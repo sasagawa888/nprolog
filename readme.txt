@@ -1,5 +1,6 @@
 
 O-Prolog(OPL) is an interpreter and compiler to be compatible with Edinburgh Prolog and ISO-Prolog.
+https://qiita.com/sym_num/items/e6e35d3e1bff41f0efe5
 
 To invoke opl, enter command from terminal
 
