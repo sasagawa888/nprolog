@@ -423,7 +423,6 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
     }
     else{//operand
         if(temp == RIGHTPAREN){
-            paren_nest--;
             stok.flag = BACK;
             goto exit;
         }
@@ -1535,6 +1534,7 @@ int readparen(void){
         car = parser(NIL,NIL,1201,NIL,0,0);
         next:
         gettoken(); //discard ')'
+        paren_nest--;
         gettoken(); //read-ahead
 
         if(stok.type == PERIOD){
