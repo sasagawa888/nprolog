@@ -1,0 +1,1 @@
+once(X) :- call(X),!.
