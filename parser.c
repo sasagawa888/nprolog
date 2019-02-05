@@ -75,7 +75,9 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
         #endif
         exit:
         if(nullp(operator)){
-            if(length(operand) != 1)
+            if(nullp(operand))
+                return(NIL);
+            else if(length(operand) != 1)
                 error(SYNTAX_ERR,"not one operand with no operator ",1);
             else
                 return(car(operand));
@@ -441,6 +443,7 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
             //comma is operator
             temp1 = parser(NIL,NIL,1201,NIL,0,0);
             gettoken(); //discard RPAREN
+            paren_nest--;
             return(parser(cons(temp1,operand),operator,weight,spec,terminal,parsemode));
         }
         else
