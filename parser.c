@@ -75,9 +75,7 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
         #endif
         exit:
         if(nullp(operator)){
-            if(nullp(operand))
-                return(NIL);
-            else if(length(operand) != 1)
+            if(length(operand) != 1)
                 error(SYNTAX_ERR,"not one operand with no operator ",1);
             else
                 return(car(operand));
@@ -92,6 +90,7 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
 
     stok.flag = BACK;
     temp = readitem();
+
     #if CHECK
     print(temp); printf("%d",GET_OPT(temp));
     #endif
@@ -106,7 +105,8 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
         goto exit;
     }
     else if(terminal == 1 && infix_operator_p(temp) &&
-       mixturep(temp) && get_2nd_weight(temp) >= weight){
+       mixturep(temp) && get_2nd_weight(temp) >= weight &&
+       !(nullp(operand) && nullp(operator))){
         #if CHECK
         printf("terminate with get_2nd_weight(%d)>=weight(%d)\n",
                 get_2nd_weight(temp),weight);
@@ -200,7 +200,6 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
              GET_OPT(temp) == FY_XFY ||
              GET_OPT(temp) == FY_YFX) &&
              length(operand) == length(operator)){ //as FY
-
         if(GET_OPT(temp) == FY)
             w1 = GET_CDR(temp);
         else
@@ -234,6 +233,7 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
         #if CHECK
         printf("xfx %d %d\n", w1,w2);
         #endif
+
         if(nullp(operator)){
             #if CHECK
             printf("null operator\n");
