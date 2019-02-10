@@ -1053,6 +1053,11 @@ void printanswer(int addr){
         print(addr);
         fprintf(GET_PORT(output_stream),")");
     }
+    else if(builtinp(addr)){
+        fprintf(GET_PORT(output_stream),"(");
+        print(addr);
+        fprintf(GET_PORT(output_stream),")");
+    }
     else
         print(addr);
 }
