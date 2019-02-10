@@ -1368,7 +1368,7 @@ void printinfix(int addr){
             fprintf(GET_PORT(output_stream),")" );
         }
         else if(infixp(cadr(addr)) &&
-                get_2nd_weight(car(cadr(addr))) >= get_2nd_weight(car(addr))){
+            get_2nd_weight(car(cadr(addr))) > get_2nd_weight(car(addr))){
             fprintf(GET_PORT(output_stream),"(" );
             print(cadr(addr));
             fprintf(GET_PORT(output_stream),")" );
