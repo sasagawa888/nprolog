@@ -1382,6 +1382,7 @@ void printinfix(int addr){
             print(cadr(addr));
 
         print(car(addr));
+
         if(infix_operator_p(caddr(addr))){
             fprintf(GET_PORT(output_stream),"(" );
             print(caddr(addr));
@@ -1392,6 +1393,10 @@ void printinfix(int addr){
             fprintf(GET_PORT(output_stream),"(" );
             print(caddr(addr));
             fprintf(GET_PORT(output_stream),")" );
+        }
+        else if(single_operation_p(caddr(addr))){
+            fprintf(GET_PORT(output_stream)," " );
+            print(caddr(addr));
         }
         else
             print(caddr(addr));

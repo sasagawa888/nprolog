@@ -749,6 +749,15 @@ int operationp(int addr){
         return(0);
 }
 
+// e.g. -1 -p
+int single_operation_p(int addr){
+    if(operationp(addr) && length(addr) == 2)
+        return(1);
+    else if(integerp(addr) && GET_INT(addr) < 0)
+        return(1);
+    else
+        return(0);
+}
 
 int builtinp(int addr){
     if(structurep(addr) && IS_INCELL(car(addr)) &&

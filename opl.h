@@ -1085,6 +1085,7 @@ int s_remainder(int x, int y);
 int see_trail(void);
 int singletonp(int x);
 int singleton_list(void);
+int single_operation_p(int x);
 int sjis_to_code(char *p);
 int smallerp(int x1, int x2);
 int sort(int x);
