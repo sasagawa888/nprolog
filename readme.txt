@@ -2,6 +2,13 @@
 O-Prolog(OPL) is an interpreter and compiler to be compatible with Edinburgh Prolog and ISO-Prolog.
 https://qiita.com/sym_num/items/e6e35d3e1bff41f0efe5
 
+Installation
+On Linux  type "make" on terminal.
+
+On Windows rename winmakefile -> makefile. and type "make" on terminal.
+Require MINGW gcc
+
+
 To invoke opl, enter command from terminal
 
 opl (Windows)
