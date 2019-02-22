@@ -10,8 +10,8 @@ Require MINGW gcc
 
 We confirmed the operation in the following environment.
 Ubuntu 16.04 GCC 5.4
-Raspbery Pi3
-Windows10 MINGW GCC 5,3
+Raspbery Pi3 Raspbian GCC 6.3
+Windows10 MINGW GCC 5.3
 
 
 To invoke opl, enter command from terminal

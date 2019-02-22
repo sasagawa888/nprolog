@@ -1590,7 +1590,7 @@ int b_ask(int nest, int n){
         while(!nullp(x1)){
             if(variablep(car(x1)) && deref(car(x1)) != car(x1))
                 x2 = cons(car(x1),x2);
-                x1 = cdr(x1);
+            x1 = cdr(x1);
         }
         x2 = reverse(x2);
         while(!nullp(x2)){
@@ -4590,8 +4590,8 @@ int b_current_predicate(int nest, int n){
                     if(proceed(NIL,nest) == YES)
                         return(YES);
 
-                    wp = save1;
-                    unbind(save2);
+                wp = save1;
+                unbind(save2);
             }
         }
         wp = save1;
@@ -8623,7 +8623,7 @@ int f_abs(int x){
     if(!numberp(x))
         error(NOT_NUM,"abs ",x);
 
-	return(absolute(x));
+    return(absolute(x));
 }
 
 int f_sin(int x){
@@ -8632,7 +8632,7 @@ int f_sin(int x){
     if(!numberp(x))
         error(NOT_NUM,"sin ",x);
 
-	return(makeflt(sin(GET_FLT(exact_to_inexact(x)))));
+    return(makeflt(sin(GET_FLT(exact_to_inexact(x)))));
 }
 
 int f_asin(int x){
@@ -8640,7 +8640,8 @@ int f_asin(int x){
         error(INSTANTATION_ERR,"asin ",x);
     if(!numberp(x))
         error(NOT_NUM,"asin ",x);
-	return(makeflt(asin(GET_FLT(exact_to_inexact(x)))));
+
+	  return(makeflt(asin(GET_FLT(exact_to_inexact(x)))));
 }
 
 int f_cos(int x){
@@ -8648,7 +8649,8 @@ int f_cos(int x){
         error(INSTANTATION_ERR,"cos ",x);
     if(!numberp(x))
         error(NOT_NUM,"cos ",x);
-	return(makeflt(cos(GET_FLT(exact_to_inexact(x)))));
+
+	  return(makeflt(cos(GET_FLT(exact_to_inexact(x)))));
 }
 
 int f_acos(int x){
@@ -8656,7 +8658,8 @@ int f_acos(int x){
         error(INSTANTATION_ERR,"acos ",x);
     if(!numberp(x))
         error(NOT_NUM,"acos ",x);
-	return(makeflt(acos(GET_FLT(exact_to_inexact(x)))));
+
+	  return(makeflt(acos(GET_FLT(exact_to_inexact(x)))));
 }
 
 int f_tan(int x){
@@ -8664,7 +8667,8 @@ int f_tan(int x){
         error(INSTANTATION_ERR,"tan ",x);
     if(!numberp(x))
         error(NOT_NUM,"tan ",x);
-	return(makeflt(tan(GET_FLT(exact_to_inexact(x)))));
+
+	  return(makeflt(tan(GET_FLT(exact_to_inexact(x)))));
 }
 
 int f_atan(int x){
@@ -8672,7 +8676,8 @@ int f_atan(int x){
         error(INSTANTATION_ERR,"atan ",x);
     if(!numberp(x))
         error(NOT_NUM,"atan ",x);
-	return(makeflt(atan(GET_FLT(exact_to_inexact(x)))));
+
+	  return(makeflt(atan(GET_FLT(exact_to_inexact(x)))));
 }
 
 int f_exp(int x){
@@ -8680,7 +8685,8 @@ int f_exp(int x){
         error(INSTANTATION_ERR,"exp ",x);
     if(!numberp(x))
         error(NOT_NUM,"exp ",x);
-	return(makeflt(exp(GET_FLT(exact_to_inexact(x)))));
+
+	  return(makeflt(exp(GET_FLT(exact_to_inexact(x)))));
 }
 
 int f_log(int x){
@@ -8690,7 +8696,8 @@ int f_log(int x){
         error(NOT_NUM,"log ",x);
     if(zerop(x) || negativep(x))
         error(EVALUATION_ERR,"log ", x);
-	return(makeflt(log(GET_FLT(exact_to_inexact(x)))));
+
+	  return(makeflt(log(GET_FLT(exact_to_inexact(x)))));
 }
 
 int f_floor(int x){
@@ -8698,7 +8705,8 @@ int f_floor(int x){
         error(INSTANTATION_ERR,"floor ",x);
     if(!numberp(x))
         error(NOT_NUM,"floor ",x);
-	return(makeint((int)floor(GET_FLT(exact_to_inexact(x)))));
+
+	  return(makeint((int)floor(GET_FLT(exact_to_inexact(x)))));
 }
 
 int f_ceiling(int x){
@@ -8706,7 +8714,8 @@ int f_ceiling(int x){
         error(INSTANTATION_ERR,"ceiling ",x);
     if(!numberp(x))
         error(NOT_NUM,"ceiling ",x);
-	return(makeint((int)ceil(GET_FLT(exact_to_inexact(x)))));
+
+	  return(makeint((int)ceil(GET_FLT(exact_to_inexact(x)))));
 }
 
 int f_truncate(int x){
@@ -8714,7 +8723,8 @@ int f_truncate(int x){
         error(INSTANTATION_ERR,"truncate ",x);
     if(!numberp(x))
         error(NOT_NUM,"truncate ",x);
-	return(makeint((int)trunc(GET_FLT(exact_to_inexact(x)))));
+
+	  return(makeint((int)trunc(GET_FLT(exact_to_inexact(x)))));
 }
 
 int f_float(int x){
@@ -8722,7 +8732,8 @@ int f_float(int x){
         error(INSTANTATION_ERR,"float ",x);
     if(!numberp(x))
         error(NOT_NUM,"float ",x);
-	return(makeflt(GET_FLT(exact_to_inexact(x))));
+
+	  return(makeflt(GET_FLT(exact_to_inexact(x))));
 }
 
 int f_float_integer_part(int x){
@@ -8732,9 +8743,10 @@ int f_float_integer_part(int x){
         error(INSTANTATION_ERR,"float_integer_part ",x);
     if(!numberp(x))
         error(NOT_NUM,"float_integer_part ",x);
+
     f = GET_FLT(exact_to_inexact(x));
     f = trunc(f);
-	return(makeflt(f));
+	  return(makeflt(f));
 }
 
 int f_float_fraction_part(int x){
@@ -8744,9 +8756,10 @@ int f_float_fraction_part(int x){
         error(INSTANTATION_ERR,"float_fraction_part ",x);
     if(!numberp(x))
         error(NOT_NUM,"float_fraction_part ",x);
+
     f = GET_FLT(exact_to_inexact(x));
     f = f - (int)f;
-	return(makeflt(f));
+	  return(makeflt(f));
 }
 
 
