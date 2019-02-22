@@ -21,7 +21,7 @@ opl (Windows)
 
 -c option is for start up file.
 
-./opl -c init,pl
+./opl -c init.pl
 
 -r option is for Not editable REPL mode.
 Default, REPL is editable.
@@ -56,6 +56,31 @@ yes
 The Compiler generates filename.o object file.
 
 ?- ['filename.o'].
+
+example
+O-Prolog Ver 1.70 (Chisato)
+| ?- use_module(library(compiler)).
+yes
+| ?- compile_file('queens.pl').
+pass1
+pass2
+compiling test16
+compiling test
+compiling queen
+compiling queen_2
+compiling qdelete
+
+compiling tail nodiag
+invoke GCC
+yes
+| ?- ['queens.o'].
+yes
+| ?- time(test).
+Elapsed Time=0.023919 (second)
+no
+| ?- time(test16).
+Elapsed Time=0.381781 (second)
+no
 
 Char set
 Linux default is unicode.
