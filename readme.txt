@@ -69,7 +69,6 @@ compiling test
 compiling queen
 compiling queen_2
 compiling qdelete
-
 compiling tail nodiag
 invoke GCC
 yes

@@ -1,0 +1,76 @@
+/*    doctor system  from 
+               Prolog to sono ouyou
+               humio mizoguchi 
+               ISBN-7952-6307-8
+*/
+:- dynamic(rule/1).
+
+doctor :-
+	write('Hi!,I am a doctor'),
+    nl,tab(3),write('Speak up'),
+    nl,prog.
+
+prog :-
+    reader(X),!,rule(X),assertz((rule(X))),prog.
+
+
+reader(X) :- nl,input(X),nl.
+
+printer([]).
+printer([X|Y]) :- write(X),tab(1),printer(Y).
+
+
+rule([i,am,worried|L]) :-
+    write('How long have you been worried'),
+    tab(1),printer(L),tab(1),write('.').
+
+rule([stop]) :-
+    write('I am sorry our time is up.'),
+    nl,write('Good bye !'),nl,clear,abort.
+rule([X]) :-
+    member(mother,x),!,
+    write('Tell me more about your family.'),
+    assert(flag),nl.
+
+
+rule(X) :-
+    member(computer,X),write('Do machines frighten you.').
+rule([yes]) :- message.
+rule([no]) :- message.
+rule(X) :- count(X,4),
+        write('Please do not use Words like that.').
+
+rule(X) :- flag,
+        write('Earlier you spoke of your mother'),retract(flag).
+rule(X) :- 
+        write('You say so before, too?').
+rule(X) :- member(remember,X),!,
+        write('you spoke me next, ok!'),stem(Y),
+        printlist(Y).
+rule(X) :- write('I see,tell me more.'),nl.
+
+message :- write('Please do not be so short with me').
+
+count([X|[]],Y) :- name(X,Z),counter(Z,Y).
+counter([],0).
+counter([X|Y],M) :- counter(Y,N),M is N+1.
+
+clear :- flag,retract((flag)).
+clear.
+
+stm(S) :- findall(X,rules(X),S).
+
+printlist([A|B]) :- write(A),nl,printlist(B).
+printlist([]).
+
+input(X) :- in(X,[],[]).
+in(X,Y,Z) :- get0(C),test(C,X,Y,Z).
+
+test(31,X,Y,Z) :- in(X,[],[]).
+test(32,X,Y,[]) :- in(X,Y,[]).
+test(32,X,Y,Z) :- name(X1,Z),append(Y,[X1],Y1),in(X,Y1,[]).
+test(46,X,Y,[]).
+test(46,X,Y,Z) :- name(X1,Z),append(Y,[X1],X).
+test(C,X,Y,Z) :- append(Z,[C],X1),in(X,Y,X1).
+
+
