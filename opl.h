@@ -1253,7 +1253,7 @@ struct position{
 
 int b_set_editor(int nest, int n);
 int b_edit(int nest, int n);
-void edit_screen();
+void edit_screen(int x);
 void display_command(int arg);
 void display_screen();
 void display_line(int line);
