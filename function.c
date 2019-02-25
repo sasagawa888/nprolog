@@ -23,9 +23,59 @@
 #include <errno.h>
 #include <dlfcn.h>
 #endif
+#if __OpenBSD__
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <errno.h>
+#include <dlfcn.h>
+#endif
 #include "opl.h"
 
+#ifdef _WIN32
+#define FLUSH fflush(stdin);
+#elif __OpenBSD__
+#define FLUSH fpurge(stdin);
+#else
+#define FLUSH __fpurge(stdin);
+#endif
+
 #if __linux
+void dynamic_link(int x){
+    char str[256] = {"./"};
+    void* hmod;
+
+    int (*init_f0)(int x, int y);
+    int (*init_f1)(int x, int y);
+    int (*init_f2)(int x, int y);
+    int (*init_f3)(int x, int y);
+    int (*init_f4)(int x, int y);
+    void (*init_deftpred)(int x);
+    void (*init_tpredicate)();
+    void (*init_declare)();
+
+    if(strstr(GET_NAME(x),"/"))
+        strcpy(str,GET_NAME(x));
+    else
+        strcat(str,GET_NAME(x));
+
+    hmod = dlopen(str, RTLD_LAZY);
+    if(hmod == NULL)
+        error(ILLEGAL_ARGS, "load", x);
+
+    init_f0 = dlsym(hmod, "init0");
+    init_f1 = dlsym(hmod, "init1");
+    init_f2 = dlsym(hmod, "init2");
+    init_f3 = dlsym(hmod, "init3");
+    init_f4 = dlsym(hmod, "init4");
+    init_deftpred = dlsym(hmod, "init_deftpred");
+    init_tpredicate = dlsym(hmod, "init_tpredicate");
+    init_declare = dlsym(hmod, "init_declare");
+#endif
+#if __OpenBSD__
 void dynamic_link(int x){
     char str[256] = {"./"};
     void* hmod;
@@ -1604,11 +1654,7 @@ int b_ask(int nest, int n){
         }
 
         fflush(stdout);
-        #ifdef _WIN32
-            fflush(stdin);
-        #else
-            __fpurge(stdin);
-        #endif
+        FLUSH
 
         loop:
         c = getchar();
@@ -1979,6 +2025,8 @@ int b_get0(int nest, int n){
     char c;
 #elif __linux
     int c,arg1,i,res;
+#elif __OpenBSD__
+    int c,arg1,i,res;
 #endif
 
     if(n == 1){
@@ -1999,6 +2047,8 @@ int b_get(int nest, int n){
     int arg1,i,res;
     char c;
 #elif __linux
+    int c,arg1,i,res;
+#elif __OpenBSD__
     int c,arg1,i,res;
 #endif
 
@@ -2028,6 +2078,9 @@ int b_get_char(int nest, int n){
     int arg1,arg2,res;
     char c,str[10];
 #elif __linux
+    int c,arg1,arg2,res;
+    char str[10];
+#elif __OpenBSD__
     int c,arg1,arg2,res;
     char str[10];
 #endif
@@ -3708,6 +3761,8 @@ int b_use_module(int nest, int n){
             strcat(str,"\\\\");
             #elif __linux
             strcat(str,"/");
+            #elif __OpenBSD__
+            strcat(str,"/");
             #endif
             strcat(str,GET_NAME(cadr(arg1)));
             strcat(str,".o");
@@ -3721,6 +3776,8 @@ int b_use_module(int nest, int n){
                 #if _WIN32
                 strcat(str,"\\\\");
                 #elif __linux
+                strcat(str,"/");
+                #elif __OpenBSD__
                 strcat(str,"/");
                 #endif
                 strcat(str,GET_NAME(cadr(arg1)));
@@ -7556,11 +7613,7 @@ int o_question(int x, int y){
         error(NOT_CALLABLE,"?- ", x);
 
 
-    #if _WIN32
-    fflush(stdin);
-    #elif __linux
-    __fpurge(stdin);
-    #endif
+    FLUSH
     if(!has_cut_p(x)){
         push_trail_body_with_ask(x);
         res = resolve_all(0,sp,1);
@@ -9710,6 +9763,8 @@ int b_self_introduction(int nest , int n){
         	return(unify(arg1,makeconst("windows")));
         #elif __linux
         	return(unify(arg1,makeconst("linux")));
+        #elif __OpenBSD__
+        	return(unify(arg1,makeconst("openbsd")));
         #endif
     }
     return(NO);
