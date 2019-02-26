@@ -384,7 +384,7 @@ extern int cp; //cut point
 extern int tp; //trail stack pointer
 extern int wp; //working pointer
 
-#if __linux
+#if defined( __linux) || defined(__OpenBSD__)
 //-----editor-----
 extern int repl_flag;
 extern int buffer[256][10];
@@ -464,7 +464,7 @@ extern int ed_incomment;
 #define CR      13
 #define VT      11
 
-#if __linux
+#if defined(__linux) || defined(__OpenBSD__)
 #define LEFT    'D'
 #define UP      'A'
 #define RIGHT   'C'
@@ -550,6 +550,8 @@ double getETime(void);
 #if _WIN32
 wint_t readc(void);
 #elif __linux
+int readc(void);
+#elif __OpenBSD__
 int readc(void);
 #endif
 int absolute(int x);
@@ -1245,7 +1247,7 @@ int makestrflt(char *str);
 int makestrlong(char *str);
 void debug(void);
 
-#if __linux
+#if defined( __linux) || defined(__OpenBSD__)
 struct position{
     int row;
     int col;

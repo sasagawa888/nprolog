@@ -23,6 +23,16 @@
 #include <errno.h>
 #include <dlfcn.h>
 #endif
+#if __OpenBSD__
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <unistd.h>
+#include <errno.h>
+#include <dlfcn.h>
+#endif
 #include "opl.h"
 
 //#define CHECK   1 //for parser debug check
@@ -488,6 +498,24 @@ int readc(void){
 
     return(c);
 }
+#elif __OpenBSD__
+int readc(void){
+    int c;
+
+    if(input_stream == standard_input && repl_flag)
+        c = read_line(1);
+    else
+        c = getc(GET_PORT(input_stream));
+
+    if(c == EOL){
+        line++;
+        column = 0;
+    }
+    else
+        column++;
+
+    return(c);
+}
 #endif
 
 #if _WIN32
@@ -509,6 +537,17 @@ void unreadc(char c){
     else
         ungetc(c,GET_PORT(input_stream));
 }
+#elif __OpenBSD__
+void unreadc(char c){
+    if(c == EOL)
+        line--;
+    else
+        column--;
+    if(input_stream == standard_input && repl_flag)
+        c = read_line(-1);
+    else
+        ungetc(c,GET_PORT(input_stream));
+}
 #endif
 
 void gettoken(void){
@@ -518,6 +557,8 @@ char str[256], *e;
     char c,c1;
     int pos,i;
 #elif __linux
+    int c,c1,pos,i;
+#elif __OpenBSD__
     int c,c1,pos,i;
 #endif
 

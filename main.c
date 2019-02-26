@@ -99,6 +99,8 @@ int double_flag = 1; //0=code, 1=char, 2=string for string
 int mode_flag = 0;  // 0=SJIS, 1=Unicode
 #elif __linux
 int mode_flag = 1;  // 0=SJIS, 1=Unicod
+#elif __OpenBSD__
+int mode_flag = 1;  // 0=SJIS, 1=Unicod
 #endif
 int quoted_flag = 1; // 0=not print ' 1=print '
 int ignore_flag = 0; // 0=infix notation 2+2 1=prefix notation +(2,2)
@@ -203,7 +205,7 @@ int input_stream;
 int output_stream;
 int error_stream;
 
-#if __linux
+#if defined(__linux) || defined(__OpenBSD__)
 //-----editor-----
 int repl_flag = 1;  //for REPL read_line 1=on, 0=off
 int buffer[256][10];
@@ -811,6 +813,8 @@ int after_cut(int x){
 
 #ifdef _WIN32
 #define FLUSH fflush(stdin);
+#elif __OpenBSD__
+#define FLUSH fpurge(stdin);
 #else
 #define FLUSH __fpurge(stdin);
 #endif
@@ -821,11 +825,7 @@ void debugger(int end, int bindings, int choice, int n){
     printf("?>");
     fflush(stdout);
     c = getchar();
-    #ifdef _WIN32
-    fflush(stdin);
-    #else
-    __fpurge(stdin);
-    #endif
+    FLUSH
     switch(c){
         case EOL:   trace_flag = FULL;
                     break;
@@ -866,11 +866,7 @@ void debugger(int end, int bindings, int choice, int n){
                     printf("wp       %d\n", wp);
                     goto loop;
         case 's':   trace_flag = SPY;
-                    #ifdef _WIN32
-                    fflush(stdin);
-                    #else
-                    __fpurge(stdin);
-                    #endif
+                    FLUSH
                     break;
         case 't':   print_trail_block(tp);
                     goto loop;
@@ -1323,6 +1319,8 @@ void print_not_quoted(int addr){
                 #if _WIN32
                 MessageBeep(-1);
                 #elif __linux
+                printf("\a");
+                #elif __OpenBSD__
                 printf("\a");
                 #endif
             else if(c == 'b')
