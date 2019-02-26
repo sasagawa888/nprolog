@@ -8297,7 +8297,7 @@ int f_divide(int x, int y){
         error(NOT_NUM,"/ ",x);
     if(!numberp(y))
         error(NOT_NUM,"/ ",y);
-	if(zerop(y))
+    if(zerop(y))
     	error(DIV_ZERO,"/",NIL);
     return(exact_to_inexact(divide(x,y)));
 }
@@ -8313,7 +8313,7 @@ int f_div(int x, int y){
         error(NOT_NUM,"/ ",x);
     if(!numberp(y))
         error(NOT_NUM,"/ ",y);
-	if(zerop(y))
+    if(zerop(y))
     	error(DIV_ZERO,"/",NIL);
 
     q = quotient(x,y);

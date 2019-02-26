@@ -335,7 +335,7 @@ int makestr(char *name){
         else if(double_flag == 1) // chars
             code = makeconst(str2);
 
-            res = cons(code,res);
+        res = cons(code,res);
         }
     return(listreverse(res));
 }
