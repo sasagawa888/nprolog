@@ -687,7 +687,8 @@ void display_command(int name){
     ESCHOME;
     ESCREV;
     printf("OPL editor          File: %s                                                     ", GET_NAME(name));
-    return;
+    ESCRST;    
+return;
 }
 
 void display_screen(){
