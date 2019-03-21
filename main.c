@@ -163,7 +163,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"expand_path"},{"delete_file"},{"file_exists"},{"decompose_file_name"},
 {"environment_variable"},{"file_modification_time"},
 {"server_create"},{"server_accept"},{"client_connect"},{"socket_send"},
-{"socket_recieve"},{"socket_close"},
+{"socket_recieve"},{"socket_close"},{"sort"},{"keysort"},
 {"c_lang"},{"c_define"},{"c_include"},{"c_option"},{"c_global"},
 {"o_include_cut"},{"o_has_cut"},{"o_c_define"},{"o_c_include"},
 {"o_c_option"},{"o_c_global"},{"o_clause_with_arity"},

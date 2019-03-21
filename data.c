@@ -1489,11 +1489,44 @@ int sort(int x){
 int insert(int x,int y){
     if(nullp(x))
         return(list1(y));
-    else if(atsmaller(y,car(x)))
+    else if(sortsmaller(y,car(x)))
         return(listcons(y,x));
+    else if(sorteqlp(y,car(x)))
+        return(x);
     else
         return(listcons(car(x),insert(cdr(x),y)));
 }
+
+int sortsmaller(int x, int y){
+    if(variablep(x) && !variablep(y))
+        return(1);
+    else if(!variablep(x) && variablep(y))
+        return(0);
+    else if(variablep(x) && variablep(y)){
+        if(strcmp(GET_NAME(x),GET_NAME(y)) < 0)
+            return(1);
+        else
+            return(0);
+    }
+    else
+        return(atsmaller(x,y));
+}
+
+int sorteqlp(int x, int y){
+    if(variablep(x) && !variablep(y))
+        return(0);
+    else if(!variablep(x) && variablep(y))
+        return(0);
+    else if(variablep(x) && variablep(y)){
+        if(strcmp(GET_NAME(x),GET_NAME(y)) == 0)
+            return(1);
+        else
+            return(0);
+    }
+    else
+        return(eqlp(x,y));
+}
+
 
 int keysort(int x){
     int res;
@@ -1512,7 +1545,7 @@ int keyinsert(int x,int y){
         return(list1(y));
     else if(!(length(car(x)) == 3 && eqlp(caar(x),makeope("-"))))
         error(ILLEGAL_ARGS,"keysort ", car(x));
-    else if(atsmaller(cadr(y),cadr(car(x))))
+    else if(sortsmaller(cadr(y),cadr(car(x))))
         return(listcons(y,x));
     else
         return(listcons(car(x),keyinsert(cdr(x),y)));

@@ -20,7 +20,7 @@ written by kenichi sasagawa 2016/9~
 #define MODULES 10
 #define OPERATOR_NUMBER 24
 #define FUNCTION_NUMBER 19
-#define BUILTIN_NUMBER 188
+#define BUILTIN_NUMBER 190
 #define COMPILED_NUMBER 23
 #define EXTENDED_NUMBER  12
 #define NIL     0
@@ -1091,6 +1091,8 @@ int single_operation_p(int x);
 int sjis_to_code(char *p);
 int smallerp(int x1, int x2);
 int sort(int x);
+int sortsmaller(int x, int y);
+int sorteqlp(int x, int y);
 int structure_to_list(int x);
 int structurep(int addr);
 int streamp(int addr);
