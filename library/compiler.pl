@@ -89,6 +89,19 @@ invoke_gcc(X) :-
     atom_concat(Sys1,O,Sys),
     system(Sys).
 
+invoke_gcc(X) :-
+    o_self_introduction(openbsd),
+    write(user_output,'invoke GCC'),
+    nl(user_output),
+    o_filename(X,F),
+    o_c_option(O),
+    atom_concat(F,'.c ',Cfile),
+    atom_concat(F,'.o ',Ofile),
+    atom_concat(Ofile,Cfile,Files),
+    atom_concat('gcc -O3 -w -shared -fPIC -o ',Files,Sys1),
+    atom_concat(Sys1,O,Sys),
+    system(Sys).
+
 /*
 for C wrapper
 #include #define macro
