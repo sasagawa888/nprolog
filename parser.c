@@ -1501,7 +1501,7 @@ int readitem(void){
         case CHARCODE:  return(makeint(stok.buf[0]));
         case ATOMOBJ:   strcpy(str,stok.buf);
                         if(stok.ch == EOL || stok.ch == CR)
-                            goto elseexit;
+                            goto elseexit1;
 
                         gettoken();
                         if(stok.type == LPAREN){
@@ -1527,6 +1527,7 @@ int readitem(void){
                         else{
                             elseexit:
                             stok.flag = BACK;
+                            elseexit1:
                             if(getatom(str,USER,hash(str)))
                                 temp = makeatom(str,USER);
                             else if(getatom(str,COMP,hash(str)))
