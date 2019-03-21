@@ -64,14 +64,14 @@
 
 
 
-//operator 
+//operator
 #define XFX 1
 #define XFY 2
 #define YFX 3
 #define FX  4
 #define FY  5
 #define XF  6
-#define YF  7 
+#define YF  7
 
 //clause option
 #define HASCUT  100 //the clause has cut operator
@@ -116,28 +116,28 @@ jmp_buf cut_buf[1000];
 int cut_pt;
 int cut_dt[1000][3];
 
-void init0(int n, int x){
+void init0(int n, tpred x){
     f0[n] = (fn0)x;
 }
 
-void init1(int n, int x){
+void init1(int n, tpred x){
     f1[n] = (fn1)x;
 }
 
-void init2(int n, int x){
+void init2(int n, tpred x){
     f2[n] = (fn2)x;
 }
 
-void init3(int n, int x){
+void init3(int n, tpred x){
     f3[n] = (fn3)x;
 }
 
-void init4(int n, int x){
+void init4(int n, tpred x){
     f4[n] = (fn4)x;
 }
 
 //for define compiled builtin predicate
-void init_deftpred(int x){
+void init_deftpred(tpred x){
     deftpred = (tpred)x;
 }
 
@@ -182,9 +182,9 @@ void init_deftpred(int x){
 #define Jtan(x)      (f1[22])(x)
 #define Jatan(x)     (f1[23])(x)
 #define Jexp(x)      (f1[24])(x)
-#define Jlog(x)      (f1[25])(x)    
+#define Jlog(x)      (f1[25])(x)
 #define Jfloor(x)    (f1[26])(x)
-#define Jceiling(x)  (f1[27])(x)    
+#define Jceiling(x)  (f1[27])(x)
 #define Jtruncate(x) (f1[28])(x)
 #define Jsign(x)     (f1[29])(x)
 #define Jround(x)    (f1[30])(x)
@@ -212,8 +212,8 @@ void init_deftpred(int x){
 #define Jmod(x,y)		 (f2[14])(x,y)
 #define Jgcd(x,y)        (f2[15])(x,y)
 #define Jlcm(x,y)        (f2[16])(x,y)
-#define Jexpt(x,y)       (f2[17])(x,y) 
-#define Jsqrt(x,y)       (f2[18])(x,y)    
+#define Jexpt(x,y)       (f2[17])(x,y)
+#define Jsqrt(x,y)       (f2[18])(x,y)
 #define Jleftshift(x,y)  (f2[19])(x,y)
 #define Jrightshift(x,y) (f2[20])(x,y)
 #define Jlogicaland(x,y) (f2[21])(x,y)
@@ -249,6 +249,8 @@ void init_deftpred(int x){
 #define Jmakesys(x)    (f4[5])(x)
 #define Jmakeope(x)    (f4[6])(x)
 #define Jmakeuser(x)   (f4[7])(x)
+#define Jmakestrlong(x) (f4[8])(x)
+#define Jmakebig(x)    (f4[9])(x)
 
 //for cut operator
 void init_cut(void){
@@ -258,4 +260,3 @@ void init_cut(void){
 void invoke_cut(void){
     longjmp(cut_buf[1],1);
 }
-

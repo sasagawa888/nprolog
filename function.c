@@ -44,16 +44,18 @@
 #endif
 
 #if __linux
+typedef void (*tpred)(char*, int(*pred)(int , int));
+
 void dynamic_link(int x){
     char str[256] = {"./"};
     void* hmod;
 
-    int (*init_f0)(int x, int y);
-    int (*init_f1)(int x, int y);
-    int (*init_f2)(int x, int y);
-    int (*init_f3)(int x, int y);
-    int (*init_f4)(int x, int y);
-    void (*init_deftpred)(int x);
+    int (*init_f0)(int x, tpred y);
+    int (*init_f1)(int x, tpred y);
+    int (*init_f2)(int x, tpred y);
+    int (*init_f3)(int x, tpred y);
+    int (*init_f4)(int x, tpred y);
+    void (*init_deftpred)(tpred x);
     void (*init_tpredicate)();
     void (*init_declare)();
 
@@ -76,16 +78,18 @@ void dynamic_link(int x){
     init_declare = dlsym(hmod, "init_declare");
 #endif
 #if __OpenBSD__
+typedef void (*tpred)(char*, int(*pred)(int , int));
+
 void dynamic_link(int x){
     char str[256] = {"./"};
     void* hmod;
 
-    int (*init_f0)(int x, int y);
-    int (*init_f1)(int x, int y);
-    int (*init_f2)(int x, int y);
-    int (*init_f3)(int x, int y);
-    int (*init_f4)(int x, int y);
-    void (*init_deftpred)(int x);
+    int (*init_f0)(int x, tpred y);
+    int (*init_f1)(int x, tpred y);
+    int (*init_f2)(int x, tpred y);
+    int (*init_f3)(int x, tpred y);
+    int (*init_f4)(int x, tpred y);
+    void (*init_deftpred)(tpred x);
     void (*init_tpredicate)();
     void (*init_declare)();
 
@@ -138,116 +142,116 @@ void dynamic_link(int x){
 #endif
 
     //argument-0 type
-    init_f0(0,(int)checkgbc);
-    init_f0(1,(int)gbc);
-    init_f0(2,(int)freshcell);
-    init_f0(3,(int)makevariant);
-    init_f0(4,(int)get_tp);
-    init_f0(5,(int)get_sp);
-    init_f0(6,(int)print_trail_block);
-    init_f0(11,(int)get_trail_end);
-    init_f0(12,(int)debug);
-    init_f0(13,(int)get_wp);
+    init_f0(0,(tpred)checkgbc);
+    init_f0(1,(tpred)gbc);
+    init_f0(2,(tpred)freshcell);
+    init_f0(3,(tpred)makevariant);
+    init_f0(4,(tpred)get_tp);
+    init_f0(5,(tpred)get_sp);
+    init_f0(6,(tpred)print_trail_block);
+    init_f0(11,(tpred)get_trail_end);
+    init_f0(12,(tpred)debug);
+    init_f0(13,(tpred)get_wp);
 
     //argument-1 type
-    init_f1(0,(int)car);
-    init_f1(1,(int)cdr);
-    init_f1(2,(int)cadr);
-    init_f1(3,(int)caddr);
-    init_f1(4,(int)caar);
-    init_f1(5,(int)cadar);
-    init_f1(6,(int)print);
-    init_f1(7,(int)makeint);
-    init_f1(8,(int)execute);
-    init_f1(9,(int)unbind);
-    init_f1(10,(int)push_trail_body);
-    init_f1(11,(int)get_goal);
-    init_f1(12,(int)set_tp);
-    init_f1(13,(int)set_sp);
-    init_f1(14,(int)set_length);
-    init_f1(15,(int)deref);
-    init_f1(16,(int)retract_goal);
-    init_f1(17,(int)get_int);
-    init_f1(18,(int)f_sin);
-    init_f1(19,(int)f_asin);
-    init_f1(20,(int)f_cos);
-    init_f1(21,(int)f_acos);
-    init_f1(22,(int)f_tan);
-    init_f1(23,(int)f_atan);
-    init_f1(24,(int)f_exp);
-    init_f1(25,(int)f_log);
-    init_f1(26,(int)f_floor);
-    init_f1(27,(int)f_ceiling);
-    init_f1(28,(int)f_truncate);
-    init_f1(29,(int)f_sign);
-    init_f1(30,(int)f_round);
-    init_f1(31,(int)list1);
-    init_f1(32,(int)set_trail_end);
-    init_f1(33,(int)f_random);
-    init_f1(34,(int)set_wp);
-    init_f1(35,(int)wlist1);
+    init_f1(0,(tpred)car);
+    init_f1(1,(tpred)cdr);
+    init_f1(2,(tpred)cadr);
+    init_f1(3,(tpred)caddr);
+    init_f1(4,(tpred)caar);
+    init_f1(5,(tpred)cadar);
+    init_f1(6,(tpred)print);
+    init_f1(7,(tpred)makeint);
+    init_f1(8,(tpred)execute);
+    init_f1(9,(tpred)unbind);
+    init_f1(10,(tpred)push_trail_body);
+    init_f1(11,(tpred)get_goal);
+    init_f1(12,(tpred)set_tp);
+    init_f1(13,(tpred)set_sp);
+    init_f1(14,(tpred)set_length);
+    init_f1(15,(tpred)deref);
+    init_f1(16,(tpred)retract_goal);
+    init_f1(17,(tpred)get_int);
+    init_f1(18,(tpred)f_sin);
+    init_f1(19,(tpred)f_asin);
+    init_f1(20,(tpred)f_cos);
+    init_f1(21,(tpred)f_acos);
+    init_f1(22,(tpred)f_tan);
+    init_f1(23,(tpred)f_atan);
+    init_f1(24,(tpred)f_exp);
+    init_f1(25,(tpred)f_log);
+    init_f1(26,(tpred)f_floor);
+    init_f1(27,(tpred)f_ceiling);
+    init_f1(28,(tpred)f_truncate);
+    init_f1(29,(tpred)f_sign);
+    init_f1(30,(tpred)f_round);
+    init_f1(31,(tpred)list1);
+    init_f1(32,(tpred)set_trail_end);
+    init_f1(33,(tpred)f_random);
+    init_f1(34,(tpred)set_wp);
+    init_f1(35,(tpred)wlist1);
 
     //argument-2 type
-    init_f2(0,(int)cons);
-    init_f2(1,(int)f_plus);
-    init_f2(2,(int)f_minus);
-    init_f2(3,(int)f_mult);
-    init_f2(4,(int)f_divide);
-    init_f2(5,(int)s_remainder);
-    init_f2(6,(int)quotient);
-    init_f2(7,(int)eqp);
-    init_f2(8,(int)numeqp);
-    init_f2(9,(int)smallerp);
-    init_f2(10,(int)eqsmallerp);
-    init_f2(11,(int)greaterp);
-    init_f2(12,(int)eqgreaterp);
-    init_f2(13,(int)unify);
-    init_f2(14,(int)f_mod);
-    init_f2(15,(int)gcd);
-    init_f2(16,(int)lcm);
-    init_f2(17,(int)f_expt);
-    init_f2(18,(int)f_sqrt);
-    init_f2(19,(int)f_leftshift);
-    init_f2(20,(int)f_rightshift);
-    init_f2(21,(int)f_logicaland);
-    init_f2(22,(int)f_logicalor);
-    init_f2(23,(int)f_exclusiveor);
-    init_f2(24,(int)f_inclusiveand);
-    init_f2(25,(int)listcons);
-    init_f2(26,(int)list2);
-    init_f2(27,(int)set_car);
-    init_f2(28,(int)set_cdr);
-    init_f2(29,(int)f_rem);
-    init_f2(30,(int)f_complement);
-    init_f2(31,(int)set_aux);
-    init_f2(32,(int)not_numeqp);
-    init_f2(33,(int)set_goal);
-    init_f2(34,(int)f_div);
-    init_f2(35,(int)set_var);
-    init_f2(36,(int)wcons);
-    init_f2(37,(int)wlist2);
-    init_f2(38,(int)wlistcons);
-    init_f2(39,(int)proceed);
+    init_f2(0,(tpred)cons);
+    init_f2(1,(tpred)f_plus);
+    init_f2(2,(tpred)f_minus);
+    init_f2(3,(tpred)f_mult);
+    init_f2(4,(tpred)f_divide);
+    init_f2(5,(tpred)s_remainder);
+    init_f2(6,(tpred)quotient);
+    init_f2(7,(tpred)eqp);
+    init_f2(8,(tpred)numeqp);
+    init_f2(9,(tpred)smallerp);
+    init_f2(10,(tpred)eqsmallerp);
+    init_f2(11,(tpred)greaterp);
+    init_f2(12,(tpred)eqgreaterp);
+    init_f2(13,(tpred)unify);
+    init_f2(14,(tpred)f_mod);
+    init_f2(15,(tpred)gcd);
+    init_f2(16,(tpred)lcm);
+    init_f2(17,(tpred)f_expt);
+    init_f2(18,(tpred)f_sqrt);
+    init_f2(19,(tpred)f_leftshift);
+    init_f2(20,(tpred)f_rightshift);
+    init_f2(21,(tpred)f_logicaland);
+    init_f2(22,(tpred)f_logicalor);
+    init_f2(23,(tpred)f_exclusiveor);
+    init_f2(24,(tpred)f_inclusiveand);
+    init_f2(25,(tpred)listcons);
+    init_f2(26,(tpred)list2);
+    init_f2(27,(tpred)set_car);
+    init_f2(28,(tpred)set_cdr);
+    init_f2(29,(tpred)f_rem);
+    init_f2(30,(tpred)f_complement);
+    init_f2(31,(tpred)set_aux);
+    init_f2(32,(tpred)not_numeqp);
+    init_f2(33,(tpred)set_goal);
+    init_f2(34,(tpred)f_div);
+    init_f2(35,(tpred)set_var);
+    init_f2(36,(tpred)wcons);
+    init_f2(37,(tpred)wlist2);
+    init_f2(38,(tpred)wlistcons);
+    init_f2(39,(tpred)proceed);
 
     //argument-3
-    init_f3(0,(int)resolve_all);
-    init_f3(1,(int)list3);
-    init_f3(2,(int)callsubr);
-    init_f3(3,(int)wlist3);
+    init_f3(0,(tpred)resolve_all);
+    init_f3(1,(tpred)list3);
+    init_f3(2,(tpred)callsubr);
+    init_f3(3,(tpred)wlist3);
 
     //argument-1 string type
-    init_f4(0,(int)makeconst);
-    init_f4(1,(int)makepred);
-    init_f4(2,(int)makevar);
-    init_f4(3,(int)makestrflt);
-    init_f4(4,(int)makecomp);
-    init_f4(5,(int)makesys);
-    init_f4(6,(int)makeope);
-    init_f4(7,(int)makeuser);
-    init_f4(8,(int)makestrlong);
-    init_f4(9,(int)makebigx);
+    init_f4(0,(tpred)makeconst);
+    init_f4(1,(tpred)makepred);
+    init_f4(2,(tpred)makevar);
+    init_f4(3,(tpred)makestrflt);
+    init_f4(4,(tpred)makecomp);
+    init_f4(5,(tpred)makesys);
+    init_f4(6,(tpred)makeope);
+    init_f4(7,(tpred)makeuser);
+    init_f4(8,(tpred)makestrlong);
+    init_f4(9,(tpred)makebigx);
 
-    init_deftpred((int)defcompiled);
+    init_deftpred((tpred)defcompiled);
     init_tpredicate();
     init_declare();
     //cut_function[0] = init_cut;
