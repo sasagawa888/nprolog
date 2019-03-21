@@ -115,12 +115,13 @@ void dynamic_link(int x){
 
 #if _WIN32
 //for dynamic link
-typedef void (*p_f0)(int, int);
-typedef void (*p_f1)(int, int);
-typedef void (*p_f2)(int, int);
-typedef void (*p_f3)(int, int);
-typedef void (*p_f4)(int, int);
-typedef void (*p_def)(int);
+typedef void (*tpred)(char*, int(*pred)(int , int));
+typedef void (*p_f0)(int, tpred);
+typedef void (*p_f1)(int, tpred);
+typedef void (*p_f2)(int, tpred);
+typedef void (*p_f3)(int, tpred);
+typedef void (*p_f4)(int, tpred);
+typedef void (*p_def)(tpred);
 typedef void (*p_init)(void);
 typedef void (*p_declare)(void);
 
