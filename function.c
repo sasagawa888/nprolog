@@ -4532,7 +4532,7 @@ int b_retractall(int nest, int n){
 
 
 int b_abolish(int nest, int n){
-    int arg1,clause,arity,clauses,new_clauses;
+    int arg1,pred,clause,arity,clauses,new_clauses;
 
     clause = clauses = NIL;
     if(n == 1){
@@ -4555,8 +4555,8 @@ int b_abolish(int nest, int n){
         if(!integerp(caddr(arg1)))
             error(NOT_INT,"abolish ",arg1);
 
-
-        clauses = GET_CAR(cadr(arg1));
+        pred = makepred(GET_NAME(cadr(arg1)));
+        clauses = GET_CAR(pred);
         arity = GET_INT(caddr(arg1));
 
         new_clauses = NIL;
@@ -4578,7 +4578,7 @@ int b_abolish(int nest, int n){
             abolish:
             clauses = cdr(clauses);
         }
-        SET_CAR(cadr(arg1),listreverse(new_clauses));
+        SET_CAR(pred,listreverse(new_clauses));
         if(nullp(new_clauses))
             listremove(cadr(arg1),predicates);
         return(YES);

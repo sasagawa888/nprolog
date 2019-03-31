@@ -10,6 +10,7 @@ compile_file(X) :-
     assert(optimizable(0)),
     pass1(X),
     pass2(X),
+    abolish(compiler_optimizable/1),
     invoke_gcc(X).
 
 
@@ -51,8 +52,8 @@ pass2(X) :-
     gen_c_def(L),
     gen_c_exec,
     close(S),
-    set_output(user_output),
-    abolish(optimizable/1).
+    set_output(user_output).
+
 
 /*
 when OS is Windows
