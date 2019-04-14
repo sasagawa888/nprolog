@@ -544,7 +544,7 @@ int argumentsp(int addr){
 }
 
 int disjunctionp(int addr){
-    if(structurep(addr) && IS_INCELL(car(addr)) && car(addr) == OR)
+    if(structurep(addr) && IS_INCELL(car(addr)) && eqlp(car(addr),OR))
         return(1);
     else
         return(0);
@@ -851,6 +851,9 @@ int has_cut_p(int addr){
     else if(operationp(addr) && car(addr) == IFTHEN)
         return(0);
     else if(operationp(addr) && car(addr) == AND &&
+            (has_cut_p(cadr(addr)) || has_cut_p(caddr(addr))))
+        return(1);
+    else if(operationp(addr) && car(addr) == OR &&
             (has_cut_p(cadr(addr)) || has_cut_p(caddr(addr))))
         return(1);
     else
@@ -1166,6 +1169,14 @@ int listremove(int x, int y){
     else
         return(cons(car(y),listremove(x,cdr(y))));
 }
+
+int remove_cut(int x){
+  if(eqlp(cadr(x),CUT))
+      return(caddr(x));
+  else
+      return(list3(car(x),cadr(x),remove_cut(caddr(x))));
+}
+
 /*
 x1 is ignore
 */

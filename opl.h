@@ -1071,6 +1071,7 @@ int readitem(void);
 int readcurl(void);
 int readlist(void);
 int readparen(void);
+int remove_cut(int x);
 int replace(int x, int lis);
 int reposition_option_p(int x);
 int resolve_all(int end, int bindings, int n);
