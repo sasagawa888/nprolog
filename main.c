@@ -245,7 +245,7 @@ int ed_incomment = -1; /*...*/
 int main(int argc, char *argv[]){
     int opt;
 
-    printf("O-Prolog Ver 1.70 (Chisato)\n");
+    printf("O-Prolog Ver 1.71 (Chisato)\n");
     initcell();
     initbuiltin();
     initoperator();
@@ -1388,6 +1388,12 @@ void printinfix(int addr){
         }
         else if(infixp(caddr(addr)) &&
                 get_2nd_weight(car(caddr(addr))) > get_2nd_weight(car(addr))){
+            fprintf(GET_PORT(output_stream),"(" );
+            print(caddr(addr));
+            fprintf(GET_PORT(output_stream),")" );
+        }
+        else if(infixp(cadr(addr)) && infixp(caddr(addr)) &&
+            get_2nd_weight(car(cadr(addr))) <= get_2nd_weight(car(caddr(addr)))){
             fprintf(GET_PORT(output_stream),"(" );
             print(caddr(addr));
             fprintf(GET_PORT(output_stream),")" );
