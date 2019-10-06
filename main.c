@@ -245,7 +245,7 @@ int ed_incomment = -1; /*...*/
 int main(int argc, char *argv[]){
     int opt;
 
-    printf("O-Prolog Ver 1.71 (Chisato)\n");
+    printf("O-Prolog Ver 1.72\n");
     initcell();
     initbuiltin();
     initoperator();
