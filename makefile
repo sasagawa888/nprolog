@@ -16,13 +16,13 @@ error.o : error.c opl.h
 	gcc -O3 -Wall -c error.c
 
 bignum.o : bignum.c opl.h
-	gcc -O3 -Wall -c bignum.c -lm -ldl
+	gcc -O3 -Wall -c bignum.c
 
 compute.o : compute.c opl.h
-	gcc -O3 -Wall -c compute.c -lm -ldl
+	gcc -O3 -Wall -c compute.c
 
 edit.o : edit.c opl.h
-	gcc -O3 -Wall -c edit.c -lm -ldl
+	gcc -O3 -Wall -c edit.c
 
 .PHONY: clean
 clean: -lm
