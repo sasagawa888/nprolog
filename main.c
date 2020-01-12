@@ -90,11 +90,11 @@ int open_flag = 0;
 int gbc_flag = 0;  // 0=not display massage 1=display message
 int simp_flag = 1;
 int assert_flag = 0; // 0=asserta, 1=assertz
-int debug_flag = 0;  // 0=normal mode, 1=debug mode
+int debug_flag = 1;  // 0=normal mode, 1=debug mode
 int sexp_flag = 0;
 int arguments_flag = 1; //1= 1,2,3 -> (1,2,3) 0= 1,2,3 -> 1,2,3
 int undefined_flag = 1; //0=fail, 1=error, 2=warning
-int double_flag = 1; //0=code, 1=char, 2=string for string
+int double_flag = 0; //0=code, 1=char, 2=string for string
 #if _WIN32
 int mode_flag = 0;  // 0=SJIS, 1=Unicode
 #elif __linux

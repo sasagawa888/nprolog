@@ -1,3 +1,8 @@
+# Notice of development end
+I released version 1.72.
+Development of O-Prolog will end with this release.
+I hated the meaningless complexity of the ISO-Prolog standard.
+I am developing a new simple Prolog in Elixir.
 
 # O-Prolog
 O-Prolog(OPL) is an interpreter and compiler to be compatible with Edinburgh Prolog and ISO-Prolog.
@@ -115,21 +120,21 @@ Invoke editor
 ?- edit([]). edit recent file again.
 
 Command
-CTR+O@save file.
-CTRL+X@quit editor.
-CTRL+K@delete selection.
-CTRL+U@paste from clip board.
+CTR+Oï¿½@save file.
+CTRL+Xï¿½@quit editor.
+CTRL+Kï¿½@delete selection.
+CTRL+Uï¿½@paste from clip board.
 Editing
-ª«©¨@move cursol
+ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½@move cursol
 ESC A mark current row position. After this operation, cursol up or down reverse selected rows. ESC A again, unmark. Similer to nano editor
 Enter key insert tab for Lisp automatic
 Insert key switch insert/overwrite
 Tab key insert tab for Lisp
 BackSpace key delete backword char
-Delete key@delete forwaord char
+Delete keyï¿½@delete forwaord char
 Home key display top page
 ESC |(SSH)
-End key@display end page
+End keyï¿½@display end page
 ESC /(SSH)
 PageUp key PageUp
 Ctrl+Y(SSH)
@@ -139,7 +144,7 @@ Ctrl+V(SSH)
 ESC TAB completion.
 
 Setting
-set_editor(indent,auto)@set auto indent mode.
+set_editor(indent,auto)ï¿½@set auto indent mode.
 set_editor(indent,manual) set manual indet mode. To indent tab key.
 set_editor(tab,2)
 set tab 2.
@@ -168,7 +173,7 @@ sudo ./opl
 
 OPL <==================================> C
 
-wiringpi_spi_setup(ch,speed)  <===>@@wiringPiSPISetup (SPI_CH, SPI_SPEED)
+wiringpi_spi_setup(ch,speed)  <===>ï¿½@ï¿½@wiringPiSPISetup (SPI_CH, SPI_SPEED)
 wiringpi_setup_gpio(X)  <===>  X=wiringPiSetupGpio()
 pin-mode(N,output)  <====> pinMode(N, OUTPUT)  or input -> INPUT or pwm_output ->PWM-OUTPUT
 digital_write(n,v)  <===> digitalWrite(n, v);
@@ -226,7 +231,7 @@ test1(N) :-
 
 ```
 server_create/2
-@ server_create(N,S)
+ï¿½@ server_create(N,S)
 N = atom of port number
 S = socket descriptor
 

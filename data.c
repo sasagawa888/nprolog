@@ -1585,6 +1585,7 @@ void printenv(void){
 void add_data(int pred, int data){
     int clauses;
 
+    print(pred);
     //for calling_context;
     if(module_name != makeatom("compiler",SIMP))
         SET_VAR(pred,module_name);
@@ -1601,7 +1602,6 @@ void add_data(int pred, int data){
         }
         SET_CDR(clauses,cons(data,NIL));
     }
-
     if(!memq(pred,predicates))
         predicates = cons(pred,predicates);
 }
