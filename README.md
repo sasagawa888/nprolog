@@ -72,7 +72,7 @@ The Compiler generates filename.o object file.
 
 ## example
 ```prolog
-O-Prolog Ver 1.70 (Chisato)
+O-Prolog Ver 1.70
 | ?- use_module(library(compiler)).
 yes
 | ?- compile_file('queens.pl').
@@ -120,12 +120,12 @@ Invoke editor
 ?- edit([]). edit recent file again.
 
 Command
-CTR+O�@save file.
-CTRL+X�@quit editor.
-CTRL+K�@delete selection.
-CTRL+U�@paste from clip board.
+CTRL+O save file.
+CTRL+X quit editor.
+CTRL+K delete selection.
+CTRL+U paste from clip board.
 Editing
-���������@move cursol
+move cursol
 ESC A mark current row position. After this operation, cursol up or down reverse selected rows. ESC A again, unmark. Similer to nano editor
 Enter key insert tab for Lisp automatic
 Insert key switch insert/overwrite
@@ -144,7 +144,7 @@ Ctrl+V(SSH)
 ESC TAB completion.
 
 Setting
-set_editor(indent,auto)�@set auto indent mode.
+set_editor(indent,auto) set auto indent mode.
 set_editor(indent,manual) set manual indet mode. To indent tab key.
 set_editor(tab,2)
 set tab 2.
@@ -173,7 +173,7 @@ sudo ./opl
 
 OPL <==================================> C
 
-wiringpi_spi_setup(ch,speed)  <===>�@�@wiringPiSPISetup (SPI_CH, SPI_SPEED)
+wiringpi_spi_setup(ch,speed)  <===> wiringPiSPISetup (SPI_CH, SPI_SPEED)
 wiringpi_setup_gpio(X)  <===>  X=wiringPiSetupGpio()
 pin-mode(N,output)  <====> pinMode(N, OUTPUT)  or input -> INPUT or pwm_output ->PWM-OUTPUT
 digital_write(n,v)  <===> digitalWrite(n, v);
