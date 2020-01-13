@@ -109,21 +109,21 @@ Invoke editor
 ?- edit([]). edit recent file again.
 
 Command
-CTR+O　save file.
-CTRL+X　quit editor.
-CTRL+K　delete selection.
-CTRL+U　paste from clip board.
+CTRL +O save file.
+CTRL+X quit editor.
+CTRL+K delete selection.
+CTRL+U paste from clip board.
 Editing
-↑↓←→　move cursol
+move cursol
 ESC A mark current row position. After this operation, cursol up or down reverse selected rows. ESC A again, unmark. Similer to nano editor
 Enter key insert tab for Lisp automatic
 Insert key switch insert/overwrite
 Tab key insert tab for Lisp
 BackSpace key delete backword char
-Delete key　delete forwaord char
+Delete key delete forwaord char
 Home key display top page
 ESC |(SSH)
-End key　display end page
+End key display end page
 ESC /(SSH)
 PageUp key PageUp
 Ctrl+Y(SSH)
@@ -133,7 +133,7 @@ Ctrl+V(SSH)
 ESC TAB completion.
 
 Setting
-set_editor(indent,auto)　set auto indent mode.
+set_editor(indent,auto) set auto indent mode.
 set_editor(indent,manual) set manual indet mode. To indent tab key.
 set_editor(tab,2)
 set tab 2.
@@ -161,7 +161,7 @@ sudo ./opl
 
 OPL <==================================> C
 
-wiringpi_spi_setup(ch,speed)  <===>　　wiringPiSPISetup (SPI_CH, SPI_SPEED)
+wiringpi_spi_setup(ch,speed)  <===> wiringPiSPISetup (SPI_CH, SPI_SPEED)
 wiringpi_setup_gpio(X)  <===>  X=wiringPiSetupGpio()
 pin-mode(N,output)  <====> pinMode(N, OUTPUT)  or input -> INPUT or pwm_output ->PWM-OUTPUT
 digital_write(n,v)  <===> digitalWrite(n, v);
@@ -218,7 +218,7 @@ TCP/IP
 
 
 server_create/2
-　 server_create(N,S)
+server_create(N,S)
 N = atom of port number
 S = socket descriptor
 

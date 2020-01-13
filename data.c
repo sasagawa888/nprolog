@@ -1585,7 +1585,6 @@ void printenv(void){
 void add_data(int pred, int data){
     int clauses;
 
-    print(pred);
     //for calling_context;
     if(module_name != makeatom("compiler",SIMP))
         SET_VAR(pred,module_name);
