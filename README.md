@@ -131,10 +131,10 @@ Enter key insert tab for Lisp automatic
 Insert key switch insert/overwrite
 Tab key insert tab for Lisp
 BackSpace key delete backword char
-Delete key�@delete forwaord char
+Delete key delete forwaord char
 Home key display top page
 ESC |(SSH)
-End key�@display end page
+End key display end page
 ESC /(SSH)
 PageUp key PageUp
 Ctrl+Y(SSH)
@@ -231,7 +231,7 @@ test1(N) :-
 
 ```
 server_create/2
-�@ server_create(N,S)
+server_create(N,S)
 N = atom of port number
 S = socket descriptor
 
