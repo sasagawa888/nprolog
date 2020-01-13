@@ -1,15 +1,33 @@
-%DNAコードをアミノ酸の名称に変換。
-%参考 「ＤＮＡの構造とはたらき」（べレ出版）
+%?-data(X),rna_amino(X,Y).
+%X   = [a,u,g,c,g,c,a,a,u,g,u,g,u,a,a],
+%Y   = [begin,arg,asn,val,end]
+%yes
 
-%テストデータ　
+%?-rna_amino(X,[begin,arg,asn,val,end]).
+%X   = [a,u,g,c,g,u,a,a,u,g,u,u,u,a,a]
+%yes
+ 
+
+%?-dna_rna([t,t,g,c,g,a,t],X).
+%X   = [a,a,c,g,c,u,a]
+%yes
+ 
+
+%?- make_dna([arg,asn,val],X).
+%X   = [[g,c],[c,g],[a,t],[t,a],[t,a],[a,t],[c,g],[a,t],[a,t]]
+%yes
+
+
+%Convert DNA code to amino acid name.
+%test data
 data([a,u,g,c,g,c,a,a,u,g,u,g,u,a,a]).
 
-
-%変換中であるかどうかの大域変数。beginかmet（メチオニン）かの判定で必要。
+% global variable that indicates whether the conversion is in progress.
+% Necessary for judging begin or met (methionine).
 :- dynamic(trans/1).
 trans(off).
 
-%RNA列をアミノ酸名に変換する。逆変換も可能。
+%Convert RNA sequence to amino acid name. Inverse conversion is also possible.
 rna_amino([],[]) :-
     abolish(trans/1),
     assert(trans(off)).
@@ -25,7 +43,7 @@ rna_amino([A,B,C|Xs],[Z|Zs]) :-
     assert(trans(on)),
     rna_amino(Xs,Zs).
 
-%RNAとそれに対応するアミノ酸名
+%RNA and its corresponding amino acid name
 dnaward([u,u,u],phe).
 dnaward([u,u,c],ala).
 dnaward([u,u,a],leu).
@@ -92,7 +110,7 @@ dnaward([g,g,c],gly).
 dnaward([g,g,a],gly).
 dnaward([g,g,g],gly).
 
-%DNA列(１本に分けたもの）をRNA列へ変換、逆変換も可
+%Convert DNA sequence (divided into one) to RNA sequence, reverse conversion possible
 dna_rna([],[]).
 dna_rna([X|Xs],[Z|Zs]) :-
     copy_rule(X,Z),
@@ -103,7 +121,7 @@ copy_rule(t,a).
 copy_rule(g,c).
 copy_rule(c,g).
 
-%DNA列（１本）からペアのDNA列を生成する。
+%A pair of DNA strings is generated from one DNA string.
 make_dna_pair([],[]).
 make_dna_pair([X|Xs],[Z|Zs]) :-
     pair_rule(X,Z),
@@ -114,12 +132,12 @@ pair_rule(t,a).
 pair_rule(g,c).
 pair_rule(c,g).
 
-%DNA列（２本）をくっつけて１本の二重螺旋にする。
+%Attach two DNA strands into one double helix
 conjugate_dna([],[],[]).
 conjugate_dna([X|Xs],[Y|Ys],[[X,Y]|Zs]) :-
     conjugate_dna(Xs,Ys,Zs).
 
-%アミノ酸名から二重螺旋のDNA列を生成。
+%Generate double helix DNA sequence from amino acid name.
 make_dna(X,Z) :-
     rna_amino(Z1,X),
     dna_rna(X1,Z1),

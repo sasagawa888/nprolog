@@ -14,39 +14,39 @@ rule7 rule5 rule6 rule7 rule5 rule6 yes
 
 proof(X) :- cnf(X,Y),tautology(Y).
 
-%論理式は記号アトムで表される
+%Logical expressions are represented by symbolic atoms
 cnf(X,X) :- atomic(X).
-%ドモルガンの法則
+%De Morgans law
 cnf(~(X & Y),Z) :- write('rule1 '),cnf(~X v ~Y,Z).
 
-%二重否定の法則
+%The rule of double negation
 cnf(~ ~ X,Z) :- write('rule2 '),cnf(X,Z).
 
 
-%分配律
+%Distribution rule
 cnf((A & B) v (A & C),Z) :-
      write('rule3 '),cnf(A & (B v C),Z).
 
-%再帰構造
+%Recursive structure
 cnf(X & Y,X1 & Y1) :- write('rule4 '),cnf(X,X1),cnf(Y,Y1).
 
 cnf(X v Y,X1 v Y1) :- write('rule5 '),cnf(X,X1),cnf(Y,Y1).
 
 cnf(~ X,~ Z) :- write('rule6 '),cnf(X,Z).
 
-%含意
+%Implication
 cnf(X => Y,Z) :- write('rule7 '),cnf(~X v Y,Z).
 
 
-%トートロジー
+%tautology
 tautology(X & Y) :- or_tautology(X),tautology(Y).
 tautology(X) :- or_tautology(X).
 
-%部分論理式の相補確認
+%Complementary check of partial logical expressions
 or_tautology(X v Y) :-  complement(~X,Y).
 or_tautology(~X v Y) :- complement(X,Y).
 
-%相補的
+%Complementary
 complement(X,X).
 complement(X,X v _).
 complement(X,Y v Ys) :- complement(X,Ys).
