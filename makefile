@@ -1,29 +1,29 @@
-opl : main.o parser.o function.o data.o gbc.o cell.o error.o bignum.o compute.o edit.o
-	gcc  -O3 -Wall  main.o parser.o function.o data.o gbc.o cell.o error.o bignum.o compute.o edit.o -o opl -lm -ldl
-main.o : main.c opl.h
+npl : main.o parser.o function.o data.o gbc.o cell.o error.o bignum.o compute.o edit.o
+	gcc  -O3 -Wall  main.o parser.o function.o data.o gbc.o cell.o error.o bignum.o compute.o edit.o -o npl -lm -ldl
+main.o : main.c npl.h
 	gcc  -Wall -c main.c
-parser.o : parser.c opl.h
+parser.o : parser.c npl.h
 	gcc -O3 -Wall -c parser.c
-function.o : function.c opl.h
+function.o : function.c npl.h
 	gcc -O3 -Wall -c function.c
-data.o : data.c opl.h
+data.o : data.c npl.h
 	gcc -O3 -Wall -c data.c
-gbc.o : gbc.c opl.h
+gbc.o : gbc.c npl.h
 	gcc -O3 -Wall -c gbc.c
-cell.o : cell.c opl.h
+cell.o : cell.c npl.h
 	gcc -O3 -Wall -c cell.c
-error.o : error.c opl.h
+error.o : error.c npl.h
 	gcc -O3 -Wall -c error.c
 
-bignum.o : bignum.c opl.h
+bignum.o : bignum.c npl.h
 	gcc -O3 -Wall -c bignum.c
 
-compute.o : compute.c opl.h
+compute.o : compute.c npl.h
 	gcc -O3 -Wall -c compute.c
 
-edit.o : edit.c opl.h
+edit.o : edit.c npl.h
 	gcc -O3 -Wall -c edit.c
 
 .PHONY: clean
 clean: -lm
-	rm -f opl *.o
+	rm -f npl *.o

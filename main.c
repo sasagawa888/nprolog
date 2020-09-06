@@ -11,7 +11,7 @@ written by kenichi sasagawa 2016/8~
 #if __linux
 #include <stdio_ext.h>
 #endif
-#include "opl.h"
+#include "npl.h"
 
 //global vers
 int proof = 0;
@@ -245,7 +245,7 @@ int ed_incomment = -1; /*...*/
 int main(int argc, char *argv[]){
     int opt;
 
-    printf("O-Prolog Ver 1.72\n");
+    printf("N-Prolog Ver 0.01\n");
     initcell();
     initbuiltin();
     initoperator();

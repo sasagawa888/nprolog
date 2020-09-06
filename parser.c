@@ -33,7 +33,7 @@
 #include <errno.h>
 #include <dlfcn.h>
 #endif
-#include "opl.h"
+#include "npl.h"
 
 //#define CHECK   1 //for parser debug check
 

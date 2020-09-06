@@ -33,7 +33,7 @@
 #include <errno.h>
 #include <dlfcn.h>
 #endif
-#include "opl.h"
+#include "npl.h"
 
 #ifdef _WIN32
 #define FLUSH fflush(stdin);

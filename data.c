@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <setjmp.h>
-#include "opl.h"
+#include "npl.h"
 
 //--------------list data type---------------------
 

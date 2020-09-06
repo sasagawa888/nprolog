@@ -6,7 +6,7 @@
 #ifdef __linux
 #include <stdio_ext.h>
 #endif
-#include "opl.h"
+#include "npl.h"
 
 //-------error------
 void error(int errnum, char *fun, int arg){

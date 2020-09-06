@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <float.h>
 #include <math.h>
-#include "opl.h"
+#include "npl.h"
 
 //immediate small integer
 int get_tag(int addr){
@@ -754,7 +754,7 @@ int int_lcm(int m, int n){
 int lcm(int x, int y){
     int g,d,res;
     if(integerp(x) && integerp(y) &&
-        abs(GET_INT(x)) < 10000 && abs(GET_INT(y)) < 10000)// ‚È‚º‚È‚çx,y < sqrt(BIGNUM_BASE)
+        abs(GET_INT(x)) < 10000 && abs(GET_INT(y)) < 10000)// ï¿½È‚ï¿½ï¿½È‚ï¿½x,y < sqrt(BIGNUM_BASE)
         return(makeint(abs(int_lcm(GET_INT(x),GET_INT(y)))));
     
     else if(floatp(x) && integerp(y))

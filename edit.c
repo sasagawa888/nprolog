@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <termios.h>
 #include <unistd.h>
-#include "opl.h"
+#include "npl.h"
 
 //----editor----
 

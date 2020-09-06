@@ -16,7 +16,7 @@ number of data is absolute.
 #include <stdlib.h>
 #include <setjmp.h>
 #include <math.h>
-#include "opl.h"
+#include "npl.h"
 
 
 int makebigx(char *bignum){ 
