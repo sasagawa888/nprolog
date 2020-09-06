@@ -10,11 +10,11 @@ On Linux  type "make" on terminal.
 To invoke opl, enter command from terminal
 
 ```
-./opl
+./npl
 
 -c option is for start up file.
 
-./opl -c init.pl
+./npl -c init.pl
 
 -r option is for Not editable REPL mode.
 Default, REPL is editable.
@@ -84,11 +84,4 @@ X = 1071508607186267320948425049060001810561404811705533607443750388370351051124
 7594672917553146825187145285692314043598457757469857480393456777482423098542107460506237114187795418215304
 6474983581941267398767559165543946077062914571196477686542167660429831652624386837205668069376
 yes
-
-Char set
-Linux default is unicode.
-
-Windows default is SJIS.
-
-to change. set_prolog_flag(char_set,unicode).
 
