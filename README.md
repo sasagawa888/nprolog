@@ -1,5 +1,5 @@
 # N-Prolog
-N-Prolog(NPL) is an interpreter and compiler to be compatible with ARITY-Prolog.
+N-Prolog(NPL) is an interpreter and compiler to be subset of ARITY-Prolog.
 it is based on O-Prolog. Project is now startup.
 
 ## Installation
@@ -24,7 +24,7 @@ Default, REPL is editable.
 Even if you do not specify an option, if there is a file startup.pl in the current directory, OPL loads it and start it.
 
 ## Goal
-I hope that Prolog will become more popular. I hope many people enjoy Prolog. OPL aims at easy handling.
+I hope that Prolog will become more popular. I hope many people enjoy Prolog. NPL aims at easy handling.
 
 ## Intaraction
 
