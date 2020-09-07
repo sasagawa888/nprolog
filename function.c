@@ -7557,7 +7557,7 @@ int o_dcg(int x, int y){
 }
 
 int o_question(int x, int y){
-    int res,temp;
+    int res;
 
     //[file1,file2] -> consult(file1),consult(file2).
     if(listp(x))
@@ -7579,16 +7579,6 @@ int o_question(int x, int y){
         res = resolve_all(0,sp,1);
         if(res == CUT)
             res = NO;
-        print(res);printf("\n");
-        return(res);
-    }
-    /*
-    e.g. ?- ((X=1;X=2),Y=6;Y=7,!,(X=3;X=4)).
-    */
-    else if(has_cut_p(x) && disjunctionp(after_cut(x))){
-        temp = remove_cut(x);
-        push_trail_body_with_ask(temp);
-        res = resolve_all(0,sp,1);
         print(res);printf("\n");
         return(res);
     }
