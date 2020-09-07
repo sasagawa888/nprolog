@@ -298,7 +298,7 @@ int main(int argc, char *argv[]){
             output_stream = standard_output;
             error_stream = standard_error;
             init_repl();
-            printf("| "); fflush(stdout);
+            printf("?- "); fflush(stdout);
             execute(variable_to_call(readparse()));
             //sexp_flag = 1;print(variable_to_call(parser(NIL,NIL,NIL,NIL,0,0)));
             //printf("proof = %d\n", proof);
@@ -348,65 +348,8 @@ void init_repl(void){
 }
 
 void execute(int x){
-    int atom;
-
-    if((builtinp(x) || compiledp(x)) &&
-       !(structurep(x) && car(x) == COLON))
-        error(BUILTIN_EXIST,"assertz",x);
-
-    if(atomp(x)){
-        SET_AUX(x,PRED);
-        if(module_name != NIL)
-            x = add_prefix(x);
-        add_data(x,x);
-        return;
-    }
-    if(predicatep(x)){
-        if(module_name != NIL)
-            x = add_prefix(x);
-        if(atomp(x))
-            atom = x;
-        else
-            atom = car(x);
-        memoize_arity(x,atom);
-        SET_VAR(x,unique(varslist(x)));
-        set_length(x);
-        add_data(car(x),x);
-        return;
-    }
-    if(user_operation_p(x)){
-        if(module_name != NIL)
-            x = add_prefix(x);
-        if(atomp(cadr(x)))
-            atom = cadr(x);
-        else
-            atom = car(cadr(x));
-        SET_VAR(x,unique(varslist(x)));
-        set_length(x);
-        add_data(car(x),x);
-        return;
-    }
-    else if(operationp(x)){
-        operate(x);
-        return;
-    }
-    else if(colonp(x)){
-        // (: atom pred(t1)) -> atom_pred(t1)
-        if(atomp(caddr(x)))
-            x = cons(concat_atom(cadr(x),caddr(x)),cdr(caddr(x)));
-        else
-            x = cons(concat_atom(cadr(x),car(caddr(x))),cdr(caddr(x)));
-        if(atomp(x))
-            atom = x;
-        else
-            atom = car(x);
-        memoize_arity(x,atom);
-        SET_VAR(x,unique(varslist(x)));
-        set_length(x);
-        add_data(car(x),x);
-        return;
-    }
-    error(SYNTAX_ERR,"execute ",x);
+    o_question(x,NIL);
+    return;
 }
 
 int resolve_all(int end, int bindings, int n){
@@ -822,7 +765,7 @@ void debugger(int end, int bindings, int choice, int n){
     int c;
 
     loop:
-    printf("?>");
+    printf("?> ");
     fflush(stdout);
     c = getchar();
     FLUSH
@@ -915,7 +858,6 @@ int valslist(int x){
     else
         return(cons(cons(car(x),deref1(car(x))),valslist(cdr(x))));
 }
-
 
 int operate(int x){
     int operator,operand1,operand2;

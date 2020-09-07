@@ -485,7 +485,7 @@ int readc(void){
     int c;
 
     if(input_stream == standard_input && repl_flag)
-        c = read_line(1);
+        c = read_line(3);
     else
         c = getc(GET_PORT(input_stream));
 
@@ -503,7 +503,7 @@ int readc(void){
     int c;
 
     if(input_stream == standard_input && repl_flag)
-        c = read_line(1);
+        c = read_line(3);
     else
         c = getc(GET_PORT(input_stream));
 
