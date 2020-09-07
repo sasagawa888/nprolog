@@ -256,13 +256,6 @@ int main(int argc, char *argv[]){
     opt = 1;
     init_repl();
 
-    FILE* fp = fopen("startup.pl","r");
-    if(fp != NULL){
-        fclose(fp);
-        goal[2] = makeconst("startup.pl");
-        b_consult(0,1);
-        predicates = NIL;
-    }
     while(opt < argc){
         if(strcmp(argv[opt],"-c") == 0){
             opt++;
