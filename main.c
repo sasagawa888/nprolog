@@ -209,14 +209,14 @@ int error_stream;
 //-----editor-----
 int repl_flag = 1;  //for REPL read_line 1=on, 0=off
 int buffer[256][10];
-int ed_row;
-int ed_col;
-int ed_start;
-int ed_end;
-int ed_ins = 1;
+//int ed_row;
+//int ed_col;
+//int ed_start;
+//int ed_end;
+//int ed_ins = 1;
 int ed_tab = 4;
 int ed_indent = 0;
-int ed_name = NIL;
+//int ed_name = NIL;
 //char ed_data[1000][80];
 //char ed_copy[500][80];
 int ed_lparen_row;
@@ -227,9 +227,9 @@ int ed_lbracket_row;
 int ed_lbracket_col;
 int ed_rbracket_row;
 int ed_rbracket_col;
-int ed_clip_start;
-int ed_clip_end;
-int ed_copy_end;
+//int ed_clip_start;
+//int ed_clip_end;
+//int ed_copy_end;
 char ed_candidate[15][30];
 int ed_candidate_pt;
 int ed_operator_color = 3;   //default yellow
@@ -431,7 +431,7 @@ int resolve(int end, int bindings, int choice, int n){
     		else if(undefined_flag == 2){
     		    printf("Warning: undefined predicate ");
         		print_goal();
-            printf("\n");
+                printf("\n");
         		return(NO);
     		    }
         }
