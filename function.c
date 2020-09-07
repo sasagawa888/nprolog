@@ -1472,47 +1472,6 @@ int b_callable(int nest, int n){
 
 }
 
-/*
-int b_once(int nest, int n){
-    int arg1,save1,save2,save3,save4,res;
-
-    save1 = tp;
-    save2 = sp;
-    save3 = trail_end;
-    if(n == 1){
-        arg1 = goal[2];
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"once",arg1);
-        if(!callablep(arg1))
-            error(NOT_CALLABLE,"once",arg1);
-
-        save4 = wp;
-        res = NIL;
-        if(arg1 == CUT)
-            res = YES;
-        else if(!has_cut_p(arg1)){
-            trail_end = save1;
-            res = proceed(arg1,2);
-        }
-        else{
-            if(proceed(before_cut(arg1),NIL) == YES)
-                res = proceed(after_cut(arg1),NIL);
-        }
-        if(res == YES){
-            tp = save1 + 1;
-            trail_end = save3;
-            if(proceed(1,NIL) == YES)
-                return(YES);
-        }
-
-        wp = save4;
-        unbind(save2);
-        return(NO);
-    }
-    return(NO);
-}
-*/
-
 int b_unify_with_occurs_check(int nest, int n){
     int arg1,arg2;
 
