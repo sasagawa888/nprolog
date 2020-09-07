@@ -1021,7 +1021,6 @@ void initbuiltin(void){
     defcompiled("atom_concat",b_atom_concat);
     defcompiled("length",b_length);
     defcompiled("call",b_call);
-    //defcompiled("once",b_once);
     defcompiled("setup_call_cleanup",b_setup_call_cleanup);
 
     return;
