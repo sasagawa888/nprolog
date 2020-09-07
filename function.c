@@ -811,7 +811,6 @@ void initbuiltin(void){
     definfix("\\==",b_notequalp,700,XFX);
     definfix("\\=",b_notunify,700,XFX);
     definfix("=..",b_univ,700,XFX);
-    definfix("\\+",b_fail_if,900,FY);
     definfix("@",b_atmark,100,XFX);
     definfix(":",b_colon,50,XFX);
     definfix("->",b_ifthen,1050,XFY);
@@ -845,8 +844,7 @@ void initbuiltin(void){
     defbuiltin("nl",b_nl);
     defbuiltin("tab",b_tab);
     defbuiltin("fail",b_fail);
-    defbuiltin("fail_if",b_fail_if);
-    defbuiltin("not",b_fail_if);
+    defbuiltin("not",b_not);
     defbuiltin("true",b_true);
     defbuiltin("halt",b_halt);
     defbuiltin("abort",b_abort);
@@ -4216,7 +4214,7 @@ int b_call(int nest, int n){
     return(NO);
 }
 
-int b_fail_if(int nest, int n){
+int b_not(int nest, int n){
     int arg1,res,save1,save3;
 
     save1 = tp;
@@ -4224,9 +4222,9 @@ int b_fail_if(int nest, int n){
     if(n == 1){
         arg1 = deref(goal[2]);
         if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"fail_if ",arg1);
+            error(INSTANTATION_ERR,"not ",arg1);
         if(!callablep(arg1))
-            error(NOT_CALLABLE,"fail_if ", arg1);
+            error(NOT_CALLABLE,"not ", arg1);
 
         res = NIL;
         if(arg1 == CUT)

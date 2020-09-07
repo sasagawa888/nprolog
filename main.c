@@ -141,7 +141,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"tab"},{"fail"},{"not"},{"true"},{"halt"},{"abort"},
 {"listing"},{"functor"},{"arg"},{"debug"},{"write_canonical"},
 {"writeq"},{"write_term"},{"read_term"},{"bounded"},{"integer_rounding_function"},
-{"char_conversion"},{"max_arity"},{"fail_if"},
+{"char_conversion"},{"max_arity"},
 {"atom_length"},{"findall"},{"consult"},{"reconsult"},
 {"see"},{"seen"},{"tell"},{"told"},{"trace"},{"notrace"},{"spy"},
 {"nospy"},{"atom"},{"integer"},{"real"},{"float"},{"number"},{"compound"},
