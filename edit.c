@@ -51,6 +51,7 @@ int b_set_editor(int nest, int n){
         return(NO);
 }
 
+/*
 int b_edit(int nest, int n){
     int arg1,c,i,j;
     FILE *port;
@@ -477,7 +478,7 @@ void edit_screen(int name){
                     }
                     else{
                         type = check_token(ed_row,ed_col-2);
-                        if(type == 7) // /*...*/
+                        if(type == 7) 
                            ed_incomment = -1;
                         backspace();
                         display_screen();
@@ -645,6 +646,7 @@ void edit_screen(int name){
     goto loop;
 }
 
+
 int count_col(int x){
     int pysical_col,logical_col;
 
@@ -720,7 +722,7 @@ void display_line(int line){
                 ESCREV;
          else
                 ESCRST;
-         if(ed_incomment != -1 && line >= ed_incomment){ //comment /*...*/
+         if(ed_incomment != -1 && line >= ed_incomment){ //comment 
              ESCBOLD;
              setcolor(ed_comment_color);
              while(ed_data[line][col] != EOL &&
@@ -825,7 +827,7 @@ void display_line(int line){
                    ESCRST;
                    ESCFORG;
                }
-               else if(type == 7){ //comment /*...*/
+               else if(type == 7){ //comment 
                    ESCBOLD;
                    setcolor(ed_comment_color);
                    ed_incomment = line;
@@ -861,7 +863,7 @@ void display_line(int line){
     ESCRST;
     return;
 }
-
+*/
 void setcolor(int n){
         switch(n){
                 case 0: ESCFBLACK; break;
@@ -890,7 +892,7 @@ int getch(){
     tcsetattr( STDIN_FILENO, TCSANOW, &oldt );
     return ch;
 }
-
+/*
 void backspace(){
     int i;
 
@@ -1467,7 +1469,7 @@ int check_token(int row, int col){
        }
        str[pos] = NUL;
        if(str[0] == '/' && str[1] == '*')
-          return(7); //comment /*...*/
+          return(7); //comment 
     }
     str[pos] = NUL;
     if(pos == 0) //null token
@@ -1577,7 +1579,7 @@ void replace_fragment(char* newstr){
         }
         return;
 }
-
+*/
 //------------REPL read-line-----------------
 void display_buffer(){
     int col,type;

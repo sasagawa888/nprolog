@@ -991,9 +991,8 @@ void initbuiltin(void){
     defcompiled("o_ifthenelse",b_comp_ifthenelse);
 
     #if __linux
-    defbuiltin("edit",b_edit);
     defbuiltin("set_editor",b_set_editor);
-    defbuiltin("nano",b_nano);
+    defbuiltin("edit",b_nano);
     defbuiltin("server_create",b_server_create);
     defbuiltin("server_accept",b_server_accept);
     defbuiltin("client_connect",b_client_connect);

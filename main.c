@@ -1,4 +1,4 @@
-/* O-Prolog
+/* N-Prolog
 written by kenichi sasagawa 2016/8~
 */
 
@@ -217,8 +217,8 @@ int ed_ins = 1;
 int ed_tab = 4;
 int ed_indent = 0;
 int ed_name = NIL;
-char ed_data[1000][80];
-char ed_copy[500][80];
+//char ed_data[1000][80];
+//char ed_copy[500][80];
 int ed_lparen_row;
 int ed_lparen_col;
 int ed_rparen_row;
