@@ -26,4 +26,4 @@ edit.o : edit.c npl.h
 
 .PHONY: clean
 clean: -lm
-	rm -f npl *.o
+	rm -f *.o

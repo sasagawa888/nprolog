@@ -811,7 +811,6 @@ void initbuiltin(void){
     definfix("\\==",b_notequalp,700,XFX);
     definfix("\\=",b_notunify,700,XFX);
     definfix("=..",b_univ,700,XFX);
-    definfix("\\+",b_fail_if,900,FY);
     definfix("@",b_atmark,100,XFX);
     definfix(":",b_colon,50,XFX);
     definfix("->",b_ifthen,1050,XFY);
@@ -845,8 +844,7 @@ void initbuiltin(void){
     defbuiltin("nl",b_nl);
     defbuiltin("tab",b_tab);
     defbuiltin("fail",b_fail);
-    defbuiltin("fail_if",b_fail_if);
-    defbuiltin("not",b_fail_if);
+    defbuiltin("not",b_not);
     defbuiltin("true",b_true);
     defbuiltin("halt",b_halt);
     defbuiltin("abort",b_abort);
@@ -993,9 +991,8 @@ void initbuiltin(void){
     defcompiled("o_ifthenelse",b_comp_ifthenelse);
 
     #if __linux
-    defbuiltin("edit",b_edit);
     defbuiltin("set_editor",b_set_editor);
-    defbuiltin("nano",b_nano);
+    defbuiltin("edit",b_nano);
     defbuiltin("server_create",b_server_create);
     defbuiltin("server_accept",b_server_accept);
     defbuiltin("client_connect",b_client_connect);
@@ -1024,7 +1021,6 @@ void initbuiltin(void){
     defcompiled("atom_concat",b_atom_concat);
     defcompiled("length",b_length);
     defcompiled("call",b_call);
-    //defcompiled("once",b_once);
     defcompiled("setup_call_cleanup",b_setup_call_cleanup);
 
     return;
@@ -1471,47 +1467,6 @@ int b_callable(int nest, int n){
     return(NO);
 
 }
-
-/*
-int b_once(int nest, int n){
-    int arg1,save1,save2,save3,save4,res;
-
-    save1 = tp;
-    save2 = sp;
-    save3 = trail_end;
-    if(n == 1){
-        arg1 = goal[2];
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"once",arg1);
-        if(!callablep(arg1))
-            error(NOT_CALLABLE,"once",arg1);
-
-        save4 = wp;
-        res = NIL;
-        if(arg1 == CUT)
-            res = YES;
-        else if(!has_cut_p(arg1)){
-            trail_end = save1;
-            res = proceed(arg1,2);
-        }
-        else{
-            if(proceed(before_cut(arg1),NIL) == YES)
-                res = proceed(after_cut(arg1),NIL);
-        }
-        if(res == YES){
-            tp = save1 + 1;
-            trail_end = save3;
-            if(proceed(1,NIL) == YES)
-                return(YES);
-        }
-
-        wp = save4;
-        unbind(save2);
-        return(NO);
-    }
-    return(NO);
-}
-*/
 
 int b_unify_with_occurs_check(int nest, int n){
     int arg1,arg2;
@@ -4257,7 +4212,7 @@ int b_call(int nest, int n){
     return(NO);
 }
 
-int b_fail_if(int nest, int n){
+int b_not(int nest, int n){
     int arg1,res,save1,save3;
 
     save1 = tp;
@@ -4265,9 +4220,9 @@ int b_fail_if(int nest, int n){
     if(n == 1){
         arg1 = deref(goal[2]);
         if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"fail_if ",arg1);
+            error(INSTANTATION_ERR,"not ",arg1);
         if(!callablep(arg1))
-            error(NOT_CALLABLE,"fail_if ", arg1);
+            error(NOT_CALLABLE,"not ", arg1);
 
         res = NIL;
         if(arg1 == CUT)
@@ -7602,7 +7557,7 @@ int o_dcg(int x, int y){
 }
 
 int o_question(int x, int y){
-    int res,temp;
+    int res;
 
     //[file1,file2] -> consult(file1),consult(file2).
     if(listp(x))
@@ -7624,16 +7579,6 @@ int o_question(int x, int y){
         res = resolve_all(0,sp,1);
         if(res == CUT)
             res = NO;
-        print(res);printf("\n");
-        return(res);
-    }
-    /*
-    e.g. ?- ((X=1;X=2),Y=6;Y=7,!,(X=3;X=4)).
-    */
-    else if(has_cut_p(x) && disjunctionp(after_cut(x))){
-        temp = remove_cut(x);
-        push_trail_body_with_ask(temp);
-        res = resolve_all(0,sp,1);
         print(res);printf("\n");
         return(res);
     }

@@ -485,7 +485,7 @@ int readc(void){
     int c;
 
     if(input_stream == standard_input && repl_flag)
-        c = read_line(1);
+        c = read_line(3);
     else
         c = getc(GET_PORT(input_stream));
 
@@ -503,7 +503,7 @@ int readc(void){
     int c;
 
     if(input_stream == standard_input && repl_flag)
-        c = read_line(1);
+        c = read_line(3);
     else
         c = getc(GET_PORT(input_stream));
 
@@ -551,7 +551,6 @@ void unreadc(char c){
 #endif
 
 void gettoken(void){
-char str[256], *e;
 
 #if _WIN32
     char c,c1;
@@ -981,35 +980,6 @@ char str[256], *e;
                     //skip eol
                     goto redo;
                 }
-                else if(c == 'x'){
-                    i = 0;
-                    c = readc();
-                    while(c != '\\'){
-                        if(!ishexch(c))
-                            error(SYNTAX_ERR,"illegal hex char",4);
-                        str[i] = c;
-                        c = readc();
-                        i++;
-                    }
-                    c = strtol(str,&e,16);
-                    if(c > 127 || c < 0)
-                        error(SYNTAX_ERR,"illegal char code",5);
-                }
-                else if(isdigit(c)){
-                    i = 0;
-                    while(c != '\\'){
-                        if(!isoctch(c))
-                            error(SYNTAX_ERR,"illegal oct char",6);
-                        str[i] = c;
-                        c = readc();
-                        if(c == '\'')
-                        error(SYNTAX_ERR,"illegal token",7);
-                        i++;
-                    }
-                    c = strtol(str,&e,8);
-                    if(c > 127 || c < 0)
-                        error(SYNTAX_ERR,"illegal char code",8);
-                }
                 else if(c == '\"' || c == '\\' ||
                         c == '\'' || c == '`')
                     stok.buf[pos++] = '\\';
@@ -1042,51 +1012,16 @@ char str[256], *e;
     }
 
     //string
-    if(c == '"'){
+    if(c == '$'){
         pos = 0;
         c = readc();
         c1 = readc();
-        while(!(c == '"' && c1 != '"')){
-            if(c == '"'){
-                if(c1 == '"')
+        while(!(c == '$' && c1 != '$')){
+            if(c == '$'){
+                if(c1 == '$')
                     stok.buf[pos++] = c;
                 else
                     error(SYNTAX_ERR,"double quotes",10);
-            }
-            else if(c == '\\'){
-                if(c1 == 'x'){
-                    i = 0;
-                    c = readc();
-                    while(c != '\\'){
-                        if(!ishexch(c))
-                            error(SYNTAX_ERR,"illegal hex char",4);
-                        str[i] = c;
-                        c = readc();
-                        i++;
-                    }
-                    c = strtol(str,&e,16);
-                    if(c > 127 || c < 0)
-                        error(SYNTAX_ERR,"illegal char code",5);
-                    stok.buf[pos++] = c;
-                }
-                else if(isdigit(c1)){
-                    i = 0;
-                    while(c != '\\'){
-                        if(!isoctch(c))
-                            error(SYNTAX_ERR,"illegal oct char",6);
-                        str[i] = c;
-                        c = readc();
-                        if(c == '\'')
-                            error(SYNTAX_ERR,"illegal token",7);
-                        i++;
-                    }
-                    c = strtol(str,&e,8);
-                    if(c > 127 || c < 0)
-                          error(SYNTAX_ERR,"illegal char code",8);
-                    stok.buf[pos++] = c;
-                }
-                else
-                    stok.buf[pos++] = c1;
             }
             else{
                 stok.buf[pos++] = c;

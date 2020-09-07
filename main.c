@@ -1,4 +1,4 @@
-/* O-Prolog
+/* N-Prolog
 written by kenichi sasagawa 2016/8~
 */
 
@@ -141,7 +141,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"tab"},{"fail"},{"not"},{"true"},{"halt"},{"abort"},
 {"listing"},{"functor"},{"arg"},{"debug"},{"write_canonical"},
 {"writeq"},{"write_term"},{"read_term"},{"bounded"},{"integer_rounding_function"},
-{"char_conversion"},{"max_arity"},{"fail_if"},
+{"char_conversion"},{"max_arity"},
 {"atom_length"},{"findall"},{"consult"},{"reconsult"},
 {"see"},{"seen"},{"tell"},{"told"},{"trace"},{"notrace"},{"spy"},
 {"nospy"},{"atom"},{"integer"},{"real"},{"float"},{"number"},{"compound"},
@@ -209,16 +209,16 @@ int error_stream;
 //-----editor-----
 int repl_flag = 1;  //for REPL read_line 1=on, 0=off
 int buffer[256][10];
-int ed_row;
-int ed_col;
-int ed_start;
-int ed_end;
-int ed_ins = 1;
+//int ed_row;
+//int ed_col;
+//int ed_start;
+//int ed_end;
+//int ed_ins = 1;
 int ed_tab = 4;
 int ed_indent = 0;
-int ed_name = NIL;
-char ed_data[1000][80];
-char ed_copy[500][80];
+//int ed_name = NIL;
+//char ed_data[1000][80];
+//char ed_copy[500][80];
 int ed_lparen_row;
 int ed_lparen_col;
 int ed_rparen_row;
@@ -227,9 +227,9 @@ int ed_lbracket_row;
 int ed_lbracket_col;
 int ed_rbracket_row;
 int ed_rbracket_col;
-int ed_clip_start;
-int ed_clip_end;
-int ed_copy_end;
+//int ed_clip_start;
+//int ed_clip_end;
+//int ed_copy_end;
 char ed_candidate[15][30];
 int ed_candidate_pt;
 int ed_operator_color = 3;   //default yellow
@@ -256,13 +256,6 @@ int main(int argc, char *argv[]){
     opt = 1;
     init_repl();
 
-    FILE* fp = fopen("startup.pl","r");
-    if(fp != NULL){
-        fclose(fp);
-        goal[2] = makeconst("startup.pl");
-        b_consult(0,1);
-        predicates = NIL;
-    }
     while(opt < argc){
         if(strcmp(argv[opt],"-c") == 0){
             opt++;
@@ -298,7 +291,7 @@ int main(int argc, char *argv[]){
             output_stream = standard_output;
             error_stream = standard_error;
             init_repl();
-            printf("| "); fflush(stdout);
+            printf("?- "); fflush(stdout);
             execute(variable_to_call(readparse()));
             //sexp_flag = 1;print(variable_to_call(parser(NIL,NIL,NIL,NIL,0,0)));
             //printf("proof = %d\n", proof);
@@ -348,65 +341,8 @@ void init_repl(void){
 }
 
 void execute(int x){
-    int atom;
-
-    if((builtinp(x) || compiledp(x)) &&
-       !(structurep(x) && car(x) == COLON))
-        error(BUILTIN_EXIST,"assertz",x);
-
-    if(atomp(x)){
-        SET_AUX(x,PRED);
-        if(module_name != NIL)
-            x = add_prefix(x);
-        add_data(x,x);
-        return;
-    }
-    if(predicatep(x)){
-        if(module_name != NIL)
-            x = add_prefix(x);
-        if(atomp(x))
-            atom = x;
-        else
-            atom = car(x);
-        memoize_arity(x,atom);
-        SET_VAR(x,unique(varslist(x)));
-        set_length(x);
-        add_data(car(x),x);
-        return;
-    }
-    if(user_operation_p(x)){
-        if(module_name != NIL)
-            x = add_prefix(x);
-        if(atomp(cadr(x)))
-            atom = cadr(x);
-        else
-            atom = car(cadr(x));
-        SET_VAR(x,unique(varslist(x)));
-        set_length(x);
-        add_data(car(x),x);
-        return;
-    }
-    else if(operationp(x)){
-        operate(x);
-        return;
-    }
-    else if(colonp(x)){
-        // (: atom pred(t1)) -> atom_pred(t1)
-        if(atomp(caddr(x)))
-            x = cons(concat_atom(cadr(x),caddr(x)),cdr(caddr(x)));
-        else
-            x = cons(concat_atom(cadr(x),car(caddr(x))),cdr(caddr(x)));
-        if(atomp(x))
-            atom = x;
-        else
-            atom = car(x);
-        memoize_arity(x,atom);
-        SET_VAR(x,unique(varslist(x)));
-        set_length(x);
-        add_data(car(x),x);
-        return;
-    }
-    error(SYNTAX_ERR,"execute ",x);
+    o_question(x,NIL);
+    return;
 }
 
 int resolve_all(int end, int bindings, int n){
@@ -495,7 +431,7 @@ int resolve(int end, int bindings, int choice, int n){
     		else if(undefined_flag == 2){
     		    printf("Warning: undefined predicate ");
         		print_goal();
-            printf("\n");
+                printf("\n");
         		return(NO);
     		    }
         }
@@ -822,7 +758,7 @@ void debugger(int end, int bindings, int choice, int n){
     int c;
 
     loop:
-    printf("?>");
+    printf("?> ");
     fflush(stdout);
     c = getchar();
     FLUSH
@@ -915,7 +851,6 @@ int valslist(int x){
     else
         return(cons(cons(car(x),deref1(car(x))),valslist(cdr(x))));
 }
-
 
 int operate(int x){
     int operator,operand1,operand2;
