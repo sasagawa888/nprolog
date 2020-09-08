@@ -1102,18 +1102,21 @@ int b_member(int nest, int n){
     return(NO);
 }
 
-int b_append(int nest, int n){
-    int arg1,arg2,arg3,x,ls,ys,zs,save1,save2,body;
+int b_append(int args, int n){
+    int arglist,rest,arg1,arg2,arg3,x,ls,ys,zs,save1,save2,body;
 
     save2 = sp;
+    body = NIL;
     if(n == 3){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
+        arglist = car(args);
+        rest = cadr(args);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+        arg3 = deref(caddr(arglist));
 
         save1 = wp;
         if(unify(arg1,NIL) == YES && unify(arg2,arg3) == YES){
-            if(proceed(NIL,nest) == YES)
+            if(prove(NIL,sp,rest,0) == YES)
                 return(YES);
         }
         wp = save1;
@@ -1128,7 +1131,7 @@ int b_append(int nest, int n){
            unify(arg2,ys) == YES &&
            unify(arg3,wlistcons(x,zs)) == YES){
             body = wlist4(makeatom("append",COMP),ls,ys,zs);
-            if(proceed(body,nest) == YES)
+            if(prove(body,sp,rest,0) == YES)
                 return(YES);
         }
         wp = save1;

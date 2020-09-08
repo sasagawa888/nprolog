@@ -1,4 +1,4 @@
-/* O-Prolog
+/* N-Prolog
 written by kenichi sasagawa 2016/9~
 */
 #include <setjmp.h>
@@ -20,7 +20,7 @@ written by kenichi sasagawa 2016/9~
 #define MODULES 10
 #define OPERATOR_NUMBER 24
 #define FUNCTION_NUMBER 19
-#define BUILTIN_NUMBER 190
+#define BUILTIN_NUMBER 200
 #define COMPILED_NUMBER 23
 #define EXTENDED_NUMBER  12
 #define NIL     0
@@ -79,7 +79,7 @@ written by kenichi sasagawa 2016/9~
 #define SJIS2       255        //#b0000000011111111
 
 int prove_all(int goals, int bindings, int n);
-int prove(int goal, int bindings, int n);
+int prove(int goal, int bindings, int rest, int n);
 
 typedef enum tag {EMP,INTN,FLTN,LONGN,BIGX,STRUCT,SINGLE,STREAM,STR} tag;
 typedef enum flag {FRE,USE} flag;

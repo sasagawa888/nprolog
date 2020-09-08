@@ -380,22 +380,31 @@ int prove_all(int goals, int bindings, int n){
     if(nullp(goals))
         return(YES);
     else if(car(goals) == AND){
-        if(prove(cadr(goals),bindings,n) == YES)
+        if(prove(cadr(goals),bindings,caddr(goals),n) == YES)
             return(prove_all(caddr(goals),bindings,n+1));
     } 
     else
-        return(prove(goals,bindings,n));
+        return(prove(goals,bindings,NIL,n));
     
     return(NO);
 }
 
-int prove(int goal, int bindings, int n){
+int prove(int goal, int bindings, int rest, int n){
 
-    if(builtinp(goal)){
+    if(nullp(goal)){
+        return(prove_all(rest,bindings,n));
+    }
+    else if(builtinp(goal)){
         if((GET_SUBR(car(goal)))(cdr(goal),length(goal) - 1) == YES)
             return(YES);
 
         unbind(bindings);
+        return(NO);
+    }
+    else if(compiledp(goal)){
+        if((GET_SUBR(car(goal)))(list2(cdr(goal),rest),length(goal) - 1) == YES)
+            return(YES);
+
         return(NO);
     }
     else
