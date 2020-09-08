@@ -31,17 +31,6 @@ I hope that Prolog will become more popular. I hope many people enjoy Prolog. NP
 ?- is prompt.
 
 
-Compiler
-read compiler from library
-
-?- use_module(library(compiler)).
-yes
-
-?- compile_file(filename.pl).
-
-The Compiler generates filename.o object file.
-
-?- ['filename.o'].
 ```
 
 ## example
@@ -57,5 +46,8 @@ X = 1071508607186267320948425049060001810561404811705533607443750388370351051124
 7594672917553146825187145285692314043598457757469857480393456777482423098542107460506237114187795418215304
 6474983581941267398767559165543946077062914571196477686542167660429831652624386837205668069376
 yes
+
+?- halt().
+- good bye -
 
 ```

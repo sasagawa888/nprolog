@@ -1393,13 +1393,6 @@ int readitem(void){
                             temp1 = readparen();
                             return(cons(temp,temp1));
                         }
-                        /*
-                        else if(stok.type == OPERATOR){
-                            stok.flag = BACK;
-                            temp = makeconst(GET_NAME(temp));
-                            return(temp);
-                        }
-                        */
                         else{
                             stok.flag = BACK;
                             return(temp);
@@ -1470,7 +1463,7 @@ int readitem(void){
                             else if(getatom(str,PRED,hash(str)))
                                 temp = makeatom(str,PRED);
                             else if(getatom(str,SYS,hash(str)))
-                                temp = makeatom(str,SYS);
+                                temp = cons(makeatom(str,SYS),NIL);
                             else
                                 temp = makeatom(str,SIMP);
                             return(temp);

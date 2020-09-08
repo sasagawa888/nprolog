@@ -19,7 +19,7 @@ void error(int errnum, char *fun, int arg){
         set_length(cleanup_dt);
         push_trail_body1(cleanup_dt);
         cleanup_dt = NIL;
-        resolve_all(0,sp,0);
+        prove_all(0,sp,0);
     }
 
     switch(errnum){

@@ -66,11 +66,6 @@ int wcons(int car, int cdr){
     SET_CAR(addr,car);
     SET_CDR(addr,cdr);
     SET_AUX(addr,0);
-    //SET_VAR(addr,0);
-    //SET_TR(addr,0);
-    //SET_LENGTH(addr,0);
-    //SET_OPT(addr,0);
-    //SET_OPT(addr,1);
     return(addr);
 }
 
@@ -762,8 +757,6 @@ int single_operation_p(int addr){
 int builtinp(int addr){
     if(structurep(addr) && IS_INCELL(car(addr)) &&
        GET_AUX(car(addr)) == SYS && GET_AUX(addr) != LIST)
-        return(1);
-    else if(IS_INCELL(addr) && GET_AUX(addr) == SYS)
         return(1);
     else
         return(0);

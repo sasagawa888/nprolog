@@ -861,7 +861,7 @@ int proceed(int body, int cont){
         save1 = tp;
         save2 = sp;
         save3 = trail_end;
-        if(resolve_all(save3,save2,body) == YES)
+        if(prove_all(save3,save2,body) == YES)
             return(YES);
         else{
             tp = save1;
@@ -927,7 +927,7 @@ int proceed(int body, int cont){
         save3 = trail_end;
         set_length(body);
         push_trail1(body);
-        if(resolve_all(trail_end,sp,1) == YES)
+        if(prove_all(trail_end,sp,1) == YES)
             return(proceed(cont,NIL));
         else{
             unbind(save2);
@@ -987,7 +987,7 @@ int proceed(int body, int cont){
             save3 = trail_end;
             set_length(cadr(body));
             push_trail1(cadr(body));
-            if(resolve_all(trail_end,sp,1) == YES)
+            if(prove_all(trail_end,sp,1) == YES)
                 return(proceed(op_connect(caddr(body),cont),NIL));
             else{
                 unbind(save2);

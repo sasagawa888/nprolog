@@ -38,11 +38,6 @@ int cell_hash_table[HASHTBSIZE];
 int variables = NIL;
 int predicates = NIL;
 int spy_list = NIL;
-int findall_list[10];
-int findall_pt = 0;
-int bagof_list = NIL;
-int checked_var = NIL; //for bagof_help
-int checking_var = NIL; //for bagof_help
 int load_list = NIL;
 int dynamic_list = NIL;
 int reconsult_list = NIL;
@@ -163,7 +158,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"expand_path"},{"delete_file"},{"file_exists"},{"decompose_file_name"},
 {"environment_variable"},{"file_modification_time"},
 {"server_create"},{"server_accept"},{"client_connect"},{"socket_send"},
-{"socket_recieve"},{"socket_close"},{"sort"},{"keysort"},
+{"socket_recieve"},{"socket_close"},{"sort"},{"keysort"},{"length"},
 {"c_lang"},{"c_define"},{"c_include"},{"c_option"},{"c_global"},
 {"o_include_cut"},{"o_has_cut"},{"o_c_define"},{"o_c_include"},
 {"o_c_option"},{"o_c_global"},{"o_clause_with_arity"},
@@ -184,7 +179,7 @@ char compiled[COMPILED_NUMBER][30] ={
 {"retract"},{"clause"},{"current_predicate"},
 {"current_prolog_flag"},{"current_op"},{"current_module"},
 {"current_visible"},{"stream_property"},{"between"},
-{"bagof"},{"setof"},{"sub_atom"},{"atom_concat"},{"length"},
+{"bagof"},{"setof"},{"sub_atom"},{"atom_concat"},
 {"call"},{"setup_call_cleanup"},{"o_reconsult_predicate"},
 };
 
@@ -319,9 +314,6 @@ void init_repl(void){
     trail_end = 0;
     cut_flag = 0;
     store_pt = 0;
-    findall_pt = 0;  //findall/3
-    checked_var = NIL; //bagof/3
-    checking_var = NIL; //bagof/3
     catch_pt = 0;
     cleanup_dt = NIL;
     numbervars_top_pt = 0;
@@ -341,10 +333,76 @@ void init_repl(void){
 }
 
 void execute(int x){
-    o_question(x,NIL);
+    int res;
+
+    //[file1,file2] -> consult(file1),consult(file2).
+    if(listp(x))
+        x = list_to_ope(x);
+
+    if(atomp(x) && !builtinp(x) && !compiledp(x))
+        x = makepred(GET_NAME(x));
+
+    if(wide_variable_p(x))
+        error(INSTANTATION_ERR,"?- ", x);
+
+    if(!callablep(x))
+        error(NOT_CALLABLE,"?- ", x);
+
+    variables = listreverse(unique(varslist(x)));
+    res = prove_all(addask(x),sp,1);
+    print(res);printf("\n");
     return;
 }
 
+int list_to_ope(int x){
+    if(nullp(x))
+        error(SYNTAX_ERR,"?-", x);
+    else if(nullp(cdr(x)))
+        return(cons(makeatom("reconsult",SYS),x));
+    else{
+        return(list3(makeatom(",",OPE),
+                     list2(makeatom("reconsult",SYS),car(x)),
+                     list_to_ope(cdr(x))));
+    }
+    return(NIL);
+}
+
+int addask(int x){
+
+    if(car(x) != AND)
+        return(list3(AND,x,cons(makeatom("%ask",SYS),NIL)));
+    else 
+        return(list3(AND,cadr(x),addask(caddr(x))));
+}
+
+
+int prove_all(int goals, int bindings, int n){
+    if(nullp(goals))
+        return(YES);
+    else if(car(goals) == AND){
+        if(prove(cadr(goals),bindings,n) == YES)
+            return(prove_all(caddr(goals),bindings,n+1));
+    } 
+    else
+        return(prove(goals,bindings,n));
+    
+    return(NO);
+}
+
+int prove(int goal, int bindings, int n){
+
+    if(builtinp(goal)){
+        if((GET_SUBR(car(goal)))(cdr(goal),length(goal) - 1) == YES)
+            return(YES);
+
+        unbind(bindings);
+        return(NO);
+    }
+    else
+        return(NO);
+}
+
+/*
 int resolve_all(int end, int bindings, int n){
     trail_end = end;
     if(tp <= end)
@@ -584,7 +642,7 @@ int resolve(int end, int bindings, int choice, int n){
                             return(CUT);
                     }
                 }
-                /*
+                
                 else{
                     if(cut_flag == 1){
                         cut_flag = 0;
@@ -595,7 +653,7 @@ int resolve(int end, int bindings, int choice, int n){
                         return(NO); //not back track when if_then
                     }
                 }
-                */
+                
             }
         }
         else{
@@ -669,7 +727,7 @@ int resolve(int end, int bindings, int choice, int n){
     }
     return(NO);
 }
-
+*/
 int before_cut(int x){
     return(before_cut1(x,NIL));
 }

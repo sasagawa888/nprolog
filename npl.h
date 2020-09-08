@@ -78,6 +78,8 @@ written by kenichi sasagawa 2016/9~
 #define SJIS1       65280      //#b1111111100000000
 #define SJIS2       255        //#b0000000011111111
 
+int prove_all(int goals, int bindings, int n);
+int prove(int goal, int bindings, int n);
 
 typedef enum tag {EMP,INTN,FLTN,LONGN,BIGX,STRUCT,SINGLE,STREAM,STR} tag;
 typedef enum flag {FRE,USE} flag;
@@ -555,6 +557,7 @@ int readc(void);
 int readc(void);
 #endif
 int absolute(int x);
+int addask(int x);
 int add_atom_pred_prefix(int pred);
 int add_prefix(int x);
 int add_body_prefix(int body);
@@ -789,7 +792,7 @@ int b_univ(int nest, int n);
 int b_use_module(int nest, int n);
 int b_var(int nest, int n);
 int b_variable_convert(int nest, int n);
-int b_write(int nest, int n);
+int b_write(int arglist, int n);
 int b_writeln(int nest, int n);
 int b_write_term(int nest, int n);
 int b_write_canonical(int nest, int n);

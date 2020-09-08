@@ -235,7 +235,7 @@ void dynamic_link(int x){
     init_f2(39,(tpred)proceed);
 
     //argument-3
-    init_f3(0,(tpred)resolve_all);
+    init_f3(0,(tpred)prove_all);
     init_f3(1,(tpred)list3);
     init_f3(2,(tpred)callsubr);
     init_f3(3,(tpred)wlist3);
@@ -767,7 +767,7 @@ void initoperator(void){
     defoperator(":-",o_define,1200,XFX,0);
     defoperator(":-",o_define,1200,FX,0);
     defoperator("-->",o_dcg,1200,XFX,0);
-    defoperator("?-",o_question,1200,FX,0);
+    defoperator("?-",o_ignore,1200,FX,0);
     defoperator(",",o_ignore,1000,XFY,0);
     defoperator(";",o_ignore,1100,XFY,0);
     defoperator(":",o_ignore,50,XFX,0);
@@ -856,7 +856,6 @@ void initbuiltin(void){
     defbuiltin("copy_term",b_copy_term);
     defbuiltin("debug",b_debug);
     defbuiltin("atom_length",b_atom_length);
-    defbuiltin("findall",b_findall);
     defbuiltin("consult",b_consult);
     defbuiltin("reconsult",b_reconsult);
     defbuiltin("initialization",b_initialization);
@@ -925,8 +924,6 @@ void initbuiltin(void){
     defbuiltin("term_variables",b_term_variables);
     defbuiltin("callable",b_callable);
     defbuiltin("%ask",b_ask);
-    defbuiltin("%findall_help",b_findall_help);
-    defbuiltin("%bagof_help",b_bagof_help);
     defbuiltin("system",b_system);
     defbuiltin("sort",b_sort);
     defbuiltin("keysort",b_keysort);
@@ -944,6 +941,7 @@ void initbuiltin(void){
     defbuiltin("environment_variable",b_environment_variable);
     defbuiltin("file_modification_time",b_file_modification_time);
     defbuiltin("date",b_date);
+    defbuiltin("length",b_length);
     defbuiltin("c_lang",b_c_lang);
     defbuiltin("c_define",b_c_define);
     defbuiltin("c_include",b_c_include);
@@ -1015,24 +1013,20 @@ void initbuiltin(void){
     defcompiled("current_prolog_flag",b_current_prolog_flag);
     defcompiled("stream_property",b_stream_property);
     defcompiled("between",b_between);
-    defcompiled("bagof",b_bagof);
-    defcompiled("setof",b_setof);
     defcompiled("sub_atom",b_sub_atom);
     defcompiled("atom_concat",b_atom_concat);
-    defcompiled("length",b_length);
     defcompiled("call",b_call);
     defcompiled("setup_call_cleanup",b_setup_call_cleanup);
 
     return;
 }
 
-int b_length(int nest, int n){
-    int arg1,arg2,res,i,j,save1,save2;
+int b_length(int arglist, int n){
+    int arg1,arg2;
 
-    save2 = sp;
     if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         if(integerp(eval(arg2)) && GET_INT(eval(arg2)) < 0)
             error(NOT_LESS_THAN_ZERO,"length ",arg2);
@@ -1041,62 +1035,10 @@ int b_length(int nest, int n){
         if(wide_variable_p(arg1) && wide_variable_p(arg2) && eqp(arg1,arg2))
             error(RESOURCE_ERR,"length ",arg1);
 
-        save1 = wp;
-        if(listp(arg1) && length(arg1) == -1)
-            return(NO);
-        else if(listp(arg1) && integerp(arg2)){
-            if(unify(arg2,makeint(length(arg1))))
-                if(proceed(NIL,nest) == YES)
-                    return(YES);
+        if(unify(arg2,makeint(length(arg1))) == YES)
+            return(YES);
 
-            wp = save1;
-            unbind(save2);
-            return(NO);
-        }
-        else if(listp(arg1) && wide_variable_p(arg2)){
-            if(unify(arg2,makeint(length(arg1))) == YES)
-                if(proceed(NIL,nest) == YES)
-                    return(YES);
-
-            wp = save1;
-            unbind(save2);
-            return(NO);
-        }
-        else if(wide_variable_p(arg1) && integerp(arg2)){
-            i = GET_INT(arg2);
-            res = NIL;
-            while(i > 0){
-                res = wlistcons(makeatom("_",ANOY),res);
-                i--;
-            }
-            if(unify(arg1,res) == YES)
-                if(proceed(NIL,nest) == YES)
-                    return(YES);
-
-            wp = save1;
-            unbind(save2);
-            return(NO);
-        }
-        else if(wide_variable_p(arg1) && wide_variable_p(arg2)){
-            j = 0;
-            while(1){
-                i = j;
-                res = NIL;
-                while(i > 0){
-                    res = wlistcons(makeatom("_",ANOY),res);
-                    i--;
-                }
-                if(unify(arg1,res) == YES && unify(arg2,makeint(j)) == YES)
-                    if(proceed(NIL,nest) == YES)
-                        return(YES);
-
-                wp = save1;
-                unbind(save2);
-                j++;
-            }
-        }
-        else
-            return(NO);
+        return(NO);
     }
     return(NO);
 }
@@ -1675,41 +1617,11 @@ int b_notunify(int nest, int n){
 
 
 //input and output
-int b_write(int nest, int n){
-    int arg1,arg2,save;
+int b_write(int arglist, int n){
 
-    if(n == 1){
-        arg1 = output_stream;
-        arg2 = deref(goal[2]);
-        goto write;
+    print(deref(car(arglist)));
+    return(YES);
 
-    }
-    else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        write:
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"write ",arg1);
-        if(!streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"write ",arg1);
-
-        save = output_stream;
-        if(aliasp(arg1))
-            output_stream = GET_CAR(arg1);
-        else
-            output_stream = arg1;
-        quoted_flag = 0;
-        numbervars_flag = 1;
-        numbervars_top_pt = 0;
-        print(arg2);
-        fflush(GET_PORT(output_stream));
-        quoted_flag = 1;
-        numbervars_flag = 0;
-        output_stream = save;
-        return(YES);
-    }
-    return(NO);
 }
 
 int b_writeln(int nest, int n){
@@ -2820,7 +2732,7 @@ int b_stream_property(int nest, int n){
         }
 
         if(res == YES){
-            if(resolve_all(save3,sp,nest+1) == YES)
+            if(prove_all(save3,sp,nest+1) == YES)
                 return(YES);
             else
                 goto exit;
@@ -2853,7 +2765,7 @@ int b_stream_property(int nest, int n){
                         else
                             unify(arg2,list2(makepred("eof_action"),OPLFALSE));
             }
-            if(resolve_all(save3,sp,nest+1) == YES)
+            if(prove_all(save3,sp,nest+1) == YES)
                 return(YES);
 
             tp = save1;
@@ -3757,12 +3669,12 @@ int b_use_module(int nest, int n){
 
 //arithmetic operation
 
-int b_is(int nest, int n){
+int b_is(int arglist, int n){
     int arg1,arg2,res;
 
     if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         if(wide_variable_p(arg2))
             error(INSTANTATION_ERR,"is ", arg2);
@@ -4233,7 +4145,7 @@ int b_not(int nest, int n){
             set_length(arg1);
             save_trail(save1+10);  //save old trail 10
             push_trail_body1(arg1);
-            res = resolve_all(save1,sp,nest+100); //to avoid duplicate nest
+            res = prove_all(save1,sp,nest+100); //to avoid duplicate nest
             tp = save1;
             retract_trail(save1+10); //retract old trail 10
             trail_end = save3;
@@ -4766,12 +4678,12 @@ int b_ifthen(int nest, int n){
             error(INSTANTATION_ERR,"-> ",arg2);
 
         push_trail_body1(arg1);
-        if(resolve_all(save1,sp,nest+3) == YES){
+        if(prove_all(save1,sp,nest+3) == YES){
             tp = save1;
             if(!has_cut_p(arg2)){
                 push_trail_body1(arg2);
-                if(resolve_all(save1,sp,nest+4) == YES)
-                    return(resolve_all(save3,sp,nest+1));
+                if(prove_all(save1,sp,nest+4) == YES)
+                    return(prove_all(save3,sp,nest+1));
                 else{
                     tp = save1;
                     sp = save2;
@@ -4783,9 +4695,9 @@ int b_ifthen(int nest, int n){
             else{
                 cut_flag = 1;
                 push_trail_body1(before_cut(arg2));
-                if(resolve_all(save3,sp,nest+3) ==YES){
+                if(prove_all(save3,sp,nest+3) ==YES){
                     push_trail_body1(after_cut(arg2));
-                    return(resolve_all(save3,sp,nest+1));
+                    return(prove_all(save3,sp,nest+1));
                 }
             }
           }
@@ -4937,7 +4849,7 @@ int b_atmark(int nest, int n){
         context = arg2;
         set_length(arg1);
         push_trail_body1(arg1);
-        res = resolve_all(save1,sp,nest+1);
+        res = prove_all(save1,sp,nest+1);
         context = NIL;
         tp = save1;
         if(res == NO)
@@ -4967,7 +4879,7 @@ int b_time(int nest, int n){
         }
         push_trail_body1(arg1);
         time_flag = getETime(); //time_flag on and it store start time
-        res = resolve_all(0,sp,0);
+        res = prove_all(0,sp,0);
         if(res == NO){
             end_time = getETime();
             printf("Elapsed Time=%.6f (second)\n", end_time - time_flag);
@@ -5094,24 +5006,10 @@ int b_nospy(int nest, int n){
 }
 
 int b_halt(int nest, int n){
-    int arg1;
 
     if(n == 0){
         printf("- good bye -\n");
         longjmp(buf,2);
-    }
-    else if(n == 1){
-        arg1 = deref(goal[2]);
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"halt ",arg1);
-        if(!wide_integer_p(arg1))
-            error(NOT_INT,"halt ",arg1);
-        if(GET_INT(arg1) == 0){
-            printf("- good bye -\n");
-            longjmp(buf,2);
-        }
-        else
-            return(NO);
     }
     return(NO);
 }
@@ -5140,11 +5038,11 @@ int b_atom(int nest, int n){
     return(NO);
 }
 
-int b_integer(int nest, int n){
+int b_integer(int arglist, int n){
     int arg1;
 
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(integerp(arg1) || longnump(arg1) || bignump(arg1))
             return(YES);
         else
@@ -5153,11 +5051,11 @@ int b_integer(int nest, int n){
     return(NO);
 }
 
-int b_real(int nest, int n){
+int b_real(int arglist, int n){
     int arg1;
 
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(floatp(arg1))
             return(YES);
         else
@@ -6635,106 +6533,7 @@ int b_listing(int nest, int n){
 }
 
 
-int b_bagof(int nest, int n){
-    int arg1,arg2,arg3,save1,save2,save3,save4,end,
-    vars,notfree,free;
 
-    save1 = tp;
-    save2 = sp;
-    save3 = trail_end;
-    save4 = variables;
-    if(n == 3){
-        arg1 = deref(goal[2]); //template
-        arg2 = deref(goal[3]); //goal
-        arg3 = deref(goal[4]); //instance
-
-        if(wide_variable_p(arg2))
-            error(INSTANTATION_ERR,"bagof ",arg2);
-        if(!callablep(get_predicate(arg2)))
-            error(NOT_CALLABLE,"bagof ",arg2);
-        if(!wide_variable_p(arg3) && !listp(arg3))
-            error(NOT_LIST,"bagof ",arg3);
-
-        if(arg2 == makeconst("fail"))
-            goto exit;
-        vars = listreverse(unique(varslist(arg2)));
-        notfree = cons(arg1,get_notfree_variable(arg2));
-        free = get_free_variable(vars,notfree);
-        if(nullp(free))
-            goto findall;
-
-        loop:
-        bagof_list = NIL;
-        push_trail_body_with_bagof_help(get_predicate(arg2),car(free),notfree);
-        resolve_all(save1,sp,nest+1);
-        unify(arg3,listreverse(bagof_list));
-        unify(car(free),car(checking_var));
-        checked_var = cons(checking_var,checked_var);
-        checking_var = NIL;
-        variables = save4;
-        if(!nullp(bagof_list)){
-            tp = save1;
-            trail_end = save3;
-            if(proceed(NIL,nest) == YES){
-                return(YES);
-            }
-            else{
-                tp = save1;
-                trail_end = save3;
-                unbind(save2);
-                goto loop;
-            }
-        }
-        else{
-            exit:
-            checked_var = NIL;
-            checking_var = NIL;
-            unbind(save2);
-            return(NO);
-        }
-
-        findall:
-        findall_pt++;
-        findall_list[findall_pt] = NIL;
-        end = tp;
-        push_trail_body_with_findall_help(arg2,arg1);
-        resolve_all(end,sp,nest);
-        tp = save1;
-        unbind(save2);
-        trail_end = save3;
-        unify(arg3,listreverse(findall_list[findall_pt]));
-        findall_pt--;
-        variables = save4;
-            if(proceed(NIL,nest) == YES)
-                return(YES);
-    }
-    return(NO);
-}
-
-int b_bagof_help(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-        arg1 = goal[2]; //derefvar
-        arg2 = goal[3]; //freevar
-
-        if(already_checked_p(arg2)){
-            return(NO);
-        }
-        else if(now_checking_var_p(arg2)){
-            bagof_list = cons(deref(arg1),bagof_list);
-            return(NO);
-        }
-        else if(nullp(checking_var)){
-            checking_var = deref(arg2);
-            bagof_list = cons(deref(arg1),bagof_list);
-            return(NO);
-        }
-        else
-            return(NO);
-    }
-    return(NO);
-}
 
 // X^Y^Z^pred -> [X,Y,Z]
 int get_notfree_variable(int x){
@@ -6772,179 +6571,7 @@ int get_free_variable(int x, int y){
     return(listreverse(res));
 }
 
-//for bagof_help
-int already_checked_p(int x){
-    int lis;
 
-    lis = checked_var;
-    while(!nullp(lis)){
-        if(unify(x,car(lis)) == YES)
-            return(1);
-        lis = cdr(lis);
-    }
-    return(0);
-}
-
-//for bagof_help
-int now_checking_var_p(int x){
-    if(unify(x,checking_var) == YES)
-        return(1);
-    else
-        return(0);
-}
-
-//setof
-int b_setof(int nest, int n){
-    int arg1,arg2,arg3,save1,save2,save3,save4,end,
-    vars,notfree,free;
-
-    save1 = tp;
-    save2 = sp;
-    save3 = trail_end;
-    save4 = variables;
-    if(n == 3){
-        arg1 = deref(goal[2]); //template
-        arg2 = deref(goal[3]); //goal
-        arg3 = deref(goal[4]); //instance
-
-        if(wide_variable_p(arg2))
-            error(INSTANTATION_ERR,"setof ",arg2);
-        if(!callablep(get_predicate(arg2)))
-            error(NOT_CALLABLE,"setof ",arg2);
-        if(!wide_variable_p(arg3) && !listp(arg3))
-            error(NOT_LIST,"setof ",arg3);
-
-        if(arg2 == makeconst("fail"))
-            goto exit;
-        vars = listreverse(unique(varslist(arg2)));
-        notfree = cons(arg1,get_notfree_variable(arg2));
-        free = get_free_variable(vars,notfree);
-        if(nullp(free))
-            goto findall;
-
-        loop:
-        bagof_list = NIL;
-        push_trail_body_with_bagof_help(get_predicate(arg2),car(free),notfree);
-        resolve_all(save1,sp,nest+1);
-        unify(arg3,sort(unique(bagof_list)));
-        unify(car(free),car(checking_var));
-        checked_var = cons(checking_var,checked_var);
-        checking_var = NIL;
-        variables = save4;
-        if(!nullp(bagof_list)){
-            tp = save1;
-            trail_end = save3;
-            if(proceed(NIL,nest) == YES){
-                return(YES);
-            }
-            else{
-                tp = save1;
-                trail_end = save3;
-                unbind(save2);
-                goto loop;
-            }
-        }
-        else{
-            exit:
-            checked_var = NIL;
-            checking_var = NIL;
-            unbind(save2);
-            return(NO);
-        }
-
-        findall:
-        findall_pt++;
-        findall_list[findall_pt] = NIL;
-        end = tp;
-        push_trail_body_with_findall_help(arg2,arg1);
-        resolve_all(end,sp,nest);
-        tp = save1;
-        unbind(save2);
-        trail_end = save3;
-        unify(arg3,sort(unique(findall_list[findall_pt])));
-        findall_pt--;
-        variables = save4;
-            if(proceed(NIL,nest) == YES)
-                return(YES);
-    }
-    return(NO);
-}
-
-
-int b_findall(int nest, int n){
-    int arg1,arg2,arg3,arg4,save1,save2,save3,save4,end;
-
-    save1 = tp;
-    save2 = sp;
-    save3 = trail_end;
-    save4 = variables;
-    if(n == 3){
-        arg1 = deref(goal[2]); //template
-        arg2 = deref(goal[3]); //goal
-        arg3 = deref(goal[4]); //instance
-
-        if(wide_variable_p(arg2))
-            error(INSTANTATION_ERR,"findall ",arg2);
-        if(!callablep(arg2))
-            error(NOT_CALLABLE,"findall ",arg2);
-        if(!wide_variable_p(arg3) && !listp(arg3))
-            error(NOT_LIST,"findall ",arg3);
-
-        findall_pt++;
-        findall_list[findall_pt] = NIL;
-        end = tp;
-        push_trail_body_with_findall_help(arg2,arg1);
-        resolve_all(end,sp,nest);
-        tp = save1;
-        unbind(save2);
-        trail_end = save3;
-        unify(arg3,listreverse(findall_list[findall_pt]));
-        findall_pt--;
-        variables = save4;
-        return(YES);
-    }
-    if(n == 4){
-        arg1 = deref(goal[2]); //template
-        arg2 = deref(goal[3]); //goal
-        arg3 = deref(goal[4]); //instance
-        arg4 = deref(goal[5]); //tail
-
-        if(wide_variable_p(arg2))
-            error(INSTANTATION_ERR,"findall ",arg2);
-        if(!callablep(arg2))
-            error(NOT_CALLABLE,"findall ",arg2);
-        if(!wide_variable_p(arg3) && !listp(arg3))
-            error(NOT_LIST,"findall ",arg3);
-
-        findall_pt++;
-        findall_list[findall_pt] = NIL;
-        end = tp;
-        push_trail_body_with_findall_help(arg2,arg1);
-        resolve_all(end,sp,nest);
-        tp = save1;
-        unbind(save2);
-        trail_end = save3;
-        unify(arg3,append(listreverse(findall_list[findall_pt]),arg4));
-        findall_pt--;
-        variables = save4;
-        return(YES);
-    }
-
-    return(NO);
-}
-
-int b_findall_help(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = goal[2];
-
-        findall_list[findall_pt] =
-         listcons(copy_heap(deref(arg1)),findall_list[findall_pt]);
-        return(NO);
-    }
-    return(NO);
-}
 
 //transform bwtween predicate and data
 int b_univ(int nest, int n){
@@ -7534,7 +7161,7 @@ int o_define(int x, int y){
     	save = tp;
     	set_length(x);
     	push_trail_body1(x);
-        return(resolve_all(save,sp,0));
+        return(prove_all(save,sp,0));
     }
     return(NO);
 }
@@ -7552,74 +7179,11 @@ int o_dcg(int x, int y){
     set_length(clause);
     tp = 0;
     push_trail_body1(clause);
-    res = resolve_all(0,sp,0);
+    res = prove_all(0,sp,0);
     return(res);
 }
 
-int o_question(int x, int y){
-    int res;
 
-    //[file1,file2] -> consult(file1),consult(file2).
-    if(listp(x))
-        x = list_to_ope(x);
-
-    if(atomp(x) && !builtinp(x) && !compiledp(x))
-        x = makepred(GET_NAME(x));
-
-    if(wide_variable_p(x))
-        error(INSTANTATION_ERR,"?- ", x);
-
-    if(!callablep(x))
-        error(NOT_CALLABLE,"?- ", x);
-
-
-    FLUSH
-    if(!has_cut_p(x)){
-        push_trail_body_with_ask(x);
-        res = resolve_all(0,sp,1);
-        if(res == CUT)
-            res = NO;
-        print(res);printf("\n");
-        return(res);
-    }
-    else{
-        push_trail_body1(before_cut(x));
-        if(resolve_all(0,sp,1) == YES){
-            push_trail_body_with_ask(after_cut(x));
-            variables = listreverse(unique(varslist(x)));
-            if(resolve_all(0,sp,1) == YES){
-                res = YES;
-                goto cut;
-            }
-            else{
-                res = NO;
-                goto cut;
-            }
-        }
-        else{
-            res = NO;
-            goto cut;
-        }
-        cut:
-        if(res == CUT)
-            res = NO;
-        print(res);printf("\n");
-        return(res);
-    }
-}
-
-int list_to_ope(int x){
-    if(nullp(x))
-        error(SYNTAX_ERR,"?-", x);
-    else if(nullp(cdr(x)))
-        return(cons(makeatom("reconsult",SYS),x));
-    else{
-        return(list3(makeatom(",",OPE),
-                     list2(makeatom("reconsult",SYS),car(x)),
-                     list_to_ope(cdr(x))));
-    }
-    return(NIL);
-}
 
 int b_gbc(int nest, int n){
     int arg1;
