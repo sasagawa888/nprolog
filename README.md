@@ -25,14 +25,6 @@ Default, REPL is editable.
 ## Goal
 I hope that Prolog will become more popular. I hope many people enjoy Prolog. NPL aims at easy handling.
 
-## Intaraction
-
-```
-?- is prompt.
-
-
-```
-
 ## example
 ```prolog
 N-Prolog Ver 0.01
@@ -47,7 +39,26 @@ X = 1071508607186267320948425049060001810561404811705533607443750388370351051124
 6474983581941267398767559165543946077062914571196477686542167660429831652624386837205668069376
 yes
 
-?- halt().
+?- append(X,Y,[1,2,3]).
+X = []
+Y = [1,2,3];
+X = [1]
+Y = [2,3];
+X = [1,2]
+Y = [3];
+X = [1,2,3]
+Y = [];
+no
+?- 
+
+?- halt.
 - good bye -
 
 ```
+
+# builtin predicate
+
+append/3
+halt/0
+length/2
+

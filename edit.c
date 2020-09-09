@@ -1742,7 +1742,7 @@ void display_buffer(){
                        col++;
                     }
                }
-                }
+            }
         }
     ESCRST;
     return;
@@ -1807,6 +1807,11 @@ int check_token_buffer(int col){
     for(i=0; i<BUILTIN_NUMBER; i++){
         if(strcmp(builtin[i],str) == 0){
             return(2); //builtin token
+        }
+    }
+    for(i=0; i<COMPILED_NUMBER; i++){
+        if(strcmp(compiled[i],str) == 0){
+            return(2); //compiled token same as builtin
         }
     }
     for(i=0; i<EXTENDED_NUMBER; i++){

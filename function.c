@@ -929,7 +929,6 @@ void initbuiltin(void){
     defbuiltin("keysort",b_keysort);
     defbuiltin("retractall",b_retractall);
     defbuiltin("compare",b_compare);
-    defbuiltin("freeze",b_freeze);
     defbuiltin("make_directory",b_make_directory);
     defbuiltin("directory_exists",b_directory_exists);
     defbuiltin("current_directory",b_current_directory);
@@ -1021,9 +1020,10 @@ void initbuiltin(void){
     return;
 }
 
-int b_length(int arglist, int n){
-    int arg1,arg2;
+int b_length(int arglist, int rest){
+    int n,arg1,arg2;
 
+    n = length(arglist);
     if(n == 2){
         arg1 = deref(car(arglist));
         arg2 = deref(cadr(arglist));
@@ -1102,14 +1102,13 @@ int b_member(int nest, int n){
     return(NO);
 }
 
-int b_append(int args, int n){
-    int arglist,rest,arg1,arg2,arg3,x,ls,ys,zs,save1,save2,body;
+int b_append(int arglist, int rest){
+    int n,arg1,arg2,arg3,x,ls,ys,zs,save1,save2,body;
 
     save2 = sp;
     body = NIL;
+    n = length(arglist);
     if(n == 3){
-        arglist = car(args);
-        rest = cadr(args);
         arg1 = deref(car(arglist));
         arg2 = deref(cadr(arglist));
         arg3 = deref(caddr(arglist));
@@ -5008,8 +5007,10 @@ int b_nospy(int nest, int n){
     return(NO);
 }
 
-int b_halt(int nest, int n){
+int b_halt(int arglist, int rest){
+    int n;
 
+    n = length(arglist);
     if(n == 0){
         printf("- good bye -\n");
         longjmp(buf,2);
@@ -7099,27 +7100,6 @@ int b_setup_call_cleanup(int nest, int n){
     return(NO);
 }
 
-int b_freeze(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        if(!wide_variable_p(arg1))
-            error(NOT_VAR,"freeze ",arg1);
-        if(!callablep(arg2))
-            error(NOT_CALLABLE,"freeze ",arg2);
-
-        if(alpha_variable_p(arg1))
-            variant[arg1-CELLSIZE][1] = arg2;
-        else
-            SET_ATTR(arg1,arg2);
-
-        return(YES);
-    }
-    return(NO);
-}
 
 //operation
 int o_define(int x, int y){

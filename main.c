@@ -395,17 +395,34 @@ int prove(int goal, int bindings, int rest, int n){
         return(prove_all(rest,bindings,n));
     }
     else if(builtinp(goal)){
-        if((GET_SUBR(car(goal)))(cdr(goal),length(goal) - 1) == YES)
-            return(YES);
+        if(atomp(goal)){
+            if((GET_SUBR(goal))(cdr(goal),rest) == YES)
+                return(YES);
 
-        unbind(bindings);
-        return(NO);
+            unbind(bindings);
+            return(NO);
+        }
+        else{
+            if((GET_SUBR(car(goal)))(cdr(goal),rest) == YES)
+                return(YES);
+
+            unbind(bindings);
+            return(NO);
+        }
     }
     else if(compiledp(goal)){
-        if((GET_SUBR(car(goal)))(list2(cdr(goal),rest),length(goal) - 1) == YES)
-            return(YES);
+        if(atomp(goal)){
+            if((GET_SUBR(goal))(cdr(goal),rest) == YES)
+                return(YES);
 
-        return(NO);
+            return(NO);
+        }
+        else{
+            if((GET_SUBR(car(goal)))(cdr(goal),rest) == YES)
+                return(YES);
+
+            return(NO);
+        }
     }
     else
         return(NO);

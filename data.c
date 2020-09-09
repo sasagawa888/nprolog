@@ -758,6 +758,8 @@ int builtinp(int addr){
     if(structurep(addr) && IS_INCELL(car(addr)) &&
        GET_AUX(car(addr)) == SYS && GET_AUX(addr) != LIST)
         return(1);
+    else if(IS_INCELL(addr) && GET_AUX(addr) == SYS)
+        return(1);
     else
         return(0);
 }

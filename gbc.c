@@ -59,8 +59,6 @@ void markcell(int addr){
         case SINGLE: markcell(car(addr));
                     markcell(cdr(addr));
                     markcell(GET_VAR(addr));
-                    markcell(GET_ATTR(addr));
-                    markcell(GET_ARITY(addr));
                     return;
         case BIGX:  x=addr;
                     do{

@@ -102,7 +102,6 @@ typedef struct{
     } val;
     int     aux;
     int     var;
-    int     attr;
     int     arity;
     char    tag;
     flag    flag;
@@ -245,7 +244,6 @@ extern int error_stream;
 #define SET_CDR(addr,x)     heap[addr].val.cdr.intnum = x
 #define SET_AUX(addr,x)     heap[addr].aux = x
 #define SET_VAR(addr,x)     heap[addr].var = x
-#define SET_ATTR(addr,x)    heap[addr].attr = x
 #define SET_ARITY(addr,x)   heap[addr].arity = x
 #define SET_INT(addr,x)     heap[addr].val.car.intnum = x
 #define SET_FLT(addr,x)     heap[addr].val.fltnum = x

@@ -1472,7 +1472,6 @@ int readitem(void){
                         SET_CAR(temp,UNBIND);  //value
                         SET_CDR(temp,UNBIND);  //alpha variable
                         SET_VAR(temp,NIL);
-                        SET_ATTR(temp,UNBIND);  //attribute for freeze/2
                         return(temp);
 
         case ANOYMOUS:  return(makeatom(stok.buf,ANOY));

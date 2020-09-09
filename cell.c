@@ -105,25 +105,6 @@ void bindsym(int x, int val){
         error(ILLEGAL_ARGS, "nbindsym", x);
 
     push_stack(x);
-
-
-    //call fleezed goal
-    if(alpha_variable_p(x) &&
-       variant[x-CELLSIZE][1] != UNBIND){
-        goal[2] = variant[x-CELLSIZE][1];
-        if(b_call(0,1) == NO){
-            print(NO);printf("\n");
-            longjmp(buf,1);
-        }
-    }
-    else if(atom_variable_p(x) &&
-            GET_ATTR(x) != UNBIND){
-        goal[2] = GET_ATTR(x);
-        if(b_call(0,1) == NO){
-            print(NO);printf("\n");
-            longjmp(buf,1);
-        }
-    }
 }
 
 
@@ -828,7 +809,6 @@ int makevar(char *name){
     SET_CAR(y,UNBIND);  //value
     SET_CDR(y,UNBIND);  //alpha variable
     SET_VAR(y,NIL);
-    SET_ATTR(y,UNBIND);  //attribute for freeze/2
     return(y);
 }
 
