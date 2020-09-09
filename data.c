@@ -1292,25 +1292,6 @@ int deref_array(int arity[256], int head){
     return(res);
 }
 
-//unify
-/*
-int unify_goal(void){
-    int i,n;
-
-    n = goal[0];
-    if(trail[tp][0] != n)
-        return(NO);
-    if(n == 1)
-        return(YES);
-
-    for(i=2;i<=n;i++)
-        if(unify(goal[i],trail[tp][i]) == NO)
-            return(NO);
-
-    return(YES);
-}
-*/
-
 int unify(int x, int y){
     int x1,y1;
 
@@ -2038,7 +2019,7 @@ int ctrl_to_number(char c){
     return(NIL);
 }
 
-
+/*
 void set_length(int x){
     if(operationp(x)){
         set_length(cadr(x));
@@ -2050,7 +2031,7 @@ void set_length(int x){
         SET_LENGTH(x,length(x));
     }
 }
-
+*/
 int last_predicate(int x){
 
     if(!operationp(x))

@@ -109,7 +109,6 @@ typedef struct{
     unsigned char option;
     unsigned char option1;
     unsigned char trace;
-    unsigned char length;
 } cell;
 
 
@@ -237,7 +236,6 @@ extern int error_stream;
 #define GET_CAR(addr)       heap[addr].val.car.intnum
 #define GET_OPT(addr)       heap[addr].option
 #define GET_OPT1(addr)       heap[addr].option1
-#define GET_LENGTH(addr)    heap[addr].length
 #define GET_FLAG(addr)      heap[addr].flag
 #define SET_TAG(addr,x)     heap[addr].tag = x
 #define SET_CAR(addr,x)     heap[addr].val.car.intnum = x
@@ -252,7 +250,6 @@ extern int error_stream;
 #define SET_PORT(addr,x)    heap[addr].val.car.port = x
 #define SET_OPT(addr,x)     heap[addr].option = x
 #define SET_OPT1(addr,x)    heap[addr].option1 = x
-#define SET_LENGTH(addr,x)  heap[addr].length = x
 #define SET_CHAR(addr,x)    heap[addr].name[0] = x
 #define SET_TR(addr,x)      heap[addr].trace = x
 #define SET(addr,x)         heap[addr] = heap[x]

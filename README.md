@@ -58,9 +58,13 @@ no
 
 # builtin predicate
 
+```
 =/2
 \=/2
 append/3
+assert/1
+asserta/1
+assertz/1
 fail/0
 float/1
 gc/0
@@ -68,11 +72,13 @@ halt/0
 integer/1
 is/2
 length/2
+member/2
 nl/0
 nonvar/1
 number/1
+not/1
 true/0
 var/1
 write/1
 writeq/1 writeq/2
-
+```
