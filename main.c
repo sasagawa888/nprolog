@@ -31,9 +31,6 @@ int numbervars_base_pt = 0; // for numbervars
 int numbervars_top_pt  = 0; // for numbervars
 token stok = {GO,OTHER};
 jmp_buf buf;
-jmp_buf catch_buf[CTRLSTKSIZE];
-int catch_dt[CTRLSTKSIZE][5];
-int catch_pt = 0;
 int cell_hash_table[HASHTBSIZE];
 int variables = NIL;
 int predicates = NIL;
@@ -313,8 +310,6 @@ void init_repl(void){
     tp = 0;
     trail_end = 0;
     cut_flag = 0;
-    store_pt = 0;
-    catch_pt = 0;
     cleanup_dt = NIL;
     numbervars_top_pt = 0;
     numbervars_base_pt = 0;

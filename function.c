@@ -903,8 +903,6 @@ void initbuiltin(void){
     defbuiltin("name",b_atom_codes);
     defbuiltin("number_chars",b_number_chars);
     defbuiltin("number_codes",b_number_codes);
-    defbuiltin("catch",b_catch);
-    defbuiltin("throw",b_throw);
     defbuiltin("reverse",b_reverse);
     defbuiltin("dynamic",b_dynamic);
     defbuiltin("multifile",b_multifile);
@@ -7103,7 +7101,7 @@ int b_setup_call_cleanup(int nest, int n){
 
 //operation
 int o_define(int x, int y){
-    int clause,save;
+    int clause;
 
     if(!nullp(y)){
         if(builtinp(x) || compiledp(x))
@@ -7141,10 +7139,7 @@ int o_define(int x, int y){
     }
     // :- predicate.
     else{
-    	save = tp;
-    	set_length(x);
-    	push_trail_body1(x);
-        return(prove_all(save,sp,0));
+        return(prove_all(x,sp,0));
     }
     return(NO);
 }
@@ -7187,81 +7182,6 @@ int b_gbc(int nest, int n){
     return(NO);
 }
 
-int b_catch(int nest, int n){
-    int arg1,arg2,arg3,clause,ret,res;
-
-    //save1 = tp;
-    if(n == 3){
-        arg1 = deref(goal[2]); //goal
-        arg2 = deref(goal[3]); //catcher
-        arg3 = deref(goal[4]); //recovery
-
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"catch ",arg1);
-        if(!callablep(arg1))
-            error(NOT_CALLABLE,"catch ",arg1);
-
-        catch_pt++;
-        catch_dt[catch_pt][0] = arg2;
-        catch_dt[catch_pt][1] = arg3;
-        catch_dt[catch_pt][2] = tp;
-        catch_dt[catch_pt][3] = sp;
-        ret = setjmp(catch_buf[catch_pt]);
-        if(ret == 0){
-            clause = arg1;
-            //end = tp;
-            //set_length(clause);
-            //push_trail_body1(clause);
-            //res = resolve_all(end,sp,nest);
-            res = proceed(arg1,nest);
-            catch_pt--;
-            //tp = save1;
-            return(res);
-        }
-        else if(ret == 1){
-            if(debug_flag){
-                printf("recieve error ");
-                print(deref(catch_dt[catch_pt][0]));
-                printf("\n");
-            }
-            catch_pt--;
-            ret = 0;
-            if(anoymousp(arg3))
-                return(YES);
-            clause = deref(arg3);
-            //end = tp;
-            //set_length(clause);
-            //push_trail_body(clause);
-            //res = resolve_all(end,sp,nest);
-            res = proceed(clause,nest);
-            //tp = save1;
-            return(res);
-        }
-    }
-    return(NO);
-}
-
-
-int b_throw(int nest, int n){
-    int arg1,i,tag;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"throw ",arg1);
-
-        for(i=catch_pt;i>0;i--){
-            tag = catch_dt[i][0];
-            tp = catch_dt[i][2];
-            sp = catch_dt[i][3];
-            if(unify(arg1,tag) == YES){
-                longjmp(catch_buf[i],1);
-            }
-        }
-        error(UNCAUGHT_EXCEPTION,"throw",arg1);
-    }
-    return(NO);
-}
 
 
 int o_ignore(int nest, int n){

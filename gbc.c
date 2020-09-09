@@ -127,12 +127,6 @@ void gbcmark(void){
                 markcell(store[i][j]);
         }
     }
-    //mark catch_dt
-    for(i=0;i<=catch_pt;i++){
-        markcell(catch_dt[i][0]);
-        markcell(catch_dt[i][1]);
-    }
-
     //mark cleanup_dt
     markcell(cleanup_dt);
 }
