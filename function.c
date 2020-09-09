@@ -149,7 +149,6 @@ void dynamic_link(int x){
     init_f0(3,(tpred)makevariant);
     init_f0(4,(tpred)get_tp);
     init_f0(5,(tpred)get_sp);
-    init_f0(6,(tpred)print_trail_block);
     init_f0(11,(tpred)get_trail_end);
     init_f0(12,(tpred)debug);
     init_f0(13,(tpred)get_wp);
@@ -1005,9 +1004,6 @@ void initbuiltin(void){
     defcompiled("clause",b_clause);
     defcompiled("current_predicate",b_current_predicate);
     defcompiled("current_op",b_current_op);
-    defcompiled("current_module",b_current_module);
-    defcompiled("current_visible",b_current_visible);
-    defcompiled("current_prolog_flag",b_current_prolog_flag);
     defcompiled("stream_property",b_stream_property);
     defcompiled("between",b_between);
     defcompiled("sub_atom",b_sub_atom);
@@ -1051,14 +1047,14 @@ int b_repeat(int nest, int n){
     if(n == 0){
         loop:
         save1 = wp;
-        save_trail(save3);
+        //save_trail(save3);
         if(proceed(NIL,nest) == YES){
             return(YES);
         }
     wp = save1;
     unbind(save2);
     tp = save3;
-    retract_trail(save3);
+    //retract_trail(save3);
     goto loop;
     }
     return(NO);
@@ -4055,7 +4051,10 @@ int b_ateqgreater(int nest, int n){
 
 
 //true fail
-int b_fail(int nest, int n){
+int b_fail(int arglist, int rest){
+    int n;
+
+    n = length(arglist);
     if(n == 0){
         return(NO);
     }
@@ -4140,11 +4139,11 @@ int b_not(int nest, int n){
             save1 = tp;
             save3 = trail_end;
             set_length(arg1);
-            save_trail(save1+10);  //save old trail 10
+            //save_trail(save1+10);  //save old trail 10
             push_trail_body1(arg1);
             res = prove_all(save1,sp,nest+100); //to avoid duplicate nest
             tp = save1;
-            retract_trail(save1+10); //retract old trail 10
+            //retract_trail(save1+10); //retract old trail 10
             trail_end = save3;
         }
         else{
@@ -4159,7 +4158,10 @@ int b_not(int nest, int n){
     return(NO);
 }
 
-int b_true(int nest, int n){
+int b_true(int arglist, int rest){
+    int n;
+
+    n = length(arglist);
     if(n == 0){
         return(YES);
     }
@@ -4569,88 +4571,6 @@ int b_current_op(int nest, int n){
     return(NO);
 }
 
-int b_current_module(int nest, int n){
-    int arg1,i,save1,save2;
-
-    save2 = sp;
-    if(n == 1){
-        arg1 = deref(goal[2]);
-
-        i = 0;
-        save1 = wp;
-        while(i<module_pt){
-            unify(arg1,module[i][0]);
-            if(proceed(NIL,nest) == YES)
-                return(YES);
-
-            wp = save1;
-            unbind(save2);
-            i++;
-        }
-        wp = save1;
-        unbind(save2);
-        return(NO);
-    }
-    return(NO);
-}
-
-int b_current_visible(int nest, int n){
-    int arg1,arg2,save1,save2,i,lis;
-
-    save2 = sp;
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        i=0;
-        save1 = wp;
-        while(i<module_pt){
-            if(unify(arg2,module[i][0]) == YES){
-                lis = module[i][1];
-                while(!nullp(lis)){
-                    if(unify(arg1,(car(lis))) == YES){
-                        if(proceed(NIL,nest) == YES)
-                            return(YES);
-                    }
-                    wp = save1;
-                    unbind(save2);
-                    lis = cdr(lis);
-                }
-            }
-            wp = save1;
-            unbind(save2);
-            i++;
-        }
-    }
-    return(NO);
-}
-
-int b_current_prolog_flag(int nest, int n){
-    int arg1,arg2,save1,save2,lis;
-
-    save2 = sp;
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        lis = flag_list;
-        save1 = wp;
-        while(!nullp(lis)){
-            if(unify(arg1,(car(car(lis)))) == YES){
-                unify(arg2,(cdr(car(lis))));
-                if(proceed(NIL,nest) == YES)
-                    return(YES);
-            }
-            wp = save1;
-            unbind(save2);
-            lis = cdr(lis);
-        }
-        tp = save1;
-        unbind(save2);
-        return(NO);
-    }
-    return(NO);
-}
 
 //controle
 int b_cut(int nest, int n){

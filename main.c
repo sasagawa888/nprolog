@@ -21,7 +21,7 @@ int stack[STACKSIZE];
 //0=arity-count 1=name-symbol 2-17=arity
 //row=0 predicate for unify row>=1 trail predicate
 int goal[ARITY];
-int head[ARITY];
+//int head[ARITY];
 int trail[TRAILSIZE][ARITY];
 int store[TRAILSIZE][ARITY];
 int store1[100][ARITY][10]; //for repeat/0 for between/3
@@ -258,8 +258,7 @@ int main(int argc, char *argv[]){
                 printf("Not exist %s\n", argv[opt]);
                 break;
             }
-            goal[2] = makeconst(argv[opt]);
-            b_consult(0,1);
+            b_consult(list(makeconst(argv[opt])),NIL);
             opt++;
         }
         #if __linux
@@ -849,9 +848,6 @@ void debugger(int end, int bindings, int choice, int n){
         case 'c':   trace_flag = FULL;
                     FLUSH
                     break;
-        case 'd':   print_goal();
-                    FLUSH
-                    goto loop;
         case 'e':   longjmp(buf,2);
         case '?':
         case 'h':   printf("return key: creep\n");
@@ -883,10 +879,6 @@ void debugger(int end, int bindings, int choice, int n){
         case 's':   trace_flag = SPY;
                     FLUSH
                     break;
-        case 't':   print_trail_block(tp);
-                    goto loop;
-        case 'l':   print_stack();
-                    goto loop;
         case '1':
         case '2':
         case '3':

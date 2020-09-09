@@ -1309,6 +1309,7 @@ int unify_goal(void){
     return(YES);
 }
 
+/*
 int unify_head(void){
     int i,n;
 
@@ -1322,7 +1323,7 @@ int unify_head(void){
     }
     return(YES);
 }
-
+*/
 int unify(int x, int y){
     int x1,y1;
 
@@ -2050,75 +2051,6 @@ int ctrl_to_number(char c){
     return(NIL);
 }
 
-void print_goal(void){
-    int i,n;
-
-    n = goal[0];
-    sprint(goal[1]);
-    if(n == 1)
-        return;
-    printf("(");
-    for(i=2;i<n;i++){
-        sprint(deref(goal[i]));
-        printf(",");
-    }
-    sprint(deref(goal[i]));
-    printf(")");
-}
-
-void print_head(void){
-    int i,n;
-
-    n = head[0];
-    sprint(head[1]);
-    if(n == 1)
-        return;
-    printf("(");
-    for(i=2;i<n;i++){
-        sprint(deref(head[i]));
-        printf(",");
-    }
-    sprint(deref(head[i]));
-    printf(")");
-}
-
-void print_trail(int x){
-    int i,n;
-
-    n = trail[x][0];
-    sprint(trail[x][1]);
-    if(n == 1)
-        return;
-    printf("(");
-    for(i=2;i<n;i++){
-        sprint(trail[x][i]);
-        printf(",");
-    }
-    sprint(trail[x][i]);
-    printf(")");
-}
-
-void print_trail_block(int n){
-    int i;
-
-    for(i=0;i<=n;i++){
-        printf("(%d)",i);
-        print_trail(i);
-        printf("\n");
-    }
-}
-
-void print_stack(void){
-    int i;
-
-    for(i=0;i<sp;i++){
-        printf("(%d)",i);
-        print(stack[i]);
-        printf(" = ");
-        print(deref(stack[i]));
-        printf("\n");
-    }
-}
 
 void set_length(int x){
     if(operationp(x)){
@@ -2140,22 +2072,4 @@ int last_predicate(int x){
         return(last_predicate(caddr(x)));
 }
 
-void save_trail(int x){
-	int i,j;
 
-    for(i=0;i<=x;i++)
-    	for(j=0;j<ARITY;j++)
-        	store1[i][j][store_pt] = trail[i][j];
-
-    store_pt++;
-}
-
-void retract_trail(int x){
-	int i,j;
-
-    store_pt--;
-
-    for(i=0;i<=x;i++)
-    	for(j=0;j<ARITY;j++)
-        	trail[i][j] = store1[i][j][store_pt];
-}

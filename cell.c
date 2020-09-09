@@ -675,6 +675,7 @@ void retract_goal(int nest){
 
 }
 
+/*
 void set_head(int x){
     int i,n;
 
@@ -690,6 +691,7 @@ void set_head(int x){
         x = cdr(x);
     }
 }
+*/
 
 //------for JUMP compiler-----
 

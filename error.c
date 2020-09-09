@@ -117,7 +117,6 @@ void error(int errnum, char *fun, int arg){
                             break;
 
         case UNDEF_PRED:	  printf("Undefined predicate %s ", fun);
-        										print_goal();
                             break;
 
         case DISCONTIGUOUS:	
@@ -127,12 +126,10 @@ void error(int errnum, char *fun, int arg){
 
         case NOT_EXIST_MODULE:
                             printf("Not exist module %s ", fun);
-        										print_goal();
                             break;
 
         case EOF_ERROR:    
                             printf("End of file error %s ", fun);
-        										print_goal();
                             break;
 
         case INSTANTATION_ERR:
@@ -141,12 +138,10 @@ void error(int errnum, char *fun, int arg){
                             break;
         case EXPONENT_ERR:
                             printf("Exponentiation of a too big integer %s ", fun);
-        										print_goal();
                             break;
 
         case RESOURCE_ERR:
                             printf("Resource error ");
-        										print_goal();
                             break;
 
         case NOT_CHAR:     
