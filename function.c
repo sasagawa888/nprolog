@@ -891,7 +891,7 @@ void initbuiltin(void){
     defbuiltin("nonvar",b_nonvar);
     defbuiltin("atomic",b_atomic);
     defbuiltin("list",b_list);
-    defbuiltin("gbc",b_gbc);
+    defbuiltin("gc",b_gbc);
     defbuiltin("time",b_time);
     defbuiltin("timer",b_timer);
     defbuiltin("char_set",b_char_set);
@@ -1578,12 +1578,13 @@ int b_ask(int nest, int n){
 }
 
 
-int b_unify(int nest, int n){
-    int arg1,arg2,res;
+int b_unify(int arglist, int rest){
+    int n,arg1,arg2,res;
 
+    n = length(arglist);
     if(n == 2){
-        arg1 = goal[2];
-        arg2 = goal[3];
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
         if(operationp(arg1) && car(arg1) == DOTOBJ)
             arg1 = operate(arg1);
         if(operationp(arg2) && car(arg2) == DOTOBJ)
@@ -1594,12 +1595,13 @@ int b_unify(int nest, int n){
     return(NO);
 }
 
-int b_notunify(int nest, int n){
-    int arg1,arg2,res;
+int b_notunify(int arglist, int rest){
+    int n,arg1,arg2,res;
 
+    n = length(arglist);
     if(n == 2){
-        arg1 = goal[2];
-        arg2 = goal[3];
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
         if(operationp(arg1))
             arg1 = operate(arg1);
         if(operationp(arg2))
@@ -1617,11 +1619,15 @@ int b_notunify(int nest, int n){
 
 
 //input and output
-int b_write(int arglist, int n){
+int b_write(int arglist, int rest){
+    int n;
 
-    print(deref(car(arglist)));
-    return(YES);
-
+    n = length(arglist);
+    if(n == 1){
+        print(deref(car(arglist)));
+        return(YES);
+    }
+    return(NO);
 }
 
 int b_writeln(int nest, int n){
@@ -1820,18 +1826,19 @@ int b_write_canonical(int nest, int n){
     return(NO);
 }
 
-int b_writeq(int nest, int n){
-    int arg1,arg2,save;
+int b_writeq(int arglist, int rest){
+    int n,arg1,arg2,save;
 
+    n = length(arglist);
     if(n == 1){
         arg1 = output_stream;
-        arg2 = deref(goal[2]);
+        arg2 = deref(car(arglist));
         goto writeq;
 
     }
     else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
         writeq:
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"writeq ",arg1);
@@ -1855,27 +1862,16 @@ int b_writeq(int nest, int n){
 }
 
 
-int b_nl(int nest, int n){
-    int arg1,save;
+int b_nl(int arglist, int rest){
+    int n;
 
+    n = length(arglist);
     if(n == 0){
         fprintf(GET_PORT(output_stream),"\n");
         fflush(GET_PORT(output_stream));
         return(YES);
     }
-    else if(n == 1){
-        arg1 = deref(goal[2]);
-
-        save = output_stream;
-        if(aliasp(arg1))
-            output_stream = GET_CAR(arg1);
-        else
-            output_stream = arg1;
-        fprintf(GET_PORT(output_stream),"\n");
-        fflush(GET_PORT(output_stream));
-        output_stream = save;
-        return(YES);
-    }
+    
     return(NO);
 }
 
@@ -3669,9 +3665,10 @@ int b_use_module(int nest, int n){
 
 //arithmetic operation
 
-int b_is(int arglist, int n){
-    int arg1,arg2,res;
+int b_is(int arglist, int rest){
+    int n,arg1,arg2,res;
 
+    n = length(arglist);
     if(n == 2){
         arg1 = deref(car(arglist));
         arg2 = deref(cadr(arglist));
@@ -7163,22 +7160,15 @@ int o_dcg(int x, int y){
 
 
 
-int b_gbc(int nest, int n){
-    int arg1;
+int b_gbc(int arglist, int rest){
+    int n;
 
+    n = length(arglist);
     if(n == 0){
         gbc();
         return(YES);
     }
-    else if(n == 1){
-        arg1 = deref(goal[2]);
-        if(arg1 == YES)
-            gbc_flag = 1;
-        else if(arg1 == NO)
-            gbc_flag = 0;
-
-        return(YES);
-    }
+    
     return(NO);
 }
 

@@ -58,7 +58,14 @@ no
 
 # builtin predicate
 
+=/2
+\=/2
 append/3
+gc/0
 halt/0
+is/2
 length/2
+nl/0
+write/1
+writeq/1 writeq/2
 

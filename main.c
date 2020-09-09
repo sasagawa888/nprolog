@@ -137,7 +137,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"atom_length"},{"findall"},{"consult"},{"reconsult"},
 {"see"},{"seen"},{"tell"},{"told"},{"trace"},{"notrace"},{"spy"},
 {"nospy"},{"atom"},{"integer"},{"real"},{"float"},{"number"},{"compound"},
-{"var"},{"nonvar"},{"atomic"},{"list"},{"gbc"},{"time"},
+{"var"},{"nonvar"},{"atomic"},{"list"},{"gc"},{"time"},
 {"char_set"},{"char_code"},{"atom_chars"},{"atom_codes"},{"name"},
 {"number_chars"},{"number_codes"},{"debug"},{"bounded"},{"max_arity"},
 {"undefined_predicate"},{"discontiguous"},

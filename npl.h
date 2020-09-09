@@ -615,8 +615,6 @@ int b_atom_length(int nest, int n);
 int b_atomic(int nest, int n);
 int b_atom_convert(int nest, int n);
 int b_atsmaller(int nest, int n);
-int b_bagof(int nest, int n);
-int b_bagof_help(int nset, int n);
 int b_between(int nest, int n);
 int b_bignum(int nest, int n);
 int b_body(int nest, int n);
