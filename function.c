@@ -4957,9 +4957,10 @@ int b_atom(int nest, int n){
     return(NO);
 }
 
-int b_integer(int arglist, int n){
-    int arg1;
+int b_integer(int arglist, int rest){
+    int n,arg1;
 
+    n = length(arglist);
     if(n == 1){
         arg1 = deref(car(arglist));
         if(integerp(arg1) || longnump(arg1) || bignump(arg1))
@@ -4970,9 +4971,10 @@ int b_integer(int arglist, int n){
     return(NO);
 }
 
-int b_real(int arglist, int n){
-    int arg1;
+int b_real(int arglist, int rest){
+    int n,arg1;
 
+    n = length(arglist);
     if(n == 1){
         arg1 = deref(car(arglist));
         if(floatp(arg1))
@@ -4983,11 +4985,12 @@ int b_real(int arglist, int n){
     return(NO);
 }
 
-int b_number(int nest, int n){
-    int arg1;
+int b_number(int arglist, int rest){
+    int n,arg1;
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(numberp(arg1))
             return(YES);
         else
@@ -5024,11 +5027,12 @@ int b_ground(int nest, int n){
     return(NO);
 }
 
-int b_var(int nest, int n){
-    int arg1;
+int b_var(int arglist, int rest){
+    int n,arg1;
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(variablep(arg1))
             return(YES);
         else if(anoymousp(arg1))
@@ -5039,11 +5043,12 @@ int b_var(int nest, int n){
     return(NO);
 }
 
-int b_nonvar(int nest, int n){
-    int arg1;
+int b_nonvar(int arglist, int rest){
+    int n,arg1;
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
 
         if(variablep(arg1))
             return(NO);

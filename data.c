@@ -1293,6 +1293,7 @@ int deref_array(int arity[256], int head){
 }
 
 //unify
+/*
 int unify_goal(void){
     int i,n;
 
@@ -1308,22 +1309,8 @@ int unify_goal(void){
 
     return(YES);
 }
-
-/*
-int unify_head(void){
-    int i,n;
-
-    n = goal[0];
-    if(head[0] != n)
-        return(NO);
-
-    for(i=2;i<=n;i++){
-        if(unify(goal[i],head[i]) == NO)
-            return(NO);
-    }
-    return(YES);
-}
 */
+
 int unify(int x, int y){
     int x1,y1;
 
