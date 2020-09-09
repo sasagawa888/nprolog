@@ -252,8 +252,6 @@ void dynamic_link(int x){
     init_deftpred((tpred)defcompiled);
     init_tpredicate();
     init_declare();
-    //cut_function[0] = init_cut;
-    //cut_function[1] = invoke_cut;
     link_flag = 1;
     return;
 }
@@ -812,7 +810,6 @@ void initbuiltin(void){
     definfix(":",b_colon,50,XFX);
     definfix("->",b_ifthen,1050,XFY);
 
-    defbuiltin("unify_with_occurs_check",b_unify_with_occurs_check);
     defbuiltin("op",b_op);
     defbuiltin("!",b_cut);
     defbuiltin("assert",b_assert);
@@ -906,18 +903,6 @@ void initbuiltin(void){
     defbuiltin("discontiguous",b_discontiguous);
     defbuiltin("char_conversion",b_char_conversion);
     defbuiltin("set_prolog_flag",b_set_prolog_flag);
-    defbuiltin("module",b_module);
-    defbuiltin("end_module",b_end_module);
-    defbuiltin("export",b_export);
-    defbuiltin("import",b_import);
-    defbuiltin("reexport",b_import);
-    defbuiltin("body",b_body);
-    defbuiltin("end_body",b_end_body);
-    defbuiltin("meta",b_meta);
-    defbuiltin("calling_context",b_calling_context);
-    defbuiltin("succ",b_succ);
-    defbuiltin("term_variables",b_term_variables);
-    defbuiltin("callable",b_callable);
     defbuiltin("%ask",b_ask);
     defbuiltin("system",b_system);
     defbuiltin("sort",b_sort);
@@ -936,59 +921,11 @@ void initbuiltin(void){
     defbuiltin("file_modification_time",b_file_modification_time);
     defbuiltin("date",b_date);
     defbuiltin("length",b_length);
-    defbuiltin("c_lang",b_c_lang);
-    defbuiltin("c_define",b_c_define);
-    defbuiltin("c_include",b_c_include);
-    defbuiltin("c_option",b_c_option);
-    defbuiltin("c_global",b_c_global);
-    defbuiltin("o_include_cut",b_include_cut);
-    defbuiltin("o_has_cut",b_has_cut);
-    defbuiltin("o_has_c_lang",b_has_c_lang);
-    defbuiltin("o_c_define",b_o_c_define);
-    defbuiltin("o_c_include",b_o_c_include);
-    defbuiltin("o_c_option",b_o_c_option);
-    defbuiltin("o_c_global",b_o_c_global);
-    defbuiltin("o_clause_with_arity",b_clause_with_arity);
-    defbuiltin("o_variable_convert",b_variable_convert);
-    defbuiltin("o_filename",b_filename);
-    defbuiltin("o_arity_count",b_arity_count);
-    defcompiled("o_reconsult_predicate",b_reconsult_predicate);
-    defbuiltin("o_reconsult_predicate_list",b_reconsult_predicate_list);
-    defbuiltin("o_defined_predicate",b_defined_predicate);
-    defbuiltin("o_defined_userop",b_defined_userop);
-    defbuiltin("o_property",b_property);
-    defbuiltin("o_is",b_isp);
-    defbuiltin("o_compiler_anoymous",b_compiler_anoymous);
-    defbuiltin("o_compiler_variable",b_compiler_variable);
-    defbuiltin("o_generate_variable",b_generate_variable);
-    defbuiltin("o_generate_all_variable",b_generate_all_variable);
-    defbuiltin("o_self_introduction",b_self_introduction);
-    defbuiltin("o_dynamic_check",b_dynamic_check);
-    defbuiltin("o_get_dynamic",b_get_dynamic);
-    defbuiltin("o_get_execute",b_get_execute);
-    defbuiltin("o_write_original_variable",b_write_original_variable);
-    defbuiltin("o_atom_convert",b_atom_convert);
-    defbuiltin("o_generate_before_cut",b_generate_before_cut);
-    defbuiltin("o_generate_after_cut",b_generate_after_cut);
-    defbuiltin("o_generate_before_c_lang",b_generate_before_c_lang);
-    defbuiltin("o_generate_after_c_lang",b_generate_after_c_lang);
-    defbuiltin("o_generated_module",b_generated_module);
-    defbuiltin("o_argument_list",b_argument_list);
-    defbuiltin("o_decompose",b_decompose);
-    defbuiltin("o_findatom",b_findatom);
-    defbuiltin("o_bignum",b_bignum);
-    defbuiltin("o_longnum",b_longnum);
-    defbuiltin("o_dumpcell",b_dumpcell);
+    
 
     #if __linux
     defbuiltin("set_editor",b_set_editor);
     defbuiltin("edit",b_nano);
-    defbuiltin("server_create",b_server_create);
-    defbuiltin("server_accept",b_server_accept);
-    defbuiltin("client_connect",b_client_connect);
-    defbuiltin("socket_send",b_socket_send);
-    defbuiltin("socket_recieve",b_socket_recieve);
-    defbuiltin("socket_close",b_socket_close);
     #endif
 
     defcompiled("repeat",b_repeat);
@@ -1120,111 +1057,6 @@ int b_append(int arglist, int rest){
     return(NO);
 }
 
-
-int b_succ(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        if(wide_variable_p(arg1) && wide_variable_p(arg2))
-            error(INSTANTATION_ERR,"succ ", list2(arg1,arg2));
-        if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
-            error(NOT_INT,"succ ",arg1);
-        if(!wide_variable_p(arg2) && !wide_integer_p(arg2))
-            error(NOT_INT,"succ ",arg2);
-        if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
-            error(NOT_INT,"succ ",arg1);
-        if(!wide_variable_p(arg2) && !wide_integer_p(arg2))
-            error(NOT_INT,"succ ",arg2);
-        if(wide_integer_p(arg1) && negativep(arg1))
-            error(NOT_LESS_THAN_ZERO,"succ ",arg1);
-        if(wide_integer_p(arg2) && negativep(arg2))
-            error(NOT_LESS_THAN_ZERO,"succ ",arg2);
-
-        if(wide_variable_p(arg1))
-            return(unify(arg1,minus(arg2,makeint(1))));
-        else if(wide_variable_p(arg2))
-            return(unify(arg2,plus(arg1,makeint(1))));
-        else
-            return(unify(arg2,plus(arg1,makeint(1))));
-
-    }
-    return(NO);
-}
-
-int b_term_variables(int nest, int n){
-    int arg1,arg2,lis,res;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        if(!wide_variable_p(arg2) && !listp(arg2))
-            error(NOT_LIST,"term_variables ",arg2);
-
-        lis = listreverse(term_variables(arg1,NIL));
-        res = unify(lis,arg2);
-
-        return(res);
-    }
-    return(NO);
-}
-
-
-int term_variables(int x, int y){
-    int temp;
-
-    if(nullp(x))
-    	return(y);
-    else if(numberp(x))
-    	return(y);
-    else if(wide_variable_p(x) && !memq(x,y)){
-    	temp = cons(x,y);
-        SET_AUX(temp,LIST);
-        return(temp);
-    }
-    else if(singlep(x))
-    	return(y);
-    else if(car(x) == AND)
-    	return(term_variables(caddr(x),term_variables(cadr(x),y)));
-    else if(car(x) == OR)
-    	return(term_variables(caddr(x),term_variables(cadr(x),y)));
-    else if(car(x) == DEFINE)
-        return(term_variables(caddr(x),term_variables(cadr(x),y)));
-    else
-    	return(term_variables(caddr(x),term_variables(cadr(x),y)));
-}
-
-int b_callable(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-
-        if(callablep(arg1))
-            return(YES);
-        else if(structurep(arg1))
-            return(YES);
-        else
-            return(NO);
-    }
-    return(NO);
-
-}
-
-int b_unify_with_occurs_check(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-        arg1 = goal[2];
-        arg2 = goal[3];
-        if(occursp(arg1,arg2))
-            return(NO);
-        return(unify(arg1,arg2));
-    }
-    return(NO);
-}
 
 int b_op(int nest, int n){
     int arg1,arg2,arg3,weight,type;
@@ -5734,209 +5566,6 @@ int b_reverse(int nest, int n){
     return(NO);
 }
 
-int b_module(int nest, int n){
-    int arg1,i;
-
-    if(n == 1){
-        arg1 = goal[2];
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"module ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"module ",arg1);
-
-        module_name = arg1;
-        export_list = NIL;
-        meta_list = NIL;
-
-        for(i=0;i<module_pt;i++)
-            if(module[module_pt][0] == arg1){
-                return(YES);
-            }
-
-        module[module_pt][0] = arg1;
-        module_pt++;
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_end_module(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"end_module ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"end_module ",arg1);
-        if(arg1 != module_name)
-            error(SYNTAX_ERR,"end_module ",arg1);
-        module_name = NIL;
-        export_list = NIL;
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_export(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = goal[2];
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"export ",arg1);
-        if(!listp(arg1))
-            error(NOT_LIST,"export ",arg1);
-
-        module[module_pt - 1][1] = arg1;
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_reexport(int nest, int n){
-    int arg1,arg2,i;
-
-    if(n == 1){
-        arg1 = deref(goal[2]); //module
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"reexport ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"reexport ",arg1);
-
-        for(i=0;i<MODULES;i++){
-            if(module[i][0] == arg1){
-                module[i][1] = export_list;
-                return(YES);
-            }
-        }
-        error(NOT_EXIST_MODULE,"reexport ",arg1);
-    }
-    else if(n == 2){
-        arg1 = deref(goal[2]); //module
-        arg2 = deref(goal[3]); //list
-
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"reexport ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"reexport ",arg1);
-        if(!list(arg2))
-            error(NOT_LIST,"reexport ",arg2);
-
-        for(i=0;i<MODULES;i++){
-            if(module[i][0] == arg1){
-                module[i][1] = arg2;
-                return(YES);
-            }
-        }
-        error(NOT_EXIST_MODULE,"reexport ",arg1);
-    }
-    return(NO);
-}
-
-int b_meta(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        if(!listp(arg1))
-            error(NOT_LIST,"meta ",arg1);
-
-        meta_list = arg1;
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_calling_context(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-
-        return(unify(arg1,context));
-    }
-    return(NO);
-}
-
-int b_import(int nest, int n){
-    int arg1,arg2,i;
-
-    if(n == 1){
-        arg1 = goal[2]; //module
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"import ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"import ",arg1);
-
-        module_name = arg1;
-        for(i=0;i<MODULES;i++){
-            if(module[i][0] == arg1){
-                export_list = cons(module[i][1],export_list);
-                return(YES);
-            }
-        }
-        error(NOT_EXIST_MODULE,"import ",arg1);
-    }
-    else if(n == 2){
-        arg1 = goal[2]; //module
-        arg2 = goal[3]; //list
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"import ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"import ",arg1);
-        if(!listp(arg2))
-            error(NOT_LIST,"import ",arg2);
-
-        module_name = arg1;
-        export_list = cons(arg2,export_list);
-        return(YES);
-    }
-    return(NO);
-}
-
-
-int b_body(int nest, int n){
-    int arg1,i;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"body ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"body ",arg1);
-
-        module_name = arg1;
-        for(i=0;i<MODULES;i++){
-            if(module[i][0] == arg1){
-                export_list = module[i][1];
-                return(YES);
-            }
-        }
-        error(NOT_EXIST_MODULE,"body ",arg1);
-    }
-    return(NO);
-}
-
-int b_end_body(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"end_body ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"end_body ",arg1);
-        if(!eqlp(arg1,module_name))
-            error(SYNTAX_ERR,"end_body ",arg1);
-
-        module_name = NIL;
-        export_list = NIL;
-        meta_list = NIL;
-        return(YES);
-    }
-    return(NO);
-}
 
 
 //--------Flags------------
@@ -7320,207 +6949,7 @@ int f_random(int x){
     return(makeint(rand() & x));
 }
 
-#if __linux
-//extension
-//-------Socket TCP/IP--------
 
-int b_server_create(int nest, int n){
-    int arg1,arg2,arg3,sock,res;
-    struct sockaddr_in addr;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[2]);
-
-        if(!singlep(arg1))
-            error(NOT_ATOM, "server_create", arg1);
-
-        sock = socket(AF_INET, SOCK_STREAM, 0);
-        if(sock < 0){
-            printf( "%s\n", strerror(errno) );
-            error(TCPIP, "server_create", NIL);
-        }
-
-        addr.sin_family = AF_INET;
-        addr.sin_port = htons(atoi(GET_NAME(arg1)));
-        addr.sin_addr.s_addr = INADDR_ANY;
-        res = bind(sock, (struct sockaddr *)&addr, sizeof(addr));
-
-        if(res < 0){
-            printf( "%s\n", strerror(errno) );
-            error(TCPIP, "server_create", NIL);
-        }
-
-        res = listen(sock, 5);
-        if(res < 0){
-            printf( "%s\n", strerror(errno) );
-            error(TCPIP, "server_create", NIL);
-        }
-
-        unify(arg2,makeint(sock));
-        return(YES);
-    }
-
-    if(n == 3){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
-
-        if(!singlep(arg1))
-            error(NOT_ATOM, "server_create", arg1);
-
-        if(!singlep(arg2))
-            error(NOT_ATOM, "server_create", arg2);
-
-        sock = socket(AF_INET, SOCK_STREAM, 0);
-        if(sock < 0){
-            printf( "%s\n", strerror(errno) );
-            error(TCPIP, "server_create", NIL);
-        }
-
-        addr.sin_family = AF_INET;
-        addr.sin_port = htons(atoi(GET_NAME(arg2)));
-        addr.sin_addr.s_addr = inet_addr(GET_NAME(arg1));
-        res = bind(sock, (struct sockaddr *)&addr, sizeof(addr));
-        if(res < 0){
-            printf( "%s\n", strerror(errno) );
-            error(TCPIP, "server_create", NIL);
-        }
-
-        res = listen(sock, 5);
-        if(res < 0){
-            printf( "%s\n", strerror(errno) );
-            error(TCPIP, "server_create", NIL);
-        }
-        unify(arg3,makeint(sock));
-        return(YES);
-
-    }
-    return(NO);
-}
-
-
-
-int b_server_accept(int nest, int n){
-    int arg1,arg2,arg3,sock0,sock;
-    struct sockaddr_in client;
-    socklen_t len;
-
-    if(n == 3){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
-
-        if(!integerp(arg1))
-            error(NOT_INT, "server_accept", arg1);
-
-        sock0 = GET_INT(arg1);
-        len = sizeof(client);
-        sock = accept(sock0, (struct sockaddr *)&client, &len);
-
-        if(sock < 0){
-            printf( "%s\n", strerror(errno) );
-            error(TCPIP, "server_accept", NIL);
-        }
-        unify(arg2,makeconst(inet_ntoa(client.sin_addr)));
-        unify(arg3,makeint(sock));
-        return(YES);
-   }
-   return(NO);
-}
-
-
-
-int b_client_connect(int nest, int n){
-    int arg1,arg2,arg3,sock,res;
-    struct sockaddr_in server;
-
-    if(n == 3){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
-
-        if(!singlep(arg1))
-            error(NOT_ATOM, "client_connect", arg1);
-
-        if(!singlep(arg2))
-            error(NOT_ATOM, "client_connect", arg2);
-
-        sock = socket(AF_INET, SOCK_STREAM, 0);
-        server.sin_family = AF_INET;
-        server.sin_port = htons(atoi(GET_NAME(arg2)));
-        server.sin_addr.s_addr = inet_addr(GET_NAME(arg1));
-        res = connect(sock, (struct sockaddr *)&server, sizeof(server));
-
-        if(res < 0){
-            printf( "%s\n", strerror(errno) );
-            error(TCPIP, "clinet_connect", NIL);
-        }
-        unify(arg3,makeint(sock));
-        return(YES);
-    }
-    return(NO);
-}
-
-
-int b_socket_send(int nest, int n){
-    int arg1,arg2,sock,len,res;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        if(!integerp(arg1))
-            error(NOT_INT, "socket_recieve", arg1);
-
-        sock = GET_INT(arg1);
-        len = strlen(GET_NAME(arg2));
-        res = send(sock, GET_NAME(arg2), len, 0);
-
-        if(res < 0){
-            printf( "%s\n", strerror(errno) );
-            error(TCPIP, "socket_send", NIL);
-        }
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_socket_recieve(int nest, int n){
-    int arg1,arg2,sock,res;
-    char str[STRSIZE];
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        if(!integerp(arg1))
-            error(NOT_INT, "socket_recieve", arg1);
-
-        sock = GET_INT(arg1);
-        memset(str, 0, sizeof(str));
-        res = recv(sock, str, sizeof(str),0);
-
-        if(res < 0){
-            printf( "%s\n", strerror(errno) );
-            error(TCPIP, "socket_recieve", NIL);
-        }
-        unify(arg2,makeconst(str));
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_socket_close(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        close(GET_INT(arg1));
-        return(YES);
-    }
-    return(NO);
-}
 
 int b_nano(int nest, int n){
     int arg1,res;
@@ -7544,11 +6973,6 @@ int b_nano(int nest, int n){
     return(NO);
 }
 
-
-#endif
-
-
-//JUMP Project
 int b_include_cut(int nest, int n){
 	int arg1,clauses,clause;
 
@@ -8468,6 +7892,7 @@ int b_dumpcell(int nest, int n){
     }
     return(NO);
 }
+
 
 
 int b_sort(int nest, int n){
