@@ -373,6 +373,7 @@ int prove_all(int goals, int bindings, int n){
 }
 
 int prove(int goal, int bindings, int rest, int n){
+    int clause,clauses,clause1,varlis,save;
 
     if(nullp(goal)){
         return(prove_all(rest,bindings,n));
@@ -407,8 +408,35 @@ int prove(int goal, int bindings, int rest, int n){
             return(NO);
         }
     }
-    else
-        return(NO);
+    else if(predicatep(goal)){
+        clauses = GET_CAR(car(goal));
+        while(!nullp(clauses)){
+            save = wp;
+            clause = car(clauses);
+            clauses = cdr(clauses);
+            varlis = GET_VAR(clause);
+            assign_variant(varlis);
+            clause1 = walpha_conversion(clause);
+            release_variant(varlis);
+            
+            if(predicatep(clause1) && unify(goal,clause1) == YES){
+                if(prove_all(rest,sp,n+1) == YES)
+                    return(YES);
+            }
+            // clause
+            else{
+                if(unify(goal,(cadr(clause1))) == YES){
+                    if(prove_all(caddr(clause1),sp,n) == YES)
+                        return(prove_all(rest,sp,n+1));
+                }
+            }
+            wp = save;
+            unbind(bindings);
+        }
+    }
+
+    
+    return(NO);
 }
 
 /*

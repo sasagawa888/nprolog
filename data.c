@@ -1418,6 +1418,7 @@ void unbind(int x){
     sp = x;
 }
 
+// link variable and variant
 void assign_variant(int x){
     while(!nullp(x)){
         SET_CDR(car(x),makevariant());
@@ -1425,6 +1426,7 @@ void assign_variant(int x){
     }
 }
 
+// release link variable and ariant
 void release_variant(int x){
     while(!nullp(x)){
         SET_CDR(car(x),NIL);
@@ -1432,23 +1434,6 @@ void release_variant(int x){
     }
 }
 
-int memory_variant(int x){
-    int res;
-
-    res = NIL;
-    while(!nullp(x)){
-        res = cons(cons(car(x),GET_CDR(car(x))),res);
-        x = cdr(x);
-    }
-    return(res);
-}
-
-void recall_variant(int x){
-    while(!nullp(x)){
-        SET_CDR(caar(x),cdar(x));
-        x = cdr(x);
-    }
-}
 
 int sort(int x){
     int res;
@@ -2019,19 +2004,7 @@ int ctrl_to_number(char c){
     return(NIL);
 }
 
-/*
-void set_length(int x){
-    if(operationp(x)){
-        set_length(cadr(x));
-        set_length(caddr(x));
-    }
-    else if(!structurep(x))
-        return;
-    else{
-        SET_LENGTH(x,length(x));
-    }
-}
-*/
+
 int last_predicate(int x){
 
     if(!operationp(x))
