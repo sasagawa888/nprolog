@@ -353,7 +353,7 @@ int list_to_ope(int x){
 int addask(int x){
 
     if(car(x) != AND)
-        return(list3(AND,x,cons(makeatom("%ask",SYS),NIL)));
+        return(list3(AND,x,makeatom("%ask",SYS)));
     else 
         return(list3(AND,cadr(x),addask(caddr(x))));
 }
@@ -363,8 +363,7 @@ int prove_all(int goals, int bindings, int n){
     if(nullp(goals))
         return(YES);
     else if(car(goals) == AND){
-        if(prove(cadr(goals),bindings,caddr(goals),n) == YES)
-            return(prove_all(caddr(goals),bindings,n+1));
+        return(prove(cadr(goals),bindings,caddr(goals),n));
     } 
     else
         return(prove(goals,bindings,NIL,n));
@@ -375,20 +374,22 @@ int prove_all(int goals, int bindings, int n){
 int prove(int goal, int bindings, int rest, int n){
     int clause,clauses,clause1,varlis,save;
 
+    goal = deref(goal);
+
     if(nullp(goal)){
         return(prove_all(rest,bindings,n));
     }
     else if(builtinp(goal)){
         if(atomp(goal)){
             if((GET_SUBR(goal))(cdr(goal),rest) == YES)
-                return(YES);
+                return(prove_all(rest,sp,n+1));
 
             unbind(bindings);
             return(NO);
         }
         else{
             if((GET_SUBR(car(goal)))(cdr(goal),rest) == YES)
-                return(YES);
+                return(prove_all(rest,sp,n+1));
 
             unbind(bindings);
             return(NO);
@@ -419,11 +420,12 @@ int prove(int goal, int bindings, int rest, int n){
             clause1 = walpha_conversion(clause);
             release_variant(varlis);
             
+            // case of predicate
             if(predicatep(clause1) && unify(goal,clause1) == YES){
                 if(prove_all(rest,sp,n+1) == YES)
                     return(YES);
             }
-            // clause
+            // case of clause
             else{
                 if(unify(goal,(cadr(clause1))) == YES){
                     if(prove_all(caddr(clause1),sp,n) == YES)

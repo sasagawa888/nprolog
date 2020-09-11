@@ -72,11 +72,13 @@ halt/0
 integer/1
 is/2
 length/2
+listing/1
 member/2
 nl/0
 nonvar/1
 number/1
 not/1
+reconsult/1
 true/0
 var/1
 write/1

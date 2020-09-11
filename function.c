@@ -907,7 +907,6 @@ void initbuiltin(void){
     defbuiltin("system",b_system);
     defbuiltin("sort",b_sort);
     defbuiltin("keysort",b_keysort);
-    defbuiltin("retractall",b_retractall);
     defbuiltin("compare",b_compare);
     defbuiltin("make_directory",b_make_directory);
     defbuiltin("directory_exists",b_directory_exists);
@@ -1156,11 +1155,12 @@ int o_cons(int x, int y){
     return(cons(x,y));
 }
 
-int b_ask(int nest, int n){
-    int x1,x2;
+int b_ask(int arglist, int rest){
+    int n,x1,x2;
     char c;
     double end_time;
 
+    n = length(arglist);
     if(n == 0){
         // if invoke from time/1 then print elapsed time
         if(time_flag){
@@ -1191,15 +1191,16 @@ int b_ask(int nest, int n){
         }
 
         fflush(stdout);
-        FLUSH
+        fflush(stdin);
 
         loop:
         c = getchar();
+        
         if(c == '.'){
         	getchar();
             return(YES);
         }
-        if(c == EOL){
+        else if(c == EOL){
             return(YES);
         }
         else if(c == ';'){
@@ -2816,12 +2817,13 @@ int b_consult(int nest, int n){
 }
 
 
-int b_reconsult(int nest, int n){
-    int arg1,clause,save,atom,arity,temp;
+int b_reconsult(int arglist, int rest){
+    int n,arg1,clause,save;
     char str[STRSIZE];
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"reconsult ",arg1);
         if(!atomp(arg1))
@@ -2846,114 +2848,19 @@ int b_reconsult(int nest, int n){
         line = 1;
         column = 0;
         reconsult_list = NIL;
-        contiguous_list = NIL;
-        atom = NIL;
-        arity = 0;
-        SET_CDR(atom,NIL);
-        define_list = NIL;
-        include_list = NIL;
-        option_list = NIL;
-        global_list = NIL;
-        execute_list = NIL;
         while(1){
-            clause = variable_to_call(parser(NIL,NIL,NIL,NIL,0,0));
+            clause = parser(NIL,NIL,NIL,NIL,0,0);
             if(clause == FEND)
                 break;
 
-            if(predicatep(clause)){
-                if(atomp(clause))
-                    arity = 0;
-                else
-                    arity = length(cdr(clause));
-
-                if(module_name == NIL){
-                    if(atomp(clause))
-                        atom = clause;  // ex foo
-                    else
-                        atom = car(clause); // ex foo(x).
-                }
-                else{
-                    if(atomp(clause))
-                        if(export_check(clause))
-                            atom = clause;
-                        else
-                            atom = add_prefix(clause);
-                    else
-                        if(export_check(clause))
-                            atom = car(clause);
-                        else
-                            atom = add_prefix(car(clause)); // ex modulename_a(x)
-                }
-            }
-            else if(clausep(clause)){
-                if(!nullp(caddr(clause))){// ex a(x) :- b(x).
-                    if(atomp(cadr(clause)))
-                        arity = 0;
-                    else
-                        arity = length(cdr(cadr(clause)));
-
-                    if(module_name == NIL){
-                        if(atomp(cadr(clause))){
-                            atom = makepred(GET_NAME(cadr(clause)));
-                            clause = list3(car(clause),atom,caddr(clause));
-                        }
-                        else{
-                            atom = car(cadr(clause));
-                        }
-                    }
-                    else{
-                        if(atomp(cadr(clause))){
-                            if(export_check(cadr(clause)))
-                                atom = cadr(clause);
-                            else
-                                atom = add_prefix(cadr(clause));
-                        }
-                        else{
-                            if(export_check(cadr(clause)))
-                                atom = car(cadr(clause));
-                            else
-                                atom = add_prefix(car(cadr(clause)));
-                        }
-                    }
-                }
-                else if(nullp(caddr(clause))){// ex :- b(X).
-                    temp = cons(cadr(clause),execute_list);
-                    SET_AUX(temp,LIST);
-                	execute_list = temp;
-
-                }
-            }
-            if(!nullp(atom) && !memq(atom,reconsult_list)){
-                SET_CAR(atom,NIL);
-                if(!infix_operator_p(atom))
-                    SET_CDR(atom,NIL);
-                temp = cons(atom,reconsult_list);
-                SET_AUX(temp,LIST);
-                reconsult_list = temp;
-            }
-            //memoize arity
-            memoize_arity(clause,atom);
-
-            //contiguous check
-            temp = list3(makeatom("/",OPE),atom,makeint(arity));
-            if(!memberp(temp,contiguous_list))
-                contiguous_list= cons(temp,contiguous_list);
-            if(memberp(temp,cdr(contiguous_list)))
-                error(DISCONTIGUOUS,"consult ",atom);
-
-            execute(clause);
+            //assert
+            b_assert(list1(clause),NIL);
         }
         open_flag = 0;
         fclose(GET_PORT(input_stream));
         input_stream = save;
 
         exit:
-        while(!nullp(init_list)){
-            arg1 = car(init_list);
-            arg1 = list2(makeatom(":-",OPE),arg1);
-            execute(arg1);
-            init_list = cdr(init_list);
-        }
         return(YES);
     }
     return(NO);
@@ -3730,74 +3637,6 @@ int b_retract(int nest, int n){
         wp = save1;
         sp = save2;
         return(NO);
-    }
-    return(NO);
-}
-
-
-int b_retractall(int nest, int n){
-    int arg1,clause,head,clauses,new_clauses,save1,save2;
-
-    save1 = tp;
-    save2 = sp;
-    clause = clauses = head = NIL;
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"retractall ",arg1);
-        //if(operationp(arg1) && !predicatep(cadr(arg1)))
-        //    error(NOT_CALLABLE,"retractall ",arg1);
-        //if(!operationp(arg1) && !predicatep(arg1))
-        //    error(NOT_CALLABLE,"retractall ",arg1);
-        if(operationp(arg1) && builtinp(cadr(arg1)))
-            error(BUILTIN_EXIST,"retractall ",arg1);
-        if(!operationp(arg1) && builtinp(arg1))
-            error(BUILTIN_EXIST,"retractall ",arg1);
-
-        if(singlep(arg1)){
-            arg1 = list1(arg1);
-        }
-        if(atom_predicate_p(arg1))
-            clauses = GET_CAR(arg1);
-        else if(predicatep(arg1))
-            clauses = GET_CAR(car(arg1));
-
-        new_clauses = NIL;
-        while(!nullp(clauses)){
-            clause = car(clauses);
-            clauses = cdr(clauses);
-
-            if(unify(arg1,clause) == YES)
-                new_clauses = new_clauses;
-            else
-                new_clauses = cons(clause,new_clauses);
-
-            tp = save1;
-            unbind(save2);
-        }
-        if(atom_predicate_p(arg1)){
-           SET_CAR(arg1,append(listreverse(new_clauses),clauses));
-           if(GET_CAR(arg1) == NIL)
-                SET_OPT1(arg1,NO);
-        }
-        else if(predicatep(arg1)){
-            SET_CAR(car(arg1),append(listreverse(new_clauses),clauses));
-            if(GET_CAR(car(arg1)) == NIL)
-                SET_OPT1(car(arg1),NO);
-        }
-        else if(clausep(arg1) && atom_predicate_p(cadr(arg1))){
-            SET_CAR(cadr(arg1),append(listreverse(new_clauses),clauses));
-            if(GET_CAR(cadr(arg1)) == NIL)
-                SET_OPT1(cadr(arg1),NO);
-        }
-        else if(clausep(arg1)){
-            SET_CAR(car(cadr(arg1)),append(listreverse(new_clauses),clauses));
-            if(GET_CAR(car(cadr(arg1))) == NIL)
-                SET_OPT1(car(cadr(arg1)),NO);
-        }
-        tp = save1;
-        sp = save2;
-        return(YES);
     }
     return(NO);
 }
@@ -5366,10 +5205,10 @@ int b_predicate_property(int nest, int n){
 }
 
 //-----other----
+int b_listing(int arglist, int rest){
+    int n,arg1,clauses,pred,list,temp;
 
-int b_listing(int nest, int n){
-    int arg1,clauses,pred,list,temp;
-
+    n = length(arglist);
     if(n == 0){
         list = listreverse(predicates);
         listing_flag = 1;
@@ -5387,16 +5226,12 @@ int b_listing(int nest, int n){
         return(YES);
     }
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(atomp(arg1)){
             clauses = GET_CAR(arg1);
             listing_flag = 1;
             while(!nullp(clauses)){
                 print(car(clauses));
-                if(debug_flag){
-                    if(GET_OPT(car(clauses)) == HASCUT)
-                        printf("has cut");
-                }
                 printf(".\n");
                 clauses = cdr(clauses);
             }
@@ -5405,26 +5240,22 @@ int b_listing(int nest, int n){
         }
         else if(eqlp(car(arg1),makeope("/")) &&
                 atomp(cadr(arg1)) && integerp(caddr(arg1))){
-              clauses = GET_CAR(cadr(arg1));
-              listing_flag = 1;
-              while(!nullp(clauses)){
-                  temp = car(clauses);
-                  if(predicatep(temp) && length(cdr(temp)) == GET_INT(caddr(arg1))){
-                      print(temp);
-                      printf(".\n");
-                  }
-                  else if(clausep(temp) && length(cdr(cadr(arg1))) == GET_INT(caddr(arg1))){
-                      print(temp);
-                      if(debug_flag){
-                          if(GET_OPT(car(clauses)) == HASCUT)
-                              printf("has cut");
-                      }
-                      printf(".\n");
-                  }
-                  clauses = cdr(clauses);
-              }
-              listing_flag = 0;
-              return(YES);
+            clauses = GET_CAR(cadr(arg1));
+            listing_flag = 1;
+            while(!nullp(clauses)){
+                temp = car(clauses);
+                if(predicatep(temp) && length(cdr(temp)) == GET_INT(caddr(arg1))){
+                    print(temp);
+                    printf(".\n");
+                }
+                else if(clausep(temp) && length(cdr(cadr(arg1))) == GET_INT(caddr(arg1))){
+                    print(temp);
+                    printf(".\n");
+                }
+                clauses = cdr(clauses);
+            }
+            listing_flag = 0;
+            return(YES);
         }
     }
     return(NO);
