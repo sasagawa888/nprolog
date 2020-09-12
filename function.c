@@ -55,10 +55,6 @@ void dynamic_link(int x){
     init_f0(1,(tpred)gbc);
     init_f0(2,(tpred)freshcell);
     init_f0(3,(tpred)makevariant);
-    init_f0(4,(tpred)get_tp);
-    init_f0(5,(tpred)get_sp);
-    init_f0(11,(tpred)get_trail_end);
-    init_f0(12,(tpred)debug);
     init_f0(13,(tpred)get_wp);
 
     //argument-1 type
@@ -72,12 +68,8 @@ void dynamic_link(int x){
     init_f1(7,(tpred)makeint);
     init_f1(8,(tpred)execute);
     init_f1(9,(tpred)unbind);
-    init_f1(10,(tpred)push_trail_body);
-    init_f1(11,(tpred)get_goal);
-    init_f1(12,(tpred)set_tp);
     init_f1(13,(tpred)set_sp);
     init_f1(15,(tpred)deref);
-    init_f1(16,(tpred)retract_goal);
     init_f1(17,(tpred)get_int);
     init_f1(18,(tpred)f_sin);
     init_f1(19,(tpred)f_asin);
@@ -93,7 +85,6 @@ void dynamic_link(int x){
     init_f1(29,(tpred)f_sign);
     init_f1(30,(tpred)f_round);
     init_f1(31,(tpred)list1);
-    init_f1(32,(tpred)set_trail_end);
     init_f1(33,(tpred)f_random);
     init_f1(34,(tpred)set_wp);
     init_f1(35,(tpred)wlist1);
@@ -132,7 +123,6 @@ void dynamic_link(int x){
     init_f2(30,(tpred)f_complement);
     init_f2(31,(tpred)set_aux);
     init_f2(32,(tpred)not_numeqp);
-    init_f2(33,(tpred)set_goal);
     init_f2(34,(tpred)f_div);
     init_f2(35,(tpred)set_var);
     init_f2(36,(tpred)wcons);
@@ -714,7 +704,7 @@ void initbuiltin(void){
     definfix("\\==",b_notequalp,700,XFX);
     definfix("\\=",b_notunify,700,XFX);
     definfix("=..",b_univ,700,XFX);
-    definfix("@",b_atmark,100,XFX);
+    definfix("@",o_ignore,100,XFX);
     definfix(":",b_colon,50,XFX);
     definfix("->",b_ifthen,1050,XFY);
 
@@ -725,12 +715,8 @@ void initbuiltin(void){
     defbuiltin("assertz",b_assert);
     defbuiltin("abolish",b_abolish);
     defbuiltin("read",b_read);
-    defbuiltin("read_term",b_read_term);
-    defbuiltin("read_item",b_read_item);
-    defbuiltin("read_token",b_read_token);
     defbuiltin("write",b_write);
     defbuiltin("writeln",b_writeln);
-    defbuiltin("write_term",b_write_term);
     defbuiltin("write_canonical",b_write_canonical);
     defbuiltin("writeq",b_writeq);
     defbuiltin("put",b_put);
@@ -739,10 +725,6 @@ void initbuiltin(void){
     defbuiltin("get_char",b_get_char);
     defbuiltin("get_code",b_get_code);
     defbuiltin("get_byte",b_get_byte);
-    defbuiltin("peek_byte",b_peek_byte);
-    defbuiltin("put_char",b_put_char);
-    defbuiltin("put_code",b_put_code);
-    defbuiltin("put_byte",b_put_byte);
     defbuiltin("nl",b_nl);
     defbuiltin("tab",b_tab);
     defbuiltin("fail",b_fail);
@@ -753,26 +735,15 @@ void initbuiltin(void){
     defbuiltin("listing",b_listing);
     defbuiltin("functor",b_functor);
     defbuiltin("arg",b_arg);
-    defbuiltin("debug",b_debug);
-    defbuiltin("atom_length",b_atom_length);
     defbuiltin("consult",b_consult);
     defbuiltin("reconsult",b_reconsult);
-    defbuiltin("initialization",b_initialization);
-    defbuiltin("include",b_include);
-    defbuiltin("ensure_loaded",b_ensure_loaded);
-    defbuiltin("use_module",b_use_module);
     defbuiltin("open",b_open);
     defbuiltin("close",b_close);
     defbuiltin("see",b_see);
     defbuiltin("seen",b_seen);
     defbuiltin("tell",b_tell);
     defbuiltin("told",b_told);
-    defbuiltin("current_input",b_current_input);
-    defbuiltin("current_output",b_current_output);
-    defbuiltin("set_input",b_set_input);
-    defbuiltin("set_output",b_set_output);
     defbuiltin("flush_output",b_flush_output);
-    defbuiltin("at_end_of_stream",b_at_end_of_stream);
     defbuiltin("trace",b_trace);
     defbuiltin("notrace",b_notrace);
     defbuiltin("spy",b_spy);
@@ -785,47 +756,19 @@ void initbuiltin(void){
     defbuiltin("number",b_number);
     defbuiltin("compound",b_compound);
     defbuiltin("ground",b_ground);
-    defbuiltin("constant",b_constant);
     defbuiltin("var",b_var);
     defbuiltin("nonvar",b_nonvar);
     defbuiltin("atomic",b_atomic);
     defbuiltin("list",b_list);
     defbuiltin("gc",b_gbc);
     defbuiltin("time",b_time);
-    defbuiltin("timer",b_timer);
-    defbuiltin("char_set",b_char_set);
-    defbuiltin("char_code",b_char_code);
-    defbuiltin("atom_chars",b_atom_chars);
-    defbuiltin("atom_codes",b_atom_codes);
-    defbuiltin("string_chars",b_string_chars);
-    defbuiltin("string_codes",b_string_codes);
-    defbuiltin("name",b_atom_codes);
-    defbuiltin("number_chars",b_number_chars);
-    defbuiltin("number_codes",b_number_codes);
-    defbuiltin("reverse",b_reverse);
-    defbuiltin("dynamic",b_dynamic);
-    defbuiltin("multifile",b_multifile);
-    defbuiltin("discontiguous",b_discontiguous);
-    defbuiltin("char_conversion",b_char_conversion);
-    defbuiltin("set_prolog_flag",b_set_prolog_flag);
     defbuiltin("%ask",b_ask);
     defbuiltin("system",b_system);
     defbuiltin("sort",b_sort);
-    defbuiltin("keysort",b_keysort);
     defbuiltin("make_directory",b_make_directory);
-    defbuiltin("directory_exists",b_directory_exists);
-    defbuiltin("current_directory",b_current_directory);
     defbuiltin("change_directory",b_change_directory);
-    defbuiltin("expand_path",b_expand_path);
-    defbuiltin("delete_file",b_delete_file);
-    defbuiltin("file_exists",b_file_exists);
-    defbuiltin("decompose_file_name",b_decompose_file_name);
-    defbuiltin("environment_variable",b_environment_variable);
-    defbuiltin("file_modification_time",b_file_modification_time);
-    defbuiltin("date",b_date);
     defbuiltin("length",b_length);
     defbuiltin("call",b_call);
-    defbuiltin("set_editor",b_set_editor);
     defbuiltin("edit",b_nano);
 
     defcompiled("repeat",b_repeat);
@@ -833,7 +776,6 @@ void initbuiltin(void){
     defcompiled("member",b_member);
     defcompiled("retract",b_retract);
     defcompiled("clause",b_clause);
-    defcompiled("atom_concat",b_atom_concat);
     
 
     return;
@@ -956,13 +898,14 @@ int b_append(int arglist, int rest){
 }
 
 
-int b_op(int nest, int n){
-    int arg1,arg2,arg3,weight,type;
+int b_op(int arglist, int rest){
+    int n,arg1,arg2,arg3,weight,type;
 
+    n = length(arglist);
     if(n == 3){
-        arg1 = deref(goal[2]); //priority
-        arg2 = deref(goal[3]); //specifier
-        arg3 = deref(goal[4]); //operator
+        arg1 = deref(car(arglist));   //priority
+        arg2 = deref(cadr(arglist));  //specifier
+        arg3 = deref(caddr(arglist)); //operator
 
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"op ",arg1);
@@ -1057,16 +1000,9 @@ int o_cons(int x, int y){
 int b_ask(int arglist, int rest){
     int n,x1,x2;
     char c;
-    double end_time;
 
     n = length(arglist);
     if(n == 0){
-        // if invoke from time/1 then print elapsed time
-        if(time_flag){
-            end_time = getETime();
-            printf("Elapsed Time=%.6f (second)\n", end_time - time_flag);
-            time_flag = 0;
-        }
         x1 = variables;
         if(nullp(x1) || has_no_value_p(x1)){
             return(YES);
@@ -1165,18 +1101,19 @@ int b_write(int arglist, int rest){
     return(NO);
 }
 
-int b_writeln(int nest, int n){
-    int arg1,arg2,save;
+int b_writeln(int arglist, int rest){
+    int n,arg1,arg2,save;
 
+    n = length(arglist);
     if(n == 1){
         arg1 = output_stream;
-        arg2 = deref(goal[2]);
+        arg2 = deref(cadr(arglist));
         goto write;
 
     }
     else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         write:
         if(wide_variable_p(arg1))
@@ -1203,142 +1140,19 @@ int b_writeln(int nest, int n){
     return(NO);
 }
 
+int b_write_canonical(int arglist, int rest){
+    int n,arg1,arg2,save;
 
-int b_write_term(int nest, int n){
-    int arg1,arg2,arg3,save,var,variable_name_flag;
-
-    if(n == 2){
-        arg1 = output_stream;
-        arg2 = deref(goal[2]);
-        arg3 = deref(goal[3]);
-        goto write_term;
-
-    }
-    else if(n == 3){
-        arg1 = deref(goal[2]); //stream or alias
-        arg2 = deref(goal[3]); //term
-        arg3 = deref(goal[4]); //option
-
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"write_term ",arg1);
-        if(!listp(arg3))
-            error(NOT_LIST,"write_term ",arg3);
-        if(!streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"write_term ",arg1);
-
-
-
-        write_term:
-        save = output_stream;
-        var = NIL;
-        variable_name_flag = 0;
-
-        if(aliasp(arg1))
-            output_stream = GET_CAR(arg1);
-        else
-            output_stream = arg1;
-        quoted_flag = 0;
-        ignore_flag = 0;
-        numbervars_flag = 0;
-        while(!nullp(arg3)){
-            if(quoted_option_p(car(arg3))){
-                if(cadr(car(arg3)) == makeconst("true"))
-                    quoted_flag = 1;
-            }
-            else if(ignore_optin_p(car(arg3))){
-                if(cadr(car(arg3)) == makeconst("true"))
-                    ignore_flag = 1;
-            }
-            else if(numbervars_option_p(car(arg3))){
-                if(cadr(car(arg3)) == makeconst("true"))
-                    numbervars_flag = 1;
-            }
-            else if(variable_name_p(car(arg3))){
-                variable_name_flag = 1;
-                var = cadr(car(arg3));
-            }
-            else if(wide_variable_p(car(arg3)))
-                error(NOT_LIST,"write_term ",car(arg3));
-            else
-                error(NOT_WRITE_OPTION,"write_term ",car(arg3));
-
-            arg3 = cdr(arg3);
-        }
-
-        if(!variable_name_flag)
-            print(arg2);
-        else{
-            while(!nullp(var)){
-                if(!eqp(car(car(var)),makeatom("=",SYS)))
-                    error(NOT_WRITE_OPTION,"write_term ",car(var));
-                unify(cadr(car(var)),caddr(car(var))); //e.g. 'A'=X
-                variables = listremove(cadr(car(var)),variables);
-                variables = listremove(caddr(car(var)),variables);
-                var = cdr(var);
-            }
-            print(deref(arg2));
-        }
-        output_stream = save;
-        quoted_flag = 1;
-        ignore_flag = 0;
-        numbervars_flag = 0;
-        return(YES);
-    }
-    return(NO);
-}
-
-int quoted_option_p(int x){
-
-    if(eqlp(car(x),makeconst("quoted")) &&
-       eqlp(cadr(x),makeconst("true")) &&
-       caddr(x) == NIL)
-        return(1);
-    else if(eqlp(car(x),makeconst("quoted")) &&
-            eqlp(cadr(x),makeconst("false")) &&
-            caddr(x) == NIL)
-        return(1);
-    else
-        return(0);
-}
-
-int ignore_optin_p(int x){
-    if(eqlp(car(x),makeconst("ignore_ops")) &&
-       eqlp(cadr(x),makeconst("true")) &&
-       caddr(x) == NIL)
-        return(1);
-    else if(eqlp(car(x),makeconst("ignore_ops")) &&
-            eqlp(cadr(x),makeconst("false")) &&
-            caddr(x) == NIL)
-        return(1);
-    else
-        return(0);
-}
-
-int numbervars_option_p(int x){
-    if(eqlp(car(x),makeconst("numbervars")) &&
-       eqlp(cadr(x),makeconst("true")) &&
-       caddr(x) == NIL)
-        return(1);
-    if(eqlp(car(x),makeconst("numbervars")) &&
-       eqlp(cadr(x),makeconst("false")) &&
-       caddr(x) == NIL)
-        return(1);
-    else
-        return(0);
-}
-
-int b_write_canonical(int nest, int n){
-    int arg1,arg2,save;
-
+    n = length(arglist);
     if(n == 1){
         arg1 = output_stream;
-        arg2 = deref(goal[2]);
+        arg2 = deref(car(arglist));
         goto write_canonical;
 
     }
     else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
         write_canonical:
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"write_canonical ",arg1);
@@ -1410,10 +1224,12 @@ int b_nl(int arglist, int rest){
     return(NO);
 }
 
-int b_put(int nest, int n){
-    int arg1;
+int b_put(int arglist, int rest){
+    int n,arg1;
+
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(!integerp(arg1))
             error(NOT_INT,"put",arg1);
         fprintf(GET_PORT(output_stream), "%c", (char)GET_INT(arg1));
@@ -1422,18 +1238,12 @@ int b_put(int nest, int n){
     return(NO);
 }
 
-int b_get0(int nest, int n){
-#ifdef _WIN32
-    int arg1,i,res;
-    char c;
-#elif __linux
-    int c,arg1,i,res;
-#elif __OpenBSD__
-    int c,arg1,i,res;
-#endif
+int b_get0(int arglist, int rest){
+    int n,c,arg1,i,res;
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         c = getc(GET_PORT(input_stream));
         if(c == EOL){
             c = getc(GET_PORT(input_stream));
@@ -1445,18 +1255,12 @@ int b_get0(int nest, int n){
     return(NO);
 }
 
-int b_get(int nest, int n){
-#ifdef _WIN32
-    int arg1,i,res;
-    char c;
-#elif __linux
-    int c,arg1,i,res;
-#elif __OpenBSD__
-    int c,arg1,i,res;
-#endif
+int b_get(int arglist, int rest){
+    int n,c,arg1,i,res;
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
 
         loop:
         c = getc(GET_PORT(input_stream));
@@ -1476,26 +1280,19 @@ int b_get(int nest, int n){
 }
 
 
-int b_get_char(int nest, int n){
-#if _WIN32
-    int arg1,arg2,res;
-    char c,str[10];
-#elif __linux
-    int c,arg1,arg2,res;
+int b_get_char(int arglist, int rest){
+    int n,c,arg1,arg2,res;
     char str[10];
-#elif __OpenBSD__
-    int c,arg1,arg2,res;
-    char str[10];
-#endif
 
+    n = length(arglist);
     if(n == 1){
         arg1 = input_stream;
-        arg2 = deref(goal[2]);
+        arg2 = deref(car(arglist));
         goto get_char;
     }
     else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
         get_char:
 
         if(wide_variable_p(arg1))
@@ -1590,18 +1387,19 @@ int b_get_char(int nest, int n){
     return(NO);
 }
 
-int b_get_code(int nest, int n){
-    int arg1,arg2,c,i,res;
+int b_get_code(int arglist, int rest){
+    int n,arg1,arg2,c,i,res;
     char str[10];
 
+    n = length(arglist);
     if(n == 1){
         arg1 = input_stream;
-        arg2 = deref(goal[2]);
+        arg2 = deref(car(arglist));
         goto get_code;
     }
     else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         get_code:
         if(wide_variable_p(arg1))
@@ -1692,17 +1490,18 @@ int b_get_code(int nest, int n){
     return(NO);
 }
 
-int b_get_byte(int nest, int n){
-    int arg1,arg2,c,res;
+int b_get_byte(int arglist, int rest){
+    int n,arg1,arg2,c,res;
 
+    n = length(arglist);
     if(n == 1){
         arg1 = input_stream;
-        arg2 = deref(goal[2]);
+        arg2 = deref(car(arglist));
         goto get_byte;
     }
     else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         get_byte:
         if(wide_variable_p(arg1))
@@ -1738,164 +1537,13 @@ int b_get_byte(int nest, int n){
     return(NO);
 }
 
-int b_peek_byte(int nest, int n){
-    int arg1,arg2,c,res;
 
+int b_tab(int arglist, int rest){
+    int n,arg1,count;
+
+    n = length(arglist);
     if(n == 1){
-        arg1 = input_stream;
-        arg2 = deref(goal[2]);
-        goto get_byte;
-    }
-    else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        get_byte:
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"peek_byte ",arg1);
-        if(!wide_variable_p(arg2) && !integerp(arg2))
-            error(NOT_INT,"peek_byte ",arg2);
-        if(!streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"peek_byte ",arg1);
-
-        if(aliasp(arg1))
-            arg1 = GET_CAR(arg1);
-        c = fgetc(GET_PORT(arg1));
-        ungetc(c,GET_PORT(arg1));
-
-        res = NIL;
-        if(c == EOF){
-            if(GET_TR(arg1) == 0){
-                SET_TR(arg1,1);
-                res = unify(arg2,makeint(26)); //0x1A ctrl+Z ascii code
-            }
-            else{
-                if(GET_AUX(arg1) == makeconst("error"))
-                    error(PAST_EOF_INPUT,"peek_byte ",arg1);
-                else if(GET_AUX(arg1) == makeconst("eof_code"))
-                    res = unify(arg2,FEND);
-
-            }
-        }
-        else{
-            res = unify(arg2,makeint(c));
-        }
-        return(res);
-    }
-    return(NO);
-}
-
-
-int b_put_char(int nest, int n){
-    int arg1,arg2,save;
-
-    if(n == 1){
-        arg1 = output_stream;
-        arg2 = deref(goal[2]);
-        goto put_char;
-    }
-    else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        put_char:
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"get_char ",arg1);
-        if(wide_variable_p(arg2))
-            error(INSTANTATION_ERR,"get_char ",arg2);
-        if(!wide_variable_p(arg2) && !characterp(arg2))
-            error(NOT_CHAR,"get_char ",arg2);
-        if(!streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"get_char ",arg1);
-
-        save = output_stream;
-        if(aliasp(arg1))
-            output_stream = GET_CAR(arg1);
-        else
-            output_stream = arg1;
-        print(arg2);
-        output_stream = save;
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_put_code(int nest, int n){
-    int arg1,arg2,save;
-    char str[10];
-
-    if(n == 1){
-        arg1 = output_stream;
-        arg2 = deref(goal[2]);
-        goto put_code;
-
-    }
-    else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        put_code:
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"get_code ",arg1);
-        if(wide_variable_p(arg2))
-            error(INSTANTATION_ERR,"get_code ",arg2);
-        if(!wide_variable_p(arg2) && !integerp(arg2))
-            error(NOT_CHAR,"get_code ",arg2);
-        if(!streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"get_code ",arg1);
-
-        save = output_stream;
-        if(aliasp(arg1))
-            output_stream = GET_CAR(arg1);
-        else
-            output_stream = arg1;
-        str[0] = GET_INT(arg2);
-        str[1] = NUL;
-        print(makeconst(str));
-        output_stream = save;
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_put_byte(int nest, int n){
-    int arg1,arg2,save;
-
-    if(n == 1){
-        arg1 = output_stream;
-        arg2 = deref(goal[2]);
-        goto put_byte;
-
-    }
-    else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        put_byte:
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"get_byte ",arg1);
-        if(wide_variable_p(arg2))
-            error(INSTANTATION_ERR,"get_byte ",arg2);
-        if(!wide_variable_p(arg2) && !integerp(arg2))
-            error(NOT_CHAR,"get_byte ",arg2);
-        if(!streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"get_byte ",arg1);
-
-        save = output_stream;
-        if(aliasp(arg1))
-            output_stream = GET_CAR(arg1);
-        else
-            output_stream = arg1;
-        fputc(GET_INT(arg2),GET_PORT(output_stream));
-        output_stream = save;
-        return(YES);
-    }
-    return(NO);
-}
-
-
-int b_tab(int nest, int n){
-    int arg1,count;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(integerp(eval(arg1)) && GET_INT(eval(arg1)) < 0)
             error(NOT_LESS_THAN_ZERO,"tab",arg1);
         if(!integerp(arg1))
@@ -1911,85 +1559,6 @@ int b_tab(int nest, int n){
     return(NO);
 }
 
-//unfinished
-int b_read_term(int nest, int n){
-    int arg1,arg2,arg3,original,copy,save,res,
-        variable_name_flag,var,singleton_flag,var1;
-
-    if(n == 2){
-        arg1 = input_stream;
-        arg2 = deref(goal[2]);
-        arg3 = deref(goal[3]);
-        goto read_term;
-
-    }
-    else if(n == 3){
-        arg1 = deref(goal[2]); //stream
-        arg2 = deref(goal[3]); //term
-        arg3 = deref(goal[4]); //option
-        read_term:
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"read_term ",arg1);
-        if(listp(arg3) && length(arg3) == -1)
-            error(INSTANTATION_ERR,"read_term ",arg3);
-        if(!streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"read_term ",arg1);
-        if(!listp(arg3) && !nullp(arg3))
-            error(NOT_LIST,"read_term ",arg3);
-        if(streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
-            error(NOT_INPUT_STREAM,"read_term ", arg1);
-
-        var = NIL;
-        var1 = NIL;
-        copy = NIL;
-        while(!nullp(arg3)){
-            if(variable_name_p(car(arg3))){
-                variable_name_flag = 1;
-                var = cadr(car(arg3));
-            }
-            else if(singletonp(car(arg3))){
-                singleton_flag = 1;
-                var1 = cadr(car(arg3));
-            }
-            else if(wide_variable_p(car(arg3)))
-                error(INSTANTATION_ERR,"read_term ",car(arg3));
-            else
-                error(NOT_READ_OPTION,"read_term ",car(arg3));
-
-            arg3 = cdr(arg3);
-        }
-        save = input_stream;
-        if(aliasp(arg1))
-            input_stream = GET_CAR(arg1);
-        else
-            input_stream = arg1;
-        original = variable_to_call(parser(NIL,NIL,NIL,NIL,0,0));
-        if(original == FEND){
-            if(GET_AUX(input_stream) == makeconst("error") &&
-               GET_TR(input_stream) == 1)
-                error(EOF_ERROR,"read_term",NIL);
-            SET_TR(input_stream,1); // for at_end_of_stream
-            res = unify(arg2,original);
-        }
-        else if(variable_name_flag || singleton_flag){
-            numbervars_base_pt = numbervars_top_pt;
-            print(original);
-            copy = copy_term(original);
-            res = unify(arg2,copy);
-            if(variable_name_flag)
-                unify(var,variable_name_list());
-            if(singleton_flag)
-                unify(var1,singleton_list());
-        }
-        else
-            res = unify(arg2,copy);
-
-
-        input_stream = save;
-        return(res);
-    }
-    return(NO);
-}
 
 //option for read_term [variable_names(X)]
 int variable_name_p(int x){
@@ -2043,18 +1612,19 @@ int singleton_list(void){
     return(res);
 }
 
-int b_read(int nest, int n){
-    int arg1,arg2,save,temp,res;
+int b_read(int arglist, int rest){
+    int n,arg1,arg2,save,temp,res;
 
+    n = length(arglist);
     if(n == 1){
         arg1 = input_stream;
-        arg2 = deref(goal[2]);
+        arg2 = deref(car(arglist));
         goto read;
 
     }
     else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
         read:
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"read ",arg1);
@@ -2084,303 +1654,28 @@ int b_read(int nest, int n){
     return(NO);
 }
 
-int b_read_item(int nest, int n){
-    int arg1,arg2,save,temp,res;
-
-    if(n == 1){
-        arg1 = input_stream;
-        arg2 = deref(goal[2]);
-        goto read;
-
-    }
-    else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        read:
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"read_item ",arg1);
-        if(!streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"read_item ",arg1);
-        if(streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
-            error(NOT_INPUT_STREAM,"read_item ", arg1);
-        save = input_stream;
-        if(aliasp(arg1))
-            input_stream = GET_CAR(arg1);
-        else
-            input_stream = arg1;
-
-        temp = readitem();
-        if(operatorp(temp))
-            temp = makeconst(GET_NAME(temp)); //e.g.  (,) -> ','
-        if(temp == FEND){
-            if(GET_AUX(input_stream) == makeconst("error") &&
-               GET_TR(input_stream) == 1)
-                error(EOF_ERROR,"read_item",NIL);
-            else
-                temp = GET_AUX(input_stream);
-
-            SET_TR(input_stream,1); //for at_end_of_stream;
-        }
-        res = unify(arg2,temp);
-        input_stream = save;
-        return(res);
-    }
-    return(NO);
-}
-
-int b_read_token(int nest, int n){
-    int arg1,arg2,save,temp,res;
-    char *e;
-
-    if(n == 1){
-        arg1 = input_stream;
-        arg2 = deref(goal[2]);
-        goto read;
-
-    }
-    else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        read:
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"read_token ",arg1);
-        if(!streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"read_token ",arg1);
-        if(streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
-            error(NOT_INPUT_STREAM,"read_token ", arg1);
-        save = input_stream;
-        if(aliasp(arg1))
-            input_stream = GET_CAR(arg1);
-        else
-            input_stream = arg1;
-
-        gettoken();
-        switch(stok.type){
-            case PERIOD:    temp = makeconst("."); break;
-            case COMMA:     temp = makeconst(","); break;
-            case SEMICOLON: temp = makeconst(";"); break;
-            case LPAREN:    temp = makeconst("("); break;
-            case RPAREN:    temp = makeconst(")"); break;
-            case LCURL:     temp = makeconst("{"); break;
-            case RCURL:     temp = makeconst("}"); break;
-            case LBRACKET:  temp = makeconst("["); break;
-            case RBRACKET:  temp = makeconst("]"); break;
-            case VERTICAL:  temp = makeconst("|"); break;
-            case INTEGER:   temp = makeint(atoi(stok.buf)); break;
-            case OCTNUM:    if(strtol(stok.buf,&e,8) < 1000000000)
-                                temp = makeint(strtol(stok.buf,&e,8));
-                            else
-                                temp = makeoctbigx(stok.buf);
-                            break;
-            case BINNUM:    if(strtol(stok.buf,&e,2) < 1000000000)
-                                temp = makeint(strtol(stok.buf,&e,2));
-                            else
-                                temp = makebinbigx(stok.buf);
-                            break;
-            case HEXNUM:    if(strtol(stok.buf,&e,16) < 1000000000)
-                                temp = makeint(strtol(stok.buf,&e,16));
-                            else
-                                temp = makehexbigx(stok.buf);
-                            break;
-            case FLOATN:    temp = makeflt(atof(stok.buf)); break;
-            case BIGNUM:    temp = makebigx(stok.buf); break;
-            case CHARCODE:  temp = makeint(stok.buf[0]); break;
-            case STRING:    temp = makestr(stok.buf); break;
-            case FILEEND:   temp = FEND; break;
-            default:        temp = makeconst(stok.buf); break;
-        }
-
-        if(temp == FEND){
-            if(GET_AUX(input_stream) == makeconst("error") &&
-               GET_TR(input_stream) == 1)
-                error(EOF_ERROR,"read_token ",NIL);
-            else
-                temp = GET_AUX(input_stream);
-
-            SET_TR(input_stream,1); //for at_end_of_stream;
-        }
-        res = unify(arg2,temp);
-        input_stream = save;
-        return(res);
-    }
-    return(NO);
-}
 
 
 
 int b_open(int nest, int n){
-    int arg1,arg2,arg3,arg4;
-
-    if(n == 3){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
-        arg4 = NIL;
-        goto open;
-    }
-    if(n == 4){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
-        arg4 = deref(goal[5]);
-
-        open:
-        if(variablep(arg1) || anoymousp(arg1))
-            error(INSTANTATION_ERR,"open ",arg1);
-        if(!!structurep(arg1))
-            error(NOT_SOURCE,"open ",arg1);
-        if(variablep(arg2) || anoymousp(arg2))
-            error(INSTANTATION_ERR,"open ",arg2);
-        if(length(arg4) == -1) //improper_list
-            error(NOT_LIST,"open ",arg4);
-        if(!builtinp(arg2) && !!structurep(arg2))
-            error(NOT_ATOM,"open ",arg2);
-        if(!wide_variable_p(arg3))
-            error(NOT_VAR,"open ",arg3);
-        if(!listp(arg4) && !nullp(arg4))
-            error(NOT_LIST,"open ",arg4);
-
-    }   
+    
     return(NO);
 }
 
 
-int type_option_p(int x){
-    if(eqlp(car(x),makeconst("type")) &&
-       singlep(cadr(x)) &&
-       nullp(cddr(x)))
-        return(1);
-    else
-        return(0);
-}
-
-
-int alias_option_p(int x){
-    if(eqlp(car(x),makeconst("alias")) &&
-       singlep(cadr(x)) &&
-       nullp(cddr(x))){
-        if(GET_AUX(cadr(x)) == PRED ||
-           GET_AUX(cadr(x)) == SYS ||
-           GET_AUX(cadr(x)) == PRED)
-            error(ILLEGAL_ARGS,"alias",cadr(x));
-        return(1);
-       }
-    else
-        return(0);
-}
-
-int position_option_p(int x){
-    if(eqlp(car(x),makeconst("position")) &&
-       singlep(cadr(x)) &&
-       nullp(cddr(x)))
-        return(1);
-    else
-        return(0);
-}
-
-int reposition_option_p(int x){
-    if(eqlp(car(x),makeconst("reposition")) &&
-       singlep(cadr(x)) &&
-       nullp(cddr(x)))
-        return(1);
-    else
-        return(0);
-}
-
-
-int eof_action_option_p(int x){
-    if(eqlp(car(x),makeconst("eof_action")) &&
-       singlep(cadr(x)) &&
-       nullp(cddr(x))){
-       if(GET_AUX(cadr(x)) == PRED ||
-           GET_AUX(cadr(x)) == SYS ||
-           GET_AUX(cadr(x)) == COMP)
-            error(ILLEGAL_ARGS,"alias",cadr(x));
-        return(1);
-    }
-    else
-        return(0);
-}
 
 int b_close(int nest, int n){
-    int arg1,arg2,type,res;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        arg2 = NIL;
-        goto close;
-
-    }
-    else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        close:
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"close ",arg1);
-        if(!listp(arg2) && !nullp(arg2))
-            error(NOT_LIST,"close ",arg2);
-        if(length(arg2) == -1) //partial list
-            error(NOT_LIST,"close ",arg2);
-        if(!streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"close ",arg1);
-
-        type = 0;
-        while(!nullp(arg2)){
-            if(forcefalsep(car(arg2)))
-                type = 1; //force(false)
-            else if(forcetruep(car(arg2)))
-                type = 2; //force(true)
-            else if(variablep(car(arg2)))
-                error(INSTANTATION_ERR,"close",car(arg2));
-            else
-                error(NOT_CLOSE_OPTION,"close",car(arg2));
-
-            arg2 = cdr(arg2);
-        }
-        if(arg1 == standard_input || arg1 == standard_output)
-            return(YES);
-        else if(type == 1 || type == 2){
-            if(aliasp(arg1) && GET_CDR(arg1) == NORMAL){
-                res = fclose(GET_PORT(GET_CAR(arg1)));
-                SET_AUX(arg1,NIL);
-                if(res == EOF && type ==1) //fail close
-                    error(EXISTENCE_ERR,"close ",arg2);
-            }
-            else
-                fclose(GET_PORT(arg1));
-        }
-        else
-            fclose(GET_PORT(arg1));
-
-        return(YES);
-    }
+    
     return(NO);
 }
 
-int forcefalsep(int x){
-    if(eqlp(car(x),makeconst("force")) &&
-       eqlp(cadr(x),makeconst("false")) &&
-       nullp(cddr(x)))
-        return(1);
-    else
-        return(0);
-}
 
-int forcetruep(int x){
-    if(eqlp(car(x),makeconst("force")) &&
-       eqlp(cadr(x),makeconst("true")) &&
-       nullp(cddr(x)))
-        return(1);
-    else
-        return(0);
-}
+int b_see(int arglist, int rest){
+    int n,arg1;
 
-int b_see(int nest, int n){
-    int arg1;
-
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"see ",arg1);
         if(!atomp(arg1))
@@ -2401,7 +1696,10 @@ int b_see(int nest, int n){
     return(NO);
 }
 
-int b_seen(int nest, int n){
+int b_seen(int arglist, int rest){
+    int n;
+
+    n = length(arglist);
     if(n == 0){
         if(input_stream != standard_input){
             fclose(GET_PORT(input_stream));
@@ -2412,11 +1710,12 @@ int b_seen(int nest, int n){
     return(NO);
 }
 
-int b_tell(int nest, int n){
-    int arg1;
+int b_tell(int arglist, int rest){
+    int n,arg1;
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"tell ",arg1);
         if(!atomp(arg1))
@@ -2437,7 +1736,10 @@ int b_tell(int nest, int n){
     return(NO);
 }
 
-int b_told(int nest, int n){
+int b_told(int arglist, int rest){
+    int n;
+
+    n = length(arglist);
     if(n == 0){
         if(output_stream != standard_output){
             fclose(GET_PORT(output_stream));
@@ -2448,91 +1750,17 @@ int b_told(int nest, int n){
     return(NO);
 }
 
-int b_current_input(int nest, int n){
-    int arg1;
 
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        if(!wide_variable_p(arg1) && !streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"current_input ",arg1);
-        if(aliasp(arg1))
-            arg1 = GET_CAR(arg1);
-        return(unify(arg1,input_stream));
-    }
-    return(NO);
-}
+int b_flush_output(int arglist, int rest){
+    int n,arg1;
 
-int b_current_output(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        if(!wide_variable_p(arg1) && !streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"current_output ",arg1);
-        if(aliasp(arg1))
-            arg1 = GET_CAR(arg1);
-        return(unify(arg1,output_stream));
-    }
-    return(NO);
-}
-
-int b_set_input(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"set_intput", arg1);
-        if(!streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"set_intput ", arg1);
-        if(streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
-            error(NOT_INPUT_STREAM,"set_input ", arg1);
-        if(aliasp(arg1) && GET_OPT(car(arg1)) == OPL_OUTPUT)
-            error(NOT_INPUT_STREAM,"set_input ", arg1);
-
-        if(aliasp(arg1))
-            input_stream = GET_CAR(arg1);
-        else
-            input_stream = arg1;
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_set_output(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"set_output", arg1);
-        if(!streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"set_output ", arg1);
-        if(streamp(arg1) && GET_OPT(arg1) == OPL_INPUT)
-            error(NOT_OUTPUT_STREAM,"set_output ", arg1);
-        if(aliasp(arg1) && GET_OPT(car(arg1)) == OPL_INPUT)
-            error(NOT_OUTPUT_STREAM,"set_output ", arg1);
-
-        if(aliasp(arg1))
-            output_stream = GET_CAR(arg1);
-        else
-            output_stream = arg1;
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_flush_output(int nest, int n){
-    int arg1;
-
+    n = length(arglist);
     if(n == 0){
         fflush(stdout);
         return(YES);
     }
     else if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"flush_output ",arg1);
         if(!streamp(arg1) && !aliasp(arg1))
@@ -2548,61 +1776,14 @@ int b_flush_output(int nest, int n){
     return(NO);
 }
 
-int b_at_end_of_stream(int nest, int n){
-    int arg1;
 
-    if(n == 0){
-        arg1 = input_stream;
-        goto at_end_of_stream;
-    }
-    else if(n == 1){
-        arg1 = deref(goal[2]);
-
-        at_end_of_stream:
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"at_end_of_stream ",arg1);
-        if(!streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"at_end_of_stream ",arg1);
-
-        if(aliasp(arg1))
-            arg1 = GET_CAR(arg1);
-        if(GET_TR(arg1) == 1)
-            return(YES);
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
-int b_set_stream_position(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"set_stream_position ",arg1);
-        if(wide_variable_p(arg2))
-            error(INSTANTATION_ERR,"set_stream_position ",arg2);
-        if(!streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"set_stream_position ",arg1);
-        if(!integerp(arg2))
-            error(NOT_INT,"set_stream_position",arg2);
-
-        fseek(GET_PORT(arg1),GET_INT(arg2),SEEK_CUR);
-        return(YES);
-    }
-    return(NO);
-}
-
-
-int b_consult(int nest, int n){
-    int arg1,clause,save,atom,arity,temp;
+int b_consult(int arglist, int rest){
+    int n,arg1,clause,save;
     char str[STRSIZE];
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"consult ",arg1);
         if(!atomp(arg1))
@@ -2623,85 +1804,23 @@ int b_consult(int nest, int n){
             goto exit;
         }
 
-
         open_flag = 1;
         line = 1;
         column = 0;
         reconsult_list = NIL;
-        contiguous_list = NIL;
-        atom = NIL;
-        arity = 0;
-        SET_CDR(atom,NIL);
         while(1){
-            clause = variable_to_call(parser(NIL,NIL,NIL,NIL,0,0));
-            if(predicatep(clause)){
-                if(atomp(clause))
-                    arity = 0;
-                else
-                    arity = length(cdr(clause));
-
-                if(module_name == NIL){
-                    if(atomp(clause))
-                        atom = clause;  // ex foo
-                    else
-                        atom = car(clause); // ex foo(x).
-                }
-                else{
-                    if(atomp(clause))
-                        atom = add_prefix(clause);
-                    else
-                        atom = add_prefix(car(clause)); // ex modulename_a(x)
-                }
-
-                if(!memq(makeint(length(cdr(clause))),GET_CDR(atom)))
-                	SET_CDR(atom,cons(makeint(length(cdr(clause))),GET_CDR(atom)));
-            }
-            else if(clausep(clause)){
-                if(!nullp(caddr(clause))){
-                    if(atomp(cadr(clause)))
-                        arity = 0;
-                    else
-                        arity = length(cdr(cadr(clause)));
-
-                    if(module_name == NIL){
-                        if(atomp(cadr(clause)))
-                            atom = cadr(clause);
-                        else
-                            atom = car(cadr(clause));
-                    }
-                    else{
-                        if(atomp(cadr(clause)))
-                            atom = add_prefix(cadr(clause));
-                        else
-                            atom = add_prefix(car(cadr(clause)));
-                    }
-                }
-            }
-            if(!nullp(atom) && !memq(atom,reconsult_list)){
-                reconsult_list = cons(atom,reconsult_list);
-            }
-            //contiguous check
-            temp = list3(makeatom("/",OPE),atom,makeint(arity));
-            if(!memberp(temp,contiguous_list))
-                contiguous_list= cons(temp,contiguous_list);
-            if(memberp(temp,cdr(contiguous_list)))
-                error(DISCONTIGUOUS,"consult ",atom);
-
+            clause = parser(NIL,NIL,NIL,NIL,0,0);
             if(clause == FEND)
                 break;
-            execute(clause);
+
+            //assert
+            b_assert(list1(clause),NIL);
         }
         open_flag = 0;
         fclose(GET_PORT(input_stream));
         input_stream = save;
 
         exit:
-        while(!nullp(init_list)){
-            arg1 = car(init_list);
-            arg1 = list2(makeatom("?-",OPE),arg1);
-            execute(arg1);
-            init_list = cdr(init_list);
-        }
         return(YES);
     }
     return(NO);
@@ -2777,8 +1896,7 @@ int b_reconsult(int arglist, int rest){
 }
 
 /*
- clause is predicate or clause
- atom is functor of clause. e.g. foo(X)->foo, foo(X) :- bar(X)->foo
+X)->foo, foo(X) :- bar(X)->foo
  set CDR part of atom the arity. e.g. cdr(atom) = #[2,3]
 */
 void memoize_arity(int clause, int atom){
@@ -2801,139 +1919,6 @@ void memoize_arity(int clause, int atom){
         }
     }
 }
-
-int b_multifile(int nest, int n){
-    int arg1;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"multifile ",arg1);
-        if(!eqlp(car(arg1),makeatom("/",OPE)))
-            error(PRED_INDICATOR,"multifile ",arg1);
-        if(!atomp(cadr(arg1)))
-            error(NOT_ATOM,"multifile ",cadr(arg1));
-        if(!integerp(caddr(arg1)))
-            error(NOT_INT,"multifile ",caddr(arg1));
-
-        SET_OPT1(cadr(arg1),NO);
-        arg1 = list3(car(arg1),makepred(GET_NAME(cadr(arg1))),caddr(arg1));
-        if(!memberp(arg1,dynamic_list)){
-            dynamic_list = listcons(arg1,dynamic_list);
-        }
-        return(YES);
-    }
-    return(NO);
-}
-
-
-int b_initialization(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-
-        init_list = cons(arg1,init_list);
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_include(int nest, int n){
-    int arg1,clause,save;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"include ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM, "include ", arg1);
-
-        save = input_stream;
-        input_stream = makestream(fopen(GET_NAME(arg1),"r"),OPL_INPUT,OPL_TEXT,NIL,arg1);
-
-        if(GET_PORT(input_stream) == NULL)
-            error(CANT_OPEN, "include", arg1);
-
-        open_flag = 1;
-        column = 0;
-        while(1){
-            clause = variable_to_call(parser(NIL,NIL,NIL,NIL,0,0));
-            if(clause == FEND)
-                break;
-            execute(clause);
-        }
-        open_flag = 0;
-        fclose(GET_PORT(input_stream));
-        input_stream = save;
-        return(YES);
-    }
-    return(NO);
-}
-
-
-int b_ensure_loaded(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-
-        if(!memberp(arg1,load_list)){
-        	load_list = cons(arg1,load_list);
-        	b_consult(nest,n);
-        }
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_use_module(int nest, int n){
-	int arg1,filename;
-    char str[ATOMSIZE];
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-
-        if(!memberp(cadr(arg1),load_list)){
-            memset(str,NUL,ATOMSIZE);
-            strcpy(str,GET_NAME(car(arg1)));
-            #if _WIN32
-            strcat(str,"\\\\");
-            #elif __linux
-            strcat(str,"/");
-            #elif __OpenBSD__
-            strcat(str,"/");
-            #endif
-            strcat(str,GET_NAME(cadr(arg1)));
-            strcat(str,".o");
-
-            FILE* fp = fopen(str,"r");
-            if(fp != NULL)
-                fclose(fp);
-            else{
-                memset(str,NUL,ATOMSIZE);
-                strcpy(str,GET_NAME(car(arg1)));
-                #if _WIN32
-                strcat(str,"\\\\");
-                #elif __linux
-                strcat(str,"/");
-                #elif __OpenBSD__
-                strcat(str,"/");
-                #endif
-                strcat(str,GET_NAME(cadr(arg1)));
-                strcat(str,".pl");
-            }
-            filename = makeconst(str);
-        	load_list = cons(cadr(arg1),load_list);
-            goal[2] = filename;
-        	b_consult(nest,n);
-        }
-        return(YES);
-    }
-    return(NO);
-}
-
 
 
 //arithmetic operation
@@ -3130,8 +2115,8 @@ int b_notequalp(int arglist, int rest){
 
     n = length(arglist);
     if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         if(anoymousp(arg1) && anoymousp(arg2))
             return(YES);
@@ -3144,12 +2129,13 @@ int b_notequalp(int arglist, int rest){
 }
 
 
-int b_atsmaller(int nest, int n){
-    int arg1,arg2;
+int b_atsmaller(int arglist, int rest){
+    int n,arg1,arg2;
 
+    n = length(arglist);
     if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         if(atsmaller(arg1,arg2))
             return(YES);
@@ -3257,12 +2243,13 @@ int ateqsmaller(int x, int y){
 }
 
 
-int b_ateqsmaller(int nest, int n){
-    int arg1,arg2;
+int b_ateqsmaller(int arglist, int rest){
+    int n,arg1,arg2;
 
+    n = length(arglist);
     if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         if(ateqsmaller(arg1,arg2))
             return(YES);
@@ -3275,12 +2262,13 @@ int b_ateqsmaller(int nest, int n){
 
 
 
-int b_atgreater(int nest, int n){
-    int arg1,arg2;
+int b_atgreater(int arglist, int rest){
+    int n,arg1,arg2;
 
+    n = length(arglist);
     if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         if(!ateqsmaller(arg1,arg2))
             return(NO);
@@ -3292,12 +2280,13 @@ int b_atgreater(int nest, int n){
 }
 
 
-int b_ateqgreater(int nest, int n){
-    int arg1,arg2;
+int b_ateqgreater(int arglist, int rest){
+    int n,arg1,arg2;
 
+    n = length(arglist);
     if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         if(atsmaller(arg1,arg2))
             return(NO);
@@ -3467,13 +2456,14 @@ int b_asserta(int arglist, int rest){
     return(NO);
 }
 
-int b_retract(int nest, int n){
-    int arg1,clause,head,clauses,new_clauses,save1,save2;
+int b_retract(int arglist, int rest){
+    int n,arg1,clause,head,clauses,new_clauses,save1,save2;
 
     save2 = sp;
     clause = clauses = head = NIL;
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"retract ",arg1);
         if(operationp(arg1) && !predicatep(cadr(arg1)))
@@ -3531,12 +2521,13 @@ int b_retract(int nest, int n){
 }
 
 
-int b_abolish(int nest, int n){
-    int arg1,pred,clause,arity,clauses,new_clauses;
+int b_abolish(int arglist, int rest){
+    int n,arg1,pred,clause,arity,clauses,new_clauses;
 
     clause = clauses = NIL;
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
 
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"abolish ",arg1);
@@ -3586,13 +2577,14 @@ int b_abolish(int nest, int n){
     return(NO);
 }
 
-int b_clause(int nest, int n){
-    int arg1,arg2,clause,clauses,save1,save2,copy;
+int b_clause(int arglist, int rest){
+    int n,arg1,arg2,clause,clauses,save1,save2,copy;
 
     save2 = sp;
+    n = length(arglist);
     if(n == 2){
-        arg1 = deref(goal[2]); //head
-        arg2 = deref(goal[3]); //body
+        arg1 = deref(car(arglist));  //head
+        arg2 = deref(cadr(arglist)); //body
 
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"clause ",arg1);
@@ -3634,58 +2626,40 @@ int b_clause(int nest, int n){
 }
 
 //controle
-int b_cut(int nest, int n){
+int b_cut(int arglist, int rest){
+    int n;
+
+    n = length(arglist);
     if(n == 0){
         return(YES);
     }
     return(NO);
 }
 
-int b_ifthen(int nest, int n){
-    int arg1,arg2,save1,save2,save3;
+int b_ifthen(int arglist, int rest){
+    int n,arg1,arg2,save1;
 
-    save1 = tp;
-    save2 = sp;
-    save3 = trail_end;
+    n = length(arglist);
     if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+        save1 = sp;
         if(variablep(arg1))
-            error(INSTANTATION_ERR,"-> ",arg1);
+            error(INSTANTATION_ERR,"ifthen ",arg1);
         if(variablep(arg2))
-            error(INSTANTATION_ERR,"-> ",arg2);
+            error(INSTANTATION_ERR,"ifthen ",arg2);
 
-        push_trail_body1(arg1);
-        if(prove_all(save1,sp,nest+3) == YES){
-            tp = save1;
-            if(!has_cut_p(arg2)){
-                push_trail_body1(arg2);
-                if(prove_all(save1,sp,nest+4) == YES)
-                    return(prove_all(save3,sp,nest+1));
-                else{
-                    tp = save1;
-                    sp = save2;
-                    unbind(save2);
-                    trail_end = save3;
-                    return(NO);
-                }
-            }
-            else{
-                cut_flag = 1;
-                push_trail_body1(before_cut(arg2));
-                if(prove_all(save3,sp,nest+3) ==YES){
-                    push_trail_body1(after_cut(arg2));
-                    return(prove_all(save3,sp,nest+1));
-                }
-            }
-          }
-          else{
-              tp = save1;
-              sp = save2;
-              unbind(save2);
-              trail_end = save3;
-              return(NO);
-          }
+        if(prove_all(arg1,sp,0) == YES){
+            if(prove_all(arg2,sp,0) == YES)
+                return(prove_all(rest,sp,0));
+        }
+        else{
+            unbind(save1);
+            return(NO);
+        }
+            
+        unbind(save1);
+        return(NO);
     }
     return(NO);
 }
@@ -3696,29 +2670,7 @@ int b_colon(int nest, int n){
     return(YES);
 }
 
-int b_atmark(int nest, int n){
-    int arg1,arg2,res,save1,save2,save3;
 
-    save1 = tp;
-    save2 = sp;
-    save3 = trail_end;
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        context = arg2;
-        //set_length(arg1);
-        push_trail_body1(arg1);
-        res = prove_all(save1,sp,nest+1);
-        context = NIL;
-        tp = save1;
-        if(res == NO)
-            unbind(save2);
-        trail_end = save3;
-        return(res);
-    }
-    return(NO);
-}
 
 double getETime(){
     struct timeval tv;
@@ -3726,90 +2678,34 @@ double getETime(){
     return tv.tv_sec + (double)tv.tv_usec*1e-6;
 }
 
-int b_time(int nest, int n){
-    int arg1,res;
-    double end_time;
+int b_time(int arglist, int rest){
+    int n,arg1,res;
+    double start_time,end_time;
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = goal[2];
+        arg1 = car(arglist);
         if(!structurep(arg1)){   // ex test -> (test)
             if(GET_AUX(arg1) == SIMP)
                 arg1 = makeatom(GET_NAME(arg1),PRED);
             arg1 = cons(arg1,NIL);
         }
-        push_trail_body1(arg1);
-        time_flag = getETime(); //time_flag on and it store start time
-        res = prove_all(0,sp,0);
+        start_time = getETime(); //time_flag on and it store start time
+        res = prove_all(arg1,sp,0);
         if(res == NO){
             end_time = getETime();
-            printf("Elapsed Time=%.6f (second)\n", end_time - time_flag);
-            time_flag = 0;
+            printf("Elapsed Time=%.6f (second)\n", end_time - start_time);
         }
         return(res);
     }
     return(NO);
 }
 
-int b_timer(int nest, int n){
-    int arg1,on,off;
 
-    on = makeconst("on");
-    off = makeconst("off");
-    if(n == 1){
-        arg1 = goal[2];
+int b_trace(int arglist, int rest){
+    int n;
 
-        if(arg1 == on)
-            micro_second = getETime();
-        else if(arg1 == off)
-            micro_second = getETime() - micro_second;
-        else if(variablep(arg1))
-            unify(arg1,makeflt(micro_second));
-        else
-            error(ILLEGAL_ARGS,"timer",arg1);
-
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_char_set(int nest, int n){
-    int arg1;
-
-    if(n == 0){
-        if(mode_flag == 0)
-            printf("SJIS\n");
-        else
-            printf("Unicode\n");
-        return(YES);
-    }
-    if(n == 1){
-        arg1 = goal[2];
-        if(eqp(arg1,makeconst("sjis"))){
-            mode_flag = 0;
-            return(YES);
-        }
-        else if(eqp(arg1,makeconst("unicode"))){
-            mode_flag = 1;
-            return(YES);
-        }
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
-int b_char_conversion(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-
-        return(unify(arg1,makeconst("on")));
-    }
-    return(NO);
-}
-
-int b_trace(int nest, int n){
+    n = length(arglist);
     if(n == 0){
         trace_flag = FULL;
         return(YES);
@@ -3817,7 +2713,10 @@ int b_trace(int nest, int n){
     return(NO);
 }
 
-int b_notrace(int nest, int n){
+int b_notrace(int arglist, int rest){
+    int n;
+
+    n = length(arglist);
     if(n == 0){
         trace_flag = OFF;
         return(YES);
@@ -3825,15 +2724,16 @@ int b_notrace(int nest, int n){
     return(NO);
 }
 
-int b_spy(int nest, int n){
-    int arg1;
+int b_spy(int arglist, int rest){
+    int n,arg1;
 
+    n = length(arglist);
     if(n == 0){
         print(spy_list);
         return(YES);
     }
     else if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         SET_TR(cadr(arg1),1);
         if(!memberp(arg1,spy_list))
             spy_list = cons(arg1,spy_list);
@@ -3843,9 +2743,10 @@ int b_spy(int nest, int n){
     return(NO);
 }
 
-int b_nospy(int nest, int n){
-    int arg1;
+int b_nospy(int arglist, int rest){
+    int n,arg1;
 
+    n = length(arglist);
     if(n == 0){
         while(!nullp(spy_list)){
             SET_TR(cadr(car(spy_list)),0);
@@ -3855,7 +2756,7 @@ int b_nospy(int nest, int n){
         return(YES);
     }
     else if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         SET_TR(cadr(arg1),0);
         spy_list = listremove(arg1,spy_list);
         if(nullp(spy_list))
@@ -3876,8 +2777,10 @@ int b_halt(int arglist, int rest){
     return(NO);
 }
 
-int b_abort(int nest, int n){
+int b_abort(int arglist, int rest){
+    int n;
 
+    n = length(arglist);
     if(n == 0){
         longjmp(buf,1);
     }
@@ -3886,11 +2789,12 @@ int b_abort(int nest, int n){
 
 
 //check data type
-int b_atom(int nest, int n){
-    int arg1;
+int b_atom(int arglist, int rest){
+    int n,arg1;
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
 
         if(atomp(arg1))
             return(YES);
@@ -3943,11 +2847,12 @@ int b_number(int arglist, int rest){
 }
 
 
-int b_compound(int nest, int n){
-    int arg1;
+int b_compound(int arglist, int rest){
+    int n,arg1;
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(compoundp(arg1))
             return(YES);
         else
@@ -3956,11 +2861,12 @@ int b_compound(int nest, int n){
     return(NO);
 }
 
-int b_ground(int nest, int n){
-    int arg1;
+int b_ground(int arglist, int rest){
+    int n,arg1;
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
 
         if(groundp(arg1))
             return(YES);
@@ -4003,11 +2909,12 @@ int b_nonvar(int arglist, int rest){
     return(NO);
 }
 
-int b_atomic(int nest, int n){
-    int arg1;
+int b_atomic(int arglist, int rest){
+    int n,arg1;
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
 
         if(atomicp(arg1))
             return(YES);
@@ -4017,11 +2924,12 @@ int b_atomic(int nest, int n){
     return(NO);
 }
 
-int b_list(int nest, int n){
-    int arg1;
+int b_list(int arglist, int rest){
+    int n,arg1;
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(listp(arg1))
             return(YES);
         else
@@ -4030,11 +2938,12 @@ int b_list(int nest, int n){
     return(NO);
 }
 
-int b_string(int nest, int n){
-    int arg1;
+int b_string(int arglist, int rest){
+    int n,arg1;
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
 
         if(stringp(arg1))
             return(YES);
@@ -4044,794 +2953,6 @@ int b_string(int nest, int n){
     return(NO);
 }
 
-
-//characters
-int b_char_code(int nest, int n){
-    int arg1,arg2,code,res;
-    char str[2];
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        if(wide_variable_p(arg1) && wide_variable_p(arg2))
-            error(INSTANTATION_ERR,"char_code ",list2(arg1,arg2));
-        if(!wide_variable_p(arg1) && !characterp(arg1))
-            error(NOT_CHAR,"char_code ",arg1);
-        if(!wide_variable_p(arg2) && !integerp(arg2))
-            error(NOT_INT,"char_code ",arg2);
-
-
-        if(atomp(arg1) && !variablep(arg1)){
-            strcpy(str,GET_NAME(arg1));
-            if(str[0] == '\\'){
-                if(str[1] == 'n')
-                    return(unify(arg2,makeint(EOL)));
-                else if(str[1] == 't')
-                    return(unify(arg2,makeint(TAB)));
-                else if(str[1] == 'f')
-                    return(unify(arg2,makeint(FF)));
-                else if(str[1] == 'r')
-                    return(unify(arg2,makeint(CR)));
-                else if(str[1] == 'v')
-                    return(unify(arg2,makeint(VT)));
-                else if(str[1] == 'a')
-                    return(unify(arg2,makeint(BEL)));
-                else if(str[1] == 'b')
-                    return(unify(arg2,makeint(BS)));
-                else
-                    error(SYNTAX_ERR,"char_code ",NIL);
-            }
-            if(mode_flag == 0) //SJIS
-                code = makeint(sjis_to_code(GET_NAME(arg1)));
-            else //unicode
-                code = makeint(utf8_to_ucs4(GET_NAME(arg1)));
-            res = unify(arg2,code);
-        return(res);
-        }
-        else if(integerp(arg2)){
-            if(mode_flag == 0) //SJIS
-                sjis_to_char(GET_INT(arg2),str);
-            else //unicode
-                ucs4_to_utf8(GET_INT(arg2),str);
-            res = unify(arg1,makeconst(str));
-            return(res);
-        }
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
-int b_constant(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-
-        if(constantp(arg1))
-            return(YES);
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
-
-int b_atom_length(int nest, int n){
-    int arg1,arg2,val;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"atom_length ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"atom_length ",arg1);
-        if(integerp(eval(arg2)) && GET_INT(eval(arg2)) < 0)
-            error(NOT_LESS_THAN_ZERO,"atom_length ",arg2);
-        if(!wide_variable_p(arg2) && !integerp(arg2))
-            error(NOT_INT,"atom_length ", arg2);
-
-        val = makeint(atom_length(arg1));
-        return(unify(arg2,val));
-    }
-    return(NO);
-}
-
-
-int b_atom_concat(int nest, int n){
-    int arg1,arg2,arg3,atom,h,i,j,k,save1,save2;
-    char str1[STRSIZE],str2[STRSIZE],str3[STRSIZE];
-
-    save2 = sp;
-    if(n == 3){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
-        if(wide_variable_p(arg1) && wide_variable_p(arg3))
-            error(INSTANTATION_ERR,"atom_concat ",list2(arg1,arg3));
-        if(wide_variable_p(arg2) && wide_variable_p(arg3))
-            error(INSTANTATION_ERR,"atom_concat ",list2(arg2,arg3));
-        if(!wide_variable_p(arg1) && !atomp(arg1))
-            error(NOT_ATOM,"atom_concat ",arg1);
-        if(!wide_variable_p(arg2) && !atomp(arg2))
-            error(NOT_ATOM,"atom_concat ",arg2);
-        if(!wide_variable_p(arg3) && !atomp(arg3))
-            error(NOT_ATOM,"atom_concat ",arg3);
-
-        save1 = wp;
-        if(!wide_variable_p(arg1) && !wide_variable_p(arg2)){
-            strcpy(str1,GET_NAME(arg1));
-            strcat(str1,GET_NAME(arg2));
-            atom = makeconst(str1);
-
-            //if(unify(arg3,atom) == YES)
-            //    if(proceed(NIL,nest) == YES)
-            //        return(YES);
-
-            wp = save1;
-            unbind(save2);
-            return(NO);
-        }
-        else if(wide_variable_p(arg1) && !wide_variable_p(arg2) &&
-                !wide_variable_p(arg3)){
-            strcpy(str1,GET_NAME(arg3));
-            //arg1
-            memset(str2, '\0' ,STRSIZE);
-            i = 0;
-            k = strlen(GET_NAME(arg3)) - strlen(GET_NAME(arg2));
-            while(i < k){
-                str2[i] = str1[i];
-                i++;
-            }
-            //arg2
-            memset(str3, '\0' ,STRSIZE);
-            i = 0;
-            k = strlen(GET_NAME(arg2));
-            j = strlen(GET_NAME(arg3)) - k;
-            while(i < k){
-                str3[i] = str1[j];
-                i++;
-                j++;
-            }
-            if(strcmp(str3,GET_NAME(arg2)) == 0){
-                atom = makeconst(str2);
-                unify(arg1,atom);
-                //if(proceed(NIL,nest) == YES)
-                //    return(YES);
-
-            }
-            wp = save1;
-            unbind(save2);
-            return(NO);
-        }
-        else if(!wide_variable_p(arg1) && wide_variable_p(arg2) &&
-                !wide_variable_p(arg3)){
-            strcpy(str1,GET_NAME(arg3));
-            //arg2
-            memset(str2, '\0' ,STRSIZE);
-            i = 0;
-            k = strlen(GET_NAME(arg3)) - strlen(GET_NAME(arg1));
-            j = k - 1;
-            while(i < k){
-                str2[i] = str1[j];
-                i++;
-                j++;
-            }
-            //arg1
-            memset(str3, '\0' ,STRSIZE);
-            i = 0;
-            k = strlen(GET_NAME(arg1));
-            j = k - 1;
-            while(i < k){
-                str3[i] = str1[i];
-                i++;
-            }
-
-            if(strcmp(str3,GET_NAME(arg1)) == 0){
-                atom = makeconst(str2);
-                unify(arg2,atom);
-                //if(proceed(NIL,nest) == YES)
-                //    return(YES);
-
-            }
-            wp = save1;
-            unbind(save2);
-            return(NO);
-        }
-        else if(wide_variable_p(arg1) && wide_variable_p(arg2) &&
-                !wide_variable_p(arg3)){
-
-            strcpy(str1,GET_NAME(arg3));
-            h = strlen(GET_NAME(arg3));
-            j = 0;
-            while(j <= h){
-                i = 0;
-                k = j;
-                memset(str2, '\0' ,STRSIZE);
-                while(i < k){
-                    str2[i] = str1[i];
-                    i++;
-                }
-                i = 0;
-                k = h - j;
-                memset(str3, '\0' ,STRSIZE);
-                while(i < k){
-                    str3[i] = str1[i+j];
-                    i++;
-                }
-                unify(arg1,makeconst(str2));
-                unify(arg2,makeconst(str3));
-                //if(proceed(NIL,nest) == YES)
-                //    return(YES);
-
-                wp = save1;
-                unbind(save2);
-                j++;
-            }
-        wp = save1;
-        unbind(save2);
-        return(NO);
-        }
-    }
-    return(NO);
-}
-
-
-int b_atom_chars(int nest, int n){
-    int arg1,arg2,ls,atom,pos,res;
-    char str1[STRSIZE],str2[10];
-
-    if(n == 2){
-        arg1 = deref(goal[2]); //atom
-        arg2 = deref(goal[3]); //list
-
-        if(wide_variable_p(arg1) && listp(arg2) && length(arg2) == -1)
-            error(INSTANTATION_ERR,"atom_chars ",arg1);
-        if(!wide_variable_p(arg1) && !atomp(arg1))
-            error(NOT_ATOM,"atom_chars ",arg1);
-        if(wide_variable_p(arg1) && !listp(arg2))
-            error(NOT_LIST,"atom_chars ",arg2);
-        if(wide_variable_p(arg1) && !atom_chars_list_p(arg2))
-            error(NOT_CHAR,"atom_chars ",arg2);
-
-
-        if(!wide_variable_p(arg1)){
-            ls = NIL;
-            strcpy(str1,GET_NAME(arg1));
-            pos = 0;
-            while(str1[pos] != NUL){
-                if(mode_flag == 0 && iskanji(str1[pos])){ //SJIS
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = NUL;
-                }
-                else if(mode_flag == 1 && isUni2(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = NUL;
-                }
-                else if(mode_flag == 1 && isUni3(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = NUL;
-                }
-                else if(mode_flag == 1 && isUni4(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = str1[pos++];
-                    str2[4] = NUL;
-                }
-                else if(mode_flag == 1 && isUni5(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = str1[pos++];
-                    str2[4] = str1[pos++];
-                    str2[5] = NUL;
-                }
-                else if(mode_flag == 1 && isUni6(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = str1[pos++];
-                    str2[4] = str1[pos++];
-                    str2[5] = str1[pos++];
-                    str2[6] = NUL;
-                }
-                else{//ascii code
-                    str2[0] = str1[pos++];
-                    str2[1] = NUL;
-                }
-                ls = cons(makeconst(str2),ls);
-            }
-            ls = listreverse(ls);
-            res = unify(arg2,ls);
-            return(res);
-            }
-        else if(listp(arg2)){
-            ls = arg2;
-            str1[0] = NUL;
-            while(!nullp(ls)){
-                strcat(str1,GET_NAME(car(ls)));
-                ls = cdr(ls);
-            }
-            atom = makeconst(str1);
-            res = unify(arg1,atom);
-            return(res);
-        }
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
-
-
-int b_atom_codes(int nest, int n){
-    int arg1,arg2,ls,atom,pos,code,res;
-    char str1[STRSIZE],str2[10];
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        if(wide_variable_p(arg1) && listp(arg2) && length(arg2) == -1)
-            error(INSTANTATION_ERR,"atom_codes ",arg1);
-        if(!wide_variable_p(arg1) && !atomp(arg1))
-            error(NOT_ATOM,"atom_codes ",arg1);
-        if(wide_variable_p(arg1) && !listp(arg2))
-            error(NOT_LIST,"atom_codes ",arg2);
-        if(wide_variable_p(arg1) && !atom_codes_list_p(arg2))
-            error(NOT_CHAR_CODE,"atom_codes ",arg2);
-
-
-        if(singlep(arg1) && !variablep(arg1)){
-            strcpy(str1,GET_NAME(arg1));
-            ls = NIL;
-            pos = 0;
-            while(str1[pos] != NUL){
-                if(str1[pos] == '\\'){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                }
-                else if(mode_flag == 0 && iskanji(str1[pos])){ //SJIS
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = NUL;
-                }
-                else if(mode_flag == 1 && isUni2(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = NUL;
-                }
-                else if(mode_flag == 1 && isUni3(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = NUL;
-                }
-                else if(mode_flag == 1 && isUni4(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = str1[pos++];
-                    str2[4] = NUL;
-                }
-                else if(mode_flag == 1 && isUni5(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = str1[pos++];
-                    str2[4] = str1[pos++];
-                    str2[5] = NUL;
-                }
-                else if(mode_flag == 1 && isUni6(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = str1[pos++];
-                    str2[4] = str1[pos++];
-                    str2[5] = str1[pos++];
-                    str2[6] = NUL;
-                }
-                else{//ascii code
-                    str2[0] = str1[pos++];
-                    str2[1] = NUL;
-                }
-                if(str2[0] == '\\')
-                    code = ctrl_to_number(str2[1]);
-                else if(mode_flag == 0) //SJIS
-                    code = makeint(sjis_to_code(str2));
-                else //unicode
-                    code = makeint(utf8_to_ucs4(str2));
-                ls = cons(code,ls);
-            }
-            ls = listreverse(ls);
-            res = unify(arg2,ls);
-            return(res);
-        }
-        else if(structurep(arg2)){
-            ls = arg2;
-            str1[0] = NUL;
-            while(!nullp(ls)){
-                if(GET_INT(car(ls)) < ' ')
-                    sprintf(str2,"\\x%x\\",GET_INT(car(ls)));
-                else if(mode_flag == 0)
-                    sjis_to_char(GET_INT(car(ls)),str2);
-                else
-                    ucs4_to_utf8(GET_INT(car(ls)),str2);
-                strcat(str1,str2);
-                ls = cdr(ls);
-            }
-            atom = makeconst(str1);
-            res = unify(arg1,atom);
-            return(res);
-        }
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
-int b_string_chars(int nest, int n){
-    int arg1,arg2,ls,atom,pos,res;
-    char str1[STRSIZE],str2[10];
-
-    if(n == 2){
-        arg1 = deref(goal[2]); //string
-        arg2 = deref(goal[3]); //list
-
-        if(wide_variable_p(arg1) && listp(arg2) && length(arg2) == -1)
-            error(INSTANTATION_ERR,"string_chars ",arg1);
-        if(!wide_variable_p(arg1) && !stringp(arg1))
-            error(NOT_STR,"string_chars ",arg1);
-        if(wide_variable_p(arg1) && !listp(arg2))
-            error(NOT_LIST,"string_chars ",arg2);
-        if(wide_variable_p(arg1) && !atom_chars_list_p(arg2))
-            error(NOT_CHAR,"string_chars ",arg2);
-
-
-        if(!wide_variable_p(arg1)){
-            ls = NIL;
-            strcpy(str1,GET_NAME(arg1));
-            pos = 0;
-            while(str1[pos] != NUL){
-                if(mode_flag == 0 && iskanji(str1[pos])){ //SJIS
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = NUL;
-                }
-                else if(mode_flag == 1 && isUni2(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = NUL;
-                }
-                else if(mode_flag == 1 && isUni3(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = NUL;
-                }
-                else if(mode_flag == 1 && isUni4(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = str1[pos++];
-                    str2[4] = NUL;
-                }
-                else if(mode_flag == 1 && isUni5(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = str1[pos++];
-                    str2[4] = str1[pos++];
-                    str2[5] = NUL;
-                }
-                else if(mode_flag == 1 && isUni6(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = str1[pos++];
-                    str2[4] = str1[pos++];
-                    str2[5] = str1[pos++];
-                    str2[6] = NUL;
-                }
-                else{//ascii code
-                    str2[0] = str1[pos++];
-                    str2[1] = NUL;
-                }
-                ls = cons(makeconst(str2),ls);
-            }
-            ls = listreverse(ls);
-            res = unify(arg2,ls);
-            return(res);
-            }
-        else if(listp(arg2)){
-            ls = arg2;
-            str1[0] = NUL;
-            while(!nullp(ls)){
-                strcat(str1,GET_NAME(car(ls)));
-                ls = cdr(ls);
-            }
-            atom = makestr(str1);
-            res = unify(arg1,atom);
-            return(res);
-        }
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
-
-
-int b_string_codes(int nest, int n){
-    int arg1,arg2,ls,atom,pos,code,res;
-    char str1[STRSIZE],str2[10];
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        if(wide_variable_p(arg1) && listp(arg2) && length(arg2) == -1)
-            error(INSTANTATION_ERR,"string_codes ",arg1);
-        if(!wide_variable_p(arg1) && !stringp(arg1))
-            error(NOT_STR,"string_codes ",arg1);
-        if(wide_variable_p(arg1) && !listp(arg2))
-            error(NOT_LIST,"string_codes ",arg2);
-        if(wide_variable_p(arg1) && !atom_codes_list_p(arg2))
-            error(NOT_CHAR_CODE,"string_codes ",arg2);
-
-
-        if(stringp(arg1) && !variablep(arg1)){
-            strcpy(str1,GET_NAME(arg1));
-            ls = NIL;
-            pos = 0;
-            while(str1[pos] != NUL){
-                if(str1[pos] == '\\'){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                }
-                else if(mode_flag == 0 && iskanji(str1[pos])){ //SJIS
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = NUL;
-                }
-                else if(mode_flag == 1 && isUni2(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = NUL;
-                }
-                else if(mode_flag == 1 && isUni3(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = NUL;
-                }
-                else if(mode_flag == 1 && isUni4(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = str1[pos++];
-                    str2[4] = NUL;
-                }
-                else if(mode_flag == 1 && isUni5(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = str1[pos++];
-                    str2[4] = str1[pos++];
-                    str2[5] = NUL;
-                }
-                else if(mode_flag == 1 && isUni6(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = str1[pos++];
-                    str2[3] = str1[pos++];
-                    str2[4] = str1[pos++];
-                    str2[5] = str1[pos++];
-                    str2[6] = NUL;
-                }
-                else{//ascii code
-                    str2[0] = str1[pos++];
-                    str2[1] = NUL;
-                }
-                if(str2[0] == '\\')
-                    code = ctrl_to_number(str2[1]);
-                else if(mode_flag == 0) //SJIS
-                    code = makeint(sjis_to_code(str2));
-                else //unicode
-                    code = makeint(utf8_to_ucs4(str2));
-                ls = cons(code,ls);
-            }
-            ls = listreverse(ls);
-            res = unify(arg2,ls);
-            return(res);
-        }
-        else if(structurep(arg2)){
-            ls = arg2;
-            str1[0] = NUL;
-            while(!nullp(ls)){
-                if(GET_INT(car(ls)) < ' ')
-                    sprintf(str2,"\\x%x\\",GET_INT(car(ls)));
-                else if(mode_flag == 0)
-                    sjis_to_char(GET_INT(car(ls)),str2);
-                else
-                    ucs4_to_utf8(GET_INT(car(ls)),str2);
-                strcat(str1,str2);
-                ls = cdr(ls);
-            }
-            atom = makestr(str1);
-            res = unify(arg1,atom);
-            return(res);
-        }
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
-
-int b_number_chars(int nest, int n){
-    int arg1,arg2,res,pos,flag;
-    char str1[STRSIZE],str2[2],c,*sym;
-    double d;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        if(integerp(arg1)){
-            sprintf(str1,"%d",GET_INT(arg1));
-            pos = 0;
-            c = str1[pos];
-            res = NIL;
-            while(c != NUL){
-                str2[0] = c;
-                str2[1] = NUL;
-                res = cons(makeconst(str2),res);
-                pos++;
-                c = str1[pos];
-            }
-            res = listreverse(res);
-            return(unify(arg2,res));
-        }
-        else if(floatp(arg1)){
-            sprintf(str1,"%g",GET_FLT(arg1));
-            pos = 0;
-            c = str1[pos];
-            res = NIL;
-            while(c != NUL){
-                if(c >= 48 && c <= 57){
-                    str2[0] = c;
-                    str2[1] = NUL;
-                    res = cons(makeconst(str2),res);
-                }
-                else{
-                    str2[0] = c;
-                    str2[1] = NUL;
-                    res = cons(makeconst(str2),res);
-                }
-                pos++;
-                c = str1[pos];
-            }
-            res = listreverse(res);
-            return(unify(arg2,res));
-        }
-        else if(listp(arg2)){
-            pos = 0;
-            while(!nullp(arg2)){
-                sym = GET_NAME(car(arg2));
-                c = *sym;
-                str1[pos] = c;
-                pos++;
-                arg2 = cdr(arg2);
-            }
-            str1[pos] = NUL;
-            pos = 0;
-            flag = 0;
-            c = str1[pos];
-            while(c != NUL){
-                if(!isdigit(c) && c != '-' && c != '+')
-                    flag = 1;
-                c = str1[pos];
-                pos++;
-            }
-            if(flag){
-                d = atof(str1);
-                return(unify(arg1,makeflt(d)));
-            }
-            else{
-                res = atoi(str1);
-                return(unify(arg1,makeint(res)));
-            }
-        }
-        return(NO);
-    }
-    return(NO);
-}
-
-int b_number_codes(int nest, int n){
-    int arg1,arg2,res,pos,flag;
-    char str1[STRSIZE],c,*sym;
-    double d;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        if(integerp(arg1)){
-            sprintf(str1,"%d",GET_INT(arg1));
-            pos = 0;
-            c = str1[pos];
-            res = NIL;
-            while(c != NUL){
-                res = cons(makeint((int)c),res);
-                pos++;
-                c = str1[pos];
-            }
-            res = listreverse(res);
-            return(unify(arg2,res));
-        }
-        else if(floatp(arg1)){
-            sprintf(str1,"%g",GET_FLT(arg1));
-            pos = 0;
-            c = str1[pos];
-            res = NIL;
-            flag = 0;
-            while(c != NUL){
-                res = cons(makeint((int)c),res);
-                pos++;
-                c = str1[pos];
-                if(c == '.')
-                    flag = 1;
-            }
-            if(flag == 0){
-                res = cons(makeint((int)'.'),res);
-                res = cons(makeint((int)'0'),res);
-            }
-            res = listreverse(res);
-            return(unify(arg2,res));
-        }
-        else if(listp(arg2)){
-            pos = 0;
-            while(!nullp(arg2)){
-                if(integerp(car(arg2)))
-                    c = (char)(GET_INT(car(arg2)));
-                else{
-                    sym = GET_NAME(car(arg2));
-                    c = *sym;
-                }
-                str1[pos] = c;
-                pos++;
-                arg2 = cdr(arg2);
-            }
-            str1[pos] = NUL;
-            pos = 0;
-            flag = 0;
-            c = str1[pos];
-            while(c != NUL){
-                if(!isdigit(c) && c != '-' && c != '+')
-                    flag = 1;
-                c = str1[pos];
-                pos++;
-            }
-            if(flag){
-                d = atof(str1);
-                return(unify(arg1,makeflt(d)));
-            }
-            else{
-                res = atoi(str1);
-                return(unify(arg1,makeint(res)));
-            }
-        }
-        return(NO);
-    }
-    return(NO);
-}
 
 
 //-----structure------
@@ -4933,9 +3054,9 @@ int b_arg(int arglist, int rest){
 
     n = length(arglist);
     if(n == 3){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+        arg3 = deref(caddr(arglist));
 
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"arg ", arg1);
@@ -5058,12 +3179,13 @@ int get_free_variable(int x, int y){
 
 
 //transform bwtween predicate and data
-int b_univ(int nest, int n){
-    int arg1,arg2,res;
+int b_univ(int arglist, int rest){
+    int n,arg1,arg2,res;
 
+    n = length(arglist);
     if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         if(variablep(arg1) && variablep(arg2))
             error(INSTANTATION_ERR,"=.. ",list2(arg1,arg2));
@@ -5120,210 +3242,8 @@ int b_univ(int nest, int n){
     return(NO);
 }
 
-int b_copy_term(int nest, int n){
-    int arg1,arg2,res;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        res = unify(arg2,copy_term(arg1));
-        return(res);
-    }
-    return(NO);
-}
 
 
-//listreverse/2
-int b_reverse(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        if(!variablep(arg1) && variablep(arg2))
-            return(unify(listreverse(arg1),arg2));
-        else if(variablep(arg1) && !variablep(arg2))
-            return(unify(arg1,listreverse(arg2)));
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
-
-
-//--------Flags------------
-int b_dynamic(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"dynamic ",arg1);
-        if(car(arg1) != makeatom("/",OPE))
-            error(PRED_INDICATOR,"dynamic ",arg1);
-        if(!atomp(cadr(arg1)))
-            error(NOT_ATOM,"dynamic ",cadr(arg1));
-        if(!integerp(caddr(arg1)))
-            error(NOT_INT,"dynamic ",caddr(arg1));
-
-        arg1 = list3(car(arg1),makepred(GET_NAME(cadr(arg1))),caddr(arg1));
-        SET_OPT1(cadr(arg1),NO);
-        if(!memberp(arg1,dynamic_list)){
-            dynamic_list = listcons(arg1,dynamic_list);
-        }
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_discontiguous(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"discontiguous ",arg1);
-        if(car(arg1) != makeatom("/",OPE))
-            error(PRED_INDICATOR,"discontiguous ",arg1);
-        if(!atomp(cadr(arg1)))
-            error(NOT_ATOM,"discontiguous ",cadr(arg1));
-        if(!integerp(caddr(arg1)))
-            error(NOT_INT,"discontiguous ",caddr(arg1));
-
-        SET_OPT1(cadr(arg1),NO);
-
-        if(!memberp(arg1,discontiguous_list))
-        	discontiguous_list = cons(copy_heap(arg1),discontiguous_list);
-
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_debug(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = goal[2];
-        if(arg1 == makeconst("on")){
-            debug_flag = 1;
-            sexp_flag = 1;
-            gbc_flag = 1;
-            flag_list = replace(cons(makeconst("debug"),
-                                     makeconst("on")),flag_list);
-            return(YES);
-        }
-        else if(arg1 == makeconst("off")){
-            debug_flag = 0;
-            sexp_flag = 0;
-            gbc_flag = 0;
-            flag_list = replace(cons(makeconst("debug"),
-                                     makeconst("off")),flag_list);
-            return(YES);
-        }
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
-int b_set_prolog_flag(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        if(eqlp(arg1,makesys("debug")) && eqlp(arg2,makeconst("on"))){
-            sexp_flag = 1;
-            flag_list = replace(cons(makesys("debug"),makeconst("on")),flag_list);
-            return(YES);
-        }
-        else if(eqlp(arg1,makesys("debug")) && eqlp(arg2,makeconst("off"))){
-            sexp_flag = 0;
-            flag_list = replace(cons(makesys("debug"),makeconst("off")),flag_list);
-            return(YES);
-        }
-        else if(eqlp(arg1,makeconst("unknown")) &&
-                eqlp(arg2,makeconst("fail"))){
-            undefined_flag = 0;
-            flag_list = replace(cons(makeconst("unknown"),
-                                     makeconst("fail")),flag_list);
-            return(YES);
-        }
-        else if(eqlp(arg1,makeconst("unknown")) &&
-                eqlp(arg2,makeconst("error"))){
-            undefined_flag = 1;
-            flag_list = replace(cons(makeconst("unknown"),
-                                     makeconst("error")),flag_list);
-            return(YES);
-        }
-        else if(eqlp(arg1,makeconst("unknown")) &&
-                eqlp(arg2,makeconst("warning"))){
-            undefined_flag = 2;
-            flag_list = replace(cons(makeconst("unknown"),
-                                     makeconst("warning")),flag_list);
-            return(YES);
-        }
-        else if(eqlp(arg1,makeconst("integer_rounding_function")) &&
-                eqlp(arg2,makeconst("down"))){
-            rounding_flag = 1;
-            return(YES);
-        }
-        else if(eqlp(arg1,makeconst("integer_rounding_function")) &&
-                eqlp(arg2,makeconst("toward_zero"))){
-            rounding_flag = 0;
-            return(YES);
-        }
-        else if(eqlp(arg1,makeconst("double_quotes")) &&
-                eqlp(arg2,makeconst("codes"))){
-            double_flag = 0;
-            flag_list = replace(cons(makeconst("double_quotes"),
-                                     makeconst("codes")),flag_list);
-            return(YES);
-        }
-        else if(eqlp(arg1,makeconst("double_quotes")) &&
-                eqlp(arg2,makeconst("chars"))){
-            double_flag = 1;
-            flag_list = replace(cons(makeconst("double_quotes"),
-                                     makeconst("chars")),flag_list);
-            return(YES);
-        }
-        else if(eqlp(arg1,makeconst("double_quotes")) &&
-                eqlp(arg2,makeconst("string"))){
-            double_flag = 2;
-            flag_list = replace(cons(makeconst("double_quotes"),
-                                     makeconst("string")),flag_list);
-            return(YES);
-        }
-        else if(eqlp(arg1,makesys("char_set")) &&
-                eqlp(arg2,makeconst("sjis"))){
-            mode_flag = 0;
-            flag_list = replace(cons(makesys("char_set"),
-                                     makeconst("sjis")),flag_list);
-            return(YES);
-        }
-        else if(eqlp(arg1,makesys("char_set")) &&
-                eqlp(arg2,makeconst("unicode"))){
-            mode_flag = 1;
-            flag_list = replace(cons(makesys("char_set"),
-                                     makeconst("unicode")),flag_list);
-            return(YES);
-        }
-        error(NOT_FLAG_SPEC,"set_prolog_flag ",list2(arg1,arg2));
-        return(NO);
-    }
-    return(NO);
-}
-
-
-
-//operation
 int o_define(int x, int y){
     int clause;
 
@@ -5334,23 +3254,13 @@ int o_define(int x, int y){
             SET_AUX(x,PRED);
         clause = list3(DEFINE,x,y);
         SET_AUX(clause,CLAUSE);
-        if(module_name != NIL)
-            clause = add_prefix(clause);
         SET_VAR(clause,reverse(unique(varslist(clause))));
-        //set_length(cadr(clause)); //head
-        //set_length(caddr(clause)); //body
-        if(has_cut_p(y)){
-            SET_OPT(clause,HASCUT);
-        }
-        if(has_ifthen_p(y)){
-            SET_OPT1(clause,HASIFTHEN);
-        }
-        //when in module, head of clause is prifix added.
+    
         if(assert_flag){
             if(atomp(x))
                 insert_data(cadr(clause),clause);
             else
-        	     insert_data(car(cadr(clause)),clause);
+        	    insert_data(car(cadr(clause)),clause);
         }
         else{
             if(atomp(x))
@@ -5378,10 +3288,7 @@ int o_dcg(int x, int y){
         clause = list2(makepred("dcg_expand"),
                    list3(makeatom("-->",OPE),x,y));
 
-    //set_length(clause);
-    tp = 0;
-    push_trail_body1(clause);
-    res = prove_all(0,sp,0);
+    res = prove_all(clause,sp,0);
     return(res);
 }
 
@@ -5407,11 +3314,12 @@ int o_ignore(int nest, int n){
 
 
 //directory for Logtalk
-int b_make_directory(int nest, int n){
-    int arg1;
+int b_make_directory(int arglist, int rest){
+    int n,arg1;
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"make_directory ",arg1);
         if(!atomp(arg1))
@@ -5426,50 +3334,13 @@ int b_make_directory(int nest, int n){
     return(NO);
 }
 
-int b_directory_exists(int nest, int n){
-    int arg1;
-    struct stat statBuf;
 
+int b_change_directory(int arglist , int rest){
+    int n,arg1;
+
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"directory exists ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"directory_exists ", arg1);
-
-        if(stat(GET_NAME(arg1), &statBuf) == 0)
-            return(YES);
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
-int b_current_directory(int nest , int n){
-    int arg1;
-    char str[ATOMSIZE];
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        //if(!wide_variable_p(arg1))
-        //    error(NOT_VAR,"current_directory ",arg1);
-
-        memset(str,NUL,ATOMSIZE);
-        if(getcwd(str,ATOMSIZE) != NULL)
-            unify(arg1,makeconst(str));
-        else
-            return(NO);
-
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_change_directory(int nest , int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"change_directory ",arg1);
         if(!atomp(arg1))
@@ -5481,247 +3352,6 @@ int b_change_directory(int nest , int n){
             return(NO);
     }
     return(NO);
-}
-
-int b_expand_path(int nest, int n){
-    int arg1,arg2,pos1,pos2;
-    char str1[ATOMSIZE],str2[ATOMSIZE],str3[ATOMSIZE];
-    char *str;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"expand_path ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"expand_path ",arg1);
-
-
-        strcpy(str1,GET_NAME(arg1));
-        if(str1[0] == '$'){
-            pos1 = 0;
-            pos2 = 1;
-        }
-        else{
-            pos1 = 0;
-            pos2 = 0;
-        }
-        while(str1[pos2] != NUL){
-            str2[pos1] = str1[pos2];
-            pos1++;
-            pos2++;
-            if(str1[pos2] == '/')
-                break;
-        }
-        str2[pos1] = NUL;
-        if(str1[0] == '$'){
-            if((str = getenv(str2)) != NULL)
-                strcpy(str3,str);
-        }
-        else
-            strcpy(str3,str2);
-
-        pos1 = 0;
-        while(str1[pos2] != NUL){
-            str2[pos1] = str1[pos2];
-            pos1++;
-            pos2++;
-        }
-        str2[pos1] = NUL;
-        strcat(str3,str2);
-
-        unify(arg2,makeconst(str3));
-        return(YES);
-
-    }
-    return(NO);
-}
-
-int b_delete_file(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"delete_file ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"delete_file ", arg1);
-
-        remove(GET_NAME(arg1));
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_file_exists(int nest, int n){
-    int arg1,res;
-    FILE *fp;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"file_exists ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"file_exists ", arg1);
-
-        fp = fopen(GET_NAME(arg1), "r");
-        if(fp == NULL)
-            res = NO;
-        else{
-            fclose(fp);
-            res = YES;
-        }
-        return(res);
-    }
-    return(NO);
-}
-
-int b_decompose_file_name(int nest, int n){
-    int arg1,arg2,arg3,arg4,i,j,len,dirpos,extpos;
-
-    char str[ATOMSIZE];
-    char strdir[ATOMSIZE];  //directory
-    char strname[ATOMSIZE]; //filename
-    char strext[5];   //ext
-
-    if(n == 4){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
-        arg4 = deref(goal[5]);
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"decompose_file_name ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"decompose_file_name ",arg1);
-
-
-        memset(strdir,NUL,ATOMSIZE);
-        memset(strname,NUL,ATOMSIZE);
-        memset(strext,NUL,5);
-        strcpy(str,GET_NAME(arg1));
-        len = strlen(str);
-        extpos = 0;
-        dirpos = 0;
-        j = 0;
-
-        for(i=len;i>=0;i--){
-            if(str[i] == '.'){
-                extpos = i;
-            }
-            #if _WIN32
-            else if(str[i] == '\\'){
-                dirpos = i;
-                break;
-            }
-            #else
-            else if(str[i] == '/'){
-                dirpos = i;
-                break;
-            }
-            #endif
-        }
-        //directory
-        if(dirpos != 0){
-            i = 0;
-            for(i=0;i<=dirpos;i++){
-                strdir[j] = str[i];
-                j++;
-            }
-        }
-        //filename
-        if(extpos != 0){ // horm/foo.pl
-            j = 0;
-            for(i=dirpos+1;i<extpos;i++){
-                strname[j] = str[i];
-                j++;
-            }
-        }
-        else{  // homr/foo
-            j = 0;
-            for(i=dirpos+1;i<len;i++){
-                strname[j] = str[i];
-                j++;
-            }
-        }
-        //ext
-        if(extpos != 0){
-            j = 0;
-            for(i=extpos+1;i<len;i++){
-                strext[j] = str[i];
-                j++;
-            }
-        }
-        unify(arg2,makeconst(strdir));
-        unify(arg3,makeconst(strname));
-        unify(arg4,makeconst(strext));
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_environment_variable(int nest, int n){
-    int arg1,arg2;
-    char *str;
-
-    if(n == 2){
-        arg1 = deref(goal[2]); //variable
-        arg2 = deref(goal[3]); //value
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"environment_variable ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"environment_variable ",arg1);
-        //if(!wide_variable_p(arg2))
-        //    error(NOT_VAR,"environment_variable ",arg2);
-
-        if((str = getenv(GET_NAME(arg1))) != NULL)
-            unify(arg2,makeconst(str));
-        else
-            return(NO);
-
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_file_modification_time(int nest, int n){
-    int arg1,arg2,res;
-
-    struct stat attr;
-    struct tm *t_st;
-
-
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"file_modification_time ",arg1);
-        if(!atomp(arg1))
-            error(NOT_ATOM,"file_modification_time ",arg1);
-        //if(!wide_variable_p(arg2))
-        //    error(NOT_VAR,"file_modification_time ",arg2);
-
-        if(stat(GET_NAME(arg1), &attr) != 0)
-		    return(NO);
-
-        t_st = localtime(&attr.st_mtime);
-
-        res = NIL;
-        res = cons(makeint(t_st->tm_sec),res);
-        res = cons(makeint(t_st->tm_min),res);
-        res = cons(makeint(t_st->tm_hour),res);
-        res = cons(makeint(t_st->tm_mday),res);
-        res = cons(makeint(t_st->tm_mon+1),res);
-        res = cons(makeint(t_st->tm_year+1900),res);
-        res = cons(makeconst("stamp"),res);
-        SET_AUX(car(res),PRED);
-        unify(arg2,res);
-        return(YES);
-    }
-    return(NO);
-
 }
 
 
@@ -6537,13 +4167,14 @@ int f_random(int x){
 
 
 
-int b_nano(int nest, int n){
-    int arg1,res;
+int b_nano(int arglist, int rest){
+    int n,arg1,res;
     char str1[STRSIZE];
     char str0[STRSIZE] = "nano ";
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(!singlep(arg1))
             error(NOT_ATOM,"nano",arg1);
 
@@ -6552,148 +4183,7 @@ int b_nano(int nest, int n){
         res = system(str0);
         if(res == -1)
             error(SYSTEM_ERROR,"nano",arg1);
-        goal[2] = arg1;
-        b_reconsult(0,1);
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_include_cut(int nest, int n){
-	int arg1,clauses,clause;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-        clauses = GET_CAR(arg1);
-        while(!nullp(clauses)){
-        	clause = car(clauses);
-            if(clausep(clause) && GET_OPT(clause) == HASCUT)
-            	return(YES);
-            clauses = cdr(clauses);
-        }
-        return(NO);
-    }
-    return(NO);
-}
-
-int b_has_cut(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-
-        if(has_cut_p(arg1))
-        	return(YES);
-        else
-        	return(NO);
-    }
-    return(NO);
-}
-
-int b_has_c_lang(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-
-        if(has_c_lang_p(arg1))
-        	return(YES);
-        else
-        	return(NO);
-    }
-    return(NO);
-}
-
-
-int b_o_c_define(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-        return(unify(arg1,define_list));
-    }
-    return(NO);
-}
-
-int b_o_c_include(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-        return(unify(arg1,include_list));
-    }
-    return(NO);
-}
-
-int b_o_c_option(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-        if(nullp(option_list))
-        	option_list = makeconst(" ");
-        return(unify(arg1,option_list));
-    }
-    return(NO);
-}
-
-int b_o_c_global(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-        return(unify(arg1,listreverse(global_list)));
-    }
-    return(NO);
-}
-
-int b_c_lang(int nest, int n){
-	if(n == 1){
-    	return(YES);
-    }
-    return(NO);
-}
-
-int b_c_define(int nest, int n){
-	int arg1,arg2;
-
-    if(n == 2){
-    	arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        define_list = listcons(listcons(arg1,arg2),define_list);
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_c_include(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-        include_list = listcons(arg1,include_list);
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_c_option(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-        option_list = arg1;
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_c_global(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-        global_list = listcons(arg1,global_list);
+        b_reconsult(arg1,NIL);
         return(YES);
     }
     return(NO);
@@ -6701,352 +4191,20 @@ int b_c_global(int nest, int n){
 
 
 
-int b_generate_all_variable(int nest, int n){
-	int arg1,arg2;
-
-    if(n == 2){
-    	arg1 = deref(goal[2]);
-        arg2 = goal[3];
-        return(unify(arg2,generate_all_variable(GET_CAR(arg1))));
-    }
-    return(NO);
-}
-
-int b_generate_variable(int nest, int n){
-	int arg1,arg2;
-
-    if(n == 2){
-    	arg1 = deref(goal[2]);
-        arg2 = goal[3];
-        return(unify(arg2,generate_variable(arg1)));
-    }
-    return(NO);
-}
-
-int generate_all_variable(int x){
-    int y,res;
-
-    res = NIL;
-    while(!nullp(x)){
-    	y = variable_convert1(car(x));
-    	if(clausep(y))
-    		res = generate_variable1(caddr(y),
-                   generate_variable1(cadr(y),res));
-    	else
-    		res = generate_variable1(y,res);
-
-        x = cdr(x);
-    }
-    return(res);
-}
-
-int generate_variable(int x){
-	if(clausep(x))
-    	return(generate_variable1(caddr(x),
-                   generate_variable1(cadr(x),NIL)));
-    else
-    	return(generate_variable1(x,NIL));
-}
-
-int generate_variable1(int x, int y){
-    int temp;
-
-    if(nullp(x))
-    	return(y);
-    else if(numberp(x))
-    	return(y);
-    else if(compiler_variable_p(x) && !memq(x,y)){
-    	temp = cons(x,y);
-        SET_AUX(temp,LIST);
-        return(temp);
-    }
-    else if(singlep(x))
-    	return(y);
-    else if(car(x) == AND)
-    	return(generate_variable1(cadr(x),generate_variable1(caddr(x),y)));
-    else if(car(x) == OR)
-    	return(generate_variable1(cadr(x),generate_variable1(caddr(x),y)));
-    else
-    	return(generate_variable1(car(x),generate_variable1(cdr(x),y)));
-}
-
-int b_generate_before_cut(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = goal[3];
-
-        if(has_cut_p(arg1))
-            unify(arg2,before_cut(arg1));
-        else
-            unify(arg2,arg1);
-        return(YES);
-
-    }
-    return(NO);
-}
-
-int b_generate_after_cut(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = goal[3];
-
-        if(has_cut_p(arg1))
-            unify(arg2,after_cut(arg1));
-        else
-            unify(arg2,NIL);
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_generate_before_c_lang(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = goal[3];
-
-        unify(arg2,before_c_lang(arg1));
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_generate_after_c_lang(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = goal[3];
-
-        unify(arg2,after_c_lang(arg1));
-        return(YES);
-    }
-    return(NO);
-}
 
 
 
-int b_generated_module(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        return(unify(arg2,GET_VAR(arg1)));
-    }
-    return(NO);
-}
-
-int b_compiler_anoymous(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        if(!!structurep(arg1))
-            return(NO);
-        else if(numberp(arg1))
-        	return(NO);
-
-        if(strcmp(GET_NAME(arg1),"var_") == 0)
-            return(YES);
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
-int b_compiler_variable(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-        if(compiler_variable_p(arg1))
-        	return(YES);
-        else
-        	return(NO);
-    }
-    return(NO);
-}
-
-int compiler_variable_p(int x){
-	char str[256];
-
-    if(numberp(x))
-    	return(0);
-    if(!!structurep(x))
-    	return(0);
-    strcpy(str,GET_NAME(x));
-    str[3] = NUL;
-    if(strcmp(str,"var") == 0)
-    	return(1);
-    else
-    	return(0);
-}
 
 
-int b_defined_predicate(int nest, int n){
-	int arg1;
 
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-
-        if(predicatep(arg1)){
-            if(atomp(arg1) && GET_CAR(arg1) != NIL)
-                return(YES);
-            else if(structurep(arg1) && GET_CAR(car(arg1)) != NIL)
-        	    return(YES);
-            else
-                return(NO);
-        }
-        else
-        	return(NO);
-    }
-    return(NO);
-}
-
-int b_defined_userop(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-
-        if(user_operation_p(arg1)){
-            if(atomp(arg1) && GET_CAR(arg1) != NIL)
-                return(YES);
-            else if(structurep(arg1) && GET_CAR(car(arg1)) != NIL)
-        	    return(YES);
-            else
-                return(NO);
-        }
-        else
-        	return(NO);
-    }
-    return(NO);
-}
-
-
-int b_property(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        if(builtinp(arg1))
-            return(unify(arg2,makeconst("builtin")));
-        else if(predicatep(arg1))
-            return(unify(arg2,makeconst("predicate")));
-        else if(compiledp(arg1))
-            return(unify(arg2,makeconst("compiled")));
-        else if(operationp(arg1))
-            return(unify(arg2,makeconst("operation")));
-        else if(operatorp(arg1))
-            return(unify(arg2,makeconst("operation")));
-        else if(user_operation_p(arg1))
-            return(unify(arg2,makeconst("userop")));
-        else
-            return(NO);
-
-    }
-    return(NO);
-}
-
-
-int b_isp(int nest, int n){
-	int arg1,arg2,temp,vars;
-
-    if(n == 2){
-    	arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        if(builtinp(arg1) && car(arg1) == makeatom("is",SYS)){
-        	temp = caddr(arg1);
-            if(compiler_variable_p(temp))
-            	return(unify(arg2,list1(temp)));
-            else{
-            	vars = NIL;
-            	while(!nullp(temp)){
-            		if(compiler_variable_p(car(temp)))
-                		vars = listcons(car(temp),vars);
-                	temp = cdr(temp);
-            	}
-            	return(unify(arg2,vars));
-            }
-        }
-        else
-        	return(NO);
-
-    }
-    return(NO);
-}
-
-int b_reconsult_predicate(int nest, int n){
-	int arg1,lis,save1,save2,save3,save4;
-
-    save1 = tp;
-    save2 = sp;
-    save3 = trail_end;
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-        if(!wide_variable_p(arg1))
-            error(NOT_VAR,"o_reconsult_predicate ",arg1);
-
-        lis = reverse(reconsult_list);
-        save4 = wp;
-        while(!nullp(lis)){
-            unify(arg1,car(lis));
-            if(prove(NIL,sp,nest,nest) == YES)
-                return(YES);
-
-            lis = cdr(lis);
-            wp = save4;
-            unbind(save2);
-        }
-        tp = save1;
-        wp = save4;
-        unbind(save2);
-        trail_end = save3;
-        return(NO);
-    }
-    return(NO);
-}
-
-int b_reconsult_predicate_list(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = goal[2];
-
-        unify(arg1,listreverse(reconsult_list));
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_arity_count(int nest, int n){
-	int arg1,arg2;
-
-    if(n == 2){
-    	arg1 = deref(goal[2]);
-        arg2 = goal[3];
-
-        return(unify(arg2,listreverse(GET_ARITY(arg1))));
-    }
-    return(NO);
-}
-
-int b_filename(int nest, int n){
-	int arg1,arg2,pos,len;
+int b_filename(int arglist, int rest){
+	int n,arg1,arg2,pos,len;
     char str1[STRSIZE];
 
+    n = length(arglist);
     if(n == 2){
-    	arg1 = deref(goal[2]);
-        arg2 = goal[3];
+    	arg1 = deref(car(arglist));
+        arg2 = cadr(arglist);
     	strcpy(str1,GET_NAME(arg1));
         len = strlen(GET_NAME(arg1));
         for(pos=0;pos<len;pos++)
@@ -7059,12 +4217,13 @@ int b_filename(int nest, int n){
     return(NO);
 }
 
-int b_system(int nest, int n){
-    int arg1,res;
+int b_system(int arglist, int rest){
+    int n,arg1,res;
     char str1[STRSIZE];
 
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
         if(!singlep(arg1))
             error(NOT_ATOM,"system",arg1);
 
@@ -7078,475 +4237,18 @@ int b_system(int nest, int n){
 }
 
 
-int b_clause_with_arity(int nest, int n){
-    int arg1,arg2,arg3,l,clause,clauses,res;
 
-    if(n == 3){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
-        if(!singlep(arg1))
-            error(NOT_ATOM, "o_clause_with_arity", arg1);
-        if(!integerp(arg2))
-            error(NOT_INT, "o_clause_with_arity", arg2);
+int b_sort(int arglist, int rest){
+    int n,arg1,arg2;
 
-        clauses = GET_CAR(arg1);
-        l = GET_INT(arg2);
-        res = NIL;
-
-        while(!nullp(clauses)){
-            clause = car(clauses);
-            if(atomp(clause) && l == 0)
-                res = cons(clause,res);
-            else if(predicatep(clause) && length(clause) == l+1)
-                res = cons(clause,res);
-            else if(clausep(clause) && atomp(cadr(clause)) && l == 0)
-                res = cons(clause,res);
-            else if(clausep(clause) && length(cadr(clause)) == l+1)
-                res = cons(clause,res);
-
-            clauses = cdr(clauses);
-        }
-        res = listreverse(res);
-        unify(res,arg3);
-        return(YES);
-    }
-    return(NO);
-}
-
-
-int b_variable_convert(int nest, int n){
-    int arg1,arg2;
-
+    n = length(arglist);
     if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = goal[3];
-
-        return(unify(arg2,variable_convert1(arg1)));
-    }
-    return(NO);
-}
-
-int variable_convert1(int x){
-    int y;
-    variable_convert4(NIL); //initialize anoymous N
-    y = variable_convert2(x);
-    if(clausep(x)){
-    	SET_AUX(y,CLAUSE);
-        SET_OPT(y,GET_OPT(x));
-    }
-    return(y);
-}
-
-int variable_convert2(int x){
-    int y,z;
-
-    if(nullp(x))
-        return(NIL);
-    else if(anoymousp(x))
-        return(variable_convert4(x));
-    else if(variablep(x))
-        return(variable_convert3(x));
-    else if(!structurep(x))
-        return(x);
-    else{
-        y = GET_AUX(x);
-        z = cons(variable_convert2(car(x)),
-                variable_convert2(cdr(x)));
-        SET_AUX(z,y);
-        return(z);
-    }
-
-}
-
-//normal variable X -> varX
-int variable_convert3(int x){
-    int res;
-    char str[STRSIZE];
-
-    strcpy(str,"var");
-    strcat(str,GET_NAME(x));
-    res = makeconst(str);
-    return(res);
-}
-
-//anoymous variable _ -> varN (N=1...)
-int variable_convert4(int x){
-    int res;
-    static int n;
-    char str1[STRSIZE],str2[STRSIZE];
-
-    //initialize
-    if(x == NIL){
-        n = 1;
-        return(0);
-    }
-
-    strcpy(str1,"var");
-    sprintf(str2,"%d",n);
-    strcat(str1,str2);
-    res = makeconst(str1);
-    n++;
-    return(res);
-}
-
-
-
-
-int b_self_introduction(int nest , int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = goal[2];
-    	#if _WIN32
-        	return(unify(arg1,makeconst("windows")));
-        #elif __linux
-        	return(unify(arg1,makeconst("linux")));
-        #elif __OpenBSD__
-        	return(unify(arg1,makeconst("openbsd")));
-        #endif
-    }
-    return(NO);
-}
-
-int b_dynamic_check(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-
-        if(dynamic_check1(arg1))
-            return(YES);
-        else
-        	return(NO);
-    }
-    return(NO);
-}
-
-int dynamic_check1(int x){
-	int lis;
-
-    lis = dynamic_list;
-    while(!nullp(lis)){
-    	if(eqlp(x,cadar(lis)))
-        	return(1);
-    	lis = cdr(lis);
-    }
-    return(0);
-}
-
-int b_get_dynamic(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = goal[2];
-        return(unify(arg1,dynamic_list));
-    }
-    return(NO);
-}
-
-int b_get_execute(int nest, int n){
-	int arg1;
-
-    if(n == 1){
-    	arg1 = goal[2];
-        return(unify(arg1,execute_list));
-    }
-    return(NO);
-}
-
-int b_write_original_variable(int nest, int n){
-	int arg1,pos;
-    char str[STRSIZE];
-
-    if(n == 1){
-    	arg1 = deref(goal[2]);
-        if(!compiler_variable_p(arg1))
-        	return(NO);
-        strcpy(str,GET_NAME(arg1));
-        pos = 3;
-        loop:
-        	if(str[pos] == NUL)
-            	return(YES);
-            fprintf(GET_PORT(output_stream), "%c", str[pos]);
-            pos++;
-            goto loop;
-
-    }
-    return(NO);
-}
-
-//convert atom for C language function name
-int b_atom_convert(int nest, int n){
-    int arg1,arg2,pos1,pos2;
-    char str1[ATOMSIZE],str2[ATOMSIZE];
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        strcpy(str1,GET_NAME(arg1));
-        pos1 = 0;
-        pos2 = 0;
-        while(str1[pos1] != NUL){
-            if(str1[pos1] == ':'){
-                str2[pos2] = '_';
-                pos2++;
-            }
-            else if(str1[pos1] == '&'){
-                str2[pos2] = 'a';
-                pos2++;
-                str2[pos2] = 'n';
-                pos2++;
-                str2[pos2] = 'd';
-                pos2++;
-            }
-            else if(str1[pos1] == '?'){
-                str2[pos2] = 'm';
-                pos2++;
-                str2[pos2] = 'a';
-                pos2++;
-                str2[pos2] = 'g';
-                pos2++;
-            }
-            else if(str1[pos1] == '+'){
-                str2[pos2] = 'p';
-                pos2++;
-                str2[pos2] = 'l';
-                pos2++;
-                str2[pos2] = 's';
-                pos2++;
-            }
-            else if(str1[pos1] == '-'){
-                str2[pos2] = 'm';
-                pos2++;
-                str2[pos2] = 'n';
-                pos2++;
-                str2[pos2] = 's';
-                pos2++;
-            }
-            else if(str1[pos1] == '*'){
-                str2[pos2] = 'a';
-                pos2++;
-                str2[pos2] = 's';
-                pos2++;
-                str2[pos2] = 't';
-                pos2++;
-            }
-            else if(str1[pos1] == '/'){
-                str2[pos2] = 'd';
-                pos2++;
-                str2[pos2] = 'i';
-                pos2++;
-                str2[pos2] = 'v';
-                pos2++;
-            }
-            else if(str1[pos1] == '>'){
-                str2[pos2] = 'r';
-                pos2++;
-                str2[pos2] = 'i';
-                pos2++;
-                str2[pos2] = 'g';
-                pos2++;
-            }
-            else if(str1[pos1] == '<'){
-                str2[pos2] = 'l';
-                pos2++;
-                str2[pos2] = 'e';
-                pos2++;
-                str2[pos2] = 'f';
-                pos2++;
-            }
-            else{
-                str2[pos2] = str1[pos1];
-                pos2++;
-            }
-            pos1++;
-        }
-        str2[pos2] = NUL;
-        unify(arg2,makeconst(str2));
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_argument_list(int nest, int n){
-    int arg1,arg2,res;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        arg1 = listreverse(cdr(arg1));
-        res = NIL;
-        while(!nullp(arg1)){
-           res = listcons(car(arg1),res);
-           arg1 = cdr(arg1);
-        }
-        return(unify(arg2,res));
-    }
-    return(NO);
-}
-
-int b_decompose(int nest, int n){
-    int arg1,arg2,arg3;
-
-    if(n == 3){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
-
-        unify(arg2,car(arg1));
-        unify(arg3,cdr(arg1));
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_findatom(int nest, int n){
-    int arg1,arg2,arg3,res;
-
-    if(n == 3){
-        arg1 = deref(goal[2]); //atom
-        arg2 = deref(goal[3]); //property
-        arg3 = deref(goal[4]); //address
-
-        res = NIL;
-        if(eqlp(arg2,makeconst("constant")))
-            res = findatom(arg1,SIMP);
-        else if(eqlp(arg2,makeconst("predicate")))
-            res = findatom(arg1,PRED);
-        else if(eqlp(arg2,makeconst("builtin")))
-            res = findatom(arg1,SYS);
-        else if(eqlp(arg2,makeconst("compiled")))
-            res = findatom(arg1,COMP);
-        else if(eqlp(arg2,makeconst("operator")))
-            res = findatom(arg1,OPE);
-        else if(eqlp(arg2,makeconst("userop")))
-            res = findatom(arg1,USER);
-        else
-            error(ILLEGAL_ARGS,"findatom ", arg2);
-
-        return(unify(arg3,makeint(res)));
-    }
-    return(NO);
-}
-
-int b_bignum(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-
-        if(bignump(arg1))
-            return(YES);
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
-int b_longnum(int nest, int n){
-    int arg1;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-
-        if(longnump(arg1))
-            return(YES);
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
-int b_dumpcell(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 1){
-        arg1 = deref(goal[2]);
-
-        cellprint(GET_INT(arg1));
-        return(YES);
-    }
-    else if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        heapdump(GET_INT(arg1),GET_INT(arg2));
-        return(YES);
-    }
-    return(NO);
-}
-
-
-
-int b_sort(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         return(unify(arg2,sort(arg1)));
     }
     return(NO);
 }
 
-int b_keysort(int nest, int n){
-    int arg1,arg2;
 
-    if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-
-        return(unify(arg2,keysort(arg1)));
-    }
-    return(NO);
-}
-
-int b_date(int nest, int n){
-    int arg1,arg2,arg3,arg4,arg5,arg6,arg7,arg8,arg9;
-    struct tm* jst;
-    time_t t;
-
-    if(n == 3){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
-
-        t = time( NULL );
-        jst = localtime( &t );
-        unify(arg1,makeint(jst->tm_year));
-        unify(arg2,makeint(jst->tm_mon));
-        unify(arg3,makeint(jst->tm_mday));
-
-        return(YES);
-    }
-    else if(n == 9){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
-        arg4 = deref(goal[5]);
-        arg5 = deref(goal[6]);
-        arg6 = deref(goal[7]);
-        arg7 = deref(goal[8]);
-        arg8 = deref(goal[9]);
-        arg9 = deref(goal[10]);
-
-        t = time( NULL );
-        jst = localtime( &t );
-        unify(arg1,makeint(jst->tm_year));
-        unify(arg2,makeint(jst->tm_mon));
-        unify(arg3,makeint(jst->tm_mday));
-        unify(arg4,makeint(jst->tm_wday));
-        unify(arg5,makeint(jst->tm_hour));
-        unify(arg6,makeint(jst->tm_min));
-        unify(arg7,makeint(jst->tm_sec));
-        unify(arg8,makeint(jst->tm_yday));
-        unify(arg9,makeint(jst->tm_isdst));
-
-        return(YES);
-    }
-    return(NO);
-}

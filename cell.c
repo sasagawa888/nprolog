@@ -8,7 +8,7 @@
 
 //-----------------------------
 void initcell(void){
-    int addr,x,version;
+    int addr,x;
 
     for(addr=0; addr < HEAPSIZE; addr++){
         heap[addr].flag = FRE;
@@ -49,31 +49,7 @@ void initcell(void){
     makeatom("_",SIMP); //address = 42
     makeatom(".",OPE);  //addredd = 44
 
-    version = list5(makeconst("opl"),makeint(1),makeint(7),makeint(0),NIL);
-    SET_AUX(version,PRED);
-    #if _WIN32
-    flag_list = list10(cons(makeconst("bounded"),OPLFALSE),
-                      cons(makeconst("integer_rounding_function"),makeconst("toward_zero")),
-                      cons(makeatom("char_conversion",SYS),makeconst("on")),
-                      cons(makeatom("debug",SYS),makeconst("off")),
-                      cons(makeconst("max_arity"),makeint(ARITY-2)),
-                      cons(makeconst("unknown"),makeconst("error")),
-                      cons(makeconst("double_quotes"),makeconst("chars")),
-                      cons(makeatom("char_set",SYS),makeconst("sjis")),
-                      cons(makeconst("colon_sets_calling_context"),OPLTRUE),
-                      cons(makeconst("version_data"),version));
-    #elif __linux
-    flag_list = list10(cons(makeconst("bounded"),OPLFALSE),
-                      cons(makeconst("integer_rounding_function"),makeconst("toward_zero")),
-                      cons(makeatom("char_conversion",SYS),makeconst("on")),
-                      cons(makeatom("debug",SYS),makeconst("off")),
-                      cons(makeconst("max_arity"),makeint(ARITY-2)),
-                      cons(makeconst("unknown"),makeconst("error")),
-                      cons(makeconst("double_quotes"),makeconst("chars")),
-                      cons(makeatom("char_set",SYS),makeconst("unicode")),
-                      cons(makeconst("colon_sets_calling_context"),OPLTRUE),
-                      cons(makeconst("version_data"),version));
-    #endif
+    
 }
 
 int freshcell(void){
@@ -441,252 +417,7 @@ int pop_stack(void){
 }
 
 
-//trail stack
-//push predicate data to trail stack
-void push_trail(int x){
-    int i;
-
-    if(variablep(x)){
-        trail[tp][0] = 2;
-        trail[tp][1] = CALL;
-        trail[tp][2] = walpha_conversion(x);
-        tp++;
-        if(tp > TRAILSIZE)
-            error(TRAIL_OVERF,"",NIL);
-        return;
-    }
-    if(atomp(x)){
-        trail[tp][0] = 1;
-        trail[tp][1] = x;
-        tp++;
-        if(tp > TRAILSIZE)
-            error(TRAIL_OVERF,"",NIL);
-        return;
-    }
-
-    i = 0;
-    //trail[tp][i] = GET_LENGTH(x);
-    if(trail[tp][i] > ARITY)
-    	error(OUT_OF_RANGE, "arity is too much", x);
-    i++;
-    while(!nullp(x)){
-    	trail[tp][i] = walpha_conversion(car(x));
-        x = cdr(x);
-        i++;
-    }
-    tp++;
-    if(tp > TRAILSIZE)
-        error(TRAIL_OVERF,"",NIL);
-}
-
-//without alpha conversion
-void push_trail1(int x){
-    int i;
-
-    if(variablep(x)){
-        trail[tp][0] = 2;
-        trail[tp][1] = CALL;
-        trail[tp][2] = x;
-        tp++;
-        if(tp > TRAILSIZE)
-            error(TRAIL_OVERF,"",NIL);
-        return;
-    }
-    if(atomp(x)){
-        trail[tp][0] = 1;
-        trail[tp][1] = x;
-        tp++;
-        if(tp > TRAILSIZE)
-            error(TRAIL_OVERF,"",NIL);
-        return;
-    }
-
-    i = 0;
-    trail[tp][i] = length(x);
-    if(trail[tp][i] > ARITY)
-    	error(OUT_OF_RANGE, "arity is too much", x);
-    i++;
-    while(!nullp(x)){
-        trail[tp][i] = car(x);
-        x = cdr(x);
-        i++;
-    }
-    tp++;
-    if(tp > TRAILSIZE)
-        error(TRAIL_OVERF,"",NIL);
-}
-
-void push_trail_body(int x){
-
-    if(conjunctionp(x)){
-        if(!operationp(cadr(x)) && !operationp(caddr(x))){
-            push_trail(caddr(x));
-            push_trail(cadr(x));
-            return;
-        }
-        else if(operationp(cadr(x)) && !operationp(caddr(x))){
-            push_trail(caddr(x));
-            push_trail_body(cadr(x));
-            return;
-        }
-        else if(!operationp(cadr(x)) && operationp(caddr(x))){
-            push_trail_body(caddr(x));
-            push_trail(cadr(x));
-            return;
-        }
-        else{
-            push_trail_body(caddr(x));
-            push_trail_body(cadr(x));
-            return;
-        }
-    }
-    // if ';' disjuntion, it will be expanded to trail stack on run time.
-    else if(disjunctionp(x)){
-        x = walpha_conversion(x);
-        push_trail1(x);
-        return;
-    }
-    else if(colonp(x)){
-        // (: atom pred(t1)) -> atom_pred(t1)
-        if(atomp(caddr(x)))
-            x = cons(concat_atom(cadr(x),caddr(x)),cdr(caddr(x)));
-        else
-            x = cons(concat_atom(cadr(x),car(caddr(x))),cdr(caddr(x)));
-        push_trail(x);
-    }
-    else if(nullp(x)){
-        return;
-    }
-    else{
-        push_trail(x);
-        return;
-    }
-}
-
-void push_trail_body_with_ask(int x){
-
-    variables = listreverse(unique(varslist(x)));
-    x = anoymous_conversion(x); // e.g. f(_,_,_) -> f(v_1,v_2,v_3)
-    trail[tp][0] = 1;
-    trail[tp][1] = makeatom("%ask",SYS);
-    tp++;
-    if(tp > TRAILSIZE)
-        error(TRAIL_OVERF,"",NIL);
-    push_trail_body1(x);
-}
-
-void push_trail_body_with_findall_help(int pred, int var){
-
-    variables = listreverse(unique(varslist(pred)));
-    trail[tp][0] = 2;
-    trail[tp][1] = makeatom("%findall_help",SYS);
-    trail[tp][2] = var;
-    tp++;
-    if(tp > TRAILSIZE)
-        error(TRAIL_OVERF,"",NIL);
-    push_trail_body1(pred);
-}
-
-void push_trail_body_with_bagof_help(int pred, int var, int free){
-
-    variables = listreverse(unique(varslist(pred)));
-    trail[tp][0] = 3;
-    trail[tp][1] = makeatom("%bagof_help",SYS);
-    trail[tp][2] = var;
-    trail[tp][3] = free;
-    tp++;
-    if(tp > TRAILSIZE)
-        error(TRAIL_OVERF,"",NIL);
-    push_trail_body1(pred);
-}
-
-
-
-void push_trail_body1(int x){
-
-    if(conjunctionp(x)){
-        if(!operationp(cadr(x)) && !operationp(caddr(x))){
-            push_trail1(caddr(x));
-            push_trail1(cadr(x));
-            return;
-        }
-        else if(operationp(cadr(x)) && !operationp(caddr(x))){
-            push_trail1(caddr(x));
-            push_trail_body1(cadr(x));
-            return;
-        }
-        else if(!operationp(cadr(x)) && operationp(caddr(x))){
-            push_trail_body1(caddr(x));
-            push_trail1(cadr(x));
-            return;
-        }
-        else{
-            push_trail_body1(caddr(x));
-            push_trail_body1(cadr(x));
-            return;
-        }
-    }
-    //
-    else if(disjunctionp(x)){
-        push_trail1(x);
-        return;
-    }
-    else if(colonp(x)){
-        // (: atom pred(t1)) -> atom_pred(t1)
-        if(atomp(caddr(x)))
-            x = cons(concat_atom(cadr(x),caddr(x)),cdr(caddr(x)));
-        else
-            x = cons(concat_atom(cadr(x),car(caddr(x))),cdr(caddr(x)));
-        push_trail1(x);
-    }
-    else if(nullp(x)){
-        return;
-    }
-    else{
-        push_trail1(x);
-        return;
-    }
-}
-
-
-
-void store_goal(int nest){
-    int i,n;
-
-    tp--;
-    n = trail[tp][0];
-    for(i=0;i<=n;i++){
-        goal[i] = trail[tp][i];
-        store[nest][i] = trail[tp][i];
-    }
-    if(GET_AUX(goal[1]) == PRED ||
-       GET_AUX(goal[1]) == COMP)
-        context = GET_VAR(goal[1]); //for calling_context
-}
-
-void retract_goal(int nest){
-    int i,n;
-
-    n = store[nest][0];
-    for(i=0;i<=n;i++){
-        trail[tp][i] = store[nest][i];
-        goal[i]      = store[nest][i];
-    }
-
-}
-
-
 //------for JUMP compiler-----
-
-int get_tp(void){
-	return(tp);
-}
-
-int set_tp(int x){
-	tp = x;
-    return(0);
-}
-
 int get_sp(void){
 	return(sp);
 }
@@ -709,15 +440,6 @@ int set_wp(int x){
     return(0);
 }
 
-int get_goal(int n){
-	return(goal[n]);
-}
-
-int set_goal(int n, int x){
-    goal[n] = x;
-    return(x);
-}
-
 int listcons(int x, int y){
 	int res;
 
@@ -732,15 +454,6 @@ int wlistcons(int x, int y){
     res = wcons(x,y);
     SET_AUX(res,LIST);
     return(res);
-}
-
-int get_trail_end(void){
-	return(trail_end);
-}
-
-int set_trail_end(int x){
-    trail_end = x;
-    return(x);
 }
 
 int set_car(int x, int y){

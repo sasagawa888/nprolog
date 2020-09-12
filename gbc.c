@@ -77,7 +77,7 @@ void markcell(int addr){
 }
 
 void gbcmark(void){
-    int i,j;
+    int i;
 
     //mark nil and basic symbol
     MARK_CELL(NIL);
@@ -114,21 +114,6 @@ void gbcmark(void){
             markcell(stack[i]);
     }
 
-    //mark trail stack
-    for(i=0;i<tp;i++){
-        for(j=2;j<ARITY;j++){
-            markcell(trail[i][j]);
-        }
-    }
-    //mark store stack
-    for(i=0;i<TRAILSIZE;i++){
-        if(store[i][0] != 0){
-            for(j=2;j<ARITY;j++)
-                markcell(store[i][j]);
-        }
-    }
-    //mark cleanup_dt
-    markcell(cleanup_dt);
 }
 
 void gbcsweep(void){

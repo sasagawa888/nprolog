@@ -8,52 +8,6 @@
 #define LEFTPOS  4
 
 //----editor----
-
-int b_set_editor(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-    	arg1 = goal[2];
-        arg2 = goal[3];
-        if(arg1 == makeconst("repl")){
-        	if(arg2 == makeconst("on"))
-        		repl_flag = 1;
-            else if(arg2 == makeconst("off"))
-            	repl_flag = 0;
-        }
-        else if(arg1 == makeconst("indent") && arg2 == makeconst("auto"))
-        	ed_indent = 1;
-        else if(arg1 == makeconst("indent") && arg2 == makeconst("manual"))
-        	ed_indent = 0;
-        else if(arg1 == makeconst("tab")){
-        	if(integerp(arg2) && GET_INT(arg2) == 2)
-            	ed_tab = 2;
-        	else if(integerp(arg2) && GET_INT(arg2) == 4)
-        		ed_tab = 4;
-        	else if(integerp(arg2) && GET_INT(arg2) == 8)
-        		ed_tab = 8;
-        }
-        else if(arg1 == makeconst("operator_color"))
-                ed_operator_color = GET_INT(arg2);
-        else if(arg1 == makeconst("builtin_color"))
-                ed_builtin_color = GET_INT(arg2);
-        else if(arg1 == makeconst("extended_color"))
-                ed_extended_color = GET_INT(arg2);
-        else if(arg1 == makeconst("quote_color"))
-                ed_quote_color = GET_INT(arg2);
-        else if(arg1 == makeconst("function_color"))
-                ed_function_color = GET_INT(arg2);
-        else if(arg1 == makeconst("comment_color"))
-                ed_comment_color = GET_INT(arg2);
-        else
-                return(NO);
-
-        return(YES);
-        }
-        return(NO);
-}
-
-
 void setcolor(int n){
         switch(n){
                 case 0: ESCFBLACK; break;

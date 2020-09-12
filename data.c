@@ -1488,31 +1488,6 @@ int sorteqlp(int x, int y){
 }
 
 
-int keysort(int x){
-    int res;
-
-    res = NIL;
-    while(!nullp(x)){
-        res = keyinsert(res,(car(x)));
-        x = cdr(x);
-    }
-    return(res);
-}
-
-int keyinsert(int x,int y){
-
-    if(nullp(x))
-        return(list1(y));
-    else if(!(length(car(x)) == 3 && eqlp(caar(x),makeope("-"))))
-        error(ILLEGAL_ARGS,"keysort ", car(x));
-    else if(sortsmaller(cadr(y),cadr(car(x))))
-        return(listcons(y,x));
-    else
-        return(listcons(car(x),keyinsert(cdr(x),y)));
-
-    return(NIL);
-}
-
 void printenv(void){
     int i;
     for(i=0; i< sp; i++){
@@ -1534,9 +1509,6 @@ void printenv(void){
 void add_data(int pred, int data){
     int clauses;
 
-    //for calling_context;
-    if(module_name != makeatom("compiler",SIMP))
-        SET_VAR(pred,module_name);
     //set arity. e.g. GET_CDR(pred) == #[2,3]
     memoize_arity(data,pred);
 
@@ -1556,12 +1528,11 @@ void add_data(int pred, int data){
 
 void insert_data(int pred, int data){
 
-    if(module_name != makeatom("compiler",SIMP))
-        SET_VAR(pred,module_name); //for calling_context;
     SET_CAR(pred,cons(data,GET_CAR(pred)));
     if(!memq(pred,predicates))
         predicates = cons(pred,predicates);
 }
+
 /*
 X -> call(X) e.g foo(X) :- X. -> foo(X) :- call(X).
 atom without argument is converted to predicate
@@ -1590,141 +1561,6 @@ int variable_to_call(int x){
         return(x);
 }
 
-
-int add_prefix(int x){
-    int res;
-
-    if(wide_variable_p(x))
-        return(x);
-    else if(atomp(x) && !builtinp(x)){
-        if(!export_check(x))
-            return(add_atom_pred_prefix(x));
-        else
-            return(x);
-    }
-    else if(predicatep(x)){
-        if(!export_check(x))
-            return(add_pred_prefix(x));
-        else
-            return(x);
-    }
-    else if(clausep(x)){
-        res = list3(DEFINE,add_prefix(cadr(x)),add_body_prefix(caddr(x)));
-        return(res);
-    }
-    else if(builtinp(x)){
-        return(x);
-    }
-    else if(compiledp(x)){
-        return(x);
-    }
-
-    return(x);
-}
-
-int export_check(int pred){
-    int lis;
-
-    lis = export_list;
-    while(!nullp(lis)){
-        if(atomp(pred) && eqlp(pred,cadr(car(lis))) &&
-           caddr(car(lis)) == makeint(0))
-            return(1);
-    	else if(eqlp(car(pred),cadr(car(lis))) &&
-            caddr(car(lis)) == makeint(length(cdr(pred))))
-            return(1);
-    	lis = cdr(lis);
-    }
-    return(0);
-}
-
-int meta_check(int pred, int arity){
-    int lis;
-
-    lis = meta_list;
-    while(!nullp(lis)){
-        if(atomp(pred) && pred == cadr(car(lis)) &&
-            caddr(car(lis)) == makeint(0))
-            return(1);
-    	else if(car(pred) == cadr(car(lis)) &&
-            caddr(car(lis)) == arity)
-            return(1);
-    	lis = cdr(lis);
-    }
-    return(0);
-}
-
-int add_body_prefix(int body){
-
-    if(nullp(body))
-        return(NIL);
-    else if(atomp(body))
-        return(add_prefix(body));
-    else if(predicatep(body) && meta_check(body,makeint(length(cdr(body)))))
-        return(cons(car(body),add_body_prefix1(cdr(body))));
-    else if(predicatep(body))
-        return(add_prefix(body));
-    else if(builtinp(body) && colon_sets_calling_context_flag &&
-           (car(body) == makeatom("not",SYS) ||
-            car(body) == makeatom("\\+",SYS) ||
-            car(body) == makeatom("fail_if",SYS) ||
-            car(body) == makeatom("->",SYS) ||
-            car(body) == makeatom("assert",SYS) ||
-            car(body) == makeatom("asserta",SYS) ||
-            car(body) == makeatom("assertz",SYS) ||
-            car(body) == makeatom("abolish",SYS) ||
-            car(body) == makeatom("retract",COMP) ||
-            car(body) == makeatom("retractall",SYS) ||
-            car(body) == makeatom("findall",SYS) ||
-            car(body) == makeatom("bagof",COMP) ||
-            car(body) == makeatom("setof",COMP) ||
-            car(body) == makeatom("call",COMP) ||
-            car(body) == makeatom("once",COMP))){
-        return(cons(car(body),add_body_prefix1(cdr(body))));
-    }
-    else if(car(body) == AND)
-        return(list3(AND,add_body_prefix(cadr(body)),
-                         add_body_prefix(caddr(body))));
-    else if(car(body) == OR){
-        return(list3(OR,add_body_prefix(cadr(body)),
-                        add_body_prefix(caddr(body))));
-    }
-    return(body);
-}
-
-// ex not(foo) -> not(prefix_foo)
-int add_body_prefix1(int x){
-    if(nullp(x))
-        return(NIL);
-    else
-        return(cons(add_prefix(car(x)),
-                    add_body_prefix1(cdr(x))));
-}
-
-int add_atom_pred_prefix(int pred){
-    char str[ATOMSIZE];
-    int x;
-
-    x = pred;
-    strcpy(str,GET_NAME(module_name));
-    strcat(str,"_");
-    strcat(str,GET_NAME(x));
-    x = makeatom(str,PRED);
-    return(x);
-}
-
-
-int add_pred_prefix(int pred){
-    char str[ATOMSIZE];
-    int x;
-
-    x = car(pred);
-    strcpy(str,GET_NAME(module_name));
-    strcat(str,"_");
-    strcat(str,GET_NAME(x));
-    x = makeatom(str,PRED);
-    return(cons(x,cdr(pred)));
-}
 
 int concat_atom(int x, int y){
     char str[ATOMSIZE];

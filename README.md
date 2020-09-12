@@ -1,5 +1,5 @@
 # N-Prolog
-N-Prolog(NPL) is an interpreter and compiler to be subset of ARITY-Prolog.
+N-Prolog(NPL) is an interpreter to be subset of ARITY-Prolog.
 it is based on O-Prolog. Project is now startup.
 
 N-Prolog is NOT ISO-Prolog.

@@ -8,9 +8,7 @@ written by kenichi sasagawa 2016/8~
 #include <stdlib.h>
 #include <setjmp.h>
 #include <math.h>
-#if __linux
 #include <stdio_ext.h>
-#endif
 #include "npl.h"
 
 //global vers
@@ -18,14 +16,6 @@ int proof = 0;
 cell heap[CELLSIZE];
 int variant[VARIANTSIZE][2];
 int stack[STACKSIZE];
-//0=arity-count 1=name-symbol 2-17=arity
-//row=0 predicate for unify row>=1 trail predicate
-int goal[ARITY];
-//int head[ARITY];
-int trail[TRAILSIZE][ARITY];
-int store[TRAILSIZE][ARITY];
-int store1[100][ARITY][10]; //for repeat/0 for between/3
-int store_pt = 0;
 int numbervars[20][3]; // for numbervars  variable,numbervars and it's count
 int numbervars_base_pt = 0; // for numbervars
 int numbervars_top_pt  = 0; // for numbervars
@@ -35,38 +25,20 @@ int cell_hash_table[HASHTBSIZE];
 int variables = NIL;
 int predicates = NIL;
 int spy_list = NIL;
-int load_list = NIL;
-int dynamic_list = NIL;
 int reconsult_list = NIL;
-int init_list = NIL;    //initialization/1
-int contiguous_list = NIL;    //for contiguous check
-int discontiguous_list = NIL; //discontiguous/1
-int op_list = NIL; //current_op/3
-int flag_list = NIL; //for current_prolog_flag, set_prolog_flag
-int define_list = NIL;  //for c_define/2
-int include_list = NIL; //for c_iinclude/1
-int option_list = NIL;  //for c_option/1
-int global_list = NIL;  //for c_global/1
-int execute_list;     //for compiler. o_get_execution/1
+int op_list = NIL;
 int unread = NIL;     //for parse
 int paren_nest = 0;   //for parse check ((()))
 int line;
 int column;
-int trail_end;  //for comiler. get end of trail point
 double micro_second;
-int module_name = NIL;
-int export_list = NIL;
-int meta_list = NIL;
-int context = NIL;
-int cleanup_dt = NIL;  //for setup_call_clean_up. when error invokde
+
 
 //------pointer----
 int hp; //heap pointer
 int sp; //stack pointer
 int fc; //free counter
-int ac; //alpha conversion variable counter
-int cp; //cut point
-int tp; //trail stack pointer
+int ac; //alpha conversion variable count
 int wp; //working pointer
 
 
@@ -82,13 +54,7 @@ int sexp_flag = 0;
 int arguments_flag = 1; //1= 1,2,3 -> (1,2,3) 0= 1,2,3 -> 1,2,3
 int undefined_flag = 1; //0=fail, 1=error, 2=warning
 int double_flag = 0; //0=code, 1=char, 2=string for string
-#if _WIN32
-int mode_flag = 0;  // 0=SJIS, 1=Unicode
-#elif __linux
 int mode_flag = 1;  // 0=SJIS, 1=Unicod
-#elif __OpenBSD__
-int mode_flag = 1;  // 0=SJIS, 1=Unicod
-#endif
 int quoted_flag = 1; // 0=not print ' 1=print '
 int ignore_flag = 0; // 0=infix notation 2+2 1=prefix notation +(2,2)
 int numbervars_flag = 0; // 0=normal 1= A -> '_0001
@@ -98,7 +64,6 @@ int cut_flag = 0;  //for if then else 0=not exist cut, 1=exist cut
 int listing_flag = 0;  //for print clause, 0=normal, 1=format print
 int colon_sets_calling_context_flag = 1; //1=true, 0=false
 int prefix_flag = 0;   //for parser 0=not prefix, 1=prefix
-double time_flag = 0;   //for time/1 0=normal, not 0(start time)=print elapsed time
 
 
 //operator token
@@ -208,7 +173,7 @@ int ed_incomment = -1; /*...*/
 int main(int argc, char *argv[]){
     int opt;
 
-    printf("N-Prolog Ver 0.01\n");
+    printf("N-Prolog Ver 0.02\n");
     initcell();
     initbuiltin();
     initoperator();
@@ -351,9 +316,6 @@ int prove(int goal, int bindings, int rest, int n){
     int clause,clauses,clause1,varlis,save;
 
     goal = deref(goal);
-    print(goal);
-    getchar();
-    printf("\n");
 
     if(nullp(goal)){
         return(prove_all(rest,bindings,n));
@@ -393,6 +355,7 @@ int prove(int goal, int bindings, int rest, int n){
             clauses = GET_CAR(goal);
         else
             clauses = GET_CAR(car(goal));
+
         while(!nullp(clauses)){
             save = wp;
             clause = car(clauses);
@@ -411,7 +374,8 @@ int prove(int goal, int bindings, int rest, int n){
             else{
                 if(unify(goal,(cadr(clause1))) == YES){
                     if(prove_all(caddr(clause1),sp,n) == YES)
-                        return(prove_all(rest,sp,n+1));
+                        if(prove_all(rest,sp,n+1) == YES)
+                            return(YES);
                 }
             }
             wp = save;
@@ -541,7 +505,6 @@ void debugger(int end, int bindings, int choice, int n){
                     printf("bindings %d\n", bindings);
                     printf("choice   %d\n", choice);
                     printf("nest     %d\n", n);
-                    printf("tp       %d\n", tp);
                     printf("sp       %d\n", sp);
                     printf("wp       %d\n", wp);
                     goto loop;
