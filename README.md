@@ -119,3 +119,40 @@ var/1
 write/1
 writeq/1 writeq/2
 ```
+
+# function
+```
++
+-
+*
+/
+^  expt
+** expt
+<< leftshift
+>> rightshift
+/\ logical and
+\/ logical or
+\  complement
+xor exclusive or
+iand inclusive and
+abs 
+sin
+asin
+cos 
+acos
+tan
+atan
+exp
+log
+floor
+ceiling
+truncate
+float
+float_integer_part
+float_fraction_part
+sign
+min
+max
+random
+
+```
