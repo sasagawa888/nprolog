@@ -3132,45 +3132,6 @@ int b_listing(int arglist, int rest){
 
 
 
-
-// X^Y^Z^pred -> [X,Y,Z]
-int get_notfree_variable(int x){
-    int res;
-
-    res = NIL;
-    while(car(x) == makeatom("^",OPE)){
-        res = cons(cadr(x),res);
-        x = caddr(x);
-    }
-    return(listreverse(res));
-}
-
-// X^Y^Z^pred -> pred
-int get_predicate(int x){
-    if(predicatep(x))
-        return(x);
-
-    while(!predicatep(caddr(x)) && !nullp(x)){
-        x = caddr(x);
-    }
-    return(caddr(x));
-}
-
-// x=[X,Y,Z,A,B] y=[X,Y,Z] -> [A,B]
-int get_free_variable(int x, int y){
-    int res;
-
-    res = NIL;
-    while(!nullp(x)){
-        if(!memq(car(x),y))
-            res = cons(car(x),res);
-        x = cdr(x);
-    }
-    return(listreverse(res));
-}
-
-
-
 //transform bwtween predicate and data
 int b_univ(int arglist, int rest){
     int n,arg1,arg2,res;
@@ -3223,9 +3184,6 @@ int b_univ(int arglist, int rest){
         else if(listp(arg1)){
             arg1 = list3(DOTOBJ,car(arg1),cdr(arg1));
             SET_AUX(arg1,LIST);
-            return(unify(arg1,arg2));
-        }
-        else if(alpha_variable_p(arg2)){//for bug of OPL compiler
             return(unify(arg1,arg2));
         }
         else{
@@ -4172,7 +4130,8 @@ int b_nano(int arglist, int rest){
         res = system(str0);
         if(res == -1)
             error(SYSTEM_ERROR,"nano",arg1);
-        b_reconsult(arg1,NIL);
+
+        b_reconsult(list1(arg1),NIL);
         return(YES);
     }
     return(NO);
