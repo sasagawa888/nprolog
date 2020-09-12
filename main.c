@@ -609,53 +609,6 @@ int walpha_conversion(int x){
     }
 }
 
-int anoymous_conversion(int x){
-    int temp;
-
-    if(nullp(x))
-        return(NIL);
-    else if(alpha_variable_p(x))
-    	return(x);
-    else if(anoymousp(x))
-        return(makevariant());
-    else if(variablep(x))
-        return(x);
-    else if(!structurep(x))
-        return(x);
-    else if(operationp(x) && nullp(cdr(x)))
-        return(x);
-    else if(operationp(x) && nullp(caddr(x))){ // e.g. :- foo(x)
-        temp = list2(car(x),anoymous_conversion(cadr(x)));
-        SET_AUX(temp,GET_AUX(x));
-    	return(temp);
-    }
-    else if(operationp(x)){
-        temp = list3(car(x),
-                     anoymous_conversion(cadr(x)),
-                     anoymous_conversion(caddr(x)));
-        SET_AUX(temp,GET_AUX(x));
-    	return(temp);
-    }
-    else if(listp(x)){
-        temp = cons(anoymous_conversion(car(x)),
-                    anoymous_conversion(cdr(x)));
-        SET_AUX(temp,GET_AUX(x));
-    	return(temp);
-    }
-    else if(predicatep(x)){
-        temp = cons(car(x),
-                    anoymous_conversion(cdr(x)));
-        SET_AUX(temp,GET_AUX(x));
-        return(temp);
-    }
-    else{ //buiiltin
-        temp = cons(anoymous_conversion(car(x)),
-                    anoymous_conversion(cdr(x)));
-        SET_AUX(temp,GET_AUX(x));
-        return(temp);
-    }
-}
-
 //-----print------------------
 //output to standard output
 void sprint(int addr){
