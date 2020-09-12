@@ -2685,17 +2685,10 @@ int b_time(int arglist, int rest){
     n = length(arglist);
     if(n == 1){
         arg1 = car(arglist);
-        if(!structurep(arg1)){   // ex test -> (test)
-            if(GET_AUX(arg1) == SIMP)
-                arg1 = makeatom(GET_NAME(arg1),PRED);
-            arg1 = cons(arg1,NIL);
-        }
         start_time = getETime(); //time_flag on and it store start time
         res = prove_all(arg1,sp,0);
-        if(res == NO){
-            end_time = getETime();
-            printf("Elapsed Time=%.6f (second)\n", end_time - start_time);
-        }
+        end_time = getETime();
+        printf("Elapsed Time=%.6f (second)\n", end_time - start_time);
         return(res);
     }
     return(NO);

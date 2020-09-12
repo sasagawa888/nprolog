@@ -292,11 +292,7 @@ int list_to_ope(int x){
 }
 
 int addask(int x){
-
-    if(car(x) != AND)
-        return(list3(AND,x,makeatom("%ask",SYS)));
-    else 
-        return(list3(AND,cadr(x),addask(caddr(x))));
+    return(addtail_operation(makeatom("%ask",SYS),x));
 }
 
 
@@ -373,9 +369,9 @@ int prove(int goal, int bindings, int rest, int n){
             // case of clause
             else{
                 if(unify(goal,(cadr(clause1))) == YES){
-                    if(prove_all(caddr(clause1),sp,n) == YES)
-                        if(prove_all(rest,sp,n+1) == YES)
-                            return(YES);
+                    clause1 = addtail_operation(rest,caddr(clause1));
+                    if(prove_all(clause1,sp,n) == YES)
+                        return(YES);
                 }
             }
             wp = save;
@@ -424,9 +420,9 @@ int addtail_operation(int x, int y){
     if(nullp(y))
         return(x);
     else if(!operationp(y))
-        return(list3(AND,y,x));
+        return(wlist3(AND,y,x));
     else
-        return(list3(car(y),cadr(y),addtail_operation(x,caddr(y))));
+        return(wlist3(car(y),cadr(y),addtail_operation(x,caddr(y))));
 }
 
 int after_cut(int x){
