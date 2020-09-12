@@ -113,6 +113,7 @@ not/1
 read/1
 reconsult/1
 sort/2
+system/1
 time/1
 true/0
 var/1
