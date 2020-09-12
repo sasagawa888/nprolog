@@ -65,6 +65,7 @@ append/3
 assert/1
 asserta/1
 assertz/1
+call/1
 fail/0
 float/1
 gc/0

@@ -8,42 +8,15 @@
 #include <sys/time.h>
 #include <float.h>
 #include <sys/stat.h>
-#if _WIN32
-#include <windows.h>
-#include <direct.h>
-#endif
-#if __linux
 #include <stdio_ext.h>
 #include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
 #include <unistd.h>
 #include <errno.h>
 #include <dlfcn.h>
-#endif
-#if __OpenBSD__
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <unistd.h>
-#include <errno.h>
-#include <dlfcn.h>
-#endif
 #include "npl.h"
 
-#ifdef _WIN32
-#define FLUSH fflush(stdin);
-#elif __OpenBSD__
-#define FLUSH fpurge(stdin);
-#else
 #define FLUSH __fpurge(stdin);
-#endif
 
-#if __linux
 typedef void (*tpred)(char*, int(*pred)(int , int));
 
 void dynamic_link(int x){
@@ -76,71 +49,6 @@ void dynamic_link(int x){
     init_deftpred = dlsym(hmod, "init_deftpred");
     init_tpredicate = dlsym(hmod, "init_tpredicate");
     init_declare = dlsym(hmod, "init_declare");
-#endif
-#if __OpenBSD__
-typedef void (*tpred)(char*, int(*pred)(int , int));
-
-void dynamic_link(int x){
-    char str[256] = {"./"};
-    void* hmod;
-
-    int (*init_f0)(int x, tpred y);
-    int (*init_f1)(int x, tpred y);
-    int (*init_f2)(int x, tpred y);
-    int (*init_f3)(int x, tpred y);
-    int (*init_f4)(int x, tpred y);
-    void (*init_deftpred)(tpred x);
-    void (*init_tpredicate)();
-    void (*init_declare)();
-
-    if(strstr(GET_NAME(x),"/"))
-        strcpy(str,GET_NAME(x));
-    else
-        strcat(str,GET_NAME(x));
-
-    hmod = dlopen(str, RTLD_LAZY);
-    if(hmod == NULL)
-        error(ILLEGAL_ARGS, "load", x);
-
-    init_f0 = dlsym(hmod, "init0");
-    init_f1 = dlsym(hmod, "init1");
-    init_f2 = dlsym(hmod, "init2");
-    init_f3 = dlsym(hmod, "init3");
-    init_f4 = dlsym(hmod, "init4");
-    init_deftpred = dlsym(hmod, "init_deftpred");
-    init_tpredicate = dlsym(hmod, "init_tpredicate");
-    init_declare = dlsym(hmod, "init_declare");
-#endif
-
-
-#if _WIN32
-//for dynamic link
-typedef void (*tpred)(char*, int(*pred)(int , int));
-typedef void (*p_f0)(int, tpred);
-typedef void (*p_f1)(int, tpred);
-typedef void (*p_f2)(int, tpred);
-typedef void (*p_f3)(int, tpred);
-typedef void (*p_f4)(int, tpred);
-typedef void (*p_def)(tpred);
-typedef void (*p_init)(void);
-typedef void (*p_declare)(void);
-
-void dynamic_link(int x){
-    HMODULE hmod;
-
-    hmod = LoadLibrary((LPCSTR)(GET_NAME(x)));
-    //loadeddll = hmod;
-    p_f0 init_f0 = (p_f0)GetProcAddress(hmod, (LPCSTR)"init0");
-    p_f1 init_f1 = (p_f1)GetProcAddress(hmod, (LPCSTR)"init1");
-    p_f2 init_f2 = (p_f2)GetProcAddress(hmod, (LPCSTR)"init2");
-    p_f3 init_f3 = (p_f3)GetProcAddress(hmod, (LPCSTR)"init3");
-    p_f4 init_f4 = (p_f4)GetProcAddress(hmod, (LPCSTR)"init4");
-    p_def init_deftpred = (p_def)GetProcAddress(hmod, (LPCSTR)"init_deftpred");
-    p_init init_tpredicate = (p_init)GetProcAddress(hmod, (LPCSTR)"init_tpredicate");
-    p_declare init_declare = (p_declare)GetProcAddress(hmod, (LPCSTR)"init_declare");
-    //p_cut1 init_cut = (p_cut1)GetProcAddress(hmod, (LPCSTR)"init_cut");
-    //p_cut1 invoke_cut = (p_cut1)GetProcAddress(hmod, (LPCSTR)"invoke_cut");
-#endif
 
     //argument-0 type
     init_f0(0,(tpred)checkgbc);
@@ -845,9 +753,6 @@ void initbuiltin(void){
     defbuiltin("listing",b_listing);
     defbuiltin("functor",b_functor);
     defbuiltin("arg",b_arg);
-    defbuiltin("numbervars",b_numbervars);
-    defbuiltin("predicate_property",b_predicate_property);
-    defbuiltin("copy_term",b_copy_term);
     defbuiltin("debug",b_debug);
     defbuiltin("atom_length",b_atom_length);
     defbuiltin("consult",b_consult);
@@ -907,7 +812,6 @@ void initbuiltin(void){
     defbuiltin("system",b_system);
     defbuiltin("sort",b_sort);
     defbuiltin("keysort",b_keysort);
-    defbuiltin("compare",b_compare);
     defbuiltin("make_directory",b_make_directory);
     defbuiltin("directory_exists",b_directory_exists);
     defbuiltin("current_directory",b_current_directory);
@@ -920,22 +824,17 @@ void initbuiltin(void){
     defbuiltin("file_modification_time",b_file_modification_time);
     defbuiltin("date",b_date);
     defbuiltin("length",b_length);
-    
-
-    #if __linux
+    defbuiltin("call",b_call);
     defbuiltin("set_editor",b_set_editor);
     defbuiltin("edit",b_nano);
-    #endif
 
     defcompiled("repeat",b_repeat);
     defcompiled("append",b_append);
     defcompiled("member",b_member);
     defcompiled("retract",b_retract);
     defcompiled("clause",b_clause);
-    defcompiled("current_predicate",b_current_predicate);
-    defcompiled("current_op",b_current_op);
     defcompiled("atom_concat",b_atom_concat);
-    defcompiled("call",b_call);
+    
 
     return;
 }
@@ -2345,14 +2244,6 @@ int b_open(int nest, int n){
     return(NO);
 }
 
-int mode_option_p(int x){
-    if(eqlp(car(x),makeconst("mode")) &&
-       singlep(cadr(x)) &&
-       nullp(cddr(x)))
-        return(1);
-    else
-        return(0);
-}
 
 int type_option_p(int x){
     if(eqlp(car(x),makeconst("type")) &&
@@ -2818,7 +2709,7 @@ int b_consult(int nest, int n){
 
 
 int b_reconsult(int arglist, int rest){
-    int n,arg1,clause,save;
+    int n,arg1,clause,head,atom,save;
     char str[STRSIZE];
 
     n = length(arglist);
@@ -2852,6 +2743,25 @@ int b_reconsult(int arglist, int rest){
             clause = parser(NIL,NIL,NIL,NIL,0,0);
             if(clause == FEND)
                 break;
+
+            //delete old definition
+            if(predicatep(clause)){
+                if(atomp(clause))
+                    atom  = clause;
+                else
+                    atom = car(clause);
+            }
+            else{
+                head = cadr(clause);
+                if(atomp(head))
+                    atom = head;
+                else
+                    atom = car(head);
+            }
+            if(!memberp(atom,reconsult_list)){
+                reconsult_list = cons(atom,reconsult_list);
+                SET_CAR(atom,NIL);
+            }
 
             //assert
             b_assert(list1(clause),NIL);
@@ -3047,12 +2957,13 @@ int b_is(int arglist, int rest){
 }
 
 
-int b_greater(int nest, int n){
-    int arg1,arg2;
+int b_greater(int arglist, int rest){
+    int n,arg1,arg2;
 
+    n = length(arglist);
     if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"> ",arg1);
@@ -3075,12 +2986,13 @@ int b_greater(int nest, int n){
     return(NO);
 }
 
-int b_smaller(int nest, int n){
-    int arg1,arg2;
+int b_smaller(int arglist, int rest){
+    int n,arg1,arg2;
 
+    n = length(arglist);
     if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"< ",arg1);
@@ -3102,12 +3014,13 @@ int b_smaller(int nest, int n){
     return(NO);
 }
 
-int b_eqsmaller(int nest, int n){
-    int arg1,arg2;
+int b_eqsmaller(int arglist, int rest){
+    int n,arg1,arg2;
 
+    n = length(arglist);
     if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"=< ",arg1);
         if(wide_variable_p(arg2))
@@ -3127,12 +3040,13 @@ int b_eqsmaller(int nest, int n){
     return(NO);
 }
 
-int b_eqgreater(int nest, int n){
-    int arg1,arg2;
+int b_eqgreater(int arglist, int rest){
+    int n,arg1,arg2;
 
+    n = length(arglist);
     if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,">= ",arg1);
@@ -3153,12 +3067,13 @@ int b_eqgreater(int nest, int n){
     return(NO);
 }
 
-int b_numeq(int nest, int n){
-    int arg1,arg2;
+int b_numeq(int arglist, int rest){
+    int n,arg1,arg2;
 
+    n = length(arglist);
     if(n == 2){
-        arg1 = eval(goal[2]);
-        arg2 = eval(goal[3]);
+        arg1 = eval(car(arglist));
+        arg2 = eval(cadr(arglist));
         if(!numberp(arg1))
             error(NOT_NUM,"=:= ",arg1);
         if(!numberp(arg2))
@@ -3172,12 +3087,13 @@ int b_numeq(int nest, int n){
     return(NO);
 }
 
-int b_notnumeq(int nest, int n){
-    int arg1,arg2;
+int b_notnumeq(int arglist, int rest){
+    int n,arg1,arg2;
 
+    n = length(arglist);
     if(n == 2){
-        arg1 = eval(goal[2]);
-        arg2 = eval(goal[3]);
+        arg1 = eval(car(arglist));
+        arg2 = eval(cadr(arglist));
         if(!numberp(arg1))
             error(NOT_NUM,"=:= ",arg1);
         if(!numberp(arg2))
@@ -3191,11 +3107,13 @@ int b_notnumeq(int nest, int n){
     return(NO);
 }
 
-int b_equalp(int nest, int n){
-    int arg1,arg2;
+int b_equalp(int arglist, int rest){
+    int n,arg1,arg2;
+
+    n = length(arglist);
     if(n == 2){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
 
         if(anoymousp(arg1) && anoymousp(arg2))
             return(NO);
@@ -3207,8 +3125,10 @@ int b_equalp(int nest, int n){
     return(NO);
 }
 
-int b_notequalp(int nest, int n){
-    int arg1,arg2;
+int b_notequalp(int arglist, int rest){
+    int n,arg1,arg2;
+
+    n = length(arglist);
     if(n == 2){
         arg1 = deref(goal[2]);
         arg2 = deref(goal[3]);
@@ -3219,34 +3139,6 @@ int b_notequalp(int nest, int n){
             return(YES);
         else
             return(NO);
-    }
-    return(NO);
-}
-
-
-//comparation of term
-int b_compare(int nest, int n){
-    int arg1,arg2,arg3;
-
-    if(n == 3){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
-        if(!wide_variable_p(arg1) && !atomp(arg1))
-            error(NOT_ATOM,"compare ",arg1);
-        if(!wide_variable_p(arg1) &&
-          !(eqp(arg1,makeatom("<",SYS)) ||
-            eqp(arg1,makeatom("=",SYS)) ||
-            eqp(arg1,makeatom(">",SYS))))
-            error(NOT_ORDER,"compare ",arg1);
-
-        if(equalp(arg2,arg3))
-            return(unify(arg1,makeatom("=",SYS)));
-        else if(atsmaller(arg2,arg3))
-            return(unify(arg1,makeatom("<",SYS)));
-        else if(atsmaller(arg3,arg2))
-            return(unify(arg1,makeatom(">",SYS)));
-
     }
     return(NO);
 }
@@ -3428,12 +3320,12 @@ int b_fail(int arglist, int rest){
     return(NO);
 }
 
-int b_call(int nest, int n){
-    int arg1,save1,save2;
+int b_call(int arglist, int rest){
+    int n,arg1,res;
 
-    save2 = sp;
+    n = length(arglist);
     if(n == 1){
-        arg1 = deref(goal[2]);
+        arg1 = deref(car(arglist));
 
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"call ",arg1);
@@ -3444,11 +3336,8 @@ int b_call(int nest, int n){
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"call ",arg1);
 
-        save1 = wp;
-        
-        wp = save1;
-        unbind(save2);
-        return(NO);
+        res = prove_all(arg1,sp,n);
+        return(res);
     }
     
     return(NO);
@@ -3743,79 +3632,6 @@ int b_clause(int nest, int n){
     }
     return(NO);
 }
-
-int b_current_predicate(int nest, int n){
-    int arg1,save1,save2,predlist,pred,aritylist,arity;
-
-    save2 = sp;
-    if(n == 1){
-        arg1 = deref(goal[2]);
-        predlist = reverse(predicates);
-        save1 = wp;
-        while(!nullp(predlist)){
-            pred = car(predlist);
-            predlist = cdr(predlist);
-            aritylist = GET_CDR(pred);
-            while(!nullp(aritylist)){
-                arity = car(aritylist);
-                aritylist = cdr(aritylist);
-                if(unify(arg1,list3(makeatom("/",OPE),pred,arity)) == YES)
-                    //if(proceed(NIL,nest) == YES)
-                    //    return(YES);
-
-                wp = save1;
-                unbind(save2);
-            }
-        }
-        wp = save1;
-        unbind(save2);
-        return(NO);
-    }
-    return(NO);
-}
-
-int b_current_op(int nest, int n){
-    int arg1,arg2,arg3,save1,save2,
-        lis,weight,spec,op,w,s,o;
-
-    save2 = sp;
-    if(n == 3){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
-
-        /*
-        e.g. ',' ':-'  aux of operator is SIMP
-        beclause of parsing. so change to OPE from SIMP
-        */
-        if(getatom(GET_NAME(arg3),OPE,hash(GET_NAME(arg3))))
-            arg3 = makeatom(GET_NAME(arg3),OPE);
-
-        lis = op_list;
-        spec = NIL;
-        save1 = wp;
-        while(!nullp(lis)){
-            weight = car(car(lis));
-            spec = cadr(car(lis));
-            op = caddr(car(lis));
-
-            w= unify(arg1,weight);
-            s = unify(arg2,spec);
-            o = unify(arg3,op);
-            if(w == YES && s == YES && o == YES)
-                //if(proceed(NIL,nest) == YES)
-                //    return(YES);
-            lis = cdr(lis);
-            wp = save1;
-            unbind(save2);
-        }
-        wp = save1;
-        unbind(save2);
-        return(NO);
-    }
-    return(NO);
-}
-
 
 //controle
 int b_cut(int nest, int n){
@@ -5019,13 +4835,14 @@ int b_number_codes(int nest, int n){
 
 
 //-----structure------
-int b_functor(int nest, int n){
-    int arg1,arg2,arg3,res,i;
+int b_functor(int arglist, int rest){
+    int n,arg1,arg2,arg3,res,i;
 
+    n = length(arglist);
     if(n == 3){
-        arg1 = deref(goal[2]);
-        arg2 = deref(goal[3]);
-        arg3 = deref(goal[4]);
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+        arg3 = deref(caddr(arglist));
 
         // to avoid compier bug {}
         if(structurep(arg2) && car(arg2) == CURL && length(arg2) == 1)
@@ -5111,9 +4928,10 @@ int b_functor(int nest, int n){
     return(NO);
 }
 
-int b_arg(int nest, int n){
-    int arg1,arg2,arg3,elt,i;
+int b_arg(int arglist, int rest){
+    int n,arg1,arg2,arg3,elt,i;
 
+    n = length(arglist);
     if(n == 3){
         arg1 = deref(goal[2]);
         arg2 = deref(goal[3]);
@@ -5139,69 +4957,6 @@ int b_arg(int nest, int n){
         }
     }
     return(NO);
-}
-
-int b_numbervars(int nest, int n){
-    int arg1,arg2,arg3,vars,i,pred;
-
-    if(n == 3){
-        arg1 = deref(goal[2]); //term
-        arg2 = deref(goal[3]); //start
-        arg3 = deref(goal[4]); //end
-
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"numbervars ",arg1);
-        if(!integerp(arg2))
-            error(NOT_INT,"numbervars ",arg2);
-        if(!wide_variable_p(arg3) && !integerp(arg3))
-            error(NOT_INT,"numbervars ",arg3);
-
-        vars = listreverse(unique(varslist(arg1)));
-        i = GET_INT(arg2);
-        while(!nullp(vars)){
-            pred = makeatom("$VAR",SIMP);
-            SET_AUX(pred,PRED);
-            unify(car(vars),list2(pred,makeint(i)));
-            vars = cdr(vars);
-            i++;
-        }
-        if(unify(arg3,makeint(i)) == YES)
-            return(YES);
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
-int b_predicate_property(int nest, int n){
-    int arg1,arg2;
-
-    if(n == 2){
-        arg1 = deref(goal[2]); //term
-        arg2 = deref(goal[3]); //prop
-
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"predicate_property ",arg1);
-
-        if(atomp(arg1) && GET_AUX(arg1) == SYS)
-            return(unify(arg2,makeconst("built_in")));
-        else if(structurep(arg1) && GET_AUX(car(arg1)) == SYS)
-            return(unify(arg2,makeconst("built_in")));
-        else if(atomp(arg1) && GET_AUX(arg1) == PRED &&
-                GET_CAR(arg1) != NIL)
-            return(unify(arg2,makeatom("dynamic",SYS)));
-        else if(structurep(arg1) && GET_AUX(car(arg1)) == PRED &&
-                GET_CAR(car(arg1)) != NIL)
-            return(unify(arg2,makeatom("dynamic",SYS)));
-        else if(atomp(arg1) && GET_AUX(arg1) == COMP)
-            return(unify(arg2,makeconst("static")));
-        else if(structurep(arg1) && GET_AUX(car(arg1)) == COMP)
-            return(unify(arg2,makeconst("static")));
-        else
-            return(NO);
-    }
-    return(NO);
-
 }
 
 //-----other----

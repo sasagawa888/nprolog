@@ -54,11 +54,6 @@ int line;
 int column;
 int trail_end;  //for comiler. get end of trail point
 double micro_second;
-p_cut1 cut_function[2]; // for compiled code o_cut !
-                        // cut_function[0] <- cut_pt = 0
-                        // cut_function[1] <- longjmp(cut_buf[cut_pt],1);
-int module[10][2];
-int module_pt = 0;
 int module_name = NIL;
 int export_list = NIL;
 int meta_list = NIL;
@@ -154,20 +149,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"make_directory"},{"directory_exists"},{"current_directory"},
 {"expand_path"},{"delete_file"},{"file_exists"},{"decompose_file_name"},
 {"environment_variable"},{"file_modification_time"},
-{"server_create"},{"server_accept"},{"client_connect"},{"socket_send"},
-{"socket_recieve"},{"socket_close"},{"sort"},{"keysort"},{"length"},
-{"c_lang"},{"c_define"},{"c_include"},{"c_option"},{"c_global"},
-{"o_include_cut"},{"o_has_cut"},{"o_c_define"},{"o_c_include"},
-{"o_c_option"},{"o_c_global"},{"o_clause_with_arity"},
-{"o_variable_convert"},{"o_filename"},{"o_arity_count"},
-{"o_reconsult_predicate_list"},{"o_defined_predicate"},
-{"o_is"},{"o_compiler_anoymous"},
-{"o_compiler_variable"},{"o_generate_variable"},{"o_generate_all_variable"},
-{"o_self_introduction"},{"o_dynamic_check"},{"o_get_dynamic"},
-{"o_get_execute"},{"o_write_original_variable"},{"o_atom_convert"},
-{"o_generate_before_cut"},{"o_generate_after_cut"},{"o_generated_module"},
-{"o_argument_list"},{"o_decompose"},{"o_property"},
-{"o_has_c_lang"},{"o_generate_before_c_lang"},{"o_generate_after_c_lang"},
+{"sort"},{"keysort"},{"length"},{"call"},
 };
 
 //compiled predicate
@@ -177,7 +159,7 @@ char compiled[COMPILED_NUMBER][30] ={
 {"current_prolog_flag"},{"current_op"},{"current_module"},
 {"current_visible"},{"stream_property"},{"between"},
 {"bagof"},{"setof"},{"sub_atom"},{"atom_concat"},
-{"call"},{"setup_call_cleanup"},{"o_reconsult_predicate"},
+{"setup_call_cleanup"},{"o_reconsult_predicate"},
 };
 
 //extened predicate
@@ -197,7 +179,7 @@ int input_stream;
 int output_stream;
 int error_stream;
 
-#if defined(__linux) || defined(__OpenBSD__)
+
 //-----editor-----
 int repl_flag = 1;  //for REPL read_line 1=on, 0=off
 int buffer[256][10];
@@ -220,7 +202,7 @@ int ed_quote_color = 3;   //default yellow
 int ed_comment_color = 4;  //default blue
 int ed_function_color = 2; //default green
 int ed_incomment = -1; /*...*/
-#endif
+
 
 
 int main(int argc, char *argv[]){
@@ -295,12 +277,6 @@ void init_repl(void){
     wp = HEAPSIZE+1;
     unbind(0);
     sp = 0;
-    tp = 0;
-    trail_end = 0;
-    cut_flag = 0;
-    cleanup_dt = NIL;
-    numbervars_top_pt = 0;
-    numbervars_base_pt = 0;
     //initialize variant variable
     for(i=0; i<VARIANTSIZE; i++){
         variant[i][0] = UNBIND;
@@ -375,13 +351,16 @@ int prove(int goal, int bindings, int rest, int n){
     int clause,clauses,clause1,varlis,save;
 
     goal = deref(goal);
+    print(goal);
+    getchar();
+    printf("\n");
 
     if(nullp(goal)){
         return(prove_all(rest,bindings,n));
     }
     else if(builtinp(goal)){
         if(atomp(goal)){
-            if((GET_SUBR(goal))(cdr(goal),rest) == YES)
+            if((GET_SUBR(goal))(NIL,rest) == YES)
                 return(prove_all(rest,sp,n+1));
 
             unbind(bindings);
@@ -397,7 +376,7 @@ int prove(int goal, int bindings, int rest, int n){
     }
     else if(compiledp(goal)){
         if(atomp(goal)){
-            if((GET_SUBR(goal))(cdr(goal),rest) == YES)
+            if((GET_SUBR(goal))(NIL,rest) == YES)
                 return(YES);
 
             return(NO);
@@ -410,7 +389,10 @@ int prove(int goal, int bindings, int rest, int n){
         }
     }
     else if(predicatep(goal)){
-        clauses = GET_CAR(car(goal));
+        if(atomp(goal))
+            clauses = GET_CAR(goal);
+        else
+            clauses = GET_CAR(car(goal));
         while(!nullp(clauses)){
             save = wp;
             clause = car(clauses);
@@ -436,337 +418,10 @@ int prove(int goal, int bindings, int rest, int n){
             unbind(bindings);
         }
     }
-
-    
     return(NO);
 }
 
-/*
-int resolve_all(int end, int bindings, int n){
-    trail_end = end;
-    if(tp <= end)
-        return(YES);
-    else
-        return(resolve(end,bindings,tp-1,n+1));
-}
 
-int resolve(int end, int bindings, int choice, int n){
-    int clause,clauses,varlis,save1,save2,save3,save4,save5,temp;
-
-    proof++;
-    checkgbc();
-    #if _WIN32
-    if(n > 250000)
-        error(RESOURCE_ERR,"resolve ",NIL);
-
-    #elif __linux
-    if(n > 150000)
-        error(RESOURCE_ERR,"resolve ",NIL);
-    #endif
-    store_goal(n);
-    trail_end = end;
-    if((trace_flag == FULL && n < trace_nest) ||
-       (trace_flag == SPY && aritycheck(goal[1],goal[0]))){
-        if(goal[1] != OR){ //normal predicate
-            printf("(%d) CALL: ", n); print_goal();
-        }
-        else{ // or disjunction
-            printf("(%d) CALL: ;(",n);
-            sprint(goal[2]);
-            printf(",");
-            sprint(goal[3]);
-            printf(")");
-        }
-        debugger(end,bindings,choice,n);
-    }
-    //builtin
-    if(GET_AUX(goal[1]) == SYS){
-        save1 = tp;
-        save2 = trail_end;
-        if((GET_SUBR(goal[1]))(0,goal[0] - 1) == YES)
-            if(resolve_all(end,sp,n+1) == YES)
-                return(YES);
-
-        tp = save1;
-        trail_end = save2;
-        retract_goal(n);
-        unbind(bindings);
-        return(NO);
-    }
-    //compiled
-    else if(GET_AUX(goal[1]) == COMP){
-        if((GET_SUBR(goal[1]))(n, goal[0]-1) == YES)
-            return(YES);
-
-        retract_goal(n);
-        return(NO);
-    }
-    //compiled user operation
-    else if(GET_AUX(goal[1]) == USER &&
-            getatom(GET_NAME(goal[1]),COMP,hash(GET_NAME(goal[1]))) != 0){
-
-        if((GET_SUBR(makecomp(GET_NAME(goal[1]))))(n, goal[0]-1) == YES)
-            return(YES);
-
-        retract_goal(n);
-        return(NO);
-    }
-    //predicate
-    else if(GET_AUX(goal[1]) == PRED ||
-            GET_AUX(goal[1]) == USER){
-        clauses = GET_CAR(goal[1]);
-        // when not defined clause or not match arity
-        // invoke error or return NO or warning according to flag
-        if(clauses == NIL ||
-           !memq(makeint(goal[0]-1),GET_ARITY(goal[1]))){
-            if(undefined_flag == 0)
-    			      return(NO);
-            else if(GET_OPT1(goal[1]) == NO)
-                return(NO);
-    		    else if(undefined_flag == 1)
-    			      error(UNDEF_PRED,"resolve",NIL);
-    		else if(undefined_flag == 2){
-    		    printf("Warning: undefined predicate ");
-        		print_goal();
-                printf("\n");
-        		return(NO);
-    		    }
-        }
-        while(!nullp(clauses)){
-            save5 = wp;
-            clause = car(clauses);
-            clauses = cdr(clauses);
-            varlis = GET_VAR(clause);
-            if(predicatep(clause)){
-                assign_variant(varlis);
-                set_head(clause);
-                release_variant(varlis);
-                if(unify_head() == YES){
-                    if(trace_flag == FULL && !nullp(clauses) &&
-                       n < trace_nest){
-                        printf("(%d) EXIT: ",n); print_goal();
-                        debugger(end,bindings,choice,n);
-                    }
-                    if((temp=resolve_all(end,sp,n+1)) == YES)
-                        return(YES);
-                    else if(temp == CUT)
-                        goto cut;
-                }
-            }
-            else{
-                assign_variant(varlis);
-                set_head(cadr(clause));
-                if(unify_head() == YES){
-                    if(GET_OPT(clause) != HASCUT){
-                        push_trail_body(caddr(clause));
-                        release_variant(varlis);
-                        if(resolve_all(end,sp,n+1) == YES){
-                            if(trace_flag == FULL && n < trace_nest){
-                                printf("(%d) EXIT: ",n); print_goal();
-                                debugger(end,bindings,choice,n);
-                            }
-                            return(YES);
-                        }
-                        else if(cut_flag == 1 && GET_OPT1(clause) == HASIFTHEN){
-                            cut_flag = 0;
-                            tp = choice;
-                            retract_goal(n);
-                            unbind(bindings);
-                            goto cut;
-                        }
-                        else if(cut_flag == 1){
-                            tp = choice;
-                            retract_goal(n);
-                            unbind(bindings);
-                            goto cut;
-                        }
-                    }
-                    //clause has a cut
-                    else{
-                        save1 = tp;
-                        save2 = memory_variant(varlis);
-                        push_trail_body(before_cut(caddr(clause)));
-                        release_variant(varlis);
-                        if(resolve_all(save1,sp,n+1) == YES){
-                            recall_variant(save2);
-                            push_trail_body(after_cut(caddr(clause)));
-                            release_variant(varlis);
-                            if(resolve_all(end,sp,n+1) == YES){
-                                if(trace_flag == FULL && n < trace_nest){
-                                    printf("(%d) EXIT: ",n); print_goal();
-                                    debugger(end,bindings,choice,n);
-                                }
-                                return(YES);
-                            }
-                            else if(cut_flag == 1 && GET_OPT1(clause) == HASIFTHEN){
-                                cut_flag = 0;
-                                tp = choice;
-                                retract_goal(n);
-                                unbind(bindings);
-                                goto cut;
-                            }
-                            else if(cut_flag == 1){
-                                tp = choice;
-                                retract_goal(n);
-                                unbind(bindings);
-                                goto cut;
-                            }
-                            else{
-                                tp = choice;
-                                trail_end = end;
-                                retract_goal(n);
-                                unbind(bindings);
-                                goto cut;
-                            }
-                        }
-                    }
-                }
-            }
-            if(trace_flag == FULL && !nullp(clauses) && n < trace_nest){
-                printf("(%d) REDO: ",n); sprint(car(clauses));
-                debugger(end,bindings,choice,n);
-            }
-            tp = choice;
-            retract_goal(n);
-            unbind(bindings);
-            wp = save5;
-        }// end of while loop
-        cut:
-        if(trace_flag == FULL && n < trace_nest){
-            printf("(%d) FAIL: ",n); print_goal();
-            printf("cut_flag %d" ,cut_flag);
-            debugger(end,bindings,choice,n);
-        }
-        if(cut_flag == 0)
-            return(NO);
-        else
-            return(CUT);
-    }
-    //disjunction
-    else if(goal[1] == OR){
-        save1 = tp;
-        save2 = trail_end;
-        save3 = goal[2];
-        save4 = goal[3];
-        if(!has_cut_p(save3)){
-            if(!ifthenp(save3)){
-                if(!callablep(save3))
-                    error(NOT_CALLABLE, "; ", save3);
-                push_trail_body1(save3);
-                trail_end = save2;
-                if(resolve_all(end,sp,n+2) == YES)
-                    return(YES);
-                else{
-                    tp = choice;
-                    unbind(bindings);
-                    trail_end = end;
-                    retract_goal(n);
-                }
-            }
-            else{// case of if_then(->)
-                push_trail_body1(save3);
-                if(resolve_all(save1,sp,n+1) == YES){
-                    trail_end = save2;
-                    retract_goal(n);
-                    if(resolve_all(end,sp,n+2) == YES)
-                        return(YES);
-                    else{
-                        tp = choice;
-                        unbind(bindings);
-                        trail_end = end;
-                        retract_goal(n);
-                        if(cut_flag == 0)
-                            return(NO); //not back track when if_then
-                        else
-                            return(CUT);
-                    }
-                }
-                
-                else{
-                    if(cut_flag == 1){
-                        cut_flag = 0;
-                        tp = choice;
-                        unbind(bindings);
-                        trail_end = end;
-                        retract_goal(n);
-                        return(NO); //not back track when if_then
-                    }
-                }
-                
-            }
-        }
-        else{
-            push_trail_body1(before_cut(save3));
-            if(resolve_all(save1,sp,n+1) == YES){
-                trail_end = save2;
-                push_trail_body1(after_cut(save3));
-                trail_end = save2;
-                if(resolve_all(save1,sp,n+2) == YES){
-                    trail_end = save2;
-                    retract_goal(n);
-                    if(resolve_all(end,sp,n+3) == YES)
-                        return(YES);
-                    else{
-                        tp = choice;
-                        unbind(bindings);
-                        trail_end = end;
-                        retract_goal(n);
-                        return(NO);
-                    }
-                }
-                else{
-                    tp = choice;
-                    trail_end = end;
-                    retract_goal(n);
-                    unbind(bindings);
-                    goto cut;
-                }
-            }
-        }
-        unbind(bindings);
-        tp = save1;
-        if(!has_cut_p(save4)){
-            if(!callablep(save4))
-                    error(NOT_CALLABLE, "; ", save4);
-            push_trail_body1(save4);
-            trail_end = save2;
-            if(resolve_all(end,sp,n+2) == YES)
-                return(YES);
-        }
-        else{
-            cut_flag = 1;
-            push_trail_body1(before_cut(save4));
-            if(resolve_all(save1,sp,n+1) == YES){
-                trail_end = save2;
-                push_trail_body1(after_cut(save4));
-                trail_end = save2;
-                if(resolve_all(save1,sp,n+2) == YES){
-                    trail_end = save2;
-                    if(resolve_all(end,sp,n+3) == YES)
-                        return(YES);
-                }
-                else{
-                    tp = choice;
-                    trail_end = end;
-                    retract_goal(n);
-                    unbind(bindings);
-                    goto cut;
-                }
-            }
-        }
-        tp = save1;
-        trail_end = save2;
-        retract_goal(n);
-        unbind(bindings);
-        if(trace_flag == FULL && n < trace_nest){
-            printf("(%d) FAIL: ",n);sprint(save3), sprint(save4);
-            debugger(end,bindings,choice,n);
-        }
-        return(NO);
-    }
-    return(NO);
-}
-*/
 int before_cut(int x){
     return(before_cut1(x,NIL));
 }
@@ -844,13 +499,8 @@ int after_cut(int x){
     return(x);
 }
 
-#ifdef _WIN32
-#define FLUSH fflush(stdin);
-#elif __OpenBSD__
-#define FLUSH fpurge(stdin);
-#else
 #define FLUSH __fpurge(stdin);
-#endif
+
 void debugger(int end, int bindings, int choice, int n){
     int c;
 
