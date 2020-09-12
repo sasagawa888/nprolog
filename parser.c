@@ -8,11 +8,6 @@
 #include <sys/time.h>
 #include <float.h>
 #include <sys/stat.h>
-#if _WIN32
-#include <windows.h>
-#include <direct.h>
-#endif
-#if __linux
 #include <stdio_ext.h>
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -22,17 +17,6 @@
 #include <unistd.h>
 #include <errno.h>
 #include <dlfcn.h>
-#endif
-#if __OpenBSD__
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <unistd.h>
-#include <errno.h>
-#include <dlfcn.h>
-#endif
 #include "npl.h"
 
 //#define CHECK   1 //for parser debug check
@@ -466,21 +450,6 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
 
 //-------readitem()--------
 
-#if _WIN32
-wint_t readc(void){
-    wint_t c;
-    c = getwc(GET_PORT(input_stream));
-
-    if(c == EOL){
-        line++;
-        column = 0;
-    }
-    else
-        column++;
-
-    return(c);
-}
-#elif __linux
 int readc(void){
     int c;
 
@@ -498,35 +467,7 @@ int readc(void){
 
     return(c);
 }
-#elif __OpenBSD__
-int readc(void){
-    int c;
 
-    if(input_stream == standard_input && repl_flag)
-        c = read_line(3);
-    else
-        c = getc(GET_PORT(input_stream));
-
-    if(c == EOL){
-        line++;
-        column = 0;
-    }
-    else
-        column++;
-
-    return(c);
-}
-#endif
-
-#if _WIN32
-void unreadc(char c){
-    if(c == EOL)
-        line--;
-    else
-        column--;
-    ungetc(c,GET_PORT(input_stream));
-}
-#elif __linux
 void unreadc(char c){
     if(c == EOL)
         line--;
@@ -537,29 +478,9 @@ void unreadc(char c){
     else
         ungetc(c,GET_PORT(input_stream));
 }
-#elif __OpenBSD__
-void unreadc(char c){
-    if(c == EOL)
-        line--;
-    else
-        column--;
-    if(input_stream == standard_input && repl_flag)
-        c = read_line(-1);
-    else
-        ungetc(c,GET_PORT(input_stream));
-}
-#endif
 
 void gettoken(void){
-
-#if _WIN32
-    char c,c1;
-    int pos,i;
-#elif __linux
     int c,c1,pos,i;
-#elif __OpenBSD__
-    int c,c1,pos,i;
-#endif
 
     stok.space = NOTSKIP;
     if(stok.flag == BACK){
@@ -973,10 +894,6 @@ void gettoken(void){
             if(c == '\\'){
                 c = readc();
                 if(c == EOL){
-                    //on Windows LF+CR
-                    #if _WIN32
-                    readc();
-                    #endif
                     //skip eol
                     goto redo;
                 }
