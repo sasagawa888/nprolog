@@ -1,4 +1,6 @@
-test(20).
+% ?- test(0).
+
+test(20). 
 test(N) :-
     fizzbuzz(N),
     N1 is N+1,

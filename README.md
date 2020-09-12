@@ -27,7 +27,7 @@ I hope that Prolog will become more popular. I hope many people enjoy Prolog. NP
 
 ## example
 ```prolog
-N-Prolog Ver 0.01
+N-Prolog Ver 0.02
 ?- length([1,2,3],X).
 X = 3
 yes
@@ -50,6 +50,17 @@ X = [1,2,3]
 Y = [];
 no
 ?- 
+?- ['queens.pl'].
+yes
+?- test.
+....
+[9,7,2,4,1,8,5,3,6]
+[9,7,3,8,2,5,1,6,4]
+[9,7,4,2,8,6,1,3,5]
+no
+?- 
+
+
 
 ?- halt.
 - good bye -
@@ -59,17 +70,37 @@ no
 # builtin predicate
 
 ```
-=/2
-\=/2
+<
+=/
+\=
+= ..
+=<
+> 
+>=
+=:=
+=\=
+==
+\==
+@<
+@=<
+@>
+@>=
+abolish/1
+abort/0
 append/3
 assert/1
 asserta/1
 assertz/1
+atom/1
+atomic/1
 call/1
+edit/1
 fail/0
 float/1
+flush/0 
 gc/0
 halt/0
+ifthen/2
 integer/1
 is/2
 length/2
@@ -79,7 +110,10 @@ nl/0
 nonvar/1
 number/1
 not/1
+read/1
 reconsult/1
+sort/2
+time/1
 true/0
 var/1
 write/1
