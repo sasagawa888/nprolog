@@ -16,6 +16,7 @@ To invoke opl, enter command from terminal
 
 -c option is for start up file.
 
+e.g.
 ./npl -c init.pl
 
 -r option is for Not editable REPL mode.
@@ -134,7 +135,7 @@ writeq/1
 writeq/2
 ```
 
-# builtin (extention)
+# builtin (extension)
 ```
 append/3
 member/2
