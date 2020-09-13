@@ -31,7 +31,6 @@ int unread = NIL;     //for parse
 int paren_nest = 0;   //for parse check ((()))
 int line;
 int column;
-double micro_second;
 
 
 //------pointer----
@@ -53,7 +52,6 @@ int debug_flag = 1;  // 0=normal mode, 1=debug mode
 int sexp_flag = 0;
 int arguments_flag = 1; //1= 1,2,3 -> (1,2,3) 0= 1,2,3 -> 1,2,3
 int undefined_flag = 1; //0=fail, 1=error, 2=warning
-int double_flag = 0; //0=code, 1=char, 2=string for string
 int mode_flag = 1;  // 0=SJIS, 1=Unicod
 int quoted_flag = 1; // 0=not print ' 1=print '
 int ignore_flag = 0; // 0=infix notation 2+2 1=prefix notation +(2,2)
@@ -805,7 +803,7 @@ void print(int addr){
                     else
                         fprintf(GET_PORT(output_stream),"<stream%d>",addr);
                     break;
-        case STR:   fprintf(GET_PORT(output_stream),"\"%s\"", GET_NAME(addr));
+        case STR:   fprintf(GET_PORT(output_stream),"$%s$", GET_NAME(addr));
                     break;
         default:    fprintf(GET_PORT(output_stream),"<undef>"); break;
     }

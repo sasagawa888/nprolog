@@ -218,83 +218,21 @@ int makecopy(int x){
 }
 
 int makestr(char *name){
-    int pos,code,res;
-    char str1[STRSIZE],str2[10],*str;
+    int res;
+    char *str;
 
-    if(double_flag == 2){ //string mode
-        res = freshcell();
-        SET_TAG(res,STR);
-        str = (char *)malloc(strlen(name)+1);
-        if(str == NULL)
-            error(MALLOC_OVERF,"makestr",NIL);
-        heap[res].name = str;
-        strcpy(heap[res].name,name);
-        SET_CAR(res,NIL);
-        SET_CDR(res,NIL);
-        SET_AUX(res,NIL);
-        return(res);
-    }
-
-    //codes mode or chars mode
-    res = NIL;
-    strcpy(str1,name);
-    pos = 0;
-    code = NIL;
-    while(str1[pos] != NUL){
-        if(mode_flag == 0 && iskanji(str1[pos])){ //SJIS
-            str2[0] = str1[pos++];
-            str2[1] = str1[pos++];
-            str2[2] = NUL;
-        }
-        else if(mode_flag == 1 && isUni2(str1[pos])){
-            str2[0] = str1[pos++];
-            str2[1] = str1[pos++];
-            str2[2] = NUL;
-        }
-        else if(mode_flag == 1 && isUni3(str1[pos])){
-            str2[0] = str1[pos++];
-            str2[1] = str1[pos++];
-            str2[2] = str1[pos++];
-            str2[3] = NUL;
-        }
-        else if(mode_flag == 1 && isUni4(str1[pos])){
-            str2[0] = str1[pos++];
-            str2[1] = str1[pos++];
-            str2[2] = str1[pos++];
-            str2[3] = str1[pos++];
-            str2[4] = NUL;
-        }
-        else if(mode_flag == 1 && isUni5(str1[pos])){
-            str2[0] = str1[pos++];
-            str2[1] = str1[pos++];
-            str2[2] = str1[pos++];
-            str2[3] = str1[pos++];
-            str2[4] = str1[pos++];
-            str2[5] = NUL;
-        }
-        else if(mode_flag == 1 && isUni6(str1[pos])){
-            str2[0] = str1[pos++];
-            str2[1] = str1[pos++];
-            str2[2] = str1[pos++];
-            str2[3] = str1[pos++];
-            str2[4] = str1[pos++];
-            str2[5] = str1[pos++];
-            str2[6] = NUL;
-        }
-        else{//ascii code
-            str2[0] = str1[pos++];
-            str2[1] = NUL;
-        }
-        if(double_flag == 0 && mode_flag == 0) //SJIS
-            code = makeint(sjis_to_code(str2));
-        else if(double_flag == 0 && mode_flag == 1) //unicode
-            code = makeint(utf8_to_ucs4(str2));
-        else if(double_flag == 1) // chars
-            code = makeconst(str2);
-
-        res = cons(code,res);
-        }
-    return(listreverse(res));
+    
+    res = freshcell();
+    SET_TAG(res,STR);
+    str = (char *)malloc(strlen(name)+1);
+    if(str == NULL)
+        error(MALLOC_OVERF,"makestr",NIL);
+    heap[res].name = str;
+    strcpy(heap[res].name,name);
+    SET_CAR(res,NIL);
+    SET_CDR(res,NIL);
+    SET_AUX(res,NIL);
+    return(res);
 }
 
 
