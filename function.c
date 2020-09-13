@@ -3581,7 +3581,7 @@ int f_divide(int x, int y){
 }
 
 int f_div(int x, int y){
-    int q,r;
+    int q;
 
     if(wide_variable_p(x))
         error(INSTANTATION_ERR,"/ ",x);
@@ -3595,24 +3595,7 @@ int f_div(int x, int y){
     	error(DIV_ZERO,"/",NIL);
 
     q = quotient(x,y);
-    r = s_remainder(x,y);
-    if(zerop(r))
-        return(q);
-    else
-        if(positivep(x) && negativep(y)){
-            if(rounding_flag == 0) //toward_zero
-                return(q);
-            else //down
-                return(minus(q,makeint(1)));
-        }
-        else if(negativep(x) && positivep(y)){
-            if(rounding_flag == 0) //toward_zero
-                return(q);
-            else //down
-                return(minus(q,makeint(1)));
-        }
-        else
-            return(q);
+    return(q);
 }
 
 int f_mod(int x, int y){
@@ -3660,10 +3643,6 @@ int f_rem(int x, int y){
         error(NOT_INT,"rem ",y);
 
     q = quotient(x,y);
-    if(negativep(q) && !eqp(x,mult(y,q))){
-        if(rounding_flag == 1) // toward_zero
-        q = minus(q,makeint(1));
-    }
     r = minus(x,mult(y,q));
     return(r);
 }

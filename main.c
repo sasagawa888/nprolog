@@ -51,13 +51,12 @@ int assert_flag = 0; // 0=asserta, 1=assertz
 int debug_flag = 1;  // 0=normal mode, 1=debug mode
 int sexp_flag = 0;
 int arguments_flag = 1; //1= 1,2,3 -> (1,2,3) 0= 1,2,3 -> 1,2,3
-int undefined_flag = 1; //0=fail, 1=error, 2=warning
 int mode_flag = 1;  // 0=SJIS, 1=Unicod
 int quoted_flag = 1; // 0=not print ' 1=print '
 int ignore_flag = 0; // 0=infix notation 2+2 1=prefix notation +(2,2)
 int numbervars_flag = 0; // 0=normal 1= A -> '_0001
 int link_flag = 0;  // 0=not-link, 1=linked
-int rounding_flag = 0; //0 = toward_zero, 1=down
+//int rounding_flag = 0; //0 = toward_zero, 1=down
 int cut_flag = 0;  //for if then else 0=not exist cut, 1=exist cut
 int listing_flag = 0;  //for print clause, 0=normal, 1=format print
 int colon_sets_calling_context_flag = 1; //1=true, 0=false
