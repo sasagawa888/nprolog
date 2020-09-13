@@ -807,7 +807,7 @@ void display_buffer(){
                           buffer[col][0] != EOL){
                         printf("%c", buffer[col][0]);
                         col++;
-                        if(buffer[col-1][0] == '\'')
+                        if(buffer[col-1][0] == '"')
                             break;
                    }
                    ESCRST;

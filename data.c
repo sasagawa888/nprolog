@@ -855,6 +855,42 @@ int has_cut_p(int addr){
         return(0);
 }
 
+int has_ifthen_p(int addr){
+    if(!structurep(addr))
+        return(0);
+    else if(operationp(addr) && car(addr) == IFTHEN)
+        return(1);
+    else if(operationp(addr) && car(addr) == OR &&
+            (has_cut_p(cadr(addr)) || has_cut_p(caddr(addr))))
+        return(1);
+    else if(operationp(addr) && car(addr) == AND &&
+            (has_cut_p(cadr(addr)) || has_cut_p(caddr(addr))))
+        return(1);
+    else
+        return(0);
+}
+
+
+int has_c_lang_p(int addr){
+    if(c_lang_p(addr))
+        return(1);
+    else if(!structurep(addr))
+        return(0);
+    else if(operationp(addr) && car(addr) == AND &&
+            (has_c_lang_p(cadr(addr)) || has_c_lang_p(caddr(addr))))
+        return(1);
+    else
+        return(0);
+}
+
+
+int c_lang_p(int addr){
+    if(structurep(addr) &&
+       IS_INCELL(car(addr)) && eqlp(car(addr),makeconst("c_lang")))
+        return(1);
+    else
+        return(0);
+}
 
 // for parser. if weight of operator is heavy than 999
 int heavy999p(int addr){
@@ -865,6 +901,29 @@ int heavy999p(int addr){
         return(0);
 }
 
+int before_c_lang(int x){
+    if(nullp(x))
+        return(NIL);
+    else if(c_lang_p(x))
+        return(NIL);
+    else if(car(x) == AND && c_lang_p(cadr(x)))
+        return(NIL);
+    else if(car(x) == AND && c_lang_p(caddr(x)))
+        return(cadr(x));
+    else
+        return(list3(AND,cadr(x),before_c_lang(caddr(x))));
+    return(x);
+}
+
+int after_c_lang(int x){
+    if(c_lang_p(x))
+        return(x);
+    else if(car(x) == AND && c_lang_p(cadr(x)))
+        return(x);
+    else if(car(x) == AND)
+        return(after_c_lang(caddr(x)));
+    return(x);
+}
 
 
 int callablep(int addr){
