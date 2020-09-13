@@ -94,6 +94,7 @@ assertz/1
 atom/1
 atomic/1
 call/1
+chdir/1
 compare/3
 consult/1
 display/1
@@ -110,6 +111,7 @@ length/2
 listing/0
 listing/1
 member/2
+mkdir/1
 nl/0
 nonvar/1
 number/1

@@ -765,8 +765,8 @@ void initbuiltin(void){
     defbuiltin("%ask",b_ask);
     defbuiltin("system",b_system);
     defbuiltin("sort",b_sort);
-    defbuiltin("make_directory",b_make_directory);
-    defbuiltin("change_directory",b_change_directory);
+    defbuiltin("mkdir",b_make_directory);
+    defbuiltin("chdir",b_change_directory);
     defbuiltin("length",b_length);
     defbuiltin("call",b_call);
     defbuiltin("edit",b_nano);

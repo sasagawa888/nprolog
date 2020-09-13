@@ -97,32 +97,24 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"nospy"},{"atom"},{"integer"},{"real"},{"float"},{"number"},{"compound"},
 {"var"},{"nonvar"},{"atomic"},{"list"},{"gc"},{"time"},
 {"char_set"},{"char_code"},{"atom_chars"},{"atom_codes"},{"name"},
-{"number_chars"},{"number_codes"},{"debug"},{"bounded"},{"max_arity"},
-{"undefined_predicate"},{"discontiguous"},
-{"findall"},{"ensure_loaded"},{"dynamic"},
-{"module"},{"export"},{"import"},{"end_module"},{"end_body"},{"body"},
-{"reexprt"},{"meta"},{"calling_context"},
+{"number_chars"},{"number_codes"},{"debug"},{"bounded"},
 {"catch"},{"throw"},{"get_char"},{"get_code"},{"put_char"},{"put_code"},
 {"current_input"},{"current_output"},{"unify_with_occurs_check"},
 {"set_input"},{"set_output"},{"flush_output"},{"listreverse"},{"nano"},
 {"numbervars"},{"retractall"},{"get_byte"},
 {"string"},{"string_chars"},{"string_codes"},{"ground"},
-{"put_byte"},{"predicate_property"},{"set_prolog_flag"},
-{"succ"},{"term_variables"},{"use_module"},{"compare"},{"freeze"},
-{"make_directory"},{"directory_exists"},{"current_directory"},
-{"expand_path"},{"delete_file"},{"file_exists"},{"decompose_file_name"},
-{"environment_variable"},{"file_modification_time"},
+{"put_byte"},
+{"succ"},{"term_variables"},{"compare"},
+{"mkdir"},{"chdir"},
 {"sort"},{"keysort"},{"length"},{"call"},
 };
 
 //compiled predicate
 char compiled[COMPILED_NUMBER][30] ={
-{"append"},{"member"},{"repeat"},{"select"},{"maplist"},
-{"retract"},{"clause"},{"current_predicate"},
-{"current_prolog_flag"},{"current_op"},{"current_module"},
+{"append"},{"member"},{"repeat"},
+{"retract"},{"clause"},
 {"current_visible"},{"stream_property"},{"between"},
-{"bagof"},{"setof"},{"sub_atom"},{"atom_concat"},
-{"setup_call_cleanup"},{"o_reconsult_predicate"},
+{"sub_atom"},{"atom_concat"}
 };
 
 //extened predicate
