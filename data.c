@@ -1397,6 +1397,32 @@ int insert(int x,int y){
         return(listcons(car(x),insert(cdr(x),y)));
 }
 
+int keysort(int x){
+    int res;
+
+    res = NIL;
+    while(!nullp(x)){
+        res = keyinsert(res,(car(x)));
+        x = cdr(x);
+    }
+    return(res);
+}
+
+int keyinsert(int x,int y){
+
+    if(nullp(x))
+        return(list1(y));
+    else if(!(length(car(x)) == 3 && eqlp(caar(x),makeope("-"))))
+        error(ILLEGAL_ARGS,"keysort ", car(x));
+    else if(sortsmaller(cadr(y),cadr(car(x))))
+        return(listcons(y,x));
+    else
+        return(listcons(car(x),keyinsert(cdr(x),y)));
+
+    return(NIL);
+}
+
+
 int sortsmaller(int x, int y){
     if(variablep(x) && !variablep(y))
         return(1);

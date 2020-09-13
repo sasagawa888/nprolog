@@ -765,6 +765,7 @@ void initbuiltin(void){
     defbuiltin("%ask",b_ask);
     defbuiltin("system",b_system);
     defbuiltin("sort",b_sort);
+    defbuiltin("keysort",b_keysort);
     defbuiltin("mkdir",b_make_directory);
     defbuiltin("chdir",b_change_directory);
     defbuiltin("length",b_length);
@@ -4254,4 +4255,16 @@ int b_sort(int arglist, int rest){
     return(NO);
 }
 
+int b_keysort(int arglist, int rest){
+    int n,arg1,arg2;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+
+        return(unify(arg2,keysort(arg1)));
+    }
+    return(NO);
+}
 

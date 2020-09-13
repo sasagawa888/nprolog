@@ -107,6 +107,7 @@ halt/0
 ifthen/2
 integer/1
 is/2
+keysort/2
 length/2
 listing/0
 listing/1
