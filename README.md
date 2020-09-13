@@ -113,6 +113,7 @@ length/2
 listing/0
 listing/1
 mkdir/1
+name/2
 nl/0
 nonvar/1
 nospy/1

@@ -774,6 +774,7 @@ void initbuiltin(void){
     defbuiltin("call",b_call);
     defbuiltin("edit",b_nano);
     defbuiltin("reverse",b_reverse);
+    defbuiltin("name",b_atom_codes);
 
 
     defcompiled("repeat",b_repeat);
@@ -2565,6 +2566,113 @@ int b_clause(int arglist, int rest){
         wp = save1;
         unbind(save2);
         return(NO);
+    }
+    return(NO);
+}
+
+//transform
+int b_atom_codes(int arglist, int rest){
+    int n,arg1,arg2,ls,atom,pos,code,res;
+    char str1[STRSIZE],str2[10];
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+        if(wide_variable_p(arg1) && listp(arg2) && length(arg2) == -1)
+            error(INSTANTATION_ERR,"atom_codes ",arg1);
+        if(!wide_variable_p(arg1) && !atomp(arg1))
+            error(NOT_ATOM,"atom_codes ",arg1);
+        if(wide_variable_p(arg1) && !listp(arg2))
+            error(NOT_LIST,"atom_codes ",arg2);
+        if(wide_variable_p(arg1) && !atom_codes_list_p(arg2))
+            error(NOT_CHAR_CODE,"atom_codes ",arg2);
+
+
+        if(singlep(arg1) && !variablep(arg1)){
+            strcpy(str1,GET_NAME(arg1));
+            ls = NIL;
+            pos = 0;
+            while(str1[pos] != NUL){
+                if(str1[pos] == '\\'){
+                    str2[0] = str1[pos++];
+                    str2[1] = str1[pos++];
+                }
+                else if(mode_flag == 0 && iskanji(str1[pos])){ //SJIS
+                    str2[0] = str1[pos++];
+                    str2[1] = str1[pos++];
+                    str2[2] = NUL;
+                }
+                else if(mode_flag == 1 && isUni2(str1[pos])){
+                    str2[0] = str1[pos++];
+                    str2[1] = str1[pos++];
+                    str2[2] = NUL;
+                }
+                else if(mode_flag == 1 && isUni3(str1[pos])){
+                    str2[0] = str1[pos++];
+                    str2[1] = str1[pos++];
+                    str2[2] = str1[pos++];
+                    str2[3] = NUL;
+                }
+                else if(mode_flag == 1 && isUni4(str1[pos])){
+                    str2[0] = str1[pos++];
+                    str2[1] = str1[pos++];
+                    str2[2] = str1[pos++];
+                    str2[3] = str1[pos++];
+                    str2[4] = NUL;
+                }
+                else if(mode_flag == 1 && isUni5(str1[pos])){
+                    str2[0] = str1[pos++];
+                    str2[1] = str1[pos++];
+                    str2[2] = str1[pos++];
+                    str2[3] = str1[pos++];
+                    str2[4] = str1[pos++];
+                    str2[5] = NUL;
+                }
+                else if(mode_flag == 1 && isUni6(str1[pos])){
+                    str2[0] = str1[pos++];
+                    str2[1] = str1[pos++];
+                    str2[2] = str1[pos++];
+                    str2[3] = str1[pos++];
+                    str2[4] = str1[pos++];
+                    str2[5] = str1[pos++];
+                    str2[6] = NUL;
+                }
+                else{//ascii code
+                    str2[0] = str1[pos++];
+                    str2[1] = NUL;
+                }
+                if(str2[0] == '\\')
+                    code = ctrl_to_number(str2[1]);
+                else if(mode_flag == 0) //SJIS
+                    code = makeint(sjis_to_code(str2));
+                else //unicode
+                    code = makeint(utf8_to_ucs4(str2));
+                ls = cons(code,ls);
+            }
+            ls = listreverse(ls);
+            res = unify(arg2,ls);
+            return(res);
+        }
+        else if(structurep(arg2)){
+            ls = arg2;
+            str1[0] = NUL;
+            while(!nullp(ls)){
+                if(GET_INT(car(ls)) < ' ')
+                    sprintf(str2,"\\x%x\\",GET_INT(car(ls)));
+                else if(mode_flag == 0)
+                    sjis_to_char(GET_INT(car(ls)),str2);
+                else
+                    ucs4_to_utf8(GET_INT(car(ls)),str2);
+                strcat(str1,str2);
+                ls = cdr(ls);
+            }
+            atom = makeconst(str1);
+            res = unify(arg1,atom);
+            return(res);
+        }
+        else
+            return(NO);
     }
     return(NO);
 }

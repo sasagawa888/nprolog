@@ -95,7 +95,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"see"},{"seen"},{"tell"},{"told"},{"trace"},{"notrace"},{"spy"},
 {"nospy"},{"atom"},{"integer"},{"real"},{"float"},{"number"},{"compound"},
 {"var"},{"nonvar"},{"atomic"},{"list"},{"gc"},{"time"},
-{"char_set"},{"char_code"},{"atom_chars"},{"atom_codes"},{"name"},
+{"char_set"},{"char_code"},{"atom_chars"},{"name"},
 {"number_chars"},{"number_codes"},{"debug"},{"bounded"},
 {"catch"},{"throw"},{"get_char"},{"get_code"},{"put_char"},{"put_code"},
 {"current_input"},{"current_output"},{"unify_with_occurs_check"},
