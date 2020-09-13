@@ -768,10 +768,13 @@ void initbuiltin(void){
     defbuiltin("keysort",b_keysort);
     defbuiltin("mkdir",b_make_directory);
     defbuiltin("chdir",b_change_directory);
+    defbuiltin("inc",b_inc);
+    defbuiltin("dec",b_dec);
     defbuiltin("length",b_length);
     defbuiltin("call",b_call);
     defbuiltin("edit",b_nano);
     defbuiltin("reverse",b_reverse);
+
 
     defcompiled("repeat",b_repeat);
     defcompiled("append",b_append);
@@ -820,100 +823,6 @@ int b_repeat(int arglist, int rest){
         }
     unbind(save1);
     goto loop;
-    }
-    return(NO);
-}
-
-int b_member(int arglist, int rest){
-    int n,arg1,arg2,x,y,l,save1,save2,body;
-
-    save2 = sp;
-    n = length(arglist);
-    if(n == 2){
-        arg1 = deref(car(arglist));
-        arg2 = deref(cadr(arglist));
-
-
-        save1 = wp;
-        x = makevariant();
-        l = makevariant();
-        if(unify(arg1,x) == YES && unify(arg2,wlistcons(x,l)) == YES){
-            if(prove(NIL,sp,rest,0) == YES)
-                return(YES);
-        }
-        wp = save1;
-        unbind(save2);
-
-        save1 = wp;
-        x = makevariant();
-        y = makevariant();
-        l = makevariant();
-        if(unify(arg1,x) == YES &&
-           unify(arg2,wlistcons(y,l)) == YES){
-            body = wlist3(makeatom("member",COMP),x,l);
-            if(prove(body,sp,rest,0) == YES)
-                return(YES);
-        }
-        wp = save1;
-        unbind(save2);
-        return(NO);
-    }
-    return(NO);
-}
-
-int b_append(int arglist, int rest){
-    int n,arg1,arg2,arg3,x,ls,ys,zs,save1,save2,body;
-
-    save2 = sp;
-    body = NIL;
-    n = length(arglist);
-    if(n == 3){
-        arg1 = deref(car(arglist));
-        arg2 = deref(cadr(arglist));
-        arg3 = deref(caddr(arglist));
-
-        save1 = wp;
-        if(unify(arg1,NIL) == YES && unify(arg2,arg3) == YES){
-            if(prove(NIL,sp,rest,0) == YES)
-                return(YES);
-        }
-        wp = save1;
-        unbind(save2);
-
-        save1 = wp;
-        x = makevariant();
-        ls = makevariant();
-        ys = makevariant();
-        zs = makevariant();
-        if(unify(arg1,wlistcons(x,ls)) == YES &&
-           unify(arg2,ys) == YES &&
-           unify(arg3,wlistcons(x,zs)) == YES){
-            body = wlist4(makeatom("append",COMP),ls,ys,zs);
-            if(prove(body,sp,rest,0) == YES)
-                return(YES);
-        }
-        wp = save1;
-        unbind(save2);
-        return(NO);
-    }
-    return(NO);
-}
-
-//listreverse/2
-int b_reverse(int arglist, int rest){
-    int n,arg1,arg2;
-
-    n = length(arglist);
-    if(n == 2){
-        arg1 = deref(car(arglist));
-        arg2 = deref(cadr(arglist));
-
-        if(!variablep(arg1) && variablep(arg2))
-            return(unify(listreverse(arg1),arg2));
-        else if(variablep(arg1) && !variablep(arg2))
-            return(unify(arg1,listreverse(arg2)));
-        else
-            return(NO);
     }
     return(NO);
 }
@@ -4267,3 +4176,166 @@ int b_keysort(int arglist, int rest){
     return(NO);
 }
 
+int b_member(int arglist, int rest){
+    int n,arg1,arg2,x,y,l,save1,save2,body;
+
+    save2 = sp;
+    n = length(arglist);
+    if(n == 2){
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+
+
+        save1 = wp;
+        x = makevariant();
+        l = makevariant();
+        if(unify(arg1,x) == YES && unify(arg2,wlistcons(x,l)) == YES){
+            if(prove(NIL,sp,rest,0) == YES)
+                return(YES);
+        }
+        wp = save1;
+        unbind(save2);
+
+        save1 = wp;
+        x = makevariant();
+        y = makevariant();
+        l = makevariant();
+        if(unify(arg1,x) == YES &&
+           unify(arg2,wlistcons(y,l)) == YES){
+            body = wlist3(makeatom("member",COMP),x,l);
+            if(prove(body,sp,rest,0) == YES)
+                return(YES);
+        }
+        wp = save1;
+        unbind(save2);
+        return(NO);
+    }
+    return(NO);
+}
+
+//---------extention--------
+
+int b_append(int arglist, int rest){
+    int n,arg1,arg2,arg3,x,ls,ys,zs,save1,save2,body;
+
+    save2 = sp;
+    body = NIL;
+    n = length(arglist);
+    if(n == 3){
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+        arg3 = deref(caddr(arglist));
+
+        save1 = wp;
+        if(unify(arg1,NIL) == YES && unify(arg2,arg3) == YES){
+            if(prove(NIL,sp,rest,0) == YES)
+                return(YES);
+        }
+        wp = save1;
+        unbind(save2);
+
+        save1 = wp;
+        x = makevariant();
+        ls = makevariant();
+        ys = makevariant();
+        zs = makevariant();
+        if(unify(arg1,wlistcons(x,ls)) == YES &&
+           unify(arg2,ys) == YES &&
+           unify(arg3,wlistcons(x,zs)) == YES){
+            body = wlist4(makeatom("append",COMP),ls,ys,zs);
+            if(prove(body,sp,rest,0) == YES)
+                return(YES);
+        }
+        wp = save1;
+        unbind(save2);
+        return(NO);
+    }
+    return(NO);
+}
+
+//listreverse/2
+int b_reverse(int arglist, int rest){
+    int n,arg1,arg2;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+
+        if(!variablep(arg1) && variablep(arg2))
+            return(unify(listreverse(arg1),arg2));
+        else if(variablep(arg1) && !variablep(arg2))
+            return(unify(arg1,listreverse(arg2)));
+        else
+            return(NO);
+    }
+    return(NO);
+}
+
+int b_inc(int arglist, int rest){
+    int n,arg1,arg2;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+
+        if(wide_variable_p(arg1) && wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"inc ", list2(arg1,arg2));
+        if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
+            error(NOT_INT,"inc ",arg1);
+        if(!wide_variable_p(arg2) && !wide_integer_p(arg2))
+            error(NOT_INT,"inc ",arg2);
+        if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
+            error(NOT_INT,"inc ",arg1);
+        if(!wide_variable_p(arg2) && !wide_integer_p(arg2))
+            error(NOT_INT,"inc ",arg2);
+        if(wide_integer_p(arg1) && negativep(arg1))
+            error(NOT_LESS_THAN_ZERO,"inc ",arg1);
+        if(wide_integer_p(arg2) && negativep(arg2))
+            error(NOT_LESS_THAN_ZERO,"inc ",arg2);
+
+        if(wide_variable_p(arg1))
+            return(unify(arg1,minus(arg2,makeint(1))));
+        else if(wide_variable_p(arg2))
+            return(unify(arg2,plus(arg1,makeint(1))));
+        else
+            return(unify(arg2,plus(arg1,makeint(1))));
+
+    }
+    return(NO);
+}
+
+int b_dec(int arglist, int rest){
+    int n,arg1,arg2;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+
+        if(wide_variable_p(arg1) && wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"dec ", list2(arg1,arg2));
+        if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
+            error(NOT_INT,"dec ",arg1);
+        if(!wide_variable_p(arg2) && !wide_integer_p(arg2))
+            error(NOT_INT,"dec ",arg2);
+        if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
+            error(NOT_INT,"dec ",arg1);
+        if(!wide_variable_p(arg2) && !wide_integer_p(arg2))
+            error(NOT_INT,"dec ",arg2);
+        if(wide_integer_p(arg1) && negativep(arg1))
+            error(NOT_LESS_THAN_ZERO,"dec ",arg1);
+        if(wide_integer_p(arg2) && negativep(arg2))
+            error(NOT_LESS_THAN_ZERO,"dec ",arg2);
+
+        if(wide_variable_p(arg1))
+            return(unify(arg1,plus(arg2,makeint(1))));
+        else if(wide_variable_p(arg2))
+            return(unify(arg2,minus(arg1,makeint(1))));
+        else
+            return(unify(arg2,minus(arg1,makeint(1))));
+
+    }
+    return(NO);
+}

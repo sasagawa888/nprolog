@@ -96,6 +96,7 @@ call/1
 chdir/1
 compare/3
 consult/1
+dec/2
 display/1
 edit/1
 fail/0
@@ -104,6 +105,7 @@ flush/0
 gc/0
 halt/0
 ifthen/2
+inc/2
 integer/1
 is/2
 keysort/2

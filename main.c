@@ -103,7 +103,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"numbervars"},{"retractall"},{"get_byte"},
 {"string"},{"string_chars"},{"string_codes"},{"ground"},
 {"put_byte"},
-{"succ"},{"term_variables"},{"compare"},
+{"inc"},{"dec"},{"term_variables"},{"compare"},
 {"mkdir"},{"chdir"},
 {"sort"},{"keysort"},{"length"},{"call"},
 };
