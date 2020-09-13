@@ -1054,47 +1054,6 @@ int memberp(int x, int y){
     return(0);
 }
 
-int occursp(int x, int y){
-    if(nullp(y))
-        return(0);
-    else if(!structurep(y))
-        return(0);
-    else if(structurep(y)){
-        if(occursp1(x,cdr(y)))
-            return(1);
-        else
-            return(0);
-    }
-    return(0);
-}
-
-int occursp1(int x, int y){
-    if(nullp(y))
-        return(0);
-    else if(!structurep(y))
-        if(eqp(x,y))
-            return(1);
-        else
-            return(0);
-    else if(structurep(y)){
-        if(eqp(x,car(y)) || occursp1(x,cdr(y)))
-            return(1);
-        else
-            return(0);
-    }
-    return(0);
-}
-
-
-int exist_unbind_var_p(int x){
-
-    while(!nullp(x)){
-        if(variablep(car(x)) && eqp(car(x),deref1(car(x))))
-            return(1);
-        x = cdr(x);
-    }
-    return(0);
-}
 
 int listremove(int x, int y){
     if(nullp(y))
@@ -1103,13 +1062,6 @@ int listremove(int x, int y){
         return(cdr(y));
     else
         return(cons(car(y),listremove(x,cdr(y))));
-}
-
-int remove_cut(int x){
-  if(eqlp(cadr(x),CUT))
-      return(caddr(x));
-  else
-      return(list3(car(x),cadr(x),remove_cut(caddr(x))));
 }
 
 /*

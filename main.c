@@ -490,11 +490,11 @@ int after_cut(int x){
 
 #define FLUSH __fpurge(stdin);
 
-void debugger(int end, int bindings, int choice, int n){
+void debugger(int goal, int bindings, int rest, int n){
     int c;
 
     loop:
-    printf("?> ");
+    printf("? ");
     fflush(stdout);
     c = getchar();
     FLUSH
@@ -526,10 +526,13 @@ void debugger(int end, int bindings, int choice, int n){
                     goto loop;
         case 'n':   trace_flag = OFF;
                     break;
-        case 'r':   printf("end      %d\n",end);
+        case 'r':   printf("goal        ");
+                    print(goal);
+                    printf("\n");
                     printf("bindings %d\n", bindings);
-                    printf("choice   %d\n", choice);
-                    printf("nest     %d\n", n);
+                    printf("rest         ");
+                    print(rest);
+                    printf("\n");
                     printf("sp       %d\n", sp);
                     printf("wp       %d\n", wp);
                     goto loop;
