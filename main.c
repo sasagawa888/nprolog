@@ -290,7 +290,16 @@ int list_to_ope(int x){
 }
 
 int addask(int x){
-    return(addtail_operation(makeatom("%ask",SYS),x));
+    return(addtail_body(makeatom("%ask",SYS),x));
+}
+
+int addtail_body(int x, int y){
+    if(nullp(y))
+        return(x);
+    else if(!conjunctionp(y))
+        return(wlist3(AND,y,x));
+    else
+        return(wlist3(car(y),cadr(y),addtail_body(x,caddr(y))));
 }
 
 
@@ -318,6 +327,7 @@ int prove(int goal, int bindings, int rest, int n){
     int clause,clauses,clause1,varlis,save;
 
     goal = deref(goal);
+    //print(goal);
 
     if(nullp(goal)){
         return(prove_all(rest,bindings,n));
@@ -375,7 +385,7 @@ int prove(int goal, int bindings, int rest, int n){
             // case of clause
             else{
                 if(unify(goal,(cadr(clause1))) == YES){
-                    clause1 = addtail_operation(rest,caddr(clause1));
+                    clause1 = addtail_body(rest,caddr(clause1));
                     if(prove_all(clause1,sp,n) == YES)
                         return(YES);
                 }
@@ -387,11 +397,15 @@ int prove(int goal, int bindings, int rest, int n){
     else if(disjunctionp(goal)){
         save = wp;
         if(prove_all(cadr(goal),bindings,n) == YES)
-            return(YES);
+            if(prove_all(rest,sp,n+1) == YES)
+                return(YES);
+            else
+                goto another;
         else{
+            another:
             unbind(bindings);
             if(prove_all(caddr(goal),bindings,n) == YES)
-                return(YES);
+                return(prove_all(rest,sp,n+1));
             else{
                 save = wp;
                 unbind(bindings);

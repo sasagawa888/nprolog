@@ -94,6 +94,7 @@ assertz/1
 atom/1
 atomic/1
 call/1
+compare/3
 consult/1
 display/1
 edit/1

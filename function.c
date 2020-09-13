@@ -714,6 +714,7 @@ void initbuiltin(void){
     defbuiltin("asserta",b_asserta);
     defbuiltin("assertz",b_assert);
     defbuiltin("abolish",b_abolish);
+    defbuiltin("compare",b_compare);
     defbuiltin("read",b_read);
     defbuiltin("write",b_write);
     defbuiltin("display",b_write_canonical);
@@ -2115,6 +2116,32 @@ int b_notequalp(int arglist, int rest){
     return(NO);
 }
 
+int b_compare(int arglist, int rest){
+    int n,arg1,arg2,arg3;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+        arg3 = deref(caddr(arglist));
+        if(!wide_variable_p(arg1) && !atomp(arg1))
+            error(NOT_ATOM,"compare ",arg1);
+        if(!wide_variable_p(arg1) &&
+          !(eqp(arg1,makeatom("<",SYS)) ||
+            eqp(arg1,makeatom("=",SYS)) ||
+            eqp(arg1,makeatom(">",SYS))))
+            error(NOT_ORDER,"compare ",arg1);
+
+        if(equalp(arg2,arg3))
+            return(unify(arg1,makeatom("=",SYS)));
+        else if(atsmaller(arg2,arg3))
+            return(unify(arg1,makeatom("<",SYS)));
+        else if(atsmaller(arg3,arg2))
+            return(unify(arg1,makeatom(">",SYS)));
+
+    }
+    return(NO);
+}
 
 int b_atsmaller(int arglist, int rest){
     int n,arg1,arg2;

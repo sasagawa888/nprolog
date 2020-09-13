@@ -560,6 +560,7 @@ int add_body_prefix1(int x);
 int add_pred_prefix(int pred);
 int addatom(char *name, int property, int index);
 int addtail(int x, int y);
+int addtail_body(int x, int y);
 int addtail_operation(int x, int y);
 int after_cut(int x);
 int after_c_lang(int x);
