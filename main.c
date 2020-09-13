@@ -317,9 +317,9 @@ int prove_all(int goals, int bindings, int n){
 int prove(int goal, int bindings, int rest, int n){
     int clause,clauses,clause1,varlis,save;
 
+    checkgbc();
     goal = deref(goal);
-    //print(goal);
-
+    
     if(nullp(goal)){
         return(prove_all(rest,bindings,n));
     }
@@ -354,6 +354,13 @@ int prove(int goal, int bindings, int rest, int n){
         }
     }
     else if(predicatep(goal)){
+        //trace
+        if(trace_flag == FULL ||
+           (trace_flag == SPY && aritycheck(length(goal),car(goal)))) {
+            printf("(%d) CALL: ", n); print(goal);
+            debugger(goal,bindings,rest,n);
+        }
+
         if(atomp(goal))
             clauses = GET_CAR(goal);
         else
@@ -370,19 +377,53 @@ int prove(int goal, int bindings, int rest, int n){
             
             // case of predicate
             if(predicatep(clause1) && unify(goal,clause1) == YES){
-                if(prove_all(rest,sp,n+1) == YES)
+                if(prove_all(rest,sp,n+1) == YES){
+                    //trace
+                    if(trace_flag == FULL ||
+                       (trace_flag == SPY && aritycheck(length(goal),car(goal)))) {
+                        printf("(%d) EXIT: ", n); print(goal);
+                        debugger(goal,bindings,rest,n);
+                    }
                     return(YES);
+                }
+                else{
+                    //trace
+                    if(trace_flag == FULL ||
+                       (trace_flag == SPY && aritycheck(length(goal),car(goal)))) {
+                        printf("(%d) FAIL: ", n); print(goal);
+                        debugger(goal,bindings,rest,n);
+                    }
+                }
             }
             // case of clause
             else{
                 if(unify(goal,(cadr(clause1))) == YES){
                     clause1 = addtail_body(rest,caddr(clause1));
-                    if(prove_all(clause1,sp,n) == YES)
+                    if(prove_all(clause1,sp,n) == YES){
+                        //trace
+                        if(trace_flag == FULL ||
+                           (trace_flag == SPY && aritycheck(length(goal),car(goal)))) {
+                            printf("(%d) EXIT: ", n); print(goal);
+                            debugger(goal,bindings,rest,n);
+                        }
                         return(YES);
+                    }
                 }
+            }
+            //trace
+            if(trace_flag == FULL ||
+               (trace_flag == SPY && aritycheck(length(goal),car(goal)))) {
+                printf("(%d) REDO: ", n); print(goal);
+                debugger(goal,bindings,rest,n);
             }
             wp = save;
             unbind(bindings);
+        }
+        //trace
+        if(trace_flag == FULL ||
+           (trace_flag == SPY && aritycheck(length(goal),car(goal)))) {
+            printf("(%d) FAIL: ", n); print(goal);
+            debugger(goal,bindings,rest,n);
         }
     }
     else if(disjunctionp(goal)){

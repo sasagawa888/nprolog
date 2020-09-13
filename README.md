@@ -115,12 +115,16 @@ listing/1
 mkdir/1
 nl/0
 nonvar/1
+nospy/1
+notrace/0
 number/1
 not/1
 read/1
 reconsult/1
 sort/2
+spy/1
 time/1
+trace/0
 true/0
 var/1
 write/1
