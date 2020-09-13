@@ -9,6 +9,7 @@ written by kenichi sasagawa 2016/8~
 #include <setjmp.h>
 #include <math.h>
 #include <stdio_ext.h>
+#include <signal.h>
 #include "npl.h"
 
 //global vers
@@ -84,11 +85,11 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"=="},{"\\=="},{"@<"},{"@=<"},{"@>"},{"@>="},
 {"=:="},{"=/="},{"=\\="},{"<"},{"=<"},{">"},
 {">="},{"\\="},{"="},{"reverse"},
-{"is"},{"edit"},{"set_editor"},{"open"},{"close"},{"system"},
+{"is"},{"edit"},{"open"},{"close"},{"system"},
 {"op"},{"!"},{"assert"},{"asserta"},{"assertz"},{"retractall"},
 {"abolish"},{"read"},{"write"},{"put"},{"get"},{"get0"},{"nl"},
 {"tab"},{"fail"},{"not"},{"true"},{"halt"},{"abort"},
-{"listing"},{"functor"},{"arg"},{"debug"},{"write_canonical"},
+{"listing"},{"functor"},{"arg"},
 {"writeq"},{"write_term"},{"read_term"},{"bounded"},{"integer_rounding_function"},
 {"char_conversion"},{"max_arity"},
 {"atom_length"},{"findall"},{"consult"},{"reconsult"},
@@ -163,6 +164,7 @@ int main(int argc, char *argv[]){
     int opt;
 
     printf("N-Prolog Ver 0.02\n");
+    signal(SIGINT,reset);
     initcell();
     initbuiltin();
     initoperator();
@@ -220,6 +222,11 @@ int main(int argc, char *argv[]){
         }
         else
             return 0;
+}
+
+void reset(int i){
+    printf("ctrl+C\n");
+    longjmp(buf,1);
 }
 
 void init_repl(void){
