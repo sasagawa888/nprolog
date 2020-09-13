@@ -716,8 +716,7 @@ void initbuiltin(void){
     defbuiltin("abolish",b_abolish);
     defbuiltin("read",b_read);
     defbuiltin("write",b_write);
-    defbuiltin("writeln",b_writeln);
-    defbuiltin("write_canonical",b_write_canonical);
+    defbuiltin("display",b_write_canonical);
     defbuiltin("writeq",b_writeq);
     defbuiltin("put",b_put);
     defbuiltin("get",b_get);
@@ -1091,23 +1090,12 @@ int b_notunify(int arglist, int rest){
 
 //input and output
 int b_write(int arglist, int rest){
-    int n;
-
-    n = length(arglist);
-    if(n == 1){
-        print(deref(car(arglist)));
-        return(YES);
-    }
-    return(NO);
-}
-
-int b_writeln(int arglist, int rest){
     int n,arg1,arg2,save;
 
     n = length(arglist);
     if(n == 1){
         arg1 = output_stream;
-        arg2 = deref(cadr(arglist));
+        arg2 = deref(car(arglist));
         goto write;
 
     }
@@ -1130,7 +1118,6 @@ int b_writeln(int arglist, int rest){
         numbervars_flag = 1;
         numbervars_top_pt = 0;
         print(arg2);
-        fprintf(GET_PORT(output_stream),"\n");
         fflush(GET_PORT(output_stream));
         quoted_flag = 1;
         numbervars_flag = 0;

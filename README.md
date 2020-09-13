@@ -94,6 +94,8 @@ assertz/1
 atom/1
 atomic/1
 call/1
+consult/1
+display/1
 edit/1
 fail/0
 float/1
@@ -104,6 +106,7 @@ ifthen/2
 integer/1
 is/2
 length/2
+listing/0
 listing/1
 member/2
 nl/0
@@ -117,7 +120,9 @@ time/1
 true/0
 var/1
 write/1
-writeq/1 writeq/2
+write/2
+writeq/1
+writeq/2
 ```
 
 # function
