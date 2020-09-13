@@ -386,6 +386,24 @@ int prove(int goal, int bindings, int rest, int n){
             unbind(bindings);
         }
     }
+    else if(disjunctionp(goal)){
+        save = wp;
+        if(prove_all(cadr(goal),bindings,n) == YES)
+            return(YES);
+        else{
+            unbind(bindings);
+            if(prove_all(caddr(goal),bindings,n) == YES)
+                return(YES);
+            else{
+                save = wp;
+                unbind(bindings);
+                return(NO);
+            }
+        }
+        save = wp;
+        unbind(bindings);
+        return(NO);
+    }
     return(NO);
 }
 
