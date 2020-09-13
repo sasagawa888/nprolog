@@ -4172,7 +4172,7 @@ int b_nano(int arglist, int rest){
         res = system(str0);
         if(res == -1)
             error(SYSTEM_ERROR,"nano",arg1);
-        b_reconsult(arg1,NIL);
+        b_reconsult(list1(arg1),NIL);
         return(YES);
     }
     return(NO);
