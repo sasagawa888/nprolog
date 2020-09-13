@@ -771,6 +771,7 @@ void initbuiltin(void){
     defbuiltin("length",b_length);
     defbuiltin("call",b_call);
     defbuiltin("edit",b_nano);
+    defbuiltin("reverse",b_reverse);
 
     defcompiled("repeat",b_repeat);
     defcompiled("append",b_append);
@@ -894,6 +895,25 @@ int b_append(int arglist, int rest){
         wp = save1;
         unbind(save2);
         return(NO);
+    }
+    return(NO);
+}
+
+//listreverse/2
+int b_reverse(int arglist, int rest){
+    int n,arg1,arg2;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+
+        if(!variablep(arg1) && variablep(arg2))
+            return(unify(listreverse(arg1),arg2));
+        else if(variablep(arg1) && !variablep(arg2))
+            return(unify(arg1,listreverse(arg2)));
+        else
+            return(NO);
     }
     return(NO);
 }

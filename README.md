@@ -87,7 +87,6 @@ no
 @>=
 abolish/1
 abort/0
-append/3
 assert/1
 asserta/1
 assertz/1
@@ -111,7 +110,6 @@ keysort/2
 length/2
 listing/0
 listing/1
-member/2
 mkdir/1
 nl/0
 nonvar/1
@@ -127,6 +125,13 @@ write/1
 write/2
 writeq/1
 writeq/2
+```
+
+# builtin (extention)
+```
+append/3
+member/2
+reverse/2
 ```
 
 # function
