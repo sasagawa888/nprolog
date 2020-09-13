@@ -299,12 +299,20 @@ int addask(int x){
 int prove_all(int goals, int bindings, int n){
     if(nullp(goals))
         return(YES);
-    else if(car(goals) == AND){
-        return(prove(cadr(goals),bindings,caddr(goals),n));
-    } 
-    else
+    else if(car(goals) != AND)
         return(prove(goals,bindings,NIL,n));
-    
+    else{
+        if(!has_cut_p(goals)){
+            return(prove(cadr(goals),bindings,caddr(goals),n));
+        }
+        else{
+            if(prove_all(before_cut(goals),bindings,n) == YES)
+                return(prove_all(after_cut(goals),sp,n));
+            else
+                return(NO);
+        }
+    }
+
     return(NO);
 }
 
