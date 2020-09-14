@@ -756,6 +756,7 @@ void initbuiltin(void){
     defbuiltin("number",b_number);
     defbuiltin("compound",b_compound);
     defbuiltin("ground",b_ground);
+    defbuiltin("system",b_system);
     defbuiltin("var",b_var);
     defbuiltin("nonvar",b_nonvar);
     defbuiltin("atomic",b_atomic);
@@ -2917,6 +2918,21 @@ int b_ground(int arglist, int rest){
             return(YES);
         else
             return(NO);
+    }
+    return(NO);
+}
+
+int b_system(int arglist, int rest){
+    int n,arg1;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = deref(car(arglist));
+
+        if(builtinp(arg1))
+            return(YES);
+        else
+            return(NO);   
     }
     return(NO);
 }
