@@ -106,7 +106,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"put_byte"},
 {"inc"},{"dec"},{"term_variables"},{"compare"},
 {"mkdir"},{"chdir"},
-{"sort"},{"keysort"},{"length"},{"call"},
+{"sort"},{"keysort"},{"length"},{"call"},{"shell"}
 };
 
 //compiled predicate

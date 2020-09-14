@@ -763,7 +763,7 @@ void initbuiltin(void){
     defbuiltin("gc",b_gbc);
     defbuiltin("time",b_time);
     defbuiltin("%ask",b_ask);
-    defbuiltin("system",b_system);
+    defbuiltin("shell",b_shell);
     defbuiltin("sort",b_sort);
     defbuiltin("keysort",b_keysort);
     defbuiltin("mkdir",b_make_directory);
@@ -4237,7 +4237,7 @@ int b_filename(int arglist, int rest){
     return(NO);
 }
 
-int b_system(int arglist, int rest){
+int b_shell(int arglist, int rest){
     int n,arg1,res;
     char str1[STRSIZE];
 
@@ -4245,12 +4245,12 @@ int b_system(int arglist, int rest){
     if(n == 1){
         arg1 = deref(car(arglist));
         if(!singlep(arg1))
-            error(NOT_ATOM,"system",arg1);
+            error(NOT_ATOM,"shell",arg1);
 
         strcpy(str1,GET_NAME(arg1));
         res = system(str1);
         if(res == -1)
-            error(SYSTEM_ERROR,"system",arg1);
+            error(SYSTEM_ERROR,"shell",arg1);
         return(YES);
     }
     return(NO);

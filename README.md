@@ -123,6 +123,7 @@ number/1
 not/1
 read/1
 reconsult/1
+shell/1
 sort/2
 spy/1
 time/1
