@@ -43,7 +43,7 @@ int wp; //working pointer
 
 
 //flag
-int trace_flag = 0;
+int trace_flag = 0; //off
 int trace_nest = 999999999; //max nest level of trace
 int open_flag = 0;
 int gbc_flag = 0;  // 0=not display massage 1=display message
@@ -92,7 +92,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"listing"},{"functor"},{"arg"},
 {"writeq"},{"write_term"},{"read_term"},{"bounded"},{"integer_rounding_function"},
 {"char_conversion"},{"max_arity"},
-{"atom_length"},{"findall"},{"consult"},{"reconsult"},
+{"atom_length"},{"consult"},{"reconsult"},
 {"see"},{"seen"},{"tell"},{"told"},{"trace"},{"notrace"},{"spy"},
 {"nospy"},{"atom"},{"integer"},{"real"},{"float"},{"number"},{"compound"},
 {"var"},{"nonvar"},{"atomic"},{"list"},{"gc"},{"time"},
@@ -100,7 +100,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"number_chars"},{"number_codes"},{"debug"},{"bounded"},
 {"catch"},{"throw"},{"get_char"},{"get_code"},{"put_char"},{"put_code"},
 {"current_input"},{"current_output"},{"unify_with_occurs_check"},
-{"set_input"},{"set_output"},{"flush_output"},{"listreverse"},{"nano"},
+{"set_input"},{"set_output"},{"flush"},{"listreverse"},{"nano"},
 {"numbervars"},{"retractall"},{"get_byte"},
 {"string"},{"string_chars"},{"string_codes"},{"ground"},
 {"put_byte"},
@@ -362,8 +362,7 @@ int prove(int goal, int bindings, int rest, int n){
     }
     else if(predicatep(goal)){
         //trace
-        if(trace_flag == FULL ||
-           (trace_flag == SPY && aritycheck(length(goal),car(goal)))) {
+        if(trace_flag != OFF && aritycheck(length(goal),car(goal))) {
             printf("(%d) CALL: ", n); print(goal);
             debugger(goal,bindings,rest,n);
         }
@@ -386,8 +385,7 @@ int prove(int goal, int bindings, int rest, int n){
             if(predicatep(clause1) && unify(goal,clause1) == YES){
                 if(prove_all(rest,sp,n+1) == YES){
                     //trace
-                    if(trace_flag == FULL ||
-                       (trace_flag == SPY && aritycheck(length(goal),car(goal)))) {
+                    if(trace_flag != OFF && aritycheck(length(goal),car(goal))){
                         printf("(%d) EXIT: ", n); print(goal);
                         debugger(goal,bindings,rest,n);
                     }
@@ -395,8 +393,8 @@ int prove(int goal, int bindings, int rest, int n){
                 }
                 else{
                     //trace
-                    if(trace_flag == FULL ||
-                       (trace_flag == SPY && aritycheck(length(goal),car(goal)))) {
+                    if((trace_flag == FULL || trace_flag == TIGHT) && 
+                        aritycheck(length(goal),car(goal))){
                         printf("(%d) FAIL: ", n); print(goal);
                         debugger(goal,bindings,rest,n);
                     }
@@ -408,8 +406,7 @@ int prove(int goal, int bindings, int rest, int n){
                     clause1 = addtail_body(rest,caddr(clause1));
                     if(prove_all(clause1,sp,n) == YES){
                         //trace
-                        if(trace_flag == FULL ||
-                           (trace_flag == SPY && aritycheck(length(goal),car(goal)))) {
+                        if(trace_flag == FULL && aritycheck(length(goal),car(goal))){
                             printf("(%d) EXIT: ", n); print(goal);
                             debugger(goal,bindings,rest,n);
                         }
@@ -418,8 +415,8 @@ int prove(int goal, int bindings, int rest, int n){
                 }
             }
             //trace
-            if(trace_flag == FULL ||
-               (trace_flag == SPY && aritycheck(length(goal),car(goal)))) {
+            if((trace_flag == FULL || trace_flag == TIGHT || trace_flag == HALF) &&
+                aritycheck(length(goal),car(goal))){
                 printf("(%d) REDO: ", n); print(goal);
                 debugger(goal,bindings,rest,n);
             }
@@ -427,8 +424,8 @@ int prove(int goal, int bindings, int rest, int n){
             unbind(bindings);
         }
         //trace
-        if(trace_flag == FULL ||
-           (trace_flag == SPY && aritycheck(length(goal),car(goal)))) {
+        if((trace_flag == FULL || trace_flag == TIGHT || trace_flag == HALF) &&
+            aritycheck(length(goal),car(goal))){
             printf("(%d) FAIL: ", n); print(goal);
             debugger(goal,bindings,rest,n);
         }
@@ -584,7 +581,7 @@ void debugger(int goal, int bindings, int rest, int n){
                     printf("sp       %d\n", sp);
                     printf("wp       %d\n", wp);
                     goto loop;
-        case 's':   trace_flag = SPY;
+        case 's':   debug_flag = ON;
                     FLUSH
                     break;
         case '1':

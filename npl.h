@@ -78,8 +78,6 @@ written by kenichi sasagawa 2016/9~
 #define SJIS1       65280      //#b1111111100000000
 #define SJIS2       255        //#b0000000011111111
 
-int prove_all(int goals, int bindings, int n);
-int prove(int goal, int bindings, int rest, int n);
 
 typedef enum tag {EMP,INTN,FLTN,LONGN,BIGX,STRUCT,SINGLE,STREAM,STR} tag;
 typedef enum flag {FRE,USE} flag;
@@ -176,7 +174,13 @@ extern int error_stream;
 //trace mode
 #define OFF     0
 #define FULL    1
-#define SPY     2
+#define TIGHT   2
+#define HALF    3
+#define LOOSE   4 
+
+//debug mode
+#define OFF     0
+#define ON      1    
 
 
 #define DEBUG               printf("debug\n"); longjmp(buf,2);
@@ -513,11 +517,6 @@ int readc(void);
 
 int absolute(int x);
 int addask(int x);
-int add_atom_pred_prefix(int pred);
-int add_prefix(int x);
-int add_body_prefix(int body);
-int add_body_prefix1(int x);
-int add_pred_prefix(int pred);
 int addatom(char *name, int property, int index);
 int addtail(int x, int y);
 int addtail_body(int x, int y);
@@ -526,7 +525,6 @@ int after_cut(int x);
 int after_c_lang(int x);
 int alias_option_p(int x);
 int aliasp(int addr);
-int alpha_conversion(int x);
 int alpha_variable_p(int addr);
 int alpha_to_variable(int x);
 int alphabeticalp(int addr);
@@ -836,6 +834,7 @@ int last(int x);
 int ifthenp(int addr);
 int ignore_optin_p(int x);
 int infixp(int addr);
+int infix_operator_p(int addr);
 int insert(int x, int y);
 int int_gcd(int x, int y);
 int int_lcm(int m, int n);
@@ -926,7 +925,6 @@ int o_dcg(int x, int y);
 int o_define(int x, int y);
 int o_ignore(int nest, int n);
 int op_connect(int x, int y);
-int infix_operator_p(int addr);
 int operate(int x);
 int operationp(int addr);
 int operatorp(int addr);
@@ -943,6 +941,8 @@ int postfixp(int addr);
 int predicatep(int addr);
 int prefixp(int addr);
 int prev(int x);
+int prove(int goal, int bindings, int rest, int n);
+int prove_all(int goals, int bindings, int n);
 int quoted_option_p(int x);
 int quotient(int x, int y);
 int readparse(void);

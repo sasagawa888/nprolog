@@ -2736,7 +2736,7 @@ int b_trace(int arglist, int rest){
 
     n = length(arglist);
     if(n == 0){
-        trace_flag = FULL;
+        debug_flag = ON;
         return(YES);
     }
     return(NO);
@@ -2747,7 +2747,7 @@ int b_notrace(int arglist, int rest){
 
     n = length(arglist);
     if(n == 0){
-        trace_flag = OFF;
+        debug_flag = OFF;
         return(YES);
     }
     return(NO);
@@ -2766,7 +2766,6 @@ int b_spy(int arglist, int rest){
         SET_TR(cadr(arg1),1);
         if(!memberp(arg1,spy_list))
             spy_list = cons(arg1,spy_list);
-        trace_flag = SPY;
         return(YES);
     }
     return(NO);
@@ -2781,15 +2780,12 @@ int b_nospy(int arglist, int rest){
             SET_TR(cadr(car(spy_list)),0);
             spy_list = cdr(spy_list);
         }
-        trace_flag = OFF;
         return(YES);
     }
     else if(n == 1){
         arg1 = deref(car(arglist));
         SET_TR(cadr(arg1),0);
         spy_list = listremove(arg1,spy_list);
-        if(nullp(spy_list))
-            trace_flag = OFF;
         return(YES);
     }
     return(NO);
