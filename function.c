@@ -66,7 +66,6 @@ void dynamic_link(int x){
     init_f1(5,(tpred)cadar);
     init_f1(6,(tpred)print);
     init_f1(7,(tpred)makeint);
-    init_f1(8,(tpred)execute);
     init_f1(9,(tpred)unbind);
     init_f1(13,(tpred)set_sp);
     init_f1(15,(tpred)deref);
@@ -777,6 +776,7 @@ void initbuiltin(void){
     defbuiltin("reverse",b_reverse);
     defbuiltin("name",b_atom_codes);
     defbuiltin("delete",b_delete);
+    
 
 
     defcompiled("repeat",b_repeat);
@@ -784,7 +784,8 @@ void initbuiltin(void){
     defcompiled("member",b_member);
     defcompiled("retract",b_retract);
     defcompiled("clause",b_clause);
-    
+    defcompiled("current_predicate",b_current_predicate);
+    defcompiled("current_op",b_current_op);
 
     return;
 }
@@ -2312,7 +2313,7 @@ int b_true(int arglist, int rest){
 
 //database operation
 int b_assert(int arglist, int rest){
-    int n,arg1,atom;
+    int n,arg1;
 
     n = length(arglist);
     if(n == 1){
@@ -2330,11 +2331,6 @@ int b_assert(int arglist, int rest){
         arg1 = variable_to_call(arg1); //P -> call(P)
         arg1 = copy_heap(arg1); //copy arg1 to heap area
         if(predicatep(arg1)){
-            if(atomp(arg1))
-                atom = arg1;
-            else
-                atom = car(arg1);
-            memoize_arity(arg1,atom);
             SET_VAR(arg1,unique(varslist(arg1)));
             add_data(car(arg1),arg1);
             return(YES);
@@ -2342,11 +2338,7 @@ int b_assert(int arglist, int rest){
         else if(operationp(arg1)){
             if(!callablep(caddr(arg1)))
                 error(NOT_CALLABLE,"assertz ",arg1);
-            if(atomp(cadr(arg1)))
-                atom = cadr(arg1);
-            else
-                atom = car(cadr(arg1));
-            memoize_arity(arg1,atom);
+            
             SET_VAR(arg1,unique(varslist(arg1)));
             operate(arg1);
             return(YES);
@@ -2357,7 +2349,7 @@ int b_assert(int arglist, int rest){
 }
 
 int b_asserta(int arglist, int rest){
-    int n,arg1,atom;
+    int n,arg1;
 
     n = length(arglist);
     if(n == 1){
@@ -2375,11 +2367,6 @@ int b_asserta(int arglist, int rest){
         arg1 = variable_to_call(arg1); //P -> call(P)
         arg1 = copy_heap(arg1); //copy arg1 to heap area
         if(predicatep(arg1)){
-            if(atomp(arg1))
-                atom = arg1;
-            else
-                atom = car(arg1);
-            memoize_arity(arg1,atom);
             SET_VAR(arg1,unique(varslist(arg1)));
             insert_data(car(arg1),arg1);
             return(YES);
@@ -2388,11 +2375,6 @@ int b_asserta(int arglist, int rest){
             if(!callablep(caddr(arg1)))
                 error(NOT_CALLABLE,"asserta ",arg1);
 
-            if(atomp(cadr(arg1)))
-                atom = cadr(arg1);
-            else
-                atom = car(cadr(arg1));
-            memoize_arity(arg1,atom);
             SET_VAR(arg1,unique(varslist(arg1)));
             operate(arg1);
             assert_flag = 0;
@@ -3304,6 +3286,79 @@ int b_univ(int arglist, int rest){
     return(NO);
 }
 
+int b_current_predicate(int arglist, int rest){
+    int n,arg1,save1,save2,predlist,pred,aritylist,arity;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = deref(car(arglist));
+        predlist = reverse(predicates);
+        save1 = wp;
+        save2 = sp;
+        while(!nullp(predlist)){
+            pred = car(predlist);
+            predlist = cdr(predlist);
+            aritylist = GET_ARITY(pred);
+            while(!nullp(aritylist)){
+                arity = car(aritylist);
+                aritylist = cdr(aritylist);   
+                if(unify(arg1,list3(makeatom("/",OPE),pred,arity)) == YES)
+                    if(prove(NIL,sp,rest,0) == YES)
+                        return(YES);
+                
+                wp = save1;
+                unbind(save2);
+            }
+        }
+        wp = save1;
+        unbind(save2);
+        return(NO);
+    }
+    return(NO);
+}
+
+int b_current_op(int arglist, int rest){
+    int n,arg1,arg2,arg3,save1,save2,
+        lis,weight,spec,op,w,s,o;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+        arg3 = deref(caddr(arglist));
+
+        /*
+        e.g. ',' ':-'  aux of operator is SIMP
+        beclause of parsing. so change to OPE from SIMP
+        */
+        if(getatom(GET_NAME(arg3),OPE,hash(GET_NAME(arg3))))
+            arg3 = makeatom(GET_NAME(arg3),OPE);
+
+        lis = op_list;
+        spec = NIL;
+        save1 = wp;
+        save2 = sp;
+        while(!nullp(lis)){
+            weight = car(car(lis));
+            spec = cadr(car(lis));
+            op = caddr(car(lis));
+
+            w= unify(arg1,weight);
+            s = unify(arg2,spec);
+            o = unify(arg3,op);
+            if(w == YES && s == YES && o == YES)
+                if(prove(NIL,sp,rest,0) == YES)
+                    return(YES);
+            lis = cdr(lis);
+            wp = save1;
+            unbind(save2);
+        }
+        wp = save1;
+        unbind(save2);
+        return(NO);
+    }
+    return(NO);
+}
 
 
 int o_define(int x, int y){
@@ -3375,7 +3430,7 @@ int o_ignore(int nest, int n){
 }
 
 
-//directory for Logtalk
+//-----------file system-------------------
 int b_make_directory(int arglist, int rest){
     int n,arg1;
 

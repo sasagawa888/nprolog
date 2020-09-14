@@ -114,7 +114,7 @@ char compiled[COMPILED_NUMBER][30] ={
 {"append"},{"member"},{"repeat"},
 {"retract"},{"clause"},
 {"current_visible"},{"stream_property"},{"between"},
-{"sub_atom"},{"atom_concat"}
+{"sub_atom"},{"atom_concat"},{"current_predicate"},{"current_op"}
 };
 
 //extened predicate
@@ -163,7 +163,7 @@ int ed_incomment = -1; /*...*/
 int main(int argc, char *argv[]){
     int opt;
 
-    printf("N-Prolog Ver 0.02\n");
+    printf("N-Prolog Ver 0.03\n");
     signal(SIGINT,reset);
     initcell();
     initbuiltin();
@@ -210,7 +210,7 @@ int main(int argc, char *argv[]){
             error_stream = standard_error;
             init_repl();
             printf("?- "); fflush(stdout);
-            execute(variable_to_call(readparse()));
+            query(variable_to_call(readparse()));
             //sexp_flag = 1;print(variable_to_call(parser(NIL,NIL,NIL,NIL,0,0)));
             //printf("proof = %d\n", proof);
             fflush(stdout);
@@ -252,7 +252,7 @@ void init_repl(void){
 
 }
 
-void execute(int x){
+void query(int x){
     int res;
 
     //[file1,file2] -> consult(file1),consult(file2).

@@ -65,5 +65,3 @@ argument([X|Xs],[Y|Ys],[[X|Y],Z]) :-
 global(t,t).
 global(nil,nil).
 
-:- dynamic(fun/3).
-fun(dummy,a,b).

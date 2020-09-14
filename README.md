@@ -97,6 +97,8 @@ call/1
 chdir/1
 compare/3
 consult/1
+current_op/3
+current_predicate/1
 dec/2
 delete/1
 display/1

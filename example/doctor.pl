@@ -3,7 +3,6 @@
                humio mizoguchi 
                ISBN-7952-6307-8
 */
-:- dynamic(rule/1).
 
 doctor :-
 	write('Hi!,I am a doctor'),

@@ -1446,6 +1446,9 @@ void add_data(int pred, int data){
 
 void insert_data(int pred, int data){
 
+    //set arity. e.g. GET_CDR(pred) == #[2,3]
+    memoize_arity(data,pred);
+
     SET_CAR(pred,cons(data,GET_CAR(pred)));
     if(!memq(pred,predicates))
         predicates = cons(pred,predicates);
