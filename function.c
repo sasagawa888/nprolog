@@ -776,6 +776,7 @@ void initbuiltin(void){
     defbuiltin("edit",b_nano);
     defbuiltin("reverse",b_reverse);
     defbuiltin("name",b_atom_codes);
+    defbuiltin("delete",b_delete);
 
 
     defcompiled("repeat",b_repeat);
@@ -3407,6 +3408,23 @@ int b_change_directory(int arglist , int rest){
             return(YES);
         else
             return(NO);
+    }
+    return(NO);
+}
+
+int b_delete(int arglist, int rest){
+    int n,arg1;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = deref(car(arglist));
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"delete ",arg1);
+        if(!atomp(arg1))
+            error(NOT_ATOM,"delete ", arg1);
+
+        remove(GET_NAME(arg1));
+        return(YES);
     }
     return(NO);
 }

@@ -98,6 +98,7 @@ chdir/1
 compare/3
 consult/1
 dec/2
+delete/1
 display/1
 edit/1
 fail/0

@@ -632,6 +632,7 @@ int b_cut(int arglist, int rest);
 int b_dec(int arglist, int rest);
 int b_defined_predicate(int arglist, int rest);
 int b_defined_userop(int arglist, int rest);
+int b_delete(int arglist, int rest);
 int b_eqgreater(int arglist, int rest);
 int b_eqsmaller(int arglist, int rest);
 int b_equalp(int arglist, int rest);
