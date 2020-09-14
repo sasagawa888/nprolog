@@ -761,7 +761,7 @@ void initbuiltin(void){
     defbuiltin("atomic",b_atomic);
     defbuiltin("list",b_list);
     defbuiltin("gc",b_gbc);
-    defbuiltin("time",b_time);
+    defbuiltin("measure",b_measure);
     defbuiltin("%ask",b_ask);
     defbuiltin("shell",b_shell);
     defbuiltin("sort",b_sort);
@@ -2714,7 +2714,7 @@ double getETime(){
     return tv.tv_sec + (double)tv.tv_usec*1e-6;
 }
 
-int b_time(int arglist, int rest){
+int b_measure(int arglist, int rest){
     int n,arg1,res;
     double start_time,end_time;
 

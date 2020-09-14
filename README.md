@@ -130,7 +130,6 @@ shell/1
 sort/2
 spy/1
 system/1
-time/1
 trace/0
 true/0
 var/1
@@ -145,6 +144,7 @@ writeq/2
 append/3
 member/2
 reverse/2
+measure/1
 ```
 
 # function
