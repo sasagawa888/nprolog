@@ -748,6 +748,7 @@ void initbuiltin(void){
     defbuiltin("spy",b_spy);
     defbuiltin("nospy",b_nospy);
     defbuiltin("leash",b_leash);
+    defbuiltin("debug",b_debug);
     defbuiltin("atom",b_atom);
     defbuiltin("string",b_string);
     defbuiltin("integer",b_integer);
@@ -2710,6 +2711,8 @@ int b_spy(int arglist, int rest){
     }
     else if(n == 1){
         arg1 = deref(car(arglist));
+        arg1 = copy_heap(arg1);
+    
         if(!memberp(arg1,spy_list))
             spy_list = cons(arg1,spy_list);
         return(YES);
@@ -2729,6 +2732,7 @@ int b_nospy(int arglist, int rest){
     }
     else if(n == 1){
         arg1 = deref(car(arglist));
+        arg1 = copy_heap(arg1);
         spy_list = listremove(arg1,spy_list);
         return(YES);
     }
@@ -2759,6 +2763,21 @@ int b_leash(int arglist, int rest){
         }
         else
             return(NO);
+    }
+    return(NO);
+}
+
+int b_debug(int arglist, int rest){
+    int n;
+
+    n = length(arglist);
+    if(n == 0){
+        printf("debug_flag=%d\n", debug_flag);
+        printf("trace_flag=%d\n", trace_flag);
+        printf("spy_list=");
+        print(spy_list);
+        printf("\n");
+        return(YES);
     }
     return(NO);
 }

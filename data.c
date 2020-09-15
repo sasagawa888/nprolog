@@ -1078,13 +1078,6 @@ int listremove3(int x1, int x2, int x3, int ls){
         return(cons(car(ls),listremove3(x1,x2,x3,cdr(ls))));
 }
 
-int aritycheck(int x, int n){
-    int y;
-
-    y = list3(makeatom("/",OPE),x,makeint(n-1));
-    return(memberp(y,spy_list));
-}
-
 int spypointp(int x){
     int atom,n,y;
 
@@ -1096,9 +1089,11 @@ int spypointp(int x){
         atom = car(x);
         n = length(x) - 1;
     }
-
-    y = list3(makeatom("/",OPE),atom,makeint(n-1));
-    return(memberp(y,spy_list));
+    y = list3(makeatom("/",OPE),atom,makeint(n));
+    if(memberp(y,spy_list))
+        return(1);
+    else
+        return(0);
 }
 
 int unique(int x){

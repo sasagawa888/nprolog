@@ -43,7 +43,7 @@ int wp; //working pointer
 
 
 //flag
-int trace_flag = 0; //off
+int trace_flag = FULL;
 int trace_nest = 999999999; //max nest level of trace
 int open_flag = 0;
 int gbc_flag = 0;  // 0=not display massage 1=display message

@@ -580,6 +580,7 @@ int b_current_op(int arglist, int rest);
 int b_current_predicate(int arglist, int rest);
 int b_cut(int arglist, int rest);
 int b_dec(int arglist, int rest);
+int b_debug(int arglist, int rest);
 int b_defined_predicate(int arglist, int rest);
 int b_defined_userop(int arglist, int rest);
 int b_delete(int arglist, int rest);
