@@ -2276,6 +2276,7 @@ int b_assert(int arglist, int rest){
         if(predicatep(arg1)){
             SET_VAR(arg1,unique(varslist(arg1)));
             add_data(car(arg1),arg1);
+            checkgbc();
             return(YES);
         }
         else if(operationp(arg1)){
@@ -2284,6 +2285,7 @@ int b_assert(int arglist, int rest){
             
             SET_VAR(arg1,unique(varslist(arg1)));
             operate(arg1);
+            checkgbc();
             return(YES);
         }
         error(NOT_CALLABLE,"assertz",arg1);
@@ -2312,6 +2314,7 @@ int b_asserta(int arglist, int rest){
         if(predicatep(arg1)){
             SET_VAR(arg1,unique(varslist(arg1)));
             insert_data(car(arg1),arg1);
+            checkgbc();
             return(YES);
         }
         else if(operationp(arg1)){
@@ -2321,6 +2324,7 @@ int b_asserta(int arglist, int rest){
             SET_VAR(arg1,unique(varslist(arg1)));
             operate(arg1);
             assert_flag = 0;
+            checkgbc();
             return(YES);
         }
         error(NOT_CALLABLE,"asserta",arg1);
@@ -2706,7 +2710,6 @@ int b_spy(int arglist, int rest){
     }
     else if(n == 1){
         arg1 = deref(car(arglist));
-        //SET_TR(cadr(arg1),1);
         if(!memberp(arg1,spy_list))
             spy_list = cons(arg1,spy_list);
         return(YES);

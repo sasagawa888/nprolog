@@ -323,7 +323,6 @@ int prove_all(int goals, int bindings, int n){
 int prove(int goal, int bindings, int rest, int n){
     int clause,clauses,clause1,varlis,save;
 
-    checkgbc();
     goal = deref(goal);
     
     if(nullp(goal)){
