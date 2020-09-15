@@ -534,10 +534,10 @@ int after_cut(int x){
 #define FLUSH __fpurge(stdin);
 
 void debugger(int goal, int bindings, int rest, int n){
-    int c;
+    int c,save;
 
     loop:
-    printf("? ");
+    printf("?> ");
     fflush(stdout);
     c = getchar();
     FLUSH
@@ -549,6 +549,12 @@ void debugger(int goal, int bindings, int rest, int n){
         case 'c':   trace_flag = FULL;
                     FLUSH
                     break;
+        case 'd':   save = ignore_flag;
+                    ignore_flag = 1;
+                    print(goal);
+                    printf("\n");
+                    ignore_flag = save;
+                    goto loop;
         case 'e':   longjmp(buf,2);
         case '?':
         case 'h':   printf("return key: creep\n");
@@ -558,41 +564,23 @@ void debugger(int goal, int bindings, int rest, int n){
                     printf("e: end of intepreter\n");
                     printf("?: help\n");
                     printf("h: help\n");
-                    printf("l: display local stack\n");
                     printf("n: notrace\n");
                     printf("s: skip to next spy point\n");
-                    printf("r: dislay room information\n");
-                    printf("t: display trail stack\n");
-                    printf("1~9: set trace nest level\n");
-                    printf("0: release trace nest level\n");
+                    printf("w: write goal\n");
                     fflush(stdin);
                     goto loop;
-        case 'n':   trace_flag = OFF;
+        case 'n':   debug_flag = OFF;
                     break;
-        case 'r':   printf("goal        ");
-                    print(goal);
-                    printf("\n");
-                    printf("bindings %d\n", bindings);
-                    printf("rest         ");
-                    print(rest);
-                    printf("\n");
-                    printf("sp       %d\n", sp);
-                    printf("wp       %d\n", wp);
-                    goto loop;
         case 's':   debug_flag = ON;
                     FLUSH
                     break;
-        case '1':
-        case '2':
-        case '3':
-        case '4':
-        case '5':
-        case '6':
-        case '7':
-        case '8':
-        case '9':   trace_nest = c - '0';
+         case 'w':  save = ignore_flag;
+                    ignore_flag = 0;
+                    print(goal);
+                    printf("\n");
+                    ignore_flag = save;
                     goto loop;
-        case '0':   trace_nest = 999999999;
+    
     }
 }
 
