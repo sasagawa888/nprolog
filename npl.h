@@ -2,18 +2,12 @@
 written by kenichi sasagawa 2016/9~
 */
 #include <setjmp.h>
-#if _WIN32
-#include <windows.h>
-#endif
 #define CELLSIZE 10000000
 #define HEAPSIZE  7000000
 #define FREESIZE      500
 #define STACKSIZE   1000000
-#define TRAILSIZE   800000
-#define CTRLSTKSIZE  1000
 #define VARIANTSIZE  5000000
 #define VARIANTMAX  15000000
-#define ARITY 17
 #define ATOMSIZE 256
 #define BUFSIZE 256
 #define STRSIZE 256
@@ -105,8 +99,6 @@ typedef struct{
     flag    flag;
     char    *name;
     unsigned char option;
-    unsigned char option1;
-    unsigned char trace;
 } cell;
 
 
@@ -127,7 +119,6 @@ typedef struct token {
     char buf[BUFSIZE];
 } token;
 
-typedef void (*p_cut1)(void);
 
 extern cell heap[CELLSIZE];
 extern int variant[VARIANTSIZE][2];
@@ -141,6 +132,7 @@ extern int cell_hash_table[HASHTBSIZE];
 extern int variables;
 extern int predicates;
 extern int spy_list;
+extern int error_flag;
 extern int reconsult_list;
 extern int op_list;
 extern int proof;
@@ -200,11 +192,9 @@ extern int error_stream;
 #define GET_NAME(addr)      heap[addr].name
 #define GET_NAME_ELT(addr,n)    heap[addr].name[n]
 #define GET_CHAR(addr)      heap[addr].name[0]
-#define GET_TR(addr)        heap[addr].trace
 #define GET_TAG(addr)       get_tag(addr)
 #define GET_CAR(addr)       heap[addr].val.car.intnum
 #define GET_OPT(addr)       heap[addr].option
-#define GET_OPT1(addr)       heap[addr].option1
 #define GET_FLAG(addr)      heap[addr].flag
 #define SET_TAG(addr,x)     heap[addr].tag = x
 #define SET_CAR(addr,x)     heap[addr].val.car.intnum = x
@@ -218,9 +208,7 @@ extern int error_stream;
 #define SET_SUBR(addr,x)    heap[addr].val.car.subr = x
 #define SET_PORT(addr,x)    heap[addr].val.car.port = x
 #define SET_OPT(addr,x)     heap[addr].option = x
-#define SET_OPT1(addr,x)    heap[addr].option1 = x
 #define SET_CHAR(addr,x)    heap[addr].name[0] = x
-#define SET_TR(addr,x)      heap[addr].trace = x
 #define SET(addr,x)         heap[addr] = heap[x]
 #define IS_INCELL(addr)     (addr >= 0 && addr < CELLSIZE)
 #define IS_OUTCELL(addr)    (addr < 0 || addr >= CELLSIZE)
@@ -970,6 +958,7 @@ int smallerp(int x1, int x2);
 int sort(int x);
 int sortsmaller(int x, int y);
 int sorteqlp(int x, int y);
+int spypointp(int x);
 int structure_to_list(int x);
 int structurep(int addr);
 int streamp(int addr);

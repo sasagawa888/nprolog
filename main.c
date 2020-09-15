@@ -49,16 +49,16 @@ int open_flag = 0;
 int gbc_flag = 0;  // 0=not display massage 1=display message
 int simp_flag = 1;
 int assert_flag = 0; // 0=asserta, 1=assertz
-int debug_flag = 1;  // 0=normal mode, 1=debug mode
+int debug_flag = OFF;  // 0=normal mode, 1=debug mode
 int sexp_flag = 0;
 int arguments_flag = 1; //1= 1,2,3 -> (1,2,3) 0= 1,2,3 -> 1,2,3
 int mode_flag = 1;  // 0=SJIS, 1=Unicod
 int quoted_flag = 1; // 0=not print ' 1=print '
 int ignore_flag = 0; // 0=infix notation 2+2 1=prefix notation +(2,2)
+int error_flag = 0;  // flag in syntax error
 int numbervars_flag = 0; // 0=normal 1= A -> '_0001
 int link_flag = 0;  // 0=not-link, 1=linked
-//int rounding_flag = 0; //0 = toward_zero, 1=down
-int cut_flag = 0;  //for if then else 0=not exist cut, 1=exist cut
+//int cut_flag = 0;  //for if then else 0=not exist cut, 1=exist cut
 int listing_flag = 0;  //for print clause, 0=normal, 1=format print
 int colon_sets_calling_context_flag = 1; //1=true, 0=false
 int prefix_flag = 0;   //for parser 0=not prefix, 1=prefix
@@ -362,7 +362,7 @@ int prove(int goal, int bindings, int rest, int n){
     }
     else if(predicatep(goal)){
         //trace
-        if(trace_flag != OFF && aritycheck(length(goal),car(goal))) {
+        if(debug_flag == ON && trace_flag != OFF && spypointp(goal)){
             printf("(%d) CALL: ", n); print(goal);
             debugger(goal,bindings,rest,n);
         }
@@ -385,7 +385,7 @@ int prove(int goal, int bindings, int rest, int n){
             if(predicatep(clause1) && unify(goal,clause1) == YES){
                 if(prove_all(rest,sp,n+1) == YES){
                     //trace
-                    if(trace_flag != OFF && aritycheck(length(goal),car(goal))){
+                    if(debug_flag == ON && trace_flag != OFF && spypointp(goal)){
                         printf("(%d) EXIT: ", n); print(goal);
                         debugger(goal,bindings,rest,n);
                     }
@@ -393,8 +393,8 @@ int prove(int goal, int bindings, int rest, int n){
                 }
                 else{
                     //trace
-                    if((trace_flag == FULL || trace_flag == TIGHT) && 
-                        aritycheck(length(goal),car(goal))){
+                    if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT) && 
+                        spypointp(goal)){
                         printf("(%d) FAIL: ", n); print(goal);
                         debugger(goal,bindings,rest,n);
                     }
@@ -406,7 +406,7 @@ int prove(int goal, int bindings, int rest, int n){
                     clause1 = addtail_body(rest,caddr(clause1));
                     if(prove_all(clause1,sp,n) == YES){
                         //trace
-                        if(trace_flag == FULL && aritycheck(length(goal),car(goal))){
+                        if(debug_flag == ON && trace_flag == FULL && spypointp(goal)){
                             printf("(%d) EXIT: ", n); print(goal);
                             debugger(goal,bindings,rest,n);
                         }
@@ -415,8 +415,8 @@ int prove(int goal, int bindings, int rest, int n){
                 }
             }
             //trace
-            if((trace_flag == FULL || trace_flag == TIGHT || trace_flag == HALF) &&
-                aritycheck(length(goal),car(goal))){
+            if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT || trace_flag == HALF) &&
+                spypointp(goal)){
                 printf("(%d) REDO: ", n); print(goal);
                 debugger(goal,bindings,rest,n);
             }
@@ -424,8 +424,8 @@ int prove(int goal, int bindings, int rest, int n){
             unbind(bindings);
         }
         //trace
-        if((trace_flag == FULL || trace_flag == TIGHT || trace_flag == HALF) &&
-            aritycheck(length(goal),car(goal))){
+        if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT || trace_flag == HALF) &&
+            spypointp(goal)){
             printf("(%d) FAIL: ", n); print(goal);
             debugger(goal,bindings,rest,n);
         }

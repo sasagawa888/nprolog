@@ -247,7 +247,6 @@ int makestream(FILE *port, int i_o, int type, int action, int fname){
     SET_OPT(addr,i_o); //input/output/inout
     SET_VAR(addr,type); //text/binary
     SET_AUX(addr,action); //for eof_action
-    SET_TR(addr,0); // for at_end_of_stream 1=end
     return(addr);
 }
 

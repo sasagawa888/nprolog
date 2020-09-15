@@ -1085,6 +1085,22 @@ int aritycheck(int x, int n){
     return(memberp(y,spy_list));
 }
 
+int spypointp(int x){
+    int atom,n,y;
+
+    if(atomp(x)){
+        atom = x;
+        n = 0;
+    }
+    else{
+        atom = car(x);
+        n = length(x) - 1;
+    }
+
+    y = list3(makeatom("/",OPE),atom,makeint(n-1));
+    return(memberp(y,spy_list));
+}
+
 int unique(int x){
     int res;
 

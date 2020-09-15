@@ -1283,27 +1283,9 @@ int b_get_char(int arglist, int rest){
             str[6] = NUL;
         }
         res = NIL;
-        if(c == EOF){
-            if(GET_TR(arg1) == 0){
-                SET_TR(arg1,1);
-                res = unify(arg2,FEND);
-            }
-            else{
-                if(GET_AUX(arg1) == makeconst("error"))
-                    error(PAST_EOF_INPUT,"get_char ",arg1);
-                else if(GET_AUX(arg1) == makeconst("eof_code")){
-                    SET_TR(arg1,0);
-                    res = unify(arg2,FEND);
-                }
-                else{
-                    SET_TR(arg1,0);
-                    res = unify(arg2,FEND);
-                }
-            }
-        }
-        else{
-            res = unify(arg2,makeconst(str));
-        }
+        
+        res = unify(arg2,makeconst(str));
+        
         return(res);
     }
     return(NO);
@@ -1386,27 +1368,8 @@ int b_get_code(int arglist, int rest){
         }
 
         res = NIL;
-        if(c == EOF){
-            if(GET_TR(arg1) == 0){
-                SET_TR(arg1,1);
-                res = unify(arg2,makeint(-1));
-            }
-            else{
-                if(GET_AUX(arg1) == makeconst("error"))
-                    error(PAST_EOF_INPUT,"get_code ",arg1);
-                else if(GET_AUX(arg1) == makeconst("eof_code")){
-                    SET_TR(arg1,0);
-                    res = unify(arg2,makeint(-1));
-                }
-                else{
-                    SET_TR(arg1,1);
-                    res = unify(arg2,makeint(-1));
-                }
-            }
-        }
-        else{
-            res = unify(arg2,makeint(i));
-        }
+        
+        res = unify(arg2,makeint(i));
         return(res);
     }
     return(NO);
@@ -1437,23 +1400,7 @@ int b_get_byte(int arglist, int rest){
             arg1 = GET_CAR(arg1);
         c = fgetc(GET_PORT(arg1));
 
-        res = NIL;
-        if(c == EOF){
-            if(GET_TR(arg1) == 0){
-                SET_TR(arg1,1);
-                res = unify(arg2,FEND);
-            }
-            else{
-                if(GET_AUX(arg1) == makeconst("error"))
-                    error(PAST_EOF_INPUT,"get_byte ",arg1);
-                else if(GET_AUX(arg1) == makeconst("eof_code"))
-                    res = unify(arg2,FEND);
-
-            }
-        }
-        else{
-            res = unify(arg2,makeint(c));
-        }
+        res = unify(arg2,makeint(c));
         return(res);
     }
     return(NO);
@@ -1562,12 +1509,7 @@ int b_read(int arglist, int rest){
 
         temp = variable_to_call(readparse());
         if(temp == FEND){
-            if(GET_AUX(input_stream) == makeconst("error") &&
-               GET_TR(input_stream) == 1)
-                error(EOF_ERROR,"read ",NIL);
-            else
-                temp = GET_AUX(input_stream);
-            SET_TR(input_stream,1); //for at_end_of_stream;
+            temp = GET_AUX(input_stream);
         }
         res = unify(arg2,temp);
         input_stream = save;
@@ -2763,7 +2705,7 @@ int b_spy(int arglist, int rest){
     }
     else if(n == 1){
         arg1 = deref(car(arglist));
-        SET_TR(cadr(arg1),1);
+        //SET_TR(cadr(arg1),1);
         if(!memberp(arg1,spy_list))
             spy_list = cons(arg1,spy_list);
         return(YES);
@@ -2777,14 +2719,12 @@ int b_nospy(int arglist, int rest){
     n = length(arglist);
     if(n == 0){
         while(!nullp(spy_list)){
-            SET_TR(cadr(car(spy_list)),0);
             spy_list = cdr(spy_list);
         }
         return(YES);
     }
     else if(n == 1){
         arg1 = deref(car(arglist));
-        SET_TR(cadr(arg1),0);
         spy_list = listremove(arg1,spy_list);
         return(YES);
     }
