@@ -747,6 +747,7 @@ void initbuiltin(void){
     defbuiltin("notrace",b_notrace);
     defbuiltin("spy",b_spy);
     defbuiltin("nospy",b_nospy);
+    defbuiltin("leash",b_leash);
     defbuiltin("atom",b_atom);
     defbuiltin("string",b_string);
     defbuiltin("integer",b_integer);
@@ -2727,6 +2728,34 @@ int b_nospy(int arglist, int rest){
         arg1 = deref(car(arglist));
         spy_list = listremove(arg1,spy_list);
         return(YES);
+    }
+    return(NO);
+}
+
+int b_leash(int arglist, int rest){
+    int n,arg1;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = car(arglist);
+        if(arg1 == makeatom("full",SIMP)){
+            trace_flag = FULL;
+            return(YES);
+        }
+        else if(arg1 == makeatom("tight",SIMP)){
+            trace_flag = TIGHT;
+            return(YES);
+        }
+        else if(arg1 == makeatom("half",SIMP)){
+            trace_flag = HALF;
+            return(YES);
+        }
+        else if(arg1 == makeatom("off",SIMP)){
+            trace_flag = OFF;
+            return(YES);
+        }
+        else
+            return(NO);
     }
     return(NO);
 }

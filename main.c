@@ -58,7 +58,6 @@ int ignore_flag = 0; // 0=infix notation 2+2 1=prefix notation +(2,2)
 int error_flag = 0;  // flag in syntax error
 int numbervars_flag = 0; // 0=normal 1= A -> '_0001
 int link_flag = 0;  // 0=not-link, 1=linked
-//int cut_flag = 0;  //for if then else 0=not exist cut, 1=exist cut
 int listing_flag = 0;  //for print clause, 0=normal, 1=format print
 int colon_sets_calling_context_flag = 1; //1=true, 0=false
 int prefix_flag = 0;   //for parser 0=not prefix, 1=prefix
@@ -94,7 +93,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"char_conversion"},{"max_arity"},
 {"atom_length"},{"consult"},{"reconsult"},
 {"see"},{"seen"},{"tell"},{"told"},{"trace"},{"notrace"},{"spy"},
-{"nospy"},{"atom"},{"integer"},{"real"},{"float"},{"number"},{"compound"},
+{"nospy"},{"leash"},{"atom"},{"integer"},{"real"},{"float"},{"number"},{"compound"},
 {"var"},{"nonvar"},{"atomic"},{"list"},{"gc"},{"time"},
 {"char_set"},{"char_code"},{"atom_chars"},{"name"},
 {"number_chars"},{"number_codes"},{"debug"},{"bounded"},
