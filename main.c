@@ -843,7 +843,10 @@ void print(int addr){
                     else
                         fprintf(GET_PORT(output_stream),"<stream%d>",addr);
                     break;
-        case STR:   fprintf(GET_PORT(output_stream),"$%s$", GET_NAME(addr));
+        case STR:   if(quoted_flag)
+                        fprintf(GET_PORT(output_stream),"$%s$", GET_NAME(addr));
+                    else
+                        fprintf(GET_PORT(output_stream),"%s", GET_NAME(addr));
                     break;
         default:    fprintf(GET_PORT(output_stream),"<undef>"); break;
     }
