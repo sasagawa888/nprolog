@@ -779,6 +779,10 @@ void initbuiltin(void){
     defbuiltin("reverse",b_reverse);
     defbuiltin("name",b_atom_codes);
     defbuiltin("delete",b_delete);
+    defbuiltin("ansi_cuu",b_ansi_cuu);
+    defbuiltin("ansi_cud",b_ansi_cud);
+    defbuiltin("ansi_cuf",b_ansi_cuf);
+    defbuiltin("ansi_cub",b_ansi_cub);
     
 
 
@@ -4553,6 +4557,94 @@ int b_dec(int arglist, int rest){
         else
             return(unify(arg2,minus(arg1,makeint(1))));
 
+    }
+    return(NO);
+}
+
+int b_ansi_cuu(int arglist, int rest){
+    int n,arg1,m;
+
+    n=length(arglist);
+    if(n == 1){
+        arg1 = deref(car(arglist));
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"ansi_cuu ", arg1);
+        if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
+            error(NOT_INT,"ansi_cuu ",arg1);
+        if(wide_integer_p(arg1) && negativep(arg1))
+            error(NOT_LESS_THAN_ZERO,"ansi_cuu ",arg1);
+        m = get_int(arg1);
+        while(m > 0){
+            ESCMVU;
+            m--;
+        }
+        return(YES);
+    }
+    return(NO);
+}
+
+int b_ansi_cud(int arglist, int rest){
+    int n,arg1,m;
+
+    n=length(arglist);
+    if(n == 1){
+        arg1 = deref(car(arglist));
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"ansi_cud ", arg1);
+        if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
+            error(NOT_INT,"and_cud ",arg1);
+        if(wide_integer_p(arg1) && negativep(arg1))
+            error(NOT_LESS_THAN_ZERO,"ansi_cud ",arg1);
+        m = get_int(arg1);
+        while(m > 0){
+            ESCMVD;
+            m--;
+        }
+        return(YES);
+    }
+    return(NO);
+}
+
+int b_ansi_cuf(int arglist, int rest){
+    int n,arg1,m;
+
+    n=length(arglist);
+    if(n == 1){
+        arg1 = deref(car(arglist));
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"ansi_cuf ", arg1);
+        if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
+            error(NOT_INT,"and_cuf ",arg1);
+        if(wide_integer_p(arg1) && negativep(arg1))
+            error(NOT_LESS_THAN_ZERO,"ansi_cuf ",arg1);
+        m = get_int(arg1);
+        while(m > 0){
+            ESCMVR;
+            m--;
+        }
+        return(YES);
+    }
+    return(NO);
+}
+
+int b_ansi_cub(int arglist, int rest){
+    int n,arg1,m;
+
+    n=length(arglist);
+    if(n == 1){
+        arg1 = deref(car(arglist));
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"ansi_cub ", arg1);
+        if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
+            error(NOT_INT,"and_cub ",arg1);
+        if(wide_integer_p(arg1) && negativep(arg1))
+            error(NOT_LESS_THAN_ZERO,"ansi_cub ",arg1);
+        m = get_int(arg1);
+        while(m > 0){
+            ESCMVL;
+            m--;
+        }
+        return(YES);
     }
     return(NO);
 }

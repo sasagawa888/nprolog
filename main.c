@@ -105,7 +105,8 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"put_byte"},
 {"inc"},{"dec"},{"term_variables"},{"compare"},
 {"mkdir"},{"chdir"},
-{"sort"},{"keysort"},{"length"},{"call"},{"shell"},{"measure"}
+{"sort"},{"keysort"},{"length"},{"call"},{"shell"},{"measure"},
+{"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"}
 };
 
 //compiled predicate
