@@ -734,6 +734,7 @@ void initbuiltin(void){
     defbuiltin("listing",b_listing);
     defbuiltin("functor",b_functor);
     defbuiltin("arg",b_arg);
+    defbuiltin("arg0",b_arg0);
     defbuiltin("consult",b_consult);
     defbuiltin("reconsult",b_reconsult);
     defbuiltin("open",b_open);
@@ -3110,6 +3111,38 @@ int b_arg(int arglist, int rest){
     }
     return(NO);
 }
+
+int b_arg0(int arglist, int rest){
+    int n,arg1,arg2,arg3,elt,i;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+        arg3 = deref(caddr(arglist));
+
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"arg ", arg1);
+        if(wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"arg ", arg2);
+        if(!integerp(arg1))
+            error(NOT_INT,"arg ", arg1);
+        if(!compoundp(arg2))
+            error(NOT_COMPOUND,"arg ", arg2);
+        if(integerp(eval(arg1)) && GET_INT(eval(arg1)) < 0)
+            error(NOT_LESS_THAN_ZERO,"arg ", arg1);
+
+        if(integerp(arg1) && structurep(arg2)){
+            i = GET_INT(arg1)+1;
+            if(i < 1 || i >= length(arg2))
+                return(NO);
+            elt = nth(cdr(arg2),i);
+            return(unify(arg3,elt));
+        }
+    }
+    return(NO);
+}
+
 
 //-----other----
 int b_listing(int arglist, int rest){
