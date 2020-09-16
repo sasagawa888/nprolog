@@ -138,6 +138,7 @@ shell/1
 sort/2
 spy/1
 string/1
+string_length/2
 system/1
 trace/0
 true/0
