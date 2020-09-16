@@ -115,6 +115,7 @@ flush/0
 gc/0
 halt/0
 ifthen/2
+ifthenelse/3
 inc/2
 integer/1
 is/2

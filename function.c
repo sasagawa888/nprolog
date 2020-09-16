@@ -783,7 +783,8 @@ void initbuiltin(void){
     defbuiltin("ansi_cud",b_ansi_cud);
     defbuiltin("ansi_cuf",b_ansi_cuf);
     defbuiltin("ansi_cub",b_ansi_cub);
-    
+    defbuiltin("ifthen",b_ifthen);
+    defbuiltin("ifthenelse",b_ifthenelse);
 
 
     defcompiled("repeat",b_repeat);
@@ -2649,6 +2650,34 @@ int b_ifthen(int arglist, int rest){
             
         unbind(save1);
         return(NO);
+    }
+    return(NO);
+}
+
+int b_ifthenelse(int arglist, int rest){
+    int n,arg1,arg2,arg3;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+        arg3 = deref(caddr(arglist));
+        
+        if(variablep(arg1))
+            error(INSTANTATION_ERR,"ifthenelse ",arg1);
+        if(variablep(arg2))
+            error(INSTANTATION_ERR,"ifthenelse ",arg2);
+        if(variablep(arg3))
+            error(INSTANTATION_ERR,"ifthenelse ",arg3);    
+
+        if(prove_all(arg1,sp,0) == YES){
+            if(prove_all(arg2,sp,0) == YES)
+                return(prove_all(rest,sp,0));
+        }
+        else{
+            if(prove_all(arg3,sp,0) == YES)
+                return(prove_all(rest,sp,0));
+        }
     }
     return(NO);
 }
