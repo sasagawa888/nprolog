@@ -115,7 +115,7 @@ int length(int addr){
     return(len);
 }
 
-int atom_length(int addr){
+int string_length(int addr){
     char str[STRSIZE],c;
     int pos,n;
 
@@ -477,12 +477,7 @@ int atomicp(int addr){
         return(0);
 }
 
-int characterp(int addr){
-    if(atomp(addr) && atom_length(addr) == 1)
-        return(1);
-    else
-        return(0);
-}
+
 
 int singlep(int addr){
     if(IS_OUTCELL(addr))
@@ -940,17 +935,6 @@ int numbervarp(int addr){
         return(0);
 }
 
-int atom_chars_list_p(int addr){
-
-    while(!nullp(addr)){
-        if(!(characterp(car(addr)) &&
-             !wide_variable_p(car(addr))))
-            return(0);
-
-        addr = cdr(addr);
-    }
-    return(1);
-}
 
 int atom_codes_list_p(int addr){
 

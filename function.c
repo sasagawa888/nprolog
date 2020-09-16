@@ -721,7 +721,6 @@ void initbuiltin(void){
     defbuiltin("put",b_put);
     defbuiltin("get",b_get);
     defbuiltin("get0",b_get0);
-    defbuiltin("get_char",b_get_char);
     defbuiltin("get_code",b_get_code);
     defbuiltin("get_byte",b_get_byte);
     defbuiltin("nl",b_nl);
@@ -786,6 +785,7 @@ void initbuiltin(void){
     defbuiltin("ifthen",b_ifthen);
     defbuiltin("ifthenelse",b_ifthenelse);
     defbuiltin("concat",b_concat);
+    defbuiltin("string_length",b_string_length);
 
 
     defcompiled("repeat",b_repeat);
@@ -1211,94 +1211,6 @@ int b_get(int arglist, int rest){
 }
 
 
-int b_get_char(int arglist, int rest){
-    int n,c,arg1,arg2,res;
-    char str[10];
-
-    n = length(arglist);
-    if(n == 1){
-        arg1 = input_stream;
-        arg2 = deref(car(arglist));
-        goto get_char;
-    }
-    else if(n == 2){
-        arg1 = deref(car(arglist));
-        arg2 = deref(cadr(arglist));
-        get_char:
-
-        if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"get_char ",arg1);
-        if(!wide_variable_p(arg2) && !characterp(arg2))
-            error(NOT_CHAR,"get_char ",arg2);
-        if(!streamp(arg1) && !aliasp(arg1))
-            error(NOT_STREAM,"get_char ",arg1);
-
-
-        if(aliasp(arg1))
-            arg1 = GET_CAR(arg1);
-
-        c = getc(GET_PORT(arg1));
-
-        str[0] = c;
-        str[1] = NUL;
-        if(mode_flag == 0 && iskanji(c)){
-            c = getc(GET_PORT(arg1));
-            str[1] = c;
-            str[2] = NUL;
-        }
-        else if(mode_flag == 1 && isUni2(c)){
-            c = getc(GET_PORT(arg1));
-            str[1] = c;
-            str[2] = NUL;
-        }
-        else if(mode_flag == 1 && isUni3(c)){
-            c = getc(GET_PORT(arg1));
-            str[1] = c;
-            c = getc(GET_PORT(arg1));
-            str[2] = c;
-            str[3] = NUL;
-        }
-        else if(mode_flag == 1 && isUni4(c)){
-            c = getc(GET_PORT(arg1));
-            str[1] = c;
-            c = getc(GET_PORT(arg1));
-            str[2] = c;
-            c = getc(GET_PORT(arg1));
-            str[3] = c;
-            str[4] = NUL;
-        }
-        else if(mode_flag == 1 && isUni5(c)){
-            c = getc(GET_PORT(arg1));
-            str[1] = c;
-            c = getc(GET_PORT(arg1));
-            str[2] = c;
-            c = getc(GET_PORT(arg1));
-            str[3] = c;
-            c = getc(GET_PORT(arg1));
-            str[4] = c;
-            str[5] = NUL;
-        }
-        else if(mode_flag == 1 && isUni6(c)){
-            c = getc(GET_PORT(arg1));
-            str[1] = c;
-            c = getc(GET_PORT(arg1));
-            str[2] = c;
-            c = getc(GET_PORT(arg1));
-            str[3] = c;
-            c = getc(GET_PORT(arg1));
-            str[4] = c;
-            c = getc(GET_PORT(arg1));
-            str[5] = c;
-            str[6] = NUL;
-        }
-        res = NIL;
-        
-        res = unify(arg2,makeconst(str));
-        
-        return(res);
-    }
-    return(NO);
-}
 
 int b_get_code(int arglist, int rest){
     int n,arg1,arg2,c,i,res;
@@ -2641,6 +2553,28 @@ int b_concat(int arglist, int rest){
         unify(arg3,str);
         return(YES);
 
+    }
+    return(NO);
+}
+
+int b_string_length(int arglist, int rest){
+    int n,arg1,arg2,val;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"string_length ",arg1);
+        if(!stringp(arg1))
+            error(NOT_STR,"string_length ",arg1);
+        if(integerp(eval(arg2)) && GET_INT(eval(arg2)) < 0)
+            error(NOT_LESS_THAN_ZERO,"string_length ",arg2);
+        if(!wide_variable_p(arg2) && !integerp(arg2))
+            error(NOT_INT,"string_length ", arg2);
+
+        val = makeint(string_length(arg1));
+        return(unify(arg2,val));
     }
     return(NO);
 }
