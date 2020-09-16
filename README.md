@@ -148,9 +148,10 @@ writeq/2
 # builtin (extension)
 ```
 append/3
+between/3
 member/2
-reverse/2
 measure/1   measure elapsed time
+reverse/2
 ```
 
 # function

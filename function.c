@@ -793,7 +793,7 @@ void initbuiltin(void){
     defcompiled("clause",b_clause);
     defcompiled("current_predicate",b_current_predicate);
     defcompiled("current_op",b_current_op);
-
+    defcompiled("between",b_between);
     return;
 }
 
@@ -4492,6 +4492,65 @@ int b_reverse(int arglist, int rest){
     }
     return(NO);
 }
+
+/*
+between(L, H, L) :- L =< H.
+between(L, H, V) :- L < H, L1 is L + 1, between(L1, H, V).
+*/
+
+int b_between(int arglist, int rest){
+    int n,arg1,arg2,arg3,varL1,varV,varH,varL,body,save1,save2;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = deref(car(arglist));   //low
+        arg2 = deref(cadr(arglist));  //high
+        arg3 = deref(caddr(arglist)); //variable
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"between ",arg1);
+        if(wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"between ",arg2);
+        if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
+            error(NOT_INT,"between ",arg1);
+        if(!wide_variable_p(arg2) && !wide_integer_p(arg2))
+            error(NOT_INT,"between ",arg2);
+        if(!wide_variable_p(arg3) && !wide_integer_p(arg3))
+            error(NOT_INT,"between ",arg3);
+
+        save1 = wp;
+        save2 = sp;
+        varH = makevariant();
+        varL = makevariant();
+        if(unify(arg1,varL) == YES &&
+            unify(arg2,varH) == YES &&
+            unify(arg3,varL) == YES){
+                body = wlist3(makeatom("=<",SYS),deref(varL),deref(varH));
+                if(prove(body,sp,rest,0) == YES)
+                    return(YES);
+        }
+        wp = save1;
+        unbind(save2);
+
+        save1 = wp;
+        varL1 = makevariant();
+        varL = makevariant();
+        varH = makevariant();
+        varV = makevariant();
+        if(unify(arg1,varL) == YES &&
+            unify(arg2,varH) == YES &&
+            unify(arg3,varV) == YES){
+            body = wlist3(makeatom(",",OPE),wlist3(makeatom("<",SYS),deref(varL),deref(varH)),wlist3(makeatom(",",OPE),wlist3(makeatom("is",SYS),varL1,wcons(makeatom("+",OPE),wcons(varL,wcons(makeint(1),NIL)))),wcons(makeatom("between",COMP),wcons(varL1,wcons(varH,wcons(varV,NIL))))));
+            if(prove_all(addtail_body(rest,body),sp,0) == YES)
+                return(YES);
+        }
+        wp = save1;
+        unbind(save2);
+    }
+    return(NO);
+}
+
+
+//------------------------------------------------
 
 int b_inc(int arglist, int rest){
     int n,arg1,arg2;
