@@ -1594,9 +1594,16 @@ int b_consult(int arglist, int rest){
         column = 0;
         reconsult_list = NIL;
         while(1){
+            skip:
             clause = parser(NIL,NIL,NIL,NIL,0,0);
             if(clause == FEND)
                 break;
+
+            //e.g. :- op(...)
+            if(operationp(clause) && car(clause) == makeatom(":-",OPE) && length(clause) == 2){
+                operate(clause);
+                goto skip;
+            }
 
             //assert
             b_assert(list1(clause),NIL);
@@ -1644,9 +1651,17 @@ int b_reconsult(int arglist, int rest){
         column = 0;
         reconsult_list = NIL;
         while(1){
+            skip:
             clause = parser(NIL,NIL,NIL,NIL,0,0);
             if(clause == FEND)
                 break;
+            
+            //e.g. :- op(...)
+            if(operationp(clause) && car(clause) == makeatom(":-",OPE) && length(clause) == 2){
+                operate(clause);
+                goto skip;
+            }
+
 
             //delete old definition
             if(predicatep(clause)){
