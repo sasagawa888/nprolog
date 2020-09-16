@@ -785,6 +785,7 @@ void initbuiltin(void){
     defbuiltin("ansi_cub",b_ansi_cub);
     defbuiltin("ifthen",b_ifthen);
     defbuiltin("ifthenelse",b_ifthenelse);
+    defbuiltin("concat",b_concat);
 
 
     defcompiled("repeat",b_repeat);
@@ -2611,6 +2612,35 @@ int b_atom_codes(int arglist, int rest){
         }
         else
             return(NO);
+    }
+    return(NO);
+}
+
+
+int b_concat(int arglist, int rest){
+    int n,arg1,arg2,arg3,str;
+    char str1[STRSIZE];
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));;
+        arg3 = deref(caddr(arglist));
+        
+        if(!wide_variable_p(arg1) && !(atomp(arg1) || stringp(arg1)))
+            error(NOT_STR,"concat ",arg1);
+        if(!wide_variable_p(arg2) && !(atomp(arg2) || stringp(arg2)))
+            error(NOT_STR,"concat ",arg2);
+        if(!wide_variable_p(arg3))
+            error(NOT_VAR,"concat ", arg3);
+    
+        strcpy(str1,GET_NAME(arg1));
+        strcat(str1,GET_NAME(arg2));
+        str = makestr(str1);
+
+        unify(arg3,str);
+        return(YES);
+
     }
     return(NO);
 }

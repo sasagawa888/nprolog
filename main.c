@@ -102,7 +102,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"set_input"},{"set_output"},{"flush"},{"listreverse"},{"nano"},
 {"numbervars"},{"retractall"},{"get_byte"},
 {"string"},{"string_chars"},{"string_codes"},{"ground"},
-{"put_byte"},
+{"put_byte"},{"concat"},
 {"inc"},{"dec"},{"term_variables"},{"compare"},
 {"mkdir"},{"chdir"},
 {"sort"},{"keysort"},{"length"},{"call"},{"shell"},{"measure"},
@@ -114,7 +114,7 @@ char compiled[COMPILED_NUMBER][30] ={
 {"append"},{"member"},{"repeat"},
 {"retract"},{"clause"},
 {"current_visible"},{"stream_property"},{"between"},
-{"sub_atom"},{"atom_concat"},{"current_predicate"},{"current_op"}
+{"sub_atom"},{"current_predicate"},{"current_op"}
 };
 
 //extened predicate

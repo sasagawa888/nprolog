@@ -102,6 +102,7 @@ atomic/1
 call/1
 chdir/1
 compare/3
+concat/3
 consult/1
 current_op/3
 current_predicate/1
