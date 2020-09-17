@@ -439,24 +439,17 @@ int prove(int goal, int bindings, int rest, int n){
         }
     }
     else if(disjunctionp(goal)){
-        save = wp;
-        if(prove_all(cadr(goal),bindings,n) == YES)
-            if(prove_all(rest,sp,n+1) == YES)
-                return(YES);
-            else
-                goto another;
+        if(prove_all(addtail_body(rest,cadr(goal)),bindings,n) == YES)
+            return(YES);
         else{
-            another:
             unbind(bindings);
-            if(prove_all(caddr(goal),bindings,n) == YES)
-                return(prove_all(rest,sp,n+1));
-            else{
-                save = wp;
+            if(prove_all(addtail_body(rest,caddr(goal)),bindings,n) == YES)
+                return(YES)
+;            else{
                 unbind(bindings);
                 return(NO);
             }
         }
-        save = wp;
         unbind(bindings);
         return(NO);
     }
