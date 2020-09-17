@@ -11,7 +11,6 @@ written by kenichi sasagawa 2016/9~
 #define ATOMSIZE 256
 #define BUFSIZE 256
 #define STRSIZE 256
-#define MODULES 10
 #define OPERATOR_NUMBER 24
 #define FUNCTION_NUMBER 19
 #define BUILTIN_NUMBER 200
@@ -656,7 +655,7 @@ int b_sort(int arglist, int rest);
 int b_spy(int arglist, int rest);
 int b_string(int arglist, int rest);
 int b_string_length(int arglist, int rest);
-int b_sub_atom(int arglist, int rest);
+int b_substring(int arglist, int rest);
 int b_tab(int arglist, int rest);
 int b_tell(int arglist, int rest);
 int b_term_variables(int arglist, int rest);

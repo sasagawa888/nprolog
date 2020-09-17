@@ -1,0 +1,40 @@
+N-Prolog ユーザーズマニュアル
+
+
+□ [Filename]
+consult述語を用いてファイルからデータベースに読み込む。
+-Filenameを使ったときはresoncult述語が使われる。
+ファイルを複数指定することもできる。[Filename1,filename2,...]
+
+
+□ ansi_cuu(N)
+カーソルをN行上げる。
+
+□ ansi_cud(N)
+カーソルをN行下げる。
+
+□ ansi_cuf(N)
+カーソルをN桁進める。
+
+□ ansi_sub(N)
+カーソルをN桁戻す。
+
+□ display(Term)
+前置記法で項を標準出力装置に書き出す。
+
+□ edit(Filename)
+Filenameで指定したファイルのエディトのため、インタープリタからエディタに切り換える。
+エディタとしてnanoを呼び出す。nanoを終了するとファイルの内容はインタプリタに読み込まれる。
+
+□ halt
+インタープリタから抜け出す。
+
+□ substring(InString,N,Length,OutString)
+ストリングからサブストリングを抽出する。
+Nは開始位置　１から始まる自然数
+Lengthは抽出する文字列の長さ
+
+□ system(P)
+Pが組込述語かどうかを調べる。
+
+

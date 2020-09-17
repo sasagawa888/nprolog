@@ -786,6 +786,7 @@ void initbuiltin(void){
     defbuiltin("ifthenelse",b_ifthenelse);
     defbuiltin("concat",b_concat);
     defbuiltin("string_length",b_string_length);
+    defbuiltin("substring",b_substring);
 
 
     defcompiled("repeat",b_repeat);
@@ -2543,6 +2544,7 @@ int b_atom_codes(int arglist, int rest){
     return(NO);
 }
 
+//----------string transform-------------------
 
 int b_concat(int arglist, int rest){
     int n,arg1,arg2,arg3,str;
@@ -2593,6 +2595,55 @@ int b_string_length(int arglist, int rest){
     }
     return(NO);
 }
+
+int b_substring(int arglist, int rest){
+    int n,arg1,arg2,arg3,arg4,i,j,k,start,len,str;
+    char str1[STRSIZE],str2[STRSIZE];
+
+    n = length(arglist);
+    if(n == 4){
+        arg1 = deref(car(arglist));   //instring
+        arg2 = deref(cadr(arglist));  //start
+        arg3 = deref(caddr(arglist)); //length
+        arg4 = deref(cadddr(arglist));//outstring
+
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"substring ",arg1);
+        if(!stringp(arg1))
+            error(NOT_STR,"substring ",arg1);
+        if(!wide_variable_p(arg4) && !stringp(arg4))
+            error(NOT_STR,"substring ",arg4);
+        if(integerp(arg2) && GET_INT(arg2) < 0)
+            error(NOT_LESS_THAN_ZERO,"substring ",arg2);
+        if(integerp(arg3) && GET_INT(arg3) < 0)
+            error(NOT_LESS_THAN_ZERO,"substring ",arg3);
+        if(!wide_variable_p(arg2) && !wide_integer_p(arg2))
+            error(NOT_INT,"substring ",arg2);
+        if(!wide_variable_p(arg3) && !wide_integer_p(arg3))
+            error(NOT_INT,"substring ",arg3);
+        
+
+
+        strcpy(str1,GET_NAME(arg1));
+        start = GET_INT(arg2);
+        len   = GET_INT(arg3);
+        if(string_length(arg1) < start+len-1)
+            error(OUT_OF_RANGE,"substring ", list2(arg2,arg3));
+        i= 0;
+        j = start - 1;
+        k = start + len - 1;
+        memset(str2, '\0' ,STRSIZE);
+         while(j < k){
+            str2[i] = str1[j];
+            i++;
+            j++;
+        }
+        str = makestr(str2);
+        return(unify(arg4,str));
+    }
+    return(NO);
+}
+
 
 //controle
 int b_cut(int arglist, int rest){

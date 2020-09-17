@@ -102,7 +102,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"set_input"},{"set_output"},{"flush"},{"listreverse"},{"nano"},
 {"numbervars"},{"retractall"},{"get_byte"},
 {"string"},{"string_chars"},{"string_codes"},{"ground"},
-{"put_byte"},{"concat"},
+{"put_byte"},{"concat"},{"substring"},
 {"inc"},{"dec"},{"term_variables"},{"compare"},
 {"mkdir"},{"chdir"},{"string_length"},
 {"sort"},{"keysort"},{"length"},{"call"},{"shell"},{"measure"},
@@ -114,7 +114,7 @@ char compiled[COMPILED_NUMBER][30] ={
 {"append"},{"member"},{"repeat"},
 {"retract"},{"clause"},
 {"current_visible"},{"stream_property"},{"between"},
-{"sub_atom"},{"current_predicate"},{"current_op"}
+{"current_predicate"},{"current_op"}
 };
 
 //extened predicate
@@ -277,11 +277,20 @@ void query(int x){
 int list_to_ope(int x){
     if(nullp(x))
         error(SYNTAX_ERR,"?-", x);
-    else if(nullp(cdr(x)))
-        return(cons(makeatom("reconsult",SYS),x));
+    else if(nullp(cdr(x))){
+        if(atomp(car(x)))
+            return(list2(makeatom("consult",SYS),car(x)));
+        else if(caar(x) == makeatom("-",OPE))
+            return(list2(makeatom("reconsult",SYS),cadr(car(x))));
+    }
     else{
-        return(list3(makeatom(",",OPE),
-                     list2(makeatom("reconsult",SYS),car(x)),
+        if(atomp(car(x)))
+            return(list3(makeatom(",",OPE),
+                     list2(makeatom("consult",SYS),car(x)),
+                     list_to_ope(cdr(x))));
+        else if(caar(x) == makeatom("-",OPE))
+            return(list3(makeatom(",",OPE),
+                     list2(makeatom("reconsult",SYS),cadr(car(x))),
                      list_to_ope(cdr(x))));
     }
     return(NIL);
