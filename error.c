@@ -141,7 +141,7 @@ void error(int errnum, char *fun, int arg){
                             break;
 
         case RESOURCE_ERR:
-                            printf("Resource error ");
+                            printf("Resource error %s ", fun);
                             break;
 
         case NOT_CHAR:     

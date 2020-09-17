@@ -1600,7 +1600,7 @@ int b_consult(int arglist, int rest){
                 break;
 
             //e.g. :- op(...)
-            if(operationp(clause) && car(clause) == makeatom(":-",OPE) && length(clause) == 2){
+            if(operationp(clause) && car(clause) == DEFINE && length(clause) == 2){
                 operate(clause);
                 goto skip;
             }
@@ -1657,7 +1657,7 @@ int b_reconsult(int arglist, int rest){
                 break;
             
             //e.g. :- op(...)
-            if(operationp(clause) && car(clause) == makeatom(":-",OPE) && length(clause) == 2){
+            if(operationp(clause) && car(clause) == DEFINE && length(clause) == 2){
                 operate(clause);
                 goto skip;
             }

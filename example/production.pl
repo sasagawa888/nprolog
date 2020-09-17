@@ -11,7 +11,7 @@ yes
 reaction(X,Y) :-
     rule(X,Y).
 
-%ƒ‹[ƒ‹
+
 rule(X,Y) :-
     check(c,1,X),
     check(h2,2,X),
@@ -52,12 +52,11 @@ rule(X,Y) :-
 
 rule(X,X).
 
-%Œ³‘f‚ªˆê’è‚ÌŒÂ”ˆÈã‚ ‚é‚©‚Ç‚¤‚©
 check(A,B,X) :-
     count(A,C,X),
     C >= B.
 
-%Œ³‘f‚Ì”‚ğ”‚¦‚é
+
 count(A,0,[]).
 count(A,C,[A|L]) :-
     count(A,C1,L),
@@ -65,7 +64,7 @@ count(A,C,[A|L]) :-
 count(A,C,[L|Ls]) :-
     count(A,C,Ls).
 
-%Œ³‘f‚ğw’è‚µ‚½ŒÂ”•ªAíœ‚·‚éB
+
 remove(A,0,L,L).
 remove(A,B,[A|L],Y) :-
     B1 is B - 1,
