@@ -458,80 +458,32 @@ int prove(int goal, int bindings, int rest, int n){
 
 
 int before_cut(int x){
-    return(before_cut1(x,NIL));
-}
-
-int before_cut1(int x, int y){
-    int temp1,temp2;
-
-    if(nullp(x))
-        return(NO);
-    else if(x == CUT)
-        return(y);
-    else if(car(x) == AND && cadr(x) == CUT)
-        return(y);
-    else if(car(x) == AND && caddr(x) == CUT)
-        return(addtail_operation(cadr(x),y));
-    else if(predicatep(x) || builtinp(x) || compiledp(x))
-        return(NO);
-    else if(operationp(cadr(x))){
-        temp1 = before_cut1(cadr(x),y);
-        if(temp1 == NO)
-            return(before_cut1(caddr(x),addtail_operation(cadr(x),y)));
-        else{
-            temp2 = before_cut1(caddr(x),temp1);
-            if(temp2 == NO)
-                return(temp1);
-            else
-                return(temp2);
-        }
-    }
-    else
-        return(before_cut1(caddr(x),addtail_operation(cadr(x),y)));
-    return(x);
-}
-
-int addtail_operation(int x, int y){
-    if(nullp(y))
-        return(x);
-    else if(!operationp(y))
-        return(wlist3(AND,y,x));
-    else
-        return(wlist3(car(y),cadr(y),addtail_operation(x,caddr(y))));
-}
-
-int after_cut(int x){
-    int temp1,temp2;
 
     if(x == CUT)
         return(NIL);
-    else if(predicatep(x) || builtinp(x) || compiledp(x))
-        return(NO);
-    else if(car(x) == AND && cadr(x) == CUT){
-        temp1 = after_cut(caddr(x));
-        if(temp1 == NO)
-            return(caddr(x));
-        else
-            return(temp1);
-    }
-    else if(operationp(cadr(x))){
-        temp1 = after_cut(cadr(x));
-
-        if(temp1 == NO)
-            return(after_cut(caddr(x)));
-        else{
-            temp2 = after_cut(caddr(x));
-            if(temp2 == NO)
-                return(addtail_operation(caddr(x),temp1));
-            else
-                return(temp2);
-        }
-    }
-    else if(car(x) == AND)
-        return(after_cut(caddr(x)));
-    else if(car(car(x)) == OR)
+    else if(!conjunctionp(x))
         return(x);
-    return(x);
+    else if(cadr(x) == CUT)
+        return(NIL);
+    else if(conjunctionp(caddr(x)) && cadr(caddr(x)) == CUT)
+        return(cadr(x));
+    else
+        return(wlist3(AND,cadr(x),before_cut(caddr(x))));
+
+}
+
+
+int after_cut(int x){
+
+    if(x == CUT)
+        return(NIL);
+    else if(!conjunctionp(x))
+        return(x);
+    else if(cadr(x) == CUT)
+        return(caddr(x));
+    else
+        return(after_cut(caddr(x)));
+    
 }
 
 #define FLUSH __fpurge(stdin);

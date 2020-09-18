@@ -150,7 +150,9 @@ writeq/2
 ```
 
 # builtin (extension)
+
 ```
+/+         not in ISO-Prolog
 append/3
 between/3
 member/2

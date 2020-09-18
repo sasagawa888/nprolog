@@ -706,6 +706,7 @@ void initbuiltin(void){
     definfix("@",o_ignore,100,XFX);
     definfix(":",b_colon,50,XFX);
     definfix("->",b_ifthen,1050,XFY);
+    definfix("\\+",b_not,900,FY);
 
     defbuiltin("op",b_op);
     defbuiltin("!",b_cut);

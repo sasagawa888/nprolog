@@ -836,18 +836,12 @@ int has_no_value_p(int x){
 int has_cut_p(int addr){
     if(addr == CUT)
         return(1);
-    else if(!structurep(addr))
+    else if(!conjunctionp(addr))
         return(0);
-    else if(operationp(addr) && car(addr) == IFTHEN)
-        return(0);
-    else if(operationp(addr) && car(addr) == AND &&
-            (has_cut_p(cadr(addr)) || has_cut_p(caddr(addr))))
+    else if(conjunctionp(addr) && cadr(addr) == CUT)
         return(1);
-    else if(operationp(addr) && car(addr) == OR &&
-            (has_cut_p(cadr(addr)) || has_cut_p(caddr(addr))))
-        return(1);
-    else
-        return(0);
+    else 
+        return(has_cut_p(caddr(addr)));
 }
 
 

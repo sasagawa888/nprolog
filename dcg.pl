@@ -1,10 +1,6 @@
 %ISO/IEC DTR 13211-3
-%Thanks Paulo Moura
-:- module(dcg).
-:- export([phrase/2,dcg_expand/1]).
-:- end_module(dcg).
 
-:- body(dcg).
+
 :- op(1105,xfy,'|').
 
 phrase(GRBody,SO) :-
@@ -100,4 +96,4 @@ dcg_cbody(( GRIf -> GRThen ), S0, S, ( If -> Then )) :-
    dcg_body(GRIf, S0, S1, If),
    dcg_body(GRThen, S1, S, Then).
 
-:- end_module(dcg).
+
