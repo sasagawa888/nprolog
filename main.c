@@ -94,9 +94,9 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"char_set"},{"char_code"},{"atom_chars"},{"name"},
 {"number_chars"},{"number_codes"},{"debug"},{"bounded"},
 {"get_code"},{"put_char"},{"put_code"},
-{"current_input"},{"current_output"},{"unify_with_occurs_check"},
-{"set_input"},{"set_output"},{"flush"},{"listreverse"},{"nano"},
-{"numbervars"},{"retractall"},{"get_byte"},
+{"current_input"},{"current_output"},
+{"set_input"},{"set_output"},{"flush"},{"listreverse"},
+{"get_byte"},
 {"string"},{"string_chars"},{"string_codes"},{"ground"},
 {"put_byte"},{"concat"},{"substring"},
 {"inc"},{"dec"},{"term_variables"},{"compare"},
@@ -930,11 +930,7 @@ void printc(char c){
 }
 
 void printlong(int addr){
-    #if (defined __MINGW32__) || (defined __MINGW64)
-        fprintf(GET_PORT(output_stream),"%I64d", GET_LONG(addr));
-    #else
-        fprintf(GET_PORT(output_stream),"%lld", GET_LONG(addr));
-    #endif
+    fprintf(GET_PORT(output_stream),"%lld", GET_LONG(addr));
 }
 
 
