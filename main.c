@@ -105,14 +105,14 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"put_byte"},{"concat"},{"substring"},
 {"inc"},{"dec"},{"term_variables"},{"compare"},
 {"mkdir"},{"chdir"},{"string_length"},
-{"sort"},{"keysort"},{"length"},{"call"},{"shell"},{"measure"},
+{"sort"},{"keysort"},{"length"},{"shell"},{"measure"},
 {"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"}
 };
 
 //compiled predicate
 char compiled[COMPILED_NUMBER][30] ={
 {"append"},{"member"},{"repeat"},
-{"retract"},{"clause"},
+{"retract"},{"clause"},{"call"},
 {"current_visible"},{"stream_property"},{"between"},
 {"current_predicate"},{"current_op"}
 };
@@ -262,6 +262,7 @@ void init_repl(void){
 void query(int x){
     int res;
 
+    // DCG syntax e.g. a-->b.
     if(dcgp(x)){
         operate(x);
         return;

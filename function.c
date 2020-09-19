@@ -774,7 +774,6 @@ void initbuiltin(void){
     defbuiltin("inc",b_inc);
     defbuiltin("dec",b_dec);
     defbuiltin("length",b_length);
-    defbuiltin("call",b_call);
     defbuiltin("edit",b_nano);
     defbuiltin("reverse",b_reverse);
     defbuiltin("name",b_atom_codes);
@@ -789,7 +788,7 @@ void initbuiltin(void){
     defbuiltin("string_length",b_string_length);
     defbuiltin("substring",b_substring);
 
-
+    defcompiled("call",b_call);
     defcompiled("repeat",b_repeat);
     defcompiled("append",b_append);
     defcompiled("member",b_member);
@@ -2162,7 +2161,7 @@ int b_call(int arglist, int rest){
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"call ",arg1);
 
-        res = prove_all(arg1,sp,n);
+        res = prove_all(addtail_body(rest,arg1),sp,n);
         return(res);
     }
     
