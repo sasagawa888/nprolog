@@ -48,6 +48,7 @@ int simp_flag = 1;
 int assert_flag = 0; // 0=asserta, 1=assertz
 int debug_flag = OFF;  // 0=normal mode, 1=debug mode
 int sexp_flag = 0;
+int cut_flag = 0;
 int arguments_flag = 1; //1= 1,2,3 -> (1,2,3) 0= 1,2,3 -> 1,2,3
 int mode_flag = 1;  // 0=SJIS, 1=Unicod
 int quoted_flag = 1; // 0=not print ' 1=print '
@@ -241,6 +242,7 @@ void init_repl(void){
     wp = HEAPSIZE+1;
     unbind(0);
     sp = 0;
+    cut_flag = 0;
     //initialize variant variable
     for(i=0; i<VARIANTSIZE; i++){
         variant[i][0] = UNBIND;
@@ -329,6 +331,7 @@ int prove_all(int goals, int bindings, int n){
             return(prove(cadr(goals),bindings,caddr(goals),n));
         }
         else{
+            cut_flag = 1;
             if(prove_all(before_cut(goals),bindings,n) == YES)
                 return(prove_all(after_cut(goals),sp,n));
             else
@@ -451,10 +454,10 @@ int prove(int goal, int bindings, int rest, int n){
         if(prove_all(addtail_body(rest,cadr(goal)),bindings,n) == YES)
             return(YES);
         else{
-            if(has_cut_p(cadr(goal))){
-                // for sick code (X=1;X=2), (true->!; fail), (Y=1;Y=2). crazy!
-                printf("no\n");
-                longjmp(buf,1);
+            if(cut_flag == 1){
+                cut_flag = 0;
+                unbind(bindings);
+                return(NO);
             }
             unbind(bindings);
             if(prove_all(addtail_body(rest,caddr(goal)),bindings,n) == YES)
