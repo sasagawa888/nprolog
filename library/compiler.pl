@@ -1,9 +1,3 @@
-:- module(compiler).
-:- export([compile_file/1,invoke_gcc/1]).
-:- end_module(compiler).
-
-
-:- body(compiler).
 
 %main
 compile_file(X) :-
@@ -22,15 +16,15 @@ tail_optimize/1 check a predicate if it is tail call optimizable.
 if is is optimazable , assert optimizable/1 e.g. optimizable(foo).
 pass1 check all predicate by fail repeat.
 */
-pass1(X) :-
-	  write(user_output, 'pass1'),
-    nl(user_output),
+jump_pass1(X) :-
+	write('pass1'),
+    nl,
     reconsult(X),
-    o_reconsult_predicate(P),
-    tail_optimize(P),
+    n_reconsult_predicate(P),
+    jump_tail_optimize(P),
     assert(optimizable(P)),
     fail.
-pass1(X).
+jump_pass1(X).
 
 
 /*
@@ -38,50 +32,30 @@ pass2 generate each clause or predicate code.
 and write to <filename>.c
 when all code is generated, close file and abolish optimizable/1
 */
-pass2(X) :-
-	  write(user_output,'pass2'),
-    nl(user_output),
-	  o_filename(X,F),
+jump_pass2(X) :-
+	write('pass2'),
+    nl,
+	o_filename(X,F),
     atom_concat(F,'.c',Cfile),
-	  open(Cfile,write,S,[type(text)]),
+	open(Cfile,write,S,[type(text)]),
     set_output(S),
-	  write('#include "jump.h"'),nl,
-    gen_c_macro,
-	  o_reconsult_predicate_list(L),
-	  gen_c_pred(L),
+	write('#include "jump.h"'),nl,
+	o_reconsult_predicate_list(L),
+	gen_c_pred(L),
     gen_c_def(L),
     gen_c_exec,
     close(S),
     set_output(user_output).
 
-
-/*
-when OS is Windows
-system builtin predicate invoke GCC
-gcc -O3 -shared -o <filenam>.c <filename>.o <option>
-*/
-invoke_gcc(X) :-
-	  o_self_introduction(windows),
-	  write(user_output,'invoke gcc'),
-    nl(user_output),
-	  o_filename(X,F),
-    o_c_option(O),
-    atom_concat(F,'.c ',Cfile),
-    atom_concat(F,'.o ',Ofile),
-    atom_concat(Ofile,Cfile,Files),
-    atom_concat('gcc -O3 -shared -o ',Files,Sys1),
-    atom_concat(Sys1,O,Sys),
-    system(Sys).
 /*
 when OS is Linux
 system builtin predicate invoke GCC
 gcc -O3 -w -shared -fPIC -o <filenam>.c <filename>.o <option>
 */
 invoke_gcc(X) :-
-	  o_self_introduction(linux),
-	  write(user_output,'invoke GCC'),
-    nl(user_output),
-	  o_filename(X,F),
+	write('invoke GCC'),
+    nl,
+	o_filename(X,F),
     o_c_option(O),
     atom_concat(F,'.c ',Cfile),
     atom_concat(F,'.o ',Ofile),
@@ -103,40 +77,12 @@ invoke_gcc(X) :-
     atom_concat(Sys1,O,Sys),
     system(Sys).
 
-/*
-for C wrapper
-#include #define macro
-c_include(' ... '). --> #include ...
-c_define(' ... ').  --> #define  ...
-c_global(' ... ').  --> on top level generate ...
-*/gen_c_macro :-
-	  o_c_include(I),
-    gen_c_macro1(I),
-	  o_c_define(D),
-    gen_c_macro2(D),
-    o_c_global(G),
-    gen_c_macro3(G).
 
-% #include macro
-gen_c_macro1([]).
-gen_c_macro1([L|Ls]) :-
-	  write('#include '),
-    write(L),nl,
-    gen_c_macro1(Ls).
-
-% #define macro
-gen_c_macro2([]).
-gen_c_macro2([[X|Y]|Ls]) :-
-	  write('#define '),
-    write(X),
-    write(' '),
-    write(Y),
-    gen_c_macro2(Ls).
 
 %global declare
 gen_c_macro3([]).
 gen_c_macro3([L|Ls]) :-
-	  write(L),nl,
+	write(L),nl,
     gen_c_macro3(Ls).
 
 /*
@@ -145,35 +91,28 @@ They are provided by list.
 e.g. [foo,bar,boo]
 generate each predicate to make compiled pred
 */
-gen_c_pred([]).
-%when declare dynamic, not compile
-gen_c_pred([P|Ps]) :-
-	  o_dynamic_check(P),
-    gen_c_pred(Ps).
+
 %when predicate is tail call optimizable
 gen_c_pred([P|Ps]) :-
     optimizable(P),
-	  gen_type_declare(P),
+	gen_type_declare(P),
     gen_tail_pred(P),
     gen_c_pred(Ps).
 %normal predicate
 gen_c_pred([P|Ps]) :-
-	  gen_type_declare(P),
+	gen_type_declare(P),
     gen_pred(P),
     gen_c_pred(Ps).
 
 % code for C to define compiled predicate
 gen_c_def(L) :-
-	  write('void init_tpredicate(void){'),
+	write('void init_tpredicate(void){'),
     gen_c_def1(L),
     write('}').
 
 gen_c_def1([]).
 gen_c_def1([P|Ps]) :-
-	  o_dynamic_check(P),
-    gen_c_def1(Ps).
-gen_c_def1([P|Ps]) :-
-	  gen_def(P),
+	gen_def(P),
     gen_c_def1(Ps).
 
 /*
@@ -184,7 +123,7 @@ void init_declare(void){
 }
 */
 gen_c_exec :-
-	  write('void init_declare(void){'),
+	write('void init_declare(void){'),
     gen_dynamic,
     gen_exec,
     write('}').
@@ -194,12 +133,12 @@ dynamic predicate data are provided as list.
 e.g. [foo/1,bar/2,boo/3...]
 */
 gen_dynamic :-
-	  o_get_dynamic(X),
+	o_get_dynamic(X),
     gen_dynamic1(X).
 
 gen_dynamic1([]).
 gen_dynamic1([P/A|Ls]) :-
-	  gen_dynamic2(P,A),
+	gen_dynamic2(P,A),
     gen_dynamic1(Ls).
 /*
 when p has no module
@@ -212,19 +151,19 @@ Jset_car(Jmakepred("<predicate_name>"),Jmakeconst("<module_name>"));
 */
 gen_dynamic2(P,A) :-
     o_generated_module(P,[]),
-	  write('Jset_car(Jmakepred("'),
+	write('Jset_car(Jmakepred("'),
     write(P),
     write('"),NIL);'),nl,
-	  o_clause_with_arity(P,A,C),
+	o_clause_with_arity(P,A,C),
     o_variable_convert(C,C1),
     gen_dynamic3(C1).
 
 gen_dynamic2(P,A) :-
     o_generated_module(P,M),
-	  write('Jset_car(Jmakepred("'),
+	write('Jset_car(Jmakepred("'),
     write(P),
     write('"),NIL);'),nl,
-	  o_clause_with_arity(P,A,C),
+	o_clause_with_arity(P,A,C),
     o_variable_convert(C,C1),
     gen_dynamic3(C1),
     write('Jset_var(Jmakepred("'),
@@ -233,136 +172,58 @@ gen_dynamic2(P,A) :-
     write(M),
     write('"));').
 
-/*
-for dynamic declare predicate
-when predicate
-Jexecute(...generated dynamic code1...);
-Jexecute(...generated dynamic code2...);
-...
-when clause
-Jexecute(Jlist3(Jmakeope(":-"),head_code1,body_code1)) ;
-Jexecute(Jlist3(Jmakeope(":-"),head_code2,body_code2)) ;
-...
-*/
-gen_dynamic3([]).
-gen_dynamic3([L|Ls]) :-
-	  o_property(L,predicate),
-    write('Jexecute('),
-    gen_org(L),
-    write(');'),nl,
-    gen_dynamic3(Ls).
-gen_dynamic3([(H :- B)|Ls]) :-
-    write('Jexecute(Jlist3(Jmakeope(":-"),'),
-    gen_org(H),
-    write(','),
-    gen_org(B),
-    write('));'),nl.
-    gen_dynamic3(Ls).
 
-/*
-generate execute code for compiled function
-e.g  :- ensuare_loaded('foo.pl')).
-ignore dynamic declared predicate and C wraped code.
-ignore module/1 export/1 import/1 import/2 body/1 end_module/1 end body/1
-meta/1
-*/
-gen_exec :-
-	  o_get_execute(X),
-    gen_exec1(X).
 
-gen_exec1([]).
-gen_exec1([dynamic(X)|Ls]) :-
-	  gen_exec1(Ls).
-gen_exec1([c_include(X)|Ls]) :-
-	  gen_exec1(Ls).
-gen_exec1([c_define(X)|Ls]) :-
-	  gen_exec1(Ls).
-gen_exec1([c_option(X)|Ls]) :-
-	  gen_exec1(Ls).
-gen_exec1([c_global(X)|Ls]) :-
-	  gen_exec1(Ls).
-gen_exec1([module(X)|Ls]) :-
-	  gen_exec1(Ls).
-gen_exec1([export(X)|Ls]) :-
-	  gen_exec1(Ls).
-gen_exec1([import(X)|Ls]) :-
-	  gen_exec1(Ls).
-gen_exec1([import(X,Y)|Ls]) :-
-	  gen_exec1(Ls).
-gen_exec1([body(X)|Ls]) :-
-	  gen_exec1(Ls).
-gen_exec1([end_module(X)|Ls]) :-
-	  gen_exec1(Ls).
-gen_exec1([end_body(X)|Ls]) :-
-	  gen_exec1(Ls).
-gen_exec1([meta(X)|Ls]) :-
-	  gen_exec1(Ls).
-gen_exec1([L|Ls]) :-
-	  write('Jexecute(Jlist2(Jmakeope(":-"),'),
-    gen_a_argument(L),
-    write('));'),nl,
-    gen_exec1(Ls).
 /*
 parts for gen_predicate
 C type declare.
-int_b_foo(int nest, int n);
+int_b_foo(int arglist, int rest);
 */
-gen_type_declare(P) :-
-	  write('int b_'),
+jump_gen_type_declare(P) :-
+	write('int b_'),
     o_atom_convert(P,P1),
     write(P1),
-    write('(int nest, int n);'),
+    write('(int arglist, int rest);'),
     nl.
 /*
 C variable declare.
 generate following code
 int(int arg1,arg2,...,argN){
 int arg1,arg2 ... argN,body,save1,save2;
-save2 = Jget_sp();
 
 */
-gen_var_declare(P) :-
-	  o_arity_count(P,L),
-    max_element(L,M),
+jump_gen_var_declare(P) :-
+	o_arity_count(P,L),
+    jump_max_element(L,M),
     write('int '),
-    gen_var_declare1(1,M),
+    jump_gen_var_declare1(1,M),
     o_generate_all_variable(P,V),
-    gen_all_var(V),
-    gen_cut_var(P),
-    write('body,save1,save2;'),nl,
-    write('save2 = Jget_sp();'),nl.
-
-
-% for cut operater
-% if clause has cut, add 'save4,save5' variable
-gen_cut_var(P) :-
-	  o_include_cut(P),
-    write('save4,save5,').
-gen_cut_var(P).
+    jump_gen_all_var(V),
+    write('body,save1,save2;'),nl.
 
 % arg1,arg2,...argN
-gen_var_declare1(S,E) :-
-	  S > E.
-gen_var_declare1(S,E) :-
-	  write(arg),
+jump_gen_var_declare1(S,E) :-
+	S > E.
+jump_gen_var_declare1(S,E) :-
+	write(arg),
     write(S),
     write(','),
     S1 is S+1,
-    gen_var_declare1(S1,E).
+    jump_gen_var_declare1(S1,E).
 
 /*
 max element in list
 this is used by gen_var_declare,for to find max arity
 */
-max_element([L],L).
-max_element([L|Ls],A) :-
-	  max_element(Ls,A),
+jump_max_element([L],L).
+jump_max_element([L|Ls],A) :-
+	jump_max_element(Ls,A),
     L < A.
-max_element([L|Ls],L).
+jump_max_element([L|Ls],L).
 
 /*
 generate predicate for not tail recursive
-int b_<name>(int nest, int n){
+int b_<name>(int arglist, int rest){
 int varX,varY,...
 if(n == N){
     ...main code...
@@ -370,101 +231,98 @@ if(n == N){
 return(NO);
 }
 */
-gen_pred(P) :-
-	  atom_concat('compiling ',P,M),
+jump_gen_pred(P) :-
+	atom_concat('compiling ',P,M),
     write(user_output,M),nl(user_output),
-	  write('int b_'),
+	write('int b_'),
     o_atom_convert(P,P1),
     write(P1),
-    write('(int nest, int n){'),
+    write('(int arglist, int rest){'),
     nl,
-    gen_var_declare(P),
+    jump_gen_var_declare(P),
     o_arity_count(P,L),
-    gen_pred1(P,L),
+    jump_gen_pred1(P,L),
     write('}'),nl.
 
 % pred1,pred2,...,predN
-gen_pred1(P,[]) :-
-	  write('return(NO);').
-    gen_pred1(P,[L|Ls]) :-
-	  gen_pred2(P,L),
-    gen_pred1(P,Ls).
+jump_gen_pred1(P,[]) :-
+	write('return(NO);').
+
+jump_gen_pred1(P,[L|Ls]) :-
+	jump_gen_pred2(P,L),
+    jump_gen_pred1(P,Ls).
 
 % if(n == N){...}
-gen_pred2(P,N) :-
-	  write('if(n == '),
+jump_gen_pred2(P,N) :-
+	write('if(n == '),
     write(N),
     write('){'),
-    gen_receive_var(1,N),
-    gen_pred3(P,N),
+    jump_gen_receive_var(1,N),
+    jump_gen_pred3(P,N),
     write('}').
 
-%select all clauses that arity is N
-gen_pred3(P,N) :-
-	  o_clause_with_arity(P,N,C),
-    gen_pred4(C).
+% select all clauses that arity is N
+jump_gen_pred3(P,N) :-
+	o_clause_with_arity(P,N,C),
+    jump_gen_pred4(C).
 
-%generate each clause
-gen_pred4([]).
-gen_pred4([C|Cs]) :-
-	  o_variable_convert(C,X),
+% generate each clause
+jump_gen_pred4([]).
+jump_gen_pred4([C|Cs]) :-
+	o_variable_convert(C,X),
     o_generate_variable(X,V),
-    gen_var(V),
-    gen_pred5(X),
-    gen_pred4(Cs).
+    jump_gen_var(V),
+    jump_gen_pred5(X),
+    jump_gen_pred4(Cs).
 
 /*
 save1 = Jget_wp();
-If( )... head
+save2 = jget_sp();
+if( )... head
 {body = }
 ...
 */
-%clause that has cut
-gen_pred5((Head :- Body)) :-
-    o_has_cut(Body),
-    write('save1 = Jget_wp();'),nl,
-	  gen_head(Head),
-    gen_cut_body(Body).
 
-%clause without cut
-gen_pred5((Head :- Body)) :-
+% generate clause
+jump_gen_pred5((Head :- Body)) :-
     write('save1 = Jget_wp();'),nl,
-	  gen_head(Head),
-    gen_body(Body).
+    write('save2 = Jget_sp();'),nl,
+	jump_gen_head(Head),
+    jump_gen_body(Body).
 
-% predicate with no arity
-gen_pred5(P) :-
-	  o_property(P,predicate),
+% generate predicate with no arity
+jump_gen_pred5(P) :-
+	o_property(P,predicate),
     functor(P,_,0),
     write('return(YES);'),nl.
 
-%CPS predicate
-gen_pred5(P) :-
-	  o_property(P,predicate),
+% CPS predicate
+jump_gen_pred5(P) :-
+	o_property(P,predicate),
     write('save1 = Jget_wp();'),nl,
-	  gen_head(P),
-    write('if(Jproceed(NIL,nest) == YES)'),nl,
+	jump_gen_head(P),
+    write('if(Jprove_all(rest,sp,0) == YES)'),nl,
     write('return(YES);'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
 
 % varA,varB,...
-gen_all_var([]).
-gen_all_var([L|Ls]) :-
-	  write(L),
+jump_gen_all_var([]).
+jump_gen_all_var([L|Ls]) :-
+	write(L),
     write(','),
-    gen_all_var(Ls).
+    jump_gen_all_var(Ls).
 
 % varA = Jmakevariant(), varB = Jmakevariant();
-gen_var([]).
-gen_var([L|Ls]) :-
+jump_gen_var([]).
+jump_gen_var([L|Ls]) :-
     o_compiler_anoymous(L),
-    gen_var(Ls).
-gen_var([L|Ls]) :-
+    jmp_gen_var(Ls).
+jump_gen_var([L|Ls]) :-
     write(L),
     write(' = Jmakevariant();'),nl,
-    gen_var(Ls).
+    jump_gen_var(Ls).
 
 /*
 generate following argN code.
@@ -472,61 +330,25 @@ arg1 = Jderef(Jget_goal(2));
 arg2 = Jderef(Jget_goal(3)); ...
 if N=0 then not generate code.
 */
-gen_receive_var(_,0).
-gen_receive_var(S,N) :-
-	  S > N.
-gen_receive_var(S,N) :-
-	  write('arg'),
+jump_gen_receive_var(_,0).
+jump_gen_receive_var(S,N) :-
+	S > N.
+jump_gen_receive_var(S,N) :-
+	write('arg'),
     write(S),
     S1 is S + 1,
     write(' = Jderef(Jget_goal(' ),write(S1),write('));'),nl,
-    %write('Jdisplay(arg'),write(S),write(');'),nl,
-    gen_receive_var(S1,N).
+    jump_gen_receive_var(S1,N).
+
+
 
 /*
-when generate body that has cut!
-code is following format.
-{body = ...;
- if(Jproceed(body,cont) == YES){
-    body = ...;
-    if(Jproceed(body,cont) == YES))
-        return(YES);
- else{
-    Junbind(save2);
-    Jset_wp(save1);
-    return(NO);
- }}
-Junbind(save2);
-Jset_wp(save1);
-*/
-gen_cut_body(X) :-
-    write('{body ='),o_generate_before_cut(X,Y),gen_body1(Y),write(';'),nl,
-    write('if(Jproceed(body,NIL) == YES){'),nl,
-    write('body ='),o_generate_after_cut(X,Z),gen_body1(Z),write(';'),nl,
-    write('if(Jproceed(body,nest) == YES)'),nl,
-    write('return(YES);'),nl,
-    write('else{'),nl,
-    write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl,
-    write('return(NO);}}'),nl,
-    write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);}'),nl.
-
-/*
-generate body of clause
-when include c_pred/1 in body.
-*/
-gen_body(X) :-
-	  o_has_c_lang(X),
-    gen_c_lang_body(X).
-
-/*
-body for new compier
+body for compiler
 foo(X),bar(X),boo(X).
 
 if(unify(....)){
     body = ...;
-    if(Jproceed(body,nest) == YES)
+    if(Jprove_all(body,Jget_sp(),0) == YES)
         return(YES)};
 
 Junbind(save2);
@@ -534,60 +356,44 @@ Jset_wp(save1);
 
 
 */
-gen_body(X) :-
+jump_gen_body(X) :-
     write('{body = '),
     gen_body1(X),
     write(';'),nl,
-    write('if(Jproceed(body,nest) == YES)'),nl,
+    write('if(Jprove_all(body,Jget_sp(),0) == YES)'),nl,
     write('return(YES);}'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
-gen_body1([]) :-
+jump_gen_body1([]) :-
     write('NIL').
-gen_body1((X,Xs)) :-
-	  write('Jwlist3(Jmakeope(","),'),
-	  gen_a_body(X),
+jump_gen_body1((X,Xs)) :-
+	write('Jwlist3(Jmakeope(","),'),
+	jump_gen_a_body(X),
     write(','),
-    gen_body1(Xs),
+    jump_gen_body1(Xs),
     write(')').
-gen_body1((X;Xs)) :-
-	  write('Jwlist3(Jmakeope(";"),'),
-	  gen_body1(X),
+jump_gen_body1((X;Xs)) :-
+	write('Jwlist3(Jmakeope(";"),'),
+	jump_gen_body1(X),
     write(','),
-    gen_body1(Xs),
+    jump_gen_body1(Xs),
     write(')').
-gen_body1(X) :-
-	  gen_a_body(X).
+jump_gen_body1(X) :-
+	jump_gen_a_body(X).
 
 /*
 generate one operation,user,builtin or compiled predicate.
 when except of above type, invoke error.
 */
 gen_a_body((X;Xs)) :-
-	  write('Jwlist3(Jmakeope(";"),'),
-	  gen_a_body(X),
+	write('Jwlist3(Jmakeope(";"),'),
+	gen_a_body(X),
     write(','),
     gen_body1(Xs),
     write(')').
 
-%defined dynamic declared predicate will become predicate
-gen_a_body(X) :-
-    functor(X,P,0),
-    o_dynamic_check(P),
-    write('Jmakepred("'),
-    write(P),
-    write('")').
-gen_a_body(X) :-
-    functor(X,P,_),
-    o_dynamic_check(P),
-    o_argument_list(X,L),
-    write('Jwcons(Jmakepred("'),
-    write(P),
-    write('"),'),
-    gen_argument(L),
-    write(')').
-%defined predicate and optimizable will become builtin
+% defined predicate and optimizable will become builtin
 gen_a_body(X) :-
     o_defined_predicate(X),
     functor(X,P,_),
@@ -598,14 +404,14 @@ gen_a_body(X) :-
     write('"),'),
     gen_argument(L),
     write(')').
-%defined predicate will become compiled predicate
+% defined predicate will become compiled predicate
 gen_a_body(X) :-
     o_defined_predicate(X),
     functor(X,P,0),
     write('Jmakecomp("'),
     write(P),
     write('")').
-%defined predicate will become compiled predicate
+% defined predicate will become compiled predicate
 gen_a_body(X) :-
     o_defined_predicate(X),
     functor(X,P,_),
@@ -670,45 +476,12 @@ gen_a_body(X) :-
     write(')').
 gen_a_body(X) :-
     atom(X),
-	  write('Jmakepred("'),
+	write('Jmakepred("'),
     write(X),
     write('")').
 gen_a_body(X) :-
     invoke_error('illegal body ',X).
-/*
-when body has c_lang\1 generate following code.
- body = ...;
- if(proceed(body,NIL) == YES){
-    ... C code ...
 
-    }
-    return(proceed(NIL,nest));
-
- //when fail
- Junbind(save2);
- Jset_wp(save1);
-
-*/
-
-gen_c_lang_body(X) :-
-    o_generate_before_c_lang(X,B),
-    o_generate_after_c_lang(X,A),
-	  write('{body = '),
-    gen_body1(B),
-    write(';'),nl,
-    write('if(Jproceed(body,NIL) == YES){'),nl,
-    gen_c_lang_body1(A),
-    write('return(Jproceed(NIL,nest));}}'),nl,
-    write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl.
-
-gen_c_lang_body1(c_lang(X)) :-
-	  write(X),nl.
-gen_c_lang_body1((c_lang(X),Y)) :-
-	  write(X),nl,
-    gen_c_lang_body1(Y).
-gen_c_lang_body2((X,Y)) :-
-	  invoke_error('illegal body ',X).
 
 /*
 generate_unify of head
@@ -743,7 +516,7 @@ gen_head1([X|Xs],N) :-
 
 
 gen_head2(N,X) :-
-	  write('Junify(arg'),
+	write('Junify(arg'),
     write(N),
     write(','),
     gen_a_argument(X),
@@ -754,41 +527,41 @@ generate evauation code
 e.g.  X is 1+2.  X == 3*4.
 */
 eval_form([]) :-
-	  write('NIL').
+	write('NIL').
 eval_form([X]) :-
-	  write('Jmakeconst("'),
+	write('Jmakeconst("'),
     write(X),
     write('")').
 eval_form(pi) :-
-	  write('Jmakestrflt("3.14159265358979")').
+	write('Jmakestrflt("3.14159265358979")').
 eval_form(X) :-
-	  o_bignum(X),
+	o_bignum(X),
     write('Jmakebig("'),
     write(X),
     write('")').
 eval_form(X) :-
-	  o_longnum(X),
+	o_longnum(X),
     write('Jmakestrlong("'),
     write(X),
     write('")').
 eval_form(X) :-
-	  integer(X),
+	integer(X),
     write('Jmakeint('),
     write(X),
     write(')').
 eval_form(X) :-
-	  float(X),
+	float(X),
     write('Jmakestrflt("'),
     write(X),
     write('")').
 eval_form(X) :-
-	  atom(X),
+	atom(X),
     o_compiler_variable(X),
     write('Jderef('),
     write(X),
     write(')').
 eval_form(X) :-
-	  atom(X),
+	atom(X),
     write('Jmakeconst("'),
     write(X),
     write('")').
@@ -796,125 +569,125 @@ eval_form(X) :-
     list(X),
     gen_a_argument(X).
 eval_form(X + Y) :-
-	  write('Jplus('),
+	write('Jplus('),
     eval_form(X),
     write(','),
     eval_form(Y),
     write(')').
 eval_form(X - Y) :-
-	  write('Jminus('),
+	write('Jminus('),
     eval_form(X),
     write(','),
     eval_form(Y),
     write(')').
 eval_form(X * Y) :-
-	  write('Jmult('),
+	write('Jmult('),
     eval_form(X),
     write(','),
     eval_form(Y),
     write(')').
 eval_form(X / Y) :-
-	  write('Jdivide('),
+	write('Jdivide('),
     eval_form(X),
     write(','),
     eval_form(Y),
     write(')').
 eval_form(X//Y) :-
-	  write('Jdiv('),
+	write('Jdiv('),
     eval_form(X),
     write(','),
     eval_form(Y),
     write(')').
 eval_form(X ** Y) :-
-	  write('Jexpt('),
+	write('Jexpt('),
     eval_form(X),
     write(','),
     eval_form(Y),
     write(')').
 eval_form(X ^ Y) :-
-	  write('Jexpt('),
+	write('Jexpt('),
     eval_form(X),
     write(','),
     eval_form(Y),
     write(')').
 eval_form(X mod Y) :-
-	  write('Jmod('),
+	write('Jmod('),
     eval_form(X),
     write(','),
     eval_form(Y),
     write(')').
 eval_form(X rem Y) :-
-	  write('Jrem('),
+	write('Jrem('),
     eval_form(X),
     write(','),
     eval_form(Y),
     write(')').
 eval_form(sin(X)) :-
-	  write('Jsin('),
+	write('Jsin('),
     eval_form(X),
     write(')').
 eval_form(asin(X)) :-
-	  write('Jasin('),
+	write('Jasin('),
     eval_form(X),
     write(')').
 eval_form(cos(X)) :-
-	  write('Jcos('),
+	write('Jcos('),
     eval_form(X),
     write(')').
 eval_form(acos(X)) :-
-	  write('Jacos('),
+	write('Jacos('),
     eval_form(X),
     write(')').
 eval_form(tan(X)) :-
-	  write('Jtan('),
+	write('Jtan('),
     eval_form(X),
     write(')').
 eval_form(atan(X)) :-
-	  write('Jatan('),
+	write('Jatan('),
     eval_form(X),
     write(')').
 eval_form(exp(X)) :-
-	  write('Jexp('),
+	write('Jexp('),
     eval_form(X),
     write(')').
 eval_form(log(X)) :-
-	  write('Jatan('),
+	write('Jatan('),
     eval_form(X),
     write(')').
 eval_form(floor(X)) :-
-	  write('Jfloor('),
+	write('Jfloor('),
     eval_form(X),
     write(')').
 eval_form(ceiling(X)) :-
-	  write('Jseiling('),
+	write('Jseiling('),
     eval_form(X),
     write(')').
 eval_form(truncate(X)) :-
-	  write('Jtruncate('),
+	write('Jtruncate('),
     eval_form(X),
     write(')').
 eval_form(sign(X)) :-
-	  write('Jsign('),
+	write('Jsign('),
     eval_form(X),
     write(')').
 eval_form(round(X)) :-
-	  write('Jround('),
+	write('Jround('),
     eval_form(X),
     write(')').
 eval_form(X << Y) :-
-	  write('Jleftshift('),
+	write('Jleftshift('),
     eval_form(X),
     write(','),
     eval_form(Y),
     write(')').
 eval_form(X >> Y) :-
-	  write('Jrightshift('),
+	write('Jrightshift('),
     eval_form(X),
     write(','),
     eval_form(Y),
     write(')').
 eval_form(X /\ Y) :-
-	  write('Jlogicaland('),
+	write('Jlogicaland('),
     eval_form(X),
     write(','),
     eval_form(Y),
@@ -953,7 +726,7 @@ tail call optimized predicate is compiled to builtin(not compiled).
 */
 gen_def(P) :-
     optimizable(P),
-	  write('(deftpred)("'),
+	write('(deftpred)("'),
     write(P),
     write('",'),
     write('b_'),
@@ -997,7 +770,7 @@ e.g. [3,14,A,foo(2)]
 gen_argument([]) :-
     write('NIL').
 gen_argument([X|Xs]) :-
-	  write('Jwcons('),
+	write('Jwcons('),
     gen_a_argument(X),
     write(','),
     gen_argument(Xs),
@@ -1007,32 +780,32 @@ generate one argument
 there are all type of prolog object
 */
 gen_a_argument([]) :-
-	  write('NIL').
+	write('NIL').
 gen_a_argument(X) :-
     o_compiler_anoymous(X),
     write('ANOYVAR').
 gen_a_argument(X) :-
-	  o_compiler_variable(X),
+	o_compiler_variable(X),
     write(X).
 gen_a_argument(pi) :-
-	  write('Jmakestrflt("3.14159265358979")').
+	write('Jmakestrflt("3.14159265358979")').
 gen_a_argument(X) :-
-	  o_bignum(X),
+	o_bignum(X),
     write('Jmakebig("'),
     write(X),
     write('")').
 gen_a_argument(X) :-
-	  o_longnum(X),
+	o_longnum(X),
     write('Jmakestrlong("'),
     write(X),
     write('")').
 gen_a_argument(X) :-
-	  integer(X),
+	integer(X),
     write('Jmakeint('),
     write(X),
     write(')').
 gen_a_argument(X) :-
-	  float(X),
+	float(X),
     write('Jmakestrflt("'),
     write(X),
     write('")').
@@ -1066,7 +839,7 @@ gen_a_argument(X) :-
     functor(X,Y,_),
     o_findatom(Y,builtin,A),
     o_argument_list(X,Z),
-	  write('Jwcons('),
+	write('Jwcons('),
     write(A),
     write(','),
     gen_argument(Z),
@@ -1096,7 +869,7 @@ gen_a_argument(X) :-
     functor(X,Y,_),
     o_findatom(Y,operator,A),
     o_argument_list(X,Z),
-	  write('Jwcons('),
+	write('Jwcons('),
     write(A),
     write(','),
     gen_argument(Z),
@@ -1120,7 +893,7 @@ gen_a_argument(X) :-
     o_property(X,function),
     functor(X,F,_),
     o_argument_list(X,Z),
-	  write('Jwcons(Jmakefun("'),
+	write('Jwcons(Jmakefun("'),
     write(F),
     write('"),'),
     gen_argument(Z),
@@ -1135,24 +908,24 @@ gen_a_argument(X) :-
     o_property(X,userop),
     functor(X,Y,_),
     o_argument_list(X,Z),
-	  write('Jwcons(Jmakeuser("'),
+	write('Jwcons(Jmakeuser("'),
     write(Y),
     write('"),'),
     gen_a_argument(Z),
     write(')').
 gen_a_argument(X) :-
-	  atom(X),
+	atom(X),
     write('Jmakeconst("'),
     write(X),
     write('")').
 gen_a_argument(X) :-
-	  list(X),
+	list(X),
     gen_argument_list(X).
 gen_a_argument(X) :-
     invoke_error('illegal argument ',X).
 
 gen_argument_list([X|Xs]) :-
-	  write('Jwlistcons('),
+	write('Jwlistcons('),
     gen_a_argument(X),
     write(','),
     gen_a_argument(Xs),
@@ -1164,168 +937,11 @@ display error message and error code.
 and close output file, finaly abort to REPL
 */
 invoke_error(Message,Code) :-
-	  write(user_output,Message),
+	write(user_output,Message),
     write(user_output,Code),nl(user_output),
     told,
     abort.
 
-
-/*
-for dynamic clause retract orginal clause or predicate.
-generate original list.
-compiler variable is retract to original expression. e.g. varX -> X
-*/
-gen_org([]) :-
-	write('NIL').
-gen_org(X) :-
-	  o_compiler_variable(X),
-    write('Jmakevar("'),
-    o_write_original_variable(X),
-    write('")').
-gen_org(X) :-
-	  o_bignum(X),
-    write('Jmakebig("'),
-    write(X),
-    write('")').
-gen_org(X) :-
-	  o_longnum(X),
-    write('Jmakestrlong("'),
-    write(X),
-    write('")').
-gen_org(X) :-
-	  integer(X),
-    write('Jmakeint('),
-    write(X),
-    write(')').
-gen_org(X) :-
-	  float(X),
-    write('Jmakestrflt("'),
-    write(X),
-    write('")').
-%predicate
-gen_org(X) :-
-	  o_property(X,predicate),
-    functor(X,Y,0),
-	  write('Jmakepred("'),
-    write(Y),
-    write('")').
-gen_org(X) :-
-	  o_property(X,predicate),
-    functor(X,Y,_),
-    o_argument_list(X,Z),
-	  write('Jcons(Jmakepred("'),
-    write(Y),
-    write('"),'),
-    gen_org(Z),
-    write(')').
-%builtin
-gen_org(X) :-
-	  o_property(X,builtin),
-    functor(X,Y,0),
-    o_findatom(Y,builtin,A),
-    write(A).
-gen_org(X) :-
-	  o_property(X,builtin),
-    functor(X,Y,_),
-    o_argument_list(X,Z),
-    o_findatom(Y,builtin,A),
-	  write('Jcons('),
-    write(A),
-    write(','),
-    gen_org(Z),
-    write(')').
-%compiled
-gen_org(X) :-
-	  o_property(X,compiled),
-    functor(X,Y,0),
-    write('Jmakecomp("'),
-    write(Y),
-    write('")').
-gen_org(X) :-
-	  o_property(X,compiled),
-    functor(X,Y,_),
-    o_argument_list(X,Z),
-	  write('Jcons(Jmakecomp("'),
-    write(Y),
-    write('"),'),
-    gen_org(Z),
-    write(')').
-%operation
-gen_org(X) :-
-    o_property(X,operation),
-    functor(X,Y,0),
-	  write('Jmakeope("'),
-    write(Y),
-    write('")').
-gen_org(X) :-
-    o_property(X,operation),
-    functor(X,Y,_),
-    o_argument_list(X,Z),
-	  write('Jcons(Jmakeope("'),
-    write(Y),
-    write('"),'),
-    gen_org(Z),
-    write(')').
-%user operation
-gen_org(X) :-
-    o_property(X,userop),
-    functor(X,Y,0),
-	  write('Jmakeuser("'),
-    write(Y),
-    write('")').
-gen_org(X) :-
-    o_property(X,operation),
-    functor(X,Y,_),
-    o_argument_list(X,Z),
-	write('Jcons(Jmakeuser("'),
-    write(Y),
-    write('"),'),
-    gen_org(Z),
-    write(')').
-%function
-gen_org(X) :-
-    o_property(X,function),
-    functor(X,Y,0),
-    write('Jmakefun("'),
-    write(Y),
-    write('")').
-gen_org(X) :-
-    o_property(X,function),
-    functor(X,Y,_),
-    o_argument_list(X,Z),
-	  write('Jcons(Jmakefun("'),
-    write(Y),
-    write('"),'),
-    gen_org(Z),
-    write(')').
-%list
-gen_org([X|Xs]) :-
-    list([X|Xs]),
-    write('Jlistcons('),
-    gen_org(X),
-    write(','),
-    gen_org(Xs),
-    write(')').
-%conjunction
-gen_org((Body1,Body2)) :-
-    write('Jlist3(Jmakeope(","),'),
-    gen_org(Body1),
-    write(','),
-    gen_org(Body2),
-    write(')'),nl.
-%disjunction
-gen_org((Body1;Body2)) :-
-	  write('Jlist3(Jmakeope(";"),'),
-    gen_org(Body1),
-    write(','),
-    gen_org(Body2),
-    write(')'),nl.
-%atom
-gen_org(X) :-
-	  atom(X),
-    write('Jmakeconst("'),
-    write(X),
-    write('")').
 
 %------------------------------------
 %for tail recursive optimization
@@ -1411,7 +1027,7 @@ gen_tail_pred2(P,N) :-
 gen_tail_pred3([],N) :-
     write('return(NO);'),nl.
 gen_tail_pred3([L|Ls],N) :-
-	  o_variable_convert(L,X),
+	o_variable_convert(L,X),
     gen_tail_pred4(X,N),
     N1 is N + 1,
     gen_tail_pred3(Ls,N1).
@@ -1419,7 +1035,7 @@ gen_tail_pred3([L|Ls],N) :-
 % clause
 gen_tail_pred4((Head :- Body),N) :-
     gen_tail_var(Head),
-	  gen_tail_head(Head),
+	gen_tail_head(Head),
     gen_tail_body(Body,Head).
 
 % predicate
@@ -1450,8 +1066,8 @@ gen_tail_var1(X,N,L) :-
     gen_tail_head3(X,N,L),
     write(';'),nl.
 %ignore atom and number []
-    gen_tail_var1(X,N,L) :-
-        atomic(X).
+gen_tail_var1(X,N,L) :-
+    atomic(X).
 
 %list
 gen_tail_var1([[Y|Ys]|Xs],N,L) :-
@@ -1694,7 +1310,7 @@ gen_tail_call([X|Xs],N) :-
 %if clauses P is optimizable => true
 tail_optimize(P) :-
     o_arity_count(P,[N]),
-	  o_clause_with_arity(P,N,C),
+	o_clause_with_arity(P,N,C),
     o_variable_convert(C,C1),
     deterministic(C1),
     tail_recursive(C1,0),
@@ -1722,7 +1338,7 @@ last_body(Body,Body).
 tail_recursive(_,1) :- !.
 tail_recursive([],0) :- fail.
 tail_recursive([C|Cs],N) :-
-	  o_property(C,predicate),
+	o_property(C,predicate),
     tail_recursive(Cs,N).
 tail_recursive([(H :- B)|Cs],N) :-
     tail_recursive1(H,B),
@@ -1847,4 +1463,3 @@ list_member([L|Ls],Y) :-
     list_member(Ls,Y).
 
 
-:- end_body(compiler).

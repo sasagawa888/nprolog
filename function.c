@@ -787,6 +787,7 @@ void initbuiltin(void){
     defbuiltin("concat",b_concat);
     defbuiltin("string_length",b_string_length);
     defbuiltin("substring",b_substring);
+    defbuiltin("atom_concat",b_atom_concat);
 
     defcompiled("call",b_call);
     defcompiled("repeat",b_repeat);
@@ -797,6 +798,10 @@ void initbuiltin(void){
     defcompiled("current_predicate",b_current_predicate);
     defcompiled("current_op",b_current_op);
     defcompiled("between",b_between);
+
+
+    //-----JUMP project---------
+    defcompiled("n_reconsult_predicate",b_reconsult_predicate);
     return;
 }
 
@@ -2495,6 +2500,35 @@ int b_atom_codes(int arglist, int rest){
     }
     return(NO);
 }
+
+int b_atom_concat(int arglist, int rest){
+    int n,arg1,arg2,arg3,atom;
+    char str1[STRSIZE];
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = deref(car(arglist));
+        arg2 = deref(cadr(arglist));;
+        arg3 = deref(caddr(arglist));
+        
+        if(!wide_variable_p(arg1) && !atomp(arg1))
+            error(NOT_STR,"atom_concat ",arg1);
+        if(!wide_variable_p(arg2) && !atomp(arg2))
+            error(NOT_STR,"atom_concat ",arg2);
+        if(!wide_variable_p(arg3))
+            error(NOT_VAR,"atom_concat ", arg3);
+    
+        strcpy(str1,GET_NAME(arg1));
+        strcat(str1,GET_NAME(arg2));
+        atom = makeconst(str1);
+
+        unify(arg3,atom);
+        return(YES);
+
+    }
+    return(NO);
+}
+
 
 //----------string transform-------------------
 
@@ -4710,6 +4744,34 @@ int b_ansi_cub(int arglist, int rest){
             m--;
         }
         return(YES);
+    }
+    return(NO);
+}
+
+
+//-----------JUMP project(builtin for compiler)------------
+
+int b_reconsult_predicate(int arglist, int rest){
+	int n,arg1,lis,save1;
+
+    n = length(arglist);
+    if(n == 1){
+        save1 = sp;
+    	arg1 = deref(car(arglist));
+        if(!wide_variable_p(arg1))
+            error(NOT_VAR,"n_reconsult_predicate ",arg1);
+
+        lis = reverse(reconsult_list);
+        while(!nullp(lis)){
+            unify(arg1,car(lis));
+            if(prove_all(rest,sp,0) == YES)
+                return(YES);
+
+            lis = cdr(lis);
+            unbind(save1);
+        }
+        unbind(save1);
+        return(NO);
     }
     return(NO);
 }
