@@ -837,6 +837,9 @@ int has_no_value_p(int x){
 int has_cut_p(int addr){
     if(addr == CUT)
         return(1);
+    else if(structurep(addr) && car(addr) == IFTHEN && caddr(addr) == CUT)
+        // e.g. true->!
+        return(1);
     else if(!conjunctionp(addr))
         return(0);
     else if(conjunctionp(addr) && cadr(addr) == CUT)

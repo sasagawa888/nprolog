@@ -354,14 +354,14 @@ int prove(int goal, int bindings, int rest, int n){
     else if(builtinp(goal)){
         if(atomp(goal)){
             if((GET_SUBR(goal))(NIL,rest) == YES)
-                return(prove_all(rest,sp,n+1));
+                return(prove_all(rest,sp,n));
 
             unbind(bindings);
             return(NO);
         }
         else{
             if((GET_SUBR(car(goal)))(cdr(goal),rest) == YES)
-                return(prove_all(rest,sp,n+1));
+                return(prove_all(rest,sp,n));
 
             unbind(bindings);
             return(NO);
@@ -455,6 +455,11 @@ int prove(int goal, int bindings, int rest, int n){
         if(prove_all(addtail_body(rest,cadr(goal)),bindings,n) == YES)
             return(YES);
         else{
+            if(has_cut_p(cadr(goal))){
+                // for sick code (X=1;X=2), (true->!; fail), (Y=1;Y=2). crazy!
+                printf("no\n");
+                longjmp(buf,1);
+            }
             unbind(bindings);
             if(prove_all(addtail_body(rest,caddr(goal)),bindings,n) == YES)
                 return(YES)

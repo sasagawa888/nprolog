@@ -47,9 +47,8 @@ void initcell(void){
     makeatom("->",SYS);  //address = 38
     makeatom("$VAR",PRED); //address = 40
     makeatom("_",SIMP); //address = 42
-    makeatom(".",OPE);  //addredd = 44
-    makeatom("-->",OPE);  //addredd = 46
-
+    makeatom(".",OPE);  //address = 44
+    makeatom("-->",OPE);  //address = 46
     
 }
 
