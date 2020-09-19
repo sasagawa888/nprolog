@@ -793,6 +793,7 @@ int groundp(int addr){
     return(1);
 }
 
+
 int aliasp(int addr){
     if(IS_INCELL(addr) && singlep(addr) &&
        IS_INCELL(car(addr)) && streamp(car(addr)))
@@ -842,6 +843,13 @@ int has_cut_p(int addr){
         return(1);
     else 
         return(has_cut_p(caddr(addr)));
+}
+
+int dcgp(int addr){
+    if(structurep(addr) && car(addr) == DCG)
+        return(1);
+    else
+        return(0);
 }
 
 

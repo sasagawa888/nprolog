@@ -14,6 +14,9 @@ phrase(GRBody,SO,S) :-
 dcg_expand(X) :-
     dcg_rule(X,Y),assert(Y).
 
+expand_term(X,Y) :-
+   dcg_rule(X,Y).
+
 
 % This program uses append/3 as defined in the Prolog prologue.
 

@@ -175,6 +175,13 @@ int main(int argc, char *argv[]){
     opt = 1;
     init_repl();
 
+    FILE* fp = fopen("dcg.pl","r");
+    if(fp != NULL){
+        fclose(fp);
+        b_consult(list1(makeconst("dcg.pl")),NIL);
+        predicates = NIL;
+    }
+
     while(opt < argc){
         if(strcmp(argv[opt],"-c") == 0){
             opt++;
@@ -185,7 +192,7 @@ int main(int argc, char *argv[]){
                 printf("Not exist %s\n", argv[opt]);
                 break;
             }
-            b_consult(list(makeconst(argv[opt])),NIL);
+            b_consult(list1(makeconst(argv[opt])),NIL);
             opt++;
         }
         #if __linux
@@ -254,6 +261,11 @@ void init_repl(void){
 
 void query(int x){
     int res;
+
+    if(dcgp(x)){
+        operate(x);
+        return;
+    }
 
     //[file1,file2] -> consult(file1),consult(file2).
     if(listp(x))

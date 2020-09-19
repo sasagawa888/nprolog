@@ -1606,6 +1606,11 @@ int b_consult(int arglist, int rest){
                 operate(clause);
                 goto skip;
             }
+            // DCG syntax e.g. a-->b.
+            if(dcgp(clause)){
+                operate(clause);
+                goto skip;
+            }
 
             //assert
             b_assert(list1(clause),NIL);
@@ -1663,7 +1668,11 @@ int b_reconsult(int arglist, int rest){
                 operate(clause);
                 goto skip;
             }
-
+            // DCG syntax e.g. a-->b.
+            if(dcgp(clause)){
+                operate(clause);
+                goto skip;
+            }
 
             //delete old definition
             if(predicatep(clause)){
@@ -3482,12 +3491,8 @@ int o_define(int x, int y){
 int o_dcg(int x, int y){
     int clause,res;
 
-    if(getatom("dcg_expand",COMP,hash("dcg_expand")))
-        clause = list2(makecomp("dcg_expand"),
-                   list3(makeatom("-->",OPE),x,y));
-    else
-        clause = list2(makepred("dcg_expand"),
-                   list3(makeatom("-->",OPE),x,y));
+    clause = list2(makepred("dcg_expand"),
+                list3(makeatom("-->",OPE),x,y));
 
     res = prove_all(clause,sp,0);
     return(res);

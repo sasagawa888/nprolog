@@ -39,6 +39,7 @@ written by kenichi sasagawa 2016/9~
 #define NUMVAR  40
 #define UNDERBAR    42
 #define DOTOBJ  44
+#define DCG   46
 #define HASHTBSIZE 107
 #define BIGNUM_BASE 1000000000
 #define SMALL_INT_MAX       1000000000
@@ -730,6 +731,7 @@ int copy_term(int x);
 int copy_variable(int x);
 int ctrl_to_number(char c);
 int c_lang_p(int x);
+int dcgp(int x);
 int deref(int x);
 int deref1(int x);
 int deref_array(int arity[256], int head);
