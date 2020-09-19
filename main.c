@@ -331,7 +331,9 @@ int prove_all(int goals, int bindings, int n){
             return(prove(cadr(goals),bindings,caddr(goals),n));
         }
         else{
-            cut_flag = 1;
+            if(conjunctionp(goals) && cadr(goals) == CUT)
+                cut_flag = 1;
+
             if(prove_all(before_cut(goals),bindings,n) == YES)
                 return(prove_all(after_cut(goals),sp,n));
             else
