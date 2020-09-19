@@ -960,7 +960,6 @@ int b_ask(int arglist, int rest){
         }
         x2 = reverse(x2);
         while(!nullp(x2)){
-            numbervars_flag = 0;
             print(car(x2));
             printf(" = ");
             printanswer(deref(car(x2)));
@@ -1060,12 +1059,9 @@ int b_write(int arglist, int rest){
         else
             output_stream = arg1;
         quoted_flag = 0;
-        numbervars_flag = 1;
-        numbervars_top_pt = 0;
         print(arg2);
         fflush(GET_PORT(output_stream));
         quoted_flag = 1;
-        numbervars_flag = 0;
         output_stream = save;
         return(YES);
     }
@@ -1132,10 +1128,8 @@ int b_writeq(int arglist, int rest){
         else
             output_stream = arg1;
         quoted_flag = 1;
-        numbervars_flag = 1;
         print(arg2);
         quoted_flag = 0;
-        numbervars_flag = 0;
         output_stream = save;
         return(YES);
     }
@@ -1373,35 +1367,7 @@ int singletonp(int x){
         return(0);
 }
 
-// for read_term  e.g ['X'=_0001,'Y'=_0002]
-// copy_term generate numbervars array.
-// That array has relation data symbol,numbervar,count
-int variable_name_list(void){
-    int i,res,temp;
 
-    res = NIL;
-    for(i=numbervars_top_pt-1;i>=numbervars_base_pt;i--){
-        temp = makecopy(numbervars[i][0]); //e.g. X -> 'X'
-        res = listcons(list3(makeatom("=",SYS),temp,numbervars[i][1]),res);
-    }
-    return(res);
-}
-
-
-// for read_term singleton option e.g ['X'=_0001,'Y'=_0002]
-// similer to variable_names but variable that appear only once
-int singleton_list(void){
-    int i,res,temp;
-
-    res = NIL;
-    for(i=numbervars_top_pt-1;i>=numbervars_base_pt;i--){
-        if(numbervars[i][2] == 1){ //count == 1
-            temp = makecopy(numbervars[i][0]); //e.g. X -> 'X'
-            res = listcons(list3(makeatom("=",SYS),temp,numbervars[i][1]),res);
-        }
-    }
-    return(res);
-}
 
 int b_read(int arglist, int rest){
     int n,arg1,arg2,save,temp,res;
@@ -2399,7 +2365,7 @@ int b_abolish(int arglist, int rest){
 }
 
 int b_clause(int arglist, int rest){
-    int n,arg1,arg2,clause,clauses,save1,save2,copy;
+    int n,arg1,arg2,save2;
 
     save2 = sp;
     n = length(arglist);
@@ -2416,30 +2382,7 @@ int b_clause(int arglist, int rest){
         if(!wide_variable_p(arg2) && !callablep(arg2))
             error(NOT_CALLABLE,"clause ",arg2);
 
-        if(atom_predicate_p(arg1))
-            clauses = GET_CAR(arg1);
-        else
-            clauses = GET_CAR(car(arg1));
-
-        save1 = wp;
-        while(!nullp(clauses)){
-            clause = car(clauses);
-            clauses = cdr(clauses);
-            copy = copy_term(clause);
-            if(clausep(clause) && unify(arg1,cadr(copy)) == YES &&
-                unify(arg2,caddr(copy)) == YES){
-                //if(proceed(NIL,nest) == YES)
-                //    return(YES);
-            }
-            else if(predicatep(clause) && unify(arg1,copy) == YES &&
-                unify(arg2,OPLTRUE) == YES){
-                //if(proceed(NIL,nest) == YES)
-                //    return(YES);
-            }
-            wp = save1;
-            unbind(save2);
-        }
-        wp = save1;
+    
         unbind(save2);
         return(NO);
     }

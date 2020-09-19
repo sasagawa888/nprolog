@@ -1521,22 +1521,6 @@ int list_to_structure(int x){
     return(res);
 }
 
-int copy_term(int x){
-    int temp;
-
-    if(nullp(x))
-        return(NIL);
-    else if(variablep(x))
-        return(copy_variable(x));
-    else if(!structurep(x))
-        return(x);
-    else{
-        temp = copy_term(car(x));
-        return(cons(temp,
-                    copy_term(cdr(x))));
-    }
-    return(x);
-}
 
 int copy_heap(int x){
 
@@ -1568,30 +1552,6 @@ int alpha_to_variable(int x){
     return(res);
 }
 
-
-//if already symbol x exist in numbervars[i] _i
-//else rememmber x to numbervars[i] and _i
-// [i][0] = symbol, [i][1] = numbervars, [i][2] = count
-int copy_variable(int x){
-    char str[ATOMSIZE];
-    int i,res;
-
-   for(i=numbervars_base_pt;i<numbervars_top_pt;i++)
-     if(numbervars[i][0] == x){
-        numbervars[i][2] = numbervars[i][2] + 1; //count++
-        res = numbervars[i][1];
-        goto exit;
-     }
-
-   sprintf(str,"_%04d", numbervars_top_pt+1);
-   numbervars[numbervars_top_pt][0] = x;
-   numbervars[numbervars_top_pt][1] = makevar(str);
-   numbervars[numbervars_top_pt][2] = 1; //count
-   numbervars_top_pt++;
-   res = numbervars[numbervars_top_pt-1][1];
-   exit:
-   return(res);
-}
 
 //transform from UTF-8 to unicode
 int utf8_to_ucs4(char *p){

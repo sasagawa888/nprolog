@@ -17,9 +17,6 @@ int proof = 0;
 cell heap[CELLSIZE];
 int variant[VARIANTSIZE][2];
 int stack[STACKSIZE];
-int numbervars[20][3]; // for numbervars  variable,numbervars and it's count
-int numbervars_base_pt = 0; // for numbervars
-int numbervars_top_pt  = 0; // for numbervars
 token stok = {GO,OTHER};
 jmp_buf buf;
 int cell_hash_table[HASHTBSIZE];
@@ -56,7 +53,6 @@ int mode_flag = 1;  // 0=SJIS, 1=Unicod
 int quoted_flag = 1; // 0=not print ' 1=print '
 int ignore_flag = 0; // 0=infix notation 2+2 1=prefix notation +(2,2)
 int error_flag = 0;  // flag in syntax error
-int numbervars_flag = 0; // 0=normal 1= A -> '_0001
 int link_flag = 0;  // 0=not-link, 1=linked
 int listing_flag = 0;  //for print clause, 0=normal, 1=format print
 int colon_sets_calling_context_flag = 1; //1=true, 0=false
@@ -684,7 +680,6 @@ void printanswer(int addr){
 //output to output_stream
 void print(int addr){
     double x;
-    int i;
 
     if(IS_ALPHA(addr)){
         fprintf(GET_PORT(output_stream),"v_%d", addr-CELLSIZE);
@@ -703,21 +698,8 @@ void print(int addr){
         case SINGLE:
                     if(addr == NIL)
                         fprintf(GET_PORT(output_stream),"[]");
-                    else if(variablep(addr)){
-                        if(!numbervars_flag)
-                            fprintf(GET_PORT(output_stream),"%s", GET_NAME(addr));
-                        else{
-                            for(i=0;i<numbervars_top_pt;i++)
-                                if(numbervars[i][0] == i){
-                                    fprintf(GET_PORT(output_stream),"_%04d", i+1);
-                                    break;
-                                }
-
-                            numbervars[numbervars_top_pt][0] = addr;
-                            numbervars_top_pt++;
-                            fprintf(GET_PORT(output_stream),"_%04d", i+1);
-                        }
-                    }
+                    else if(variablep(addr))
+                        fprintf(GET_PORT(output_stream),"%s", GET_NAME(addr));
                     else if(quoted_flag && atom_quote_p(addr))
                         print_quoted(addr);
                     else
@@ -738,8 +720,6 @@ void print(int addr){
                             fprintf(GET_PORT(output_stream),")");
                         }
                     }
-                    else if(numbervarp(addr) && numbervars_flag)
-                        print_numbervars(addr);
                     else if(clausep(addr))
                             printclause(addr);
                     else if(listp(addr)){
@@ -897,26 +877,6 @@ void print_quoted(int addr){
     }
     exit:
     fprintf(GET_PORT(output_stream),"%c",'\'');
-}
-
-void print_numbervars(int addr){
-    int n,alpha,num;
-
-    if(integerp(cadr(addr))){
-        n = GET_INT(cadr(addr));
-        alpha = n % 26 + 65;
-        num = n / 26;
-        if(num != 0)
-            fprintf(GET_PORT(output_stream),"%c%d",alpha,num);
-        else
-            fprintf(GET_PORT(output_stream),"%c",alpha);
-    }
-    else{
-        print(car(addr));
-        fprintf(GET_PORT(output_stream),"(");
-        print(cadr(addr));
-        fprintf(GET_PORT(output_stream),")");
-    }
 }
 
 void print_not_quoted(int addr){
