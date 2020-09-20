@@ -59,7 +59,7 @@ compile_file(X) :-
 
 
 /*
-for tail recursive code 
+for tail recursive optimize code 
 now ignore
 */
 jump_pass1(X) :-
@@ -77,13 +77,10 @@ jump_pass2(X) :-
     nl,
 	n_filename(X,F),
     atom_concat(F,'.c',Cfile),
-	tell(Cfile),
+	%tell(Cfile),
 	write('#include "jump.h"'),nl,
-	n_reconsult_predicate(P),
-    write(user_output,P),
-    fail,
 	%jump_gen_c_pred(L),
-    %jump_gen_c_def(L),
+    jump_gen_c_pred,
     %jump_gen_c_exec,
     told.
 
@@ -113,20 +110,41 @@ generate each predicate to make compiled pred
 
 
 % normal predicate
-jump_gen_c_pred(P) :-
-	jump_gen_type_declare(P),
-    jump_gen_pred(P).
+jump_gen_c_pred :-
+    jump_gen_pred,
+    jump_gen_c_def.
 
-% code for C to define compiled predicate
-jump_gen_c_def(L) :-
+% generate all predicate code
+jump_gen_pred :-
+    n_reconsult_predicate(P),
+    jump_gen_a_pred(P),
+    fail.
+jump_gen_pred.
+
+% define compiled predicate
+jump_gen_c_def :-
 	write('void init_tpredicate(void){'),
-    jump_gen_c_def1(L),
+    jump_gen_c_def1,
     write('}').
 
-jump_gen_c_def1([]).
-jump_gen_c_def1([P|Ps]) :-
+jump_gen_c_def1 :-
+    n_reconsult_predicate(P),
 	jump_gen_def(P),
-    jump_gen_c_def1(Ps).
+    fail.
+jump_gen_c_def1.
+
+
+% generate deftpred for normal predicate
+jump_gen_def(P) :-
+	write('(deftpred)("'),
+    write(P),
+    write('",'),
+    write('b_'),
+    %o_atom_convert(P,P1),
+    write(P),
+    write(');'),
+    nl.
+
 
 /*
 last C code to make direct execute
@@ -146,8 +164,8 @@ int_b_foo(int arglist, int rest);
 */
 jump_gen_type_declare(P) :-
 	write('int b_'),
-    o_atom_convert(P,P1),
-    write(P1),
+    %o_atom_convert(P,P1),
+    write(P),
     write('(int arglist, int rest);'),
     nl.
 /*
@@ -196,49 +214,51 @@ if(n == N){
 return(NO);
 }
 */
-jump_gen_pred(P) :-
+jump_gen_a_pred(P) :-
 	atom_concat('compiling ',P,M),
-    write(user_output,M),nl(user_output),
+    write(user_output,M),
+    nl(user_output),
+    jump_gen_type_declare(P),
 	write('int b_'),
-    o_atom_convert(P,P1),
-    write(P1),
+    %o_atom_convert(P,P1),
+    write(P),
     write('(int arglist, int rest){'),
     nl,
-    jump_gen_var_declare(P),
-    o_arity_count(P,L),
-    jump_gen_pred1(P,L),
+    %jump_gen_var_declare(P),
+    %o_arity_count(P,L),
+    %jump_gen_a_pred1(P,L),
     write('}'),nl.
 
 % pred1,pred2,...,predN
-jump_gen_pred1(P,[]) :-
+jump_gen_a_pred1(P,[]) :-
 	write('return(NO);').
 
-jump_gen_pred1(P,[L|Ls]) :-
-	jump_gen_pred2(P,L),
-    jump_gen_pred1(P,Ls).
+jump_gen_a_pred1(P,[L|Ls]) :-
+	jump_gen_a_pred2(P,L),
+    jump_gen_a_pred1(P,Ls).
 
 % if(n == N){...}
-jump_gen_pred2(P,N) :-
+jump_gen_a_pred2(P,N) :-
 	write('if(n == '),
     write(N),
     write('){'),
     jump_gen_receive_var(1,N),
-    jump_gen_pred3(P,N),
+    jump_gen_a_pred3(P,N),
     write('}').
 
 % select all clauses that arity is N
-jump_gen_pred3(P,N) :-
+jump_gen_a_pred3(P,N) :-
 	o_clause_with_arity(P,N,C),
-    jump_gen_pred4(C).
+    jump_gen_a_pred4(C).
 
 % generate each clause
-jump_gen_pred4([]).
-jump_gen_pred4([C|Cs]) :-
+jump_gen_a_pred4([]).
+jump_gen_a_pred4([C|Cs]) :-
 	o_variable_convert(C,X),
     o_generate_variable(X,V),
     jump_gen_var(V),
-    jump_gen_pred5(X),
-    jump_gen_pred4(Cs).
+    jump_gen_a_pred5(X),
+    jump_gen_a_pred4(Cs).
 
 /*
 save1 = Jget_wp();
@@ -249,20 +269,20 @@ if( )... head
 */
 
 % generate clause
-jump_gen_pred5((Head :- Body)) :-
+jump_gen_a_pred5((Head :- Body)) :-
     write('save1 = Jget_wp();'),nl,
     write('save2 = Jget_sp();'),nl,
 	jump_gen_head(Head),
     jump_gen_body(Body).
 
 % generate predicate with no arity
-jump_gen_pred5(P) :-
+jump_gen_a_pred5(P) :-
 	o_property(P,predicate),
     functor(P,_,0),
     write('return(YES);'),nl.
 
 % CPS predicate
-jump_gen_pred5(P) :-
+jump_gen_a_pred5(P) :-
 	o_property(P,predicate),
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(P),
@@ -686,48 +706,7 @@ jump_eval_form(random(X)) :-
     jump_eval_form(X),
     write(')').
 
-/*
-define compiled predicate as compiled predicate.
-But, for tail call recursive difinition.
-tail call optimized predicate is compiled to builtin(not compiled).
-*/
-gen_def(P) :-
-    optimizable(P),
-	write('(deftpred)("'),
-    write(P),
-    write('",'),
-    write('b_'),
-    o_atom_convert(P,P1),
-    write(P1),
-    write(');'),
-    nl,
-    write('Jset_aux(Jmakecomp("'),
-    write(P),
-    write('"),SYS);'),
-    nl.
-%for normal
-gen_def(P) :-
-	  write('(deftpred)("'),
-    write(P),
-    write('",'),
-    write('b_'),
-    o_atom_convert(P,P1),
-    write(P1),
-    write(');'),
-    gen_def1(P),
-    nl.
 
-%for calling_context
-gen_def1(P) :-
-    o_generated_module(P,[]).
-gen_def1(P) :-
-    o_generated_module(P,M),
-    write('Jset_var(Jmakeconst("'),
-    write(P),
-    write('"),Jmakeconst("'),
-    write(M),
-    write('"));'),
-    nl.
 
 /*
 generate arguments for pred ope fun.

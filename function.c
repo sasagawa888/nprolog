@@ -804,6 +804,7 @@ void initbuiltin(void){
     //-----JUMP project---------
     defcompiled("n_reconsult_predicate",b_reconsult_predicate);
     defbuiltin("n_filename",b_filename);
+    defbuiltin("n_reconsult_predicate_list",b_reconsult_predicate_list);
     return;
 }
 
@@ -1145,7 +1146,7 @@ int b_writeq(int arglist, int rest){
 
 
 int b_nl(int arglist, int rest){
-    int n;
+    int n,arg1,save;
 
     n = length(arglist);
     if(n == 0){
@@ -1153,7 +1154,19 @@ int b_nl(int arglist, int rest){
         fflush(GET_PORT(output_stream));
         return(YES);
     }
-    
+    else if(n == 1){
+        arg1 = deref(car(arglist));
+
+        save = output_stream;
+        if(aliasp(arg1))
+            output_stream = GET_CAR(arg1);
+        else
+            output_stream = arg1;
+        fprintf(GET_PORT(output_stream),"\n");
+        fflush(GET_PORT(output_stream));
+        output_stream = save;
+        return(YES);
+    }
     return(NO);
 }
 
@@ -2180,7 +2193,6 @@ int b_assert(int arglist, int rest){
         if(singlep(arg1)){
             if(GET_AUX(arg1) == SIMP || GET_AUX(arg1) == NIL)
                 SET_AUX(arg1,PRED);
-            arg1 = list1(arg1);
         }
         if(builtinp(arg1))
             error(BUILTIN_EXIST,"assertz",arg1);
@@ -2189,7 +2201,10 @@ int b_assert(int arglist, int rest){
         arg1 = copy_heap(arg1); //copy arg1 to heap area
         if(predicatep(arg1)){
             SET_VAR(arg1,unique(varslist(arg1)));
-            add_data(car(arg1),arg1);
+            if(atomp(arg1))
+                add_data(arg1,arg1);
+            else
+                add_data(car(arg1),arg1);
             checkgbc();
             return(YES);
         }
@@ -2218,7 +2233,6 @@ int b_asserta(int arglist, int rest){
         if(singlep(arg1)){
             if(GET_AUX(arg1) == SIMP || GET_AUX(arg1) == NIL)
                 SET_AUX(arg1,PRED);
-            arg1 = list1(arg1);
         }
         if(builtinp(arg1))
             error(BUILTIN_EXIST,"asserta",arg1);
@@ -2227,7 +2241,10 @@ int b_asserta(int arglist, int rest){
         arg1 = copy_heap(arg1); //copy arg1 to heap area
         if(predicatep(arg1)){
             SET_VAR(arg1,unique(varslist(arg1)));
-            insert_data(car(arg1),arg1);
+            if(atomp(arg1))
+                insert_data(arg1,arg1);
+            else
+                insert_data(car(arg1),arg1);
             checkgbc();
             return(YES);
         }
@@ -4746,6 +4763,20 @@ int b_reconsult_predicate(int arglist, int rest){
     }
     return(NO);
 }
+
+int b_reconsult_predicate_list(int arglist, int rest){
+    int n,arg1;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = car(arglist);
+
+        unify(arg1,listreverse(reconsult_list));
+        return(YES);
+    }
+    return(NO);
+}
+
 
 int b_filename(int arglist, int rest){
 	int n,arg1,arg2,pos,len;
