@@ -153,11 +153,12 @@ writeq/2
 # builtin (extension)
 
 ```
-/+         not in ISO-Prolog
+/+  ('not' in ISO-Prolog)
+atom_concat/3
 append/3
 between/3
 member/2
-measure/1   measure elapsed time
+measure/1   (measure elapsed time)
 reverse/2
 ```
 

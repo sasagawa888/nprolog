@@ -55,7 +55,8 @@ void dynamic_link(int x){
     init_f0(1,(tpred)gbc);
     init_f0(2,(tpred)freshcell);
     init_f0(3,(tpred)makevariant);
-    init_f0(13,(tpred)get_wp);
+    init_f0(4,(tpred)get_sp);
+    init_f0(5,(tpred)get_wp);
 
     //argument-1 type
     init_f1(0,(tpred)car);
@@ -802,6 +803,7 @@ void initbuiltin(void){
 
     //-----JUMP project---------
     defcompiled("n_reconsult_predicate",b_reconsult_predicate);
+    defbuiltin("n_filename",b_filename);
     return;
 }
 
@@ -1394,16 +1396,12 @@ int b_read(int arglist, int rest){
             error(NOT_STREAM,"read",arg1);
         if(streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
             error(NOT_INPUT_STREAM,"read ", arg1);
-        save = input_stream;
-        if(aliasp(arg1))
-            input_stream = GET_CAR(arg1);
-        else
-            input_stream = arg1;
+        
+        save = input_stream;   
+        input_stream = arg1;
+        print(input_stream);
 
         temp = variable_to_call(readparse());
-        if(temp == FEND){
-            temp = GET_AUX(input_stream);
-        }
         res = unify(arg2,temp);
         input_stream = save;
         return(res);
@@ -4363,33 +4361,6 @@ int b_nano(int arglist, int rest){
 }
 
 
-
-
-
-
-
-
-
-int b_filename(int arglist, int rest){
-	int n,arg1,arg2,pos,len;
-    char str1[STRSIZE];
-
-    n = length(arglist);
-    if(n == 2){
-    	arg1 = deref(car(arglist));
-        arg2 = cadr(arglist);
-    	strcpy(str1,GET_NAME(arg1));
-        len = strlen(GET_NAME(arg1));
-        for(pos=0;pos<len;pos++)
-        	if(str1[pos] == '.'){
-            	str1[pos] = NUL;
-                return(unify(arg2,makeconst(str1)));
-            }
-        return(unify(arg1,arg2));
-    }
-    return(NO);
-}
-
 int b_shell(int arglist, int rest){
     int n,arg1,res;
     char str1[STRSIZE];
@@ -4772,6 +4743,26 @@ int b_reconsult_predicate(int arglist, int rest){
         }
         unbind(save1);
         return(NO);
+    }
+    return(NO);
+}
+
+int b_filename(int arglist, int rest){
+	int n,arg1,arg2,pos,len;
+    char str1[STRSIZE];
+
+    n = length(arglist);
+    if(n == 2){
+    	arg1 = deref(car(arglist));
+        arg2 = cadr(arglist);
+    	strcpy(str1,GET_NAME(arg1));
+        len = strlen(GET_NAME(arg1));
+        for(pos=0;pos<len;pos++)
+        	if(str1[pos] == '.'){
+            	str1[pos] = NUL;
+                return(unify(arg2,makeconst(str1)));
+            }
+        return(unify(arg1,arg2));
     }
     return(NO);
 }
