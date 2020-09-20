@@ -1381,8 +1381,6 @@ int readitem(void){
                                 temp = makeatom(str,PRED);
                             else if(getatom(str,SYS,hash(str)))
                                 temp = cons(makeatom(str,SYS),NIL);
-                            else if(getatom(str,OPE,hash(str)))
-                                temp = makeatom(str,OPE);
                             else
                                 temp = makeatom(str,SIMP);
                             return(temp);

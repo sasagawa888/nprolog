@@ -92,7 +92,7 @@ gcc -O3 -w -shared -fPIC -o <filenam>.c <filename>.o <option>
 jump_invoke_gcc(X) :-
 	write(user_output,'invoke GCC'),
     nl,
-	o_filename(X,F),
+	n_filename(X,F),
     atom_concat(F,'.c ',Cfile),
     atom_concat(F,'.o ',Ofile),
     atom_concat(Ofile,Cfile,Files),
@@ -140,8 +140,8 @@ jump_gen_def(P) :-
     write(P),
     write('",'),
     write('b_'),
-    %o_atom_convert(P,P1),
-    write(P),
+    n_atom_convert(P,P1),
+    write(P1),
     write(');'),
     nl.
 
@@ -164,8 +164,8 @@ int_b_foo(int arglist, int rest);
 */
 jump_gen_type_declare(P) :-
 	write('int b_'),
-    %o_atom_convert(P,P1),
-    write(P),
+    n_atom_convert(P,P1),
+    write(P1),
     write('(int arglist, int rest);'),
     nl.
 /*
@@ -176,13 +176,13 @@ int arg1,arg2 ... argN,body,save1,save2;
 
 */
 jump_gen_var_declare(P) :-
-	o_arity_count(P,L),
+	n_arity_count(P,L),
     jump_max_element(L,M),
     write('int '),
     jump_gen_var_declare1(1,M),
-    o_generate_all_variable(P,V),
+    n_generate_all_variable(P,V),
     jump_gen_all_var(V),
-    write('body,save1,save2;'),nl.
+    write('body,save1,save2;'),nl,!.
 
 % arg1,arg2,...argN
 jump_gen_var_declare1(S,E) :-
@@ -220,13 +220,13 @@ jump_gen_a_pred(P) :-
     nl(user_output),
     jump_gen_type_declare(P),
 	write('int b_'),
-    %o_atom_convert(P,P1),
-    write(P),
+    n_atom_convert(P,P1),
+    write(P1),
     write('(int arglist, int rest){'),
     nl,
-    %jump_gen_var_declare(P),
-    %o_arity_count(P,L),
-    %jump_gen_a_pred1(P,L),
+    jump_gen_var_declare(P),
+    n_arity_count(P,L),
+    jump_gen_a_pred1(P,L),
     write('}'),nl.
 
 % pred1,pred2,...,predN
@@ -244,18 +244,18 @@ jump_gen_a_pred2(P,N) :-
     write('){'),
     jump_gen_receive_var(1,N),
     jump_gen_a_pred3(P,N),
-    write('}').
+    write('}'),!.
 
 % select all clauses that arity is N
 jump_gen_a_pred3(P,N) :-
-	o_clause_with_arity(P,N,C),
+	n_clause_with_arity(P,N,C),
     jump_gen_a_pred4(C).
 
 % generate each clause
 jump_gen_a_pred4([]).
 jump_gen_a_pred4([C|Cs]) :-
-	o_variable_convert(C,X),
-    o_generate_variable(X,V),
+	n_variable_convert(C,X),
+    n_generate_variable(X,V),
     jump_gen_var(V),
     jump_gen_a_pred5(X),
     jump_gen_a_pred4(Cs).
@@ -277,13 +277,13 @@ jump_gen_a_pred5((Head :- Body)) :-
 
 % generate predicate with no arity
 jump_gen_a_pred5(P) :-
-	o_property(P,predicate),
+	n_property(P,predicate),
     functor(P,_,0),
     write('return(YES);'),nl.
 
 % CPS predicate
 jump_gen_a_pred5(P) :-
-	o_property(P,predicate),
+	n_property(P,predicate),
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(P),
     write('if(Jprove_all(rest,sp,0) == YES)'),nl,
@@ -302,7 +302,7 @@ jump_gen_all_var([L|Ls]) :-
 % varA = Jmakevariant(), varB = Jmakevariant();
 jump_gen_var([]).
 jump_gen_var([L|Ls]) :-
-    o_compiler_anoymous(L),
+    n_compiler_anoymous(L),
     jmp_gen_var(Ls).
 jump_gen_var([L|Ls]) :-
     write(L),
@@ -348,7 +348,7 @@ jump_gen_body(X) :-
     write('if(Jprove_all(body,Jget_sp(),0) == YES)'),nl,
     write('return(YES);}'),nl,
     write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl.
+    write('Jset_wp(save1);'),nl,!.
 
 jump_gen_body1([]) :-
     write('NIL').
@@ -377,39 +377,27 @@ jump_gen_a_body((X;Xs)) :-
     write(','),
     jump_gen_body1(Xs),
     write(')').
-
-% defined predicate and optimizable will become builtin
-jump_gen_a_body(X) :-
-    o_defined_predicate(X),
-    functor(X,P,_),
-    optimizable(P),
-    o_argument_list(X,L),
-    write('Jwcons(Jmakesys("'),
-    write(P),
-    write('"),'),
-    jump_gen_argument(L),
-    write(')').
 % defined predicate will become compiled predicate
 jump_gen_a_body(X) :-
-    o_defined_predicate(X),
+    n_defined_predicate(X),
     functor(X,P,0),
     write('Jmakecomp("'),
     write(P),
     write('")').
 % defined predicate will become compiled predicate
 jump_gen_a_body(X) :-
-    o_defined_predicate(X),
+    n_defined_predicate(X),
     functor(X,P,_),
-    o_argument_list(X,L),
+    n_argument_list(X,L),
     write('Jwcons(Jmakecomp("'),
     write(P),
     write('"),'),
     jump_gen_argument(L),
     write(')').
 jump_gen_a_body(X) :-
-    o_property(X,predicate),
+    n_property(X,predicate),
     functor(X,P,_),
-    o_argument_list(X,L),
+    n_argument_list(X,L),
     write('Jwcons(Jmakepred("'),
     write(P),
     write('"),'),
@@ -417,43 +405,43 @@ jump_gen_a_body(X) :-
     write(')').
 % atom builtin e.g. nl fail
 jump_gen_a_body(X) :-
-    o_property(X,builtin),
+    n_property(X,builtin),
     functor(X,P,0),
-    o_findatom(P,builtin,A),
+    n_findatom(P,builtin,A),
     write(A).
 jump_gen_a_body(X) :-
-    o_property(X,builtin),
+    n_property(X,builtin),
     functor(X,P,_),
-    o_argument_list(X,L),
-    o_findatom(P,builtin,A),
+    n_argument_list(X,L),
+    n_findatom(P,builtin,A),
     write('Jwcons('),
     write(A),
     write(','),
     jump_gen_argument(L),
     write(')').
 jump_gen_a_body(X) :-
-    o_property(X,operation),
+    n_property(X,operation),
     gen_body1(X).
 jump_gen_a_body(X) :-
-    o_property(X,compiled),
+    n_property(X,compiled),
     functor(X,P,_),
-    o_argument_list(X,L),
+    n_argument_list(X,L),
     write('Jwcons(Jmakecomp("'),
     write(P),
     write('"),'),
     jump_gen_argument(L),
     write(')').
 jump_gen_a_body(X) :-
-    o_property(X,userop),
+    n_property(X,userop),
     functor(X,P,0),
-    o_argument_list(X,L),
+    n_argument_list(X,L),
     write('Jmakeuser("'),
     write(P),
     write('")').
 jump_gen_a_body(X) :-
-    o_property(X,userop),
+    n_property(X,userop),
     functor(X,P,_),
-    o_argument_list(X,L),
+    n_argument_list(X,L),
     write('Jwcons(Jmakeuser("'),
     write(P),
     write('"),'),
@@ -474,20 +462,23 @@ e.g.  foo(X) -> if(Junify(arg1,varX))
 anoymous variable generate 1 as true.
 e.g   foo(_) -> if(1)
 */
+jump_gen_head(X) :-
+    write(X).
+
 gen_head(X) :-
     functor(X,_,0).
 gen_head(X) :-
-    o_argument_list(X,Y),
+    n_argument_list(X,Y),
     write('if('),
     gen_head1(Y,1),
     write(')'),nl.
 
 gen_head1([],N).
 gen_head1([X],N) :-
-    o_compiler_anoymous(X),
+    n_compiler_anoymous(X),
     write('1').
 gen_head1([X|Xs],N) :-
-    o_compiler_anoymous(X),
+    n_compiler_anoymous(X),
     write('1 && '),
     N1 is N + 1,
     gen_head1(Xs,N1).
@@ -520,12 +511,12 @@ jump_eval_form([X]) :-
 jump_eval_form(pi) :-
 	write('Jmakestrflt("3.14159265358979")').
 jump_eval_form(X) :-
-	o_bignum(X),
+	n_bignum(X),
     write('Jmakebig("'),
     write(X),
     write('")').
 jump_eval_form(X) :-
-	o_longnum(X),
+	n_longnum(X),
     write('Jmakestrlong("'),
     write(X),
     write('")').
@@ -541,7 +532,7 @@ jump_eval_form(X) :-
     write('")').
 jump_eval_form(X) :-
 	atom(X),
-    o_compiler_variable(X),
+    n_compiler_variable(X),
     write('Jderef('),
     write(X),
     write(')').
@@ -660,13 +651,13 @@ jump_eval_form(round(X)) :-
     jump_eval_form(X),
     write(')').
 
-jump_eval_form(X '<<' Y) :-
+jump_eval_form(X << Y) :-
 	write('Jleftshift('),
     jump_eval_form(X),
     write(','),
     jump_eval_form(Y),
     write(')').
-jump_eval_form(X '>>' Y) :-
+jump_eval_form(X >> Y) :-
 	write('Jrightshift('),
     jump_eval_form(X),
     write(','),
@@ -728,20 +719,20 @@ there are all type of prolog object
 jump_gen_a_argument([]) :-
 	write('NIL').
 jump_gen_a_argument(X) :-
-    o_compiler_anoymous(X),
+    n_compiler_anoymous(X),
     write('ANOYVAR').
 jump_gen_a_argument(X) :-
-	o_compiler_variable(X),
+	n_compiler_variable(X),
     write(X).
 jump_gen_a_argument(pi) :-
 	write('Jmakestrflt("3.14159265358979")').
 jump_gen_a_argument(X) :-
-	o_bignum(X),
+	n_bignum(X),
     write('Jmakebig("'),
     write(X),
     write('")').
 jump_gen_a_argument(X) :-
-	o_longnum(X),
+	n_longnum(X),
     write('Jmakestrlong("'),
     write(X),
     write('")').
@@ -755,66 +746,64 @@ jump_gen_a_argument(X) :-
     write('Jmakestrflt("'),
     write(X),
     write('")').
-%defined predicate(with out dynamic) will becomes to compiled predicate.
 jump_gen_a_argument(X) :-
-    o_defined_predicate(X),
+    n_defined_predicate(X),
     functor(X,Y,_),
-    o_argument_list(X,Z),
-    not(o_dynamic_check(Y)),
+    n_argument_list(X,Z),
     write('Jwcons(Jmakecomp("'),
     write(Y),
     write('"),'),
     jump_gen_argument(Z),
     write(')').
 jump_gen_a_argument(X) :-
-    o_property(X,predicate),
+    n_property(X,predicate),
     functor(X,Y,_),
-    o_argument_list(X,Z),
+    n_argument_list(X,Z),
     write('Jwcons(Jmakepred("'),
     write(Y),
     write('"),'),
     jump_gen_argument(Z),
     write(')').
 jump_gen_a_argument(X) :-
-    o_property(X,builtin),
+    n_property(X,builtin),
     functor(X,Y,0),
-    o_findatom(Y,builtin,A),
+    n_findatom(Y,builtin,A),
     write(A).
 jump_gen_a_argument(X) :-
-    o_property(X,builtin),
+    n_property(X,builtin),
     functor(X,Y,_),
-    o_findatom(Y,builtin,A),
-    o_argument_list(X,Z),
+    n_findatom(Y,builtin,A),
+    n_argument_list(X,Z),
 	write('Jwcons('),
     write(A),
     write(','),
     jump_gen_argument(Z),
     write(')').
 jump_gen_a_argument(X) :-
-    o_property(X,compiled),
+    n_property(X,compiled),
     functor(X,Y,0),
-    o_findatom(Y,compiled,A),
+    n_findatom(Y,compiled,A),
     write(A).
 jump_gen_a_argument(X) :-
-    o_property(X,compiled),
+    n_property(X,compiled),
     functor(X,Y,_),
-    o_findatom(Y,compiled,A),
-    o_argument_list(X,Z),
+    n_findatom(Y,compiled,A),
+    n_argument_list(X,Z),
     write('Jwcons('),
     write(A),
     write(','),
     jump_gen_argument(Z),
     write(')').
 jump_gen_a_argument(X) :-
-    o_property(X,operation),
+    n_property(X,operation),
     functor(X,Y,0),
-    o_findatom(Y,operator,A),
+    n_findatom(Y,operator,A),
     write(A).
 jump_gen_a_argument(X) :-
-    o_property(X,operation),
+    n_property(X,operation),
     functor(X,Y,_),
-    o_findatom(Y,operator,A),
-    o_argument_list(X,Z),
+    n_findatom(Y,operator,A),
+    n_argument_list(X,Z),
 	write('Jwcons('),
     write(A),
     write(','),
@@ -830,30 +819,30 @@ jump_gen_a_argument(A/B) :-
     jump_gen_a_argument(B),
     write(')').
 jump_gen_a_argument(X) :-
-    o_property(X,function),
+    n_property(X,function),
     functor(X,F,0),
     write('Jmakefun("'),
     write(F),
     write('")').
 jump_gen_a_argument(X) :-
-    o_property(X,function),
+    n_property(X,function),
     functor(X,F,_),
-    o_argument_list(X,Z),
+    n_argument_list(X,Z),
 	write('Jwcons(Jmakefun("'),
     write(F),
     write('"),'),
     jump_gen_argument(Z),
     write(')').
 jump_gen_a_argument(X) :-
-    o_property(X,userop),
+    n_property(X,userop),
     functor(X,Y,0),
     write('Jmakeuser("'),
     write(X),
     write('")').
 jump_gen_a_argument(X) :-
-    o_property(X,userop),
+    n_property(X,userop),
     functor(X,Y,_),
-    o_argument_list(X,Z),
+    n_argument_list(X,Z),
 	write('Jwcons(Jmakeuser("'),
     write(Y),
     write('"),'),
@@ -868,7 +857,7 @@ jump_gen_a_argument(X) :-
 	list(X),
     jump_gen_argument_list(X).
 jump_gen_a_argument(X) :-
-    invoke_error('illegal argument ',X).
+    jump_invoke_error('illegal argument ',X).
 
 jump_gen_argument_list([X|Xs]) :-
 	write('Jwlistcons('),

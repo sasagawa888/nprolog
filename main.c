@@ -392,6 +392,9 @@ int prove(int goal, int bindings, int rest, int n){
             clauses = GET_CAR(goal);
         else
             clauses = GET_CAR(car(goal));
+        
+        if(clauses == NIL)
+            error(EXISTENCE_ERR,"prove ", goal);
 
         while(!nullp(clauses)){
             save = wp;
