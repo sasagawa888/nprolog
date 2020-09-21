@@ -1184,7 +1184,6 @@ int deref_array(int arity[256], int head){
 int unify(int x, int y){
     int x1,y1;
 
-
     if(nullp(x) && nullp(y))
         return(YES);
     else if(variablep(x) && !variablep(y)){

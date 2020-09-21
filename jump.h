@@ -40,6 +40,7 @@ fn2 f2[50];
 fn3 f3[50];
 fn4 f4[50];
 tpred deftpred;
+tpred deftsys;
 
 void init0(int n, tpred x){
     f0[n] = (fn0)x;
@@ -66,6 +67,10 @@ void init_deftpred(tpred x){
     deftpred = (tpred)x;
 }
 
+//for define system builtin predicate
+void init_deftsys(tpred x){
+    deftsys = (tpred)x;
+}
 
 #define Jcheckgbc()  (f0[0])()
 #define Jgbc()	     (f0[1])()
@@ -82,15 +87,13 @@ void init_deftpred(tpred x){
 #define Jcadar(x)    (f1[5])(x)
 #define Jprint(x)    (f1[6])(x)
 #define Jmakeint(x)  (f1[7])(x)
-#define Jexecute(x)  (f1[8])(x)
+
 #define Junbind(x)   (f1[9])(x)
-#define Jpush_trail_body(x) (f1[10])(x)
-#define Jget_goal(x) (f1[11])(x)
-#define Jset_tp(x)   (f1[12])(x)
+#define Jlength(x)   (f1[12])(x)
 #define Jset_sp(x)   (f1[13])(x)
-#define Jset_length(x) (f1[14])(x)
+
 #define Jderef(x)    (f1[15])(x)
-#define Jretract_goal(x) (f1[16])(x)
+
 #define Jget_int(x)  (f1[17])(x)
 #define Jsin(x)      (f1[18])(x)
 #define Jasin(x)     (f1[19])(x)
@@ -106,11 +109,10 @@ void init_deftpred(tpred x){
 #define Jsign(x)     (f1[29])(x)
 #define Jround(x)    (f1[30])(x)
 #define Jlist1(x)    (f1[31])(x)
-#define Jset_trail_end(x) (f1[32])(x)
+
 #define Jrandom(x)   (f1[33])(x)
 #define Jset_wp(x)   (f1[34])(x)
 #define Jwlist1(x)   (f1[35])(x)
-#define Jdisplay(x)  (f1[36])(x)
 
 #define Jcons(x,y)   (f2[0])(x,y)
 #define Jplus(x,y)   (f2[1])(x,y)
@@ -151,7 +153,8 @@ void init_deftpred(tpred x){
 #define Jwcons(x,y)        (f2[36])(x,y)
 #define Jwlist2(x,y)       (f2[37])(x,y)
 #define Jwlistcons(x,y)    (f2[38])(x,y)
-#define Jproceed(x,y)      (f2[39])(x,y)
+#define Jaddtail_body(x,y)      (f2[39])(x,y)
+
 
 #define Jprove_all(x,y,z) (f3[0])(x,y,z)
 #define Jlist3(x,y,z)       (f3[1])(x,y,z)

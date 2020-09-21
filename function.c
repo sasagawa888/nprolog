@@ -29,6 +29,7 @@ void dynamic_link(int x){
     int (*init_f3)(int x, tpred y);
     int (*init_f4)(int x, tpred y);
     void (*init_deftpred)(tpred x);
+    //void (*init_deftsys)(tpred x);
     void (*init_tpredicate)();
     void (*init_declare)();
 
@@ -47,6 +48,7 @@ void dynamic_link(int x){
     init_f3 = dlsym(hmod, "init3");
     init_f4 = dlsym(hmod, "init4");
     init_deftpred = dlsym(hmod, "init_deftpred");
+    //init_deftsys = dlsym(hmod, "init_deftsys");
     init_tpredicate = dlsym(hmod, "init_tpredicate");
     init_declare = dlsym(hmod, "init_declare");
 
@@ -68,6 +70,7 @@ void dynamic_link(int x){
     init_f1(6,(tpred)print);
     init_f1(7,(tpred)makeint);
     init_f1(9,(tpred)unbind);
+    init_f1(12,(tpred)length);
     init_f1(13,(tpred)set_sp);
     init_f1(15,(tpred)deref);
     init_f1(17,(tpred)get_int);
@@ -128,6 +131,7 @@ void dynamic_link(int x){
     init_f2(36,(tpred)wcons);
     init_f2(37,(tpred)wlist2);
     init_f2(38,(tpred)wlistcons);
+    init_f2(39,(tpred)addtail_body);
 
     //argument-3
     init_f3(0,(tpred)prove_all);
@@ -148,6 +152,7 @@ void dynamic_link(int x){
     init_f4(9,(tpred)makebigx);
 
     init_deftpred((tpred)defcompiled);
+    //init_deftsys((tpred)defbuiltin);
     init_tpredicate();
     init_declare();
     link_flag = 1;
@@ -1061,13 +1066,13 @@ int b_write(int arglist, int rest){
     n = length(arglist);
     if(n == 1){
         arg1 = output_stream;
-        arg2 = deref(car(arglist));
+        arg2 = car(arglist);
         goto write;
 
     }
     else if(n == 2){
-        arg1 = deref(car(arglist));
-        arg2 = deref(cadr(arglist));
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
 
         write:
         if(wide_variable_p(arg1))
@@ -2742,15 +2747,18 @@ double getETime(){
 
 int b_measure(int arglist, int rest){
     int n,arg1,res;
-    double start_time,end_time;
+    double start_time,end_time,time,lips;
 
     n = length(arglist);
     if(n == 1){
         arg1 = car(arglist);
+        proof = 0;
         start_time = getETime(); //time_flag on and it store start time
         res = prove_all(arg1,sp,0);
         end_time = getETime();
-        printf("Elapsed Time=%.6f (second)\n", end_time - start_time);
+        time = end_time - start_time;
+        lips = (double)proof / time; 
+        printf("Elapsed Time=%.6f (second)  %.0f(LIPS)\n", time,lips);
         return(res);
     }
     return(NO);
@@ -5201,8 +5209,8 @@ int b_argument_list(int arglist, int rest){
 
     n = length(arglist);
     if(n == 2){
-        arg1 = deref(car(arglist));
-        arg2 = deref(cadr(arglist));
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
 
         arg1 = listreverse(cdr(arg1));
         res = NIL;

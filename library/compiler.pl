@@ -57,6 +57,8 @@ compile_file(X) :-
     jump_pass2(X),
     jump_invoke_gcc(X).
 
+compile_file1(X) :-
+    jump_invoke_gcc(X).
 
 /*
 for tail recursive optimize code 
@@ -64,7 +66,7 @@ now ignore
 */
 jump_pass1(X) :-
 	write(user_output,'pass1'),
-    nl,
+    nl(user_output),
     reconsult(X).
 
 /*
@@ -73,15 +75,14 @@ and write to <filename>.c
 when all code is generated, close file and abolish optimizable/1
 */
 jump_pass2(X) :-
-	write('pass2'),
-    nl,
+	write(user_output,'pass2'),
+    nl(user_output),
 	n_filename(X,F),
     atom_concat(F,'.c',Cfile),
-	%tell(Cfile),
+	tell(Cfile),
 	write('#include "jump.h"'),nl,
-	%jump_gen_c_pred(L),
     jump_gen_c_pred,
-    %jump_gen_c_exec,
+    jump_gen_c_exec,
     told.
 
 /*
@@ -91,13 +92,13 @@ gcc -O3 -w -shared -fPIC -o <filenam>.c <filename>.o <option>
 */
 jump_invoke_gcc(X) :-
 	write(user_output,'invoke GCC'),
-    nl,
+    nl(user_output),
 	n_filename(X,F),
     atom_concat(F,'.c ',Cfile),
     atom_concat(F,'.o ',Ofile),
     atom_concat(Ofile,Cfile,Files),
     atom_concat('gcc -O3 -w -shared -fPIC -o ',Files,Sys),
-    system(Sys).
+    shell(Sys).
 
 
 /*
@@ -145,6 +146,16 @@ jump_gen_def(P) :-
     write(');'),
     nl.
 
+% generate deftpred for optimized predicate
+jump_gen_defsys(P) :-
+	write('(deftsys)("'),
+    write(P),
+    write('",'),
+    write('b_'),
+    n_atom_convert(P,P1),
+    write(P1),
+    write(');'),
+    nl.
 
 /*
 last C code to make direct execute
@@ -154,7 +165,7 @@ void init_declare(void){
 */
 jump_gen_c_exec :-
 	write('void init_declare(void){'),
-    jump_gen_exec,
+    %jump_gen_exec,
     write('}').
 
 /*
@@ -177,12 +188,10 @@ int arg1,arg2 ... argN,body,save1,save2;
 */
 jump_gen_var_declare(P) :-
 	n_arity_count(P,L),
-    jump_max_element(L,M),
     write('int '),
-    jump_gen_var_declare1(1,M),
     n_generate_all_variable(P,V),
     jump_gen_all_var(V),
-    write('body,save1,save2;'),nl,!.
+    write('n,body,save1,save2;'),nl,!.
 
 % arg1,arg2,...argN
 jump_gen_var_declare1(S,E) :-
@@ -194,20 +203,12 @@ jump_gen_var_declare1(S,E) :-
     S1 is S+1,
     jump_gen_var_declare1(S1,E).
 
-/*
-max element in list
-this is used by gen_var_declare,for to find max arity
-*/
-jump_max_element([L],L).
-jump_max_element([L|Ls],A) :-
-	jump_max_element(Ls,A),
-    L < A.
-jump_max_element([L|Ls],L).
 
 /*
 generate predicate for not tail recursive
 int b_<name>(int arglist, int rest){
 int varX,varY,...
+save2 = Jget_sp();
 if(n == N){
     ...main code...
 }
@@ -225,6 +226,10 @@ jump_gen_a_pred(P) :-
     write('(int arglist, int rest){'),
     nl,
     jump_gen_var_declare(P),
+    write('save2 = Jget_sp();'),
+    nl,
+    write('n = Jlength(arglist);'),
+    nl,
     n_arity_count(P,L),
     jump_gen_a_pred1(P,L),
     write('}'),nl.
@@ -242,7 +247,6 @@ jump_gen_a_pred2(P,N) :-
 	write('if(n == '),
     write(N),
     write('){'),
-    jump_gen_receive_var(1,N),
     jump_gen_a_pred3(P,N),
     write('}'),!.
 
@@ -271,7 +275,6 @@ if( )... head
 % generate clause
 jump_gen_a_pred5((Head :- Body)) :-
     write('save1 = Jget_wp();'),nl,
-    write('save2 = Jget_sp();'),nl,
 	jump_gen_head(Head),
     jump_gen_body(Body).
 
@@ -286,7 +289,7 @@ jump_gen_a_pred5(P) :-
 	n_property(P,predicate),
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(P),
-    write('if(Jprove_all(rest,sp,0) == YES)'),nl,
+    write('if(Jprove_all(rest,Jget_sp(),0) == YES)'),nl,
     write('return(YES);'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
@@ -309,22 +312,6 @@ jump_gen_var([L|Ls]) :-
     write(' = Jmakevariant();'),nl,
     jump_gen_var(Ls).
 
-/*
-generate following argN code.
-arg1 = Jderef(Jget_goal(2));
-arg2 = Jderef(Jget_goal(3)); ...
-if N=0 then not generate code.
-*/
-jump_gen_receive_var(_,0).
-jump_gen_receive_var(S,N) :-
-	S > N.
-jump_gen_receive_var(S,N) :-
-	write('arg'),
-    write(S),
-    S1 is S + 1,
-    write(' = Jderef(Jget_goal(' ),write(S1),write('));'),nl,
-    jump_gen_receive_var(S1,N).
-
 
 
 /*
@@ -345,7 +332,7 @@ jump_gen_body(X) :-
     write('{body = '),
     jump_gen_body1(X),
     write(';'),nl,
-    write('if(Jprove_all(body,Jget_sp(),0) == YES)'),nl,
+    write('if(Jprove_all(Jaddtail_body(rest,body),Jget_sp(),0) == YES)'),nl,
     write('return(YES);}'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl,!.
@@ -462,41 +449,15 @@ e.g.  foo(X) -> if(Junify(arg1,varX))
 anoymous variable generate 1 as true.
 e.g   foo(_) -> if(1)
 */
+
 jump_gen_head(X) :-
-    write(X).
-
-gen_head(X) :-
     functor(X,_,0).
-gen_head(X) :-
+jump_gen_head(X) :-
     n_argument_list(X,Y),
-    write('if('),
-    gen_head1(Y,1),
-    write(')'),nl.
+    write('if(Junify('),
+    jump_gen_argument(Y),
+    write(',arglist) == YES)'),nl.
 
-gen_head1([],N).
-gen_head1([X],N) :-
-    n_compiler_anoymous(X),
-    write('1').
-gen_head1([X|Xs],N) :-
-    n_compiler_anoymous(X),
-    write('1 && '),
-    N1 is N + 1,
-    gen_head1(Xs,N1).
-gen_head1([X],N) :-
-    gen_head2(N,X).
-gen_head1([X|Xs],N) :-
-    gen_head2(N,X),
-    write(' && '),nl,
-    N1 is N + 1,
-    gen_head1(Xs,N1).
-
-
-gen_head2(N,X) :-
-	write('Junify(arg'),
-    write(N),
-    write(','),
-    jump_gen_a_argument(X),
-    write(') == YES').
 
 /*
 generate evauation code

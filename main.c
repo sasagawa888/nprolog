@@ -171,10 +171,16 @@ int main(int argc, char *argv[]){
     opt = 1;
     init_repl();
 
-    FILE* fp = fopen("dcg.pl","r");
+    FILE* fp = fopen("library/dcg.pl","r");
     if(fp != NULL){
         fclose(fp);
-        b_consult(list1(makeconst("dcg.pl")),NIL);
+        b_consult(list1(makeconst("library/dcg.pl")),NIL);
+        predicates = NIL;
+    }
+    fp = fopen("library/compiler.pl","r");
+    if(fp != NULL){
+        fclose(fp);
+        b_consult(list1(makeconst("library/compiler.pl")),NIL);
         predicates = NIL;
     }
 
@@ -332,7 +338,7 @@ int prove_all(int goals, int bindings, int n){
         else{
             if(conjunctionp(goals) && cadr(goals) == CUT)
                 cut_flag = 1;
-
+        
             if(prove_all(before_cut(goals),bindings,n) == YES)
                 return(prove_all(after_cut(goals),sp,n));
             else
@@ -346,6 +352,7 @@ int prove_all(int goals, int bindings, int n){
 int prove(int goal, int bindings, int rest, int n){
     int clause,clauses,clause1,varlis,save;
 
+    proof++;
     goal = deref(goal);
     
     if(nullp(goal)){
