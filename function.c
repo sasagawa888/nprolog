@@ -1744,8 +1744,8 @@ int b_is(int arglist, int rest){
 
     n = length(arglist);
     if(n == 2){
-        arg1 = deref(car(arglist));
-        arg2 = deref(cadr(arglist));
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
 
         if(wide_variable_p(arg2))
             error(INSTANTATION_ERR,"is ", arg2);

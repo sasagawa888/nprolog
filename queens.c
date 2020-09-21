@@ -1,4 +1,17 @@
 #include "jump.h"
+int b_test16(int arglist, int rest);
+int b_test16(int arglist, int rest){
+int varX,n,body,save1,save2;
+save2 = Jget_sp();
+n = Jlength(arglist);
+if(n == 0){varX = Jmakevariant();
+save1 = Jget_wp();
+{body = Jwlist3(Jmakeope(","),Jwcons(Jmakecomp("between"),Jwcons(Jmakeint(1),Jwcons(Jmakeint(16),Jwcons(varX,NIL)))),Jwlist3(Jmakeope(","),Jmakecomp("test"),208));
+if(Jprove_all(Jaddtail_body(rest,body),Jget_sp(),0) == YES)
+return(YES);}
+Junbind(save2);
+Jset_wp(save1);
+}return(NO);}
 int b_test(int arglist, int rest);
 int b_test(int arglist, int rest){
 int varX,n,body,save1,save2;
@@ -105,7 +118,8 @@ return(YES);}
 Junbind(save2);
 Jset_wp(save1);
 }return(NO);}
-void init_tpredicate(void){(deftpred)("test",b_test);
+void init_tpredicate(void){(deftpred)("test16",b_test16);
+(deftpred)("test",b_test);
 (deftpred)("queen",b_queen);
 (deftpred)("queen_2",b_queen_2);
 (deftpred)("qdelete",b_qdelete);

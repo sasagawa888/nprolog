@@ -1,5 +1,7 @@
 % 9-queens program
 
+test16 :- between(1,16,X),test,fail.
+
 test :- queen([1,2,3,4,5,6,7,8,9],X),write(X),nl,fail.
 
 queen(Data, Out) :-
