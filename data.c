@@ -1518,6 +1518,23 @@ int list_to_structure(int x){
     return(res);
 }
 
+int copy_term(int x){
+    int temp;
+
+    if(nullp(x))
+        return(NIL);
+    else if(variablep(x))
+        return(x);
+    else if(!structurep(x))
+        return(x);
+    else{
+        temp = copy_term(car(x));
+        return(cons(temp,
+                    copy_term(cdr(x))));
+    }
+    return(x);
+}
+
 
 int copy_heap(int x){
 

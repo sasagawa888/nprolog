@@ -60,6 +60,18 @@ Xがアトムデータタイプかどうか調べる。
 □ chdir(Path)
 現在のディレクトリを変えるかまたは戻す。
 
+□ clause(Head,Body)
+HeadとBodyを節の頭部と本体にそれぞれユニフィケーションする。
+Headは代入されなければならない。
+例
+?- assert((foo(X) :- write(X))).
+yes
+?- clause(foo(X),B).
+X = v_1
+B = (write(v_1));
+no
+?- 
+
 □ current_op(Proc,Assoc,Op)
 バックトラックしつつデータベース中に現在定義されている演算子定数を戻す。
 

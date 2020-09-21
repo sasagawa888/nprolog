@@ -2409,13 +2409,12 @@ int b_abolish(int arglist, int rest){
 }
 
 int b_clause(int arglist, int rest){
-    int n,arg1,arg2,save2;
+    int n,arg1,arg2,clause,clauses,save1,save2,copy;
 
-    save2 = sp;
     n = length(arglist);
     if(n == 2){
-        arg1 = deref(car(arglist));  //head
-        arg2 = deref(cadr(arglist)); //body
+        arg1 = car(arglist); //head
+        arg2 = cadr(arglist); //body
 
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"clause ",arg1);
@@ -2426,12 +2425,37 @@ int b_clause(int arglist, int rest){
         if(!wide_variable_p(arg2) && !callablep(arg2))
             error(NOT_CALLABLE,"clause ",arg2);
 
-    
+        if(atom_predicate_p(arg1))
+            clauses = GET_CAR(arg1);
+        else
+            clauses = GET_CAR(car(arg1));
+
+        save1 = wp;
+        save2 = sp;
+        while(!nullp(clauses)){
+            clause = car(clauses);
+            clauses = cdr(clauses);
+            copy = copy_term(clause);
+            if(clausep(clause) && unify(arg1,cadr(copy)) == YES &&
+                unify(arg2,caddr(copy)) == YES){
+                if(prove_all(rest,sp,0) == YES)
+                    return(YES);
+            }
+            else if(predicatep(clause) && unify(arg1,copy) == YES &&
+                unify(arg2,OPLTRUE) == YES){
+                if(prove_all(rest,sp,0) == YES)
+                    return(YES);
+            }
+            wp = save1;
+            unbind(save2);
+        }
+        wp = save1;
         unbind(save2);
         return(NO);
     }
     return(NO);
 }
+
 
 //transform
 int b_atom_codes(int arglist, int rest){

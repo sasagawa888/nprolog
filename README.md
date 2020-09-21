@@ -101,6 +101,7 @@ atom/1
 atomic/1
 call/1
 chdir/1
+clause/2
 compare/3
 concat/3
 consult/1
