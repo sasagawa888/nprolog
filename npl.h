@@ -134,6 +134,7 @@ extern int predicates;
 extern int spy_list;
 extern int error_flag;
 extern int reconsult_list;
+extern int execute_list;
 extern int op_list;
 extern int proof;
 extern int parse_mode;

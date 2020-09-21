@@ -165,7 +165,7 @@ void init_declare(void){
 */
 jump_gen_c_exec :-
 	write('void init_declare(void){'),
-    %jump_gen_exec,
+    jump_gen_exec,
     write('}').
 
 /*
@@ -838,3 +838,17 @@ jump_invoke_error(Message,Code) :-
     told,
     abort.
 
+/*
+e.g. :- op(...)
+generate execution 
+*/
+jump_gen_exec :-
+    n_get_execute(X),
+    jump_gen_exec1(X).
+
+jump_gen_exec1([]).
+jump_gen_exec1([L|Ls]) :-
+    write('Jexecute(Jlist2(Jmakeope(":-"),'),
+    jump_gen_a_body(L),
+    write('));'),nl,
+    jump_gen_exec1(Ls).

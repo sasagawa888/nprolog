@@ -99,7 +99,7 @@ varB = Jmakevariant();
 varD = Jmakevariant();
 save1 = Jget_wp();
 if(Junify(Jwcons(Jwlistcons(varN,varL),Jwcons(varB,Jwcons(varD,NIL))),arglist) == YES)
-{body = Jwlist3(Jmakeope(","),Jwcons(80,Jwcons(varD,Jwcons(Jwcons(480,Jwcons(varN,Jwcons(varB,NIL))),NIL))),Jwlist3(Jmakeope(","),Jwcons(80,Jwcons(varD,Jwcons(Jwcons(480,Jwcons(varB,Jwcons(varN,NIL))),NIL))),Jwlist3(Jmakeope(","),Jwcons(116,Jwcons(varD1,Jwcons(Jwcons(438,Jwcons(varD,Jwcons(Jmakeint(1),NIL))),NIL))),Jwcons(Jmakecomp("nodiag"),Jwcons(varL,Jwcons(varB,Jwcons(varD1,NIL)))))));
+{body = Jwlist3(Jmakeope(","),Jwcons(80,Jwcons(varD,Jwcons(Jwcons(482,Jwcons(varN,Jwcons(varB,NIL))),NIL))),Jwlist3(Jmakeope(","),Jwcons(80,Jwcons(varD,Jwcons(Jwcons(482,Jwcons(varB,Jwcons(varN,NIL))),NIL))),Jwlist3(Jmakeope(","),Jwcons(116,Jwcons(varD1,Jwcons(Jwcons(440,Jwcons(varD,Jwcons(Jmakeint(1),NIL))),NIL))),Jwcons(Jmakecomp("nodiag"),Jwcons(varL,Jwcons(varB,Jwcons(varD1,NIL)))))));
 if(Jprove_all(Jaddtail_body(rest,body),Jget_sp(),0) == YES)
 return(YES);}
 Junbind(save2);

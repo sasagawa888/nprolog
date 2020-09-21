@@ -91,6 +91,7 @@ void dynamic_link(int x){
     init_f1(33,(tpred)f_random);
     init_f1(34,(tpred)set_wp);
     init_f1(35,(tpred)wlist1);
+    init_f1(36,(tpred)operate);
 
     //argument-2 type
     init_f2(0,(tpred)cons);
@@ -824,6 +825,7 @@ void initbuiltin(void){
     defbuiltin("n_findatom",b_findatom);
     defbuiltin("n_defined_predicate",b_defined_predicate);
     defbuiltin("n_defined_userop",b_defined_userop);
+    defbuiltin("n_get_execute",b_get_execute);
     return;
 }
 
@@ -1595,6 +1597,7 @@ int b_consult(int arglist, int rest){
         line = 1;
         column = 0;
         reconsult_list = NIL;
+        execute_list = NIL;
         while(1){
             skip:
             clause = parser(NIL,NIL,NIL,NIL,0,0);
@@ -1657,6 +1660,7 @@ int b_reconsult(int arglist, int rest){
         line = 1;
         column = 0;
         reconsult_list = NIL;
+        execute_list = NIL;
         while(1){
             skip:
             clause = parser(NIL,NIL,NIL,NIL,0,0);
@@ -1666,6 +1670,7 @@ int b_reconsult(int arglist, int rest){
             //e.g. :- op(...)
             if(operationp(clause) && car(clause) == DEFINE && length(clause) == 2){
                 operate(clause);
+                execute_list = cons(cadr(clause),execute_list);
                 goto skip;
             }
             // DCG syntax e.g. a-->b.
@@ -5291,6 +5296,24 @@ int b_defined_userop(int arglist, int rest){
         }
         else
         	return(NO);
+    }
+    return(NO);
+}
+
+int b_get_execute(int arglist, int rest){
+	int n,arg1,pos,res;
+
+    n = length(arglist);
+    if(n == 1){
+    	arg1 = car(arglist);
+
+        res = NIL;
+        pos = execute_list;
+        while(!nullp(pos)){
+           res = listcons(car(pos),res);
+           pos = cdr(pos);
+        }
+        return(unify(arg1,res));
     }
     return(NO);
 }

@@ -113,6 +113,7 @@ void init_deftsys(tpred x){
 #define Jrandom(x)   (f1[33])(x)
 #define Jset_wp(x)   (f1[34])(x)
 #define Jwlist1(x)   (f1[35])(x)
+#define Jexecute(x)  (f1[36])(x)
 
 #define Jcons(x,y)   (f2[0])(x,y)
 #define Jplus(x,y)   (f2[1])(x,y)
