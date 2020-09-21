@@ -795,6 +795,8 @@ void initbuiltin(void){
     defbuiltin("string_length",b_string_length);
     defbuiltin("substring",b_substring);
     defbuiltin("atom_concat",b_atom_concat);
+    defbuiltin("date",b_date);
+    defbuiltin("time",b_time);
 
     defcompiled("call",b_call);
     defcompiled("repeat",b_repeat);
@@ -4782,6 +4784,53 @@ int b_ansi_cub(int arglist, int rest){
             ESCMVL;
             m--;
         }
+        return(YES);
+    }
+    return(NO);
+}
+
+
+int b_date(int arglist, int rest){
+    int n,arg1,arg2,arg3;
+    struct tm* jst;
+    time_t t;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        arg3 = caddr(arglist);
+
+        t = time( NULL );
+        jst = localtime( &t );
+        unify(arg1,makeint(jst->tm_year));
+        unify(arg2,makeint(jst->tm_mon));
+        unify(arg3,makeint(jst->tm_mday));
+
+        return(YES);
+    }
+    return(NO);
+}
+
+
+int b_time(int arglist, int rest){
+    int n,arg1,arg2,arg3;
+    struct tm* jst;
+    time_t t;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        arg3 = caddr(arglist);
+       
+
+        t = time( NULL );
+        jst = localtime( &t );
+        unify(arg1,makeint(jst->tm_hour));
+        unify(arg2,makeint(jst->tm_min));
+        unify(arg3,makeint(jst->tm_sec));
+
         return(YES);
     }
     return(NO);

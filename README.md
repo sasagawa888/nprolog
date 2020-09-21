@@ -107,6 +107,7 @@ concat/3
 consult/1
 current_op/3
 current_predicate/1
+date/3
 dec/2
 delete/1
 display/1
@@ -142,6 +143,7 @@ spy/1
 string/1
 string_length/2
 system/1
+time/3
 trace/0
 true/0
 var/1
