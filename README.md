@@ -71,6 +71,7 @@ no
 # builtin predicate
 
 ```
+/+
 <
 =/
 \=
@@ -93,6 +94,11 @@ ansi_cud/1
 ansi_cuf/1
 ansi_cub/1
 ansi_sgr/1
+ansi_cpr/2
+ansi_scp/0
+ansi_rcp/0
+ansi_ed/0
+ansi_el/0
 arg/3
 arg0/3
 assert/1
@@ -166,7 +172,6 @@ writeq/2
 # builtin (extension)
 
 ```
-/+  ('not' in ISO-Prolog)
 atom_concat/3
 append/3
 between/3
