@@ -92,6 +92,7 @@ ansi_cuu/1
 ansi_cud/1
 ansi_cuf/1
 ansi_cub/1
+ansi_sgr/1
 arg/3
 arg0/3
 assert/1

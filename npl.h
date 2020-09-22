@@ -373,7 +373,7 @@ extern int ed_incomment;
 #define ESCMVD  printf("\33[1B")
 #define ESCSCR  printf("\33[S")
 #define ESCMOVE(x,y)    printf("\33[%d;%df", x,y)
-#define ESCCOLOR(x)     printf("\33[%dm")
+#define ESCCOLOR(x)     printf("\33[%dm",x)
 #define ESCFBLACK printf("\33[30m")
 #define ESCFRED  printf("\33[31m")
 #define ESCFGREEN printf("\33[32m")
@@ -532,6 +532,7 @@ int b_ansi_cuu(int arglist, int rest);
 int b_ansi_cud(int arglist, int rest);
 int b_ansi_cuf(int arglist, int rest);
 int b_ansi_cub(int arglist, int rest);
+int b_ansi_sgr(int arglist, int rest);
 int b_append(int arglist, int rest);
 int b_arg(int arglist, int rest);
 int b_arg0(int arglist, int rest);

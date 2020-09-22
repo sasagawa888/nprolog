@@ -50,6 +50,7 @@ void initbuiltin(void){
     defbuiltin("ansi_cud",b_ansi_cud);
     defbuiltin("ansi_cuf",b_ansi_cuf);
     defbuiltin("ansi_cub",b_ansi_cub);
+    defbuiltin("ansi_sgr",b_ansi_sgr);
     defbuiltin("arg",b_arg);
     defbuiltin("arg0",b_arg0);
     defbuiltin("assert",b_assert);
@@ -3364,6 +3365,27 @@ int b_ansi_cub(int arglist, int rest){
     }
     return(NO);
 }
+
+int b_ansi_sgr(int arglist, int rest){
+    int n,arg1,m;
+
+    n=length(arglist);
+    if(n == 1){
+        arg1 = car(arglist);
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"ansi_sgr ", arg1);
+        if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
+            error(NOT_INT,"and_sgr ",arg1);
+        if(wide_integer_p(arg1) && negativep(arg1))
+            error(NOT_LESS_THAN_ZERO,"ansi_sgr ",arg1);
+        m = get_int(arg1);
+        ESCCOLOR(m);
+        cursor_prop = m;
+        return(YES);
+    }
+    return(NO);
+}
+
 
 
 int b_date(int arglist, int rest){
