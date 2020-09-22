@@ -261,3 +261,12 @@ compile_file('queens.pl').
 あとは通常の述語と同様に使えます。
 
 まだ末尾再帰最適化などの処理はしていません。インタープリタに比較して4割程度、高速になります。
+
+
+Hello
+
+My name is Kenichi Sasagawa.
+I learned prolog at Arity/Prolog in the 1980s.
+Now, I'm making a Prolog interpreter and compiler.
+I want to make it compatible with the familiar Arity/Prolog.
+Thank you.
