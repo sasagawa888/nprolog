@@ -30,6 +30,10 @@ int unread = NIL;     //for parse
 int paren_nest = 0;   //for parse check ((()))
 int line;
 int column;
+int cursor_row = 0;
+int cursor_col = 0;
+int cursor_prop = 0;
+
 
 
 //------pointer----
@@ -98,7 +102,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"inc"},{"dec"},{"compare"},
 {"mkdir"},{"chdir"},{"string_length"},
 {"sort"},{"keysort"},{"length"},{"shell"},{"measure"},
-{"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"}
+{"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"},{"ansi_cup"}
 };
 
 //compiled predicate

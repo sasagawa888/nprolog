@@ -45,6 +45,7 @@ void initbuiltin(void){
     defbuiltin("%ask",b_ask);
     defbuiltin("abolish",b_abolish);
     defbuiltin("abort",b_abort);
+    defbuiltin("ansi_cup",b_ansi_cup);
     defbuiltin("ansi_cuu",b_ansi_cuu);
     defbuiltin("ansi_cud",b_ansi_cud);
     defbuiltin("ansi_cuf",b_ansi_cuf);
@@ -3241,12 +3242,43 @@ int b_dec(int arglist, int rest){
     return(NO);
 }
 
+int b_ansi_cup(int arglist, int rest){
+    int n,arg1,arg2,r,c;
+
+    n=length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"ansi_cup ", arg1);
+        if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
+            error(NOT_INT,"ansi_cup ",arg1);
+        if(wide_integer_p(arg1) && negativep(arg1))
+            error(NOT_LESS_THAN_ZERO,"ansi_cup ",arg1);
+        if(wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"ansi_cup ", arg2);
+        if(!wide_variable_p(arg2) && !wide_integer_p(arg2))
+            error(NOT_INT,"ansi_cup ",arg2);
+        if(wide_integer_p(arg2) && negativep(arg2))
+            error(NOT_LESS_THAN_ZERO,"ansi_cup ",arg2);
+        
+        r = get_int(arg1);
+        c = get_int(arg2);
+        ESCMOVE(r,c);
+        cursor_row = r;
+        cursor_col = c;
+        return(YES);
+    }
+    return(NO);
+}
+
 int b_ansi_cuu(int arglist, int rest){
     int n,arg1,m;
 
     n=length(arglist);
     if(n == 1){
-        arg1 = deref(car(arglist));
+        arg1 = car(arglist);
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"ansi_cuu ", arg1);
         if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
@@ -3256,6 +3288,7 @@ int b_ansi_cuu(int arglist, int rest){
         m = get_int(arg1);
         while(m > 0){
             ESCMVU;
+            cursor_row--;
             m--;
         }
         return(YES);
@@ -3268,7 +3301,7 @@ int b_ansi_cud(int arglist, int rest){
 
     n=length(arglist);
     if(n == 1){
-        arg1 = deref(car(arglist));
+        arg1 = car(arglist);
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"ansi_cud ", arg1);
         if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
@@ -3278,6 +3311,7 @@ int b_ansi_cud(int arglist, int rest){
         m = get_int(arg1);
         while(m > 0){
             ESCMVD;
+            cursor_row++;
             m--;
         }
         return(YES);
@@ -3290,7 +3324,7 @@ int b_ansi_cuf(int arglist, int rest){
 
     n=length(arglist);
     if(n == 1){
-        arg1 = deref(car(arglist));
+        arg1 = car(arglist);
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"ansi_cuf ", arg1);
         if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
@@ -3300,6 +3334,7 @@ int b_ansi_cuf(int arglist, int rest){
         m = get_int(arg1);
         while(m > 0){
             ESCMVR;
+            cursor_col--;
             m--;
         }
         return(YES);
@@ -3312,7 +3347,7 @@ int b_ansi_cub(int arglist, int rest){
 
     n=length(arglist);
     if(n == 1){
-        arg1 = deref(car(arglist));
+        arg1 = car(arglist);
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"ansi_cub ", arg1);
         if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
@@ -3322,6 +3357,7 @@ int b_ansi_cub(int arglist, int rest){
         m = get_int(arg1);
         while(m > 0){
             ESCMVL;
+            cursor_col++;
             m--;
         }
         return(YES);

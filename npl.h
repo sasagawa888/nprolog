@@ -137,6 +137,9 @@ extern int proof;
 extern int parse_mode;
 extern int line;
 extern int column;
+extern int cursor_row;
+extern int cursor_col;
+extern int cursor_prop;
 extern int unread;
 extern int paren_nest;
 extern char operator[OPERATOR_NUMBER][5];
@@ -370,6 +373,7 @@ extern int ed_incomment;
 #define ESCMVD  printf("\33[1B")
 #define ESCSCR  printf("\33[S")
 #define ESCMOVE(x,y)    printf("\33[%d;%df", x,y)
+#define ESCCOLOR(x)     printf("\33[%dm")
 #define ESCFBLACK printf("\33[30m")
 #define ESCFRED  printf("\33[31m")
 #define ESCFGREEN printf("\33[32m")
@@ -523,6 +527,7 @@ int atsmaller(int x, int y);
 int ateqsmaller(int x, int y);
 int b_abolish(int arglist, int rest);
 int b_abort(int arglist, int rest);
+int b_ansi_cup(int arglist, int rest);
 int b_ansi_cuu(int arglist, int rest);
 int b_ansi_cud(int arglist, int rest);
 int b_ansi_cuf(int arglist, int rest);
