@@ -64,6 +64,7 @@ void initbuiltin(void){
     defbuiltin("concat",b_concat);
     defbuiltin("consult",b_consult);
     defbuiltin("date",b_date);
+    defbuiltin("date_day",b_date_day);
     defbuiltin("dec",b_dec);
     defbuiltin("delete",b_delete);
     defbuiltin("display",b_write_canonical);
@@ -3323,12 +3324,32 @@ int b_date(int arglist, int rest){
 
         t = time( NULL );
         jst = localtime( &t );
-        res = list4(makepred("date"),makeint(jst->tm_year),makeint(jst->tm_mon),makeint(jst->tm_mday));
+        res = list4(makepred("date"),makeint(jst->tm_year+1900),makeint(jst->tm_mon+1),makeint(jst->tm_mday));
         return(unify(arg1,res));
     }
     return(NO);
 }
 
+int b_date_day(int arglist, int rest){
+    int n,arg1,arg2,y,m,d,w;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        y = get_int(cadr(arg1));
+        m = get_int(caddr(arg1));
+        d = get_int(cadddr(arg1));
+        if (m < 3){
+            y--;
+            m += 12;
+        }
+        w = (y + y / 4 - y / 100 + y / 400 + (13 * m + 8) / 5 + d) % 7;
+        return(unify(arg2,makeint(w)));
+    }
+    return(NO);
+}
 
 int b_time(int arglist, int rest){
     int n,arg1,res;

@@ -92,7 +92,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"see"},{"seeing"},{"seen"},{"tell"},{"telling"},{"told"},{"trace"},{"notrace"},{"spy"},
 {"nospy"},{"leash"},{"atom"},{"integer"},{"real"},{"float"},{"number"},
 {"var"},{"nonvar"},{"atomic"},{"list"},{"gc"},{"time"},{"name"},{"bounded"},
-{"flush"},{"date"},
+{"flush"},{"date"},{"date_day"},
 {"string"},{"string_chars"},{"string_codes"},{"ground"},
 {"concat"},{"substring"},
 {"inc"},{"dec"},{"compare"},
@@ -155,7 +155,7 @@ int ed_incomment = -1; /*...*/
 int main(int argc, char *argv[]){
     int opt;
 
-    printf("N-Prolog Ver 0.03\n");
+    printf("N-Prolog Ver 0.06\n");
     signal(SIGINT,reset);
     initcell();
     initbuiltin();

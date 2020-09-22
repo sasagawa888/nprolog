@@ -570,6 +570,8 @@ int b_current_output(int arglist, int rest);
 int b_current_op(int arglist, int rest);
 int b_current_predicate(int arglist, int rest);
 int b_cut(int arglist, int rest);
+int b_date_day(int arglist, int rest);
+int b_date(int arglist, int rest);
 int b_dec(int arglist, int rest);
 int b_debug(int arglist, int rest);
 int b_defined_predicate(int arglist, int rest);

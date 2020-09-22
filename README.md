@@ -107,6 +107,7 @@ consult/1
 current_op/3
 current_predicate/1
 date/1
+date_day/2
 dec/2
 delete/1
 display/1
