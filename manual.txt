@@ -78,7 +78,7 @@ no
 □ current_predicate(Predicate)
 バックトラックしつつデータベース中に現在定義されている述語を戻す。
 
-□ date(Year,Month,Day)
+□ date(date(Year,Month,Day))
 年、月、日を戻す。
 日 [1-31] 
 月 [0-11] 0から始まることに注意

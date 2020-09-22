@@ -3313,23 +3313,18 @@ int b_ansi_cub(int arglist, int rest){
 
 
 int b_date(int arglist, int rest){
-    int n,arg1,arg2,arg3;
+    int n,arg1,res;
     struct tm* jst;
     time_t t;
 
     n = length(arglist);
-    if(n == 3){
+    if(n == 1){
         arg1 = car(arglist);
-        arg2 = cadr(arglist);
-        arg3 = caddr(arglist);
 
         t = time( NULL );
         jst = localtime( &t );
-        unify(arg1,makeint(jst->tm_year));
-        unify(arg2,makeint(jst->tm_mon));
-        unify(arg3,makeint(jst->tm_mday));
-
-        return(YES);
+        res = list4(makepred("date"),makeint(jst->tm_year),makeint(jst->tm_mon),makeint(jst->tm_mday));
+        return(unify(arg1,res));
     }
     return(NO);
 }

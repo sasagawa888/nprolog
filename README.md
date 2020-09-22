@@ -106,7 +106,7 @@ concat/3
 consult/1
 current_op/3
 current_predicate/1
-date/3
+date/1
 dec/2
 delete/1
 display/1
@@ -149,7 +149,7 @@ system/1
 tell/1
 telling/1
 told/0
-time/3
+time/1
 trace/0
 true/0
 var/1
