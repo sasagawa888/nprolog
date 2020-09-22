@@ -3336,24 +3336,18 @@ int b_date(int arglist, int rest){
 
 
 int b_time(int arglist, int rest){
-    int n,arg1,arg2,arg3;
+    int n,arg1,res;
     struct tm* jst;
     time_t t;
 
     n = length(arglist);
-    if(n == 3){
+    if(n == 1){
         arg1 = car(arglist);
-        arg2 = cadr(arglist);
-        arg3 = caddr(arglist);
-       
-
+    
         t = time( NULL );
         jst = localtime( &t );
-        unify(arg1,makeint(jst->tm_hour));
-        unify(arg2,makeint(jst->tm_min));
-        unify(arg3,makeint(jst->tm_sec));
-
-        return(YES);
+        res = list4(makepred("time"),makeint(jst->tm_hour),makeint(jst->tm_min),makeint(jst->tm_sec));
+        return(unify(arg1,res));
     }
     return(NO);
 }

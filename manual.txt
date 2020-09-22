@@ -157,7 +157,7 @@ Lengthは抽出する文字列の長さ
 □ system(P)
 Pが組込述語かどうかを調べる。
 
-□ time(Hours,Minutes,Seconds)
+□ time(time(Hours,Minutes,Seconds))
 時、分、秒を返す。
 
 時 [0-23]
