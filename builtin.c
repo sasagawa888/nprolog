@@ -57,6 +57,7 @@ void initbuiltin(void){
     defbuiltin("atom_concat",b_atom_concat);
     defbuiltin("atom",b_atom);
     defbuiltin("atomic",b_atomic);
+    defbuiltin("break",b_break);
     defbuiltin("chdir",b_change_directory);
     defbuiltin("close",b_close);
     defbuiltin("compare",b_compare);
@@ -2248,6 +2249,22 @@ int b_debug(int arglist, int rest){
         print(spy_list);
         printf("\n");
         return(YES);
+    }
+    return(NO);
+}
+
+int b_break(int arglist, int rest){
+    int n,input;
+
+    n = length(arglist);
+    if(n == 0){
+        while(1){
+            printf("?- ");
+            input = readitem();
+            if(input == FEND)
+                return(YES);
+            
+        }
     }
     return(NO);
 }

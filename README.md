@@ -98,6 +98,7 @@ asserta/1
 assertz/1
 atom/1
 atomic/1
+break/0
 call/1
 chdir/1
 clause/2

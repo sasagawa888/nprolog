@@ -547,6 +547,7 @@ int b_atom_convert(int arglist, int rest);
 int b_atsmaller(int arglist, int rest);
 int b_between(int arglist, int rest);
 int b_bignum(int arglist, int rest);
+int b_break(int arglist, int rest);
 int b_call(int arglist, int rest);
 int b_change_directory(int arglist , int rest);
 int b_char_code(int arglist, int rest);
