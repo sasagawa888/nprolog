@@ -123,9 +123,6 @@ typedef struct token {
 extern cell heap[CELLSIZE];
 extern int variant[VARIANTSIZE][2];
 extern int stack[STACKSIZE];
-extern int numbervars[20][3];
-extern int numbervars_base_pt;
-extern int numbervars_top_pt;
 extern token stok;
 extern jmp_buf buf;
 extern int cell_hash_table[HASHTBSIZE];
@@ -140,7 +137,6 @@ extern int proof;
 extern int parse_mode;
 extern int line;
 extern int column;
-extern int numbervars_pt;
 extern int unread;
 extern int paren_nest;
 extern char operator[OPERATOR_NUMBER][5];
@@ -318,11 +314,7 @@ extern int debug_flag;
 extern int sexp_flag;
 extern int quoted_flag;
 extern int ignore_flag;
-extern int numbervars_flag;
-extern int undefined_flag;
-extern int double_flag;
 extern int link_flag;
-extern int rounding_flag;
 extern int cut_flag;
 extern int listing_flag;
 extern int colon_sets_calling_context_flag;
@@ -333,10 +325,7 @@ extern double time_flag;
 extern int hp; //heap pointer
 extern int sp; //stack pointer
 extern int fc; //free counter
-extern int tp; //trail stack pointer
 extern int ac; //alpha conversion variable counter
-extern int cp; //cut point
-extern int tp; //trail stack pointer
 extern int wp; //working pointer
 
 #if defined( __linux) || defined(__OpenBSD__)
@@ -351,8 +340,6 @@ extern int ed_ins;
 extern int ed_tab;
 extern int ed_indent;
 extern int ed_name;
-extern char ed_data[1000][80];
-extern char ed_copy[500][80];
 extern int ed_lparen_row;
 extern int ed_lparen_col;
 extern int ed_rparen_row;
@@ -361,9 +348,6 @@ extern int ed_lbracket_row;
 extern int ed_lbracket_col;
 extern int ed_rbracket_row;
 extern int ed_rbracket_col;
-extern int ed_clip_start;
-extern int ed_clip_end;
-extern int ed_copy_end;
 extern char ed_candidate[15][30];
 extern int ed_candidate_pt;
 extern int ed_operator_color;
@@ -610,7 +594,6 @@ int b_get_code(int arglist, int rest);
 int b_greater(int arglist, int rest);
 int b_ground(int arglist, int rest);
 int b_halt(int arglist, int rest);
-int b_has_cut(int arglist, int rest);
 int b_inc(int arglist, int rest);
 int b_ifthen(int arglist, int rest);
 int b_ifthenelse(int arglist, int rest);
@@ -657,6 +640,7 @@ int b_reverse(int arglist, int rest);
 int b_reconsult_predicate(int arglist, int rest);
 int b_reconsult_predicate_list(int arglist, int rest);
 int b_see(int arglist, int rest);
+int b_seeing(int arglist, int rest);
 int b_seen(int arglist, int rest);
 int b_set_input(int arglist, int rest);
 int b_set_output(int arglist, int rest);
@@ -669,6 +653,7 @@ int b_string_length(int arglist, int rest);
 int b_substring(int arglist, int rest);
 int b_tab(int arglist, int rest);
 int b_tell(int arglist, int rest);
+int b_telling(int arglist, int rest);
 int b_term_variables(int arglist, int rest);
 int b_time(int arglist, int rest);
 int b_told(int arglist, int rest);
@@ -1110,13 +1095,12 @@ int makestrflt(char *str);
 int makestrlong(char *str);
 void debug(void);
 
-#if defined( __linux) || defined(__OpenBSD__)
+// edit 
 struct position{
     int row;
     int col;
 };
 
-int b_set_editor(int arglist, int n);
 int b_edit(int arglist, int n);
 void edit_screen(int x);
 void display_command(int arg);
@@ -1172,15 +1156,3 @@ int read_line(int flag);
 int count_col(int x);
 int count_col_buffer(int x);
 
-int b_server_create(int arglist, int n);
-int b_server_accept(int arglist, int n);
-int b_client_connect(int arglist, int n);
-int b_socket_send(int arglist, int n);
-int b_socket_recieve(int arglist, int n);
-int b_socket_close(int arglist, int n);
-#endif
-
-//-------debug tool------------
-void monitor(int x);
-void report_atom(int x);
-void report_token(void);

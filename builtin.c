@@ -106,6 +106,7 @@ void initbuiltin(void){
     defbuiltin("real",b_real);
     defbuiltin("reverse",b_reverse);
     defbuiltin("see",b_see);
+    defbuiltin("seeing",b_seeing);
     defbuiltin("seen",b_seen);
     defbuiltin("shell",b_shell);
     defbuiltin("sort",b_sort);
@@ -116,6 +117,7 @@ void initbuiltin(void){
     defbuiltin("system",b_system);
     defbuiltin("tab",b_tab);
     defbuiltin("tell",b_tell);
+    defbuiltin("telling",b_telling);
     defbuiltin("time",b_time);
     defbuiltin("told",b_told);
     defbuiltin("trace",b_trace);
@@ -814,6 +816,18 @@ int b_see(int arglist, int rest){
     return(NO);
 }
 
+int b_seeing(int arglist, int rest){
+    int n,arg1;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = car(arglist);
+        return(unify(arg1,GET_CDR(input_stream)));
+    }
+    return(NO);
+}
+
+
 int b_seen(int arglist, int rest){
     int n;
 
@@ -845,11 +859,22 @@ int b_tell(int arglist, int rest){
         }
         else{
             output_stream = makestream(fopen(GET_NAME(arg1),"w"),OPL_OUTPUT,OPL_TEXT,NIL,arg1);
-
+            
             if(GET_PORT(input_stream) == NULL)
                 error(CANT_OPEN, "tell", arg1);
             return(YES);
         }
+    }
+    return(NO);
+}
+
+int b_telling(int arglist, int rest){
+    int n,arg1;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = car(arglist);
+        return(unify(arg1,GET_CDR(output_stream)));
     }
     return(NO);
 }

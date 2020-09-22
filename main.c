@@ -15,11 +15,11 @@ written by kenichi sasagawa 2016/8~
 //global vers
 int proof = 0;
 cell heap[CELLSIZE];
+int cell_hash_table[HASHTBSIZE];
 int variant[VARIANTSIZE][2];
 int stack[STACKSIZE];
 token stok = {GO,OTHER};
 jmp_buf buf;
-int cell_hash_table[HASHTBSIZE];
 int variables = NIL;
 int predicates = NIL;
 int spy_list = NIL;
@@ -83,13 +83,13 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"=:="},{"=/="},{"=\\="},{"<"},{"=<"},{">"},
 {">="},{"\\="},{"="},{"reverse"},
 {"is"},{"edit"},{"open"},{"close"},{"system"},
-{"op"},{"!"},{"assert"},{"asserta"},{"assertz"},{"retractall"},
+{"op"},{"!"},{"assert"},{"asserta"},{"assertz"},
 {"abolish"},{"read"},{"write"},{"put"},{"get"},{"get0"},{"nl"},
 {"tab"},{"fail"},{"not"},{"true"},{"halt"},{"abort"},
 {"listing"},{"functor"},{"arg"},
 {"writeq"},
 {"atom_concat"},{"consult"},{"reconsult"},
-{"see"},{"seen"},{"tell"},{"told"},{"trace"},{"notrace"},{"spy"},
+{"see"},{"seeing"},{"seen"},{"tell"},{"telling"},{"told"},{"trace"},{"notrace"},{"spy"},
 {"nospy"},{"leash"},{"atom"},{"integer"},{"real"},{"float"},{"number"},
 {"var"},{"nonvar"},{"atomic"},{"list"},{"gc"},{"time"},{"name"},{"bounded"},
 {"flush"},{"date"},

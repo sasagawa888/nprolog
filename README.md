@@ -129,6 +129,7 @@ listing/1
 mkdir/1
 name/2
 nl/0
+nl/1
 nonvar/1
 nospy/1
 notrace/0
@@ -136,12 +137,18 @@ number/1
 not/1
 read/1
 reconsult/1
+see/1
+seeing/1
+seen/0
 shell/1
 sort/2
 spy/1
 string/1
 string_length/2
 system/1
+tell/1
+telling/1
+told/0
 time/3
 trace/0
 true/0
