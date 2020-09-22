@@ -140,6 +140,9 @@ extern int column;
 extern int cursor_row;
 extern int cursor_col;
 extern int cursor_prop;
+extern int cursor_row_store;
+extern int cursor_col_store;
+extern int cursor_prop_store;
 extern int unread;
 extern int paren_nest;
 extern char operator[OPERATOR_NUMBER][5];
@@ -318,11 +321,8 @@ extern int sexp_flag;
 extern int quoted_flag;
 extern int ignore_flag;
 extern int link_flag;
-extern int cut_flag;
 extern int listing_flag;
-extern int colon_sets_calling_context_flag;
 extern int prefix_flag;
-extern double time_flag;
 
 //------pointer----
 extern int hp; //heap pointer
@@ -533,6 +533,11 @@ int b_ansi_cud(int arglist, int rest);
 int b_ansi_cuf(int arglist, int rest);
 int b_ansi_cub(int arglist, int rest);
 int b_ansi_sgr(int arglist, int rest);
+int b_ansi_cpr(int arglist, int rest);
+int b_ansi_scp(int arglist, int rest);
+int b_ansi_rcp(int arglist, int rest);
+int b_ansi_ed(int arglist, int rest);
+int b_ansi_el(int arglist, int rest);
 int b_append(int arglist, int rest);
 int b_arg(int arglist, int rest);
 int b_arg0(int arglist, int rest);

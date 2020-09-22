@@ -51,6 +51,11 @@ void initbuiltin(void){
     defbuiltin("ansi_cuf",b_ansi_cuf);
     defbuiltin("ansi_cub",b_ansi_cub);
     defbuiltin("ansi_sgr",b_ansi_sgr);
+    defbuiltin("ansi_cpr",b_ansi_cpr);
+    defbuiltin("ansi_scp",b_ansi_scp);
+    defbuiltin("ansi_rcp",b_ansi_rcp);
+    defbuiltin("ansi_ed",b_ansi_ed);
+    defbuiltin("ansi_el",b_ansi_el);
     defbuiltin("arg",b_arg);
     defbuiltin("arg0",b_arg0);
     defbuiltin("assert",b_assert);
@@ -3273,6 +3278,77 @@ int b_ansi_cup(int arglist, int rest){
     }
     return(NO);
 }
+
+int b_ansi_cpr(int arglist, int rest){
+    int n,arg1,arg2,r,c,res1,res2;
+
+    n=length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+ 
+        r = makeint(cursor_row);
+        c = makeint(cursor_col);
+        res1 = unify(arg1,r);
+        res2 = unify(arg2,c);
+        if(res1 == YES && res2 == YES)
+            return(YES);
+        else
+            return(NO);
+    }
+    return(NO);
+}
+
+int b_ansi_scp(int arglist, int rest){
+    int n;
+
+    n=length(arglist);
+    if(n == 0){
+        cursor_row_store = cursor_row;
+        cursor_col_store = cursor_col;
+        cursor_prop_store = cursor_prop;
+        return(YES);
+    }
+    return(NO);
+}
+
+int b_ansi_rcp(int arglist, int rest){
+    int n;
+
+    n=length(arglist);
+    if(n == 0){
+        cursor_row = cursor_row_store;
+        cursor_col = cursor_col_store;
+        cursor_prop = cursor_prop_store;
+        return(YES);
+    }
+    return(NO);
+}
+
+int b_ansi_ed(int arglist, int rest){
+    int n;
+
+    n=length(arglist);
+    if(n == 0){
+        ESCCLS;
+        ESCTOP;
+        return(YES);
+    }
+    return(NO);
+}
+
+int b_ansi_el(int arglist, int rest){
+    int n;
+
+    n=length(arglist);
+    if(n == 0){
+        ESCCLSL;
+        ESCMVLEFT(0);
+        return(YES);
+    }
+    return(NO);
+}
+
 
 int b_ansi_cuu(int arglist, int rest){
     int n,arg1,m;

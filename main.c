@@ -33,6 +33,9 @@ int column;
 int cursor_row = 0;
 int cursor_col = 0;
 int cursor_prop = 0;
+int cursor_row_store = 0;
+int cursor_col_store = 0;
+int cursor_prop_store = 0;
 
 
 
@@ -102,7 +105,9 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"inc"},{"dec"},{"compare"},
 {"mkdir"},{"chdir"},{"string_length"},
 {"sort"},{"keysort"},{"length"},{"shell"},{"measure"},
-{"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"},{"ansi_cup"}
+{"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"},
+{"ansi_cup"},{"ansi_cpr"},{"ansi_scp"},{"ansi_rcp"},
+{"ansi_ed"},{"ansi_el"}
 };
 
 //compiled predicate
