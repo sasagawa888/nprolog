@@ -1,6 +1,5 @@
 # N-Prolog
 N-Prolog(NPL) is an interpreter and compiler to be compatible with ARITY-Prolog.
-it is based on O-Prolog. Project is now startup.
 
 N-Prolog is NOT ISO-Prolog.
 
@@ -161,6 +160,8 @@ atom_concat/3
 append/3
 between/3
 compile_file/1  (invoke compiler)
+compound/1
+ground/1
 member/2
 measure/1   (measure elapsed time)
 reverse/2
