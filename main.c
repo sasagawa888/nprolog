@@ -87,7 +87,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"abolish"},{"read"},{"write"},{"put"},{"get"},{"get0"},{"nl"},
 {"tab"},{"fail"},{"not"},{"true"},{"halt"},{"abort"},
 {"listing"},{"functor"},{"arg"},
-{"writeq"},
+{"writeq"},{"display"},
 {"atom_concat"},{"consult"},{"reconsult"},
 {"see"},{"seeing"},{"seen"},{"tell"},{"telling"},{"told"},{"trace"},{"notrace"},{"spy"},
 {"nospy"},{"leash"},{"atom"},{"integer"},{"real"},{"float"},{"number"},
@@ -349,6 +349,9 @@ int prove(int goal, int bindings, int rest, int n){
     int clause,clauses,clause1,varlis,save;
 
     proof++;
+    if(n > 18000)
+        error(RESOURCE_ERR,"",NIL);
+
     goal = deref(goal);
     
     if(nullp(goal)){
@@ -431,7 +434,7 @@ int prove(int goal, int bindings, int rest, int n){
             else{
                 if(unify(goal,(cadr(clause1))) == YES){
                     clause1 = addtail_body(rest,caddr(clause1));
-                    if(prove_all(clause1,sp,n) == YES){
+                    if(prove_all(clause1,sp,n+1) == YES){
                         //trace
                         if(debug_flag == ON && trace_flag == FULL && spypointp(goal)){
                             printf("(%d) EXIT: ", n); print(goal);
