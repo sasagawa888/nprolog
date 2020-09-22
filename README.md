@@ -1,11 +1,12 @@
 # N-Prolog
-N-Prolog(NPL) is an interpreter and compiler to be compatible with ARITY-Prolog.
+N-Prolog(NPL) is an interpreter and compiler to be compatible with Arity/Prolog32.
 
 N-Prolog is NOT ISO-Prolog.
+About Arity/prolog32  see  http://petergabel.info/ArityProlog32/ArityProlog32PredList/
 
 ## Installation
 On Linux  type "make" on terminal.
-
+see https://www.youtube.com/watch?v=IJTj8VRxUHc&fbclid=IwAR1KLf1ytyTlGX26dEzYru83Wu679HvKi-v87MdtIS_cvRM9Qr4wZZW3wD4
 
 # invoke
 To invoke opl, enter command from terminal
