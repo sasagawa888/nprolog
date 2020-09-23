@@ -473,7 +473,7 @@ int prove(int goal, int bindings, int rest, int n){
         if(prove_all(addtail_body(rest,cadr(goal)),bindings,n) == YES)
             return(YES);
         else{
-            if(cut_flag == 1){
+            if(cut_flag == 1 || car(cadr(goal)) == IFTHEN){
                 cut_flag = 0;
                 unbind(bindings);
                 return(NO);
