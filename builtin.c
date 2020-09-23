@@ -1357,20 +1357,14 @@ int atsmaller(int x, int y){
         return(0);
     else if(variablep(x) || variablep(y))
         return(1);
+    else if(numberp(x) && numberp(y)){
+        if(smallerp(x,y))
+            return(1);
+        else
+            return(0);
+    }
     else if(atomp(x) && atomp(y)){
         if(strcmp(GET_NAME(x),GET_NAME(y)) < 0)
-            return(1);
-        else
-            return(0);
-    }
-    else if(floatp(x) && floatp(y)){
-        if(GET_FLT(x) < GET_FLT(y))
-            return(1);
-        else
-            return(0);
-    }
-    else if(wide_integer_p(x) && wide_integer_p(y)){
-        if(smallerp(x,y))
             return(1);
         else
             return(0);
@@ -1405,20 +1399,14 @@ int ateqsmaller(int x, int y){
         return(0);
     else if(variablep(x) || variablep(y))
         return(1);
+    else if(numberp(x) && numberp(y)){
+        if(eqsmallerp(x,y))
+            return(1);
+        else
+            return(0);
+    }
     else if(atomp(x) && atomp(y)){
         if(strcmp(GET_NAME(x),GET_NAME(y)) <= 0)
-            return(1);
-        else
-            return(0);
-    }
-    else if(floatp(x) && floatp(y)){
-        if(GET_FLT(x) <= GET_FLT(y))
-            return(1);
-        else
-            return(0);
-    }
-    else if(wide_integer_p(x) && wide_integer_p(y)){
-        if(eqsmallerp(x,y))
             return(1);
         else
             return(0);
@@ -1476,9 +1464,9 @@ int b_atgreater(int arglist, int rest){
         arg2 = deref(cadr(arglist));
 
         if(!ateqsmaller(arg1,arg2))
-            return(NO);
-        else
             return(YES);
+        else
+            return(NO);
     }
     error(UNDEF_PRED,"@> ", makeint(n));
     return(NO);
@@ -1493,10 +1481,10 @@ int b_ateqgreater(int arglist, int rest){
         arg1 = deref(car(arglist));
         arg2 = deref(cadr(arglist));
 
-        if(atsmaller(arg1,arg2))
-            return(NO);
-        else
+        if(!atsmaller(arg1,arg2))
             return(YES);
+        else
+            return(NO);
     }
     error(UNDEF_PRED,"@>= ", makeint(n));
     return(NO);
