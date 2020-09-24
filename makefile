@@ -6,7 +6,7 @@ CFLAGS = $(INCS) -Wall -O3
 
 NPL = npl
 
-NPL_OBJS : main.o \
+NPL_OBJS = main.o \
 	parser.o \
 	function.o \
 	builtin.o \
@@ -20,15 +20,16 @@ NPL_OBJS : main.o \
 	compute.o \
 	edit.o
 
-.PHONY: all clean
+all: $(NPL_OBJS) $(NPL)
 
-all: $(NPL)	
+$(NPL): $(NPL_OBJS)
+	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBS) 
 		
 %.o: %.c npl.h
 	$(CC) -c $< -o $@ $(CFLAGS)
 
-$(NPL): $(NPL_OBJ)
-	$(CC) $(NPL_OBJ) -o $(NPL) $(LIBS) 
+.PHONY: clean all
 
-clean: -lm
+clean: 
 	rm -f *.o
+	rm npl
