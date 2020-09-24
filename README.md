@@ -1,12 +1,12 @@
 # N-Prolog
-N-Prolog(NPL) is an interpreter and compiler to be compatible with ARITY-Prolog.
-it is based on O-Prolog. Project is now startup.
+N-Prolog(NPL) is an interpreter and compiler to be compatible with Arity/Prolog32.
 
 N-Prolog is NOT ISO-Prolog.
+About Arity/prolog32  see  http://petergabel.info/ArityProlog32/ArityProlog32PredList/
 
 ## Installation
 On Linux  type "make" on terminal.
-
+see https://www.youtube.com/watch?v=IJTj8VRxUHc&fbclid=IwAR1KLf1ytyTlGX26dEzYru83Wu679HvKi-v87MdtIS_cvRM9Qr4wZZW3wD4
 
 # invoke
 To invoke opl, enter command from terminal
@@ -71,6 +71,7 @@ no
 # builtin predicate
 
 ```
+/+
 <
 =/
 \=
@@ -92,6 +93,12 @@ ansi_cuu/1
 ansi_cud/1
 ansi_cuf/1
 ansi_cub/1
+ansi_sgr/1
+ansi_cpr/2
+ansi_scp/0
+ansi_rcp/0
+ansi_ed/0
+ansi_el/0
 arg/3
 arg0/3
 assert/1
@@ -99,6 +106,7 @@ asserta/1
 assertz/1
 atom/1
 atomic/1
+break/0
 call/1
 chdir/1
 clause/2
@@ -107,6 +115,8 @@ concat/3
 consult/1
 current_op/3
 current_predicate/1
+date/1
+date_day/2
 dec/2
 delete/1
 display/1
@@ -129,6 +139,7 @@ listing/1
 mkdir/1
 name/2
 nl/0
+nl/1
 nonvar/1
 nospy/1
 notrace/0
@@ -136,12 +147,19 @@ number/1
 not/1
 read/1
 reconsult/1
+see/1
+seeing/1
+seen/0
 shell/1
 sort/2
 spy/1
 string/1
 string_length/2
 system/1
+tell/1
+telling/1
+told/0
+time/1
 trace/0
 true/0
 var/1
@@ -154,11 +172,12 @@ writeq/2
 # builtin (extension)
 
 ```
-/+  ('not' in ISO-Prolog)
 atom_concat/3
 append/3
 between/3
 compile_file/1  (invoke compiler)
+compound/1
+ground/1
 member/2
 measure/1   (measure elapsed time)
 reverse/2

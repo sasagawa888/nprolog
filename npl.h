@@ -123,9 +123,6 @@ typedef struct token {
 extern cell heap[CELLSIZE];
 extern int variant[VARIANTSIZE][2];
 extern int stack[STACKSIZE];
-extern int numbervars[20][3];
-extern int numbervars_base_pt;
-extern int numbervars_top_pt;
 extern token stok;
 extern jmp_buf buf;
 extern int cell_hash_table[HASHTBSIZE];
@@ -140,7 +137,12 @@ extern int proof;
 extern int parse_mode;
 extern int line;
 extern int column;
-extern int numbervars_pt;
+extern int cursor_row;
+extern int cursor_col;
+extern int cursor_prop;
+extern int cursor_row_store;
+extern int cursor_col_store;
+extern int cursor_prop_store;
 extern int unread;
 extern int paren_nest;
 extern char operator[OPERATOR_NUMBER][5];
@@ -318,25 +320,15 @@ extern int debug_flag;
 extern int sexp_flag;
 extern int quoted_flag;
 extern int ignore_flag;
-extern int numbervars_flag;
-extern int undefined_flag;
-extern int double_flag;
 extern int link_flag;
-extern int rounding_flag;
-extern int cut_flag;
 extern int listing_flag;
-extern int colon_sets_calling_context_flag;
 extern int prefix_flag;
-extern double time_flag;
 
 //------pointer----
 extern int hp; //heap pointer
 extern int sp; //stack pointer
 extern int fc; //free counter
-extern int tp; //trail stack pointer
 extern int ac; //alpha conversion variable counter
-extern int cp; //cut point
-extern int tp; //trail stack pointer
 extern int wp; //working pointer
 
 #if defined( __linux) || defined(__OpenBSD__)
@@ -351,8 +343,6 @@ extern int ed_ins;
 extern int ed_tab;
 extern int ed_indent;
 extern int ed_name;
-extern char ed_data[1000][80];
-extern char ed_copy[500][80];
 extern int ed_lparen_row;
 extern int ed_lparen_col;
 extern int ed_rparen_row;
@@ -361,9 +351,6 @@ extern int ed_lbracket_row;
 extern int ed_lbracket_col;
 extern int ed_rbracket_row;
 extern int ed_rbracket_col;
-extern int ed_clip_start;
-extern int ed_clip_end;
-extern int ed_copy_end;
 extern char ed_candidate[15][30];
 extern int ed_candidate_pt;
 extern int ed_operator_color;
@@ -386,6 +373,7 @@ extern int ed_incomment;
 #define ESCMVD  printf("\33[1B")
 #define ESCSCR  printf("\33[S")
 #define ESCMOVE(x,y)    printf("\33[%d;%df", x,y)
+#define ESCCOLOR(x)     printf("\33[%dm",x)
 #define ESCFBLACK printf("\33[30m")
 #define ESCFRED  printf("\33[31m")
 #define ESCFGREEN printf("\33[32m")
@@ -539,10 +527,17 @@ int atsmaller(int x, int y);
 int ateqsmaller(int x, int y);
 int b_abolish(int arglist, int rest);
 int b_abort(int arglist, int rest);
+int b_ansi_cup(int arglist, int rest);
 int b_ansi_cuu(int arglist, int rest);
 int b_ansi_cud(int arglist, int rest);
 int b_ansi_cuf(int arglist, int rest);
 int b_ansi_cub(int arglist, int rest);
+int b_ansi_sgr(int arglist, int rest);
+int b_ansi_cpr(int arglist, int rest);
+int b_ansi_scp(int arglist, int rest);
+int b_ansi_rcp(int arglist, int rest);
+int b_ansi_ed(int arglist, int rest);
+int b_ansi_el(int arglist, int rest);
 int b_append(int arglist, int rest);
 int b_arg(int arglist, int rest);
 int b_arg0(int arglist, int rest);
@@ -563,6 +558,7 @@ int b_atom_convert(int arglist, int rest);
 int b_atsmaller(int arglist, int rest);
 int b_between(int arglist, int rest);
 int b_bignum(int arglist, int rest);
+int b_break(int arglist, int rest);
 int b_call(int arglist, int rest);
 int b_change_directory(int arglist , int rest);
 int b_char_code(int arglist, int rest);
@@ -586,6 +582,8 @@ int b_current_output(int arglist, int rest);
 int b_current_op(int arglist, int rest);
 int b_current_predicate(int arglist, int rest);
 int b_cut(int arglist, int rest);
+int b_date_day(int arglist, int rest);
+int b_date(int arglist, int rest);
 int b_dec(int arglist, int rest);
 int b_debug(int arglist, int rest);
 int b_defined_predicate(int arglist, int rest);
@@ -610,7 +608,6 @@ int b_get_code(int arglist, int rest);
 int b_greater(int arglist, int rest);
 int b_ground(int arglist, int rest);
 int b_halt(int arglist, int rest);
-int b_has_cut(int arglist, int rest);
 int b_inc(int arglist, int rest);
 int b_ifthen(int arglist, int rest);
 int b_ifthenelse(int arglist, int rest);
@@ -657,6 +654,7 @@ int b_reverse(int arglist, int rest);
 int b_reconsult_predicate(int arglist, int rest);
 int b_reconsult_predicate_list(int arglist, int rest);
 int b_see(int arglist, int rest);
+int b_seeing(int arglist, int rest);
 int b_seen(int arglist, int rest);
 int b_set_input(int arglist, int rest);
 int b_set_output(int arglist, int rest);
@@ -669,6 +667,7 @@ int b_string_length(int arglist, int rest);
 int b_substring(int arglist, int rest);
 int b_tab(int arglist, int rest);
 int b_tell(int arglist, int rest);
+int b_telling(int arglist, int rest);
 int b_term_variables(int arglist, int rest);
 int b_time(int arglist, int rest);
 int b_told(int arglist, int rest);
@@ -1040,6 +1039,7 @@ void defoperator(char *name, int(*func)(int, int), int weight, int spec, int opt
 void defuserfunction(char *name, int weight, int spec);
 void discard_trail(void);
 void discard_trail_n(int n);
+void dynamic_link(int x);
 void error(int errnum, char *fun, int arg);
 void execute(int x);
 void gbc(void);
@@ -1109,13 +1109,12 @@ int makestrflt(char *str);
 int makestrlong(char *str);
 void debug(void);
 
-#if defined( __linux) || defined(__OpenBSD__)
+// edit 
 struct position{
     int row;
     int col;
 };
 
-int b_set_editor(int arglist, int n);
 int b_edit(int arglist, int n);
 void edit_screen(int x);
 void display_command(int arg);
@@ -1171,15 +1170,3 @@ int read_line(int flag);
 int count_col(int x);
 int count_col_buffer(int x);
 
-int b_server_create(int arglist, int n);
-int b_server_accept(int arglist, int n);
-int b_client_connect(int arglist, int n);
-int b_socket_send(int arglist, int n);
-int b_socket_recieve(int arglist, int n);
-int b_socket_close(int arglist, int n);
-#endif
-
-//-------debug tool------------
-void monitor(int x);
-void report_atom(int x);
-void report_token(void);

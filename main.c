@@ -15,11 +15,11 @@ written by kenichi sasagawa 2016/8~
 //global vers
 int proof = 0;
 cell heap[CELLSIZE];
+int cell_hash_table[HASHTBSIZE];
 int variant[VARIANTSIZE][2];
 int stack[STACKSIZE];
 token stok = {GO,OTHER};
 jmp_buf buf;
-int cell_hash_table[HASHTBSIZE];
 int variables = NIL;
 int predicates = NIL;
 int spy_list = NIL;
@@ -30,6 +30,13 @@ int unread = NIL;     //for parse
 int paren_nest = 0;   //for parse check ((()))
 int line;
 int column;
+int cursor_row = 0;
+int cursor_col = 0;
+int cursor_prop = 0;
+int cursor_row_store = 0;
+int cursor_col_store = 0;
+int cursor_prop_store = 0;
+
 
 
 //------pointer----
@@ -83,27 +90,24 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"=:="},{"=/="},{"=\\="},{"<"},{"=<"},{">"},
 {">="},{"\\="},{"="},{"reverse"},
 {"is"},{"edit"},{"open"},{"close"},{"system"},
-{"op"},{"!"},{"assert"},{"asserta"},{"assertz"},{"retractall"},
+{"op"},{"!"},{"assert"},{"asserta"},{"assertz"},
 {"abolish"},{"read"},{"write"},{"put"},{"get"},{"get0"},{"nl"},
 {"tab"},{"fail"},{"not"},{"true"},{"halt"},{"abort"},
 {"listing"},{"functor"},{"arg"},
-{"writeq"},
+{"writeq"},{"display"},
 {"atom_concat"},{"consult"},{"reconsult"},
-{"see"},{"seen"},{"tell"},{"told"},{"trace"},{"notrace"},{"spy"},
-{"nospy"},{"leash"},{"atom"},{"integer"},{"real"},{"float"},{"number"},{"compound"},
-{"var"},{"nonvar"},{"atomic"},{"list"},{"gc"},{"time"},
-{"char_set"},{"char_code"},{"atom_chars"},{"name"},
-{"number_chars"},{"number_codes"},{"debug"},{"bounded"},
-{"get_code"},{"put_char"},{"put_code"},
-{"current_input"},{"current_output"},
-{"set_input"},{"set_output"},{"flush"},{"listreverse"},
-{"get_byte"},
+{"see"},{"seeing"},{"seen"},{"tell"},{"telling"},{"told"},{"trace"},{"notrace"},{"spy"},
+{"nospy"},{"leash"},{"atom"},{"integer"},{"real"},{"float"},{"number"},
+{"var"},{"nonvar"},{"atomic"},{"list"},{"gc"},{"time"},{"name"},{"bounded"},
+{"flush"},{"date"},{"date_day"},
 {"string"},{"string_chars"},{"string_codes"},{"ground"},
-{"put_byte"},{"concat"},{"substring"},
-{"inc"},{"dec"},{"term_variables"},{"compare"},
+{"concat"},{"substring"},
+{"inc"},{"dec"},{"compare"},
 {"mkdir"},{"chdir"},{"string_length"},
 {"sort"},{"keysort"},{"length"},{"shell"},{"measure"},
-{"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"}
+{"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"},
+{"ansi_cup"},{"ansi_cpr"},{"ansi_scp"},{"ansi_rcp"},
+{"ansi_ed"},{"ansi_el"}
 };
 
 //compiled predicate
@@ -160,7 +164,7 @@ int ed_incomment = -1; /*...*/
 int main(int argc, char *argv[]){
     int opt;
 
-    printf("N-Prolog Ver 0.03\n");
+    printf("N-Prolog Ver 0.06\n");
     signal(SIGINT,reset);
     initcell();
     initbuiltin();
@@ -354,6 +358,9 @@ int prove(int goal, int bindings, int rest, int n){
     int clause,clauses,clause1,varlis,save;
 
     proof++;
+    if(n > 18000)
+        error(RESOURCE_ERR,"",NIL);
+
     goal = deref(goal);
     
     if(nullp(goal)){
@@ -436,7 +443,7 @@ int prove(int goal, int bindings, int rest, int n){
             else{
                 if(unify(goal,(cadr(clause1))) == YES){
                     clause1 = addtail_body(rest,caddr(clause1));
-                    if(prove_all(clause1,sp,n) == YES){
+                    if(prove_all(clause1,sp,n+1) == YES){
                         //trace
                         if(debug_flag == ON && trace_flag == FULL && spypointp(goal)){
                             printf("(%d) EXIT: ", n); print(goal);
@@ -466,7 +473,7 @@ int prove(int goal, int bindings, int rest, int n){
         if(prove_all(addtail_body(rest,cadr(goal)),bindings,n) == YES)
             return(YES);
         else{
-            if(cut_flag == 1){
+            if(cut_flag == 1 || car(cadr(goal)) == IFTHEN){
                 cut_flag = 0;
                 unbind(bindings);
                 return(NO);
