@@ -1021,6 +1021,7 @@ int wlist9(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8, int x
 int wlist10(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8, int x9, int x10);
 int zerop(int x);
 void add_data(int pred, int data);
+void addtail_body1(int x, int y);
 void assign_variant(int x);
 void bigx_gbc(int x);
 void bigx_minus2(int arg, int c, int msb);
