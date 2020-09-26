@@ -321,6 +321,7 @@ int addask(int x){
     return(addtail_body(makeatom("%ask",SYS),x));
 }
 
+
 int addtail_body(int x, int y){
     if(nullp(y))
         return(x);
@@ -330,8 +331,30 @@ int addtail_body(int x, int y){
         return(wlist3(car(y),cadr(y),addtail_body(x,caddr(y))));
 }
 
+/*
+int addtail_body(int x, int y){
+    if(!conjunctionp(y))
+        return(wlist3(AND,y,x));
+    else{
+        addtail_body1(x,y);
+        return(y);
+    }
+}
+
+
+//concat y and x by side eeffect.
+//set address directly
+
+void addtail_body1(int x, int y){
+    if(!conjunctionp(y))
+        y = wlist3(AND,y,x);
+    else
+        addtail_body1(x,caddr(y));
+}
+*/
 
 int prove_all(int goals, int bindings, int n){
+
     if(nullp(goals))
         return(YES);
     else if(car(goals) != AND)
