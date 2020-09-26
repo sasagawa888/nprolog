@@ -1,23 +1,9 @@
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 #include <stdlib.h>
-#include <setjmp.h>
-#include <math.h>
-#include <time.h>
-#include <sys/time.h>
-#include <float.h>
-#include <sys/stat.h>
-#include <stdio_ext.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <errno.h>
+#include <string.h>
 #include <dlfcn.h>
 #include "npl.h"
 
-
-
-
+    
 typedef void (*tpred)(char*, int(*pred)(int , int));
 
 void dynamic_link(int x){

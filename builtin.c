@@ -1,22 +1,10 @@
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 #include <stdlib.h>
-#include <setjmp.h>
-#include <math.h>
+#include <unistd.h>
+#include <string.h>
 #include <time.h>
 #include <sys/time.h>
-#include <float.h>
 #include <sys/stat.h>
-#include <stdio_ext.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <errno.h>
-#include <dlfcn.h>
 #include "npl.h"
-
-#define FLUSH __fpurge(stdin);
-
 
 void initbuiltin(void){
     definfix(">",b_greater,700,XFX);
@@ -337,21 +325,20 @@ int b_ask(int arglist, int rest){
             x2 = cdr(x2);
         }
 
+        putchar(' ');
+
         fflush(stdout);
         fflush(stdin);
 
-        loop:
-        c = getchar();
+        loop:	
+        c = getch();
         
-        if(c == '.'){
-        	getchar();
+        if(c == '.' || c == EOL){
+            fputs(".\n", stdout);           	
             return(YES);
         }
-        else if(c == EOL){
-            return(YES);
-        }
-        else if(c == ';'){
-        	getchar();
+        else if(c == ';' || c == ' '){
+            fputs(";\n", stdout);	    
             return(NO);
         }
         else
@@ -2898,7 +2885,12 @@ int b_make_directory(int arglist, int rest){
             error(INSTANTATION_ERR,"make_directory ",arg1);
         if(!atomp(arg1))
             error(NOT_ATOM,"make_directory ", arg1);
-        mkdir(GET_NAME(arg1),0777);
+
+        #ifdef IS_WINDOWS
+            mkdir(GET_NAME(arg1));
+        #else   
+            mkdir(GET_NAME(arg1),0777);
+        #endif
         return(YES);
     }
     return(NO);

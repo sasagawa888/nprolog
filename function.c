@@ -1,21 +1,7 @@
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 #include <stdlib.h>
-#include <setjmp.h>
 #include <math.h>
-#include <time.h>
-#include <sys/time.h>
 #include <float.h>
-#include <sys/stat.h>
-#include <stdio_ext.h>
-#include <sys/types.h>
-#include <unistd.h>
-#include <errno.h>
-#include <dlfcn.h>
 #include "npl.h"
-
-#define FLUSH __fpurge(stdin);
 
 void defoperator(char *name, int(*func)(int, int), int weight, int spec ,int opt){
     int atom,old_weight,old_spec,new_weight,new_spec,ex_spec;

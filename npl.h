@@ -2,6 +2,8 @@
 written by kenichi sasagawa 2016/9~
 */
 #include <setjmp.h>
+#include <stdio.h>
+
 #define CELLSIZE 10000000
 #define HEAPSIZE  7000000
 #define FREESIZE      500
@@ -331,63 +333,63 @@ extern int fc; //free counter
 extern int ac; //alpha conversion variable counter
 extern int wp; //working pointer
 
-#if defined( __linux) || defined(__OpenBSD__)
-//-----editor-----
-extern int repl_flag;
-extern int buffer[256][10];
-extern int ed_row;
-extern int ed_col;
-extern int ed_start;
-extern int ed_end;
-extern int ed_ins;
-extern int ed_tab;
-extern int ed_indent;
-extern int ed_name;
-extern int ed_lparen_row;
-extern int ed_lparen_col;
-extern int ed_rparen_row;
-extern int ed_rparen_col;
-extern int ed_lbracket_row;
-extern int ed_lbracket_col;
-extern int ed_rbracket_row;
-extern int ed_rbracket_col;
-extern char ed_candidate[15][30];
-extern int ed_candidate_pt;
-extern int ed_operator_color;
-extern int ed_builtin_color;
-extern int ed_extended_color;
-extern int ed_quote_color;
-extern int ed_comment_color;
-extern int ed_function_color;
-extern int ed_incomment;
+#if defined( __linux) || defined(__OpenBSD__)    
+    //-----editor-----
+    extern int repl_flag;
+    extern int buffer[256][10];
+    extern int ed_row;
+    extern int ed_col;
+    extern int ed_start;
+    extern int ed_end;
+    extern int ed_ins;
+    extern int ed_tab;
+    extern int ed_indent;
+    extern int ed_name;
+    extern int ed_lparen_row;
+    extern int ed_lparen_col;
+    extern int ed_rparen_row;
+    extern int ed_rparen_col;
+    extern int ed_lbracket_row;
+    extern int ed_lbracket_col;
+    extern int ed_rbracket_row;
+    extern int ed_rbracket_col;
+    extern char ed_candidate[15][30];
+    extern int ed_candidate_pt;
+    extern int ed_operator_color;
+    extern int ed_builtin_color;
+    extern int ed_extended_color;
+    extern int ed_quote_color;
+    extern int ed_comment_color;
+    extern int ed_function_color;
+    extern int ed_incomment;
 
-#define ESCHOME printf("\33[1;1H")
-#define ESCTOP  printf("\33[2;1H")
-#define ESCCLS  printf("\33[2J")
-#define ESCCLS1 printf("\33[0J")
-#define ESCCLSL printf("\33[0K")
-#define ESCMVLEFT(x) printf("\33[%dG", x)
-#define ESCMVR  printf("\33[1C")
-#define ESCMVL  printf("\33[1D")
-#define ESCMVU  printf("\33[1A")
-#define ESCMVD  printf("\33[1B")
-#define ESCSCR  printf("\33[S")
-#define ESCMOVE(x,y)    printf("\33[%d;%df", x,y)
-#define ESCCOLOR(x)     printf("\33[%dm",x)
-#define ESCFBLACK printf("\33[30m")
-#define ESCFRED  printf("\33[31m")
-#define ESCFGREEN printf("\33[32m")
-#define ESCFYELLOW printf("\33[33m")
-#define ESCFBLUE printf("\33[34m")
-#define ESCFMAGENTA printf("\33[35m")
-#define ESCFCYAN printf("\33[36m")
-#define ESCFWHITE printf("\33[37m")
-#define ESCFORG  printf("\33[39m")
-#define ESCBCYAN printf("\33[46m")
-#define ESCBORG  printf("\33[49m")
-#define ESCREV  printf("\33[7m")
-#define ESCRST  printf("\33[0m")
-#define ESCBOLD printf("\33[1m")
+    #define ESCHOME printf("\33[1;1H")
+    #define ESCTOP  printf("\33[2;1H")
+    #define ESCCLS  printf("\33[2J")
+    #define ESCCLS1 printf("\33[0J")
+    #define ESCCLSL printf("\33[0K")
+    #define ESCMVLEFT(x) printf("\33[%dG", x)
+    #define ESCMVR  printf("\33[1C")
+    #define ESCMVL  printf("\33[1D")
+    #define ESCMVU  printf("\33[1A")
+    #define ESCMVD  printf("\33[1B")
+    #define ESCSCR  printf("\33[S")
+    #define ESCMOVE(x,y)    printf("\33[%d;%df", x,y)
+    #define ESCCOLOR(x)     printf("\33[%dm",x)
+    #define ESCFBLACK printf("\33[30m")
+    #define ESCFRED  printf("\33[31m")
+    #define ESCFGREEN printf("\33[32m")
+    #define ESCFYELLOW printf("\33[33m")
+    #define ESCFBLUE printf("\33[34m")
+    #define ESCFMAGENTA printf("\33[35m")
+    #define ESCFCYAN printf("\33[36m")
+    #define ESCFWHITE printf("\33[37m")
+    #define ESCFORG  printf("\33[39m")
+    #define ESCBCYAN printf("\33[46m")
+    #define ESCBORG  printf("\33[49m")
+    #define ESCREV  printf("\33[7m")
+    #define ESCRST  printf("\33[0m")
+    #define ESCBOLD printf("\33[1m")
 
 #endif
 
@@ -408,16 +410,16 @@ extern int ed_incomment;
 #define VT      11
 
 #if defined(__linux) || defined(__OpenBSD__)
-#define LEFT    'D'
-#define UP      'A'
-#define RIGHT   'C'
-#define DOWN    'B'
-#define INSERT  '2'
-#define DELETE  '3'
-#define PAGEUP  '5'
-#define PAGEDN  '6'
-#define HOME    'H'
-#define END     'F'
+    #define LEFT    'D'
+    #define UP      'A'
+    #define RIGHT   'C'
+    #define DOWN    'B'
+    #define INSERT  '2'
+    #define DELETE  '3'
+    #define PAGEUP  '5'
+    #define PAGEDN  '6'
+    #define HOME    'H'
+    #define END     'F'
 #endif
 
 //-------error code---
@@ -1171,3 +1173,14 @@ int read_line(int flag);
 int count_col(int x);
 int count_col_buffer(int x);
 
+
+// There are a lot of flavours of windows, so define a global flag that can be used for all of them
+#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
+    #define IS_WINDOWS 1
+#endif
+
+#if IS_WINDOWS 
+    #define FLUSH fflush(stdin);
+#elif __linux
+    #define FLUSH __fpurge(stdin);    
+#endif

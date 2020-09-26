@@ -10,11 +10,7 @@ opt has sign data. plus=1,minus=-1,zero=0.
 number of data is absolute.
 
 */
-#include <stdio.h>
-#include <string.h>
-#include <ctype.h>
 #include <stdlib.h>
-#include <setjmp.h>
 #include <math.h>
 #include "npl.h"
 
