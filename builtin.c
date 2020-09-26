@@ -78,6 +78,7 @@ void initbuiltin(void){
     defbuiltin("display",b_write_canonical);
     defbuiltin("debug",b_debug);
     defbuiltin("edit",b_nano);
+    defbuiltin("eq",b_eq);
     defbuiltin("fail",b_fail);
     defbuiltin("flush",b_flush_output);
     defbuiltin("float",b_real);
@@ -1306,6 +1307,24 @@ int b_notequalp(int arglist, int rest){
     }
     return(NO);
 }
+
+int b_eq(int arglist, int rest){
+    int n,arg1,arg2;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        if(arg1 == arg2)
+            return(YES);
+        else
+            return(NO);
+    }
+    return(NO);
+}
+
+
 
 int b_compare(int arglist, int rest){
     int n,arg1,arg2,arg3;

@@ -121,6 +121,7 @@ dec/2
 delete/1
 display/1
 edit/1
+eq/2
 expand_term/2
 fail/0
 float/1
