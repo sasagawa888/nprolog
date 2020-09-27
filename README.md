@@ -128,6 +128,11 @@ fail/0
 float/1
 flush/0 
 gc/0
+get/1
+get/2
+get0/1
+get0/2
+get0_noecho/1
 halt/0
 ifthen/2
 ifthenelse/3
