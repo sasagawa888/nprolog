@@ -787,15 +787,72 @@ int b_read(int arglist, int rest){
 
 
 
-int b_open(int nest, int n){
-    
+int b_open(int arglist, int rest){
+    int n,arg1,arg2,arg3,stream;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        arg3 = caddr(arglist);
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"open ",arg2);
+        if(!atomp(arg1))
+            error(NOT_ATOM,"open ",arg2);
+
+        if(eqp(arg1,makeconst("user"))){
+            output_stream = standard_output;
+            return(YES);
+        }
+        else{
+            if(arg3 == makeconst("w")){
+                stream = makestream(fopen(GET_NAME(arg2),"w"),OPL_OUTPUT,OPL_TEXT,NIL,arg2);
+            
+                if(GET_PORT(stream) == NULL)
+                    error(CANT_OPEN, "open ", arg2);
+                unify(arg1,stream);
+                return(YES);
+            }
+            else if(arg3 == makeconst("r")){
+                stream = makestream(fopen(GET_NAME(arg2),"r"),OPL_INPUT,OPL_TEXT,NIL,arg2);
+            
+                if(GET_PORT(stream) == NULL)
+                    error(CANT_OPEN, "open ", arg2);
+                unify(arg1,stream);
+                return(YES);
+            }
+            else if(arg3 == makeconst("rw")){
+                stream = makestream(fopen(GET_NAME(arg2),"r+"),OPL_INPUT,OPL_TEXT,NIL,arg2);
+            
+                if(GET_PORT(stream) == NULL)
+                    error(CANT_OPEN, "open ", arg2);
+                unify(arg1,stream);
+                return(YES);
+            }
+            else if(arg3 == makeconst("a") || arg3 == makeconst("ra")){
+                stream = makestream(fopen(GET_NAME(arg2),"a+"),OPL_INPUT,OPL_TEXT,NIL,arg2);
+            
+                if(GET_PORT(stream) == NULL)
+                    error(CANT_OPEN, "open ", arg2);
+                unify(arg1,stream);
+                return(YES);
+            }
+        }
+    }
     return(NO);
 }
 
 
 
-int b_close(int nest, int n){
-    
+int b_close(int arglist, int rest){
+    int n,arg1;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = car(arglist);
+        fclose(GET_PORT(arg1));
+        return(YES);
+    }
     return(NO);
 }
 

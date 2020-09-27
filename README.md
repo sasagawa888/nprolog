@@ -110,6 +110,7 @@ break/0
 call/1
 chdir/1
 clause/2
+close/1
 compare/3
 concat/3
 consult/1
@@ -146,6 +147,7 @@ nospy/1
 notrace/0
 number/1
 not/1
+open/3
 read/1
 reconsult/1
 see/1

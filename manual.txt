@@ -120,6 +120,9 @@ B = (write(v_1));
 no
 ?- 
 
+□ close(Handle)
+Handleで指定したファイルをクローズする。
+
 □ current_op(Proc,Assoc,Op)
 バックトラックしつつデータベース中に現在定義されている演算子定数を戻す。
 
@@ -199,6 +202,16 @@ Eを評価し、その値をXにユニフィケーションする
 
 □ name(Atom,List)
 リストをアトムに変換するか、アトムまたは整数をリストに変換する。
+
+□ open(Handle,Filename,Access)
+既存のファイルをオープンする。
+
+Accessは次のいずれか
+r read
+w write
+rw read and write
+a append
+ra read and append
 
 □ substring(InString,N,Length,OutString)
 ストリングからサブストリングを抽出する。
