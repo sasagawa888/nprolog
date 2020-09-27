@@ -98,18 +98,14 @@ void error(int errnum, char *fun, int arg){
                             print(arg);
                             break;
 
+        case FILE_EXIST:    printf("File not exist %s ", fun);
+                            print(arg);
+                            break;
+
         case STACK_OVERF:   printf("Stack over flow ");
                             break;
 
-        case TRAIL_OVERF:   printf("Trail over flow ");
-                            break;
-
-
         case SYSTEM_ERROR:  printf("System error at %s ", fun);
-                            break;
-
-        case TCPIP:         printf("TCP/IP error %s ", fun);
-                            print(arg);
                             break;
 
         case OUT_OF_RANGE:  printf("Out of range %s ", fun);
@@ -119,15 +115,7 @@ void error(int errnum, char *fun, int arg){
         case UNDEF_PRED:	  printf("Undefined predicate %s ", fun);
                             break;
 
-        case DISCONTIGUOUS:	
-                            printf("Discontiguous assertion ");
-        										print(arg);
-                            break;
-
-        case NOT_EXIST_MODULE:
-                            printf("Not exist module %s ", fun);
-                            break;
-
+        
         case EOF_ERROR:    
                             printf("End of file error %s ", fun);
                             break;
@@ -198,16 +186,6 @@ void error(int errnum, char *fun, int arg){
                             print(arg);
                             break;
 
-        case NOT_WRITE_OPTION:
-                            printf("Not write option %s ", fun);
-                            print(arg);
-                            break;
-
-        case NOT_READ_OPTION:
-                            printf("Not read option %s ", fun);
-                            print(arg);
-                            break;
-
         case NOT_ORDER:     
                             printf("Not compare order %s ", fun);
                             print(arg);
@@ -241,11 +219,11 @@ void error(int errnum, char *fun, int arg){
                             printf("Not charactor code %s ", fun);
                             print(arg);
                             break;
-
-        case NOT_FLAG_SPEC:              
-                            printf("Not flag specifier %s ", fun);
+        
+        case NOT_OPEN_OPTION:
+                            printf("Not open option %s ", fun);
                             print(arg);
-                            break;
+                            break;       
   }
     printf("\n");
     stok.ch = NUL;

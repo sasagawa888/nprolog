@@ -71,6 +71,7 @@ void initbuiltin(void){
     defbuiltin("compound",b_compound);
     defbuiltin("concat",b_concat);
     defbuiltin("consult",b_consult);
+    defbuiltin("create",b_create);
     defbuiltin("date",b_date);
     defbuiltin("date_day",b_date_day);
     defbuiltin("dec",b_dec);
@@ -784,20 +785,49 @@ int b_read(int arglist, int rest){
     return(NO);
 }
 
+int b_create(int arglist, int rest){
+    int n,arg1,arg2,stream;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        if(wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"create ",arg2);
+        if(!atomp(arg2))
+            error(NOT_ATOM,"create ",arg2);
+
+        if(eqp(arg1,makeconst("user"))){
+            output_stream = standard_output;
+            return(YES);
+        }
+        else{
+            stream = makestream(fopen(GET_NAME(arg2),"w"),OPL_OUTPUT,OPL_TEXT,NIL,arg2);
+            
+            if(GET_PORT(stream) == NULL)
+                error(CANT_OPEN, "create ", arg2);
+            unify(arg1,stream);
+            return(YES);
+        }
+    }
+    return(NO);
+}
+
 
 
 
 int b_open(int arglist, int rest){
     int n,arg1,arg2,arg3,stream;
+    FILE* fp;
 
     n = length(arglist);
     if(n == 3){
         arg1 = car(arglist);
         arg2 = cadr(arglist);
         arg3 = caddr(arglist);
-        if(wide_variable_p(arg1))
+        if(wide_variable_p(arg2))
             error(INSTANTATION_ERR,"open ",arg2);
-        if(!atomp(arg1))
+        if(!atomp(arg2))
             error(NOT_ATOM,"open ",arg2);
 
         if(eqp(arg1,makeconst("user"))){
@@ -805,6 +835,12 @@ int b_open(int arglist, int rest){
             return(YES);
         }
         else{
+            fp = fopen(GET_NAME(arg2),"r");
+            if(fp == NULL){
+                fclose(fp);
+                error(FILE_EXIST,"open ",arg2);
+            }
+
             if(arg3 == makeconst("w")){
                 stream = makestream(fopen(GET_NAME(arg2),"w"),OPL_OUTPUT,OPL_TEXT,NIL,arg2);
             
