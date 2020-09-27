@@ -600,6 +600,7 @@ int b_generate_all_variable(int arglist, int rest);
 int b_generate_variable(int arglist, int rest);
 int b_get(int arglist, int rest);
 int b_get0(int arglist, int rest);
+int b_get0_noecho(int arglist, int rest);
 int b_get_byte(int arglist, int rest);
 int b_get_char(int arglist, int rest);
 int b_get_code(int arglist, int rest);

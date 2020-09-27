@@ -87,6 +87,7 @@ void initbuiltin(void){
     defbuiltin("gc",b_gbc);
     defbuiltin("get",b_get);
     defbuiltin("get0",b_get0);
+    defbuiltin("get0_noecho",b_get0_noecho);
     defbuiltin("get_code",b_get_code);
     defbuiltin("get_byte",b_get_byte);
     defbuiltin("ground",b_ground);
@@ -589,6 +590,22 @@ int b_get(int arglist, int rest){
 }
 
 
+int b_get0_noecho(int arglist, int rest){
+    int n,c,arg1,i,res;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = deref(car(arglist));
+        c = getchar();
+        i = makeint((int)c);
+        res = unify(arg1,i);
+        return(res);
+    }
+    return(NO);
+}
+
+
+
 
 int b_get_code(int arglist, int rest){
     int n,arg1,arg2,c,i,res;
@@ -873,6 +890,7 @@ int b_open(int arglist, int rest){
                 unify(arg1,stream);
                 return(YES);
             }
+            error(NOT_OPEN_OPTION,"open ", arg2);
         }
     }
     return(NO);
