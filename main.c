@@ -2,14 +2,12 @@
 written by kenichi sasagawa 2016/8~
 */
 
-#include <stdio.h>
 #include <string.h>
-#include <ctype.h>
-#include <stdlib.h>
-#include <setjmp.h>
 #include <math.h>
-#include <stdio_ext.h>
 #include <signal.h>
+#ifdef __linux
+  #include <stdio_ext.h>
+#endif
 #include "npl.h"
 
 //global vers
@@ -545,8 +543,6 @@ int after_cut(int x){
     
 }
 
-#define FLUSH __fpurge(stdin);
-
 void debugger(int goal, int bindings, int rest, int n){
     int c,save;
 
@@ -953,7 +949,7 @@ void print_not_quoted(int addr){
                 printf("\a");
                 #elif __OpenBSD__
                 printf("\a");
-                #endif
+                #endif 
             else if(c == 'b')
                 fprintf(GET_PORT(output_stream),"%c",BS);
             else if(c == NUL)

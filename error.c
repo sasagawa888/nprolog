@@ -231,11 +231,7 @@ void error(int errnum, char *fun, int arg){
 		stok.type = NUL;
 		stok.ahead = NUL;
     memset(stok.buf,NUL,BUFSIZE);
-    #if _WIN32
-    fflush(stdin);
-    #elif __linux
-    __fpurge(stdin);
-    #endif
+    FLUSH
     if(open_flag){
         open_flag = 0;
         printf("around here line=%d column=%d\n", line, column);

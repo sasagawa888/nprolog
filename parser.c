@@ -1,22 +1,6 @@
-#include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <stdlib.h>
-#include <setjmp.h>
-#include <math.h>
-#include <time.h>
-#include <sys/time.h>
-#include <float.h>
-#include <sys/stat.h>
-#include <stdio_ext.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include <unistd.h>
-#include <errno.h>
-#include <dlfcn.h>
 #include "npl.h"
 
 //#define CHECK   1 //for parser debug check
