@@ -88,6 +88,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"=:="},{"=/="},{"=\\="},{"<"},{"=<"},{">"},
 {">="},{"\\="},{"="},{"reverse"},
 {"is"},{"edit"},{"open"},{"close"},{"system"},{"create"},
+{"delete"},{"rename"},
 {"op"},{"!"},{"assert"},{"asserta"},{"assertz"},
 {"abolish"},{"read"},{"write"},{"put"},{"get"},{"get0"},{"get0_noecho"},{"nl"},
 {"tab"},{"fail"},{"not"},{"true"},{"halt"},{"abort"},

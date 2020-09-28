@@ -104,6 +104,7 @@ void initbuiltin(void){
     defbuiltin("reconsult",b_reconsult);
     defbuiltin("read",b_read);
     defbuiltin("real",b_real);
+    defbuiltin("rename",b_rename);
     defbuiltin("reverse",b_reverse);
     defbuiltin("see",b_see);
     defbuiltin("seeing",b_seeing);
@@ -3063,6 +3064,29 @@ int b_delete(int arglist, int rest){
     return(NO);
 }
 
+
+int b_rename(int arglist, int rest){
+    int n,arg1,arg2;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"rename ",arg1);
+        if(!atomp(arg1))
+            error(NOT_ATOM,"rename ", arg1);
+        if(wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"rename ",arg2);
+        if(!atomp(arg2))
+            error(NOT_ATOM,"rename ", arg2);
+        
+
+        rename(GET_NAME(arg1),GET_NAME(arg2));
+        return(YES);
+    }
+    return(NO);
+}
 
 
 int b_nano(int arglist, int rest){
