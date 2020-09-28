@@ -22,6 +22,16 @@ test(atom) :-
     verify(atom('a*b')),
     verify(atom(動物)).
 
+test(atomic) :-
+    verify(atomic(1)),
+    verify(atomic(abc)),
+    verify(atomic(1.0)).
+
+test(float) :-
+    verify(float(1.0)),
+    verify(float(1.0e10)),
+    verify(not(float(1))).
+
 test(unify) :-
     verify(c(Z) = c(c(z))),
     verify(Z == c(z)),
@@ -49,4 +59,8 @@ test(list_difference) :-
 test(list_difference) :-
     L = T-T, L1 = [a,b|T], T = [c,d],
     verify(L1 == [a,b,c,d]).
+
+test(univ) :-
+    X =.. [sin,3],
+    verify(X == sin(3)).
 
