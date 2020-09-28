@@ -53,7 +53,7 @@ void initbuiltin(void){
     defbuiltin("atom",b_atom);
     defbuiltin("atomic",b_atomic);
     defbuiltin("break",b_break);
-    defbuiltin("chdir",b_change_directory);
+    defbuiltin("chdir",b_chdir);
     defbuiltin("close",b_close);
     defbuiltin("compare",b_compare);
     defbuiltin("compound",b_compound);
@@ -89,7 +89,7 @@ void initbuiltin(void){
     defbuiltin("length",b_length);
     defbuiltin("listing",b_listing);
     defbuiltin("list",b_list);
-    defbuiltin("mkdir",b_make_directory);
+    defbuiltin("mkdir",b_mkdir);
     defbuiltin("measure",b_measure);
     defbuiltin("name",b_atom_codes);
     defbuiltin("nl",b_nl);
@@ -106,6 +106,7 @@ void initbuiltin(void){
     defbuiltin("real",b_real);
     defbuiltin("rename",b_rename);
     defbuiltin("reverse",b_reverse);
+    defbuiltin("rmdir",b_rmdir);
     defbuiltin("see",b_see);
     defbuiltin("seeing",b_seeing);
     defbuiltin("seen",b_seen);
@@ -3006,38 +3007,52 @@ int o_ignore(int nest, int n){
 
 
 //-----------file system-------------------
-int b_make_directory(int arglist, int rest){
+int b_mkdir(int arglist, int rest){
     int n,arg1;
 
     n = length(arglist);
     if(n == 1){
         arg1 = car(arglist);
         if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"make_directory ",arg1);
+            error(INSTANTATION_ERR,"mkdir ",arg1);
         if(!atomp(arg1))
-            error(NOT_ATOM,"make_directory ", arg1);
+            error(NOT_ATOM,"mkdir ", arg1);
 
-        #ifdef IS_WINDOWS
-            mkdir(GET_NAME(arg1));
-        #else   
-            mkdir(GET_NAME(arg1),0777);
-        #endif
+        mkdir(GET_NAME(arg1),0777);
         return(YES);
     }
     return(NO);
 }
 
 
-int b_change_directory(int arglist , int rest){
+int b_rmdir(int arglist, int rest){
     int n,arg1;
 
     n = length(arglist);
     if(n == 1){
         arg1 = car(arglist);
         if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"change_directory ",arg1);
+            error(INSTANTATION_ERR,"rmdir ",arg1);
         if(!atomp(arg1))
-            error(NOT_ATOM,"change_directory ", arg1);
+            error(NOT_ATOM,"rmdir ", arg1);
+
+        rmdir(GET_NAME(arg1));
+        return(YES);
+    }
+    return(NO);
+}
+
+
+int b_chdir(int arglist , int rest){
+    int n,arg1;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = car(arglist);
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"chdir ",arg1);
+        if(!atomp(arg1))
+            error(NOT_ATOM,"chdir ", arg1);
 
         if(chdir(GET_NAME(arg1)) != -1)
             return(YES);

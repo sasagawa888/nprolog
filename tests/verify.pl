@@ -18,7 +18,7 @@ test(atmark) :-
 test(atom) :-
     verify(atom(a)),
     verify(not(atom(1))),
-    verify(atom(1.1)),
+    verify(not(atom(1.1))),
     verify(atom('a*b')),
     verify(atom(動物)).
 

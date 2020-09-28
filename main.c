@@ -102,7 +102,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"string"},{"string_chars"},{"string_codes"},{"ground"},
 {"concat"},{"substring"},
 {"inc"},{"dec"},{"compare"},
-{"mkdir"},{"chdir"},{"string_length"},
+{"mkdir"},{"rmdir"},{"chdir"},{"string_length"},
 {"sort"},{"keysort"},{"length"},{"shell"},{"measure"},
 {"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"},
 {"ansi_cup"},{"ansi_cpr"},{"ansi_scp"},{"ansi_rcp"},

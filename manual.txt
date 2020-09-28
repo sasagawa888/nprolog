@@ -219,6 +219,9 @@ ra read and append
 □ rename(Filename,Newname)
 ファイル名を変更する。
 
+□ rmdir(Path)
+ディレクトリを削除する。
+
 □ substring(InString,N,Length,OutString)
 ストリングからサブストリングを抽出する。
 Nは開始位置　１から始まる自然数

@@ -155,6 +155,7 @@ not/1
 open/3
 read/1
 reconsult/1
+rmdir/1
 see/1
 seeing/1
 seen/0
