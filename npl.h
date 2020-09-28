@@ -9,7 +9,8 @@ written by kenichi sasagawa 2016/9~
 #define FREESIZE      500
 #define STACKSIZE   1000000
 #define VARIANTSIZE  5000000
-#define VARIANTMAX  15000000
+#define VARIANTMAX  CELLSIZE + VARIANTSIZE
+#define RECORDMAX 12
 #define ATOMSIZE 256
 #define BUFSIZE 256
 #define STRSIZE 256
@@ -128,6 +129,8 @@ extern int stack[STACKSIZE];
 extern token stok;
 extern jmp_buf buf;
 extern int cell_hash_table[HASHTBSIZE];
+extern int record_hash_talbe[HASHTBSIZE][RECORDMAX]; 
+extern int current_record;                       
 extern int variables;
 extern int predicates;
 extern int spy_list;
