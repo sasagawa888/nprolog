@@ -3710,10 +3710,6 @@ int b_recordh(int arglist, int rest){
 
         arg3 = copy_heap(arg3); //copy arg1 to heap area
         SET_ARITY(arg3,arg2);     //set sort key atom
-        if(atomp(arg3))
-            add_data(arg3,arg3);
-        else
-            add_data(car(arg3),arg3);
         
         if(GET_CDR(arg1) == NIL){
             SET_CDR(arg1,record_pt);

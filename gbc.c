@@ -77,7 +77,7 @@ void markcell(int addr){
 }
 
 void gbcmark(void){
-    int i;
+    int i,j;
 
     //mark nil and basic symbol
     MARK_CELL(NIL);
@@ -95,6 +95,11 @@ void gbcmark(void){
     //mark cells chained by symbol hash table
     for(i=0; i<HASHTBSIZE; i++)
         markcell(cell_hash_table[i]);
+    
+    //mark hash table of recordh term
+    for(i=0; i<HASHTBSIZE; i++)
+        for(j=0; j<record_pt; j++)
+            markcell(record_hash_table[i][j]);
 
     //mark stream
     markcell(standard_input);

@@ -255,7 +255,6 @@ void init_repl(void){
     unbind(0);
     sp = 0;
     cut_flag = 0;
-    record_pt = 0;
     //initialize variant variable
     for(i=0; i<VARIANTSIZE; i++){
         variant[i][0] = UNBIND;
