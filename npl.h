@@ -615,6 +615,7 @@ int b_halt(int arglist, int rest);
 int b_inc(int arglist, int rest);
 int b_ifthen(int arglist, int rest);
 int b_ifthenelse(int arglist, int rest);
+int b_instance(int arglist, int rest);
 int b_integer(int arglist, int rest);
 int b_is(int arglist, int rest);
 int b_keysort(int arglist, int rest);

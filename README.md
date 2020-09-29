@@ -137,6 +137,7 @@ halt/0
 ifthen/2
 ifthenelse/3
 inc/2
+instance/2
 integer/1
 is/2
 keysort/2
@@ -155,6 +156,8 @@ not/1
 open/3
 read/1
 reconsult/1
+recordh/3
+retrieveh/3
 rmdir/1
 see/1
 seeing/1

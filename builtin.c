@@ -83,6 +83,7 @@ void initbuiltin(void){
     defbuiltin("inc",b_inc);
     defbuiltin("ifthen",b_ifthen);
     defbuiltin("ifthenelse",b_ifthenelse);
+    defbuiltin("instance",b_instance);
     defbuiltin("integer",b_integer);
     defbuiltin("keysort",b_keysort);
     defbuiltin("leash",b_leash);
@@ -3760,6 +3761,25 @@ int b_retrieveh(int arglist, int rest){
             lis = cdr(lis);
         }
         return(NO);
+    }
+    return(NO);
+}
+
+
+int b_instance(int arglist, int rest){
+    int n,arg1,arg2;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"instance ", arg1);
+        if(!wide_variable_p(arg1) && !integerp(arg1))
+            error(NOT_INT,"instance ",arg1);
+
+        return(unify(arg2,get_int(arg1)));
     }
     return(NO);
 }
