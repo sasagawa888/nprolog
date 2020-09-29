@@ -17,7 +17,7 @@ int cell_hash_table[HASHTBSIZE];
 int variant[VARIANTSIZE][2];
 int stack[STACKSIZE];
 int record_hash_table[HASHTBSIZE][RECORDMAX];  //for hash record database 
-int current_record = 0;                        // current index of record database
+int record_pt = 0;                             // current index of record database
 token stok = {GO,OTHER};
 jmp_buf buf;
 int variables = NIL;
@@ -108,7 +108,8 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"sort"},{"keysort"},{"length"},{"shell"},{"measure"},
 {"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"},
 {"ansi_cup"},{"ansi_cpr"},{"ansi_scp"},{"ansi_rcp"},
-{"ansi_ed"},{"ansi_el"}
+{"ansi_ed"},{"ansi_el"},
+{"recordh"}
 };
 
 //compiled predicate

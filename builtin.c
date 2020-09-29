@@ -104,6 +104,7 @@ void initbuiltin(void){
     defbuiltin("reconsult",b_reconsult);
     defbuiltin("read",b_read);
     defbuiltin("real",b_real);
+    defbuiltin("recordh",b_recordh);
     defbuiltin("rename",b_rename);
     defbuiltin("reverse",b_reverse);
     defbuiltin("rmdir",b_rmdir);
@@ -3669,3 +3670,50 @@ int b_time(int arglist, int rest){
 }
 
 
+
+//-----------record data type-----------------------------
+/*
+                          CAR,CDR,...
+atom of record name    foo[NIL,record_id,...]
+
+record_hash_table 
+ ID0   ID1  ID2
+0[7272,1232,9992,...]
+1[3232,9231,2312,...]
+...
+HASHTBLSIZE[]
+
+cell_list
+e.g. hash == 1 ID==1 
+addr 1232 -> [pred1,pred2,...] 
+
+*/
+
+int b_recordh(int arglist, int rest){
+    int n,arg1,arg2,arg3,record_id,index;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = car(arglist);    //table_name
+        arg2 = cadr(arglist);   //sort_key
+        arg3 = caddr(arglist);  //term
+
+        arg3 = copy_heap(arg3); //copy arg1 to heap area
+        SET_VAR(arg3,unique(varslist(arg3)));
+        if(atomp(arg3))
+            add_data(arg3,arg3);
+        else
+            add_data(car(arg3),arg3);
+        
+        if(GET_CDR(arg1) == NIL){
+            SET_CDR(arg1,record_pt);
+            record_pt++;
+        }
+        record_id = GET_CDR(arg1);
+        index = hash(GET_NAME(arg2));
+        add_hash_pred(arg3,record_id,index);
+        checkgbc();
+        return(YES);
+    }
+    return(NO);
+}

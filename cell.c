@@ -132,7 +132,7 @@ int addatom(char *name, int property, int index){
     return(res);
 }
 
-void addtail_pred(int pred, int record_id, int index){
+void add_hash_pred(int pred, int record_id, int index){
     int addr;
 
     addr = record_hash_table[index][record_id];
