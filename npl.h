@@ -129,7 +129,7 @@ extern int stack[STACKSIZE];
 extern token stok;
 extern jmp_buf buf;
 extern int cell_hash_table[HASHTBSIZE];
-extern int record_hash_talbe[HASHTBSIZE][RECORDMAX]; 
+extern int record_hash_table[HASHTBSIZE][RECORDMAX]; 
 extern int current_record;                       
 extern int variables;
 extern int predicates;

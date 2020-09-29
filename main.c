@@ -16,7 +16,7 @@ cell heap[CELLSIZE];
 int cell_hash_table[HASHTBSIZE];
 int variant[VARIANTSIZE][2];
 int stack[STACKSIZE];
-int record_hash_talbe[HASHTBSIZE][RECORDMAX];  //for hash record database 
+int record_hash_table[HASHTBSIZE][RECORDMAX];  //for hash record database 
 int current_record = 0;                        // current index of record database
 token stok = {GO,OTHER};
 jmp_buf buf;

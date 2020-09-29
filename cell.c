@@ -5,7 +5,7 @@
 
 //-----------------------------
 void initcell(void){
-    int addr,x;
+    int addr,x,y;
 
     for(addr=0; addr < HEAPSIZE; addr++){
         heap[addr].flag = FRE;
@@ -18,6 +18,12 @@ void initcell(void){
 
     for(x=0; x<HASHTBSIZE; x++)
         cell_hash_table[x] = NIL;
+    
+    for(x=0; x<HASHTBSIZE; x++)
+        for(y=0; y<RECORDMAX; y++)
+            record_hash_table[x][y] = NIL;
+    
+
 
 
     //initialize symbol
@@ -124,6 +130,22 @@ int addatom(char *name, int property, int index){
     addr = cons(res=makeatom1(name,property),addr);
     cell_hash_table[index] = addr;
     return(res);
+}
+
+void addtail_pred(int pred, int record_id, int index){
+    int addr;
+
+    addr = record_hash_table[index][record_id];
+    if(addr == NIL){
+        addr = cons(pred,NIL);
+        record_hash_table[index][record_id] = addr;
+    }
+    else{
+        while(cdr(addr) != NIL){
+            addr = cdr(addr);
+        }
+        SET_CDR(addr,cons(pred,NIL));
+    }
 }
 
 
