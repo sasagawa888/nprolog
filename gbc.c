@@ -32,8 +32,8 @@ void markcell(int addr){
     int x;
 
     if(IS_ALPHA(addr)){
-        if(variant[addr - CELLSIZE][0] != UNBIND){
-            markcell(variant[addr - CELLSIZE][0]);
+        if(variant[addr - CELLSIZE] != UNBIND){
+            markcell(variant[addr - CELLSIZE]);
             return;
         }
         else
@@ -111,10 +111,8 @@ void gbcmark(void){
 
     //mark stack
     for(i=0;i<sp;i++){
-        if(alpha_variable_p(stack[i])){
-            markcell(variant[stack[i]-CELLSIZE][0]);
-            markcell(variant[stack[i]-CELLSIZE][1]);
-        }
+        if(alpha_variable_p(stack[i]))
+            markcell(variant[stack[i]-CELLSIZE]);
         else
             markcell(stack[i]);
     }

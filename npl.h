@@ -124,7 +124,7 @@ typedef struct token {
 
 
 extern cell heap[CELLSIZE];
-extern int variant[VARIANTSIZE][2];
+extern int variant[VARIANTSIZE];
 extern int stack[STACKSIZE];
 extern token stok;
 extern jmp_buf buf;

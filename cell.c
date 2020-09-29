@@ -77,7 +77,7 @@ void initstream(void){
 void bindsym(int x, int val){
 
     if(alpha_variable_p(x))
-        variant[x-CELLSIZE][0] = val;
+        variant[x-CELLSIZE] = val;
     else if(atom_variable_p(x))
         SET_CAR(x,val);
     else
@@ -91,7 +91,7 @@ void bindsym(int x, int val){
 int findvar(int x){
 
     if(alpha_variable_p(x))
-        return(variant[x - CELLSIZE][0]);
+        return(variant[x - CELLSIZE]);
     else if(atom_variable_p(x))
         return(GET_CAR(x));
     else

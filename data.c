@@ -1287,13 +1287,11 @@ void unbind(int x){
 
     for(i=x; i<sp; i++){
         if(alpha_variable_p(stack[i])){
-            variant[stack[i]-CELLSIZE][0] = UNBIND;
-            variant[stack[i]-CELLSIZE][1] = UNBIND;
+            variant[stack[i]-CELLSIZE] = UNBIND;
         }
         else if(atom_variable_p(stack[i])){
             if(alpha_variable_p(GET_CAR(stack[i]))){
-                variant[GET_CAR(stack[i])-CELLSIZE][0] = UNBIND;
-                variant[GET_CAR(stack[i])-CELLSIZE][1] = UNBIND;
+                variant[GET_CAR(stack[i])-CELLSIZE] = UNBIND;
             }
             SET_CAR(stack[i],UNBIND);
             SET_CDR(stack[i],UNBIND);
@@ -1406,7 +1404,7 @@ void printenv(void){
         if(alpha_variable_p(stack[i])){
             print(stack[i]);
             printf("=");
-            print(variant[stack[i]-CELLSIZE][0]);
+            print(variant[stack[i]-CELLSIZE]);
         }
         else if(atom_variable_p(stack[i])){
             print(stack[i]);

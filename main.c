@@ -14,7 +14,7 @@ written by kenichi sasagawa 2016/8~
 int proof = 0;
 cell heap[CELLSIZE];
 int cell_hash_table[HASHTBSIZE];
-int variant[VARIANTSIZE][2];
+int variant[VARIANTSIZE];
 int stack[STACKSIZE];
 int record_hash_table[HASHTBSIZE][RECORDMAX];  //for hash record database 
 int record_pt = 0;                             // current index of record database
@@ -257,8 +257,7 @@ void init_repl(void){
     cut_flag = 0;
     //initialize variant variable
     for(i=0; i<VARIANTSIZE; i++){
-        variant[i][0] = UNBIND;
-        variant[i][1] = UNBIND;
+        variant[i] = UNBIND;
     }
     i = variables;
     while(!nullp(i)){
