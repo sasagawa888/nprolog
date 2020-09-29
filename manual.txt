@@ -181,6 +181,9 @@ get0_noechoは標準出力装置にその文字を表示しない。
 □ halt
 インタープリタから抜け出す。
 
+□ instance(Ref,Term)
+その参照番号の項を戻す。
+
 □ integer(X)
 Ｘが整数かどうかを調べる。
 
@@ -215,6 +218,13 @@ w write
 rw read and write
 a append
 ra read and append
+
+□ recordh(Table_name,Sort_key,Term)
+ハッシュテーブルに項を記録する。
+
+□ retrieveh(Table_name,Sort_key,Term)
+ハッシュテーブルから項を戻す。
+
 
 □ rename(Filename,Newname)
 ファイル名を変更する。
