@@ -117,7 +117,7 @@ char compiled[COMPILED_NUMBER][30] ={
 {"append"},{"member"},{"repeat"},
 {"retract"},{"clause"},{"call"},
 {"current_visible"},{"stream_property"},{"between"},
-{"current_predicate"},{"current_op"}
+{"current_predicate"},{"current_op"},{"retrieveh"}
 };
 
 //extened predicate
@@ -166,7 +166,7 @@ int ed_incomment = -1; /*...*/
 int main(int argc, char *argv[]){
     int opt;
 
-    printf("N-Prolog Ver 0.06\n");
+    printf("N-Prolog Ver 0.09\n");
     signal(SIGINT,reset);
     initcell();
     initbuiltin();
@@ -255,6 +255,7 @@ void init_repl(void){
     unbind(0);
     sp = 0;
     cut_flag = 0;
+    record_pt = 0;
     //initialize variant variable
     for(i=0; i<VARIANTSIZE; i++){
         variant[i][0] = UNBIND;

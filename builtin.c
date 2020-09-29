@@ -139,7 +139,7 @@ void initbuiltin(void){
     defcompiled("current_predicate",b_current_predicate);
     defcompiled("current_op",b_current_op);
     defcompiled("between",b_between);
-
+    defcompiled("retrieveh",b_retrieveh);
 
     //-----JUMP project---------
     defcompiled("n_reconsult_predicate",b_reconsult_predicate);
@@ -3697,9 +3697,19 @@ int b_recordh(int arglist, int rest){
         arg1 = car(arglist);    //table_name
         arg2 = cadr(arglist);   //sort_key
         arg3 = caddr(arglist);  //term
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"recordh ", arg1);
+        if(!wide_variable_p(arg1) && !atomp(arg1))
+            error(NOT_ATOM,"recordh ",arg1);
+        if(wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"recordh ", arg2);
+        if(!wide_variable_p(arg2) && !atomp(arg2))
+            error(NOT_ATOM,"recordh ",arg2);
+        if(wide_variable_p(arg3))
+            error(INSTANTATION_ERR,"recordh ", arg3);
 
         arg3 = copy_heap(arg3); //copy arg1 to heap area
-        SET_VAR(arg3,unique(varslist(arg3)));
+        SET_ARITY(arg3,arg2);     //set sort key atom
         if(atomp(arg3))
             add_data(arg3,arg3);
         else
@@ -3714,6 +3724,46 @@ int b_recordh(int arglist, int rest){
         add_hash_pred(arg3,record_id,index);
         checkgbc();
         return(YES);
+    }
+    return(NO);
+}
+
+int b_retrieveh(int arglist, int rest){
+    int n,arg1,arg2,arg3,save1,record_id,index,lis,term;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        arg3 = caddr(arglist);
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"retrieveh ", arg1);
+        if(!wide_variable_p(arg1) && !atomp(arg1))
+            error(NOT_ATOM,"retrieveh ",arg1);
+        if(wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"retrieveh ", arg2);
+        if(!wide_variable_p(arg2) && !atomp(arg2))
+            error(NOT_ATOM,"retrieveh ",arg2);
+    
+        
+        save1 = sp;
+        record_id = GET_CDR(arg1);
+        index = hash(GET_NAME(arg2));
+        lis = record_hash_table[index][record_id];
+        while(lis != NIL){
+            term = car(lis);
+            if(GET_ARITY(term) != arg2)
+                goto skip;
+
+            unify(arg3,term);
+            if(prove_all(rest,sp,0) == YES)
+                return(YES);
+            
+            unbind(save1);
+            skip:
+            lis = cdr(lis);
+        }
+        return(NO);
     }
     return(NO);
 }
