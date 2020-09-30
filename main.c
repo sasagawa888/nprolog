@@ -26,6 +26,7 @@ int spy_list = NIL;
 int reconsult_list = NIL;
 int execute_list = NIL;
 int op_list = NIL;
+int record_list = NIL;
 int unread = NIL;     //for parse
 int paren_nest = 0;   //for parse check ((()))
 int line;

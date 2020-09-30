@@ -3797,7 +3797,7 @@ int b_instance(int arglist, int rest){
 
 
 int b_recordz(int arglist, int rest){
-    int n,arg1,arg2,arg3;
+    int n,arg1,arg2,arg3,temp;
 
     n = length(arglist);
     if(n == 3){
@@ -3816,8 +3816,17 @@ int b_recordz(int arglist, int rest){
         if(!wide_variable_p(arg3))
             error(NOT_VAR,"recordz ",arg3);
 
+        arg2 = cons(car(arg2),cons(arg1,cdr(arg2))); //insert key to term
         arg2 = copy_heap(arg2); //copy arg1 to heap area
-        add_data(arg1,arg2);
+        temp = record_list;
+        if(temp == NIL)
+            temp = cons(arg2,NIL);
+        else{
+            while(cdr(temp) != NIL){
+                temp = cdr(temp);
+            }
+            SET_CDR(temp,cons(arg2,NIL));
+        }
         checkgbc();
         return(unify(arg3,makeint(arg2)));
     }
@@ -3843,8 +3852,9 @@ int b_recorda(int arglist, int rest){
         if(!wide_variable_p(arg3))
             error(NOT_VAR,"recorda ",arg3);
 
+        arg2 = cons(car(arg2),cons(arg1,cdr(arg2))); //insert key to term
         arg2 = copy_heap(arg2); //copy arg1 to heap area
-        insert_data(arg1,arg2);
+        record_list = cons(arg2,record_list);
         checkgbc();
         return(unify(arg3,makeint(arg2)));
         
