@@ -3687,7 +3687,7 @@ record_hash_table
 HASHTBLSIZE[]
 
 cell_list
-e.g. hash == 1 ID==1 
+e.g. hash == 1 ID==1 (ID starts from 1)
 addr 1232 -> [pred1,pred2,...] 
 
 */
@@ -3725,7 +3725,7 @@ int b_recordh(int arglist, int rest){
             SET_ARITY(arg1,record_pt);
             record_pt++;
         }
-        record_id = GET_ARITY(arg1)-1;
+        record_id = GET_ARITY(arg1)-1; //id starts from 1
         index = hash(GET_NAME(arg2));
         add_hash_pred(arg3,record_id,index);
         checkgbc();
@@ -3753,7 +3753,7 @@ int b_retrieveh(int arglist, int rest){
     
         
         save1 = sp;
-        record_id = GET_ARITY(arg1)-1;
+        record_id = GET_ARITY(arg1)-1; //id starts from 1
         if(record_id < 0)
             error(NOT_RECORD,"retrieveh ",arg1);
         index = hash(GET_NAME(arg2));
