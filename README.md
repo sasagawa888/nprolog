@@ -28,7 +28,7 @@ I hope that Prolog will become more popular. I hope many people enjoy Prolog. NP
 
 ## example
 ```prolog
-N-Prolog Ver 0.02
+N-Prolog Ver 0.09
 ?- length([1,2,3],X).
 X = 3
 yes
@@ -51,7 +51,7 @@ X = [1,2,3]
 Y = [];
 no
 ?- 
-?- ['queens.pl'].
+?- ['tests/queens.pl'].
 yes
 ?- test.
 ....
