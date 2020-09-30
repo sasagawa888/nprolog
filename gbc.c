@@ -117,6 +117,9 @@ void gbcmark(void){
             markcell(stack[i]);
     }
 
+    //mark record
+    markcell(record_list);
+
 }
 
 void gbcsweep(void){
