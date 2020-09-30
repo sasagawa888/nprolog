@@ -109,7 +109,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"},
 {"ansi_cup"},{"ansi_cpr"},{"ansi_scp"},{"ansi_rcp"},
 {"ansi_ed"},{"ansi_el"},
-{"recordh"},{"instance"}
+{"recordh"},{"recorda"},{"recordz"},{"instance"}
 };
 
 //compiled predicate

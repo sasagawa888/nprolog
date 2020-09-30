@@ -713,6 +713,14 @@ int predicatep(int addr){
         return(0);
 }
 
+int termp(int addr){
+    if(structurep(addr) && GET_AUX(addr) != LIST &&
+       IS_INCELL(car(addr)) && GET_AUX(car(addr)) == PRED)
+        return(1);
+    else
+        return(0);
+}
+
 int atom_predicate_p(int addr){
     if(IS_INCELL(addr) && GET_AUX(addr) == PRED)
         return(1);

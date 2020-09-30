@@ -105,6 +105,8 @@ void initbuiltin(void){
     defbuiltin("reconsult",b_reconsult);
     defbuiltin("read",b_read);
     defbuiltin("real",b_real);
+    defbuiltin("recorda",b_recorda);
+    defbuiltin("recordz",b_recordz);
     defbuiltin("recordh",b_recordh);
     defbuiltin("rename",b_rename);
     defbuiltin("reverse",b_reverse);
@@ -3708,10 +3710,17 @@ int b_recordh(int arglist, int rest){
             error(NOT_ATOM,"recordh ",arg2);
         if(wide_variable_p(arg3))
             error(INSTANTATION_ERR,"recordh ", arg3);
+        if(!termp(arg3) && !integerp(arg3))
+            error(NOT_TERM,"record ",arg3);
 
-        arg3 = copy_heap(arg3); //copy arg1 to heap area
+        if(integerp(arg3))
+            arg3 = get_int(arg3);   //reffernce number -> term
+        else 
+            arg3 = copy_heap(arg3); //copy arg1 to heap area
+
         SET_ARITY(arg3,arg2);     //set sort key atom
-        
+        if(record_pt >= RECORDMAX)
+            error(RECORD_OVERF,"recordh ",NIL);
         if(GET_CDR(arg1) == NIL){
             SET_CDR(arg1,record_pt);
             record_pt++;
@@ -3780,6 +3789,63 @@ int b_instance(int arglist, int rest){
             error(NOT_INT,"instance ",arg1);
 
         return(unify(arg2,get_int(arg1)));
+    }
+    return(NO);
+}
+
+
+int b_recordz(int arglist, int rest){
+    int n,arg1,arg2,arg3;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = car(arglist);   //key
+        arg2 = cadr(arglist);  //term
+        arg3 = caddr(arglist); //ref 
+
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"recordz ",arg1);
+        if(builtinp(arg1))
+            error(BUILTIN_EXIST,"recordz ",arg1);
+        if(wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"recordz ",arg2);
+        if(!termp(arg2))
+            error(NOT_TERM,"recordz ",arg2);
+        if(!wide_variable_p(arg3))
+            error(NOT_VAR,"recordz ",arg3);
+
+        arg2 = copy_heap(arg2); //copy arg1 to heap area
+        add_data(arg1,arg2);
+        checkgbc();
+        return(unify(arg3,makeint(arg2)));
+    }
+    return(NO);
+}
+
+int b_recorda(int arglist, int rest){
+    int n,arg1,arg2,arg3;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        arg3 = caddr(arglist);
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"recorda ",arg1);
+        if(builtinp(arg1))
+            error(BUILTIN_EXIST,"recorda ",arg1);
+        if(wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"recorda ",arg2);
+        if(!termp(arg2))
+            error(NOT_TERM,"recorda ",arg2);
+        if(!wide_variable_p(arg3))
+            error(NOT_VAR,"recorda ",arg3);
+
+        arg2 = copy_heap(arg2); //copy arg1 to heap area
+        insert_data(arg1,arg2);
+        checkgbc();
+        return(unify(arg3,makeint(arg2)));
+        
     }
     return(NO);
 }

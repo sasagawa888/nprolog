@@ -219,6 +219,12 @@ rw read and write
 a append
 ra read and append
 
+□ recorda(Key,Term,Ref)
+述語の戦闘に項を加えて、その項の新しい参照番号を戻す。
+
+□ recordz(Key,Term,Ref)
+述語の終わりに項を追加し、その項に割り当てられた参照番号を戻す。
+
 □ recordh(Table_name,Sort_key,Term)
 ハッシュテーブルに項を記録する。
 

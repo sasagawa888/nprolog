@@ -488,6 +488,8 @@ extern int wp; //working pointer
 #define NOT_CHAR_CODE       66
 #define RESOURCE_ERR        67
 #define NOT_ORDER           68
+#define NOT_TERM            69
+#define RECORD_OVERF        70
 
 
 double getETime(void);
@@ -652,6 +654,8 @@ int b_put_code(int arglist, int rest);
 int b_put_byte(int arglist, int rest);
 int b_read(int arglist, int rest);
 int b_real(int arglist, int rest);
+int b_recorda(int arglist, int rest);
+int b_recordz(int arglist, int rest);
 int b_recordh(int arglist, int rest);
 int b_reconsult(int arglist, int rest);
 int b_rename(int arglist, int rest);
@@ -991,6 +995,7 @@ int string_length(int addr);
 int singlep(int addr);
 int streqp(int x, int y);
 int symboltoken(char buf[]);
+int termp(int addr);
 int term_variables(int x, int y);
 int type_option_p(int x);
 int thunkp(int addr);

@@ -156,7 +156,9 @@ not/1
 open/3
 read/1
 reconsult/1
+recorda/3
 recordh/3
+recordz/3
 retrieveh/3
 rmdir/1
 see/1

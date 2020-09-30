@@ -223,7 +223,16 @@ void error(int errnum, char *fun, int arg){
         case NOT_OPEN_OPTION:
                             printf("Not open option %s ", fun);
                             print(arg);
-                            break;       
+                            break; 
+
+        case NOT_TERM:      printf("Not term %s ", fun);
+                            print(arg);
+                            break;      
+        
+        case RECORD_OVERF:  printf("recordh tables max over %s ", fun);
+                            print(arg);
+                            break;      
+        
   }
     printf("\n");
     stok.ch = NUL;
