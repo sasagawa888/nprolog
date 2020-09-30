@@ -490,6 +490,7 @@ extern int wp; //working pointer
 #define NOT_ORDER           68
 #define NOT_TERM            69
 #define RECORD_OVERF        70
+#define NOT_RECORD          71
 
 
 double getETime(void);

@@ -230,9 +230,11 @@ void error(int errnum, char *fun, int arg){
                             break;      
         
         case RECORD_OVERF:  printf("recordh tables max over %s ", fun);
-                            print(arg);
                             break;      
         
+        case NOT_RECORD:    printf("recordh tables has no record %s ", fun);
+                            print(arg);
+                            break;   
   }
     printf("\n");
     stok.ch = NUL;

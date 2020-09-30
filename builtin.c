@@ -3676,8 +3676,8 @@ int b_time(int arglist, int rest){
 
 //-----------record data type-----------------------------
 /*
-                          CAR,CDR,...
-atom of record name    foo[NIL,record_id,...]
+                          CAR,CDR,...,ARITY
+atom of record name    foo[NIL,......,record_id,...]
 
 record_hash_table 
  ID0   ID1  ID2
@@ -3721,11 +3721,11 @@ int b_recordh(int arglist, int rest){
         SET_ARITY(arg3,arg2);     //set sort key atom
         if(record_pt >= RECORDMAX)
             error(RECORD_OVERF,"recordh ",NIL);
-        if(GET_CDR(arg1) == NIL){
-            SET_CDR(arg1,record_pt);
+        if(GET_ARITY(arg1) == NIL){
+            SET_ARITY(arg1,record_pt);
             record_pt++;
         }
-        record_id = GET_CDR(arg1);
+        record_id = GET_ARITY(arg1)-1;
         index = hash(GET_NAME(arg2));
         add_hash_pred(arg3,record_id,index);
         checkgbc();
@@ -3753,7 +3753,9 @@ int b_retrieveh(int arglist, int rest){
     
         
         save1 = sp;
-        record_id = GET_CDR(arg1);
+        record_id = GET_ARITY(arg1)-1;
+        if(record_id < 0)
+            error(NOT_RECORD,"retrieveh ",arg1);
         index = hash(GET_NAME(arg2));
         lis = record_hash_table[index][record_id];
         while(lis != NIL){
