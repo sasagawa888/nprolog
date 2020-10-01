@@ -108,6 +108,7 @@ void initbuiltin(void){
     defbuiltin("recorda",b_recorda);
     defbuiltin("recordz",b_recordz);
     defbuiltin("recordh",b_recordh);
+    defbuiltin("removeallh",b_removeallh);
     defbuiltin("rename",b_rename);
     defbuiltin("reverse",b_reverse);
     defbuiltin("rmdir",b_rmdir);
@@ -143,6 +144,7 @@ void initbuiltin(void){
     defcompiled("current_op",b_current_op);
     defcompiled("between",b_between);
     defcompiled("retrieveh",b_retrieveh);
+    defcompiled("removeh",b_removeh);
 
     //-----JUMP project---------
     defcompiled("n_reconsult_predicate",b_reconsult_predicate);
@@ -3858,6 +3860,64 @@ int b_recorda(int arglist, int rest){
         checkgbc();
         return(unify(arg3,makeint(arg2)));
         
+    }
+    return(NO);
+}
+
+
+int b_removeh(int arglist, int rest){
+    int n,arg1,arg2,arg3,save1,record_id,index,lis,prev,term;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        arg3 = caddr(arglist);
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"remove ", arg1);
+        if(!wide_variable_p(arg1) && !atomp(arg1))
+            error(NOT_ATOM,"remove ",arg1);
+        if(wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"remove ", arg2);
+        if(!wide_variable_p(arg2) && !atomp(arg2))
+            error(NOT_ATOM,"remove ",arg2);
+    
+        
+        save1 = sp;
+        record_id = GET_ARITY(arg1)-1; //id starts from 1
+        if(record_id < 0)
+            error(NOT_RECORD,"remove ",arg1);
+        index = hash(GET_NAME(arg2));
+        lis = record_hash_table[index][record_id];
+        prev = lis;
+        while(lis != NIL){
+            term = car(lis);
+            if(GET_ARITY(term) != arg2)
+                goto skip;
+
+            if(unify(arg3,term)){
+                SET_CDR(prev,cdr(lis)); // delete unified term
+                if(prove_all(rest,sp,0) == YES)
+                    return(YES);
+            }
+            unbind(save1);
+            skip:
+            lis = cdr(lis);
+            prev = lis;
+        }
+        return(NO);
+    }
+    return(NO);
+}
+
+int b_removeallh(int arglist, int rest){
+    int n,arg1;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = car(arglist);
+        SET_ARITY(arg1,NIL);
+        return(YES);
     }
     return(NO);
 }

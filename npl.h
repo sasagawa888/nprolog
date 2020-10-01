@@ -668,6 +668,8 @@ int b_reverse(int arglist, int rest);
 int b_reconsult_predicate(int arglist, int rest);
 int b_reconsult_predicate_list(int arglist, int rest);
 int b_rmdir(int arglist, int rest);
+int b_removeh(int arglist, int rest);
+int b_removeallh(int arglist, int rest);
 int b_see(int arglist, int rest);
 int b_seeing(int arglist, int rest);
 int b_seen(int arglist, int rest);

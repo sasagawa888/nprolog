@@ -110,7 +110,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"},
 {"ansi_cup"},{"ansi_cpr"},{"ansi_scp"},{"ansi_rcp"},
 {"ansi_ed"},{"ansi_el"},
-{"recordh"},{"recorda"},{"recordz"},{"instance"}
+{"recordh"},{"recorda"},{"recordz"},{"instance"},{"removeallh"}
 };
 
 //compiled predicate
@@ -118,7 +118,7 @@ char compiled[COMPILED_NUMBER][30] ={
 {"append"},{"member"},{"repeat"},
 {"retract"},{"clause"},{"call"},
 {"current_visible"},{"stream_property"},{"between"},
-{"current_predicate"},{"current_op"},{"retrieveh"}
+{"current_predicate"},{"current_op"},{"retrieveh"},{"removeh"}
 };
 
 //extened predicate
