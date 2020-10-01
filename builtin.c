@@ -68,6 +68,7 @@ void initbuiltin(void){
     defbuiltin("debug",b_debug);
     defbuiltin("edit",b_nano);
     defbuiltin("eq",b_eq);
+    defbuiltin("errorcode",b_errorcode);
     defbuiltin("fail",b_fail);
     defbuiltin("flush",b_flush_output);
     defbuiltin("float",b_real);
@@ -3674,6 +3675,16 @@ int b_time(int arglist, int rest){
     return(NO);
 }
 
+int b_errorcode(int arglist, int rest){
+    int n,arg1;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = car(arglist);
+        return(unify(arg1,makeint(error_code)));
+    }
+    return(NO);
+}
 
 
 //-----------record data type-----------------------------
@@ -3899,9 +3910,9 @@ int b_removeh(int arglist, int rest){
             if(unify(arg3,term)){
                 if(prev != NIL)
                     SET_CDR(prev,cdr(lis)); // delete unified term
-                else{
-                    record_hash_table[index][record_id] = cdr(lis);
-                }
+                else
+                    record_hash_table[index][record_id] = cdr(lis); 
+                    // if term is first one of list, set hashtable cdr of lis
                 if(prove_all(rest,sp,0) == YES)
                     return(YES);
             }

@@ -27,6 +27,7 @@ int reconsult_list = NIL;
 int execute_list = NIL;
 int op_list = NIL;
 int record_list = NIL;
+int error_code = 0;
 int unread = NIL;     //for parse
 int paren_nest = 0;   //for parse check ((()))
 int line;
@@ -109,7 +110,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"sort"},{"keysort"},{"length"},{"shell"},{"measure"},
 {"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"},
 {"ansi_cup"},{"ansi_cpr"},{"ansi_scp"},{"ansi_rcp"},
-{"ansi_ed"},{"ansi_el"},
+{"ansi_ed"},{"ansi_el"},{"errorcode"},
 {"recordh"},{"recorda"},{"recordz"},{"instance"},{"removeallh"}
 };
 

@@ -11,6 +11,7 @@
 //-------error------
 void error(int errnum, char *fun, int arg){
 
+    error_code = errnum;
     switch(errnum){
         case SYNTAX_ERR:    printf("Syntax error %s ", fun);
 														if(!error_flag && arg > 24)
