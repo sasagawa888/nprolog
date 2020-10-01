@@ -3888,19 +3888,26 @@ int b_removeh(int arglist, int rest){
         if(record_id < 0)
             error(NOT_RECORD,"remove ",arg1);
         index = hash(GET_NAME(arg2));
+        repeat:
         lis = record_hash_table[index][record_id];
-        prev = lis;
+        prev = NIL;
         while(lis != NIL){
             term = car(lis);
             if(GET_ARITY(term) != arg2)
                 goto skip;
 
             if(unify(arg3,term)){
-                SET_CDR(prev,cdr(lis)); // delete unified term
+                if(prev != NIL)
+                    SET_CDR(prev,cdr(lis)); // delete unified term
+                else{
+                    record_hash_table[index][record_id] = cdr(lis);
+                }
                 if(prove_all(rest,sp,0) == YES)
                     return(YES);
             }
             unbind(save1);
+            if(prev == NIL)
+                goto repeat;
             skip:
             lis = cdr(lis);
             prev = lis;
