@@ -3918,12 +3918,16 @@ int b_removeh(int arglist, int rest){
 }
 
 int b_removeallh(int arglist, int rest){
-    int n,arg1;
+    int n,arg1,record_id,i;
 
     n = length(arglist);
     if(n == 1){
         arg1 = car(arglist);
+        record_id = GET_ARITY(arg1)-1;
         SET_ARITY(arg1,NIL);
+        for(i=0;i<HASHTBSIZE;i++)
+            record_hash_table[i][record_id] = NIL;
+        //as a result, removed term will be retrieve by GC
         return(YES);
     }
     return(NO);
