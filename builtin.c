@@ -171,7 +171,7 @@ void initbuiltin(void){
 }
 
 int b_length(int arglist, int rest){
-    int n,arg1,arg2;
+    int n,arg1,arg2,i,res;
 
     n = length(arglist);
     if(n == 2){
@@ -180,14 +180,20 @@ int b_length(int arglist, int rest){
 
         if(integerp(eval(arg2)) && GET_INT(eval(arg2)) < 0)
             error(NOT_LESS_THAN_ZERO,"length ",arg2);
-        if(!wide_variable_p(arg2) && !integerp(eval(arg2)))
+        if(!wide_variable_p(arg2) && !integerp(arg2))
             error(NOT_INT,"length ",arg2);
-        if(wide_variable_p(arg1) && wide_variable_p(arg2) && eqp(arg1,arg2))
-            error(RESOURCE_ERR,"length ",arg1);
 
-        if(unify(arg2,makeint(length(arg1))) == YES)
-            return(YES);
-
+        if(listp(arg1))
+            return(unify(arg2,makeint(length(arg1))));
+        else if(integerp(arg2)){
+            i = GET_INT(arg2);
+            res = NIL;
+            while(i > 0){
+                res = wlistcons(makeatom("_",ANOY),res);
+                i--;
+            }
+            return(unify(arg1,res));
+        }
         return(NO);
     }
     return(NO);
