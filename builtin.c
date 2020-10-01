@@ -105,6 +105,7 @@ void initbuiltin(void){
     defbuiltin("put",b_put);
     defbuiltin("reconsult",b_reconsult);
     defbuiltin("read",b_read);
+    defbuiltin("read_line",b_read_line);
     defbuiltin("real",b_real);
     defbuiltin("recorda",b_recorda);
     defbuiltin("recordz",b_recordz);
@@ -788,7 +789,6 @@ int b_read(int arglist, int rest){
         
         save = input_stream;   
         input_stream = arg1;
-        print(input_stream);
 
         temp = variable_to_call(readparse());
         res = unify(arg2,temp);
@@ -797,6 +797,41 @@ int b_read(int arglist, int rest){
     }
     return(NO);
 }
+
+int b_read_line(int arglist, int rest){
+    int n,arg1,arg2,save,res,pos;
+    char str[STRSIZE],c;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"read_line ",arg1);
+        if(!streamp(arg1) && !aliasp(arg1))
+            error(NOT_STREAM,"read_line ",arg1);
+        if(streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
+            error(NOT_INPUT_STREAM,"read_line ", arg1);
+        
+        save = input_stream;   
+        input_stream = arg1;
+
+        c = readc();
+        pos = 0;
+        while(c != EOL && c != EOF){
+            str[pos] = c;
+            pos++;
+            c = readc();
+        }
+        str[pos] = NUL;
+        res = unify(arg2,makeconst(str));
+        input_stream = save;
+        return(res);
+    }
+    return(NO);
+}
+
 
 int b_create(int arglist, int rest){
     int n,arg1,arg2,stream;

@@ -219,6 +219,15 @@ rw read and write
 a append
 ra read and append
 
+□ read(Term)
+標準入力装置から項を読み込む。
+
+□ read(Handle,Term)
+ファイルから項を読み込む。
+
+□ read_line(Handle,X)
+Handleで指定したファイルから1行読む。
+
 □ recorda(Key,Term,Ref)
 述語の戦闘に項を加えて、その項の新しい参照番号を戻す。
 
@@ -227,6 +236,12 @@ ra read and append
 
 □ recordh(Table_name,Sort_key,Term)
 ハッシュテーブルに項を記録する。
+
+□ removeallh(Table_name)
+ハッシュテーブルを削除する。
+
+□ removeh(Table_name,Sort_key,Term)
+ハッシュテーブルから項を削除する。
 
 □ retrieveh(Table_name,Sort_key,Term)
 ハッシュテーブルから項を戻す。

@@ -155,6 +155,7 @@ number/1
 not/1
 open/3
 read/1
+read_line/2
 reconsult/1
 recorda/3
 recordh/3
