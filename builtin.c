@@ -119,6 +119,9 @@ void initbuiltin(void){
     defbuiltin("seen",b_seen);
     defbuiltin("shell",b_shell);
     defbuiltin("sort",b_sort);
+    defbuiltin("stdin",b_stdin);
+    defbuiltin("stdinout",b_stdinout);
+    defbuiltin("stdout",b_stdout);
     defbuiltin("string",b_string);
     defbuiltin("string_length",b_string_length);
     defbuiltin("spy",b_spy);
@@ -834,6 +837,91 @@ int b_read_line(int arglist, int rest){
         res = unify(arg2,makeconst(str));
         input_stream = save;
         return(res);
+    }
+    return(NO);
+}
+
+
+int b_stdin(int arglist, int rest){
+    int n,arg1,arg2,save1,save2;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        if(!streamp(arg1))
+            error(NOT_STREAM,"stdin ",arg1);
+        if(!callablep(arg2))
+            error(NOT_CALLABLE,"stdin ",arg2);
+        
+        save1 = input_stream;
+        save2 = sp;
+        if(prove_all(arg2,sp,0) == YES){
+            input_stream = save1;
+            return(YES);
+        }
+        unbind(save2);
+        input_stream = save1; 
+        return(NO);
+    }
+    return(NO);
+}
+
+int b_stdout(int arglist, int rest){
+    int n,arg1,arg2,save1,save2;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        if(!streamp(arg1))
+            error(NOT_STREAM,"stdout ",arg1);
+        if(!callablep(arg2))
+            error(NOT_CALLABLE,"stdout ",arg2);
+        
+        save1 = output_stream;
+        save2 = sp;
+        if(prove_all(arg2,sp,0) == YES){
+            output_stream = save1;
+            return(YES);
+        }
+        unbind(save2);
+        output_stream = save1; 
+        return(NO);
+    }
+    return(NO);
+}
+
+int b_stdinout(int arglist, int rest){
+    int n,arg1,arg2,arg3,save1,save2,save3;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        arg3 = caddr(arglist);
+
+        if(!streamp(arg1))
+            error(NOT_STREAM,"stdinout ",arg1);
+        if(!streamp(arg1))
+            error(NOT_STREAM,"stdinout ",arg2);
+        if(!callablep(arg3))
+            error(NOT_CALLABLE,"stdinout ",arg3);
+        
+        save1 = input_stream;
+        save2 = output_stream;
+        save3 = sp;
+        if(prove_all(arg3,sp,0) == YES){
+            input_stream = save1;
+            output_stream = save2;
+            return(YES);
+        }
+        unbind(save3);
+        input_stream = save1;
+        output_stream = save2; 
+        return(NO);
     }
     return(NO);
 }

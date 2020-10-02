@@ -112,7 +112,8 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"},
 {"ansi_cup"},{"ansi_cpr"},{"ansi_scp"},{"ansi_rcp"},
 {"ansi_ed"},{"ansi_el"},{"errorcode"},
-{"recordh"},{"recorda"},{"recordz"},{"instance"},{"removeallh"}
+{"recordh"},{"recorda"},{"recordz"},{"instance"},{"removeallh"},
+{"stdin"},{"stdout"},{"stdinout"}
 };
 
 //compiled predicate
