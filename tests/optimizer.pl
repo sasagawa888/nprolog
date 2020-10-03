@@ -1,4 +1,6 @@
 /*
+optimizer for deterministic predicate
+
 deterministic e.g.
 
 % type1 tail_recursive and body is unidirectory
@@ -28,8 +30,7 @@ int n,arg1,arg2,arg3,varD1,varN,varL,varB,varD;
 if(n == 3){
     loop:
     head = Jwlist3(NIL,makeconst("_"),makeconst("_"));
-    if(Junify(arglist,head))
-        return(YES);
+    if(Jcar(arglist) == NIL) return(Junify(arglist,head));
 
     varN = Jcar(car(arglist));
     varL = Jcdr(car(arglist));
@@ -49,9 +50,6 @@ if(n == 3){
 
 %------------------------------------
 %for tail recursive optimization
-test(P) :-
-    jump_gen_tail_pred(P).
-
 jump_gen_tail_pred(P) :-
     atom_concat('compiling tail ',P,M),
     write(user_output,M),nl(user_output),
@@ -120,7 +118,9 @@ jump_gen_tail_pred4((Head :- !)) :-
 jump_gen_tail_pred4((Head :- Body)) :-
     jump_gen_tail_var(Head),
 	jump_gen_tail_head(Head),
-    jump_gen_tail_body(Body,Head).
+    write('{'),
+    jump_gen_tail_body(Body,Head),
+    write('}').
 
 % predicate
 jump_gen_tail_pred4(P) :-
@@ -160,18 +160,20 @@ jump_gen_tail_var1([X|Xs],L) :-
 % if(car(arglist) == makeint(1) && cadr(arglist) == makeint(2))
 jump_gen_tail_head(X) :-
     functor(X,_,0).
+% if element of X is all compiler var -> ignore
 jump_gen_tail_head(X) :-
     n_argument_list(X,Y),
     jump_all_var(Y).
+% if element of X include constant
 jump_gen_tail_head(X) :-
     n_argument_list(X,Y),
     write('if('),
-    jump_gen_tail_head1(Y,1),
+    jump_gen_tail_head2(Y,[]),
     write(')').
 
 %  varA = makevariant();
 %  head = wlist1(varA);
-%  if(Junify(arglist,head) == YES) return(YES);
+%  if(o && o && ... &1) return(Junify(arglist,head));
 jump_gen_tail_head_unify(Pred) :-
     n_argument_list(Pred,Args),
     n_generate_variable(Args,V),
@@ -188,69 +190,59 @@ jump_gen_tail_head_unify1([X|Xs]) :-
     write(' = Jmakevariant();'),nl,
     jump_gen_tail_head_unify1(Xs).
 
-% if(Junify(arg1,varA)==YES) return(YES);
-jump_gen_tail_head_unify2([]).
-jump_gen_tail_head_unify2([X|Xs]) :-
-    write('if(Junify(arglist'),
-    write(','),
-    jump_gen_a_argument(X),
-    write(')==YES) return(YES)'),
-    write(';'),nl.
+% if( && &&) return(Junify(arglist,head));
+jump_gen_tail_head_unify2(X) :-
+    write('if('),
+    jump_gen_tail_head2(X,[]),
+    write(') return(Junify(arglist,head);'),
+    nl.
     
+% unify head
+% generate if(... && ... && 1) for constant value in head
+% NIL []
+jump_gen_tail_head2([],L) :-
+    jump_gen_tail_head3(X,L),
+    write(' == NIL && ').
 
-
-jump_gen_tail_head1([X],N) :-
-    jump_gen_tail_head2(X,N,[]),
-    write(1).
-jump_gen_tail_head1([[]|Xs],N) :-
-    write('arg'),
-    write(N),
-    write(' == NIL &&'),nl,
-    jump_gen_tail_head1(Xs,N).
-jump_gen_tail_head1([X|Xs],N) :-
-    jump_gen_tail_head2(X,N,[]),
-    N1 is N + 1,
-    jump_gen_tail_head1(Xs,N1).
-
-%NIL []
-jump_gen_tail_head2([],N,L) :-
-    jump_gen_tail_head3(X,N,L),
-    write(' == NIL &&').
-
-%ignore anoymous
-jump_gen_tail_head2(X,N,L) :-
+% ignore anoymous
+jump_gen_tail_head2(X,L) :-
     n_compiler_anoymous(X).
-%ignore variable
-jump_gen_tail_head2(X,N,L) :-
+% ignore variable
+jump_gen_tail_head2(X,L) :-
     n_compiler_variable(X).
-%atom
-jump_gen_tail_head2(X,N,L) :-
-    not(n_property(X,builtin)),
-    atom(X),
-    write('Jmakeconst("'),
-    write(X),
-    write('") != '),
-    jump_gen_tail_head3(X,N,L),
-    write(' && '),nl.
-%integer
-jump_gen_tail_head2(X,N,L) :-
+% integer
+jump_gen_tail_head2(X,L) :-
     integer(X),
     write('Jnumeqp(Jmakeint('),
     write(X),
     write('),'),
-    jump_gen_tail_head3(X,N,L),
+    jump_gen_tail_head3(X,L),
     write(') && '),nl.
-%float number
-jump_gen_tail_head2(X,N,L) :-
-    real(X),
+% atom
+jump_gen_tail_head2(X,L) :-
+    atom(X),
+    write('Jmakeconst("'),
+    write(X),
+    write('") == '),
+    jump_gen_tail_head3(X,L),
+    write(' && '),nl.
+% float number
+jump_gen_tail_head2(X,L) :-
+    float(X),
     write('Jnumeqp(Jmakestrflt("'),
     write(X),
     write('"),'),
-    jump_gen_tail_head3(X,N,L),
+    jump_gen_tail_head3(X,L),
     write(') && '),nl.
-%list  ignore list
-jump_gen_tail_head2(X,N,L) :-
-    list(X).
+
+% last element
+jump_gen_tail_head2([X],L) :-
+    jump_gen_tail_head2(X,[car|L]),
+    write(1).
+
+jump_gen_tail_head2([X|Xs],L) :-
+    jump_gen_tail_head2(X,[car|L]),
+    jump_gen_tail_head2(Xs,[cdr|L]).
 
 
 % write L=[car,cdr] -> Jcar(Jcdr(arglist))
@@ -345,7 +337,7 @@ jump_gen_tail_a_body(X,Head) :-
     n_argument_list(X,Xs),
     jump_gen_tail_call(Xs).
 
-%gen_tail_a_body(X,Head) :-
+% gen_tail_a_body(X,Head) :-
 %    write(user_output,X).
 jump_gen_tail_a_body(X,Head).
 
@@ -356,22 +348,8 @@ jump_gen_tail_call(X) :-
     write('goto loop;'),nl.
 
 
-%analize tail recursive optimization
-%if clauses P is optimizable assert jump_optimize(dt1,dt2)
-bar(0).
-bar(N) :- N1 is N-1,bar(N1).
-
-myappend([],L,L) :- !.
-myappend([A|L],B, [A|C]):-
-	myappend(L,B,C).
- 
-nodiag([], _, _).
-nodiag([N|L], B, D) :-
-	D =\= N - B,
-	D =\= B - N,
-	D1 is D + 1,
-	nodiag(L, B, D1).
-
+% analize tail recursive optimization
+% if clauses P is optimizable assert jump_pred_data(pred_name,dt)
 jump_analize(P) :-
     n_arity_count(P,[N]),
 	n_clause_with_arity(P,N,C),
@@ -380,11 +358,11 @@ jump_analize(P) :-
 
 jump_deterministic(P,C) :-
     jump_type1_deterministic(C),
-    assert(jump_optimize(P,diterministic)).
+    assert(jump_pred_data(P,diterministic)).
 
 jump_deterministic(P,C) :-
     jump_type2_deterministic(C),
-    assert(jump_optimize(P,deterministic)).
+    assert(jump_pred_data(P,deterministic)).
 
 
 
