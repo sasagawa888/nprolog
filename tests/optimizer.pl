@@ -1,3 +1,67 @@
+/*
+deterministic e.g.
+
+% all sub goals are deterministic
+foo(X) :- write(X).
+bar(X) :- foo(X),write(X). % require two pass
+
+% is/2 is unidirection
+fact(0,1).
+fact(X,Y) :- 
+    X1 is X-1,
+    fact(X1,Y1),
+    Y is X*Y1.
+
+% base has cut
+append([],L,L):-!.
+append([A|L],B, [A|C]):-
+	append(L,B,C).
+ 
+
+tail_recursive e.g.
+
+bar(0).
+bar(N) :- N1 is N-1,bar(N).
+
+optimizable <=> deterministic or (determinisutic and tail recursive)
+
+template e.g. nodiag/3 in 9queens problem
+nodiag([], _, _).
+nodiag([N|L], B, D) :-
+	D =\= N - B,
+	D =\= B - N,
+	D1 is D + 1,
+	nodiag(L, B, D1).
+
+int b_nodiag(int nest, int n);
+int b_nodiag(int nest, int n){
+int n,arg1,arg2,arg3,varD1,varN,varL,varB,varD;
+if(n == 3){
+    arg1 = Jcar(arglist);
+    arg2 = Jcadr(arglist);
+    arg3 = Jcaddr(arglist);
+    loop:
+    if(Jeqp(arg1,NIL))
+        return(YES);
+
+    varN = Jcar(arg1);
+    varL = Jcdr(arg1);
+    varB = arg2;
+    varD = arg3;
+    if(!(Jnot_numeqp(varD),Jminus(varN,varB)))
+        return(NO);
+    if(!(Jnot_numeqp(varD),Jminus(varB),varN))))
+        return(NO);
+    varD1 = Jplus(varD,Jmakeint(1));
+    arg1 = varL;
+    arg2 = varB;
+    arg3 = varD1;
+    goto loop;
+    }
+    return(NO);
+}
+*/
+
 %------------------------------------
 %for tail recursive optimization
 jump_gen_tail_pred(P) :-
