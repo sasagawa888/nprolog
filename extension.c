@@ -394,8 +394,8 @@ int b_property(int arglist, int rest){
 
     n = length(arglist);
     if(n == 2){
-        arg1 = deref(car(arglist));
-        arg2 = deref(cadr(arglist));
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
 
         if(builtinp(arg1))
             return(unify(arg2,makeconst("builtin")));
@@ -406,7 +406,7 @@ int b_property(int arglist, int rest){
         else if(operationp(arg1))
             return(unify(arg2,makeconst("operation")));
         else if(operatorp(arg1))
-            return(unify(arg2,makeconst("operation")));
+            return(unify(arg2,makeconst("operator")));
         else if(user_operation_p(arg1))
             return(unify(arg2,makeconst("userop")));
         else
@@ -421,7 +421,7 @@ int b_bignum(int arglist, int rest){
 
     n = length(arglist);
     if(n == 1){
-        arg1 = deref(car(arglist));
+        arg1 = car(arglist);
 
         if(bignump(arg1))
             return(YES);
@@ -436,7 +436,7 @@ int b_longnum(int arglist, int rest){
 
     n = length(arglist);
     if(n == 1){
-        arg1 = deref(car(arglist));
+        arg1 = car(arglist);
 
         if(longnump(arg1))
             return(YES);

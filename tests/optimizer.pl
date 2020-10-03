@@ -1,29 +1,29 @@
 /*
 deterministic e.g.
 
-% all sub goals are deterministic
+% type1 all sub goals are deterministic
 foo(X) :- write(X).
-bar(X) :- foo(X),write(X). % require two pass
 
-% is/2 is unidirection
+% type2 base has cut and clause is tail recursive
+append([],L,L) :- !.
+append([A|L],B, [A|C]):-
+	append(L,B,C).
+ 
+
+% type3 tail_recursive and other goal is builtin
+
+bar(0).
+bar(N) :- N1 is N-1,bar(N1).
+
+% type4 body has is/2 unidirection
 fact(0,1).
 fact(X,Y) :- 
     X1 is X-1,
     fact(X1,Y1),
     Y is X*Y1.
 
-% base has cut
-append([],L,L) :- !.
-append([A|L],B, [A|C]):-
-	append(L,B,C).
- 
 
-tail_recursive e.g.
-
-bar(0).
-bar(N) :- N1 is N-1,bar(N1).
-
-optimizable <=> deterministic or (determinisutic and tail recursive)
+optimizable <=> deterministic
 
 template e.g. nodiag/3 in 9queens problem
 nodiag([], _, _).
@@ -426,157 +426,123 @@ jump_gen_tail_call([X|Xs],N) :-
 
 
 %analize tail recursive optimization
-%if clauses P is optimizable => true
-tail_optimize(P) :-
+%if clauses P is optimizable assert jump_optimize(dt1,dt2)
+analize(P) :-
     n_arity_count(P,[N]),
 	n_clause_with_arity(P,N,C),
     n_variable_convert(C,C1),
-    deterministic(C1),
-    tail_recursive(C1,0),
-    unidirectional(C1),!.
+    deterministic(P,C1).
 
-% if clauses is all deterministic -> true
-deterministic([]).
-deterministic([C|Cs]) :-
+deterministic(P,C) :-
+    type1_deterministic(C),
+    assert(jump_optimize(P,diterministic,not_tail)).
+
+deterministic(P,C) :-
+    type2_deterministic(C),
+    assert(jump_optimize(P,deterministic,tail)).
+
+deterministic(P,C) :-
+    type3_deterministic(C),
+    assert(jump_optimize(P,deterministic,tail)).
+
+deterministic(P,C) :-
+    type4_deterministic(C),
+    assert(jump_optimize(P,deterministic,not_tail)).
+
+% type1 if clauses are all predicate and clause that body is all builtin, it is deterministic
+type1_deterministic([]).
+type1_deterministic([C|Cs]) :-
     n_property(C,predicate),
-    deterministic(Cs).
-deterministic([(_ :- Body)|Cs]) :-
-    deterministic1(Body),
-    deterministic(Cs).
+    type1_deterministic(Cs).
+type1_deterministic([(_ :- Body)|Cs]) :-
+    type1_deterministic1(Body),
+    type1_deterministic(Cs).
 
-deterministic1((Body1,Body2)) :-
+% all sub goals in body are builtin
+type1_deterministic1((Body1,Body2)) :-
     n_property(Body1,builtin),
-    deterministic1(Body2).
-deterministic1(Body1).
+    type1_deterministic1(Body2).
+type1_deterministic1(Body1) :-
+    n_property(Body1,builtin).
 
-last_body((_,Body),Last) :-
-    last_body(Body,Last).
-last_body(Body,Body).
+% type2 if base has cut and other clause is tail recursive.
+type2_deterministic([]).
+type2_deterministic([(Head :- Body)|Cs]) :-
+    last_cut(Body),
+    type2_deterministic(Cs).
+type2_deterministic([(Head :- Body)|Cs]) :-
+    tail_recursive(Head,Body),
+    type2_deterministic(Cs).
+
+% type3 if clause has tail recursive and butlast goals are all builtin
+type3_deterministic([]).
+type3_deterministic([C|Cs]) :-
+    n_property(C,predicate),
+    type3_deterministic(Cs).
+type3_deterministic([(Head :- Body)|Cs]) :-
+    tail_recursive(Head,Body),
+    type3_deterministic1(Body),
+    type3_deterministic(Cs).
+
+% butlast sub goals in body are builtin
+type3_deterministic1((Body1,Body2)) :-
+    n_property(Body1,builtin),
+    type1_deterministic1(Body2).
+type3_deterministic1(Body1) :-
+    n_property(Body1,predicate).
+
+% type4  if base is predicate and clause has unidirectory body
+type4_deterministic([]).
+type4_deterministic([C|Cs]) :-
+    n_property(C,predicate),
+    type4_deterministic(Cs).
+type4_deterministic([(Head :- Body)|Cs]) :-
+    unidirectory(Body),
+    type4_deterministic(Cs).
+
+
 
 % clause has tail recursive call -> true
-tail_recursive(_,1) :- !.
-tail_recursive([],0) :- fail.
-tail_recursive([C|Cs],N) :-
-	  n_property(C,predicate),
-    tail_recursive(Cs,N).
-tail_recursive([(H :- B)|Cs],N) :-
-    tail_recursive1(H,B),
-    tail_recursive(Cs,1).
-tail_recursive([(H :- B)|Cs],N) :-
-    tail_recursive2(H,B), %it has not independence
-    tail_recursive([],0).
+bar(0).
+bar(N) :- N1 is N-1,bar(N1).
 
-% body has tail recursive and it is independent
+test(P) :-
+    n_arity_count(P,[N]),
+	n_clause_with_arity(P,N,C),
+    n_variable_convert(C,C1),
+    tail_recursive(C1).
+
+tail_recursive([]) :- fail.
+tail_recursive([(H :- B)]) :-
+    tail_recursive1(H,B).
+tail_recursive([C|Cs]) :-
+    tail_recursive(Cs).
+
+% body has tail recursive 
 tail_recursive1(Head,Body) :-
     last_body(Body,Last),
     functor(Head,Pred1,Arity1),
     functor(Last,Pred2,Arity2),
     Pred1 == Pred2,
-    Arity1 == Arity2,
-    independence(Head,Last),
-    self_independence(Head).
+    Arity1 == Arity2.
 
-% body has tail recursive but it is depend
-tail_recursive2(Head,Body) :-
-    last_body(Body,Last),
-    functor(Head,Pred1,Arity1),
-    functor(Last,Pred2,Arity2),
-    Pred1 == Pred2,
-    Arity1 == Arity2,
-    (not(independence(Head,Last));not(self_independence(Head))).
-
-% if clauses are unidirectinal -> true
-unidirectional([]).
-unidirectional([C|Cs]) :-
-    n_property(C,predicate),
-    unidirectional(Cs).
-unidirectional([(H :- B)|Cs]) :-
-    unidirectional1(B,H).
-
-% clause body has is builtin and other are all builtin -> true
-/*
-unidirectional1((Body1,Body2),H) :-
-	n_is(Body1,Y),
-    H =.. A,
-	subset(Y,A).
-*/
-unidirectional1((Body1,Body2),H) :-
-    n_property(Body1,builtin),
-    unidirectional1(Body2,H).
-
-unidirectional1(Body,H) :-
-    n_property(Body,predicate),
-    functor(H,N,A),
-    functor(Body,N,A).
+last_body((_,Body),Last) :-
+    last_body(Body,Last).
+last_body(Body,Body).
 
 
-subset([],_).
-subset([X|Sub],Set) :-
-    member(X,Set),
-    subset(Sub,Set).
-
-% foo([varA|varB])<=> foo(varA) false (depend)
-% foo([varA|varB])<=> foo(varC) true (independ)
-independence(Pred1,Pred2) :-
-    n_argument_list(Pred1,Args1),
-    n_argument_list(Pred2,Args2),
-    independence1(Args1,Args2).
-
-independence1([],Y).
-independence1([X|Xs],Y) :-
-    atomic(X),
-    independence1(Xs,Y).
-independence1([X|Xs],Y) :-
-    list(X),
-    independence2(X,Y),
-    independence1(Xs,Y).
-
-independence2([],Y).
-independence2(X,Y) :-
-    atomic(X).
-independence2([X|Xs],Y) :-
-    atomic(X),
-    not(member(X,Y)),
-    independence2(Xs,Y).
-independence2([[X|Xs]|Ys],Y) :-
-    independence2([X|Xs],Y),
-    independence2(Ys,Y).
+% body has is/2 
+unidirectory(Head,Body) :-
+    unidirectory1(Body).
 
 
-% foo([varX|varL],[varX|1]) -> no
-% foo([varY|varL],[varX|1]) -> yes
-self_independence(Pred) :-
-    n_argument_list(Pred,Args),
-    self_independence1(Args).
+unidirectory1((G,Gs)) :-
+    G = is(_,_).
+unidirectory1((G,Gs)) :-
+    unidirectory1(Gs).
+unidirectory1(_) :- fail.
 
-self_independence1([]).
-self_independence1([X]).
-self_independence1([X1,X2|Xs]) :-
-    self_independence2(X1,X2),
-    self_independence1([X1|Xs]),
-    self_independence1([X2|Xs]).
-
-self_independence2(X,Y) :-
-    list(X),list(Y),
-    list_member(X,Y),!,fail.
-self_independence2(X,Y) :-
-    atom(X),list(Y),
-    member(X,Y),!,fail.
-self_independence2(X,Y) :-
-    X = Y,!,fail.
-self_independence2(X,Y).
-
-deep_member(X,[X|Ys]) :-
-    n_compiler_variable(X).
-deep_member(X,X) :-
-    n_compiler_variable(X).
-deep_member(X,[Y|Ys]) :-
-    deep_member(X,Ys).
-
-list_member([],Y) :- fail.
-list_member(X,Y) :-
-    atomic(X),deep_member(X,Y).
-list_member([L|Ls],Y) :-
-    deep_member(L,Y).
-list_member([L|Ls],Y) :-
-    list_member(Ls,Y).
+% last body is cut
+last_cut((G,Gs)) :-
+    last_cut(Gs).
+last_cat(!).
