@@ -49,6 +49,9 @@ if(n == 3){
 
 %------------------------------------
 %for tail recursive optimization
+test(P) :-
+    jump_gen_tail_pred(P).
+
 jump_gen_tail_pred(P) :-
     atom_concat('compiling tail ',P,M),
     write(user_output,M),nl(user_output),
@@ -173,6 +176,9 @@ jump_gen_tail_head_unify(Pred) :-
     n_argument_list(Pred,Args),
     n_generate_variable(Args,V),
     jump_gen_tail_head_unify1(V),
+    write('head = '),
+    jump_gen_a_argument(Args),
+    write(';'),nl,
     jump_gen_tail_head_unify2(Args).
 
 % varA = Jmakevariant(); varB = Jmakevariant(); ...
