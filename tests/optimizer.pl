@@ -27,22 +27,20 @@ int b_nodiag(int nest, int n){
 int n,arg1,arg2,arg3,varD1,varN,varL,varB,varD;
 if(n == 3){
     loop:
-    head = jwlist3(NIL,_,_)
+    head = Jwlist3(NIL,makeconst("_"),makeconst("_"));
     if(Junify(arglist,head))
         return(YES);
 
-    varN = Jcar(arg1);
-    varL = Jcdr(arg1);
-    varB = arg2;
-    varD = arg3;
+    varN = Jcar(car(arglist));
+    varL = Jcdr(car(arglist));
+    varB = cadr(arglist);
+    varD = caddr(arglist);
     if(!(Jnot_numeqp(varD),Jminus(varN,varB)))
         return(NO);
     if(!(Jnot_numeqp(varD),Jminus(varB),varN))))
         return(NO);
     varD1 = Jplus(varD,Jmakeint(1));
-    arg1 = varL;
-    arg2 = varB;
-    arg3 = varD1;
+    arglist = Jwlist3(varL,varB,varD1);
     goto loop;
     }
     return(NO);
