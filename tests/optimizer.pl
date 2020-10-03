@@ -1,27 +1,16 @@
 /*
 deterministic e.g.
 
-% type1 all sub goals are deterministic
-foo(X) :- write(X).
+% type1 tail_recursive and body is unidirectory
+
+bar(0).
+bar(N) :- N1 is N-1,bar(N1).
 
 % type2 base has cut and clause is tail recursive
 append([],L,L) :- !.
 append([A|L],B, [A|C]):-
 	append(L,B,C).
  
-
-% type3 tail_recursive and other goal is builtin
-
-bar(0).
-bar(N) :- N1 is N-1,bar(N1).
-
-% type4 body has is/2 unidirection
-fact(0,1).
-fact(X,Y) :- 
-    X1 is X-1,
-    fact(X1,Y1),
-    Y is X*Y1.
-
 
 optimizable <=> deterministic
 
@@ -37,11 +26,9 @@ int b_nodiag(int nest, int n);
 int b_nodiag(int nest, int n){
 int n,arg1,arg2,arg3,varD1,varN,varL,varB,varD;
 if(n == 3){
-    arg1 = Jcar(arglist);
-    arg2 = Jcadr(arglist);
-    arg3 = Jcaddr(arglist);
     loop:
-    if(Jeqp(arg1,NIL))
+    head = jwlist3(NIL,_,_)
+    if(Junify(arglist,head))
         return(YES);
 
     varN = Jcar(arg1);
@@ -427,122 +414,65 @@ jump_gen_tail_call([X|Xs],N) :-
 
 %analize tail recursive optimization
 %if clauses P is optimizable assert jump_optimize(dt1,dt2)
-analize(P) :-
-    n_arity_count(P,[N]),
-	n_clause_with_arity(P,N,C),
-    n_variable_convert(C,C1),
-    deterministic(P,C1).
-
-deterministic(P,C) :-
-    type1_deterministic(C),
-    assert(jump_optimize(P,diterministic,not_tail)).
-
-deterministic(P,C) :-
-    type2_deterministic(C),
-    assert(jump_optimize(P,deterministic,tail)).
-
-deterministic(P,C) :-
-    type3_deterministic(C),
-    assert(jump_optimize(P,deterministic,tail)).
-
-deterministic(P,C) :-
-    type4_deterministic(C),
-    assert(jump_optimize(P,deterministic,not_tail)).
-
-% type1 if clauses are all predicate and clause that body is all builtin, it is deterministic
-type1_deterministic([]).
-type1_deterministic([C|Cs]) :-
-    n_property(C,predicate),
-    type1_deterministic(Cs).
-type1_deterministic([(_ :- Body)|Cs]) :-
-    type1_deterministic1(Body),
-    type1_deterministic(Cs).
-
-% all sub goals in body are builtin
-type1_deterministic1((Body1,Body2)) :-
-    n_property(Body1,builtin),
-    type1_deterministic1(Body2).
-type1_deterministic1(Body1) :-
-    n_property(Body1,builtin).
-
-% type2 if base has cut and other clause is tail recursive.
-type2_deterministic([]).
-type2_deterministic([(Head :- Body)|Cs]) :-
-    last_cut(Body),
-    type2_deterministic(Cs).
-type2_deterministic([(Head :- Body)|Cs]) :-
-    tail_recursive(Head,Body),
-    type2_deterministic(Cs).
-
-% type3 if clause has tail recursive and butlast goals are all builtin
-type3_deterministic([]).
-type3_deterministic([C|Cs]) :-
-    n_property(C,predicate),
-    type3_deterministic(Cs).
-type3_deterministic([(Head :- Body)|Cs]) :-
-    tail_recursive(Head,Body),
-    type3_deterministic1(Body),
-    type3_deterministic(Cs).
-
-% butlast sub goals in body are builtin
-type3_deterministic1((Body1,Body2)) :-
-    n_property(Body1,builtin),
-    type1_deterministic1(Body2).
-type3_deterministic1(Body1) :-
-    n_property(Body1,predicate).
-
-% type4  if base is predicate and clause has unidirectory body
-type4_deterministic([]).
-type4_deterministic([C|Cs]) :-
-    n_property(C,predicate),
-    type4_deterministic(Cs).
-type4_deterministic([(Head :- Body)|Cs]) :-
-    unidirectory(Body),
-    type4_deterministic(Cs).
-
-
-
-% clause has tail recursive call -> true
 bar(0).
 bar(N) :- N1 is N-1,bar(N1).
 
-test(P) :-
+myappend([],L,L) :- !.
+myappend([A|L],B, [A|C]):-
+	myappend(L,B,C).
+ 
+
+jump_analize(P) :-
     n_arity_count(P,[N]),
 	n_clause_with_arity(P,N,C),
     n_variable_convert(C,C1),
-    tail_recursive(C1).
+    jump_deterministic(P,C1).
 
-tail_recursive([]) :- fail.
-tail_recursive([(H :- B)]) :-
-    tail_recursive1(H,B).
-tail_recursive([C|Cs]) :-
-    tail_recursive(Cs).
+jump_deterministic(P,C) :-
+    jump_type1_deterministic(C),
+    assert(jump_optimize(P,diterministic)).
 
-% body has tail recursive 
-tail_recursive1(Head,Body) :-
-    last_body(Body,Last),
+jump_deterministic(P,C) :-
+    jump_type2_deterministic(C),
+    assert(jump_optimize(P,deterministic)).
+
+
+
+% type1 if clause has tail recursive and butlast goals are all builtin
+jump_type1_deterministic([]).
+jump_type1_deterministic([C|Cs]) :-
+    n_property(C,predicate),
+    jump_type1_deterministic(Cs).
+jump_type1_deterministic([(Head :- Body)|Cs]) :-
+    jump_tail_recursive(Head,Body),
+    jump_unidirectory(Body),
+    jump_type1_deterministic(Cs).
+
+% type2 if base has cut and other clause is tail recursive.
+jump_type2_deterministic([]).
+jump_type2_deterministic([(Head :- !)|Cs]) :-
+    jump_type2_deterministic(Cs).
+jump_type2_deterministic([(Head :- Body)|Cs]) :-
+    jump_tail_recursive(Head,Body),
+    jump_type2_deterministic(Cs).
+
+
+jump_tail_recursive(Head,Body) :-
+    jump_last_body(Body,Last),
     functor(Head,Pred1,Arity1),
     functor(Last,Pred2,Arity2),
     Pred1 == Pred2,
     Arity1 == Arity2.
 
-last_body((_,Body),Last) :-
-    last_body(Body,Last).
-last_body(Body,Body).
+jump_last_body((_,Body),Last) :-
+    jump_last_body(Body,Last).
+jump_last_body(Body,Body).
 
 
 % body has is/2 
-unidirectory(Head,Body) :-
-    unidirectory1(Body).
-
-
-unidirectory1((G,Gs)) :-
+jump_unidirectory((G,Gs)) :-
     G = is(_,_).
-unidirectory1((G,Gs)) :-
-    unidirectory1(Gs).
-unidirectory1(_) :- fail.
+jump_unidirectory((G,Gs)) :-
+    jump_unidirectory(Gs).
+jump_unidirectory(_) :- fail.
 
-% last body is cut
-last_cut((G,Gs)) :-
-    last_cut(Gs).
-last_cat(!).
