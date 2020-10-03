@@ -13,7 +13,7 @@ fact(X,Y) :-
     Y is X*Y1.
 
 % base has cut
-append([],L,L):-!.
+append([],L,L) :- !.
 append([A|L],B, [A|C]):-
 	append(L,B,C).
  
@@ -21,7 +21,7 @@ append([A|L],B, [A|C]):-
 tail_recursive e.g.
 
 bar(0).
-bar(N) :- N1 is N-1,bar(N).
+bar(N) :- N1 is N-1,bar(N1).
 
 optimizable <=> deterministic or (determinisutic and tail recursive)
 

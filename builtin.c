@@ -3124,11 +3124,13 @@ int o_dcg(int x, int y){
 
 
 int b_gbc(int arglist, int rest){
-    int n;
+    int n,arg1;
 
     n = length(arglist);
-    if(n == 0){
-        gbc();
+    if(n == 1){
+        arg1 = car(arglist);
+        if(arg1 == makeconst("full"))
+            gbc();
         return(YES);
     }
     
