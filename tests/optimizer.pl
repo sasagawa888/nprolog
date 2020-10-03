@@ -55,34 +55,19 @@ jump_gen_tail_pred(P) :-
     write('int b_'),
     n_atom_convert(P,P1),
     write(P1),
-    write('(int nest, int n){'),
+    write('(int arglist, int rest){'),
     nl,
     jump_gen_tail_var_declare(P),
     n_arity_count(P,[N]),
-    gen_tail_pred1(P,N),
+    jump_gen_tail_pred1(P,N),
     write('}'),nl.
 
-% int arg1,arg2,...argN,varA,varB...
+% int a,varA,varB...
 jump_gen_tail_var_declare(P) :-
     n_arity_count(P,L),
-    jump_max_element(L,M),
-    write('int '),
-    jump_gen_tail_var_declare1(1,M),
+    write('int n,head,'),
     n_generate_all_variable(P,V),
     jump_gen_tail_all_var(V).
-
-% arg1,save1,arg1,save2,...,argN,saveN
-jump_gen_tail_var_declare1(S,E) :-
-	S > E.
-jump_gen_tail_var_declare1(S,E) :-
-    write(arg),
-    write(S),
-    write(','),
-    write(save),
-    write(S),
-    write(','),
-    S1 is S+1,
-    jump_gen_tail_var_declare1(S1,E).
 
 
 % varA,varB,...
@@ -96,117 +81,99 @@ jump_gen_tail_all_var([L|Ls]) :-
     write(','),
     jump_gen_tail_all_var(Ls).
 
+% n = Jlength(arglist);
 % if(n == N){arg1 = ;  loop: ...}
 jump_gen_tail_pred1(P,N) :-
+    write('n = Jlength(arglist);'),nl,
     write('if(n == '),
     write(N),
-    write('){'),
-    jump_gen_tail_receive_var(1,N),
+    write('){'),,nl,
     write('loop:'),nl,
     jump_gen_tail_pred2(P,N),
     write('}'),
-    write('return(NO);').
+    write('return(NO);'),nl.
+    
 
-% arg1 = save1 = Jderef(Jget_goal(2));
-% arg2 = save1 = Jderef(Jget_goal(3)); ...
-jump_gen_tail_receive_var(S,N) :-
-    S > N.
-jump_gen_tail_receive_var(S,N) :-
-    write('arg'),
-    write(S),
-    write(' = save'),
-    write(S),
-    S1 is S + 1,
-    write(' = Jderef(Jget_goal(' ),
-    write(S1),
-    write('));'),nl,
-    jump_gen_tail_receive_var(S1,N).
 
-%select clauses that arity is N
+% select clauses that arity is N
 jump_gen_tail_pred2(P,N) :-
     n_clause_with_arity(P,N,C),
-    jump_gen_tail_pred3(C,1).
+    jump_gen_tail_pred3(C).
 
-%generate each predicate
-jump_gen_tail_pred3([],N) :-
-    write('return(NO);'),nl.
-jump_gen_tail_pred3([L|Ls],N) :-
+% generate each predicate or clause
+jump_gen_tail_pred3([]).
+    
+jump_gen_tail_pred3([L|Ls]) :-
 	n_variable_convert(L,X),
-    jump_gen_tail_pred4(X,N),
-    N1 is N + 1,
-    jump_gen_tail_pred3(Ls,N1).
+    jump_gen_tail_pred4(X),
+    jump_gen_tail_pred3(Ls).
+
+% clause with cut
+jump_gen_tail_pred4((Head :- !)) :-
+    n_property(Head,predicate),
+    jump_gen_tail_head_unify(Head).
 
 % clause
-jump_gen_tail_pred4((Head :- Body),N) :-
+jump_gen_tail_pred4((Head :- Body)) :-
     jump_gen_tail_var(Head),
 	jump_gen_tail_head(Head),
     jump_gen_tail_body(Body,Head).
 
 % predicate
-jump_gen_tail_pred4(P,N) :-
+jump_gen_tail_pred4(P) :-
     n_property(P,predicate),
-    jump_gen_tail_head(P),
-    write('{'),
-    jump_gen_tail_head_unify(P,N),
-    write('return(YES);}'),nl,
-    write('exit'),write(N),write(':'),nl.
+    jump_gen_tail_head_unify(P).
 
-% foo([A|B]) -> varA = car(arg1); varB = cdr(arg1);
+% foo([A|B]) -> varA = car(car(arglist)); varB = cdr(car(arglist));
 jump_gen_tail_var(X) :-
     functor(X,_,0).
 jump_gen_tail_var(X) :-
     n_argument_list(X,Y),
-    jump_gen_tail_var1(Y,1,[]).
+    jump_gen_tail_var1(Y,[]).
 
-jump_gen_tail_var1([],N,L).
-% anoymous variable
-jump_gen_tail_var1(X,N,L) :-
+jump_gen_tail_var1([],L).
+% anoymous variable ignore
+jump_gen_tail_var1(X,L) :-
     n_compiler_anoymous(X).
-%normal variable
-jump_gen_tail_var1(X,N,L) :-
+% normal variable
+jump_gen_tail_var1(X,L) :-
     n_compiler_variable(X),
     write(X),
     write(' = '),
-    jump_gen_tail_head3(X,N,L),
+    jump_gen_tail_head3(X,L),
     write(';'),nl.
-%ignore atom and number []
-jump_gen_tail_var1(X,N,L) :-
+% ignore atom and number []
+jump_gen_tail_var1(X,L) :-
     atomic(X).
 
-%list
-jump_gen_tail_var1([[Y|Ys]|Xs],N,L) :-
-    jump_gen_tail_var1(Y,N,[car|L]),
-    jump_gen_tail_var1(Ys,N,[cdr|L]),
-    N1 is N + 1,
-    jump_gen_tail_var1(Xs,N1,[]).
+% list
+jump_gen_tail_var1([X|Xs],L) :-
+    jump_gen_tail_var1(X,[car|L]),
+    jump_gen_tail_var1(Xs,[cdr|L]).
 
-jump_gen_tail_var1([X|Xs],N,L) :-
-    jump_gen_tail_var1(X,N,[]),
-    N1 is N + 1,
-    jump_gen_tail_var1(Xs,N1,[]).
 
+% generate head of clause
 % foo(1,2) ->
-% if(arg1 == makeint(1) && arg2 == makeint(2)) return(YES);
+% if(car(arglist) == makeint(1) && cadr(arglist) == makeint(2))
 jump_gen_tail_head(X) :-
     functor(X,_,0).
 jump_gen_tail_head(X) :-
     n_argument_list(X,Y),
-    all_var(Y).
+    jump_all_var(Y).
 jump_gen_tail_head(X) :-
     n_argument_list(X,Y),
     write('if('),
     jump_gen_tail_head1(Y,1),
     write(')').
 
-% {varA = makevariant();
-%  if(Junify(varA,arg1) == NO) goto exitN;
-%  Junify(save1,varA);
-% ... return(YES);}
-jump_gen_tail_head_unify(Pred,N) :-
+%  varA = makevariant();
+%  head = wlist1(varA);
+%  if(Junify(arglist,head) == YES) return(YES);
+jump_gen_tail_head_unify(Pred) :-
     n_argument_list(Pred,Args),
     n_generate_variable(Args,V),
     jump_gen_tail_head_unify1(V),
-    jump_gen_tail_head_unify2(Args,1,N).
+    jump_gen_tail_head_unify2(Args).
 
 % varA = Jmakevariant(); varB = Jmakevariant(); ...
 jump_gen_tail_head_unify1([]).
@@ -215,22 +182,15 @@ jump_gen_tail_head_unify1([X|Xs]) :-
     write(' = Jmakevariant();'),nl,
     jump_gen_tail_head_unify1(Xs).
 
-% if(Junify(arg1,varA)==NO) goto exitN;
-% Junify(save1,varA); ...
-jump_gen_tail_head_unify2([],N,M).
-jump_gen_tail_head_unify2([X|Xs],N,M) :-
-    write('if(Junify(arg'),
-    write(N),
+% if(Junify(arg1,varA)==YES) return(YES);
+jump_gen_tail_head_unify2([]).
+jump_gen_tail_head_unify2([X|Xs]) :-
+    write('if(Junify(arglist'),
     write(','),
     jump_gen_a_argument(X),
-    write(')==NO) goto exit'),write(M),write(';'),nl,
-    write('Junify(save'),
-    write(N),
-    write(',arg'),
-    write(N),
-    write(');'),nl,
-    N1 is N + 1,
-    jump_gen_tail_head_unify2(Xs,N1,M).
+    write(')==YES) return(YES)'),
+    write(';'),nl.
+    
 
 
 jump_gen_tail_head1([X],N) :-
@@ -287,127 +247,107 @@ jump_gen_tail_head2(X,N,L) :-
     list(X).
 
 
-%write element N=1, L=[car,cdr] -> car(cdr(arg1))
-jump_gen_tail_head3(X,N,[]) :-
-    write('arg'),
-    write(N).
-jump_gen_tail_head3(X,N,[L|Ls]) :-
+% write L=[car,cdr] -> Jcar(Jcdr(arglist))
+jump_gen_tail_head3(X,[]) :-
+    write('arglist').
+jump_gen_tail_head3(X,[L|Ls]) :-
     write('J'),
     write(L),
     write('('),
-    jump_gen_tail_head3(X,N,Ls),
+    jump_gen_tail_head3(X,Ls),
     write(')').
 
 %if all elements are compiler_variable -> true
-all_var(X) :-
+jump_all_var(X) :-
     member([],X),!,fail.
-all_var(X) :-
-    all_var1(X).
-all_var1([]).
-all_var1(X) :-
+jump_all_var(X) :-
+    jump_all_var1(X).
+jump_all_var1([]).
+jump_all_var1(X) :-
     n_compiler_variable(X).
-all_var1([X|Xs]) :-
-    all_var1(X),
-    all_var1(Xs).
+jump_all_var1([X|Xs]) :-
+    jump_all_var1(X),
+    jump_all_var1(Xs).
 
 %generate body that has tail call
 jump_gen_tail_body((X,Xs),Head) :-
     jump_gen_tail_a_body(X,Head),
-    write('{'),
-    jump_gen_tail_body(Xs,Head),
-    write('}').
+    jump_gen_tail_body(Xs,Head).
 jump_gen_tail_body(X,Head) :-
     jump_gen_tail_a_body(X,Head).
 
 jump_gen_tail_a_body(X is Y,Head) :-
     write(X),
     write(' = '),
-    eval_form(Y),
-    write(';').
+    jump_eval_form(Y),
+    write(';'),nl.
 
 jump_gen_tail_a_body(X =:= Y,Head) :-
-    write('if(Jnumeqp('),
-    eval_form(X),
+    write('if(!Jnumeqp('),
+    jump_eval_form(X),
     write(','),
-    eval_form(Y),
-    write('))').
+    jump_eval_form(Y),
+    write(')) return(NO);'),nl.
 
 jump_gen_tail_a_body(X =\= Y,Head) :-
-    write('if(Jnot_numeqp('),
-    eval_form(X),
+    write('if(!Jnot_numeqp('),
+    jump_eval_form(X),
     write(','),
-    eval_form(Y),
-    write('))').
+    jump_eval_form(Y),
+    write(')) return(NO);'),nl.
 
 jump_gen_tail_a_body(X < Y,Head) :-
-    write('if(Jsmallerp('),
-    eval_form(X),
+    write('if(!Jsmallerp('),
+    jump_eval_form(X),
     write(','),
-    eval_form(Y),
-    write('))').
+    jump_eval_form(Y),
+    write(')) return(NO);'),nl.
 
 jump_gen_tail_a_body(X =< Y,Head) :-
-    write('if(Jeqsmallerp('),
-    eval_form(X),
+    write('if(!Jeqsmallerp('),
+    jump_eval_form(X),
     write(','),
-    eval_form(Y),
-    write('))').
+    jump_eval_form(Y),
+    write(')) return(NO);'),nl.
 
 jump_gen_tail_a_body(X > Y,Head) :-
-    write('if(Jgreaterp('),
-    eval_form(X),
+    write('if(!Jgreaterp('),
+    jump_eval_form(X),
     write(','),
-    eval_form(Y),
-    write('))').
+    jump_eval_form(Y),
+    write(')) return(NO);'),nl.
 
 jump_gen_tail_a_body(X >= Y,Head) :-
-    write('if(Jeqgreaterp('),
-    eval_form(X),
+    write('if(!Jeqgreaterp('),
+    jump_eval_form(X),
     write(','),
-    eval_form(Y),
-    write('))').
+    jump_eval_form(Y),
+    write(')) return(NO);'),nl.
 
+% builtin call
 jump_gen_tail_a_body(X,Head) :-
     n_property(X,builtin),
-    functor(X,_,L),
-    L1 is L+1,
-    write('Jset_goal(0,'),
-    write(L1),
-    write(');'),nl,
-    X =.. L2,
-    jump_gen_tail_set_goal(L2,1),
-    write('Jcallsubr(Jget_goal(1),0,Jget_goal(0) - 1);').
+    X =.. L,
+    write('Jcallsubr('),
+    jump_gen_a_argument(L),
+    write(',NIL);'),nl.
 
+% tail call
 jump_gen_tail_a_body(X,Head) :-
     functor(X,P,A),
     functor(Head,P,A),
     n_argument_list(X,Xs),
-    gen_tail_call(Xs,1).
+    jump_gen_tail_call(Xs).
 
 %gen_tail_a_body(X,Head) :-
 %    write(user_output,X).
 jump_gen_tail_a_body(X,Head).
 
-jump_gen_tail_set_goal([],N).
-jump_gen_tail_set_goal([X|Xs],N) :-
-    write('Jset_goal('),
-    write(N),
-    write(','),
-    jump_gen_a_argument(X),
-    write(');'),nl,
-    N1 is N + 1,
-    jump_gen_tail_set_goal(Xs,N1).
-
-jump_gen_tail_call([],N) :-
-    write('goto loop;'),nl.
-jump_gen_tail_call([X|Xs],N) :-
-    write('arg'),
-    write(N),
-    write(' = '),
+jump_gen_tail_call(X) :-
+    write('arglist = '),
     jump_gen_a_argument(X),
     write(';'),nl,
-    N1 is N + 1,
-    jump_gen_tail_call(Xs,N1).
+    write('goto loop;'),nl.
 
 
 %analize tail recursive optimization
@@ -419,6 +359,12 @@ myappend([],L,L) :- !.
 myappend([A|L],B, [A|C]):-
 	myappend(L,B,C).
  
+nodiag([], _, _).
+nodiag([N|L], B, D) :-
+	D =\= N - B,
+	D =\= B - N,
+	D1 is D + 1,
+	nodiag(L, B, D1).
 
 jump_analize(P) :-
     n_arity_count(P,[N]),
@@ -436,7 +382,7 @@ jump_deterministic(P,C) :-
 
 
 
-% type1 if clause has tail recursive and butlast goals are all builtin
+% type1 if clause has tail recursive and body is unidirectory
 jump_type1_deterministic([]).
 jump_type1_deterministic([C|Cs]) :-
     n_property(C,predicate),

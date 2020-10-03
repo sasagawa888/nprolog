@@ -378,8 +378,8 @@ int get_sp(void){
 	return(sp);
 }
 
-int callsubr(int x, int nest, int n){
-    return((GET_SUBR(x)(nest,n)));
+int callsubr(int x, int arglist, int rest){
+    return((GET_SUBR(x)(arglist,rest)));
 }
 
 int set_sp(int x){
