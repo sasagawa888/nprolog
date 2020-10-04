@@ -46,6 +46,8 @@ void dynamic_link(int x){
     init_f0(3,(tpred)makevariant);
     init_f0(4,(tpred)get_sp);
     init_f0(5,(tpred)get_wp);
+    init_f0(6,(tpred)debug);
+    init_f0(7,(tpred)inc_proof);
 
     //argument-1 type
     init_f1(0,(tpred)car);

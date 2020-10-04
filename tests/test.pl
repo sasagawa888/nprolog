@@ -10,3 +10,19 @@ hanoi(N, From, To, Via) :-
         N1 is N - 1, hanoi(N1, From, Via, To),
         write([From, to, To]), nl,
         hanoi(N1, Via, To, From).
+
+bar(0).
+bar(N) :-
+    N1 is N-1,
+    bar(N1).
+
+myappend([],L,L) :- !.
+myappend([A|L],B, [A|C]):-
+	myappend(L,B,C).
+
+nodiag([], _, _).
+nodiag([N|L], B, D) :-
+	D =\= N - B,
+	D =\= B - N,
+	D1 is D + 1,
+	nodiag(L, B, D1).

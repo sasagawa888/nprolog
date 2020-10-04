@@ -78,6 +78,8 @@ void init_deftsys(tpred x){
 #define Jmakevariant() (f0[3])()
 #define Jget_sp()    (f0[4])()
 #define Jget_wp()    (f0[5])()
+#define Jdebug()     (f0[6])()
+#define Jinc_proof() (f0[7])()
 
 #define Jcar(x)      (f1[0])(x)
 #define Jcdr(x)      (f1[1])(x)

@@ -864,6 +864,7 @@ int heavy999p(int addr);
 int last(int x);
 int ifthenp(int addr);
 int ignore_optin_p(int x);
+int inc_proof(void);
 int infixp(int addr);
 int infix_operator_p(int addr);
 int insert(int x, int y);

@@ -396,6 +396,11 @@ int set_wp(int x){
     return(0);
 }
 
+int inc_proof(void){
+    proof++;
+    return(proof);
+}
+
 int listcons(int x, int y){
 	int res;
 

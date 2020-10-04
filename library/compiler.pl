@@ -126,9 +126,16 @@ jump_gen_c_pred :-
 % generate all predicate code
 jump_gen_pred :-
     n_reconsult_predicate(P),
-    jump_gen_a_pred(P),
+    jump_gen_pred1(P),
     fail.
 jump_gen_pred.
+
+jump_gen_pred1(P) :-
+    jump_pred_data(P,type1),
+    jump_gen_tail_pred(P),!.
+jump_gen_pred1(P) :-
+    not(jump_pred_data(P,type1)),
+    jump_gen_a_pred(P),!.
 
 % define compiled predicate
 jump_gen_c_def :-
@@ -145,6 +152,8 @@ jump_gen_c_def1.
 
 % generate deftpred for normal predicate
 jump_gen_def(P) :-
+    not(jump_pred_data(P,type1)),
+    not(jump_pred_data(P,type2)),
 	write('(deftpred)("'),
     write(P),
     write('",'),
@@ -152,10 +161,11 @@ jump_gen_def(P) :-
     n_atom_convert(P,P1),
     write(P1),
     write(');'),
-    nl.
+    nl,!.
 
 % generate deftpred for optimized predicate
-jump_gen_defsys(P) :-
+jump_gen_def(P) :-
+    jump_pred_data(P,type1),
 	write('(deftsys)("'),
     write(P),
     write('",'),
@@ -163,7 +173,7 @@ jump_gen_defsys(P) :-
     n_atom_convert(P,P1),
     write(P1),
     write(');'),
-    nl.
+    nl,!.
 
 /*
 last C code to make direct execute
@@ -372,6 +382,26 @@ jump_gen_a_body((X;Xs)) :-
     write(','),
     jump_gen_body1(Xs),
     write(')').
+% defined predicate will become optimized builtin predicate
+jump_gen_a_body(X) :-
+    n_defined_predicate(X),
+    functor(X,P,0),
+    jump_pred_data(P,type1),
+    write('Jmakesys("'),
+    write(P),
+    write('")').
+% defined predicate will become optimized builtin predicate
+jump_gen_a_body(X) :-
+    n_defined_predicate(X),
+    functor(X,P,_),
+    jump_pred_data(P,type1),
+    n_argument_list(X,L),
+    write('Jwcons(Jmakesys("'),
+    write(P),
+    write('"),'),
+    jump_gen_argument(L),
+    write(')').
+
 % defined predicate will become compiled predicate
 jump_gen_a_body(X) :-
     n_defined_predicate(X),
@@ -917,6 +947,7 @@ if(n == 3){
 jump_gen_tail_pred(P) :-
     atom_concat('compiling tail ',P,M),
     write(user_output,M),nl(user_output),
+    jump_gen_type_declare(P),
     write('int b_'),
     n_atom_convert(P,P1),
     write(P1),
@@ -954,6 +985,7 @@ jump_gen_tail_pred1(P,N) :-
     write(N),
     write('){'),,nl,
     write('loop:'),nl,
+    write('Jinc_proof();'),nl,
     jump_gen_tail_pred2(P,N),
     write('}'),
     write('return(NO);'),nl.
@@ -1043,7 +1075,7 @@ jump_gen_tail_head_unify(Pred) :-
     n_generate_variable(Args,V),
     jump_gen_tail_head_unify1(V),
     write('head = '),
-    jump_gen_a_argument(Args),
+    jump_gen_argument(Args),
     write(';'),nl,
     jump_gen_tail_head_unify2(Args).
 
@@ -1058,7 +1090,7 @@ jump_gen_tail_head_unify1([X|Xs]) :-
 jump_gen_tail_head_unify2(X) :-
     write('if('),
     jump_gen_tail_head2(X,[]),
-    write(') return(Junify(arglist,head);'),
+    write(') return(Junify(arglist,head));'),
     nl.
     
 % unify head
@@ -1207,7 +1239,7 @@ jump_gen_tail_a_body(X,Head).
 
 jump_gen_tail_call(X) :-
     write('arglist = '),
-    jump_gen_a_argument(X),
+    jump_gen_argument(X),
     write(';'),nl,
     write('goto loop;'),nl.
 
@@ -1222,11 +1254,11 @@ jump_analize(P) :-
 
 jump_deterministic(P,C) :-
     jump_type1_deterministic(C),
-    assert(jump_pred_data(P,diterministic)).
+    assert(jump_pred_data(P,type1)).
 
 jump_deterministic(P,C) :-
     jump_type2_deterministic(C),
-    assert(jump_pred_data(P,deterministic)).
+    assert(jump_pred_data(P,type2)).
 
 
 
