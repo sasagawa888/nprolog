@@ -12,6 +12,7 @@
 void error(int errnum, char *fun, int arg){
 
     error_code = errnum;
+    ESCFRED;
     switch(errnum){
         case SYNTAX_ERR:    printf("Syntax error %s ", fun);
 														if(!error_flag && arg > 24)
@@ -250,5 +251,6 @@ void error(int errnum, char *fun, int arg){
         fflush(stdout);
         fclose(GET_PORT(input_stream));
     }
+    ESCFORG;
     longjmp(buf,1);
 }

@@ -6,7 +6,7 @@ save2 = Jget_sp();
 n = Jlength(arglist);
 if(n == 0){varX = Jmakevariant();
 save1 = Jget_wp();
-{body = Jwlist3(Jmakeope(","),Jwcons(Jmakecomp("between"),Jwcons(Jmakeint(1),Jwcons(Jmakeint(16),Jwcons(varX,NIL)))),Jwlist3(Jmakeope(","),Jmakecomp("test"),252));
+{body = Jwlist3(Jmakeope(","),Jwcons(Jmakecomp("between"),Jwcons(Jmakeint(1),Jwcons(Jmakeint(16),Jwcons(varX,NIL)))),Jwlist3(Jmakeope(","),Jmakecomp("test1"),Jwlist3(Jmakeope(","),Jwcons(382,Jwcons(varX,NIL)),252)));
 if(Jprove_all(Jaddtail_body(rest,body),Jget_sp(),0) == YES)
 return(YES);}
 Junbind(save2);

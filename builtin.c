@@ -2393,7 +2393,9 @@ int b_measure(int arglist, int rest){
         end_time = getETime();
         time = end_time - start_time;
         lips = (double)proof / time; 
+        ESCFGREEN;
         printf("Elapsed Time=%.6f (second)  %.0f(LIPS)\n", time,lips);
+        ESCFORG;
         return(res);
     }
     return(NO);
@@ -3412,7 +3414,7 @@ int b_reverse(int arglist, int rest){
 between(L, H, L) :- L =< H.
 between(L, H, V) :- L < H, L1 is L + 1, between(L1, H, V).
 */
-
+/*
 int b_between(int arglist, int rest){
     int n,arg1,arg2,arg3,varL1,varV,varH,varL,body,save1,save2;
 
@@ -3460,6 +3462,47 @@ int b_between(int arglist, int rest){
         }
         wp = save1;
         unbind(save2);
+    }
+    return(NO);
+}
+*/
+
+int b_between(int arglist, int rest){
+    int n,arg1,arg2,arg3,save1,save2,low,high;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = car(arglist);   //low
+        arg2 = cadr(arglist);  //high
+        arg3 = caddr(arglist); //variable
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"between ",arg1);
+        if(wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"between ",arg2);
+        if(!wide_variable_p(arg1) && !wide_integer_p(arg1))
+            error(NOT_INT,"between ",arg1);
+        if(!wide_variable_p(arg2) && !wide_integer_p(arg2))
+            error(NOT_INT,"between ",arg2);
+        if(!wide_variable_p(arg3) && !wide_integer_p(arg3))
+            error(NOT_INT,"between ",arg3);
+
+        save1 = wp;
+        save2 = sp;
+        low = get_int(arg1);
+        high = get_int(arg2);
+        while(low <= high){
+            //printf("%d",low);
+            unify(arg3,makeint(low));
+            if(prove_all(rest,sp,0) == YES)
+                return(YES);
+            
+            low++;
+            wp = save1;
+            unbind(save2);
+        }
+        wp = save1;
+        unbind(save2);
+        return(YES);
     }
     return(NO);
 }
