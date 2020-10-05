@@ -9,7 +9,7 @@ memory map
 address 
 0          - 17,000,000  heap area
 17,000,001 - 20,000,000  working area 
-20,000,001 - 25,000,000  variant area
+20,000,001 - 40,000,000  variant area
 */
 #define CELLSIZE    20000000  // this is max on raspberryPI3. If parsonal computer 30000000 is OK
 #define HEAPSIZE    17000000
