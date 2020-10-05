@@ -3468,7 +3468,7 @@ int b_between(int arglist, int rest){
 */
 
 int b_between(int arglist, int rest){
-    int n,arg1,arg2,arg3,save1,save2,low,high;
+    int n,arg1,arg2,arg3,save1,save2,save3,low,high;
 
     n = length(arglist);
     if(n == 3){
@@ -3488,6 +3488,7 @@ int b_between(int arglist, int rest){
 
         save1 = wp;
         save2 = sp;
+        save3 = ac;
         low = get_int(arg1);
         high = get_int(arg2);
         while(low <= high){
@@ -3502,6 +3503,7 @@ int b_between(int arglist, int rest){
         }
         wp = save1;
         unbind(save2);
+        ac = save3;
         return(YES);
     }
     return(NO);

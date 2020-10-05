@@ -107,6 +107,9 @@ void error(int errnum, char *fun, int arg){
         case STACK_OVERF:   printf("Stack over flow ");
                             break;
 
+        case VARIANT_OVERF:   printf("Variant over flow ");
+                            break;
+
         case SYSTEM_ERROR:  printf("System error at %s ", fun);
                             break;
 
@@ -237,6 +240,7 @@ void error(int errnum, char *fun, int arg){
         case NOT_RECORD:    printf("recordh tables has no record %s ", fun);
                             print(arg);
                             break;   
+                      
   }
     printf("\n");
     stok.ch = NUL;

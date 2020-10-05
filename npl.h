@@ -15,7 +15,7 @@ address
 #define HEAPSIZE    17000000
 #define FREESIZE         500
 #define STACKSIZE    1000000
-#define VARIANTSIZE  5000000
+#define VARIANTSIZE  20000000
 #define VARIANTMAX  CELLSIZE + VARIANTSIZE
 #define RECORDMAX 12
 #define ATOMSIZE 256
@@ -498,6 +498,7 @@ extern int ed_incomment;
 #define NOT_TERM            69
 #define RECORD_OVERF        70
 #define NOT_RECORD          71
+#define VARIANT_OVERF       72
 
 
 double getETime(void);

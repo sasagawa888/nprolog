@@ -182,6 +182,8 @@ int makevariant(void){
 
     addr = ac;
     ac++;
+    if(ac >= VARIANTMAX)
+        error(VARIANT_OVERF, "makevariant", NIL);  
     return(addr);
 }
 
