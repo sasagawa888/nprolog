@@ -1819,13 +1819,14 @@ int b_assert(int arglist, int rest){
     if(n == 1){
         arg1 = car(arglist);
         if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"assertz",arg1);
+            error(INSTANTATION_ERR,"assertz ",arg1);
         if(singlep(arg1)){
             if(GET_AUX(arg1) == SIMP || GET_AUX(arg1) == NIL)
                 SET_AUX(arg1,PRED);
         }
         if(builtinp(arg1))
-            error(BUILTIN_EXIST,"assertz",arg1);
+            error(BUILTIN_EXIST,"assertz ",arg1);
+        
 
         arg1 = variable_to_call(arg1); //P -> call(P)
         arg1 = copy_heap(arg1); //copy arg1 to heap area
@@ -1841,13 +1842,15 @@ int b_assert(int arglist, int rest){
         else if(operationp(arg1)){
             if(!callablep(caddr(arg1)))
                 error(NOT_CALLABLE,"assertz ",arg1);
+            if(operationp(cadr(arg1)))
+                error(BUILTIN_EXIST,"assertz ",arg1);
             
             SET_VAR(arg1,unique(varslist(arg1)));
             operate(arg1);
             checkgbc();
             return(YES);
         }
-        error(NOT_CALLABLE,"assertz",arg1);
+        error(NOT_CALLABLE,"assertz ",arg1);
     }
     return(NO);
 }
@@ -1859,13 +1862,14 @@ int b_asserta(int arglist, int rest){
     if(n == 1){
         arg1 = car(arglist);
         if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"asserta",arg1);
+            error(INSTANTATION_ERR,"asserta ",arg1);
         if(singlep(arg1)){
             if(GET_AUX(arg1) == SIMP || GET_AUX(arg1) == NIL)
                 SET_AUX(arg1,PRED);
         }
         if(builtinp(arg1))
-            error(BUILTIN_EXIST,"asserta",arg1);
+            error(BUILTIN_EXIST,"asserta ",arg1);
+        
 
         arg1 = variable_to_call(arg1); //P -> call(P)
         arg1 = copy_heap(arg1); //copy arg1 to heap area
@@ -1881,6 +1885,8 @@ int b_asserta(int arglist, int rest){
         else if(operationp(arg1)){
             if(!callablep(caddr(arg1)))
                 error(NOT_CALLABLE,"asserta ",arg1);
+            if(operationp(cadr(arg1)))
+                error(BUILTIN_EXIST,"asserta ",arg1);
 
             SET_VAR(arg1,unique(varslist(arg1)));
             operate(arg1);
@@ -1888,7 +1894,7 @@ int b_asserta(int arglist, int rest){
             checkgbc();
             return(YES);
         }
-        error(NOT_CALLABLE,"asserta",arg1);
+        error(NOT_CALLABLE,"asserta ",arg1);
     }
     return(NO);
 }
