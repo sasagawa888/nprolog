@@ -873,6 +873,7 @@ void print_quoted(int addr){
                 pos++;
             }
             else{
+                fprintf(GET_PORT(output_stream),"%c",'\\');
                 fprintf(GET_PORT(output_stream),"%c",c);
                 pos++;
             }
