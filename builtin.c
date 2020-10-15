@@ -60,6 +60,10 @@ void initbuiltin(void){
     defbuiltin("concat",b_concat);
     defbuiltin("consult",b_consult);
     defbuiltin("create",b_create);
+    defbuiltin("ctr_set",b_ctr_set);
+    defbuiltin("ctr_dec",b_ctr_dec);
+    defbuiltin("ctr_inc",b_ctr_inc);
+    defbuiltin("ctr_is",b_ctr_is);
     defbuiltin("date",b_date);
     defbuiltin("date_day",b_date_day);
     defbuiltin("dec",b_dec);
@@ -1745,6 +1749,96 @@ int b_ateqgreater(int arglist, int rest){
     return(NO);
 }
 
+//timer
+int b_ctr_set(int arglist, int rest){
+    int n,arg1,arg2;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        if(!integerp(arg1))
+            error(NOT_INT,"ctr_set ",arg1);
+        if(GET_INT(arg1) > 30)
+            error(ILLEGAL_ARGS,"str_set ",arg1);
+        if(!integerp(arg2))
+            error(NOT_INT,"ctr_set ",arg2);
+        
+        counter[GET_INT(arg1)] = GET_INT(arg2);
+        return(YES);
+
+    }
+    return(NO);
+}
+
+int b_ctr_dec(int arglist, int rest){
+    int n,arg1,arg2,i;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        if(!integerp(arg1))
+            error(NOT_INT,"ctr_dec ",arg1);
+        if(GET_INT(arg1) > 30)
+            error(ILLEGAL_ARGS,"str_set ",arg1);
+        if(!wide_variable_p(arg2))
+            error(NOT_VAR,"ctr_dec ",arg2);
+        
+        i = counter[GET_INT(arg1)];
+        counter[GET_INT(arg1)] = i-1;
+        return(unify(arg2,makeint(i)));
+
+    }
+    return(NO);
+}
+
+int b_ctr_inc(int arglist, int rest){
+    int n,arg1,arg2,i;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        if(!integerp(arg1))
+            error(NOT_INT,"ctr_dec ",arg1);
+        if(GET_INT(arg1) > 30)
+            error(ILLEGAL_ARGS,"str_set ",arg1);
+        if(!wide_variable_p(arg2))
+            error(NOT_VAR,"ctr_dec ",arg2);
+        
+        i = counter[GET_INT(arg1)];
+        counter[GET_INT(arg1)] = i+1;
+        return(unify(arg2,makeint(i)));
+
+    }
+    return(NO);
+}
+
+int b_ctr_is(int arglist, int rest){
+    int n,arg1,arg2,i;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        if(!integerp(arg1))
+            error(NOT_INT,"ctr_dec ",arg1);
+        if(GET_INT(arg1) > 30)
+            error(ILLEGAL_ARGS,"str_set ",arg1);
+        if(!wide_variable_p(arg2))
+            error(NOT_VAR,"ctr_dec ",arg2);
+        
+        i = counter[GET_INT(arg1)];
+        return(unify(arg2,makeint(i)));
+
+    }
+    return(NO);
+}
 
 //true fail
 int b_fail(int arglist, int rest){

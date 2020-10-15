@@ -114,6 +114,10 @@ close/1
 compare/3
 concat/3
 consult/1
+ctr_set/2
+ctr_dec/2
+ctr_inc/2
+ctr_is/2
 current_op/3
 current_predicate/1
 date/1

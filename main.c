@@ -18,6 +18,7 @@ int variant[VARIANTSIZE];
 int stack[STACKSIZE];
 int record_hash_table[HASHTBSIZE][RECORDMAX];  //for hash record database 
 int record_pt = 1;                             // current index of record database
+int counter[31];                               // counter str_set,str_dec ...
 token stok = {GO,OTHER};
 jmp_buf buf;
 int variables = NIL;
@@ -113,7 +114,8 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"ansi_cup"},{"ansi_cpr"},{"ansi_scp"},{"ansi_rcp"},
 {"ansi_ed"},{"ansi_el"},{"errorcode"},
 {"recordh"},{"recorda"},{"recordz"},{"instance"},{"removeallh"},
-{"stdin"},{"stdout"},{"stdinout"}
+{"stdin"},{"stdout"},{"stdinout"},
+{"ctr_set"},{"ctr_dec"},{"ctr_inc"},{"ctr_is"}
 };
 
 //compiled predicate
@@ -170,7 +172,7 @@ int ed_incomment = -1; /*...*/
 int main(int argc, char *argv[]){
     int opt;
 
-    printf("N-Prolog Ver 1.0\n");
+    printf("N-Prolog Ver 1.1\n");
     signal(SIGINT,reset);
     initcell();
     initbuiltin();
