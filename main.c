@@ -108,7 +108,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"string"},{"string_chars"},{"string_codes"},{"ground"},
 {"concat"},{"substring"},
 {"inc"},{"dec"},{"compare"},
-{"mkdir"},{"rmdir"},{"chdir"},{"directory"},{"string_length"},
+{"mkdir"},{"rmdir"},{"chdir"},{"string_length"},
 {"sort"},{"keysort"},{"length"},{"shell"},{"measure"},
 {"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"},
 {"ansi_cup"},{"ansi_cpr"},{"ansi_scp"},{"ansi_rcp"},
@@ -121,7 +121,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 //compiled predicate
 char compiled[COMPILED_NUMBER][30] ={
 {"append"},{"member"},{"repeat"},
-{"retract"},{"clause"},{"call"},
+{"retract"},{"clause"},{"call"},{"directory"},
 {"current_visible"},{"stream_property"},{"between"},
 {"current_predicate"},{"current_op"},{"retrieveh"},{"removeh"}
 };

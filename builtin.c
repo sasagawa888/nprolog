@@ -4,6 +4,7 @@
 #include <time.h>
 #include <sys/time.h>
 #include <sys/stat.h>
+#include <dirent.h>
 #include "npl.h"
 
 void initbuiltin(void){
@@ -68,7 +69,6 @@ void initbuiltin(void){
     defbuiltin("date_day",b_date_day);
     defbuiltin("dec",b_dec);
     defbuiltin("delete",b_delete);
-    defbuiltin("directory",b_directory);
     defbuiltin("display",b_write_canonical);
     defbuiltin("debug",b_debug);
     defbuiltin("edit",b_nano);
@@ -155,6 +155,7 @@ void initbuiltin(void){
     defcompiled("between",b_between);
     defcompiled("retrieveh",b_retrieveh);
     defcompiled("removeh",b_removeh);
+    defcompiled("directory",b_directory);
 
     //-----JUMP project---------
     defcompiled("n_reconsult_predicate",b_reconsult_predicate);
@@ -1343,9 +1344,10 @@ void memoize_arity(int clause, int atom){
 
 
 int b_directory(int arglist, int rest){
-    int n,arg1,arg2,arg3,arg4,arg5;
-    char str1[STRSIZE];
+    int n,arg1,arg2,arg3,arg4,arg5,save;
     struct stat stat_buf;
+    DIR *dir;
+    struct dirent *dp;
 
     n = length(arglist);
     if(n == 5){
@@ -1359,10 +1361,8 @@ int b_directory(int arglist, int rest){
             error(INSTANTATION_ERR,"directory ",arg1);
         if(!atomp(arg1))
             error(NOT_ATOM,"directory ",arg1);
-        if(wide_variable_p(arg2))
-            error(INSTANTATION_ERR,"directory ",arg2);
-        if(!atomp(arg2))
-            error(NOT_ATOM,"directory ",arg2);
+        if(!wide_variable_p(arg2))
+            error(NOT_VAR,"directory ",arg2);
         if(!wide_variable_p(arg3))
             error(NOT_VAR,"directory ",arg3);
         if(!wide_variable_p(arg4))
@@ -1370,20 +1370,36 @@ int b_directory(int arglist, int rest){
         if(!wide_variable_p(arg5))
             error(NOT_VAR,"directory ",arg5);    
         
-        strcpy(str1,GET_NAME(arg1));
-        strcat(str1,GET_NAME(arg2));
-        if(stat(str1,&stat_buf) == 0){
-            unify(arg3,makeint(stat_buf.st_mode));
-            unify(arg4,makeconst(ctime(&stat_buf.st_mtime)));
-            unify(arg5,makeint(stat_buf.st_size));
-            return(YES);
-        }
-        else
+        save = sp;
+        dir = opendir(GET_NAME(arg1));
+        if(dir == NULL)
             error(SYSTEM_ERROR,"directory ",NIL);
 
+        dp = readdir(dir);
+        while (dp != NULL) {
+            if(stat(dp->d_name,&stat_buf) == 0){
+                unify(arg2,makeconst(dp->d_name));
+                unify(arg3,makeint(stat_buf.st_mode));
+                unify(arg4,makeconst(ctime(&stat_buf.st_mtime)));
+                unify(arg5,makeint(stat_buf.st_size));
+                if(prove_all(rest,sp,0) == YES)
+                    return(YES);
+            }
+            else
+                error(SYSTEM_ERROR,"directory ",NIL);
+
+            unbind(save);
+            dp = readdir(dir);
+        }
+        if(dir != NULL)
+            closedir(dir);
+        
+        unbind(save);
+        return(NO);
     }
     return(NO);
 }
+        
 
 //arithmetic operation
 
