@@ -1344,18 +1344,20 @@ void memoize_arity(int clause, int atom){
 
 
 int b_directory(int arglist, int rest){
-    int n,arg1,arg2,arg3,arg4,arg5,save;
-    struct stat stat_buf;
+    int n,arg1,arg2,arg3,arg4,arg5,arg6,save,mode,date,time;
     DIR *dir;
     struct dirent *dp;
+    struct stat stat_buf;
+    struct tm *t_st;
 
     n = length(arglist);
-    if(n == 5){
+    if(n == 6){
         arg1 = car(arglist);
         arg2 = cadr(arglist);
         arg3 = caddr(arglist);
         arg4 = cadddr(arglist);
         arg5 = caddddr(arglist);
+        arg6 = cadddddr(arglist);
 
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"directory ",arg1);
@@ -1369,7 +1371,9 @@ int b_directory(int arglist, int rest){
             error(NOT_VAR,"directory ",arg4);    
         if(!wide_variable_p(arg5))
             error(NOT_VAR,"directory ",arg5);    
-        
+        if(!wide_variable_p(arg6))
+            error(NOT_VAR,"directory ",arg6);    
+
         save = sp;
         dir = opendir(GET_NAME(arg1));
         if(dir == NULL)
@@ -1378,10 +1382,31 @@ int b_directory(int arglist, int rest){
         dp = readdir(dir);
         while (dp != NULL) {
             if(stat(dp->d_name,&stat_buf) == 0){
+                if(S_ISREG(stat_buf.st_mode))
+                    mode = makeconst("file");
+                else if(S_ISDIR(stat_buf.st_mode))
+                    mode = makeconst("directory");
+                else
+                    mode = makeconst("unknown"); 
+
+                t_st = localtime(&stat_buf.st_mtime);
+                date = NIL;
+                time = NIL;
+                time = cons(makeint(t_st->tm_sec),time);
+                time = cons(makeint(t_st->tm_min),time);
+                time = cons(makeint(t_st->tm_hour),time);
+                time = cons(makeconst("time"),time);
+                SET_AUX(car(time),PRED);
+                date = cons(makeint(t_st->tm_mday),date);
+                date = cons(makeint(t_st->tm_mon+1),date);
+                date = cons(makeint(t_st->tm_year+1900),date);
+                date = cons(makeconst("date"),date);
+                SET_AUX(car(date),PRED);
                 unify(arg2,makeconst(dp->d_name));
-                unify(arg3,makeint(stat_buf.st_mode));
-                unify(arg4,makeconst(ctime(&stat_buf.st_mtime)));
-                unify(arg5,makeint(stat_buf.st_size));
+                unify(arg3,mode);
+                unify(arg4,time);
+                unify(arg5,date);
+                unify(arg6,makeint(stat_buf.st_size));
                 if(prove_all(rest,sp,0) == YES)
                     return(YES);
             }

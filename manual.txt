@@ -154,6 +154,23 @@ Handleで指定したファイルをクローズする。
 □ delete(Filename)
 指定のファイルを削除する。
 
+□ directory(Path,Name,Mode,Time,Date,Size)
+Pathで指定したディレクトリファイルをリストする。
+
+例
+?- directory('./',A,B,C,D,E).
+A = 'link.c'
+B = file
+C = time(13,20,47)
+D = date(2020,10,4)
+E = 4281 ;
+A = 'compute.o'
+B = file
+C = time(7,54,38)
+D = date(2020,10,18)
+E = 37544 .
+
+
 □ display(Term)
 前置記法で項を標準出力装置に書き出す。
 

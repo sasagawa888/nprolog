@@ -124,6 +124,7 @@ date/1
 date_day/2
 dec/2
 delete/1
+directory/6
 display/1
 edit/1
 eq/2
