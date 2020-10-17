@@ -1,6 +1,7 @@
 
 CC   = gcc
 LIBS = -lm -ldl 
+LIBSRASPI = -lm -ldl -lwiringPi
 INCS =  
 CFLAGS = $(INCS) -Wall -O3 
 
@@ -24,6 +25,9 @@ all: $(NPL_OBJS) $(NPL)
 
 $(NPL): $(NPL_OBJS)
 	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBS) 
+
+raspi:	$(NPL_OBJS)
+	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBSRASPI) 
 		
 %.o: %.c npl.h
 	$(CC) -c $< -o $@ $(CFLAGS)
