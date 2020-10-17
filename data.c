@@ -24,9 +24,6 @@ int cddr(int addr){
     return(cdr(cdr(addr)));
 }
 
-int cadddr(int addr){
-    return(car(cdr(cdr(cdr(addr)))));
-}
 
 int cadr(int addr){
     return(car(cdr(addr)));
@@ -35,6 +32,19 @@ int cadr(int addr){
 int caddr(int addr){
     return(car(cdr(cdr(addr))));
 }
+
+int cadddr(int addr){
+    return(car(cdr(cdr(cdr(addr)))));
+}
+
+int caddddr(int addr){
+    return(car(cdr(cdr(cdr(cdr(addr))))));
+}
+
+int cadddddr(int addr){
+    return(car(cdr(cdr(cdr(cdr(cdr(addr)))))));
+}
+
 
 int cadar(int addr){
     return(car(cdr(car(addr))));

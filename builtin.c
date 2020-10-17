@@ -68,6 +68,7 @@ void initbuiltin(void){
     defbuiltin("date_day",b_date_day);
     defbuiltin("dec",b_dec);
     defbuiltin("delete",b_delete);
+    defbuiltin("directory",b_directory);
     defbuiltin("display",b_write_canonical);
     defbuiltin("debug",b_debug);
     defbuiltin("edit",b_nano);
@@ -1340,6 +1341,49 @@ void memoize_arity(int clause, int atom){
     }
 }
 
+
+int b_directory(int arglist, int rest){
+    int n,arg1,arg2,arg3,arg4,arg5;
+    char str1[STRSIZE];
+    struct stat stat_buf;
+
+    n = length(arglist);
+    if(n == 5){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        arg3 = caddr(arglist);
+        arg4 = cadddr(arglist);
+        arg5 = caddddr(arglist);
+
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"directory ",arg1);
+        if(!atomp(arg1))
+            error(NOT_ATOM,"directory ",arg1);
+        if(wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"directory ",arg2);
+        if(!atomp(arg2))
+            error(NOT_ATOM,"directory ",arg2);
+        if(!wide_variable_p(arg3))
+            error(NOT_VAR,"directory ",arg3);
+        if(!wide_variable_p(arg4))
+            error(NOT_VAR,"directory ",arg4);    
+        if(!wide_variable_p(arg5))
+            error(NOT_VAR,"directory ",arg5);    
+        
+        strcpy(str1,GET_NAME(arg1));
+        strcat(str1,GET_NAME(arg2));
+        if(stat(str1,&stat_buf) == 0){
+            unify(arg3,makeint(stat_buf.st_mode));
+            unify(arg4,makeconst(ctime(&stat_buf.st_mtime)));
+            unify(arg5,makeint(stat_buf.st_size));
+            return(YES);
+        }
+        else
+            error(SYSTEM_ERROR,"directory ",NIL);
+
+    }
+    return(NO);
+}
 
 //arithmetic operation
 
