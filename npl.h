@@ -25,7 +25,7 @@ address
 #define FUNCTION_NUMBER 19
 #define BUILTIN_NUMBER 200
 #define COMPILED_NUMBER 23
-#define EXTENDED_NUMBER  12
+#define EXTENDED_NUMBER  20
 #define NIL     0
 #define YES     2
 #define NO      4

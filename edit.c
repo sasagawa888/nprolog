@@ -753,7 +753,9 @@ int read_line(int flag){
                                         if(c == ESC)
                                              goto escape;
                                         i = c - '1';
-                                        if(i > ed_candidate_pt)
+                                        if(i > ed_candidate_pt || i < 1)
+                                            goto retry;
+                                        if(c == EOL)
                                             goto retry;
                                         j = replace_fragment_buffer(ed_candidate[i],j);
                                         escape:

@@ -130,7 +130,7 @@ char compiled[COMPILED_NUMBER][30] ={
 char extended[EXTENDED_NUMBER][30] = {
 {"wiringpi_setup_gpio"},{"wiringpi_spi_setup"},{"pwm_set_mode"},
 {"pwm_set_clock"},{"pwm_set_range"},{"pin_mode"},{"digital_write"},
-{"pwm_write"},{"pull_up_dn_control"},{"digital_read"},{"delay"},
+{"pwm_write"},{"pull_up_dn_control"},{"digital_read"},{"delay"},{"delay_microseconds"},
 {"compile_file"},
 };
 
