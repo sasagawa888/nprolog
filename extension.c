@@ -632,6 +632,7 @@ int b_pwm_set_range(int arglist, int rest){
 int b_pwm_set_clock(int arglist, int rest){
     int n,arg1,x;
 
+    n = length(arglist);
     if(n == 1){
         arg1 = car(arglist);
         if(!integerp(arg1))
