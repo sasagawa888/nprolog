@@ -117,6 +117,7 @@ void initbuiltin(void){
     defbuiltin("recordh",b_recordh);
     defbuiltin("removeallh",b_removeallh);
     defbuiltin("rename",b_rename);
+    defbuiltin("reset_op",b_reset_op);
     defbuiltin("reverse",b_reverse);
     defbuiltin("rmdir",b_rmdir);
     defbuiltin("see",b_see);
@@ -190,6 +191,8 @@ void initbuiltin(void){
     defbuiltin("digital_read",b_digital_read);
     defbuiltin("delay",b_delay);
     defbuiltin("delay_microseconds",b_delay_microseconds);
+    defbuiltin("out",b_digital_write);
+    defbuiltin("in",b_digital_read);
     #endif
     return;
 }
@@ -3278,6 +3281,16 @@ int b_current_op(int arglist, int rest){
     return(NO);
 }
 
+int b_reset_op(int arglist, int rest){
+    int n;
+
+    n = length(arglist);
+    if(n == 0){
+        initoperator();
+        return(YES);
+    }
+    return(NO);
+}
 
 int o_define(int x, int y){
     int clause;

@@ -143,6 +143,7 @@ get0_noecho/1
 halt/0
 ifthen/2
 ifthenelse/3
+in/2
 inc/2
 instance/2
 integer/1
@@ -160,6 +161,7 @@ nospy/1
 notrace/0
 number/1
 not/1
+out/1
 open/3
 read/1
 read_line/2
@@ -167,6 +169,7 @@ reconsult/1
 recorda/3
 recordh/3
 recordz/3
+reset_op/0
 retrieveh/3
 rmdir/1
 see/1

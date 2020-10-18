@@ -677,6 +677,7 @@ int b_recordh(int arglist, int rest);
 int b_reconsult(int arglist, int rest);
 int b_rename(int arglist, int rest);
 int b_repeat(int arglist, int rest);
+int b_reset_op(int arglist, int rest);
 int b_retract(int arglist, int rest);
 int b_retrieveh(int arglist, int rest);
 int b_reverse(int arglist, int rest);

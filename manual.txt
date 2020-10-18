@@ -274,6 +274,9 @@ Handleで指定したファイルから1行読む。
 □ removeh(Table_name,Sort_key,Term)
 ハッシュテーブルから項を削除する。
 
+□ reset_op
+演算子の定義をそのデフォールト値に戻す。
+
 □ retrieveh(Table_name,Sort_key,Term)
 ハッシュテーブルから項を戻す。
 
