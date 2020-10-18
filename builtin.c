@@ -115,6 +115,7 @@ void initbuiltin(void){
     defbuiltin("recorda",b_recorda);
     defbuiltin("recordz",b_recordz);
     defbuiltin("recordh",b_recordh);
+    defbuiltin("ref",b_ref);
     defbuiltin("removeallh",b_removeallh);
     defbuiltin("rename",b_rename);
     defbuiltin("reset_op",b_reset_op);
@@ -4272,6 +4273,24 @@ int b_removeallh(int arglist, int rest){
             record_hash_table[i][record_id] = NIL;
         //as a result, removed term will be retrieve by GC
         return(YES);
+    }
+    return(NO);
+}
+
+int b_ref(int arglist, int rest){
+    int n,arg1;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = car(arglist);
+
+        if(!integerp(arg1))
+            error(NOT_INT,"resf ",arg1);
+        
+        if(predicatep(GET_INT(arg1)))
+            return(YES);
+        else 
+            return(NO);
     }
     return(NO);
 }

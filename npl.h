@@ -675,6 +675,7 @@ int b_recorda(int arglist, int rest);
 int b_recordz(int arglist, int rest);
 int b_recordh(int arglist, int rest);
 int b_reconsult(int arglist, int rest);
+int b_ref(int arglist, int rest);
 int b_rename(int arglist, int rest);
 int b_repeat(int arglist, int rest);
 int b_reset_op(int arglist, int rest);

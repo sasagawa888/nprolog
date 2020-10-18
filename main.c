@@ -99,7 +99,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"read_line"},{"reset_op"},
 {"tab"},{"fail"},{"not"},{"true"},{"halt"},{"abort"},
 {"listing"},{"functor"},{"arg"},
-{"writeq"},{"display"},
+{"writeq"},{"display"},{"ref"},
 {"atom_concat"},{"consult"},{"reconsult"},
 {"see"},{"seeing"},{"seen"},{"tell"},{"telling"},{"told"},{"trace"},{"notrace"},{"spy"},
 {"nospy"},{"leash"},{"atom"},{"integer"},{"real"},{"float"},{"number"},

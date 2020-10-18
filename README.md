@@ -169,6 +169,7 @@ reconsult/1
 recorda/3
 recordh/3
 recordz/3
+ref/1
 reset_op/0
 retrieveh/3
 rmdir/1
