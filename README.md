@@ -30,7 +30,7 @@ I hope that Prolog will become more popular. I hope many people enjoy Prolog. NP
 
 ## example
 ```prolog
-N-Prolog Ver 0.09
+N-Prolog Ver 1.12
 ?- length([1,2,3],X).
 X = 3
 yes

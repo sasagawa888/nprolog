@@ -753,7 +753,7 @@ int read_line(int flag){
                                         if(c == ESC)
                                              goto escape;
                                         i = c - '1';
-                                        if(i > ed_candidate_pt || i < 1)
+                                        if(i > ed_candidate_pt || i < 0)
                                             goto retry;
                                         if(c == EOL)
                                             goto retry;
