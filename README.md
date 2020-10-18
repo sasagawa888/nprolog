@@ -6,6 +6,7 @@ About Arity/prolog32  see  http://petergabel.info/ArityProlog32/ArityProlog32Pre
 
 ## Installation
 On Linux  type "make" on terminal.
+On Raspberry Pi type "make raspi" on terminal.
 see https://www.youtube.com/watch?v=IJTj8VRxUHc&fbclid=IwAR1KLf1ytyTlGX26dEzYru83Wu679HvKi-v87MdtIS_cvRM9Qr4wZZW3wD4
 
 # invoke
@@ -202,6 +203,28 @@ member/2
 measure/1   (measure elapsed time)
 reverse/2
 ```
+
+# wiringPi 
+On paspberry PI, on terminal enter "make raspi".
+As a result, N-Prolog includes builtin predicates of WiringPi. 
+
+
+```
+EISL <==================================> C
+wiringpi-spi-setup(ch speed) <===> wiringPiSPISetup (SPI_CH, SPI_SPEED)
+wiringpi-setup-gpio  <===> wiringPiSetupGpio()
+pin-mode(n, 'output) <====> pinMode(n, OUTPUT) or 'input -> INPUT 'pwm-output -> PWM-OUTPUT
+digital-write(n, v) <===> digitalWrite(n, v)
+digital-write-byte(v) <===> digitalWriteByte(value)
+digital-read(pin) <===> digitalRead(pin)
+delay(howlong) <===> void delay(unsigned int howLong)
+pull-up-dn-control(pin, pud) <===> pullUpDnControl(pin,pud)
+pwm-set-mode('pwm-mode-ms) <===> pwmSetMode(PWM_MODE_MS); or 'pwm-mode-bal -> PWM_MODE_BAL
+pwm-set-clock(n) <===> pwmSetClock(n)
+pwm-set-range(n) <===> pwmSetRange(n)
+pwm-write(pin, value) <===> pwmWrite(pin , value)
+```
+
 
 # function
 ```
