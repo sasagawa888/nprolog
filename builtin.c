@@ -176,6 +176,21 @@ void initbuiltin(void){
     defbuiltin("n_defined_predicate",b_defined_predicate);
     defbuiltin("n_defined_userop",b_defined_userop);
     defbuiltin("n_get_execute",b_get_execute);
+
+     #ifdef __arm__
+    defbuiltin("wiringpi_setup_gpio",b_wiringpi_setup_gpio);
+    defbuiltin("wiringpi_spi_setup_ch_speed",b_wiringpi_spi_setup_ch_speed);
+    defbuiltin("pwm_set_mode",b_pwm_set_mode);
+    defbuiltin("pwm_set_range",b_pwm_set_range);
+    defbuiltin("pwm_set_clock",b_pwm_set_clock);
+    defbuiltin("b_pin_mode",b_pin_mode);
+    defbuiltin("digital_write",b_digital_write);
+    defbuiltin("digital_write_byte",b_digital_write_byte);
+    defbuiltin("pull_up_dn_control",b_pull_up_dn_control);
+    defbuiltin("digital_read",b_digital_read);
+    defbuiltin("delay",b_delay);
+    defbuiltin("delay_microseconds",b_delay_microseconds);
+    #endif
     return;
 }
 
