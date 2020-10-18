@@ -730,7 +730,7 @@ int b_pull_up_dn_control(int arglist, int rest){
 }
 
 int b_digital_read(int arglist, int rest){
-    int n,arg1,ar2,x,res;
+    int n,arg1,arg2,x,res;
 
     n = length(arglist);
     if(n == 2){
