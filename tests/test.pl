@@ -20,3 +20,16 @@ myappend([],L,L) :- !.
 myappend([A|L],B, [A|C]):-
 	myappend(L,B,C).
 
+intersection([],Y,[]).
+intersection([X|Xs],Y,[X|Z]) :-
+    member(X,Y),
+    intersection(Xs,Y,Z).
+intersection([X|Xs],Y,Z) :-
+    intersection(Xs,Y,Z).
+
+union([],Y,Y).
+union([X|Xs],Y,Z) :-
+    member(X,Y),
+    union(Xs,Y,Z).
+union([X|Xs],Y,[X|Z]) :-
+    union(Xs,Y,Z).

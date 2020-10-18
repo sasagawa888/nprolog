@@ -24,7 +24,6 @@ data([a,u,g,c,g,c,a,a,u,g,u,g,u,a,a]).
 
 % global variable that indicates whether the conversion is in progress.
 % Necessary for judging begin or met (methionine).
-:- dynamic(trans/1).
 trans(off).
 
 %Convert RNA sequence to amino acid name. Inverse conversion is also possible.
