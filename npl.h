@@ -1150,6 +1150,23 @@ int makestrflt(char *str);
 int makestrlong(char *str);
 void debug(void);
 
+// wiringPI
+#ifdef __arm__
+int b_wiringpi_setup_gpio(int arglist, int rest);
+int b_wiringpi_spi_setup_ch_speed(int arglist, int rest);
+int b_pwm_set_mode(int arglist, int rest);
+int b_pwm_set_range(int arglist, int rest);
+int b_pwm_set_clock(int arglist, int rest);
+int b_pin_mode(int arglist, int rest);
+int b_digital_write(int arglist, int rest);
+int b_digital_write_byte(int arglist, int rest);
+int b_pwm_write(int arglist, int rest);
+int b_pull_up_dn_control(int arglist, int rest);
+int b_digital_read(int arglist, int rest);
+int b_delay(int arglist, int rest);
+int b_delay_microseconds(int arglist, int rest);
+#endif
+
 // edit 
 struct position{
     int row;
