@@ -761,7 +761,7 @@ int b_delay(int arglist, int rest){
     return(NO);
 }
 
-int f_delay_microseconds(int arglist, int rest){
+int b_delay_microseconds(int arglist, int rest){
     int n,arg1,x;
 
     n = length(arglist);
