@@ -730,17 +730,18 @@ int b_pull_up_dn_control(int arglist, int rest){
 }
 
 int b_digital_read(int arglist, int rest){
-    int n,arg1,x,res;
+    int n,arg1,ar2,x,res;
 
     n = length(arglist);
-    if(n == 1){
+    if(n == 2){
         arg1 = car(arglist);
+        arg2 = cadr(arglist);
         if(!integerp(arg1))
             error(NOT_INT,"digital-read",arg1);
 
         x = GET_INT(arg1);
         res = digitalRead(x);
-        return(unify(arg1,makeint(res)));
+        return(unify(arg2,makeint(res)));
     }
     return(NO);
 }
