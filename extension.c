@@ -581,9 +581,9 @@ int b_wiringpi_spi_setup_ch_speed(int arglist, int rest){
         arg2 = cadr(arglist);
 
         if(!integerp(arg1))
-            error(NOT_INT,"wiringpi-spi-setup-ch-speed",arg1);
+            error(NOT_INT,"wiringpi_spi_setup_ch_speed",arg1);
         if(!integerp(arg2))
-            error(NOT_INT,"wiringpi-spi-setup-ch-speed",arg2);
+            error(NOT_INT,"wiringpi_spi_setup_ch_speed",arg2);
 
 
         x = GET_INT(arg1);
@@ -601,12 +601,12 @@ int b_pwm_set_mode(int arglist, int rest){
     if(n == 1){
         arg1 = car(arglist);
 
-        if(arg1 == makeconst("pwm-mode-ms"))
+        if(arg1 == makeconst("pwm_mode_ms"))
             pwmSetMode(PWM_MODE_MS);
-        else if(arg1 == makeconst("pwm-mode-bal"))
+        else if(arg1 == makeconst("pwm_mode_bal"))
             pwmSetMode(PWM_MODE_BAL);
         else 
-            error(WRONG_ARGS,"pwm-set-mode",arg1);
+            error(WRONG_ARGS,"pwm_set_mode",arg1);
     
         return(YES);
     }
@@ -620,7 +620,7 @@ int b_pwm_set_range(int arglist, int rest){
     if(n == 1){
         arg1 = car(arglist);
         if(!integerp(arg1))
-            error(NOT_INT,"pwm-set-range",arg1);
+            error(NOT_INT,"pwm_set_range",arg1);
 
         x = GET_INT(arg1);
         pwmSetRange(x);
@@ -636,7 +636,7 @@ int b_pwm_set_clock(int arglist, int rest){
     if(n == 1){
         arg1 = car(arglist);
         if(!integerp(arg1))
-            error(NOT_INT,"pwm-set-clock",arg1);
+            error(NOT_INT,"pwm_set_clock",arg1);
 
         x = GET_INT(arg1);
         pwmSetClock(x);
@@ -649,23 +649,23 @@ int b_pin_mode(int arglist, int rest){
     int n,arg1,arg2,x;
 
     if(length(arglist) != 2)
-        error(WRONG_ARGS,"pin-mode",arglist);
+        error(WRONG_ARGS,"pin_mode",arglist);
     n = length(arglist);
     if(n == 2){
         arg1 = car(arglist);
         arg2 = cadr(arglist);
         if(!integerp(arg1))
-            error(NOT_INT,"pin-,mode",arg1);
+            error(NOT_INT,"pin_mode",arg1);
     
         x = GET_INT(arg1);
         if(arg2 == makeconst("intput"))
             pinMode(x,INPUT);
         else if(arg2 == makeconst("output"))
             pinMode(x,OUTPUT);
-        else if(arg2 == makeconst("pwm-output"))
+        else if(arg2 == makeconst("pwm_output"))
             pinMode(x,PWM_OUTPUT);
         else
-            error(WRONG_ARGS,"pin-mode",arg2);
+            error(WRONG_ARGS,"pin_mode",arg2);
     
         return(YES);
     }
@@ -680,9 +680,9 @@ int b_digital_write(int arglist, int rest){
         arg1 = car(arglist);
         arg2 = cadr(arglist);
         if(!integerp(arg1))
-            error(NOT_INT,"digital-write",arg1);
+            error(NOT_INT,"digital_write",arg1);
         if(!integerp(arg2))
-            error(NOT_INT,"digital-write",arg2);    
+            error(NOT_INT,"digital_write",arg2);    
 
         x = GET_INT(arg1);
         y = GET_INT(arg2);
@@ -699,7 +699,7 @@ int b_digital_write_byte(int arglist, int rest){
     if(n == 1){
         arg1 = car(arglist);
         if(!integerp(arg1))
-            error(NOT_INT,"digital-write-byte",arg1);
+            error(NOT_INT,"digital_write_byte",arg1);
 
         x = GET_INT(arg1);
         digitalWriteByte(x);
@@ -717,9 +717,9 @@ int b_pull_up_dn_control(int arglist, int rest){
         arg1 = car(arglist);
         arg2 = cadr(arglist);
         if(!integerp(arg1))
-            error(NOT_INT,"pull-up-dn-control",arg1);
+            error(NOT_INT,"pull_up_dn_control",arg1);
         if(!integerp(arg2))
-            error(NOT_INT,"pull-up-dn-control",arg2);
+            error(NOT_INT,"pull_up_dn_control",arg2);
 
         x = GET_INT(arg1);
         y = GET_INT(arg2);
@@ -737,7 +737,7 @@ int b_digital_read(int arglist, int rest){
         arg1 = car(arglist);
         arg2 = cadr(arglist);
         if(!integerp(arg1))
-            error(NOT_INT,"digital-read",arg1);
+            error(NOT_INT,"digital_read",arg1);
 
         x = GET_INT(arg1);
         res = digitalRead(x);
@@ -769,7 +769,7 @@ int b_delay_microseconds(int arglist, int rest){
     if(n == 1){
         arg1 = car(arglist);
         if(!integerp(arg1))
-            error(NOT_INT,"delay-microseconds",arg1);
+            error(NOT_INT,"delay_microseconds",arg1);
     
         x = GET_INT(arg1);
         delayMicroseconds(x);
