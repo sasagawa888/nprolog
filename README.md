@@ -215,7 +215,7 @@ As a result, N-Prolog includes builtin predicates of WiringPi.
 
 
 ```
-EISL <==================================> C
+N-Prolog <==================================> C
 wiringpi_spi_setup(ch speed) <===> wiringPiSPISetup (SPI_CH, SPI_SPEED)
 wiringpi_setup_gpio  <===> wiringPiSetupGpio()
 pin_mode(n, 'output) <====> pinMode(n, OUTPUT) or 'input -> INPUT 'pwm-output -> PWM_OUTPUT
