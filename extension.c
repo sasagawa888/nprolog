@@ -601,9 +601,9 @@ int b_pwm_set_mode(int arglist, int rest){
     if(n == 1){
         arg1 = car(arglist);
 
-        if(arg1 == makesym("pwm-mode-ms"))
+        if(arg1 == makeconst("pwm-mode-ms"))
             pwmSetMode(PWM_MODE_MS);
-        else if(arg1 == makesym("pwm-mode-bal"))
+        else if(arg1 == makeconst("pwm-mode-bal"))
             pwmSetMode(PWM_MODE_BAL);
         else 
             error(WRONG_ARGS,"pwm-set-mode",arg1);
@@ -657,11 +657,11 @@ int b_pin_mode(int arglist, int rest){
             error(NOT_INT,"pin-,mode",arg1);
     
         x = GET_INT(arg1);
-        if(arg2 == makesym("intput"))
+        if(arg2 == makeconst("intput"))
             pinMode(x,INPUT);
-        else if(arg2 == makesym("output"))
+        else if(arg2 == makeconst("output"))
             pinMode(x,OUTPUT);
-        else if(arg2 == makesym("pwm-output"))
+        else if(arg2 == makeconst("pwm-output"))
             pinMode(x,PWM_OUTPUT);
         else
             error(WRONG_ARGS,"pin-mode",arg2);
