@@ -185,7 +185,7 @@ void initbuiltin(void){
     defbuiltin("pwm_set_mode",b_pwm_set_mode);
     defbuiltin("pwm_set_range",b_pwm_set_range);
     defbuiltin("pwm_set_clock",b_pwm_set_clock);
-    defbuiltin("b_pin_mode",b_pin_mode);
+    defbuiltin("pin_mode",b_pin_mode);
     defbuiltin("digital_write",b_digital_write);
     defbuiltin("digital_write_byte",b_digital_write_byte);
     defbuiltin("pull_up_dn_control",b_pull_up_dn_control);
