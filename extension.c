@@ -649,8 +649,7 @@ int b_pwm_set_clock(int arglist, int rest){
 int b_pin_mode(int arglist, int rest){
     int n,arg1,arg2,x;
 
-    if(length(arglist) != 2)
-        error(WRONG_ARGS,"pin_mode",arglist);
+    
     n = length(arglist);
     if(n == 2){
         arg1 = car(arglist);

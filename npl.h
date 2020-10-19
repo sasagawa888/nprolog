@@ -420,18 +420,18 @@ extern int ed_incomment;
 #define CR      13
 #define VT      11
 
-#if defined(__linux) || defined(__OpenBSD__)
-    #define LEFT    'D'
-    #define UP      'A'
-    #define RIGHT   'C'
-    #define DOWN    'B'
-    #define INSERT  '2'
-    #define DELETE  '3'
-    #define PAGEUP  '5'
-    #define PAGEDN  '6'
-    #define HOME    'H'
-    #define END     'F'
-#endif
+
+#define LEFT    'D'
+#define UP      'A'
+#define RIGHT   'C'
+#define DOWN    'B'
+#define INSERT  '2'
+#define DELETE  '3'
+#define PAGEUP  '5'
+#define PAGEDN  '6'
+#define HOME    'H'
+#define END     'F'
+
 
 //-------error code---
 #define SYNTAX_ERR      1
@@ -1230,14 +1230,3 @@ int read_line(int flag);
 int count_col(int x);
 int count_col_buffer(int x);
 
-
-// There are a lot of flavours of windows, so define a global flag that can be used for all of them
-#if defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__NT__)
-    #define IS_WINDOWS 1
-#endif
-
-#if IS_WINDOWS 
-    #define FLUSH fflush(stdin);
-#elif __linux
-    #define FLUSH __fpurge(stdin);    
-#endif

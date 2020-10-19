@@ -1,5 +1,5 @@
 setup :-
-    not(flag),wiringpi_setup_gpio(X),assert(flag),
+    not(flag),wiringpi_setup_gpio,assert(flag),
     pin_mode(5,output).
 
 test(0).
