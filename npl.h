@@ -11,11 +11,11 @@ address
 17,000,001 - 20,000,000  working area 
 20,000,001 - 40,000,000  variant area
 */
-#define CELLSIZE    20000000  // this is max on raspberryPI3. If parsonal computer 30000000 is OK
-#define HEAPSIZE    17000000
+#define CELLSIZE    17000000  // this is max on raspberryPI1B. If parsonal computer 30000000 is OK
+#define HEAPSIZE    14000000
 #define FREESIZE         500
 #define STACKSIZE    1000000
-#define VARIANTSIZE  20000000
+#define VARIANTSIZE 20000000
 #define VARIANTMAX  CELLSIZE + VARIANTSIZE
 #define RECORDMAX 12
 #define ATOMSIZE 256
@@ -366,7 +366,7 @@ extern int ed_lbracket_row;
 extern int ed_lbracket_col;
 extern int ed_rbracket_row;
 extern int ed_rbracket_col;
-extern char ed_candidate[15][30];
+extern char ed_candidate[30][30];
 extern int ed_candidate_pt;
 extern int ed_operator_color;
 extern int ed_builtin_color;

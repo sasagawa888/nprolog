@@ -568,6 +568,7 @@ int b_wiringpi_setup_gpio(int arglist, int rest){
     n = length(arglist);
     if(n == 0){
         wiringPiSetupGpio();
+        return(YES);
     }
     return(NO);
 } 

@@ -157,7 +157,7 @@ int ed_lbracket_row;
 int ed_lbracket_col;
 int ed_rbracket_row;
 int ed_rbracket_col;
-char ed_candidate[15][30];
+char ed_candidate[30][30];
 int ed_candidate_pt;
 int ed_operator_color = 3;   //default yellow
 int ed_builtin_color = 6;  //default cyan
