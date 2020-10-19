@@ -378,7 +378,7 @@ extern int ed_incomment;
 
 #define ESCHOME printf("\33[1;1H")
 #define ESCTOP  printf("\33[2;1H")
-#define ESCCLS  printf("\33[2J")
+#define ESCCLS  printf("\33[2J")          //clear screen
 #define ESCCLS1 printf("\33[0J")
 #define ESCCLSL printf("\33[0K")
 #define ESCMVLEFT(x) printf("\33[%dG", x)

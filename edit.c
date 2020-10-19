@@ -757,13 +757,13 @@ int read_line(int flag){
                                         if(c == ESC)
                                              goto escape;
                                         i = c - '1';
-                                        if(ed_candidate_pt >= k+5 && i == 5){
+                                        if(ed_candidate_pt > k+5 && i == 5){ //more
                                             k = k+5;
                                             ESCMVLEFT(1);
                                             ESCCLSL;
                                             goto next;
                                         }
-                                        if(i > ed_candidate_pt || i < 0)
+                                        if(i+k >= ed_candidate_pt || i < 0)
                                             goto retry;
                                         if(c == EOL)
                                             goto retry;
