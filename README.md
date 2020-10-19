@@ -8,6 +8,7 @@ About Arity/prolog32  see  http://petergabel.info/ArityProlog32/ArityProlog32Pre
 On Linux  type "make" on terminal.
 
 On Raspberry Pi type "make raspi" on terminal.
+
 see https://www.youtube.com/watch?v=IJTj8VRxUHc&fbclid=IwAR1KLf1ytyTlGX26dEzYru83Wu679HvKi-v87MdtIS_cvRM9Qr4wZZW3wD4
 
 # invoke

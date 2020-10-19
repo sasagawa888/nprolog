@@ -192,7 +192,7 @@ extern int error_stream;
 #define OFF     0
 #define ON      1    
 
-
+#define FLUSH               __fpurge(stdin); 
 #define DEBUG               printf("debug\n"); longjmp(buf,2);
 #define GET_FLT(addr)       heap[addr].val.fltnum
 #define GET_CAR(addr)       heap[addr].val.car.intnum
