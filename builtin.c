@@ -133,6 +133,7 @@ void initbuiltin(void){
     defbuiltin("string_length",b_string_length);
     defbuiltin("spy",b_spy);
     defbuiltin("substring",b_substring);
+    defbuiltin("syntaxerrors",b_syntaxerrors);
     defbuiltin("system",b_system);
     defbuiltin("tab",b_tab);
     defbuiltin("tell",b_tell);
@@ -3500,6 +3501,21 @@ int b_shell(int arglist, int rest){
     return(NO);
 }
 
+
+int b_syntaxerrors(int arglist, int rest){
+    int n,arg1,arg2,res;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        res = unify(arg1,syntax_flag); 
+        syntax_flag = arg2;
+        return(res);
+    }
+    return(NO);
+}
 
 
 int b_sort(int arglist, int rest){

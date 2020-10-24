@@ -182,6 +182,7 @@ sort/2
 spy/1
 string/1
 string_length/2
+syntaxerrors/2
 system/1
 tell/1
 telling/1

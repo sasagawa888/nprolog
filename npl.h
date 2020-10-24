@@ -338,6 +338,7 @@ extern int ignore_flag;
 extern int link_flag;
 extern int listing_flag;
 extern int prefix_flag;
+extern int syntax_flag;
 
 //------pointer----
 extern int hp; //heap pointer
@@ -702,6 +703,7 @@ int b_stdinout(int arglist, int rest);
 int b_string(int arglist, int rest);
 int b_string_length(int arglist, int rest);
 int b_substring(int arglist, int rest);
+int b_syntaxerrors(int arglist, int rest);
 int b_tab(int arglist, int rest);
 int b_tell(int arglist, int rest);
 int b_telling(int arglist, int rest);

@@ -52,7 +52,6 @@ int wp; //working pointer
 
 //flag
 int trace_flag = FULL;
-int trace_nest = 999999999; //max nest level of trace
 int open_flag = 0;
 int gbc_flag = 0;  // 0=not display massage 1=display message
 int simp_flag = 1;
@@ -69,6 +68,7 @@ int link_flag = 0;  // 0=not-link, 1=linked
 int listing_flag = 0;  //for print clause, 0=normal, 1=format print
 int colon_sets_calling_context_flag = 1; //1=true, 0=false
 int prefix_flag = 0;   //for parser 0=not prefix, 1=prefix
+int syntax_flag = YES;   //syntaxerrors/2 YES=normal. NO=ignore syntax-errors
 
 
 //operator token
@@ -109,7 +109,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"concat"},{"substring"},
 {"inc"},{"dec"},{"compare"},{"in"},{"out"},
 {"mkdir"},{"rmdir"},{"chdir"},{"string_length"},
-{"sort"},{"keysort"},{"length"},{"shell"},{"measure"},
+{"sort"},{"keysort"},{"length"},{"shell"},{"measure"},{"syntaxerrors"},
 {"ansi_cuu"},{"ansi_cud"},{"ansi_cuf"},{"ansi_cub"},
 {"ansi_cup"},{"ansi_cpr"},{"ansi_scp"},{"ansi_rcp"},
 {"ansi_ed"},{"ansi_el"},{"errorcode"},
