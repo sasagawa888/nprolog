@@ -33,3 +33,15 @@ union([X|Xs],Y,Z) :-
     union(Xs,Y,Z).
 union([X|Xs],Y,[X|Z]) :-
     union(Xs,Y,Z).
+
+
+/* quick sort OK */
+/* 農夫問題　答えがNO */
+/* 経路の探索（２）　ok*/
+/* 積み木の移動　OK*/
+/* ライツアウト　リソースエラー*/
+
+test(N) :-
+    ifthenelse(odd(N),write(odd_number),write(even_numver)).
+
+odd(N) :- X is N mod 2,X \= 0.
