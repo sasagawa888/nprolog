@@ -314,6 +314,9 @@ Xがストリングかどうかを調べる。
 □ string_length(String,Length)
 ストリングの長さを戻す。
 
+□ string_term(String,Term)
+ストリングを項に変更する。
+
 □ substring(InString,N,Length,OutString)
 ストリングからサブストリングを抽出する。
 Nは開始位置　１から始まる自然数

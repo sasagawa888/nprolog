@@ -2510,6 +2510,11 @@ int b_string_term(int arglist, int rest){
         arg1 = car(arglist);
         arg2 = cadr(arglist);
 
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"string_term ",arg1);
+        if(!stringp(arg1))
+            error(NOT_STR,"string_term ",arg1);
+
         l = strlen(GET_NAME(arg1));
         memset(str,'\0',STRSIZE);
         strcpy(str,GET_NAME(arg1));
@@ -2521,7 +2526,7 @@ int b_string_term(int arglist, int rest){
         read_string_term(-1); //initilize 
         string_term_flag = 1;
         res = readparse();
-        read_line(0);
+        read_line(0);  //initilize REPL
         string_term_flag = 0;
         return(unify(arg2,res));
     }
