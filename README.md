@@ -129,6 +129,7 @@ dec/2
 delete/1
 directory/6
 display/1
+dup/2
 edit/1
 eq/2
 expand_term/2

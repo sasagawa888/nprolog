@@ -72,6 +72,7 @@ void initbuiltin(void){
     defbuiltin("delete",b_delete);
     defbuiltin("display",b_write_canonical);
     defbuiltin("debug",b_debug);
+    defbuiltin("dup",b_dup);
     defbuiltin("edit",b_nano);
     defbuiltin("eq",b_eq);
     defbuiltin("errorcode",b_errorcode);
@@ -1093,6 +1094,28 @@ int b_open(int arglist, int rest){
     return(NO);
 }
 
+int b_dup(int arglist, int rest){
+    int n,arg1,arg2,addr;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        if(!streamp(arg1))
+            error(NOT_STREAM,"dup ", arg1);
+        
+        addr = freshcell();
+        SET_TAG(addr,STREAM);
+        SET_PORT(addr,GET_PORT(arg1));
+        SET_CDR(addr,GET_CDR(arg1));
+        SET_OPT(addr,GET_OPT(arg1)); //input/output/inout
+        SET_VAR(addr,GET_VAR(arg1)); //text/binary
+        SET_AUX(addr,GET_AUX(arg1)); //for eof_action
+        return(unify(arg2,addr));
+    }
+    return(NO);
+}
 
 
 int b_close(int arglist, int rest){

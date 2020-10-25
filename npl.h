@@ -611,6 +611,7 @@ int b_defined_predicate(int arglist, int rest);
 int b_defined_userop(int arglist, int rest);
 int b_delete(int arglist, int rest);
 int b_directory(int arglist, int rest);
+int b_dup(int arglist, int rest);
 int b_eq(int arglist, int rest);
 int b_eqgreater(int arglist, int rest);
 int b_eqsmaller(int arglist, int rest);

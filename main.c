@@ -91,7 +91,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"=="},{"\\=="},{"@<"},{"@=<"},{"@>"},{"@>="},
 {"=:="},{"=/="},{"=\\="},{"<"},{"=<"},{">"},
 {">="},{"\\="},{"="},{"reverse"},
-{"is"},{"edit"},{"open"},{"close"},{"system"},{"create"},
+{"is"},{"edit"},{"open"},{"close"},{"system"},{"create"},{"dup"},
 {"delete"},{"rename"},
 {"op"},{"!"},{"assert"},{"asserta"},{"assertz"},
 {"abolish"},{"read"},{"write"},{"put"},{"get"},{"get0"},{"get0_noecho"},{"nl"},
