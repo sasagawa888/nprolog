@@ -2523,10 +2523,9 @@ int b_string_term(int arglist, int rest){
         
         string_term_buffer[l] = '.';
         string_term_buffer[l+1] = 0;
-        read_string_term(-1); //initilize 
+        read_string_term(0); //initilize 
         string_term_flag = 1;
         res = readparse();
-        read_line(0);  //initilize REPL
         string_term_flag = 0;
         return(unify(arg2,res));
     }
@@ -2536,10 +2535,15 @@ int b_string_term(int arglist, int rest){
 int read_string_term(int flag){
     static int pos=0;
 
-    if(flag == -1){
+    if(flag == 0){
        pos = 0;
-       return(-1);
+       return(0);
     }
+    else if(flag == -1){
+        pos--;
+        return(-1);
+    }
+
 
     return(string_term_buffer[pos++]);
 }

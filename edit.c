@@ -649,19 +649,6 @@ int read_line(int flag){
        pos--;
        return(-1);
     }
-    else if(flag == 0){ // initilize for string_term/2
-        for(i=9;i>0;i--)
-            for(j=0;j<BUFSIZE;j++)
-                buffer[j][i] = buffer[j][i-1];
-
-        limit++;
-        if(limit >= 10)
-            limit = 9;
-        
-        pos = 0;
-        buffer[pos][0] = 0;
-        return(0);
-    }
     
 
     if(buffer[pos][0] == 0){

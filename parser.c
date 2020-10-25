@@ -455,6 +455,11 @@ int readc(void){
 }
 
 void unreadc(char c){
+    if(string_term_flag == 1){
+        read_string_term(-1);
+        return;
+    }
+        
     if(c == EOL)
         line--;
     else
