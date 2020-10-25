@@ -139,6 +139,7 @@ extern int cell_hash_table[HASHTBSIZE];
 extern int record_hash_table[HASHTBSIZE][RECORDMAX]; 
 extern int record_pt;       
 extern int counter[31]; 
+extern int string_term_buffer[STRSIZE];
 extern int variables;
 extern int predicates;
 extern int spy_list;
@@ -339,6 +340,7 @@ extern int link_flag;
 extern int listing_flag;
 extern int prefix_flag;
 extern int syntax_flag;
+extern int string_term_flag;
 
 //------pointer----
 extern int hp; //heap pointer
@@ -350,7 +352,7 @@ extern int wp; //working pointer
 
 //-----editor-----
 extern int repl_flag;
-extern int buffer[256][10];
+extern int buffer[BUFSIZE][10];
 extern int ed_row;
 extern int ed_col;
 extern int ed_start;
@@ -703,6 +705,7 @@ int b_stdout(int arglist, int rest);
 int b_stdinout(int arglist, int rest);
 int b_string(int arglist, int rest);
 int b_string_length(int arglist, int rest);
+int b_string_term(int arglist, int rest);
 int b_substring(int arglist, int rest);
 int b_syntaxerrors(int arglist, int rest);
 int b_tab(int arglist, int rest);
@@ -996,6 +999,7 @@ int readitem(void);
 int readcurl(void);
 int readlist(void);
 int readparen(void);
+int read_string_term(int flag);
 int remove_cut(int x);
 int replace(int x, int lis);
 int reposition_option_p(int x);

@@ -311,7 +311,7 @@ int findrparen_buffer(int col){
 
     col++;
     nest = 0;
-    for(limit=0;limit<256;limit++)
+    for(limit=0;limit<BUFSIZE;limit++)
         if(buffer[limit][0] == 0)
             break;
 
@@ -354,7 +354,7 @@ int findrbracket_buffer(int col){
 
     col++;
     nest = 0;
-    for(limit=0;limit<256;limit++)
+    for(limit=0;limit<BUFSIZE;limit++)
         if(buffer[limit][0] == 0)
             break;
 
@@ -592,7 +592,7 @@ int replace_fragment_buffer(char* newstr, int col){
 void backspace_buffer(int col){
     int i;
 
-    for(i=col;i<256;i++)
+    for(i=col;i<BUFSIZE;i++)
         buffer[i][0] = buffer[i+1][0];
 }
 
@@ -649,17 +649,31 @@ int read_line(int flag){
        pos--;
        return(-1);
     }
+    else if(flag == 0){ // initilize for string_term/2
+        for(i=9;i>0;i--)
+            for(j=0;j<BUFSIZE;j++)
+                buffer[j][i] = buffer[j][i-1];
+
+        limit++;
+        if(limit >= 10)
+            limit = 9;
+        
+        pos = 0;
+        buffer[pos][0] = 0;
+        return(0);
+    }
+    
 
     if(buffer[pos][0] == 0){
         for(i=9;i>0;i--)
-            for(j=0;j<256;j++)
+            for(j=0;j<BUFSIZE;j++)
                 buffer[j][i] = buffer[j][i-1];
 
         limit++;
         if(limit >= 10)
             limit = 9;
 
-       for(j=0;j<256;j++)
+       for(j=0;j<BUFSIZE;j++)
             buffer[j][0] = 0;
 
         line = 0;
@@ -671,7 +685,7 @@ int read_line(int flag){
         c = getch();
         loop:
         switch(c){
-            case EOL: for(j=0;j<256;j++)
+            case EOL: for(j=0;j<BUFSIZE;j++)
                           if(buffer[j][0] == 0)
                               break;
                       buffer[j][0] = c;
@@ -701,10 +715,10 @@ int read_line(int flag){
                          break;
                       if(line >= limit-1)
                          line = limit-2;
-                      for(j=0;j<256;j++)
+                      for(j=0;j<BUFSIZE;j++)
                           buffer[j][0] = buffer[j][line+1];
 
-                      for(j=0;j<256;j++)
+                      for(j=0;j<BUFSIZE;j++)
                           if(buffer[j][0] == EOL)
                               break;
                       line++;
@@ -717,9 +731,9 @@ int read_line(int flag){
                       down_history:
                       if(line <= 1)
                          line = 1;
-                      for(j=0;j<256;j++)
+                      for(j=0;j<BUFSIZE;j++)
                           buffer[j][0] = buffer[j][line-1];
-                      for(j=0;j<256;j++)
+                      for(j=0;j<BUFSIZE;j++)
                           if(buffer[j][0] == EOL)
                               break;
                       line--;

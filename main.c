@@ -5,9 +5,7 @@ written by kenichi sasagawa 2016/8~
 #include <string.h>
 #include <math.h>
 #include <signal.h>
-#ifdef __linux
-  #include <stdio_ext.h>
-#endif
+#include <stdio_ext.h>
 #include "npl.h"
 
 //global vers
@@ -16,9 +14,10 @@ cell heap[CELLSIZE];
 int cell_hash_table[HASHTBSIZE];
 int variant[VARIANTSIZE];
 int stack[STACKSIZE];
-int record_hash_table[HASHTBSIZE][RECORDMAX];  //for hash record database 
+int record_hash_table[HASHTBSIZE][RECORDMAX];  // for hash record database 
 int record_pt = 1;                             // current index of record database
-int counter[31];                               // counter str_set,str_dec ...
+int counter[31];                               // counter str_set,str_dec ... 
+int string_term_buffer[STRSIZE];               // for string_term/2
 token stok = {GO,OTHER};
 jmp_buf buf;
 int variables = NIL;
@@ -69,7 +68,7 @@ int listing_flag = 0;  //for print clause, 0=normal, 1=format print
 int colon_sets_calling_context_flag = 1; //1=true, 0=false
 int prefix_flag = 0;   //for parser 0=not prefix, 1=prefix
 int syntax_flag = YES;   //syntaxerrors/2 YES=normal. NO=ignore syntax-errors
-
+int string_term_flag = 0; //for string_term/2 0=normal, 1=readparse from string_term_buffer
 
 //operator token
 char operator[OPERATOR_NUMBER][5] = {
@@ -106,7 +105,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"var"},{"nonvar"},{"atomic"},{"list"},{"gc"},{"time"},{"name"},{"bounded"},
 {"flush"},{"date"},{"date_day"},
 {"string"},{"string_chars"},{"string_codes"},{"ground"},
-{"concat"},{"substring"},
+{"concat"},{"substring"},{"string_term"},
 {"inc"},{"dec"},{"compare"},{"in"},{"out"},
 {"mkdir"},{"rmdir"},{"chdir"},{"string_length"},
 {"sort"},{"keysort"},{"length"},{"shell"},{"measure"},{"syntaxerrors"},

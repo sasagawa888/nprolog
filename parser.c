@@ -437,7 +437,9 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
 int readc(void){
     int c;
 
-    if(input_stream == standard_input && repl_flag)
+    if(string_term_flag == 1)
+        return(read_string_term(1));
+    else if(input_stream == standard_input && repl_flag)
         c = read_line(3);
     else
         c = getc(GET_PORT(input_stream));

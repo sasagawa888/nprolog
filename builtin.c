@@ -133,6 +133,7 @@ void initbuiltin(void){
     defbuiltin("stdout",b_stdout);
     defbuiltin("string",b_string);
     defbuiltin("string_length",b_string_length);
+    defbuiltin("string_term",b_string_term);
     defbuiltin("spy",b_spy);
     defbuiltin("substring",b_substring);
     defbuiltin("syntaxerrors",b_syntaxerrors);
@@ -2498,6 +2499,44 @@ int b_string_length(int arglist, int rest){
         return(unify(arg2,val));
     }
     return(NO);
+}
+
+int b_string_term(int arglist, int rest){
+    int n,arg1,arg2,l,i,res;
+    char str[STRSIZE];
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        l = strlen(GET_NAME(arg1));
+        memset(str,'\0',STRSIZE);
+        strcpy(str,GET_NAME(arg1));
+        for(i=0;i<l;i++)
+            string_term_buffer[i] = str[i];
+        
+        string_term_buffer[l] = '.';
+        string_term_buffer[l+1] = 0;
+        read_string_term(-1); //initilize 
+        string_term_flag = 1;
+        res = readparse();
+        read_line(0);
+        string_term_flag = 0;
+        return(unify(arg2,res));
+    }
+    return(NO);
+}
+
+int read_string_term(int flag){
+    static int pos=0;
+
+    if(flag == -1){
+       pos = 0;
+       return(-1);
+    }
+
+    return(string_term_buffer[pos++]);
 }
 
 int b_substring(int arglist, int rest){
