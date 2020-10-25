@@ -46,7 +46,7 @@ address
 #define OPLFALSE    34
 #define CURL    36
 #define IFTHEN  38
-#define NUMVAR  40
+#define IFTHENELSE  40
 #define UNDERBAR    42
 #define DOTOBJ  44
 #define DCG   46
@@ -969,7 +969,6 @@ int nullp(int addr);
 int numberp(int addr);
 int numbertoken(char buf[]);
 int numbervars_option_p(int x);
-int numbervarp(int addr);
 int numeqp(int x, int y);
 int o_cons(int x, int y);
 int o_dcg(int x, int y);

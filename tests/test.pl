@@ -44,4 +44,8 @@ union([X|Xs],Y,[X|Z]) :-
 test(N) :-
     ifthenelse(odd(N),write(odd_number),write(even_numver)).
 
+test1(N) :-
+    odd(N)->write(odd_number);write(even_number).
+
+
 odd(N) :- X is N mod 2,X \= 0.

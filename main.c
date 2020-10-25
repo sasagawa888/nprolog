@@ -499,10 +499,15 @@ int prove(int goal, int bindings, int rest, int n){
         }
     }
     else if(disjunctionp(goal)){
-        if(prove_all(addtail_body(rest,cadr(goal)),bindings,n) == YES)
+        if(ifthenp(cadr(goal))){
+            goal = wcons(IFTHENELSE,wcons(cadr(cadr(goal)),wcons(caddr(cadr(goal)),wcons(caddr(goal),NIL))));
+            // redefine goal = ifthen(if,then,else)
+            return(prove(goal,bindings,rest,n));
+        }
+        else if(prove_all(addtail_body(rest,cadr(goal)),bindings,n) == YES)
             return(YES);
         else{
-            if(cut_flag == 1 || car(cadr(goal)) == IFTHEN){
+            if(cut_flag == 1){
                 cut_flag = 0;
                 unbind(bindings);
                 return(NO);

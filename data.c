@@ -944,14 +944,6 @@ int ifthenp(int addr){
         return(0);
 }
 
-// '$VAR'(N)
-int numbervarp(int addr){
-    if(IS_INCELL(addr) && structurep(addr) && car(addr) == NUMVAR)
-        return(1);
-    else
-        return(0);
-}
-
 
 int atom_codes_list_p(int addr){
 

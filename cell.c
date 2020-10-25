@@ -48,11 +48,11 @@ void initcell(void){
     makeatom("false",SIMP); //address = 34
     makeatom("{}",PRED);  //address = 36
     makeatom("->",SYS);  //address = 38
-    makeatom("$VAR",PRED); //address = 40
+    makeatom("ifthenelse",SYS); //address = 40
     makeatom("_",SIMP); //address = 42
     makeatom(".",OPE);  //address = 44
     makeatom("-->",OPE);  //address = 46
-    
+
 }
 
 int freshcell(void){
