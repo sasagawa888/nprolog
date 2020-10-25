@@ -89,9 +89,9 @@ void initbuiltin(void){
     defbuiltin("get_byte",b_get_byte);
     defbuiltin("ground",b_ground);
     defbuiltin("halt",b_halt);
-    defbuiltin("inc",b_inc);
     defbuiltin("ifthen",b_ifthen);
     defbuiltin("ifthenelse",b_ifthenelse);
+    defbuiltin("inc",b_inc);
     defbuiltin("instance",b_instance);
     defbuiltin("integer",b_integer);
     defbuiltin("keysort",b_keysort);
@@ -151,7 +151,6 @@ void initbuiltin(void){
     defbuiltin("write",b_write);
     defbuiltin("writeq",b_writeq);
     
-
     defcompiled("call",b_call);
     defcompiled("repeat",b_repeat);
     defcompiled("append",b_append);
@@ -2691,7 +2690,7 @@ int b_ifthen(int arglist, int rest){
 }
 
 int b_ifthenelse(int arglist, int rest){
-    int n,arg1,arg2,arg3;
+    int n,arg1,arg2,arg3,save;
 
     n = length(arglist);
     if(n == 3){
@@ -2706,13 +2705,13 @@ int b_ifthenelse(int arglist, int rest){
         if(variablep(arg3))
             error(INSTANTATION_ERR,"ifthenelse ",arg3);    
 
+        save = sp;
         if(prove_all(arg1,sp,0) == YES){
-            if(prove_all(arg2,sp,0) == YES)
-                return(prove_all(rest,sp,0));
+            return(prove_all(arg2,sp,0));
         }
         else{
-            if(prove_all(arg3,sp,0) == YES)
-                return(prove_all(rest,sp,0));
+            unbind(save);
+            return(prove_all(arg3,sp,0));
         }
     }
     return(NO);
