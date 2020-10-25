@@ -694,6 +694,7 @@ int b_seen(int arglist, int rest);
 int b_set_input(int arglist, int rest);
 int b_set_output(int arglist, int rest);
 int b_shell(int arglist, int rest);
+int b_skip(int arglist, int rest);
 int b_smaller(int arglist, int rest);
 int b_sort(int arglist, int rest);
 int b_spy(int arglist, int rest);

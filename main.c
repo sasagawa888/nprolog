@@ -96,7 +96,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"delete"},{"rename"},
 {"op"},{"!"},{"assert"},{"asserta"},{"assertz"},
 {"abolish"},{"read"},{"write"},{"put"},{"get"},{"get0"},{"get0_noecho"},{"nl"},
-{"read_line"},{"reset_op"},
+{"read_line"},{"reset_op"},{"skip"},
 {"tab"},{"fail"},{"not"},{"true"},{"halt"},{"abort"},
 {"listing"},{"functor"},{"arg"},
 {"writeq"},{"display"},{"ref"},

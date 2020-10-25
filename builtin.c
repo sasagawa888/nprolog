@@ -1,3 +1,4 @@
+#include <stdio_ext.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>
@@ -125,6 +126,7 @@ void initbuiltin(void){
     defbuiltin("seeing",b_seeing);
     defbuiltin("seen",b_seen);
     defbuiltin("shell",b_shell);
+    defbuiltin("skip",b_skip);
     defbuiltin("sort",b_sort);
     defbuiltin("stdin",b_stdin);
     defbuiltin("stdinout",b_stdinout);
@@ -824,7 +826,7 @@ int b_read(int arglist, int rest){
         
         save = input_stream;   
         input_stream = arg1;
-
+        
         temp = variable_to_call(readparse());
         res = unify(arg2,temp);
         input_stream = save;
@@ -838,10 +840,15 @@ int b_read_line(int arglist, int rest){
     char str[STRSIZE],c;
 
     n = length(arglist);
-    if(n == 2){
+    if(n == 1){
+        arg1 = input_stream;
+        arg2 = car(arglist);
+        goto read_line;
+    }
+    else if(n == 2){
         arg1 = car(arglist);
         arg2 = cadr(arglist);
-        
+        read_line:
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"read_line ",arg1);
         if(!streamp(arg1) && !aliasp(arg1))
@@ -863,6 +870,43 @@ int b_read_line(int arglist, int rest){
         res = unify(arg2,makeconst(str));
         input_stream = save;
         return(res);
+    }
+    return(NO);
+}
+
+
+int b_skip(int arglist, int rest){
+    int n,arg1,arg2,save;
+    char c,str[STRSIZE];
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = standard_input;
+        arg2 = car(arglist);
+        goto skip;
+    }
+    else if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        skip:
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"skip ",arg1);
+        if(!streamp(arg1) && !aliasp(arg1))
+            error(NOT_STREAM,"skip",arg1);
+        if(streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
+            error(NOT_INPUT_STREAM,"skip ", arg1);
+        
+        save = input_stream;   
+        input_stream = arg1;
+
+        do{
+            c = readc();
+            str[0] = c;
+            str[1] = 0;
+        }while(strcmp(str,GET_NAME(arg2)) != 0 && c != EOF);
+
+        input_stream = save;
+        return(YES);
     }
     return(NO);
 }
@@ -1041,7 +1085,7 @@ int b_open(int arglist, int rest){
                 unify(arg1,stream);
                 return(YES);
             }
-            error(NOT_OPEN_OPTION,"open ", arg2);
+            error(NOT_OPEN_OPTION,"open ", arg3);
         }
     }
     return(NO);
