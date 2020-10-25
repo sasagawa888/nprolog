@@ -105,7 +105,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"var"},{"nonvar"},{"atomic"},{"list"},{"gc"},{"time"},{"name"},{"bounded"},
 {"flush"},{"date"},{"date_day"},
 {"string"},{"string_chars"},{"string_codes"},{"ground"},
-{"concat"},{"substring"},{"string_term"},
+{"concat"},{"substring"},{"string_term"},{"float_text"},
 {"inc"},{"dec"},{"compare"},{"in"},{"out"},
 {"mkdir"},{"rmdir"},{"chdir"},{"string_length"},
 {"sort"},{"keysort"},{"length"},{"shell"},{"measure"},{"syntaxerrors"},

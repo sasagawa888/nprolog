@@ -78,6 +78,7 @@ void initbuiltin(void){
     defbuiltin("fail",b_fail);
     defbuiltin("flush",b_flush_output);
     defbuiltin("float",b_real);
+    defbuiltin("float_text",b_float_text);
     defbuiltin("functor",b_functor);
     defbuiltin("gc",b_gbc);
     defbuiltin("get",b_get);
@@ -2596,6 +2597,37 @@ int b_substring(int arglist, int rest){
     return(NO);
 }
 
+
+int b_float_text(int arglist, int rest){
+    int n,arg1,arg2,arg3;
+    char str[STRSIZE];
+    double flt;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        arg3 = caddr(arglist);
+
+        if(!wide_variable_p(arg1) && !floatp(arg1))
+            error(NOT_FLT,"float_text ",arg1);
+        if(!wide_variable_p(arg2) && !stringp(arg2))
+            error(NOT_STR,"float_text ",arg2);
+        if(!stringp(arg3))
+            error(NOT_STR,"float_text ",arg3);
+
+        if(floatp(arg1)){
+            sprintf(str,GET_NAME(arg3),GET_FLT(arg1));
+            return(unify(arg2,makeconst(str)));
+        }
+        else if(stringp(arg2)){
+            flt = atof(GET_NAME(arg2));
+            return(unify(arg1,makeflt(flt)));
+        }
+        return(NO);
+    }
+    return(NO);
+}
 
 //controle
 int b_cut(int arglist, int rest){

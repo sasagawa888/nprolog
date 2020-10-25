@@ -134,6 +134,7 @@ eq/2
 expand_term/2
 fail/0
 float/1
+float_text/3
 flush/0 
 gc/0
 get/1

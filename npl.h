@@ -619,6 +619,7 @@ int b_errorcode(int arglist, int rest);
 int b_fail(int arglist, int rest);
 int b_findatom(int arglist, int rest);
 int b_filename(int arglist, int rest);
+int b_float_text(int arglist, int rest);
 int b_flush_output(int arglist, int rest);
 int b_functor(int arglist, int rest);
 int b_gbc(int arglist, int rest);
