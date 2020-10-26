@@ -235,18 +235,20 @@ int b_length(int arglist, int rest){
 
 //compiled predicate
 int b_repeat(int arglist, int rest){
-    int n,save1,save2;
+    int n,save1,save2,save3;
 
-    save1 = sp;
-    save2 = wp;
+    save1 = wp;
+    save2 = sp;
+    save3 = ac;
     n = length(arglist);
     if(n == 0){
         loop:
         if(prove_all(rest,sp,0) == YES){
             return(YES);
         }
-    unbind(save1);
-    wp = save2;
+    wp = save1;
+    unbind(save2);
+    ac = save3;
     goto loop;
     }
     return(NO);
