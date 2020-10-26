@@ -69,6 +69,7 @@ int colon_sets_calling_context_flag = 1; //1=true, 0=false
 int prefix_flag = 0;   //for parser 0=not prefix, 1=prefix
 int syntax_flag = YES;   //syntaxerrors/2 YES=normal. NO=ignore syntax-errors
 int string_term_flag = 0; //for string_term/2 0=normal, 1=readparse from string_term_buffer
+int ctrl_c_flag = 0;      //for ctrl_c  to stop prove
 
 //operator token
 char operator[OPERATOR_NUMBER][5] = {
@@ -209,12 +210,10 @@ int main(int argc, char *argv[]){
             b_consult(list1(makeconst(argv[opt])),NIL);
             opt++;
         }
-        #if __linux
         else if(strcmp(argv[opt],"-r") == 0){
             repl_flag = 0;
             opt++;
         }
-        #endif
         else{
             printf("Wrong option %s\n", argv[opt]);
             printf("-c consult prolog code\n");
@@ -246,8 +245,7 @@ int main(int argc, char *argv[]){
 }
 
 void reset(int i){
-    printf("ctrl+C\n");
-    longjmp(buf,1);
+    ctrl_c_flag = 1;
 }
 
 void init_repl(void){
@@ -260,6 +258,7 @@ void init_repl(void){
     unbind(0);
     sp = 0;
     cut_flag = 0;
+    ctrl_c_flag = 0;
     //initialize variant variable
     for(i=0; i<VARIANTSIZE; i++){
         variant[i] = UNBIND;
@@ -389,6 +388,10 @@ int prove(int goal, int bindings, int rest, int n){
     proof++;
     if(n > 18000)
         error(RESOURCE_ERR,"",NIL);
+    if(ctrl_c_flag == 1){
+        printf("ctrl+C\n\n");
+        longjmp(buf,1);
+    }
 
     goal = deref(goal);
     
