@@ -383,7 +383,7 @@ int prove_all(int goals, int bindings, int n){
 }
 
 int prove(int goal, int bindings, int rest, int n){
-    int clause,clauses,clause1,varlis,save;
+    int clause,clauses,clause1,varlis,save1,save2;
 
     proof++;
     if(n > 18000)
@@ -444,7 +444,8 @@ int prove(int goal, int bindings, int rest, int n){
             error(EXISTENCE_ERR,"", goal);
 
         while(!nullp(clauses)){
-            save = wp;
+            save1 = wp;
+            save2 = ac;
             clause = car(clauses);
             clauses = cdr(clauses);
             varlis = GET_VAR(clause);
@@ -491,7 +492,8 @@ int prove(int goal, int bindings, int rest, int n){
                 printf("(%d) REDO: ", n); print(goal);
                 debugger(goal,bindings,rest,n);
             }
-            wp = save;
+            wp = save1;
+            ac = save2;
             unbind(bindings);
         }
         //trace
