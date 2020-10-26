@@ -235,9 +235,10 @@ int b_length(int arglist, int rest){
 
 //compiled predicate
 int b_repeat(int arglist, int rest){
-    int n,save1;
+    int n,save1,save2;
 
     save1 = sp;
+    save2 = wp;
     n = length(arglist);
     if(n == 0){
         loop:
@@ -245,6 +246,7 @@ int b_repeat(int arglist, int rest){
             return(YES);
         }
     unbind(save1);
+    wp = save2;
     goto loop;
     }
     return(NO);
@@ -3785,6 +3787,7 @@ int b_reverse(int arglist, int rest){
     }
     return(NO);
 }
+
 
 int b_between(int arglist, int rest){
     int n,arg1,arg2,arg3,save1,save2,save3,low,high;

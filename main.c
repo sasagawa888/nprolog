@@ -501,7 +501,7 @@ int prove(int goal, int bindings, int rest, int n){
     else if(disjunctionp(goal)){
         if(ifthenp(cadr(goal))){
             goal = wcons(IFTHENELSE,wcons(cadr(cadr(goal)),wcons(caddr(cadr(goal)),wcons(caddr(goal),NIL))));
-            // redefine goal = ifthen(if,then,else)
+            // redefine goal = ifthenelse(if,then,else)
             return(prove(goal,bindings,rest,n));
         }
         else if(prove_all(addtail_body(rest,cadr(goal)),bindings,n) == YES)
