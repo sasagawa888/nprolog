@@ -57,7 +57,6 @@ int simp_flag = 1;
 int assert_flag = 0; // 0=asserta, 1=assertz
 int debug_flag = OFF;  // 0=normal mode, 1=debug mode
 int sexp_flag = 0;
-int cut_flag = 0;
 int arguments_flag = 1; //1= 1,2,3 -> (1,2,3) 0= 1,2,3 -> 1,2,3
 int mode_flag = 1;  // 0=SJIS, 1=Unicod
 int quoted_flag = 1; // 0=not print ' 1=print '
@@ -257,7 +256,6 @@ void init_repl(void){
     wp = HEAPSIZE+1;
     unbind(0);
     sp = 0;
-    cut_flag = 0;
     ctrl_c_flag = 0;
     //initialize variant variable
     for(i=0; i<VARIANTSIZE; i++){
@@ -520,11 +518,10 @@ int prove(int goal, int bindings, int rest, int n){
             // redefine goal = ifthenelse(if,then,else)
             return(prove(goal,bindings,rest,n));
         }
-        else if(prove_all(addtail_body(rest,cadr(goal)),bindings,n) == YES)
+        else if((res=prove_all(addtail_body(rest,cadr(goal)),bindings,n)) == YES)
             return(YES);
         else{
-            if(cut_flag == 1){
-                cut_flag = 0;
+            if(res == FALSE){
                 unbind(bindings);
                 return(NO);
             }
