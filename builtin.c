@@ -2324,11 +2324,6 @@ int b_clause(int arglist, int rest){
                 if(prove_all(rest,sp,0) == YES)
                     return(YES);
             }
-            else if(predicatep(clause) && unify(arg1,copy) == YES &&
-                unify(arg2,OPLTRUE) == YES){
-                if(prove_all(rest,sp,0) == YES)
-                    return(YES);
-            }
             wp = save1;
             unbind(save2);
         }
@@ -2680,7 +2675,7 @@ int b_ifthen(int arglist, int rest){
             error(INSTANTATION_ERR,"ifthen ",arg2);
 
         if(prove_all(arg1,sp,0) == YES){
-            return(prove_all(addtail_body(rest,arg2),sp,0));
+            return(prove_all(arg2,sp,0));
         }
         else{
             unbind(save1);

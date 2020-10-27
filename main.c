@@ -359,6 +359,7 @@ void addtail_body1(int x, int y){
 */
 
 int prove_all(int goals, int bindings, int n){
+    int res;
 
     if(nullp(goals))
         return(YES);
@@ -369,11 +370,13 @@ int prove_all(int goals, int bindings, int n){
             return(prove(cadr(goals),bindings,caddr(goals),n));
         }
         else{
-            if(conjunctionp(goals) && cadr(goals) == CUT)
-                cut_flag = 1;
-        
-            if(prove_all(before_cut(goals),bindings,n) == YES)
-                return(prove_all(after_cut(goals),sp,n));
+            if(prove_all(before_cut(goals),bindings,n) == YES){
+                res = prove_all(after_cut(goals),sp,n);
+                if(res == YES)
+                    return(YES);
+                else if(res == NO)
+                    return(FALSE);
+            }
             else
                 return(NO);
         }
@@ -383,7 +386,7 @@ int prove_all(int goals, int bindings, int n){
 }
 
 int prove(int goal, int bindings, int rest, int n){
-    int clause,clauses,clause1,varlis,save1,save2;
+    int clause,clauses,clause1,varlis,save1,save2,res;
 
     proof++;
     if(n > 18000)
@@ -476,13 +479,21 @@ int prove(int goal, int bindings, int rest, int n){
             else{
                 if(unify(goal,(cadr(clause1))) == YES){
                     clause1 = addtail_body(rest,caddr(clause1));
-                    if(prove_all(clause1,sp,n+1) == YES){
+                    if((res=prove_all(clause1,sp,n+1)) == YES){
                         //trace
                         if(debug_flag == ON && trace_flag == FULL && spypointp(goal)){
                             printf("(%d) EXIT: ", n); print(goal);
                             debugger(goal,bindings,rest,n);
                         }
                         return(YES);
+                    }
+                    else{
+                        if(res == FALSE){ // when after cut occurs NO
+                            wp = save1;
+                            ac = save2;
+                            unbind(bindings);
+                            return(NO);
+                        }
                     }
                 }
             }

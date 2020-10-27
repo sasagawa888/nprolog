@@ -1,7 +1,13 @@
 /*
 written by M.Hiroi
 Thanks 
+
+?- solve(0x1ffffff).
 */
+
+between1(L, H, L) :- L =< H.
+between1(L, H, V) :- L < H, L1 is L + 1, between1(L1, H, V).
+
 pattern(0, 0x0000023). pattern(1, 0x0000047). pattern(2, 0x000008e). pattern(3, 0x000011c).
 pattern(4, 0x0000218). pattern(5, 0x0000461). pattern(6, 0x00008e2). pattern(7, 0x00011c4).
 pattern(8, 0x0002388). pattern(9, 0x0004310). pattern(10, 0x0008c20). pattern(11, 0x0011c40).
@@ -11,10 +17,9 @@ pattern(20, 0x0308000). pattern(21, 0x0710000). pattern(22, 0x0e20000). pattern(
 pattern(24, 0x1880000).
 
 solve(Board) :-
-    between(0, 31, N),
+    between1(0, 31, N),
     push_button(N, 0, Board, NewBoard),
     clear_light(5, NewBoard, Result, N, PushPattern),
-    write(Result),nl,
     Result == 0,
     print_answer(PushPattern).
 
@@ -45,7 +50,7 @@ clear_light(N, Board, Result, Push, PushResult) :-
 
 print_answer(PushPattern) :-
     nl,
-    between(0, 24, N),
+    between1(0, 24, N),
     ((PushPattern /\ (1 << N)) > 0 -> write('1') ; write('0')),
     M is N mod 5,
     (M == 4 -> nl),
