@@ -173,7 +173,7 @@ int ed_incomment = -1; /*...*/
 int main(int argc, char *argv[]){
     int opt;
 
-    printf("N-Prolog Ver 1.2\n");
+    printf("N-Prolog Ver 1.3\n");
     signal(SIGINT,reset);
     initcell();
     initbuiltin();
