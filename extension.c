@@ -786,11 +786,11 @@ int b_timer_microseconds(int arglist, int rest){
         arg1 = car(arglist);
 
         if(arg1 == TIMERON)
-            micro_second = getETime();
+            timer = getETime();
         else if(arg1 == TIMEROFF)
-            micro_second = getETime() - micro_second;
+            timer = getETime() - timer;
         else if(variablep(arg1))
-            unify(arg1,makeflt(micro_second));
+            unify(arg1,makeflt(timer));
         else
             error(ILLEGAL_ARGS,"timer_microseconds ",arg1);
 
