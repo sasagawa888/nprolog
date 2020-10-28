@@ -1,9 +1,11 @@
 /*
-initialization/1 test0
+auto run test
 */
 
-:- initialization(main).
 
 main :-
-    write(test_hello).
+    write(test_hello),
+    nl.
+
+:- main.
     
