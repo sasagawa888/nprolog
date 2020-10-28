@@ -1,3 +1,9 @@
+/*
+  dice puzzle
+
+?- solve.
+*/
+
 
 data([[1,4,1,3,6,3,1,4,6,6,2,1,5,6,2,1,1,4],
       [5,4,2,4,5,5,5,5,5,3,2,3,5,4,2,3,5,5],
@@ -41,7 +47,7 @@ diceR([F,B,U,D,L,R],[L,R,U,D,B,F]).
 %initial dice
 dice([1,6,5,2,4,3]).
 
-solve :- abolish(arrive/3),dice(X),solve1(0,0,X,[]).
+solve :- abolish(arrive/3),assert(arrive(-1,-1,-1)),dice(X),solve1(0,0,X,[]).
 
 solve1(17,17,X,Root) :- write(Root).
 
