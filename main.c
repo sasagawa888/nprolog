@@ -375,7 +375,7 @@ int prove_all(int goals, int bindings, int n){
                 if(res == YES)
                     return(YES);
                 else if(res == NO)
-                    return(FALSE);
+                    return(NPLFALSE);
             }
             else
                 return(NO);
@@ -488,7 +488,7 @@ int prove(int goal, int bindings, int rest, int n){
                         return(YES);
                     }
                     else{
-                        if(res == FALSE){ // when after cut occurs NO
+                        if(res == NPLFALSE){ // when after cut occurs NO
                             wp = save1;
                             ac = save2;
                             unbind(bindings);
@@ -523,7 +523,7 @@ int prove(int goal, int bindings, int rest, int n){
         else if((res=prove_all(addtail_body(rest,cadr(goal)),bindings,n)) == YES)
             return(YES);
         else{
-            if(res == FALSE){
+            if(res == NPLFALSE){
                 unbind(bindings);
                 return(NO);
             }
