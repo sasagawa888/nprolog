@@ -27,7 +27,6 @@ int reconsult_list = NIL;
 int execute_list = NIL;
 int op_list = NIL;
 int record_list = NIL;
-int init_list = NIL;
 int error_code = 0;
 int unread = NIL;     //for parse
 int paren_nest = 0;   //for parse check ((()))
@@ -115,7 +114,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"ansi_cup"},{"ansi_cpr"},{"ansi_scp"},{"ansi_rcp"},
 {"ansi_ed"},{"ansi_el"},{"errorcode"},
 {"recordh"},{"recorda"},{"recordz"},{"instance"},{"removeallh"},
-{"stdin"},{"stdout"},{"stdinout"},{"initialization"},
+{"stdin"},{"stdout"},{"stdinout"},
 {"ctr_set"},{"ctr_dec"},{"ctr_inc"},{"ctr_is"}
 };
 

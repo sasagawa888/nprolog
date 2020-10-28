@@ -12,7 +12,7 @@ On Raspberry Pi type "make raspi" on terminal.
 see https://www.youtube.com/watch?v=IJTj8VRxUHc&fbclid=IwAR1KLf1ytyTlGX26dEzYru83Wu679HvKi-v87MdtIS_cvRM9Qr4wZZW3wD4
 
 # invoke
-To invoke opl, enter command from terminal
+To invoke npl, enter command from terminal
 
 ```
 ./npl
@@ -212,7 +212,6 @@ ground/1
 member/2
 measure/1   (measure elapsed time)
 reverse/2 
-initialization/1 (same as ISO-Prolog)
 ```
 
 # wiringPi 

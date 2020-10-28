@@ -92,7 +92,6 @@ void initbuiltin(void){
     defbuiltin("ifthen",b_ifthen);
     defbuiltin("ifthenelse",b_ifthenelse);
     defbuiltin("inc",b_inc);
-    defbuiltin("initialization",b_initialization);
     defbuiltin("instance",b_instance);
     defbuiltin("integer",b_integer);
     defbuiltin("keysort",b_keysort);
@@ -1323,10 +1322,6 @@ int b_consult(int arglist, int rest){
         input_stream = save;
 
         exit:
-        while(!nullp(init_list)){
-            b_call(wlist1(car(init_list)),NIL);
-            init_list = cdr(init_list);
-        }
         return(YES);
     }
     return(NO);
@@ -1410,10 +1405,6 @@ int b_reconsult(int arglist, int rest){
         input_stream = save;
 
         exit:
-        while(!nullp(init_list)){
-            b_call(wlist1(car(init_list)),NIL);
-            init_list = cdr(init_list);
-        }
         return(YES);
     }
     return(NO);
@@ -3834,21 +3825,6 @@ int b_between(int arglist, int rest){
         unbind(save2);
         ac = save3;
         return(NO);
-    }
-    return(NO);
-}
-
-int b_initialization(int arglist, int rest){
-	int n,arg1;
-
-    n = length(arglist);
-    if(n == 1){
-    	arg1 = car(arglist);
-        if(!callablep(arg1))
-            error(NOT_CALLABLE,"initialization ",arg1);
-
-        init_list = cons(arg1,init_list);
-        return(YES);
     }
     return(NO);
 }
