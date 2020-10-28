@@ -4,6 +4,7 @@ LIBS = -lm -ldl
 LIBSRASPI = -lm -ldl -lwiringPi
 INCS =  
 CFLAGS = $(INCS) -Wall -O3 
+DEST = /usr/local/bin
 
 NPL = npl
 
@@ -28,6 +29,10 @@ $(NPL): $(NPL_OBJS)
 
 raspi:	$(NPL_OBJS)
 	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBSRASPI) 
+
+install:	$(NPL)
+			install -s $(NPL) $(DEST)
+			install -s library $(DEST)
 		
 %.o: %.c npl.h
 	$(CC) -c $< -o $@ $(CFLAGS)
