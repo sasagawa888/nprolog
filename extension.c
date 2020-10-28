@@ -777,6 +777,29 @@ int b_delay_microseconds(int arglist, int rest){
     }
     return(NO);
 }
+
+int b_timer_microseconds(int arglist, int rest){
+    int n,arg1;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = car(arglist);
+
+        if(arg1 == TIMERON)
+            micro_second = getETime();
+        else if(arg1 == TIMEROFF)
+            micro_second = getETime() - micro_second;
+        else if(variablep(arg1))
+            unify(arg1,makeflt(micro_second));
+        else
+            error(ILLEGAL_ARGS,"timer_microseconds ",arg1);
+
+        return(YES);
+    }
+    return(NO);
+}
+
+
 #endif
 
 

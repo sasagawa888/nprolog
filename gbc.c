@@ -120,6 +120,9 @@ void gbcmark(void){
     //mark record
     markcell(record_list);
 
+    //mark initialization
+    markcell(init_list);
+
 }
 
 void gbcsweep(void){

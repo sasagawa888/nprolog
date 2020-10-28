@@ -27,6 +27,7 @@ int reconsult_list = NIL;
 int execute_list = NIL;
 int op_list = NIL;
 int record_list = NIL;
+int init_list = NIL;
 int error_code = 0;
 int unread = NIL;     //for parse
 int paren_nest = 0;   //for parse check ((()))
@@ -38,6 +39,7 @@ int cursor_prop = 0;
 int cursor_row_store = 0;
 int cursor_col_store = 0;
 int cursor_prop_store = 0;
+double timer;  // for timer_microseconds/1
 
 
 
@@ -113,7 +115,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"ansi_cup"},{"ansi_cpr"},{"ansi_scp"},{"ansi_rcp"},
 {"ansi_ed"},{"ansi_el"},{"errorcode"},
 {"recordh"},{"recorda"},{"recordz"},{"instance"},{"removeallh"},
-{"stdin"},{"stdout"},{"stdinout"},
+{"stdin"},{"stdout"},{"stdinout"},{"initialization"},
 {"ctr_set"},{"ctr_dec"},{"ctr_inc"},{"ctr_is"}
 };
 
@@ -130,7 +132,7 @@ char extended[EXTENDED_NUMBER][30] = {
 {"wiringpi_setup_gpio"},{"wiringpi_spi_setup"},{"pwm_set_mode"},
 {"pwm_set_clock"},{"pwm_set_range"},{"pin_mode"},{"digital_write"},
 {"pwm_write"},{"pull_up_dn_control"},{"digital_read"},{"delay"},{"delay_microseconds"},
-{"compile_file"},
+{"compile_file"},{"timer_microseconds"}
 };
 
 
@@ -158,7 +160,7 @@ int ed_rbracket_row;
 int ed_rbracket_col;
 char ed_candidate[30][30];
 int ed_candidate_pt;
-int ed_operator_color = 3;   //default yellow
+int ed_operator_color = 5;   //default magenta
 int ed_builtin_color = 6;  //default cyan
 int ed_extended_color = 1; //default red
 int ed_quote_color = 3;   //default yellow

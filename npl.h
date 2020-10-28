@@ -26,30 +26,32 @@ address
 #define BUILTIN_NUMBER 200
 #define COMPILED_NUMBER 23
 #define EXTENDED_NUMBER  20
-#define NIL     0
-#define YES     2
-#define NO      4
-#define FEND    6
-#define UNDEF   8
-#define CUT     10
-#define AND     12
-#define OR      14
+#define NIL         0
+#define YES         2
+#define NO          4
+#define FEND        6
+#define UNDEF       8
+#define CUT         10
+#define AND         12
+#define OR          14
 #define LEFTPAREN   16
 #define RIGHTPAREN  18
-#define CALL    20
-#define QUEST	22
-#define ANOYVAR 24
-#define DEFINE  26
-#define ATMARK  28
-#define COLON   30
-#define TRUE    32
-#define FALSE    34
-#define CURL    36
-#define IFTHEN  38
+#define CALL        20
+#define QUEST	    22
+#define ANOYVAR     24
+#define DEFINE      26
+#define ATMARK      28
+#define COLON       30
+#define TRUE        32
+#define FALSE       34
+#define CURL        36
+#define IFTHEN      38
 #define IFTHENELSE  40
 #define UNDERBAR    42
-#define DOTOBJ  44
-#define DCG   46
+#define DOTOBJ      44
+#define DCG         46
+#define TIMERON     48
+#define TIMEROFF    50
 #define HASHTBSIZE 107
 #define BIGNUM_BASE 1000000000
 #define SMALL_INT_MAX       1000000000
@@ -148,6 +150,7 @@ extern int reconsult_list;
 extern int execute_list;
 extern int op_list;
 extern int record_list;
+extern int init_list;
 extern int error_code;
 extern int proof;
 extern int parse_mode;
@@ -166,6 +169,7 @@ extern char function[FUNCTION_NUMBER][12];
 extern char builtin[BUILTIN_NUMBER][30];
 extern char compiled[COMPILED_NUMBER][30];
 extern char extended[EXTENDED_NUMBER][30];
+extern double timer;
 
 //stream
 extern int standard_input;
@@ -638,6 +642,7 @@ int b_halt(int arglist, int rest);
 int b_inc(int arglist, int rest);
 int b_ifthen(int arglist, int rest);
 int b_ifthenelse(int arglist, int rest);
+int b_initialization(int arglist, int rest);
 int b_instance(int arglist, int rest);
 int b_integer(int arglist, int rest);
 int b_is(int arglist, int rest);
@@ -1175,6 +1180,7 @@ int b_pull_up_dn_control(int arglist, int rest);
 int b_digital_read(int arglist, int rest);
 int b_delay(int arglist, int rest);
 int b_delay_microseconds(int arglist, int rest);
+int b_timer_microseconds(int arglist, int rest);
 #endif
 
 // edit 

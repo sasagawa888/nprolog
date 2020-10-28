@@ -87,9 +87,12 @@ void display_buffer(){
                 while(buffer[col][0] != ' ' &&
                       buffer[col][0] != '(' &&
                       buffer[col][0] != ')' &&
+                      buffer[col][0] != '[' &&
+                      buffer[col][0] != ']' &&
                       buffer[col][0] != ',' &&
                       buffer[col][0] != ';' &&
                       buffer[col][0] != '.' &&
+                      buffer[col][0] != '\'' &&
                       buffer[col][0] != NUL &&
                       buffer[col][0] != EOL){
                         printf("%c", buffer[col][0]);
@@ -104,6 +107,8 @@ void display_buffer(){
                     while(buffer[col][0] != ' ' &&
                           buffer[col][0] != '(' &&
                           buffer[col][0] != ')' &&
+                          buffer[col][0] != '[' &&
+                          buffer[col][0] != ']' &&
                           buffer[col][0] != ',' &&
                           buffer[col][0] != ';' &&
                           buffer[col][0] != '.' &&
@@ -148,6 +153,8 @@ void display_buffer(){
                    while(buffer[col][0] != ' ' &&
                           buffer[col][0] != '(' &&
                           buffer[col][0] != ')' &&
+                          buffer[col][0] != '[' &&
+                          buffer[col][0] != ']' &&
                           buffer[col][0] != ',' &&
                           buffer[col][0] != ';' &&
                           buffer[col][0] != '.' &&
