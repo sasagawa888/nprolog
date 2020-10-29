@@ -32,7 +32,7 @@ raspi:	$(NPL_OBJS)
 
 install:	$(NPL)
 			install -s $(NPL) $(DEST)
-			install -s library $(DEST)
+
 		
 %.o: %.c npl.h
 	$(CC) -c $< -o $@ $(CFLAGS)
