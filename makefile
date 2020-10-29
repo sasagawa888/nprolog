@@ -23,15 +23,18 @@ NPL_OBJS = main.o \
 	edit.o
 
 all: $(NPL_OBJS) $(NPL)
+	install  $(NPL) $(DEST)
 
 $(NPL): $(NPL_OBJS)
 	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBS) 
+	
 
 raspi:	$(NPL_OBJS)
 	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBSRASPI) 
+	install  $(NPL) $(DEST)
 
 install:	$(NPL)
-			install -s $(NPL) $(DEST)
+			install  $(NPL) $(DEST)
 
 		
 %.o: %.c npl.h
