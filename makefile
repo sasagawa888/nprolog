@@ -22,19 +22,23 @@ NPL_OBJS = main.o \
 	compute.o \
 	edit.o
 
-all: $(NPL_OBJS) $(NPL)
-	install  $(NPL) $(DEST)
 
+
+
+ifeq  ($(shell uname -n),raspberrypi)
+all: $(NPL_OBJS) $(NPL)
+$(NPL): $(NPL_OBJS)
+	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBSRASPI) 
+else
+all: $(NPL_OBJS) $(NPL)
 $(NPL): $(NPL_OBJS)
 	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBS) 
-	
+endif
 
-raspi:	$(NPL_OBJS)
-	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBSRASPI) 
+
+
+install: $(NPL)
 	install  $(NPL) $(DEST)
-
-install:	$(NPL)
-			install  $(NPL) $(DEST)
 
 		
 %.o: %.c npl.h
