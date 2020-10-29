@@ -5,9 +5,10 @@ N-Prolog is NOT ISO-Prolog.
 About Arity/prolog32  see  http://petergabel.info/ArityProlog32/ArityProlog32PredList/
 
 ## Installation
-On Linux  type "sudo make" on terminal.
+On Linux  type "make" on terminal. and type "sudo make install" on terminal. 
 
-On Raspberry Pi type "sudo make raspi" on terminal.
+## Uninstall
+On Linux type "sudo make uninstall" ont terminal.
 
 see https://www.youtube.com/watch?v=IJTj8VRxUHc&fbclid=IwAR1KLf1ytyTlGX26dEzYru83Wu679HvKi-v87MdtIS_cvRM9Qr4wZZW3wD4
 

@@ -38,8 +38,10 @@ endif
 
 
 install: $(NPL)
-	install  $(NPL) $(DEST)
+	install -s  $(NPL) $(DEST)
 
+uninstall:
+	rm $(DEST)/npl
 		
 %.o: %.c npl.h
 	$(CC) -c $< -o $@ $(CFLAGS)
