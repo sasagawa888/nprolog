@@ -7,10 +7,11 @@ About Arity/prolog32  see  http://petergabel.info/ArityProlog32/ArityProlog32Pre
 ## Installation
 On Linux  type "make" on terminal. and type "sudo make install" on terminal. 
 
+see https://www.youtube.com/watch?v=36vUd8ThMF0
+
 ## Uninstall
 On Linux type "sudo make uninstall" ont terminal.
 
-see https://www.youtube.com/watch?v=IJTj8VRxUHc&fbclid=IwAR1KLf1ytyTlGX26dEzYru83Wu679HvKi-v87MdtIS_cvRM9Qr4wZZW3wD4
 
 # invoke
 To invoke npl, enter command from terminal
