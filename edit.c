@@ -562,6 +562,12 @@ void find_candidate_buffer(int col){
                         ed_candidate_pt++;
         }
     }
+    for(i=0;i<COMPILED_NUMBER;i++){
+        if(strstr(compiled[i],str) !=NULL && compiled[i][0] == str[0]){
+            strcpy(ed_candidate[ed_candidate_pt],compiled[i]);
+                        ed_candidate_pt++;
+        }
+    }
     for(i=0;i<EXTENDED_NUMBER;i++){
         if(strstr(extended[i],str) !=NULL && extended[i][0] == str[0]){
             strcpy(ed_candidate[ed_candidate_pt],extended[i]);
