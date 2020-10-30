@@ -16,6 +16,9 @@ bar(N) :-
     N1 is N-1,
     bar(N1).
 
+my_member(X, [X | Ls]).
+my_member(X, [Y | Ls]) :- my_member(X, Ls).
+
 myappend([],L,L) :- !.
 myappend([A|L],B, [A|C]):-
 	myappend(L,B,C).

@@ -444,7 +444,7 @@ int prove(int goal, int bindings, int rest, int n){
         
         if(clauses == NIL)
             error(EXISTENCE_ERR,"", goal);
-
+    
         while(!nullp(clauses)){
             save1 = wp;
             save2 = ac;
@@ -456,21 +456,23 @@ int prove(int goal, int bindings, int rest, int n){
             release_variant(varlis);
             
             // case of predicate
-            if(predicatep(clause1) && unify(goal,clause1) == YES){
-                if(prove_all(rest,sp,n+1) == YES){
-                    //trace
-                    if(debug_flag == ON && trace_flag != OFF && spypointp(goal)){
-                        printf("(%d) EXIT: ", n); print(goal);
-                        debugger(goal,bindings,rest,n);
+            if(predicatep(clause1)){
+                if(unify(goal,clause1) == YES){
+                    if(prove_all(rest,sp,n+1) == YES){
+                        //trace
+                        if(debug_flag == ON && trace_flag != OFF && spypointp(goal)){
+                            printf("(%d) EXIT: ", n); print(goal);
+                            debugger(goal,bindings,rest,n);
+                        }
+                        return(YES);
                     }
-                    return(YES);
-                }
-                else{
-                    //trace
-                    if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT) && 
-                        spypointp(goal)){
-                        printf("(%d) FAIL: ", n); print(goal);
-                        debugger(goal,bindings,rest,n);
+                    else{
+                        //trace
+                        if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT) && 
+                            spypointp(goal)){
+                            printf("(%d) FAIL: ", n); print(goal);
+                            debugger(goal,bindings,rest,n);
+                        }
                     }
                 }
             }
