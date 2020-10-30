@@ -217,9 +217,7 @@ reverse/2
 ```
 
 # wiringPi 
-On paspberry PI, on terminal enter "make raspi".
-As a result, N-Prolog includes builtin predicates of WiringPi. 
-
+On paspberry PI, N-Prolog includes builtin predicates of WiringPi. 
 
 ```
 N-Prolog <==================================> C

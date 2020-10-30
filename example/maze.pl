@@ -1,6 +1,5 @@
 /*
   dice puzzle
-  RAM 1981 9   kousaidou syuppan
 
 ?- solve.
 see https://qiita.com/sym_num/items/bc8bfb67fde98ce3787d
