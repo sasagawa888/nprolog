@@ -2218,13 +2218,13 @@ int b_retract(int arglist, int rest){
                 else if(clausep(arg1))
                     SET_CAR(car(cadr(arg1)),append(listreverse(new_clauses),clauses));
 
-                //if(proceed(NIL,nest) == YES)
-                //    return(YES);
-                //else
-                //    goto next;
+                if(prove_all(rest,sp,0) == YES)
+                    return(YES);
+                else
+                    goto next;
             }
             new_clauses = cons(clause,new_clauses);
-            
+            next:
             wp = save1;
             unbind(save2);
         }
