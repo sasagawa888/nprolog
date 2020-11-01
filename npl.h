@@ -153,6 +153,8 @@ extern int record_list;
 extern int error_code;
 extern int proof;
 extern int parse_mode;
+extern int left_margin;
+extern int break_nest;
 extern int line;
 extern int column;
 extern int cursor_row;

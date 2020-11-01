@@ -5,7 +5,6 @@
 #include <unistd.h>
 #include "npl.h"
 
-#define LEFTPOS  4
 
 //----editor----
 void setcolor(int n){
@@ -41,7 +40,7 @@ int getch(){
 void display_buffer(){
     int col,type;
 
-    ESCMVLEFT(LEFTPOS);
+    ESCMVLEFT(left_margin);
     ESCCLSL;
     col = 0;
 
@@ -391,17 +390,17 @@ void emphasis_rparen_buffer(int col){
     if(pos < 0)
         return;
 
-    ESCMVLEFT(count_col_buffer(col)+LEFTPOS);
+    ESCMVLEFT(count_col_buffer(col)+left_margin);
     ESCBCYAN;
     printf("(");
     ESCBORG;
-    ESCMVLEFT(count_col_buffer(pos)+LEFTPOS);
+    ESCMVLEFT(count_col_buffer(pos)+left_margin);
     ESCBCYAN;
     printf(")");
     ESCBORG;
     ed_rparen_col = pos;
     ed_lparen_col = col;
-    ESCMVLEFT(count_col_buffer(col)+LEFTPOS);
+    ESCMVLEFT(count_col_buffer(col)+left_margin);
 }
 
 
@@ -415,17 +414,17 @@ void emphasis_lparen_buffer(int col){
     if(pos < 0)
         return;
 
-    ESCMVLEFT(count_col_buffer(col)+LEFTPOS);
+    ESCMVLEFT(count_col_buffer(col)+left_margin);
     ESCBCYAN;
     printf(")");
     ESCBORG;
-    ESCMVLEFT(count_col_buffer(pos)+LEFTPOS);
+    ESCMVLEFT(count_col_buffer(pos)+left_margin);
     ESCBCYAN;
     printf("(");
     ESCBORG;
     ed_rparen_col = col;
     ed_lparen_col = pos;
-    ESCMVLEFT(count_col_buffer(col)+LEFTPOS);
+    ESCMVLEFT(count_col_buffer(col)+left_margin);
 }
 
 
@@ -438,17 +437,17 @@ void emphasis_rbracket_buffer(int col){
     if(pos < 0)
         return;
 
-    ESCMVLEFT(count_col_buffer(col)+LEFTPOS);
+    ESCMVLEFT(count_col_buffer(col)+left_margin);
     ESCBCYAN;
     printf("[");
     ESCBORG;
-    ESCMVLEFT(count_col_buffer(pos)+LEFTPOS);
+    ESCMVLEFT(count_col_buffer(pos)+left_margin);
     ESCBCYAN;
     printf("]");
     ESCBORG;
     ed_rbracket_col = pos;
     ed_lbracket_col = col;
-    ESCMVLEFT(count_col_buffer(col)+LEFTPOS);
+    ESCMVLEFT(count_col_buffer(col)+left_margin);
 }
 
 
@@ -462,17 +461,17 @@ void emphasis_lbracket_buffer(int col){
     if(pos < 0)
         return;
 
-    ESCMVLEFT(count_col_buffer(col)+LEFTPOS);
+    ESCMVLEFT(count_col_buffer(col)+left_margin);
     ESCBCYAN;
     printf("]");
     ESCBORG;
-    ESCMVLEFT(count_col_buffer(pos)+LEFTPOS);
+    ESCMVLEFT(count_col_buffer(pos)+left_margin);
     ESCBCYAN;
     printf("[");
     ESCBORG;
     ed_rbracket_col = col;
     ed_lbracket_col = pos;
-    ESCMVLEFT(count_col_buffer(col)+LEFTPOS);
+    ESCMVLEFT(count_col_buffer(col)+left_margin);
 }
 
 void reset_paren_bracket_buffer(){
@@ -485,36 +484,36 @@ void reset_paren_bracket_buffer(){
 void restore_paren_buffer(int col){
 
     if(ed_lparen_col != -1){
-        ESCMVLEFT(count_col_buffer(ed_lparen_col)+LEFTPOS);
+        ESCMVLEFT(count_col_buffer(ed_lparen_col)+left_margin);
         ESCBORG;
         printf("(");
         ed_lparen_col = -1;
     }
     if(ed_rparen_col != -1){
-        ESCMVLEFT(count_col_buffer(ed_rparen_col)+LEFTPOS);
+        ESCMVLEFT(count_col_buffer(ed_rparen_col)+left_margin);
         ESCBORG;
         printf(")");
         ed_rparen_col = -1;
     }
-    ESCMVLEFT(count_col_buffer(col)+LEFTPOS);
+    ESCMVLEFT(count_col_buffer(col)+left_margin);
 }
 
 
 void restore_bracket_buffer(int col){
 
     if(ed_lbracket_col != -1){
-        ESCMVLEFT(count_col_buffer(ed_lbracket_col)+LEFTPOS);
+        ESCMVLEFT(count_col_buffer(ed_lbracket_col)+left_margin);
         ESCBORG;
         printf("[");
         ed_lbracket_col = -1;
     }
     if(ed_rbracket_col != -1){
-        ESCMVLEFT(count_col_buffer(ed_rbracket_col)+LEFTPOS);
+        ESCMVLEFT(count_col_buffer(ed_rbracket_col)+left_margin);
         ESCBORG;
         printf("]");
         ed_rbracket_col = -1;
     }
-    ESCMVLEFT(count_col_buffer(col)+LEFTPOS);
+    ESCMVLEFT(count_col_buffer(col)+left_margin);
 }
 
 
@@ -699,7 +698,7 @@ int read_line(int flag){
                       for(k=j;k<255;k++)
                           buffer[k][0] = buffer[k+1][0];
                       display_buffer();
-                      ESCMVLEFT(count_col_buffer(j)+LEFTPOS);
+                      ESCMVLEFT(count_col_buffer(j)+left_margin);
                       if(ed_rparen_col > i)
                           ed_rparen_col--;
                       if(ed_lparen_col > i)
@@ -750,7 +749,7 @@ int read_line(int flag){
                                     else if(ed_candidate_pt == 1){
                                         j = replace_fragment_buffer(ed_candidate[0],j);
                                         display_buffer();
-                                        ESCMVLEFT(j+LEFTPOS);
+                                        ESCMVLEFT(j+left_margin);
                                     }
                                     else{
                                         k = 0;
@@ -786,9 +785,9 @@ int read_line(int flag){
                                         ESCMVLEFT(1);
                                         ESCCLSL;
                                         ESCMVU;
-                                        ESCMVLEFT(LEFTPOS);
+                                        ESCMVLEFT(left_margin);
                                         display_buffer();
-                                        ESCMVLEFT(j+LEFTPOS);
+                                        ESCMVLEFT(j+left_margin);
                                     }
                                     c = getch();
                                     goto loop;
@@ -807,7 +806,7 @@ int read_line(int flag){
                                  emphasis_rparen_buffer(j);
                                  emphasis_lbracket_buffer(j);
                                  emphasis_rbracket_buffer(j);
-                                 ESCMVLEFT(count_col_buffer(j)+LEFTPOS);
+                                 ESCMVLEFT(count_col_buffer(j)+left_margin);
                                  break;
 
                           case RIGHT:
@@ -820,7 +819,7 @@ int read_line(int flag){
                                  emphasis_rparen_buffer(j);
                                  emphasis_lbracket_buffer(j);
                                  emphasis_rbracket_buffer(j);
-                                 ESCMVLEFT(count_col_buffer(j)+LEFTPOS);
+                                 ESCMVLEFT(count_col_buffer(j)+left_margin);
                                  break;
 
                       }
@@ -971,7 +970,7 @@ int read_line(int flag){
                                  ed_lbracket_col++;
                          }
                       }
-                      ESCMVLEFT(count_col_buffer(j)+LEFTPOS);
+                      ESCMVLEFT(count_col_buffer(j)+left_margin);
 
         }
         c = getch();

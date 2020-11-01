@@ -30,6 +30,8 @@ int record_list = NIL;
 int error_code = 0;
 int unread = NIL;     //for parse
 int paren_nest = 0;   //for parse check ((()))
+int left_margin = 4;  //for read_line 
+int break_nest = 0;   //for debugger b command
 int line;
 int column;
 int cursor_row = 0;
@@ -573,7 +575,7 @@ int after_cut(int x){
 }
 
 void debugger(int goal, int bindings, int rest, int n){
-    int c,save;
+    int c,save,i,read;
 
     loop:
     printf("?> ");
@@ -585,6 +587,23 @@ void debugger(int goal, int bindings, int rest, int n){
                     break;
         case 'a':   FLUSH
                     longjmp(buf,1);
+        case 'b':   break_nest++;
+                    left_margin++;
+                    break_loop:
+                    for(i=0;i<=break_nest;i++)
+                        printf("?");
+                    
+                    printf("- "); fflush(stdout);
+                    read = variable_to_call(readparse());
+                    if(read == FEND)
+                        goto break_exit;;
+                    query(read);
+                    fflush(stdout);
+                    goto break_loop;
+                    break_exit:
+                    break_nest--;
+                    left_margin--;
+                    break;
         case 'c':   trace_flag = FULL;
                     FLUSH
                     break;
@@ -598,6 +617,7 @@ void debugger(int goal, int bindings, int rest, int n){
         case '?':
         case 'h':   printf("return key: creep\n");
                     printf("a: abort to REPL\n");
+                    printf("b: break to REPL\n");
                     printf("c: creep\n");
                     printf("d: display goal\n");
                     printf("e: end of intepreter\n");

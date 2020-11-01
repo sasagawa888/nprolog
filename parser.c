@@ -440,7 +440,7 @@ int readc(void){
     if(string_term_flag == 1)
         return(read_string_term(1));
     else if(input_stream == standard_input && repl_flag)
-        c = read_line(3);
+        c = read_line(0);
     else
         c = getc(GET_PORT(input_stream));
 
