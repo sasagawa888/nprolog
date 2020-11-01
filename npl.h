@@ -52,6 +52,7 @@ address
 #define DCG         46
 #define TIMERON     48
 #define TIMEROFF    50
+#define SLASH       52
 #define HASHTBSIZE 107
 #define BIGNUM_BASE 1000000000
 #define SMALL_INT_MAX       1000000000
@@ -155,6 +156,7 @@ extern int proof;
 extern int parse_mode;
 extern int left_margin;
 extern int break_nest;
+extern int leap_point;
 extern int line;
 extern int column;
 extern int cursor_row;
@@ -909,6 +911,7 @@ int last_predicate(int x);
 int laststr(char buf[]);
 int lcm(int x, int y);
 int length(int addr);
+int leappointp(int x);
 int list(int addr);
 int list_to_ope(int x);
 int list_to_structure(int x);

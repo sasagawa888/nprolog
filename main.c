@@ -32,6 +32,7 @@ int unread = NIL;     //for parse
 int paren_nest = 0;   //for parse check ((()))
 int left_margin = 4;  //for read_line 
 int break_nest = 0;   //for debugger b command
+int leap_point = NIL; //for debugger l command
 int line;
 int column;
 int cursor_row = 0;
@@ -437,12 +438,17 @@ int prove(int goal, int bindings, int rest, int n){
     else if(predicatep(goal)){
         //trace
         if(debug_flag == ON && trace_flag != OFF && spypointp(goal)){
-            if(fail_flag == OFF){
-                printf("(%d) CALL: ", n); print(goal);
-                debugger(goal,bindings,rest,n);
-            }
-        }
+            if(fail_flag == ON)
+                goto call_exit;
+            if(leappointp(goal))
+                goto call_exit;
+            else
+                leap_point = NIL;
 
+            printf("(%d) CALL: ", n); print(goal);
+            debugger(goal,bindings,rest,n);
+        }
+        call_exit:
         if(atomp(goal))
             clauses = GET_CAR(goal);
         else
@@ -452,6 +458,7 @@ int prove(int goal, int bindings, int rest, int n){
             error(EXISTENCE_ERR,"", goal);
     
         while(!nullp(clauses)){
+            next:
             save1 = wp;
             save2 = ac;
             clause = car(clauses);
@@ -467,11 +474,17 @@ int prove(int goal, int bindings, int rest, int n){
                     if(prove_all(rest,sp,n+1) == YES){
                         //trace
                         if(debug_flag == ON && trace_flag != OFF && spypointp(goal)){
-                            if(fail_flag == OFF){
-                                printf("(%d) EXIT: ", n); print(goal);
-                                debugger(goal,bindings,rest,n);
-                            }
+                            if(fail_flag == ON)
+                                goto pred_exit_exit;
+                            if(leappointp(goal))
+                                goto pred_exit_exit;
+                            else
+                                leap_point = NIL;
+                
+                            printf("(%d) EXIT: ", n); print(goal);
+                            debugger(goal,bindings,rest,n);
                         }
+                        pred_exit_exit:
                         return(YES);
                     }
                     else{
@@ -479,6 +492,11 @@ int prove(int goal, int bindings, int rest, int n){
                         if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT) && 
                             spypointp(goal)){
                             fail_flag = OFF;
+                            if(leappointp(goal))
+                                goto next;
+                             else
+                                leap_point = NIL;
+                
                             printf("(%d) FAIL: ", n); print(goal);
                             debugger(goal,bindings,rest,n);
                         }
@@ -492,11 +510,17 @@ int prove(int goal, int bindings, int rest, int n){
                     if((res=prove_all(clause1,sp,n+1)) == YES){
                         //trace
                         if(debug_flag == ON && trace_flag == FULL && spypointp(goal)){
-                            if(fail_flag == OFF){
-                                printf("(%d) EXIT: ", n); print(goal);
-                                debugger(goal,bindings,rest,n);
-                            }
+                            if(fail_flag == ON)
+                                goto clause_exit_exit;
+                            if(leappointp(goal))
+                                goto clause_exit_exit;
+                            else
+                                leap_point = NIL;
+                
+                            printf("(%d) EXIT: ", n); print(goal);
+                            debugger(goal,bindings,rest,n);
                         }
+                        clause_exit_exit:
                         return(YES);
                     }
                     else{
@@ -512,11 +536,17 @@ int prove(int goal, int bindings, int rest, int n){
             //trace
             if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT || trace_flag == HALF) &&
                 spypointp(goal)){
-                if(fail_flag == OFF){
-                    printf("(%d) REDO: ", n); print(goal);
-                    debugger(goal,bindings,rest,n);
-                }
+                if(fail_flag == ON)
+                    goto redo_exit;
+                if(leappointp(goal))
+                    goto redo_exit;
+                else
+                    leap_point = NIL;
+                
+                printf("(%d) REDO: ", n); print(goal);
+                debugger(goal,bindings,rest,n);
             }
+            redo_exit:
             wp = save1;
             ac = save2;
             unbind(bindings);
@@ -525,6 +555,11 @@ int prove(int goal, int bindings, int rest, int n){
         if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT || trace_flag == HALF) &&
             spypointp(goal)){
             fail_flag = OFF;
+            if(leappointp(goal))
+                goto next;
+            else
+                leap_point = NIL;
+                
             printf("(%d) FAIL: ", n); print(goal);
             debugger(goal,bindings,rest,n);
         }
@@ -643,6 +678,8 @@ void debugger(int goal, int bindings, int rest, int n){
                     printf("w: write goal\n");
                     fflush(stdin);
                     goto loop;
+        case 'l':   leap_point = list3(SLASH,car(goal),makeint(length(goal)-1));
+                    break;
         case 'n':   debug_flag = OFF;
                     break;
         case 's':   debug_flag = ON;

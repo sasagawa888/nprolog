@@ -1082,10 +1082,28 @@ int spypointp(int x){
         atom = car(x);
         n = length(x) - 1;
     }
-    y = list3(makeatom("/",OPE),atom,makeint(n));
+    y = list3(SLASH,atom,makeint(n));
     if(memberp(y,spy_list))
         return(1);
     else
+        return(0);
+}
+
+int leappointp(int x){
+    int atom,n,y;
+
+    if(atomp(x)){
+        atom = x;
+        n = 0;
+    }
+    else{
+        atom = car(x);
+        n = length(x) - 1;
+    }
+    y = list3(SLASH,atom,makeint(n));
+    if(equalp(y,leap_point))
+        return(1);
+    else 
         return(0);
 }
 
