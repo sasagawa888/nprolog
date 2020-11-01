@@ -774,8 +774,6 @@ void debugger(int goal, int bindings, int rest, int n){
     c = getchar();
     FLUSH
     switch(c){
-        case EOL:   trace_flag = FULL;
-                    break;
         case 'a':   FLUSH
                     longjmp(buf,1);
         case 'b':   break_nest++;
@@ -795,6 +793,7 @@ void debugger(int goal, int bindings, int rest, int n){
                     break_nest--;
                     left_margin--;
                     break;
+        case EOL:
         case 'c':   trace_flag = FULL;
                     FLUSH
                     break;
@@ -809,6 +808,7 @@ void debugger(int goal, int bindings, int rest, int n){
                     break;
         case '?':
         case 'h':   printf("return key: creep\n");
+                    printf("escape key: sskip\n");
                     printf("a: abort to REPL\n");
                     printf("b: break to REPL\n");
                     printf("c: creep\n");
@@ -832,6 +832,7 @@ void debugger(int goal, int bindings, int rest, int n){
                     break;
         case 'q':   qskip_flag = ON;
                     break;
+        case ESC:   //escape
         case 's':   if(port != DBCALL && port != DBREDO)
                         goto loop;
                     sskip_flag = ON;
