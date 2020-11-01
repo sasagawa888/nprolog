@@ -59,6 +59,7 @@ int gbc_flag = 0;  // 0=not display massage 1=display message
 int simp_flag = 1;
 int assert_flag = 0; // 0=asserta, 1=assertz
 int debug_flag = OFF;  // 0=normal mode, 1=debug mode
+int fail_flag = OFF;     // for debugger f command
 int sexp_flag = 0;
 int arguments_flag = 1; //1= 1,2,3 -> (1,2,3) 0= 1,2,3 -> 1,2,3
 int mode_flag = 1;  // 0=SJIS, 1=Unicod
@@ -260,6 +261,7 @@ void init_repl(void){
     unbind(0);
     sp = 0;
     ctrl_c_flag = 0;
+    fail_flag = OFF;
     //initialize variant variable
     for(i=0; i<VARIANTSIZE; i++){
         variant[i] = UNBIND;
@@ -435,8 +437,10 @@ int prove(int goal, int bindings, int rest, int n){
     else if(predicatep(goal)){
         //trace
         if(debug_flag == ON && trace_flag != OFF && spypointp(goal)){
-            printf("(%d) CALL: ", n); print(goal);
-            debugger(goal,bindings,rest,n);
+            if(fail_flag == OFF){
+                printf("(%d) CALL: ", n); print(goal);
+                debugger(goal,bindings,rest,n);
+            }
         }
 
         if(atomp(goal))
@@ -463,8 +467,10 @@ int prove(int goal, int bindings, int rest, int n){
                     if(prove_all(rest,sp,n+1) == YES){
                         //trace
                         if(debug_flag == ON && trace_flag != OFF && spypointp(goal)){
-                            printf("(%d) EXIT: ", n); print(goal);
-                            debugger(goal,bindings,rest,n);
+                            if(fail_flag == OFF){
+                                printf("(%d) EXIT: ", n); print(goal);
+                                debugger(goal,bindings,rest,n);
+                            }
                         }
                         return(YES);
                     }
@@ -472,6 +478,7 @@ int prove(int goal, int bindings, int rest, int n){
                         //trace
                         if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT) && 
                             spypointp(goal)){
+                            fail_flag = OFF;
                             printf("(%d) FAIL: ", n); print(goal);
                             debugger(goal,bindings,rest,n);
                         }
@@ -485,8 +492,10 @@ int prove(int goal, int bindings, int rest, int n){
                     if((res=prove_all(clause1,sp,n+1)) == YES){
                         //trace
                         if(debug_flag == ON && trace_flag == FULL && spypointp(goal)){
-                            printf("(%d) EXIT: ", n); print(goal);
-                            debugger(goal,bindings,rest,n);
+                            if(fail_flag == OFF){
+                                printf("(%d) EXIT: ", n); print(goal);
+                                debugger(goal,bindings,rest,n);
+                            }
                         }
                         return(YES);
                     }
@@ -503,8 +512,10 @@ int prove(int goal, int bindings, int rest, int n){
             //trace
             if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT || trace_flag == HALF) &&
                 spypointp(goal)){
-                printf("(%d) REDO: ", n); print(goal);
-                debugger(goal,bindings,rest,n);
+                if(fail_flag == OFF){
+                    printf("(%d) REDO: ", n); print(goal);
+                    debugger(goal,bindings,rest,n);
+                }
             }
             wp = save1;
             ac = save2;
@@ -513,6 +524,7 @@ int prove(int goal, int bindings, int rest, int n){
         //trace
         if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT || trace_flag == HALF) &&
             spypointp(goal)){
+            fail_flag = OFF;
             printf("(%d) FAIL: ", n); print(goal);
             debugger(goal,bindings,rest,n);
         }
@@ -614,6 +626,8 @@ void debugger(int goal, int bindings, int rest, int n){
                     ignore_flag = save;
                     goto loop;
         case 'e':   longjmp(buf,2);
+        case 'f':   fail_flag = ON;
+                    break;
         case '?':
         case 'h':   printf("return key: creep\n");
                     printf("a: abort to REPL\n");
@@ -621,6 +635,7 @@ void debugger(int goal, int bindings, int rest, int n){
                     printf("c: creep\n");
                     printf("d: display goal\n");
                     printf("e: end of intepreter\n");
+                    printf("f: skip to FAIL port\n");
                     printf("?: help\n");
                     printf("h: help\n");
                     printf("n: notrace\n");

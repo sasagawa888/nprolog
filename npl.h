@@ -338,6 +338,7 @@ extern int simp_flag;
 extern int assert_flag;
 extern int mode_flag;
 extern int debug_flag;
+extern int fail_flag;
 extern int sexp_flag;
 extern int quoted_flag;
 extern int ignore_flag;
