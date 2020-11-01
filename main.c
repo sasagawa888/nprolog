@@ -813,12 +813,16 @@ void debugger(int goal, int bindings, int rest, int n){
                     printf("c: creep\n");
                     printf("d: display goal\n");
                     printf("e: end of intepreter\n");
-                    printf("f: skip to FAIL port\n");
+                    printf("f: skip to next FAIL port\n");
                     printf("?: help\n");
                     printf("h: help\n");
                     printf("n: notrace\n");
-                    printf("s: skip to next spy point\n");
+                    printf("q: skip to next EXIT or FAIL port\n");
+                    printf("s: skip to next EXIT or FAIL port (only in CALL or REDO port\n");
+                    printf("x: skip to next CALL or EXIT port (only in FAIL or REDO port\n");
                     printf("w: write goal\n");
+                    printf("@: invoke REPL once\n");
+                    printf(";: skip to next REDO port (only in EXIT port)\n");
                     fflush(stdin);
                     goto loop;
         case 'l':   leap_point = list3(SLASH,car(goal),makeint(length(goal)-1));
