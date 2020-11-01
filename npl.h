@@ -157,6 +157,7 @@ extern int parse_mode;
 extern int left_margin;
 extern int break_nest;
 extern int leap_point;
+extern int port;
 extern int line;
 extern int column;
 extern int cursor_row;
@@ -195,10 +196,15 @@ extern int error_stream;
 #define TIGHT   2
 #define HALF    3
 #define LOOSE   4 
+#define DBCALL  5
+#define DBEXIT  6
+#define DBREDO  7
+#define DBFAIL  8
 
-//debug mode
+//debugger
 #define OFF     0
-#define ON      1    
+#define ON      1
+    
 
 #define FLUSH               __fpurge(stdin); 
 #define DEBUG               printf("debug\n"); longjmp(buf,2);
@@ -340,7 +346,11 @@ extern int simp_flag;
 extern int assert_flag;
 extern int mode_flag;
 extern int debug_flag;
-extern int fail_flag;
+extern int fskip_flag;
+extern int qskip_flag;
+extern int sskip_flag;
+extern int xskip_flag;
+extern int semiskip_flag;
 extern int sexp_flag;
 extern int quoted_flag;
 extern int ignore_flag;

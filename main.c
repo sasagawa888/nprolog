@@ -33,6 +33,7 @@ int paren_nest = 0;   //for parse check ((()))
 int left_margin = 4;  //for read_line 
 int break_nest = 0;   //for debugger b command
 int leap_point = NIL; //for debugger l command
+int port;             //for debugger
 int line;
 int column;
 int cursor_row = 0;
@@ -60,7 +61,11 @@ int gbc_flag = 0;  // 0=not display massage 1=display message
 int simp_flag = 1;
 int assert_flag = 0; // 0=asserta, 1=assertz
 int debug_flag = OFF;  // 0=normal mode, 1=debug mode
-int fail_flag = OFF;     // for debugger f command
+int fskip_flag = OFF;  // for debugger f command
+int qskip_flag = OFF;  // for debugger q command
+int sskip_flag = OFF;  // for debugger s command 
+int xskip_flag = OFF;  // for debugger x command
+int semiskip_flag = OFF; //for debugger ; command
 int sexp_flag = 0;
 int arguments_flag = 1; //1= 1,2,3 -> (1,2,3) 0= 1,2,3 -> 1,2,3
 int mode_flag = 1;  // 0=SJIS, 1=Unicod
@@ -262,7 +267,9 @@ void init_repl(void){
     unbind(0);
     sp = 0;
     ctrl_c_flag = 0;
-    fail_flag = OFF;
+    fskip_flag = OFF;
+    sskip_flag = OFF;
+    xskip_flag = OFF;
     //initialize variant variable
     for(i=0; i<VARIANTSIZE; i++){
         variant[i] = UNBIND;
@@ -390,7 +397,7 @@ int prove_all(int goals, int bindings, int n){
 }
 
 int prove(int goal, int bindings, int rest, int n){
-    int clause,clauses,clause1,varlis,save1,save2,res;
+    int clause,clauses,clause1,varlis,save1,save2,res,spy,leap;
 
     proof++;
     if(n > 18000)
@@ -437,15 +444,32 @@ int prove(int goal, int bindings, int rest, int n){
     }
     else if(predicatep(goal)){
         //trace
-        if(debug_flag == ON && trace_flag != OFF && spypointp(goal)){
-            if(fail_flag == ON)
+        if(debug_flag == ON && trace_flag != OFF){
+            spy = spypointp(goal);
+            if(fskip_flag == ON)
+                goto call_exit;
+            if(qskip_flag == ON)
+                goto call_exit;
+            if(sskip_flag == ON)
+                goto call_exit;
+            if(xskip_flag == ON){
+                if(!spy)
+                    printf(">  ");
+                sskip_flag = OFF;
+            }
+            if(semiskip_flag == ON)
                 goto call_exit;
             if(leappointp(goal))
                 goto call_exit;
             else
                 leap_point = NIL;
+            if(!spy)
+                goto call_exit;
+            else
+                printf("** ");
 
             printf("(%d) CALL: ", n); print(goal);
+            port = DBCALL;
             debugger(goal,bindings,rest,n);
         }
         call_exit:
@@ -473,15 +497,40 @@ int prove(int goal, int bindings, int rest, int n){
                 if(unify(goal,clause1) == YES){
                     if(prove_all(rest,sp,n+1) == YES){
                         //trace
-                        if(debug_flag == ON && trace_flag != OFF && spypointp(goal)){
-                            if(fail_flag == ON)
+                        if(debug_flag == ON && trace_flag != OFF){
+                            spy = spypointp(goal);
+                            leap = leappointp(goal);
+
+                            if(spy && !leap && qskip_flag == OFF && sskip_flag == OFF)
+                                printf("** ");
+                            else if(spy && !leap && (qskip_flag == ON || qskip_flag == ON))
+                                printf("*> ");
+                            else if(fskip_flag == ON)
                                 goto pred_exit_exit;
-                            if(leappointp(goal))
+                            else if(qskip_flag == ON){
+                                if(!spy)
+                                    printf(">  ");
+                                qskip_flag = OFF;
+                            }
+                            else if(sskip_flag == ON){
+                                if(!spy)
+                                    printf(">  ");
+                                sskip_flag = OFF;
+                            }
+                            else if(xskip_flag == ON)
+                                goto pred_exit_exit;
+                            else if(semiskip_flag == ON)
+                                goto pred_exit_exit;
+                            
+                            if(leap)
                                 goto pred_exit_exit;
                             else
                                 leap_point = NIL;
-                
+                            
+                            
+                            printf("** ");
                             printf("(%d) EXIT: ", n); print(goal);
+                            port = DBEXIT;
                             debugger(goal,bindings,rest,n);
                         }
                         pred_exit_exit:
@@ -489,15 +538,37 @@ int prove(int goal, int bindings, int rest, int n){
                     }
                     else{
                         //trace
-                        if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT) && 
-                            spypointp(goal)){
-                            fail_flag = OFF;
-                            if(leappointp(goal))
+                        if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT)){
+                            spy = spypointp(goal);
+                            leap = leappointp(goal);
+                            if(spy && !leap && fskip_flag == OFF && qskip_flag == OFF && sskip_flag == OFF)
+                                printf("** ");
+                            else if(spy && !leap && (fskip_flag == ON || qskip_flag == ON || qskip_flag == ON))
+                                printf("*> ");
+                            else if(fskip_flag == ON){
+                                printf(">  ");
+                                fskip_flag = OFF;
+                            }
+                            else if(qskip_flag == ON){
+                                printf(">  ");
+                                qskip_flag = OFF;
+                            }
+                            else if(sskip_flag == ON){
+                                printf(">  ");
+                                sskip_flag = OFF;
+                            }
+                            else if(xskip_flag == ON)
                                 goto next;
-                             else
+                            else if(semiskip_flag == ON)
+                                goto next;
+                            
+                            if(leap)
+                                goto next;
+                            else
                                 leap_point = NIL;
-                
+                            
                             printf("(%d) FAIL: ", n); print(goal);
+                            port = DBFAIL;
                             debugger(goal,bindings,rest,n);
                         }
                     }
@@ -509,15 +580,39 @@ int prove(int goal, int bindings, int rest, int n){
                     clause1 = addtail_body(rest,caddr(clause1));
                     if((res=prove_all(clause1,sp,n+1)) == YES){
                         //trace
-                        if(debug_flag == ON && trace_flag == FULL && spypointp(goal)){
-                            if(fail_flag == ON)
+                        if(debug_flag == ON && trace_flag == FULL){
+                            spy = spypointp(goal);
+                            leap = leappointp(goal);
+
+                            if(spy && !leap && qskip_flag == OFF && sskip_flag == OFF && xskip_flag == OFF)
+                                printf("** ");
+                            else if(spy && !leap && (qskip_flag == ON || sskip_flag == ON || xskip_flag == ON))
+                                printf("*> ");
+                            else if(fskip_flag == ON)
                                 goto clause_exit_exit;
-                            if(leappointp(goal))
+                            else if(qskip_flag == ON){
+                                printf(">  ");
+                                qskip_flag = OFF;
+                            }
+                            else if(sskip_flag == ON){
+                                printf(">  ");
+                                sskip_flag = OFF;
+                            }
+                            else if(xskip_flag == ON){
+                                printf("-> ");
+                                qskip_flag = OFF;
+                            }
+                            else if(semiskip_flag == ON)
+                                goto clause_exit_exit;
+
+                            if(leap)
                                 goto clause_exit_exit;
                             else
                                 leap_point = NIL;
+                            
                 
                             printf("(%d) EXIT: ", n); print(goal);
+                            port = DBEXIT;
                             debugger(goal,bindings,rest,n);
                         }
                         clause_exit_exit:
@@ -534,16 +629,35 @@ int prove(int goal, int bindings, int rest, int n){
                 }
             }
             //trace
-            if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT || trace_flag == HALF) &&
-                spypointp(goal)){
-                if(fail_flag == ON)
+            if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT || trace_flag == HALF)){
+                spy = spypointp(goal);
+                leap = leappointp(goal);
+                
+                if(spy && !leap && semiskip_flag == OFF)
+                    printf("** ");
+                else if(spy && !leap && semiskip_flag == ON)
+                    printf("*> ");
+                else if(fskip_flag == ON)
                     goto redo_exit;
+                else if(qskip_flag == ON)
+                    goto redo_exit;
+                else if(sskip_flag == ON)
+                    goto redo_exit;
+                else if(xskip_flag == ON)
+                    goto redo_exit;
+                else if(semiskip_flag == ON){
+                    if(spy)
+                        printf(">  ");
+                    semiskip_flag = OFF;
+                }
+
                 if(leappointp(goal))
                     goto redo_exit;
                 else
                     leap_point = NIL;
                 
                 printf("(%d) REDO: ", n); print(goal);
+                port = DBREDO;
                 debugger(goal,bindings,rest,n);
             }
             redo_exit:
@@ -552,15 +666,44 @@ int prove(int goal, int bindings, int rest, int n){
             unbind(bindings);
         }
         //trace
-        if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT || trace_flag == HALF) &&
-            spypointp(goal)){
-            fail_flag = OFF;
-            if(leappointp(goal))
+        if(debug_flag == ON && (trace_flag == FULL || trace_flag == TIGHT || trace_flag == HALF)){
+            spy = spypointp(goal);
+            leap = leappointp(goal);
+
+            if(spy && !leap && fskip_flag == OFF && qskip_flag == OFF && sskip_flag == OFF && xskip_flag == OFF)
+                printf("** ");
+            else if(spy && !leap && (fskip_flag == ON || qskip_flag == ON || sskip_flag == ON || xskip_flag == ON))
+                printf("*> ");
+            if(fskip_flag == ON){
+                if(!spy)
+                    printf(">  ");
+                fskip_flag = OFF;
+            }
+            if(qskip_flag == ON){
+                if(!spy)
+                    printf(">  ");
+                qskip_flag = OFF;
+            }
+            if(sskip_flag == ON){
+                if(!spy)
+                    printf(">  ");
+                sskip_flag = OFF;
+            }
+            if(xskip_flag == ON){
+                if(!spy)
+                    printf(">  ");
+                xskip_flag = OFF;
+            }
+            if(semiskip_flag == ON)
+                goto next;
+
+            if(leap)
                 goto next;
             else
                 leap_point = NIL;
                 
             printf("(%d) FAIL: ", n); print(goal);
+            port = DBFAIL;
             debugger(goal,bindings,rest,n);
         }
     }
@@ -643,7 +786,7 @@ void debugger(int goal, int bindings, int rest, int n){
                     printf("- "); fflush(stdout);
                     read = variable_to_call(readparse());
                     if(read == FEND)
-                        goto break_exit;;
+                        goto break_exit;
                     query(read);
                     fflush(stdout);
                     goto break_loop;
@@ -661,7 +804,7 @@ void debugger(int goal, int bindings, int rest, int n){
                     ignore_flag = save;
                     goto loop;
         case 'e':   longjmp(buf,2);
-        case 'f':   fail_flag = ON;
+        case 'f':   fskip_flag = ON;
                     break;
         case '?':
         case 'h':   printf("return key: creep\n");
@@ -682,16 +825,31 @@ void debugger(int goal, int bindings, int rest, int n){
                     break;
         case 'n':   debug_flag = OFF;
                     break;
-        case 's':   debug_flag = ON;
-                    FLUSH
+        case 'q':   qskip_flag = ON;
                     break;
-         case 'w':  save = ignore_flag;
+        case 's':   if(port != DBCALL && port != DBREDO)
+                        goto loop;
+                    sskip_flag = ON;
+                    break;
+        case 'w':   save = ignore_flag;
                     ignore_flag = 0;
                     print(goal);
                     printf("\n");
                     ignore_flag = save;
                     goto loop;
-    
+        case 'x':   if(port != DBFAIL && port != DBREDO)
+                        goto loop;
+                    xskip_flag = ON;
+                    break;
+        case '@':   printf("?- "); fflush(stdout);
+                    read = variable_to_call(readparse());
+                    query(read);
+                    fflush(stdout);
+                    break;
+        case ';':   if(port != DBEXIT)
+                        goto loop;
+                    semiskip_flag = ON;
+                    break;
     }
 }
 
