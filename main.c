@@ -270,6 +270,7 @@ void init_repl(void){
     fskip_flag = OFF;
     sskip_flag = OFF;
     xskip_flag = OFF;
+    semiskip_flag = OFF;
     //initialize variant variable
     for(i=0; i<VARIANTSIZE; i++){
         variant[i] = UNBIND;
