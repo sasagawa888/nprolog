@@ -386,17 +386,28 @@ Xが代入された変数かどうかを調べる。
 例えば、デバッガをオンにし、スパイポイントを,my_appendnにセットして述語
 my_appendのデバッグを開始する。
 
+?- ['tests/test.pl'].
+yes
 ?- trace.
 yes
 ?- spy(my_append/3).
 yes
-?- my_append([1,2],[2,3],X).
-** (1) CALL: my_append([1,2],[2,3],X)?> 
-** (1) REDO: my_append([1,2],[2,3],X)?> 
-** (2) CALL: my_append([2],[2,3],v_4)?> 
-** (2) REDO: my_append([2],[2,3],v_4)?> 
-** (3) CALL: my_append([],[2,3],v_8)?> 
-X = [1,2,2,3] .
+?- my_append([1,2,3],[4,5],X).
+** (0) CALL: my_append([1,2,3],[4,5],X)?> 
+** (0) REDO: my_append([1,2,3],[4,5],X)?> 
+** (1) CALL: my_append([2,3],[4,5],v_4)?> 
+** (1) REDO: my_append([2,3],[4,5],v_4)?> 
+** (2) CALL: my_append([3],[4,5],v_8)?> 
+** (2) REDO: my_append([3],[4,5],v_8)?> 
+** (3) CALL: my_append([],[4,5],v_12)?> 
+X = [1,2,3,4,5] .
+** (3) EXIT: my_append([],[4,5],v_12)?> 
+** (2) EXIT: my_append([3],[4,5],v_8)?> 
+** (1) EXIT: my_append([2,3],[4,5],v_4)?> 
+** (0) EXIT: my_append([1,2,3],[4,5],X)?> 
+yes
+?- 
+
 
 デバッグが終了したらnotraceを実行します。これをしないと実行が遅くなります。
 
