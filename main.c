@@ -309,7 +309,7 @@ void query(int x){
         error(NOT_CALLABLE,"?- ", x);
 
     variables = listreverse(unique(varslist(x)));
-    res = prove_all(addask(x),sp,1);
+    res = prove_all(addask(x),sp,0);
     print(res);printf("\n");
     return;
 }
@@ -493,6 +493,7 @@ int prove(int goal, int bindings, int rest, int n){
                         //trace
                         if(debug_flag == ON)
                             trace(DBEXIT,goal,bindings,rest,n);
+
                         return(YES);
                     }
                     else{
