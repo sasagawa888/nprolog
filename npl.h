@@ -1158,6 +1158,7 @@ void reset(int i);
 void set_sign(int x, int y);
 void sjis_to_char(int n , char *p);
 void sprint(int addr);
+void trace(int port, int goal, int bindings, int rest, int n);
 void ucs4_to_utf8(int n, char *p);
 void unbind(int x);
 void unreadc(char c);
