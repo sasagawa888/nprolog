@@ -1,4 +1,4 @@
-#include "jump.h"
+#include "../jump.h"
 int b_test16(int arglist, int rest);
 int b_test16(int arglist, int rest){
 int varX,n,body,save1,save2;
@@ -6,7 +6,7 @@ save2 = Jget_sp();
 n = Jlength(arglist);
 if(n == 0){varX = Jmakevariant();
 save1 = Jget_wp();
-{body = Jwlist3(Jmakeope(","),Jwcons(Jmakecomp("between"),Jwcons(Jmakeint(1),Jwcons(Jmakeint(16),Jwcons(varX,NIL)))),Jwlist3(Jmakeope(","),Jmakecomp("test1"),Jwlist3(Jmakeope(","),Jwcons(406,Jwcons(varX,NIL)),266)));
+{body = Jwlist3(Jmakeope(","),Jwcons(Jmakecomp("between"),Jwcons(Jmakeint(1),Jwcons(Jmakeint(16),Jwcons(varX,NIL)))),Jwlist3(Jmakeope(","),Jmakecomp("test1"),Jwlist3(Jmakeope(","),Jwcons(408,Jwcons(varX,NIL)),268)));
 if(Jprove_all(Jaddtail_body(rest,body),Jget_sp(),0) == YES)
 return(YES);}
 Junbind(save2);
@@ -19,7 +19,7 @@ save2 = Jget_sp();
 n = Jlength(arglist);
 if(n == 0){varX = Jmakevariant();
 save1 = Jget_wp();
-{body = Jwlist3(Jmakeope(","),Jwcons(Jmakecomp("queen"),Jwcons(Jwlistcons(Jmakeint(1),Jwlistcons(Jmakeint(2),Jwlistcons(Jmakeint(3),Jwlistcons(Jmakeint(4),Jwlistcons(Jmakeint(5),Jwlistcons(Jmakeint(6),Jwlistcons(Jmakeint(7),Jwlistcons(Jmakeint(8),Jwlistcons(Jmakeint(9),NIL))))))))),Jwcons(varX,NIL))),Jwlist3(Jmakeope(","),Jwcons(406,Jwcons(varX,NIL)),Jwlist3(Jmakeope(","),316,266)));
+{body = Jwlist3(Jmakeope(","),Jwcons(Jmakecomp("queen"),Jwcons(Jwlistcons(Jmakeint(1),Jwlistcons(Jmakeint(2),Jwlistcons(Jmakeint(3),Jwlistcons(Jmakeint(4),Jwlistcons(Jmakeint(5),Jwlistcons(Jmakeint(6),Jwlistcons(Jmakeint(7),Jwlistcons(Jmakeint(8),Jwlistcons(Jmakeint(9),NIL))))))))),Jwcons(varX,NIL))),Jwlist3(Jmakeope(","),Jwcons(408,Jwcons(varX,NIL)),Jwlist3(Jmakeope(","),318,268)));
 if(Jprove_all(Jaddtail_body(rest,body),Jget_sp(),0) == YES)
 return(YES);}
 Junbind(save2);
@@ -32,7 +32,7 @@ save2 = Jget_sp();
 n = Jlength(arglist);
 if(n == 0){varX = Jmakevariant();
 save1 = Jget_wp();
-{body = Jwlist3(Jmakeope(","),Jwcons(Jmakecomp("queen"),Jwcons(Jwlistcons(Jmakeint(1),Jwlistcons(Jmakeint(2),Jwlistcons(Jmakeint(3),Jwlistcons(Jmakeint(4),Jwlistcons(Jmakeint(5),Jwlistcons(Jmakeint(6),Jwlistcons(Jmakeint(7),Jwlistcons(Jmakeint(8),Jwlistcons(Jmakeint(9),NIL))))))))),Jwcons(varX,NIL))),266);
+{body = Jwlist3(Jmakeope(","),Jwcons(Jmakecomp("queen"),Jwcons(Jwlistcons(Jmakeint(1),Jwlistcons(Jmakeint(2),Jwlistcons(Jmakeint(3),Jwlistcons(Jmakeint(4),Jwlistcons(Jmakeint(5),Jwlistcons(Jmakeint(6),Jwlistcons(Jmakeint(7),Jwlistcons(Jmakeint(8),Jwlistcons(Jmakeint(9),NIL))))))))),Jwcons(varX,NIL))),268);
 if(Jprove_all(Jaddtail_body(rest,body),Jget_sp(),0) == YES)
 return(YES);}
 Junbind(save2);

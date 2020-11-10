@@ -89,7 +89,7 @@ jump_pass2(X) :-
 	n_filename(X,F),
     atom_concat(F,'.c',Cfile),
 	tell(Cfile),
-	write('#include "jump.h"'),nl,
+	write('#include "../jump.h"'),nl,
     jump_gen_c_pred,
     jump_gen_c_exec,
     told.

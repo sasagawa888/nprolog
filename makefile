@@ -45,6 +45,7 @@ uninstall:
 		
 %.o: %.c npl.h
 	$(CC) -c $< -o $@ $(CFLAGS)
+	
 
 .PHONY: clean all
 
