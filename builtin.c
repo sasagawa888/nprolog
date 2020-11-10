@@ -73,7 +73,7 @@ void initbuiltin(void){
     defbuiltin("display",b_write_canonical);
     defbuiltin("debug",b_debug);
     defbuiltin("dup",b_dup);
-    defbuiltin("edit",b_nano);
+    defbuiltin("edit",b_edit);
     defbuiltin("eq",b_eq);
     defbuiltin("errorcode",b_errorcode);
     defbuiltin("fail",b_fail);
@@ -3605,22 +3605,30 @@ int b_rename(int arglist, int rest){
 }
 
 
-int b_nano(int arglist, int rest){
+int b_edit(int arglist, int rest){
     int n,arg1,res;
-    char str1[STRSIZE];
-    char str0[STRSIZE] = "nano ";
+    char str[STRSIZE];
+    char *editor;
 
     n = length(arglist);
     if(n == 1){
         arg1 = deref(car(arglist));
         if(!singlep(arg1))
-            error(NOT_ATOM,"nano",arg1);
+            error(NOT_ATOM,"edit ",arg1);
 
-        strcpy(str1,GET_NAME(arg1));
-        strcat(str0,str1);
-        res = system(str0);
+        editor = getenv("EDITOR");
+        if(editor == NULL){
+            strcpy(str,"nano ");
+            strcat(str,GET_NAME(arg1));
+        }
+        else{
+            strcpy(str,editor);
+            strcat(str," ");
+            strcat(str,GET_NAME(arg1));
+        }
+        res = system(str);
         if(res == -1)
-            error(SYSTEM_ERROR,"nano",arg1);
+            error(SYSTEM_ERROR,"edit ",arg1);
         b_reconsult(list1(arg1),NIL);
         return(YES);
     }

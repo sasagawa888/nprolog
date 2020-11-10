@@ -11,6 +11,7 @@ address
 17,000,001 - 20,000,000  working area 
 20,000,001 - 40,000,000  variant area
 */
+#define VERSION     1.41
 #define CELLSIZE    20000000  // this is max on raspberryPI1B. If parsonal computer 30000000 is OK
 #define HEAPSIZE    17000000
 #define FREESIZE         500
@@ -630,6 +631,7 @@ int b_defined_userop(int arglist, int rest);
 int b_delete(int arglist, int rest);
 int b_directory(int arglist, int rest);
 int b_dup(int arglist, int rest);
+int b_edit(int arglist, int rest);
 int b_eq(int arglist, int rest);
 int b_eqgreater(int arglist, int rest);
 int b_eqsmaller(int arglist, int rest);
@@ -668,7 +670,6 @@ int b_longnum(int arglist, int rest);
 int b_mkdir(int arglist, int rest);
 int b_member(int arglist, int rest);
 int b_measure(int arglist, int rest);
-int b_nano(int arglist, int rest);
 int b_nl(int arglist, int rest);
 int b_nonvar(int arglist, int rest);
 int b_nospy(int arglist, int rest);
