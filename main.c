@@ -193,6 +193,7 @@ int main(int argc, char *argv[]){
     opt = 1;
     init_repl();
 
+    
     FILE* fp = fopen("library/dcg.pl","r");
     if(fp != NULL){
         fclose(fp);
@@ -205,7 +206,7 @@ int main(int argc, char *argv[]){
         b_consult(list1(makeconst("library/compiler.pl")),NIL);
         predicates = NIL;
     }
-
+    
     while(opt < argc){
         if(strcmp(argv[opt],"-c") == 0){
             opt++;
@@ -1246,7 +1247,7 @@ void printinfix(int addr){
             fprintf(GET_PORT(output_stream),")" );
         }
         else if(infixp(cadr(addr)) && infixp(caddr(addr)) &&
-            get_2nd_weight(car(cadr(addr))) <= get_2nd_weight(car(caddr(addr)))){
+            get_2nd_weight(car(cadr(addr))) < get_2nd_weight(car(caddr(addr)))){
             fprintf(GET_PORT(output_stream),"(" );
             print(caddr(addr));
             fprintf(GET_PORT(output_stream),")" );

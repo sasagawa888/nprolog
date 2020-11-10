@@ -300,7 +300,7 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
             (GET_OPT(temp) == XFY ||
              GET_OPT(temp) == FX_XFY ||
              GET_OPT(temp) == FY_XFY)){
-        if(GET_OPT(temp) == YFX)
+        if(GET_OPT(temp) == XFY)
             w1 = GET_CDR(temp);
         else
             w1 = get_2nd_weight(temp);
@@ -317,7 +317,7 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
             #if CHECK
             printf("null operator\n");
             #endif
-            return(parser(operand,cons(temp,operator),get_2nd_weight(temp)+1,XFY,terminal,parsemode));
+            return(parser(operand,cons(temp,operator),weight,XFY,terminal,parsemode));
         }
         else if(w1 == w2){
             #if CHECK
