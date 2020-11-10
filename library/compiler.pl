@@ -68,6 +68,7 @@ jump_pass1(X) :-
 	write(user_output,'pass1'),
     nl(user_output),
     abolish(jump_pred_data/2),
+    assert(jump_pred_data(jump_dummy,-1)),
     reconsult(X),
     jump_pass1_analize.
 

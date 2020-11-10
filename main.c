@@ -455,9 +455,10 @@ int prove(int goal, int bindings, int rest, int n){
         else
             clauses = GET_CAR(car(goal));
         
-        if(clauses == NIL)
-            error(EXISTENCE_ERR,"", goal);
-    
+        if(clauses == NIL){
+            print(goal);
+            error(EXISTENCE_ERR,"predicate prove ", goal);
+        }
         while(!nullp(clauses)){
             save1 = wp;
             save2 = ac;
