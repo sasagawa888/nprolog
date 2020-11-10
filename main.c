@@ -1205,7 +1205,11 @@ void printlong(int addr){
     fprintf(GET_PORT(output_stream),"%lld", GET_LONG(addr));
 }
 
-
+/*
+print infix notation 
+get_2nd_weight means weight of infix operater
+check the weight of argument and if it needs ( ) print paren. 
+*/
 void printinfix(int addr){
     if(length(addr) == 2){
         print(car(addr));
