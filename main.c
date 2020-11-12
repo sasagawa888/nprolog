@@ -197,13 +197,13 @@ int main(int argc, char *argv[]){
     FILE* fp = fopen("library/dcg.pl","r");
     if(fp != NULL){
         fclose(fp);
-        b_consult(list1(makeconst("library/dcg.pl")),NIL);
+        b_consult(list1(makeconst("/home/nprolog/dcg.pl")),NIL);
         predicates = NIL;
     }
     fp = fopen("library/compiler.pl","r");
     if(fp != NULL){
         fclose(fp);
-        b_consult(list1(makeconst("library/compiler.pl")),NIL);
+        b_consult(list1(makeconst("/home/nprolog/compiler.pl")),NIL);
         predicates = NIL;
     }
     

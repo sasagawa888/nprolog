@@ -40,12 +40,15 @@ endif
 
 install: $(NPL)
 	install -s  $(NPL) $(DEST)
-	mkdir -p /home/header
-	cp jump.h /home/header
+	mkdir -p /home/nprolog
+	cp jump.h /home/nprolog
+	cp library/compiler.pl /home/nprolog
+	cp library/dcg.pl /home/nprolog
 
 uninstall:
 	rm $(DEST)/npl
-	rm /home/header/jump.h
+	rm /home/nprolog/*.*
+	rmdir /home/nprolog
 		
 %.o: %.c npl.h
 	$(CC) -c $< -o $@ $(CFLAGS)
