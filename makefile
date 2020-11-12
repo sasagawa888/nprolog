@@ -6,6 +6,7 @@ INCS =
 CFLAGS = $(INCS) -Wall -O3 
 DEST = /usr/local/bin
 
+
 NPL = npl
 
 NPL_OBJS = main.o \
@@ -39,9 +40,12 @@ endif
 
 install: $(NPL)
 	install -s  $(NPL) $(DEST)
+	mkdir -p /home/header
+	cp jump.h /home/header
 
 uninstall:
 	rm $(DEST)/npl
+	rm /home/header/jump.h
 		
 %.o: %.c npl.h
 	$(CC) -c $< -o $@ $(CFLAGS)

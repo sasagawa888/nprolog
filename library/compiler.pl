@@ -89,7 +89,7 @@ jump_pass2(X) :-
 	n_filename(X,F),
     atom_concat(F,'.c',Cfile),
 	tell(Cfile),
-	write('#include "../jump.h"'),nl,
+	write('#include "jump.h"'),nl,
     jump_gen_c_pred,
     jump_gen_c_exec,
     told.
@@ -106,7 +106,7 @@ jump_invoke_gcc(X) :-
     atom_concat(F,'.c ',Cfile),
     atom_concat(F,'.o ',Ofile),
     atom_concat(Ofile,Cfile,Files),
-    atom_concat('gcc -O3 -w -shared -fPIC -o ',Files,Gen),
+    atom_concat('gcc -O3 -w -shared -fPIC -I/home/header -o ',Files,Gen),
     shell(Gen),
     atom_concat('rm ',Cfile,Del),
     shell(Del).
