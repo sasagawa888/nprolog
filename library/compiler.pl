@@ -1267,12 +1267,12 @@ jump_deterministic(P,C) :-
 
 % type1 if clause has tail recursive and body is unidirectory
 jump_type1_deterministic([]).
-jump_type1_deterministic([C|Cs]) :-
-    n_property(C,predicate),
-    jump_type1_deterministic(Cs).
 jump_type1_deterministic([(Head :- Body)|Cs]) :-
     jump_tail_recursive(Head,Body),
     jump_unidirectory(Body),
+    jump_type1_deterministic(Cs).
+jump_type1_deterministic([C|Cs]) :-
+    n_property(C,predicate),
     jump_type1_deterministic(Cs).
 
 % type2 if base has cut and other clause is tail recursive.
@@ -1296,10 +1296,12 @@ jump_last_body((_,Body),Last) :-
 jump_last_body(Body,Body).
 
 
-% body has is/2 
+% body elements are all builtin predicate but last
+jump_unidirectory((G1,G2)) :-
+    n_property(G1,builtin),
+    n_property(G2,predicate).
 jump_unidirectory((G,Gs)) :-
-    G = is(_,_).
-jump_unidirectory((G,Gs)) :-
+    n_property(G,builtin),
     jump_unidirectory(Gs).
 jump_unidirectory(_) :- fail.
 
