@@ -3830,7 +3830,7 @@ int b_between(int arglist, int rest){
             unbind(save2);
         }
         wp = save1;
-        unbind(save2);
+        unify(arg3,arg2);
         ac = save3;
         return(NO);
     }

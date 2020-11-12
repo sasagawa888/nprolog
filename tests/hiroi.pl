@@ -17,7 +17,7 @@ pattern(20, 0x0308000). pattern(21, 0x0710000). pattern(22, 0x0e20000). pattern(
 pattern(24, 0x1880000).
 
 solve(Board) :-
-    between1(0, 31, N),
+    between(0, 31, N),
     push_button(N, 0, Board, NewBoard),
     clear_light(5, NewBoard, Result, N, PushPattern),
     Result == 0,
@@ -50,7 +50,7 @@ clear_light(N, Board, Result, Push, PushResult) :-
 
 print_answer(PushPattern) :-
     nl,
-    between1(0, 24, N),
+    between(0, 24, N),
     ((PushPattern /\ (1 << N)) > 0 -> write('1') ; write('0')),
     M is N mod 5,
     (M == 4 -> nl),

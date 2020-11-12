@@ -57,8 +57,14 @@ compile_file(X) :-
     jump_pass2(X),
     jump_invoke_gcc(X).
 
+% generate object from c code
 compile_file1(X) :-
     jump_invoke_gcc(X).
+
+% genrate only c code 
+compile_file2(X) :-
+    jump_pass1(X),
+    jump_pass2(X).
 
 /*
 for tail recursive optimize code 
