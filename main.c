@@ -80,6 +80,7 @@ int prefix_flag = 0;   //for parser 0=not prefix, 1=prefix
 int syntax_flag = YES;   //syntaxerrors/2 YES=normal. NO=ignore syntax-errors
 int string_term_flag = 0; //for string_term/2 0=normal, 1=readparse from string_term_buffer
 int ctrl_c_flag = 0;      //for ctrl_c  to stop prove
+int init_flag = 1;        //for halt
 
 //operator token
 char operator[OPERATOR_NUMBER][5] = {
@@ -194,7 +195,11 @@ int main(int argc, char *argv[]){
     error_stream = standard_error;
     opt = 1;
     init_repl();
+    int ret = setjmp(buf);
+    if(!init_flag)
+        goto repl;
 
+    init_flag = 0;
     home = getenv("HOME");
     strcpy(str,home);
     strcat(str,"/nprolog/library/dcg.pl");
@@ -237,7 +242,7 @@ int main(int argc, char *argv[]){
             return(0);
         }
     }
-    int ret = setjmp(buf);
+    
     repl:
     if(ret == 0)
         while(1){
