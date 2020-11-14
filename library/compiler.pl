@@ -218,7 +218,7 @@ jump_gen_var_declare(P) :-
     write('int '),
     n_generate_all_variable(P,V),
     jump_gen_all_var(V),
-    write('n,body,save1,save2;'),nl,!.
+    write('n,body,save1,save2,res;'),nl,!.
 
 % arg1,arg2,...argN
 jump_gen_var_declare1(S,E) :-
@@ -359,10 +359,13 @@ jump_gen_body(X) :-
     write('{body = '),
     jump_gen_body1(X),
     write(';'),nl,
-    write('if(Jprove_all(Jaddtail_body(rest,body),Jget_sp(),0) == YES)'),nl,
+    write('if((res=Jprove_all(Jaddtail_body(rest,body),Jget_sp(),0)) == YES)'),nl,
     write('return(YES);}'),nl,
     write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl,!.
+    write('Jset_wp(save1);'),nl,
+    write('if(res == NPLFALSE) return(NO);'),nl,
+    !.
+
 
 jump_gen_body1([]) :-
     write('NIL').
