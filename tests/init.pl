@@ -7,5 +7,5 @@ main :-
     write(test_hello),
     nl.
 
-:- main.
+:- main,halt.
     
