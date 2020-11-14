@@ -112,7 +112,7 @@ jump_invoke_gcc(X) :-
     atom_concat(F,'.c ',Cfile),
     atom_concat(F,'.o ',Ofile),
     atom_concat(Ofile,Cfile,Files),
-    atom_concat('gcc -O3 -w -shared -fPIC -I/home/nprolog -o ',Files,Gen),
+    atom_concat('gcc -O3 -w -shared -fPIC -I$HOME/nprolog -o ',Files,Gen),
     shell(Gen),
     atom_concat('rm ',Cfile,Del),
     shell(Del).

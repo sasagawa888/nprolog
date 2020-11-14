@@ -6,6 +6,7 @@ written by kenichi sasagawa 2016/8~
 #include <math.h>
 #include <signal.h>
 #include <stdio_ext.h>
+#include <stdlib.h>
 #include "npl.h"
 
 //global vers
@@ -180,6 +181,7 @@ int ed_incomment = -1; /*...*/
 
 int main(int argc, char *argv[]){
     int opt;
+    char *home,str[STRSIZE];
 
     printf("N-Prolog Ver %1.2f\n", VERSION);
     signal(SIGINT,reset);
@@ -193,17 +195,21 @@ int main(int argc, char *argv[]){
     opt = 1;
     init_repl();
 
-    
-    FILE* fp = fopen("library/dcg.pl","r");
+    home = getenv("HOME");
+    strcpy(str,home);
+    strcat(str,"/nprolog/library/dcg.pl");
+    FILE* fp = fopen(str,"r");
     if(fp != NULL){
         fclose(fp);
-        b_consult(list1(makeconst("/home/nprolog/dcg.pl")),NIL);
+        b_consult(list1(makeconst(str)),NIL);
         predicates = NIL;
     }
-    fp = fopen("library/compiler.pl","r");
+    strcpy(str,home);
+    strcat(str,"/nprolog/library/compiler.pl");
+    fp = fopen(str,"r");
     if(fp != NULL){
         fclose(fp);
-        b_consult(list1(makeconst("/home/nprolog/compiler.pl")),NIL);
+        b_consult(list1(makeconst(str)),NIL);
         predicates = NIL;
     }
     

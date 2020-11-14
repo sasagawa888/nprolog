@@ -1305,7 +1305,8 @@ int b_consult(int arglist, int rest){
 
             //e.g. :- op(...)
             if(operationp(clause) && car(clause) == DEFINE && length(clause) == 2){
-                operate(clause);
+                clause = cadr(clause);
+                query(clause);
                 goto skip;
             }
             // DCG syntax e.g. a-->b.
@@ -1368,8 +1369,13 @@ int b_reconsult(int arglist, int rest){
             
             //e.g. :- op(...)
             if(operationp(clause) && car(clause) == DEFINE && length(clause) == 2){
-                operate(clause);
-                execute_list = cons(cadr(clause),execute_list);
+                clause = cadr(clause);
+                query(clause);
+                while(structurep(clause) && car(clause) == AND){
+                    execute_list = cons(cadr(clause),execute_list);
+                    clause = caddr(clause);
+                }
+                execute_list = cons(clause,execute_list);
                 goto skip;
             }
             // DCG syntax e.g. a-->b.
