@@ -3,6 +3,7 @@
                humio mizoguchi 
                ISBN-7952-6307-8
 */
+flag(dummy). % to avoid existence error
 
 doctor :-
 	write('Hi!,I am a doctor'),
@@ -29,7 +30,7 @@ rule([stop]) :-
 rule([X]) :-
     member(mother,x),!,
     write('Tell me more about your family.'),
-    assert(flag),nl.
+    assert((flag(on))),nl.
 
 
 rule(X) :-
@@ -39,7 +40,7 @@ rule([no]) :- message.
 rule(X) :- count(X,4),
         write('Please do not use Words like that.').
 
-rule(X) :- flag,
+rule(X) :- flag(on),
         write('Earlier you spoke of your mother'),retract(flag).
 rule(X) :- 
         write('You say so before, too?').
@@ -54,7 +55,7 @@ count([X|[]],Y) :- name(X,Z),counter(Z,Y).
 counter([],0).
 counter([X|Y],M) :- counter(Y,N),M is N+1.
 
-clear :- flag,retract((flag)).
+clear :- flag(on),retract((flag(on))).
 clear.
 
 stm(S) :- findall(X,rules(X),S).
@@ -62,14 +63,14 @@ stm(S) :- findall(X,rules(X),S).
 printlist([A|B]) :- write(A),nl,printlist(B).
 printlist([]).
 
-input(X) :- in(X,[],[]).
-in(X,Y,Z) :- get0(C),test(C,X,Y,Z).
+input(X) :- in0(X,[],[]).
+in0(X,Y,Z) :- get0(C),test(C,X,Y,Z).
 
-test(31,X,Y,Z) :- in(X,[],[]).
-test(32,X,Y,[]) :- in(X,Y,[]).
-test(32,X,Y,Z) :- name(X1,Z),append(Y,[X1],Y1),in(X,Y1,[]).
+test(31,X,Y,Z) :- in0(X,[],[]).
+test(32,X,Y,[]) :- in0(X,Y,[]).
+test(32,X,Y,Z) :- name(X1,Z),append(Y,[X1],Y1),in0(X,Y1,[]).
 test(46,X,Y,[]).
 test(46,X,Y,Z) :- name(X1,Z),append(Y,[X1],X).
-test(C,X,Y,Z) :- append(Z,[C],X1),in(X,Y,X1).
+test(C,X,Y,Z) :- append(Z,[C],X1),in0(X,Y,X1).
 
 
