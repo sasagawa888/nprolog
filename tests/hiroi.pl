@@ -5,8 +5,6 @@ Thanks
 ?- solve(0x1ffffff).
 */
 
-between1(L, H, L) :- L =< H.
-between1(L, H, V) :- L < H, L1 is L + 1, between1(L1, H, V).
 
 pattern(0, 0x0000023). pattern(1, 0x0000047). pattern(2, 0x000008e). pattern(3, 0x000011c).
 pattern(4, 0x0000218). pattern(5, 0x0000461). pattern(6, 0x00008e2). pattern(7, 0x00011c4).
