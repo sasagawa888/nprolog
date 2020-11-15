@@ -50,8 +50,10 @@ void init_declare(void){
 
 */
 
+% optimize flag
+jump_optimize(off).
 
-%main
+% main
 compile_file(X) :-
     jump_pass1(X),
     jump_pass2(X),
@@ -1266,10 +1268,12 @@ jump_analize(P) :-
 
 jump_deterministic(P,C) :-
     jump_type1_deterministic(C),
+    jump_optimize(on),
     assert(jump_pred_data(P,type1)).
 
 jump_deterministic(P,C) :-
     jump_type2_deterministic(C),
+    jump_optimize(on),
     assert(jump_pred_data(P,type2)).
 
 
