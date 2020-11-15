@@ -55,6 +55,7 @@ void initbuiltin(void){
     defbuiltin("atom",b_atom);
     defbuiltin("atomic",b_atomic);
     defbuiltin("break",b_break);
+    defbuiltin("char_code",b_char_code);
     defbuiltin("chdir",b_chdir);
     defbuiltin("close",b_close);
     defbuiltin("compare",b_compare);
@@ -2476,6 +2477,61 @@ int b_atom_concat(int arglist, int rest){
     }
     return(NO);
 }
+
+int b_char_code(int arglist, int rest){
+    int n,arg1,arg2,code,res;
+    char str[2];
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        if(wide_variable_p(arg1) && wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"char_code ",list2(arg1,arg2));
+        if(!wide_variable_p(arg1) && !characterp(arg1))
+            error(NOT_CHAR,"char_code ",arg1);
+        if(!wide_variable_p(arg2) && !integerp(arg2))
+            error(NOT_INT,"char_code ",arg2);
+
+
+        if(atomp(arg1) && !variablep(arg1)){
+            strcpy(str,GET_NAME(arg1));
+            if(str[0] == '\\'){
+                if(str[1] == 'n')
+                    return(unify(arg2,makeint(EOL)));
+                else if(str[1] == 't')
+                    return(unify(arg2,makeint(TAB)));
+                else if(str[1] == 'f')
+                    return(unify(arg2,makeint(FF)));
+                else if(str[1] == 'r')
+                    return(unify(arg2,makeint(CR)));
+                else if(str[1] == 'v')
+                    return(unify(arg2,makeint(VT)));
+                else if(str[1] == 'a')
+                    return(unify(arg2,makeint(BEL)));
+                else if(str[1] == 'b')
+                    return(unify(arg2,makeint(BS)));
+                else
+                    error(SYNTAX_ERR,"char_code ",NIL);
+            }
+            //unicode
+            code = makeint(utf8_to_ucs4(GET_NAME(arg1)));
+            res = unify(arg2,code);
+            return(res);
+        }
+        else if(integerp(arg2)){
+            //unicode
+            ucs4_to_utf8(GET_INT(arg2),str);
+            res = unify(arg1,makeconst(str));
+            return(res);
+        }
+        else
+            return(NO);
+    }
+    return(NO);
+}
+
 
 
 //----------string transform-------------------

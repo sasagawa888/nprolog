@@ -115,7 +115,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"see"},{"seeing"},{"seen"},{"tell"},{"telling"},{"told"},{"trace"},{"notrace"},{"spy"},
 {"nospy"},{"leash"},{"atom"},{"integer"},{"real"},{"float"},{"number"},
 {"var"},{"nonvar"},{"atomic"},{"list"},{"gc"},{"time"},{"name"},{"bounded"},
-{"flush"},{"date"},{"date_day"},
+{"flush"},{"date"},{"date_day"},{"char_code"},
 {"string"},{"string_chars"},{"string_codes"},{"ground"},
 {"concat"},{"substring"},{"string_term"},{"float_text"},
 {"inc"},{"dec"},{"compare"},{"in"},{"out"},
@@ -469,7 +469,7 @@ int prove(int goal, int bindings, int rest, int n){
         
         if(clauses == NIL){
             print(goal);
-            error(EXISTENCE_ERR,"predicate prove ", goal);
+            error(EXISTENCE_ERR,"", goal);
         }
         while(!nullp(clauses)){
             save1 = wp;

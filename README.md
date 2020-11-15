@@ -208,6 +208,7 @@ writeq/2
 atom_concat/3
 append/3
 between/3
+char_code/2
 compile_file/1  (invoke compiler)
 compound/1
 ground/1

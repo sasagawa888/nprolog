@@ -1,5 +1,5 @@
 %Lisp in Prolog
-
+fun(1,2,3). %dummy to avoid existence error
 
 repl :-
     repeat,

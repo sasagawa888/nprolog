@@ -122,6 +122,43 @@ int length(int addr){
     return(len);
 }
 
+int atom_length(int addr){
+    char str[STRSIZE],c;
+    int pos,n;
+
+    strcpy(str,GET_NAME(addr));
+    if(strlen(GET_NAME(addr)) == 2 && str[0] == '\\')
+        return(1);
+
+    pos = 0;
+    n = 0;
+    c = str[pos];
+    while(c != NUL){
+        if(c == '\\'){
+            n++;
+            pos = pos + 2;
+        }
+        else if(mode_flag == 1 && isUni2(c)){
+            n++;
+            pos = pos + 2;
+        }
+        else if(mode_flag == 1 && isUni3(c)){
+            n++;
+            pos = pos + 3;
+        }
+        else if(mode_flag == 1 && isUni4(c)){
+            n++;
+            pos = pos + 4;
+        }
+        else{
+            n++;
+            pos++;
+        }
+        c = str[pos];
+    }
+    return(n);
+}
+
 int string_length(int addr){
     char str[STRSIZE],c;
     int pos,n;
@@ -484,7 +521,12 @@ int atomicp(int addr){
         return(0);
 }
 
-
+int characterp(int addr){
+    if(atomp(addr) && atom_length(addr) == 1)
+        return(1);
+    else
+        return(0);
+}
 
 int singlep(int addr){
     if(IS_OUTCELL(addr))
