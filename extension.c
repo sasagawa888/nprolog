@@ -54,9 +54,9 @@ int b_filename(int arglist, int rest){
 
 //convert atom for C language function name
 int b_atom_convert(int arglist, int rest){
-    int n,arg1,arg2,pos1,pos2;
-    char str1[ATOMSIZE],str2[ATOMSIZE];
-
+    int n,arg1,arg2,pos1;
+    char str1[ATOMSIZE],str2[ATOMSIZE],str3[ATOMSIZE],str4[ATOMSIZE];
+    //   str1=input   str2=unicode-buffer str3=usc4-buffer str4 = output-string 
     n = length(arglist);
     if(n == 2){
         arg1 = deref(car(arglist));
@@ -64,84 +64,132 @@ int b_atom_convert(int arglist, int rest){
 
         strcpy(str1,GET_NAME(arg1));
         pos1 = 0;
-        pos2 = 0;
+        memset(str4,NUL,ATOMSIZE);
+
         while(str1[pos1] != NUL){
             if(str1[pos1] == ':'){
-                str2[pos2] = '_';
-                pos2++;
+                str2[0] = '_';
+                str2[1] = NUL;
+                strcat(str4,str2);
+                pos1++;
             }
             else if(str1[pos1] == '&'){
-                str2[pos2] = 'a';
-                pos2++;
-                str2[pos2] = 'n';
-                pos2++;
-                str2[pos2] = 'd';
-                pos2++;
+                str2[0] = 'a';
+                str2[1] = 'n';
+                str2[2] = 'd';
+                str2[3] = NUL;
+                strcat(str4,str2);
+                pos1++;
             }
             else if(str1[pos1] == '?'){
-                str2[pos2] = 'm';
-                pos2++;
-                str2[pos2] = 'a';
-                pos2++;
-                str2[pos2] = 'g';
-                pos2++;
+                str2[0] = 'm';
+                str2[1] = 'a';
+                str2[2] = 'g';
+                str2[3] = NUL;
+                strcat(str4,str2);
+                pos1++;
             }
             else if(str1[pos1] == '+'){
-                str2[pos2] = 'p';
-                pos2++;
-                str2[pos2] = 'l';
-                pos2++;
-                str2[pos2] = 's';
-                pos2++;
+                str2[0] = 'p';
+                str2[1] = 'l';
+                str2[2] = 's';
+                str2[3] = NUL;
+                strcat(str4,str2);
+                pos1++;
             }
             else if(str1[pos1] == '-'){
-                str2[pos2] = 'm';
-                pos2++;
-                str2[pos2] = 'n';
-                pos2++;
-                str2[pos2] = 's';
-                pos2++;
+                str2[0] = 'm';
+                str2[1] = 'n';
+                str2[2] = 's';
+                str2[3] = NUL;
+                strcat(str4,str2);
+                pos1++;
             }
             else if(str1[pos1] == '*'){
-                str2[pos2] = 'a';
-                pos2++;
-                str2[pos2] = 's';
-                pos2++;
-                str2[pos2] = 't';
-                pos2++;
+                str2[0] = 'a';
+                str2[1] = 's';
+                str2[2] = 't';
+                str2[3] = NUL;
+                strcat(str4,str2);
+                pos1++;
             }
             else if(str1[pos1] == '/'){
-                str2[pos2] = 'd';
-                pos2++;
-                str2[pos2] = 'i';
-                pos2++;
-                str2[pos2] = 'v';
-                pos2++;
+                str2[0] = 'd';
+                str2[1] = 'i';
+                str2[2] = 'v';
+                str2[3] = NUL;
+                strcat(str4,str2);
+                pos1++;
             }
             else if(str1[pos1] == '>'){
-                str2[pos2] = 'r';
-                pos2++;
-                str2[pos2] = 'i';
-                pos2++;
-                str2[pos2] = 'g';
-                pos2++;
+                str2[0] = 'r';
+                str2[1] = 'i';
+                str2[2] = 'g';
+                str2[3] = NUL;
+                strcat(str4,str2);
+                pos1++;
             }
             else if(str1[pos1] == '<'){
-                str2[pos2] = 'l';
-                pos2++;
-                str2[pos2] = 'e';
-                pos2++;
-                str2[pos2] = 'f';
-                pos2++;
+                str2[0] = 'l';
+                str2[1] = 'e';
+                str2[2] = 'f';
+                str2[3] = NUL;
+                strcat(str4,str2);
+                pos1++;
             }
-            else{
-                str2[pos2] = str1[pos1];
-                pos2++;
+            else if(mode_flag == 1 && isUni1(str1[pos1])){
+                str2[0] = str1[pos1];
+                str2[1] = NUL;
+                strcat(str4,str2);
+                pos1++;
             }
-            pos1++;
+            else if(mode_flag == 1 && isUni2(str1[pos1])){
+                str2[0] = str1[pos1++];
+                str2[1] = str1[pos1++];
+                str2[2] = NUL;
+                sprintf(str3,"u%d",utf8_to_ucs4(str2));
+                strcat(str4,str3);
+            }
+            else if(mode_flag == 1 && isUni3(str1[pos1])){
+                str2[0] = str1[pos1++];
+                str2[1] = str1[pos1++];
+                str2[2] = str1[pos1++];
+                str2[3] = NUL;
+                sprintf(str3,"u%d",utf8_to_ucs4(str2));
+                strcat(str4,str3);
+            }
+            else if(mode_flag == 1 && isUni4(str1[pos1])){
+                str2[0] = str1[pos1++];
+                str2[1] = str1[pos1++];
+                str2[2] = str1[pos1++];
+                str2[3] = str1[pos1++];
+                str2[4] = NUL;
+                sprintf(str3,"u%d",utf8_to_ucs4(str2));
+                strcat(str4,str3);
+            }
+            else if(mode_flag == 1 && isUni5(str1[pos1])){
+                str2[0] = str1[pos1++];
+                str2[1] = str1[pos1++];
+                str2[2] = str1[pos1++];
+                str2[3] = str1[pos1++];
+                str2[4] = str1[pos1++];
+                str2[5] = NUL;
+                sprintf(str3,"u%d",utf8_to_ucs4(str2));
+                strcat(str4,str3);
+            }
+            else if(mode_flag == 1 && isUni6(str1[pos1])){
+                str2[0] = str1[pos1++];
+                str2[1] = str1[pos1++];
+                str2[2] = str1[pos1++];
+                str2[3] = str1[pos1++];
+                str2[4] = str1[pos1++];
+                str2[5] = str1[pos1++];
+                str2[6] = NUL;
+                sprintf(str3,"u%d",utf8_to_ucs4(str2));
+                strcat(str4,str3);
+            }
         }
-        str2[pos2] = NUL;
-        unify(arg2,makeconst(str2));
+        unify(arg2,makeconst(str4));
         return(YES);
     }
     return(NO);
