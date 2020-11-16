@@ -81,6 +81,7 @@ int syntax_flag = YES;   //syntaxerrors/2 YES=normal. NO=ignore syntax-errors
 int string_term_flag = 0; //for string_term/2 0=normal, 1=readparse from string_term_buffer
 int ctrl_c_flag = 0;      //for ctrl_c  to stop prove
 int init_flag = 1;        //for halt
+int greeting_flag = 1;    //for greeting message
 
 //operator token
 char operator[OPERATOR_NUMBER][5] = {
@@ -184,7 +185,6 @@ int main(int argc, char *argv[]){
     int opt;
     char *home,str[STRSIZE];
 
-    printf("N-Prolog Ver %1.2f\n", VERSION);
     signal(SIGINT,reset);
     initcell();
     initbuiltin();
@@ -235,14 +235,43 @@ int main(int argc, char *argv[]){
             repl_flag = 0;
             opt++;
         }
+        else if(strcmp(argv[opt],"-rc") == 0){
+            opt++;
+            FILE* fp = fopen(argv[opt],"r");
+            if(fp != NULL)
+                fclose(fp);
+            else{
+                printf("Not exist %s\n", argv[opt]);
+                break;
+            }
+            b_consult(list1(makeconst(argv[opt])),NIL);
+            repl_flag = 0;
+            opt++;
+        }
+        else if(strcmp(argv[opt],"-h") == 0){
+            printf("List of options:\n");
+            printf("-c           -- NPL starts after reading the file.\n");
+            printf("-h           -- display help.\n");
+            printf("-r           -- NPL does not use editable REPL.\n");
+            printf("-v           -- dislplay version number.\n");
+            return(0);
+        }
+        else if(strcmp(argv[opt],"-v") == 0){
+            printf("N-Prolog Ver %1.2f\n", VERSION);
+            return(0);
+        }
         else{
             printf("Wrong option %s\n", argv[opt]);
-            printf("-c consult prolog code\n");
-            printf("-r off repl mode (only Linux)\n");
+            printf("check npl- h\n");
             return(0);
         }
     }
-    
+
+    if(greeting_flag){
+        printf("N-Prolog Ver %1.2f\n", VERSION);
+        greeting_flag = 0;
+    }
+
     repl:
     if(ret == 0)
         while(1){

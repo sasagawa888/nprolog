@@ -1307,7 +1307,7 @@ int b_consult(int arglist, int rest){
             //e.g. :- op(...)
             if(operationp(clause) && car(clause) == DEFINE && length(clause) == 2){
                 clause = cadr(clause);
-                query(clause);
+                prove_all(clause,sp,0);
                 goto skip;
             }
             // DCG syntax e.g. a-->b.
@@ -1371,7 +1371,7 @@ int b_reconsult(int arglist, int rest){
             //e.g. :- op(...)
             if(operationp(clause) && car(clause) == DEFINE && length(clause) == 2){
                 clause = cadr(clause);
-                query(clause);
+                prove_all(clause,sp,0);
                 while(structurep(clause) && car(clause) == AND){
                     execute_list = cons(cadr(clause),execute_list);
                     clause = caddr(clause);
