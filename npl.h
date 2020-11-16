@@ -11,7 +11,7 @@ address
 17,000,001 - 20,000,000  working area 
 20,000,001 - 40,000,000  variant area
 */
-#define VERSION     1.46
+#define VERSION     1.47
 #define CELLSIZE    20000000  // this is max on raspberryPI1B. If parsonal computer 30000000 is OK
 #define HEAPSIZE    17000000
 #define FREESIZE         500
