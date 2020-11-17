@@ -5,6 +5,7 @@ N-Prolog is NOT ISO-Prolog.
 About Arity/prolog32  see  http://petergabel.info/ArityProlog32/ArityProlog32PredList/
 
 ## Installation
+In home directory ,make clone or download zip file from github.
 On Linux  type "make" on terminal. and type "sudo make install" on terminal. 
 
 see https://www.youtube.com/watch?v=36vUd8ThMF0
