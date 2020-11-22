@@ -37,7 +37,7 @@ NPLは簡単な取扱を目指しています。
 
 ## 実行例
 ```prolog
-N-Prolog Ver 1.12
+N-Prolog Ver 1.50
 ?- length([1,2,3],X).
 X = 3
 yes
