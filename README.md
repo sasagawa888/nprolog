@@ -215,6 +215,7 @@ compound/1
 ground/1
 member/2
 measure/1   (measure elapsed time)
+predicate_property/2
 reverse/2 
 ```
 

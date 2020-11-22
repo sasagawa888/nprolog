@@ -111,6 +111,7 @@ void initbuiltin(void){
     defbuiltin("number",b_number);
     defbuiltin("op",b_op);
     defbuiltin("open",b_open);
+    defbuiltin("predicate_property",b_predicate_property);
     defbuiltin("put",b_put);
     defbuiltin("reconsult",b_reconsult);
     defbuiltin("read",b_read);
@@ -3490,6 +3491,39 @@ int b_current_op(int arglist, int rest){
     }
     return(NO);
 }
+
+int b_predicate_property(int arglist, int rest){
+    int n,arg1,arg2;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist); //term
+        arg2 = cadr(arglist);//prop
+
+        if(wide_variable_p(arg1))
+            error(INSTANTATION_ERR,"predicate_property ",arg1);
+
+        if(atomp(arg1) && GET_AUX(arg1) == SYS)
+            return(unify(arg2,makeconst("built_in")));
+        else if(structurep(arg1) && GET_AUX(car(arg1)) == SYS)
+            return(unify(arg2,makeconst("built_in")));
+        else if(atomp(arg1) && GET_AUX(arg1) == PRED &&
+                GET_CAR(arg1) != NIL)
+            return(unify(arg2,makeatom("dynamic",SYS)));
+        else if(structurep(arg1) && GET_AUX(car(arg1)) == PRED &&
+                GET_CAR(car(arg1)) != NIL)
+            return(unify(arg2,makeatom("dynamic",SYS)));
+        else if(atomp(arg1) && GET_AUX(arg1) == COMP)
+            return(unify(arg2,makeconst("static")));
+        else if(structurep(arg1) && GET_AUX(car(arg1)) == COMP)
+            return(unify(arg2,makeconst("static")));
+        else
+            return(NO);
+    }
+    return(NO);
+
+}
+
 
 int b_reset_op(int arglist, int rest){
     int n;
