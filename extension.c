@@ -614,9 +614,9 @@ int b_strict(int arglist, int rest){
     if(n == 1){
         arg1 = car(arglist);
 
-        if(arg1 == NPLTRUE)
+        if(eqlp(arg1,NPLTRUE))
             strict_flag = 1;
-        else if(arg1 == NPLFALSE)
+        else if(eqlp(arg1,NPLFALSE))
             strict_flag = 0;
         else if(variablep(arg1))
             if(strict_flag == 1)
