@@ -15,21 +15,17 @@ my_call(X) :-
 %user predicate
 my_call(X) :-
     predicate_property(X,dynamic),
-    write('asdf'),
     clause(X,true),
     call(X),
-    get_char(D), %discard EOL
-    get_char(Z),
-    (\+(Z = ';') -> true;fail).
+    get(Z),
+    (not(Z = ';') -> true;fail).
 %user clause
 my_call(X) :-
     predicate_property(X,dynamic),
     clause(X,Y),
     Y \= true,
     my_call(Y),
-    write(X),
-    get_char(D), %discard EOL
-    get_char(Z),
+    get(Z),
     (\+(Z = ';') -> true;fail).
 %variable
 my_call(X) :-

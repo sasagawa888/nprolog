@@ -3521,10 +3521,10 @@ int b_predicate_property(int arglist, int rest){
             return(unify(arg2,makeconst("built_in")));
         else if(atomp(arg1) && GET_AUX(arg1) == PRED &&
                 GET_CAR(arg1) != NIL)
-            return(unify(arg2,makeatom("dynamic",SYS)));
+            return(unify(arg2,makeconst("dynamic")));
         else if(structurep(arg1) && GET_AUX(car(arg1)) == PRED &&
                 GET_CAR(car(arg1)) != NIL)
-            return(unify(arg2,makeatom("dynamic",SYS)));
+            return(unify(arg2,makeconst("dynamic")));
         else if(atomp(arg1) && GET_AUX(arg1) == COMP)
             return(unify(arg2,makeconst("static")));
         else if(structurep(arg1) && GET_AUX(car(arg1)) == COMP)
