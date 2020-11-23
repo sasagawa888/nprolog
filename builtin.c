@@ -814,7 +814,7 @@ int singletonp(int x){
 
 
 int b_read(int arglist, int rest){
-    int n,arg1,arg2,save,temp,res;
+    int n,arg1,arg2,save1,save2,temp,res;
 
     n = length(arglist);
     if(n == 1){
@@ -834,19 +834,22 @@ int b_read(int arglist, int rest){
         if(streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
             error(NOT_INPUT_STREAM,"read ", arg1);
         
-        save = input_stream;   
+        save1 = input_stream;
+        save2 = repl_flag;   
         input_stream = arg1;
+        repl_flag = 0;
         
         temp = variable_to_call(readparse());
         res = unify(arg2,temp);
-        input_stream = save;
+        input_stream = save1;
+        repl_flag = save2;
         return(res);
     }
     return(NO);
 }
 
 int b_read_line(int arglist, int rest){
-    int n,arg1,arg2,save,res,pos;
+    int n,arg1,arg2,save1,save2,res,pos;
     char str[STRSIZE],c;
 
     n = length(arglist);
@@ -866,8 +869,10 @@ int b_read_line(int arglist, int rest){
         if(streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
             error(NOT_INPUT_STREAM,"read_line ", arg1);
         
-        save = input_stream;   
+        save1 = input_stream;
+        save2 = repl_flag;   
         input_stream = arg1;
+        repl_flag = 0;
 
         c = readc();
         pos = 0;
@@ -878,7 +883,8 @@ int b_read_line(int arglist, int rest){
         }
         str[pos] = NUL;
         res = unify(arg2,makeconst(str));
-        input_stream = save;
+        input_stream = save1;
+        repl_flag = save2;
         return(res);
     }
     return(NO);
