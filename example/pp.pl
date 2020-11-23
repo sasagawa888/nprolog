@@ -15,6 +15,7 @@ my_call(X) :-
 %user predicate
 my_call(X) :-
     predicate_property(X,dynamic),
+    write('asdf'),
     clause(X,true),
     call(X),
     get_char(D), %discard EOL

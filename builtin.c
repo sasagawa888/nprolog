@@ -2308,7 +2308,7 @@ int b_abolish(int arglist, int rest){
 }
 
 int b_clause(int arglist, int rest){
-    int n,arg1,arg2,clause,clauses,save1,save2,copy;
+    int n,arg1,arg2,clause,clauses,save1,save2;
 
     n = length(arglist);
     if(n == 2){
@@ -2324,10 +2324,7 @@ int b_clause(int arglist, int rest){
         if(!wide_variable_p(arg2) && !callablep(arg2))
             error(NOT_CALLABLE,"clause ",arg2);
 
-        if(predicatep(arg1)){
-            return(unify(arg2,NPLTRUE));
-        }
-
+        
         if(atom_predicate_p(arg1))
             clauses = GET_CAR(arg1);
         else
@@ -2338,9 +2335,13 @@ int b_clause(int arglist, int rest){
         while(!nullp(clauses)){
             clause = car(clauses);
             clauses = cdr(clauses);
-            copy = copy_term(clause);
-            if(clausep(clause) && unify(arg1,cadr(copy)) == YES &&
-                unify(arg2,caddr(copy)) == YES){
+            if(clausep(clause) && unify(arg1,cadr(clause)) == YES &&
+                unify(arg2,caddr(clause)) == YES){
+                if(prove_all(rest,sp,0) == YES)
+                    return(YES);
+            }
+            else if(predicatep(clause) && unify(arg1,clause) == YES &&
+                    unify(arg2,NPLTRUE) == YES){
                 if(prove_all(rest,sp,0) == YES)
                     return(YES);
             }
