@@ -16,7 +16,7 @@ my_call(X) :-
 my_call(X) :-
     predicate_property(X,dynamic),
     clause(X,true),
-    write(X),
+    call(X),
     get_char(D), %discard EOL
     get_char(Z),
     (\+(Z = ';') -> true;fail).

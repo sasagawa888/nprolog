@@ -2324,6 +2324,10 @@ int b_clause(int arglist, int rest){
         if(!wide_variable_p(arg2) && !callablep(arg2))
             error(NOT_CALLABLE,"clause ",arg2);
 
+        if(predicatep(arg1)){
+            return(unify(arg2,NPLTRUE));
+        }
+
         if(atom_predicate_p(arg1))
             clauses = GET_CAR(arg1);
         else
