@@ -147,7 +147,6 @@ extern int string_term_buffer[STRSIZE];
 extern int variables;
 extern int predicates;
 extern int spy_list;
-extern int error_flag;
 extern int reconsult_list;
 extern int execute_list;
 extern int op_list;
@@ -175,6 +174,10 @@ extern char builtin[BUILTIN_NUMBER][30];
 extern char compiled[COMPILED_NUMBER][30];
 extern char extended[EXTENDED_NUMBER][30];
 extern double timer;
+
+//flag
+extern int error_flag;
+extern int strict_flag;
 
 //stream
 extern int standard_input;
@@ -723,6 +726,7 @@ int b_sort(int arglist, int rest);
 int b_spy(int arglist, int rest);
 int b_stdin(int arglist, int rest);
 int b_stdout(int arglist, int rest);
+int b_strict(int arglist, int rest);
 int b_stdinout(int arglist, int rest);
 int b_string(int arglist, int rest);
 int b_string_length(int arglist, int rest);

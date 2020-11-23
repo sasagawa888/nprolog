@@ -185,6 +185,7 @@ void initbuiltin(void){
     defbuiltin("n_defined_predicate",b_defined_predicate);
     defbuiltin("n_defined_userop",b_defined_userop);
     defbuiltin("n_get_execute",b_get_execute);
+    defbuiltin("n_strict",b_strict);
 
      #ifdef __arm__
     defbuiltin("wiringpi_setup_gpio",b_wiringpi_setup_gpio);

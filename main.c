@@ -82,6 +82,7 @@ int string_term_flag = 0; //for string_term/2 0=normal, 1=readparse from string_
 int ctrl_c_flag = 0;      //for ctrl_c  to stop prove
 int init_flag = 1;        //for halt
 int greeting_flag = 1;    //for greeting message
+int strict_flag = 0;      //0= return NO when predicate not exists, 1= invoke error when predicate not exists. 
 
 //operator token
 char operator[OPERATOR_NUMBER][5] = {
@@ -497,8 +498,10 @@ int prove(int goal, int bindings, int rest, int n){
             clauses = GET_CAR(car(goal));
         
         if(clauses == NIL){
-            print(goal);
-            error(EXISTENCE_ERR,"", goal);
+            if(strict_flag)
+                error(EXISTENCE_ERR,"", goal);
+            else
+                return(NO);
         }
         while(!nullp(clauses)){
             save1 = wp;

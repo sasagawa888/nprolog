@@ -607,6 +607,29 @@ int b_get_execute(int arglist, int rest){
     return(NO);
 }
 
+int b_strict(int arglist, int rest){
+    int n,arg1;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = car(arglist);
+
+        if(arg1 == NPLTRUE)
+            strict_flag = 1;
+        else if(arg1 == NPLFALSE)
+            strict_flag = 0;
+        else if(variablep(arg1))
+            if(strict_flag == 1)
+                unify(arg1,NPLTRUE);
+            else 
+                unify(arg1,NPLFALSE);
+        else
+            error(WRONG_ARGS, "n_strict ",arg1);
+        
+        return(YES);
+    }
+    return(NO);
+}
 
 //----------for Raspberry PI
 #ifdef __arm__
