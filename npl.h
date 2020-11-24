@@ -99,7 +99,6 @@ typedef struct{
                 int intnum;
                 int     ( *subr) (int, int);
                 FILE    *port;
-                int     *dyna_vec;
             } car;
             union{
                 int intnum;
