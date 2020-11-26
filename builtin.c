@@ -186,6 +186,7 @@ void initbuiltin(void){
     defbuiltin("n_defined_userop",b_defined_userop);
     defbuiltin("n_get_execute",b_get_execute);
     defbuiltin("n_strict",b_strict);
+    defbuiltin("n_heapdump",b_heapdump);
 
      #ifdef __arm__
     defbuiltin("wiringpi_setup_gpio",b_wiringpi_setup_gpio);

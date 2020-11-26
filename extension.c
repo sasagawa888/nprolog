@@ -631,6 +631,26 @@ int b_strict(int arglist, int rest){
     return(NO);
 }
 
+
+int b_heapdump(int arglist, int rest){
+    int n,arg1,arg2;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        if(!integerp(arg1))
+            error(NOT_INT,"n_heapdump ",arg1);
+        if(!integerp(arg2))
+            error(NOT_INT,"n_heapdump ",arg2);
+        
+        heapdump(get_int(arg1),get_int(arg2));
+        return(YES);
+    }
+    return(NO);
+}
+
 //----------for Raspberry PI
 #ifdef __arm__
 int b_wiringpi_setup_gpio(int arglist, int rest){

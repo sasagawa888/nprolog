@@ -1176,10 +1176,10 @@ void cellprint(int addr){
         case USE:   printf("USE "); break;
     }
     switch(GET_TAG(addr)){
-        case EMP:   printf("EMP    "); break;
-        case INTN:  printf("INTN   "); break;
-        case FLTN:  printf("FLTN   "); break;
-        case SINGLE:   printf("ATOM    "); break;
+        case EMP:    printf("EMP    "); break;
+        case INTN:   printf("INTN   "); break;
+        case FLTN:   printf("FLTN   "); break;
+        case SINGLE: printf("ATOM   "); break;
         case STRUCT: printf("STRUCT "); break;
     }
     printf("%07d ", GET_CAR(addr));
@@ -1192,7 +1192,7 @@ void cellprint(int addr){
 void heapdump(int start, int end){
     int i;
 
-    printf("addr    F   TAG   CAR     CDR    BIND   NAME\n");
+    printf("addr    F     TAG  CAR     CDR    BIND   NAME\n");
     for(i=start; i<= end; i++){
         printf("%07d ", i);
         cellprint(i);
