@@ -113,7 +113,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"tab"},{"fail"},{"not"},{"true"},{"halt"},{"abort"},
 {"listing"},{"functor"},{"arg"},
 {"writeq"},{"display"},{"ref"},
-{"atom_concat"},{"consult"},{"reconsult"},
+{"atom_concat"},{"atom_string"},{"consult"},{"reconsult"},
 {"see"},{"seeing"},{"seen"},{"tell"},{"telling"},{"told"},{"trace"},{"notrace"},{"spy"},
 {"nospy"},{"leash"},{"atom"},{"integer"},{"real"},{"float"},{"number"},
 {"var"},{"nonvar"},{"atomic"},{"list"},{"gc"},{"time"},{"name"},{"bounded"},

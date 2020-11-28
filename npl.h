@@ -588,6 +588,7 @@ int b_ateqsmaller(int arglist, int rest);
 int b_atgreater(int arglist, int rest);
 int b_atmark(int arglist, int rest);
 int b_atom(int arglist, int rest);
+int b_atom_string(int arglist, int rest);
 int b_atom_concat(int arglist, int rest);
 int b_atom_codes(int arglist, int rest);
 int b_atomic(int arglist, int rest);

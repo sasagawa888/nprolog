@@ -53,6 +53,7 @@ void initbuiltin(void){
     defbuiltin("assertz",b_assert);
     defbuiltin("atom_concat",b_atom_concat);
     defbuiltin("atom",b_atom);
+    defbuiltin("atom_string",b_atom_string);
     defbuiltin("atomic",b_atomic);
     defbuiltin("break",b_break);
     defbuiltin("char_code",b_char_code);
@@ -2475,9 +2476,9 @@ int b_atom_concat(int arglist, int rest){
         arg3 = caddr(arglist);
         
         if(!wide_variable_p(arg1) && !atomp(arg1))
-            error(NOT_STR,"atom_concat ",arg1);
+            error(NOT_ATOM,"atom_concat ",arg1);
         if(!wide_variable_p(arg2) && !atomp(arg2))
-            error(NOT_STR,"atom_concat ",arg2);
+            error(NOT_ATOM,"atom_concat ",arg2);
         if(!wide_variable_p(arg3))
             error(NOT_VAR,"atom_concat ", arg3);
     
@@ -2488,6 +2489,31 @@ int b_atom_concat(int arglist, int rest){
         unify(arg3,atom);
         return(YES);
 
+    }
+    return(NO);
+}
+
+int b_atom_string(int arglist, int rest){
+    int n,arg1,arg2,temp;
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist); //atom
+        arg2 = cadr(arglist);//string
+
+        if(!wide_variable_p(arg1) && !atomp(arg1))
+            error(NOT_ATOM,"atom_string ",arg1);
+        if(!wide_variable_p(arg2) && !stringp(arg2))
+            error(NOT_STR,"atom_string ",arg2);
+
+        if(atomp(arg1)){
+            temp = makestr(GET_NAME(arg1));
+            return(unify(arg2,temp));
+        }
+        else if(stringp(arg2)){
+            temp = makeconst(GET_NAME(arg2));
+            return(unify(arg1,temp));
+        }
     }
     return(NO);
 }
