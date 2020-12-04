@@ -641,9 +641,11 @@ int b_heapdump(int arglist, int rest){
         arg2 = cadr(arglist);
 
         if(!integerp(arg1))
-            error(NOT_INT,"n_heapdump ",arg1);
+            error(NOT_INT,"heap ",arg1);
         if(!integerp(arg2))
-            error(NOT_INT,"n_heapdump ",arg2);
+            error(NOT_INT,"heap ",arg2);
+        if(greaterp(arg1,arg2))
+            error(WRONG_ARGS,"heap ",wlist2(arg1,arg2));
         
         heapdump(get_int(arg1),get_int(arg2));
         return(YES);

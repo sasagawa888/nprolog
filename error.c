@@ -79,6 +79,11 @@ void error(int errnum, char *fun, int arg){
         case NOT_COMPOUND:  printf("Not a compound %s ", fun);
                             print(arg);
                             break;
+
+        case WRONG_ARGS:    printf("Wrong arguments %s ", fun);
+                            print(arg);
+                            break;
+                            
         case PRED_INDICATOR:
                             printf("Not predicate indicator %s ", fun);
                             print(arg);

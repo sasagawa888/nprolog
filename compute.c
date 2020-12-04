@@ -201,14 +201,14 @@ int eqsmallerp(int x1, int x2){
 }
 
 int greaterp(int x1, int x2){
-    if(smallerp(x2,x1))
+    if(eqsmallerp(x2,x1))
         return(1);
     else
         return(0);
 }
 
 int eqgreaterp(int x1, int x2){
-    if(eqsmallerp(x2,x1))
+    if(smallerp(x2,x1))
         return(1);
     else
         return(0);

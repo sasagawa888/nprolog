@@ -128,7 +128,8 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"ansi_ed"},{"ansi_el"},{"errorcode"},
 {"recordh"},{"recorda"},{"recordz"},{"instance"},{"removeallh"},
 {"stdin"},{"stdout"},{"stdinout"},
-{"ctr_set"},{"ctr_dec"},{"ctr_inc"},{"ctr_is"}
+{"ctr_set"},{"ctr_dec"},{"ctr_inc"},{"ctr_is"},
+{"heapd"}
 };
 
 //compiled predicate
