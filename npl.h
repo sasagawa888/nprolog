@@ -3,6 +3,7 @@ written by kenichi sasagawa 2016/9~
 */
 #include <setjmp.h>
 #include <stdio.h>
+#include <sys/ioctl.h>
 
 /*
 memory map
@@ -399,6 +400,8 @@ extern int ed_quote_color;
 extern int ed_comment_color;
 extern int ed_function_color;
 extern int ed_incomment;
+extern int ed_hight;
+extern int ed_width;
 
 #define ESCHOME printf("\33[1;1H")
 #define ESCTOP  printf("\33[2;1H")

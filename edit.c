@@ -611,7 +611,7 @@ void backspace_buffer(int col){
 void insertcol_buffer(int col){
     int i;
 
-    for(i=255;i>col;i--)
+    for(i=BUFSIZE-1;i>col;i--)
         buffer[i][0] = buffer[i-1][0];
 }
 
@@ -695,7 +695,7 @@ int read_line(int flag){
             case DEL:  if(j <= 0)
                           break;
                       j--;
-                      for(k=j;k<255;k++)
+                      for(k=j;k<BUFSIZE-1;k++)
                           buffer[k][0] = buffer[k+1][0];
                       display_buffer();
                       ESCMVLEFT(count_col_buffer(j)+left_margin);
@@ -826,153 +826,152 @@ int read_line(int flag){
                       break;
 
             default:  
-                
-                      if(mode_flag == 0 && iskanji(c)){
-                         for(k=255;k>j;k--)
-                             buffer[k][0] = buffer[k-2][0];
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         display_buffer();
-                         reset_paren_bracket_buffer();
-                         if(ed_rparen_col >= j-2)
-                             ed_rparen_col = ed_rparen_col + 2;
-                         if(ed_lparen_col >= j-2)
-                             ed_lparen_col = ed_rparen_col + 2;
-                         if(ed_rbracket_col >= j-2)
-                             ed_rbracket_col = ed_rbracket_col + 2;
-                         if(ed_lbracket_col >= j-2)
-                             ed_lbracket_col = ed_rbracket_col + 2;
-                      }
-                      else if(mode_flag == 1 && isUni2(c)){
-                         for(k=255;k>j;k--)
-                             buffer[k][0] = buffer[k-2][0];
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         display_buffer();
-                         reset_paren_bracket_buffer();
-                         if(ed_rparen_col >= j-2)
-                             ed_rparen_col = ed_rparen_col + 2;
-                         if(ed_lparen_col >= j-2)
-                             ed_lparen_col = ed_rparen_col + 2;
-                         if(ed_rbracket_col >= j-2)
-                             ed_rbracket_col = ed_rbracket_col + 2;
-                         if(ed_lbracket_col >= j-2)
-                             ed_lbracket_col = ed_rbracket_col + 2;
-                      }
-                      else if(mode_flag == 1 && isUni3(c)){
-                         for(k=255;k>j;k--)
-                             buffer[k][0] = buffer[k-3][0];
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         display_buffer();
-                         reset_paren_bracket_buffer();
-                         if(ed_rparen_col >= j-3)
-                             ed_rparen_col = ed_rparen_col + 3;
-                         if(ed_lparen_col >= j-3)
-                             ed_lparen_col = ed_rparen_col + 3;
-                         if(ed_rbracket_col >= j-3)
-                             ed_rbracket_col = ed_rbracket_col + 3;
-                         if(ed_lbracket_col >= j-3)
-                             ed_lbracket_col = ed_rbracket_col + 3;
-                      }
-                      else if(mode_flag == 1 && isUni4(c)){
-                         for(k=255;k>j;k--)
-                             buffer[k][0] = buffer[k-4][0];
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         display_buffer();
-                         reset_paren_bracket_buffer();
-                         if(ed_rparen_col >= j-4)
-                             ed_rparen_col = ed_rparen_col + 4;
-                         if(ed_lparen_col >= j-4)
-                             ed_lparen_col = ed_rparen_col + 4;
-                         if(ed_rbracket_col >= j-4)
-                             ed_rbracket_col = ed_rbracket_col + 4;
-                         if(ed_lbracket_col >= j-4)
-                             ed_lbracket_col = ed_rbracket_col + 4;
-                      }
-                      else if(mode_flag == 1 && isUni5(c)){
-                         for(k=255;k>j;k--)
-                             buffer[k][0] = buffer[k-5][0];
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         display_buffer();
-                         reset_paren_bracket_buffer();
-                         if(ed_rparen_col >= j-5)
-                             ed_rparen_col = ed_rparen_col + 5;
-                         if(ed_lparen_col >= j-5)
-                             ed_lparen_col = ed_rparen_col + 5;
-                         if(ed_rbracket_col >= j-5)
-                             ed_rbracket_col = ed_rbracket_col + 5;
-                         if(ed_lbracket_col >= j-5)
-                             ed_lbracket_col = ed_rbracket_col + 5;
-                      }
-                      else if(mode_flag == 1 && isUni6(c)){
-                         for(k=255;k>j;k--)
-                             buffer[k][0] = buffer[k-6][0];
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         c = getch();
-                         buffer[j++][0] = c;
-                         display_buffer();
-                         reset_paren_bracket_buffer();
-                         if(ed_rparen_col >= j-6)
-                             ed_rparen_col = ed_rparen_col + 6;
-                         if(ed_lparen_col >= j-6)
-                             ed_lparen_col = ed_rparen_col + 6;
-                         if(ed_rbracket_col >= j-6)
-                             ed_rbracket_col = ed_rbracket_col + 6;
-                         if(ed_lbracket_col >= j-6)
-                             ed_lbracket_col = ed_rbracket_col + 6;
-                      }
-                      else{
-                         for(k=255;k>j;k--)
-                             buffer[k][0] = buffer[k-1][0];
-                         buffer[j++][0] = c;
-                         display_buffer();
-                         reset_paren_bracket_buffer();
-                         if(c == '(' || c == ')' || c == '[' || c == ']'){
-                             emphasis_lparen_buffer(count_col_buffer(j-1));
-                             emphasis_rparen_buffer(count_col_buffer(j-1));
-                             emphasis_lbracket_buffer(count_col_buffer(j-1));
-                             emphasis_rbracket_buffer(count_col_buffer(j-1));
-                         }
-                         else{
-                             if(ed_rparen_col >= j-1)
-                                 ed_rparen_col++;
-                             if(ed_lparen_col >= j-1)
-                                 ed_lparen_col++;
-                             if(ed_rbracket_col >= j-1)
-                                 ed_rbracket_col++;
-                             if(ed_lbracket_col >= j-1)
-                                 ed_lbracket_col++;
-                         }
-                      }
-                      ESCMVLEFT(count_col_buffer(j)+left_margin);
+                    if(mode_flag == 0 && iskanji(c)){
+                        for(k=BUFSIZE-1;k>j;k--)
+                            buffer[k][0] = buffer[k-2][0];
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        display_buffer();
+                        reset_paren_bracket_buffer();
+                        if(ed_rparen_col >= j-2)
+                            ed_rparen_col = ed_rparen_col + 2;
+                        if(ed_lparen_col >= j-2)
+                            ed_lparen_col = ed_rparen_col + 2;
+                        if(ed_rbracket_col >= j-2)
+                            ed_rbracket_col = ed_rbracket_col + 2;
+                        if(ed_lbracket_col >= j-2)
+                            ed_lbracket_col = ed_rbracket_col + 2;
+                    }
+                    else if(mode_flag == 1 && isUni2(c)){
+                        for(k=BUFSIZE-1;k>j;k--)
+                            buffer[k][0] = buffer[k-2][0];
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        display_buffer();
+                        reset_paren_bracket_buffer();
+                        if(ed_rparen_col >= j-2)
+                            ed_rparen_col = ed_rparen_col + 2;
+                        if(ed_lparen_col >= j-2)
+                            ed_lparen_col = ed_rparen_col + 2;
+                        if(ed_rbracket_col >= j-2)
+                            ed_rbracket_col = ed_rbracket_col + 2;
+                        if(ed_lbracket_col >= j-2)
+                            ed_lbracket_col = ed_rbracket_col + 2;
+                    }
+                    else if(mode_flag == 1 && isUni3(c)){
+                        for(k=BUFSIZE-1;k>j;k--)
+                            buffer[k][0] = buffer[k-3][0];
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        display_buffer();
+                        reset_paren_bracket_buffer();
+                        if(ed_rparen_col >= j-3)
+                            ed_rparen_col = ed_rparen_col + 3;
+                        if(ed_lparen_col >= j-3)
+                            ed_lparen_col = ed_rparen_col + 3;
+                        if(ed_rbracket_col >= j-3)
+                            ed_rbracket_col = ed_rbracket_col + 3;
+                        if(ed_lbracket_col >= j-3)
+                            ed_lbracket_col = ed_rbracket_col + 3;
+                    }
+                    else if(mode_flag == 1 && isUni4(c)){
+                        for(k=BUFSIZE-1;k>j;k--)
+                            buffer[k][0] = buffer[k-4][0];
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        display_buffer();
+                        reset_paren_bracket_buffer();
+                        if(ed_rparen_col >= j-4)
+                            ed_rparen_col = ed_rparen_col + 4;
+                        if(ed_lparen_col >= j-4)
+                            ed_lparen_col = ed_rparen_col + 4;
+                        if(ed_rbracket_col >= j-4)
+                            ed_rbracket_col = ed_rbracket_col + 4;
+                        if(ed_lbracket_col >= j-4)
+                            ed_lbracket_col = ed_rbracket_col + 4;
+                    }
+                    else if(mode_flag == 1 && isUni5(c)){
+                        for(k=BUFSIZE-1;k>j;k--)
+                            buffer[k][0] = buffer[k-5][0];
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        display_buffer();
+                        reset_paren_bracket_buffer();
+                        if(ed_rparen_col >= j-5)
+                            ed_rparen_col = ed_rparen_col + 5;
+                        if(ed_lparen_col >= j-5)
+                            ed_lparen_col = ed_rparen_col + 5;
+                        if(ed_rbracket_col >= j-5)
+                            ed_rbracket_col = ed_rbracket_col + 5;
+                        if(ed_lbracket_col >= j-5)
+                            ed_lbracket_col = ed_rbracket_col + 5;
+                    }
+                    else if(mode_flag == 1 && isUni6(c)){
+                        for(k=BUFSIZE-1;k>j;k--)
+                            buffer[k][0] = buffer[k-6][0];
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        c = getch();
+                        buffer[j++][0] = c;
+                        display_buffer();
+                        reset_paren_bracket_buffer();
+                        if(ed_rparen_col >= j-6)
+                            ed_rparen_col = ed_rparen_col + 6;
+                        if(ed_lparen_col >= j-6)
+                            ed_lparen_col = ed_rparen_col + 6;
+                        if(ed_rbracket_col >= j-6)
+                            ed_rbracket_col = ed_rbracket_col + 6;
+                        if(ed_lbracket_col >= j-6)
+                            ed_lbracket_col = ed_rbracket_col + 6;
+                    }
+                    else{
+                        for(k=BUFSIZE-1;k>j;k--)
+                            buffer[k][0] = buffer[k-1][0];
+                        buffer[j++][0] = c;
+                        display_buffer();
+                        reset_paren_bracket_buffer();
+                        if(c == '(' || c == ')' || c == '[' || c == ']'){
+                            emphasis_lparen_buffer(count_col_buffer(j-1));
+                            emphasis_rparen_buffer(count_col_buffer(j-1));
+                            emphasis_lbracket_buffer(count_col_buffer(j-1));
+                            emphasis_rbracket_buffer(count_col_buffer(j-1));
+                        }
+                        else{
+                            if(ed_rparen_col >= j-1)
+                                ed_rparen_col++;
+                            if(ed_lparen_col >= j-1)
+                                ed_lparen_col++;
+                            if(ed_rbracket_col >= j-1)
+                                ed_rbracket_col++;
+                            if(ed_lbracket_col >= j-1)
+                                ed_lbracket_col++;
+                        }
+                    }
+                    ESCMVLEFT(count_col_buffer(j)+left_margin);
 
         }
         c = getch();

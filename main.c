@@ -180,18 +180,23 @@ int ed_quote_color = 3;   //default yellow
 int ed_comment_color = 4;  //default blue
 int ed_function_color = 2; //default green
 int ed_incomment = -1; /*...*/
-
+int ed_hight;
+int ed_width;
 
 
 int main(int argc, char *argv[]){
     int opt;
     char *home,str[STRSIZE];
+    struct winsize w;
 
     signal(SIGINT,reset);
     initcell();
     initbuiltin();
     initoperator();
-    initstream();
+    initstream(); 
+    ioctl(0, TIOCGWINSZ, &w);
+    ed_hight = w.ws_row;
+    ed_width = w.ws_col;
     input_stream = standard_input;
     output_stream = standard_output;
     error_stream = standard_error;
