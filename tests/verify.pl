@@ -32,6 +32,12 @@ test(float) :-
     verify(float(1.0e10)),
     verify(not(float(1))).
 
+test(arithmetic) :-
+    verify(2>1),
+    verify(2>=1),
+    verify(1<2),
+    verify(1=<1).
+
 test(unify) :-
     verify(c(Z) = c(c(z))),
     verify(Z == c(z)),
@@ -64,3 +70,5 @@ test(univ) :-
     X =.. [sin,3],
     verify(X == sin(3)).
 
+
+:- alltest,write('All tests are done\n').

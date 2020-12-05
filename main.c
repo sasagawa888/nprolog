@@ -233,6 +233,18 @@ int main(int argc, char *argv[]){
             b_consult(list1(makeconst(argv[opt])),NIL);
             opt++;
         }
+        else if(strcmp(argv[opt],"-s") == 0){
+            opt++;
+            FILE* fp = fopen(argv[opt],"r");
+            if(fp != NULL)
+                fclose(fp);
+            else{
+                printf("Not exist %s\n", argv[opt]);
+                break;
+            }
+            b_consult(list1(makeconst(argv[opt])),NIL);
+            return(0);
+        }
         else if(strcmp(argv[opt],"-r") == 0){
             repl_flag = 0;
             opt++;
@@ -252,9 +264,10 @@ int main(int argc, char *argv[]){
         }
         else if(strcmp(argv[opt],"-h") == 0){
             printf("List of options:\n");
-            printf("-c           -- NPL starts after reading the file.\n");
+            printf("-c filename  -- NPL starts after reading the file.\n");
             printf("-h           -- display help.\n");
             printf("-r           -- NPL does not use editable REPL.\n");
+            printf("-s filename  -- NPL run file with script mode.\n");
             printf("-v           -- dislplay version number.\n");
             return(0);
         }
