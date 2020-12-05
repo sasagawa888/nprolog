@@ -826,6 +826,12 @@ int read_line(int flag){
                       break;
 
             default:  
+                    //limit terminal width
+                    if(buffer[ed_width-6][0] != 0){
+                        c = getch();
+                        goto loop;
+                    }
+
                     if(mode_flag == 0 && iskanji(c)){
                         for(k=BUFSIZE-1;k>j;k--)
                             buffer[k][0] = buffer[k-2][0];
