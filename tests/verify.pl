@@ -98,6 +98,9 @@ test(univ) :-
 
 test(concat) :-
     concat(a123,asdf,X),
-    X = a123asdf.
+    X = a123asdf,
+    concat($asdf$,$123$,Y),
+    Y = $asdf123$.
+
 
 :- alltest,write('All tests are done\n').

@@ -1611,6 +1611,8 @@ int copy_heap(int x){
         return(x);
     else if(numberp(x))
         return(x);
+    else if(stringp(x))
+        return(x);
     else if(listp(x))
         return(listcons(copy_heap(car(x)),
                         copy_heap(cdr(x))));
