@@ -522,7 +522,7 @@ char *get_fragment_buffer(int col){
     int pos;
 
     while(col >= 0 &&
-          buffer[col][0] != ' ' &&
+          buffer[col][0] != ',' &&
           buffer[col][0] != '(' &&
           buffer[col][0] != ')'){
                 col--;
