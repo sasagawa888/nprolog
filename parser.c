@@ -54,13 +54,13 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
         exit:
         if(nullp(operator)){
             if(length(operand) != 1)
-                error(SYNTAX_ERR,"not one operand with no operator ",1);
+                error(SYNTAX_ERR,"expected operator ",1);
             else
                 return(car(operand));
         }
         else{
             if(length(operand) != 2)
-                error(SYNTAX_ERR,"not two operand with an operator",2);
+                error(SYNTAX_ERR,"expected two operand ",2);
             else
                 return(cons(car(operator),reverse(operand)));
         }
