@@ -27,13 +27,25 @@ test(atomic) :-
     verify(atomic(abc)),
     verify(atomic(1.0)).
 
+test(integer) :-
+    verify(integer(1)),
+    verify(integer(10000000000)),
+    verify(integer(-1)),
+    verify(integer(-10000000001)).
+
 test(float) :-
     verify(float(1.0)),
     verify(float(1.0e10)),
     verify(not(float(1))).
 
 test(arithmetic) :-
+    verify(2 is 1+1),
+    verify(1.2 is 0.7+0.5),
+    verify(2==2),
+    verify(2\=3),
+    verify(2\=0.3),
     verify(2>1),
+    verify(3.2>3),
     verify(2>=1),
     verify(1<2),
     verify(1=<1).
