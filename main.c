@@ -240,7 +240,7 @@ int main(int argc, char *argv[]){
                 fclose(fp);
             else{
                 printf("Not exist %s\n", argv[opt]);
-                break;
+                return(0);
             }
             b_consult(list1(makeconst(argv[opt])),NIL);
             return(0);
