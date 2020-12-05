@@ -51,7 +51,10 @@ test(arithmetic) :-
     verify(16 is 2**4),
     verify(-1.0 is cos(acos(-1))),
     verify(2==2),
+    verify(1.23==1.23),
+    verify(2=:=2),
     verify(2\=3),
+    verify(2=\=3),
     verify(2\=0.3),
     verify(2>1),
     verify(3.2>3),
@@ -60,7 +63,9 @@ test(arithmetic) :-
     verify(1=<1).
 
 test(string) :-
-    verify(string($asdf$)).
+    verify(string($asdf$)),
+    verify(string($123$)),
+    verify(string($hello world!$)).
 
 test(unify) :-
     verify(c(Z) = c(c(z))),
@@ -102,5 +107,19 @@ test(concat) :-
     concat($asdf$,$123$,Y),
     Y = $asdf123$.
 
+test(current_predicate) :-
+    verify(current_predicate(verify/1)).
+
+test(dec) :-
+    dec(10,X),
+    X == 9.
+
+test(inc) :-
+    inc(9,X),
+    X == 10.
+
+test(float_text) :-
+    float_text(1.23,X,$%1.2f$),
+    X = $1.23$.
 
 :- alltest,write('All tests are done\n').

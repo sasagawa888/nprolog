@@ -2742,7 +2742,7 @@ int b_float_text(int arglist, int rest){
 
         if(floatp(arg1)){
             sprintf(str,GET_NAME(arg3),GET_FLT(arg1));
-            return(unify(arg2,makeconst(str)));
+            return(unify(arg2,makestr(str)));
         }
         else if(stringp(arg2)){
             flt = atof(GET_NAME(arg2));
