@@ -214,7 +214,7 @@ void display_buffer(){
 }
 
 int check_token_buffer(int col){
-    char str[80];
+    char str[BUFSIZE];
     int pos,i;
 
     pos = 0;
@@ -825,7 +825,9 @@ int read_line(int flag){
                       }
                       break;
 
-            default:  if(mode_flag == 0 && iskanji(c)){
+            default:  
+                
+                      if(mode_flag == 0 && iskanji(c)){
                          for(k=255;k>j;k--)
                              buffer[k][0] = buffer[k-2][0];
                          buffer[j++][0] = c;
