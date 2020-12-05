@@ -27,6 +27,11 @@ test(atomic) :-
     verify(atomic(abc)),
     verify(atomic(1.0)).
 
+test(number) :-
+    verify(number(1)),
+    verify(number(1.0)),
+    verify(number(1.0e1)).
+
 test(integer) :-
     verify(integer(1)),
     verify(integer(10000000000)),
@@ -35,12 +40,16 @@ test(integer) :-
 
 test(float) :-
     verify(float(1.0)),
+    verify(float(0.000001)),
     verify(float(1.0e10)),
     verify(not(float(1))).
 
 test(arithmetic) :-
     verify(2 is 1+1),
     verify(1.2 is 0.7+0.5),
+    verify(8 is 2^3),
+    verify(16 is 2**4),
+    verify(-1.0 is cos(acos(-1))),
     verify(2==2),
     verify(2\=3),
     verify(2\=0.3),
@@ -49,6 +58,9 @@ test(arithmetic) :-
     verify(2>=1),
     verify(1<2),
     verify(1=<1).
+
+test(string) :-
+    verify(string($asdf$)).
 
 test(unify) :-
     verify(c(Z) = c(c(z))),
@@ -80,7 +92,12 @@ test(list_difference) :-
 
 test(univ) :-
     X =.. [sin,3],
-    verify(X == sin(3)).
+    cos(2) =.. Y,
+    verify(X == sin(3)),
+    verify(Y == [cos,2]).
 
+test(concat) :-
+    concat(a123,asdf,X),
+    X = a123asdf.
 
 :- alltest,write('All tests are done\n').
