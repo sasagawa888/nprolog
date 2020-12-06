@@ -4069,9 +4069,14 @@ int b_reverse(int arglist, int rest){
         arg1 = car(arglist);
         arg2 = cadr(arglist);
 
-        if(!variablep(arg1) && variablep(arg2))
+        if(!wide_variable_p(arg1) && !listp(arg1))
+            error(NOT_LIST,"reverse ",arg1);
+        if(!wide_variable_p(arg2) && !listp(arg2))
+            error(NOT_LIST,"reverse ",arg2);
+
+        if(!variablep(arg1))
             return(unify(listreverse(arg1),arg2));
-        else if(variablep(arg1) && !variablep(arg2))
+        else if(!variablep(arg2))
             return(unify(arg1,listreverse(arg2)));
         else
             return(NO);
