@@ -120,6 +120,11 @@ test(inc) :-
 
 test(float_text) :-
     float_text(1.23,X,$%1.2f$),
-    X = $1.23$.
+    verify(X = $1.23$),
+    float_text(Y,$1.23$,$%1.2f$),
+    verify(Y == 1.23).
+
+test(length) :-
+    verify(length([1,2,3],3)).
 
 :- alltest,write('All tests are done\n').

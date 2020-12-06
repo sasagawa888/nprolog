@@ -129,7 +129,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"recordh"},{"recorda"},{"recordz"},{"instance"},{"removeallh"},
 {"stdin"},{"stdout"},{"stdinout"},
 {"ctr_set"},{"ctr_dec"},{"ctr_inc"},{"ctr_is"},
-{"heapd"}
+{"heapd"},{"list_text"}
 };
 
 //compiled predicate

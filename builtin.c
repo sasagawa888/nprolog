@@ -102,9 +102,10 @@ void initbuiltin(void){
     defbuiltin("length",b_length);
     defbuiltin("listing",b_listing);
     defbuiltin("list",b_list);
+    defbuiltin("list_text",b_list_text);
     defbuiltin("mkdir",b_mkdir);
     defbuiltin("measure",b_measure);
-    defbuiltin("name",b_atom_codes);
+    defbuiltin("name",b_name);
     defbuiltin("nl",b_nl);
     defbuiltin("not",b_not);
     defbuiltin("nonvar",b_nonvar);
@@ -2359,7 +2360,7 @@ int b_clause(int arglist, int rest){
 
 
 //transform
-int b_atom_codes(int arglist, int rest){
+int b_name(int arglist, int rest){
     int n,arg1,arg2,ls,atom,pos,code,res;
     char str1[STRSIZE],str2[10];
 
@@ -2368,13 +2369,13 @@ int b_atom_codes(int arglist, int rest){
         arg1 = car(arglist);
         arg2 = cadr(arglist);
         if(wide_variable_p(arg1) && listp(arg2) && length(arg2) == -1)
-            error(INSTANTATION_ERR,"atom_codes ",arg1);
+            error(INSTANTATION_ERR,"name ",arg1);
         if(!wide_variable_p(arg1) && !atomp(arg1))
-            error(NOT_ATOM,"atom_codes ",arg1);
+            error(NOT_ATOM,"name ",arg1);
         if(wide_variable_p(arg1) && !listp(arg2))
-            error(NOT_LIST,"atom_codes ",arg2);
+            error(NOT_LIST,"name ",arg2);
         if(wide_variable_p(arg1) && !atom_codes_list_p(arg2))
-            error(NOT_CHAR_CODE,"atom_codes ",arg2);
+            error(NOT_CHAR_CODE,"name ",arg2);
 
 
         if(singlep(arg1) && !variablep(arg1)){
@@ -2464,6 +2465,126 @@ int b_atom_codes(int arglist, int rest){
     }
     return(NO);
 }
+
+int b_list_text(int arglist, int rest){
+    int n,arg1,arg2,ls,atom,pos,code,index,res;
+    char str1[STRSIZE],str2[10];
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);  //list
+        arg2 = cadr(arglist); //atomstring
+        if(listp(arg1) && length(arg1) == -1 && wide_variable_p(arg2))
+            error(INSTANTATION_ERR,"list_text ",arg2);
+        if(!wide_variable_p(arg1) && !listp(arg1))
+            error(NOT_LIST,"list_text ",arg1);
+        if(wide_variable_p(arg1) && !atomp(arg2) && !stringp(arg2))
+            error(NOT_ATOM,"list_text ",arg2);
+        
+
+        if(atomp(arg2) || stringp(arg2)){
+            strcpy(str1,GET_NAME(arg2));
+            ls = NIL;
+            pos = 0;
+            while(str1[pos] != NUL){
+                if(str1[pos] == '\\'){
+                    str2[0] = str1[pos++];
+                    str2[1] = str1[pos++];
+                }
+                else if(mode_flag == 0 && iskanji(str1[pos])){ //SJIS
+                    str2[0] = str1[pos++];
+                    str2[1] = str1[pos++];
+                    str2[2] = NUL;
+                }
+                else if(mode_flag == 1 && isUni2(str1[pos])){
+                    str2[0] = str1[pos++];
+                    str2[1] = str1[pos++];
+                    str2[2] = NUL;
+                }
+                else if(mode_flag == 1 && isUni3(str1[pos])){
+                    str2[0] = str1[pos++];
+                    str2[1] = str1[pos++];
+                    str2[2] = str1[pos++];
+                    str2[3] = NUL;
+                }
+                else if(mode_flag == 1 && isUni4(str1[pos])){
+                    str2[0] = str1[pos++];
+                    str2[1] = str1[pos++];
+                    str2[2] = str1[pos++];
+                    str2[3] = str1[pos++];
+                    str2[4] = NUL;
+                }
+                else if(mode_flag == 1 && isUni5(str1[pos])){
+                    str2[0] = str1[pos++];
+                    str2[1] = str1[pos++];
+                    str2[2] = str1[pos++];
+                    str2[3] = str1[pos++];
+                    str2[4] = str1[pos++];
+                    str2[5] = NUL;
+                }
+                else if(mode_flag == 1 && isUni6(str1[pos])){
+                    str2[0] = str1[pos++];
+                    str2[1] = str1[pos++];
+                    str2[2] = str1[pos++];
+                    str2[3] = str1[pos++];
+                    str2[4] = str1[pos++];
+                    str2[5] = str1[pos++];
+                    str2[6] = NUL;
+                }
+                else{//ascii code
+                    str2[0] = str1[pos++];
+                    str2[1] = NUL;
+                }
+                if(str2[0] == '\\')
+                    code = ctrl_to_number(str2[1]);
+                else if(mode_flag == 0) //SJIS
+                    code = makeint(sjis_to_code(str2));
+                else //unicode
+                    code = makeint(utf8_to_ucs4(str2));
+                ls = cons(code,ls);
+            }
+            ls = listreverse(ls);
+            res = unify(arg1,ls);
+            return(res);
+        }
+        else if(structurep(arg1)){
+            ls = arg1;
+            str1[0] = NUL;
+            while(!nullp(ls)){
+                if(GET_INT(car(ls)) < ' ')
+                    sprintf(str2,"\\x%x\\",GET_INT(car(ls)));
+                else if(mode_flag == 0)
+                    sjis_to_char(GET_INT(car(ls)),str2);
+                else
+                    ucs4_to_utf8(GET_INT(car(ls)),str2);
+                strcat(str1,str2);
+                ls = cdr(ls);
+            }
+
+            index = hash(str1);
+            if((res=getatom(str1,SIMP,index)) != 0)
+                atom = res;
+            else if((res=getatom(str1,PRED,index)) != 0)
+                atom = res;
+            else if((res=getatom(str1,SYS,index)) != 0)
+                atom = res;
+            else if((res=getatom(str1,COMP,index)) != 0)
+                atom = res;
+            else if((res=getatom(str1,OPE,index)) != 0)
+                atom = res;
+            else if((res=getatom(str1,USER,index)) != 0)
+                atom = res;
+            else
+                atom = makestr(str1);
+            
+            return(unify(arg2,atom));
+        }
+        else
+            return(NO);
+    }
+    return(NO);
+}
+
 
 int b_atom_concat(int arglist, int rest){
     int n,arg1,arg2,arg3,atom;
