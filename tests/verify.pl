@@ -196,6 +196,13 @@ test(list_text) :-
     list_text([97,115,115,101,114,116],Y),
     verify(Y=assert).
 
+test(int_text) :-
+    int_text(6,X),
+    verify(X = $6$),
+    int_text(Y,$7$),
+    verify(Y = 7),
+    verify(5,$5$).
+
 test(string_term) :-
     string_term($sin(3)$,X),
     verify(X = sin(3)).
