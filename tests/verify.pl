@@ -74,6 +74,9 @@ test(arithmetic) :-
     verify(3 is max(3,1)),
     verify(2.718281828459045 is exp(1)),
     verify(0 is log(1)),
+    verify(2 is ceiling(1.1)),
+    verify(1 is floor(1.1)),
+    verify(1 is truncate(1.1)),
     verify(2==2),
     verify(1.23==1.23),
     verify(0.00000000000001==0.00000000000001),
@@ -88,6 +91,10 @@ test(arithmetic) :-
     verify(1<2.0),
     verify(1.0<999999999999999999999999),
     verify(1=<1).
+
+test(sort) :-
+    sort([2,3,1],X),
+    verify(X = [1,2,3]).
 
 test(string) :-
     verify(string($asdf$)),

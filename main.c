@@ -226,7 +226,7 @@ int main(int argc, char *argv[]){
     }
     
     while(opt < argc){
-        if(strcmp(argv[opt],"-c") == 0){
+        if(strcmp(argv[opt],"-c") == 0 || strcmp(argv[opt],"--code") == 0){
             opt++;
             FILE* fp = fopen(argv[opt],"r");
             if(fp != NULL)
@@ -238,7 +238,7 @@ int main(int argc, char *argv[]){
             b_reconsult(list1(makeconst(argv[opt])),NIL);
             opt++;
         }
-        else if(strcmp(argv[opt],"-s") == 0){
+        else if(strcmp(argv[opt],"-s") == 0 || strcmp(argv[opt],"--script") == 0){
             opt++;
             FILE* fp = fopen(argv[opt],"r");
             if(fp != NULL)
@@ -250,7 +250,7 @@ int main(int argc, char *argv[]){
             b_reconsult(list1(makeconst(argv[opt])),NIL);
             return(0);
         }
-        else if(strcmp(argv[opt],"-r") == 0){
+        else if(strcmp(argv[opt],"-r") == 0 || strcmp(argv[opt],"--repl") == 0){
             repl_flag = 0;
             opt++;
         }
@@ -267,7 +267,7 @@ int main(int argc, char *argv[]){
             repl_flag = 0;
             opt++;
         }
-        else if(strcmp(argv[opt],"-h") == 0){
+        else if(strcmp(argv[opt],"-h") == 0 || strcmp(argv[opt],"--help") == 0){
             printf("List of options:\n");
             printf("-c filename  -- NPL starts after reading the file.\n");
             printf("-h           -- display help.\n");
@@ -276,7 +276,7 @@ int main(int argc, char *argv[]){
             printf("-v           -- dislplay version number.\n");
             return(0);
         }
-        else if(strcmp(argv[opt],"-v") == 0){
+        else if(strcmp(argv[opt],"-v") == 0 || strcmp(argv[opt],"--version") == 0){
             printf("N-Prolog Ver %1.2f\n", VERSION);
             return(0);
         }
