@@ -58,9 +58,19 @@ test(var) :-
     Y = a,
     verify(not(var(Y))).
 
+test(radix) :-
+    verify(0xff == 255), 
+    verify(0o77 == 63).
+
 test(arithmetic) :-
     verify(2 is 1+1),
+    verify(-1 is 3-4),
+    verify(6 is 2*3),
+    verify(8 is 16/2),
+    verify(2.3 is 1.1+1.2),
     verify(1.2 is 0.7+0.5),
+    verify(2.3 is 3.4-1.1),
+    verify(0.36 is 0.6*0.6),
     verify(8 is 2^3),
     verify(16 is 2**4),
     verify(-1.0 is cos(acos(-1))),
@@ -77,6 +87,10 @@ test(arithmetic) :-
     verify(2 is ceiling(1.1)),
     verify(1 is floor(1.1)),
     verify(1 is truncate(1.1)),
+    verify(1.0 is float(1)),
+    verify(1 is sign(10)),
+    verify(0 is sign(0)),
+    verify(-1 is sign(-9)),
     verify(2==2),
     verify(1.23==1.23),
     verify(0.00000000000001==0.00000000000001),
@@ -94,12 +108,16 @@ test(arithmetic) :-
 
 test(sort) :-
     sort([2,3,1],X),
-    verify(X = [1,2,3]).
+    verify(X = [1,2,3]),
+    keysort([25-a, e-100, n-5, 12-o, 50-t], Y),
+    verify(Y,[12-o,25-a,50-t,e-100,n-5]).
 
 test(string) :-
     verify(string($asdf$)),
     verify(string($123$)),
-    verify(string($hello world!$)).
+    verify(string($hello world!$)),
+    verify($asdf$ = $asdf$),
+    verify($asdf$ \= $qwer$).
 
 test(true_fail_not) :-
     verify(true),
