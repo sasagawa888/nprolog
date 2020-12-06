@@ -127,4 +127,14 @@ test(float_text) :-
 test(length) :-
     verify(length([1,2,3],3)).
 
+test(list_text) :-
+    list_text([97,115,100],X),
+    verify(X = asd),
+    list_text([97,115,115,101,114,116],Y),
+    verify(Y=assert).
+
+test(string_term) :-
+    string_term($sin(3)$,X),
+    verify(X = sin(3)).
+
 :- alltest,write('All tests are done\n').
