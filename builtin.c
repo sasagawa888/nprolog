@@ -97,6 +97,7 @@ void initbuiltin(void){
     defbuiltin("inc",b_inc);
     defbuiltin("instance",b_instance);
     defbuiltin("integer",b_integer);
+    defbuiltin("int_text",b_int_text);
     defbuiltin("keysort",b_keysort);
     defbuiltin("leash",b_leash);
     defbuiltin("length",b_length);
@@ -2858,11 +2859,11 @@ int b_float_text(int arglist, int rest){
             error(NOT_FLT,"float_text ",arg1);
         if(!wide_variable_p(arg2) && !stringp(arg2))
             error(NOT_STR,"float_text ",arg2);
-        if(!stringp(arg3))
+        if(!wide_variable_p(arg3) && !stringp(arg3))
             error(NOT_STR,"float_text ",arg3);
 
         if(floatp(arg1)){
-            sprintf(str,GET_NAME(arg3),GET_FLT(arg1));
+            sprintf(str,"%g",GET_FLT(arg1));
             return(unify(arg2,makestr(str)));
         }
         else if(stringp(arg2)){
@@ -2873,6 +2874,34 @@ int b_float_text(int arglist, int rest){
     }
     return(NO);
 }
+
+int b_int_text(int arglist, int rest){
+    int n,arg1,arg2,i;
+    char str[STRSIZE];
+
+    n = length(arglist);
+    if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+
+        if(!wide_variable_p(arg1) && !integerp(arg1))
+            error(NOT_FLT,"int_text ",arg1);
+        if(!wide_variable_p(arg2) && !stringp(arg2))
+            error(NOT_STR,"int_text ",arg2);
+
+        if(integerp(arg1)){
+            sprintf(str,"%d",get_int(arg1));
+            return(unify(arg2,makestr(str)));
+        }
+        else if(stringp(arg2)){
+            i = atoi(GET_NAME(arg2));
+            return(unify(arg1,makeint(i)));
+        }
+        return(NO);
+    }
+    return(NO);
+}
+
 
 //controle
 int b_cut(int arglist, int rest){

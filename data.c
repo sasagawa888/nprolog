@@ -1030,11 +1030,18 @@ int eqlp(int addr1, int addr2){
         else
             return(0);
     }
-    else if(numberp(addr1) && numberp(addr2))
+    else if(numberp(addr1) && numberp(addr2)){
         if(numeqp(addr1,addr2))
             return(1);
         else
             return(0);
+    }
+    else if(stringp(addr1) && stringp(addr2)){
+        if(strcmp(GET_NAME(addr1),GET_NAME(addr2)) == 0)
+            return(1);
+        else
+            return(0);
+    }
     else
         return(0);
 }

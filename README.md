@@ -153,11 +153,13 @@ in/2
 inc/2
 instance/2
 integer/1
+int_text/2
 is/2
 keysort/2
 length/2
 listing/0
 listing/1
+list_text/2
 mkdir/1
 name/2
 nl/0

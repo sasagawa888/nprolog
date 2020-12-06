@@ -48,12 +48,32 @@ test(float) :-
     verify(float(1.0e10)),
     verify(not(float(1))).
 
+test(nonvar) :-
+    X = a,
+    verify(nonvar(X)),
+    verify(not(nonvar(Y))).
+
+test(var) :-
+    verify(var(X)),
+    Y = a,
+    verify(not(var(Y))).
+
 test(arithmetic) :-
     verify(2 is 1+1),
     verify(1.2 is 0.7+0.5),
     verify(8 is 2^3),
     verify(16 is 2**4),
     verify(-1.0 is cos(acos(-1))),
+    verify(4 is 1 << 2),
+    verify(8 is 1 << 3),
+    verify(1 is 8 >> 3),
+    verify(1 is 4 >> 2),
+    verify(3 is abs(-3)),
+    verify(3.3 is abs(-3.3)),
+    verify(1 is min(3,1)),
+    verify(3 is max(3,1)),
+    verify(2.718281828459045 is exp(1)),
+    verify(0 is log(1)),
     verify(2==2),
     verify(1.23==1.23),
     verify(0.00000000000001==0.00000000000001),
@@ -74,10 +94,17 @@ test(string) :-
     verify(string($123$)),
     verify(string($hello world!$)).
 
-test(true_fail) :-
+test(true_fail_not) :-
     verify(true),
     verify(not(fail)),
-    verify((fail;true)).
+    verify((fail;true)),
+    verify(not(not(true))),
+    verify(not(1==2)).
+
+test(system) :-
+    verify(system(write(1))),
+    verify(system(true)),
+    verify(system(halt)).
 
 test(unify) :-
     verify(c(Z) = c(c(z))),
@@ -132,10 +159,10 @@ test(inc) :-
     X == 10.
 
 test(float_text) :-
-    float_text(1.23,X,$%1.2f$),
+    float_text(1.23,X,_),
     verify(X = $1.23$),
     
-    float_text(Y,$1.23$,$%1.2f$),
+    float_text(Y,$1.23$,_),
     verify(Y == 1.23).
 
 test(length) :-
@@ -154,6 +181,15 @@ test(reverse) :-
     reverse([a,b,c],X),
     verify(X=[c,b,a]).
 
+test(name) :-
+    name(asdf,X),
+    name(Y,X),
+    verify(Y=asdf),
+
+    name(笹川賢一,A),
+    name(B,A),
+    verify(B=笹川賢一).
+
 test(list_text) :-
     list_text([97,115,100],X),
     verify(X = asd),
@@ -163,5 +199,11 @@ test(list_text) :-
 test(string_term) :-
     string_term($sin(3)$,X),
     verify(X = sin(3)).
+
+test(atom_string) :-
+    atom_string('orange',X),
+    verify(X = $orange$),
+    atom_string(Y,$apple$),
+    verify(Y = apple).
 
 :- alltest,write('All tests are done\n').
