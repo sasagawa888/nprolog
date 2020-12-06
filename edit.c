@@ -522,10 +522,11 @@ char *get_fragment_buffer(int col){
     int pos;
 
     while(col >= 0 &&
-          buffer[col][0] != ',' &&
-          buffer[col][0] != '(' &&
-          buffer[col][0] != ')'){
-                col--;
+        buffer[col][0] != ' ' &&
+        buffer[col][0] != ',' &&
+        buffer[col][0] != '(' &&
+        buffer[col][0] != ')'){
+            col--;
         }
         col++;
         pos = 0;
@@ -570,6 +571,12 @@ void find_candidate_buffer(int col){
     for(i=0;i<EXTENDED_NUMBER;i++){
         if(strstr(extended[i],str) !=NULL && extended[i][0] == str[0]){
             strcpy(ed_candidate[ed_candidate_pt],extended[i]);
+                        ed_candidate_pt++;
+        }
+    }
+    for(i=0;i<FUNCTION_NUMBER;i++){
+        if(strstr(function[i],str) !=NULL && function[i][0] == str[0]){
+            strcpy(ed_candidate[ed_candidate_pt],function[i]);
                         ed_candidate_pt++;
         }
     }
