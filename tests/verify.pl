@@ -20,6 +20,9 @@ test(atom) :-
     verify(not(atom(1))),
     verify(not(atom(1.1))),
     verify(atom('a*b')),
+    verify(atom('123abc')),
+    verify(atom(=$)),
+    verify(atom(true)),
     verify(atom(動物)).
 
 test(atomic) :-
@@ -36,7 +39,8 @@ test(integer) :-
     verify(integer(1)),
     verify(integer(10000000000)),
     verify(integer(-1)),
-    verify(integer(-10000000001)).
+    verify(integer(-10000000001)),
+    verify(integer(100000000000000000000000000000000000000000001)).
 
 test(float) :-
     verify(float(1.0)),
@@ -52,6 +56,7 @@ test(arithmetic) :-
     verify(-1.0 is cos(acos(-1))),
     verify(2==2),
     verify(1.23==1.23),
+    verify(0.00000000000001==0.00000000000001),
     verify(2=:=2),
     verify(2\=3),
     verify(2=\=3),
@@ -60,12 +65,19 @@ test(arithmetic) :-
     verify(3.2>3),
     verify(2>=1),
     verify(1<2),
+    verify(1<2.0),
+    verify(1.0<999999999999999999999999),
     verify(1=<1).
 
 test(string) :-
     verify(string($asdf$)),
     verify(string($123$)),
     verify(string($hello world!$)).
+
+test(true_fail) :-
+    verify(true),
+    verify(not(fail)),
+    verify((fail;true)).
 
 test(unify) :-
     verify(c(Z) = c(c(z))),
@@ -104,6 +116,7 @@ test(univ) :-
 test(concat) :-
     concat(a123,asdf,X),
     X = a123asdf,
+
     concat($asdf$,$123$,Y),
     Y = $asdf123$.
 
@@ -121,11 +134,25 @@ test(inc) :-
 test(float_text) :-
     float_text(1.23,X,$%1.2f$),
     verify(X = $1.23$),
+    
     float_text(Y,$1.23$,$%1.2f$),
     verify(Y == 1.23).
 
 test(length) :-
-    verify(length([1,2,3],3)).
+    verify(length([1,2,3],3)),
+    verify(length([],0)).
+
+test(member) :-
+    verify(member(b,[a,b,c])),
+    verify(member(1,[3,2,1])),
+    verify(not(member(a,[3,2,1]))).
+
+test(append) :-
+    verify(append([a,b,c],[d,e,f],[a,b,c,d,e,f])).
+
+test(reverse) :-
+    reverse([a,b,c],X),
+    verify(X=[c,b,a]).
 
 test(list_text) :-
     list_text([97,115,100],X),
