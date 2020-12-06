@@ -232,6 +232,7 @@ int check_token_buffer(int col){
         }
         str[pos] = NUL;
         // for raspberry GCC to avoid fleeze 'setup' word
+        /*
         if(str[0] == 's' &&
            str[1] == 'e' &&
            str[2] == 't' &&
@@ -239,6 +240,7 @@ int check_token_buffer(int col){
            str[4] == 'p' &&
            str[5] == NUL)
             return(0);
+        */
     }
     else if(buffer[col][0] == '_'){ //atom
        while(isalpha(buffer[col][0])  ||
