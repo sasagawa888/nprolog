@@ -1258,6 +1258,7 @@ int deref_array(int arity[256], int head){
 int unify(int x, int y){
     int x1,y1;
 
+    
     if(nullp(x) && nullp(y))
         return(YES);
     else if(variablep(x) && !variablep(y)){
@@ -1409,7 +1410,7 @@ int sort(int x){
 
 int insert(int x,int y){
     if(nullp(x))
-        return(list1(y));
+        return(listcons(y,NIL));
     else if(sortsmaller(y,car(x)))
         return(listcons(y,x));
     else if(sorteqlp(y,car(x)))

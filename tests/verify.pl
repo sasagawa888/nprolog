@@ -147,6 +147,13 @@ test(univ) :-
     verify(X == sin(3)),
     verify(Y == [cos,2]).
 
+test(functor) :-
+    verify(functor(book(pooh,miline,aa),book,3)).
+
+test(arg) :-
+    arg(1,book(poetry,milne,poetry)),
+    arg0(0,book(poetry,milne,poetry)).
+
 test(concat) :-
     concat(a123,asdf,X),
     X = a123asdf,

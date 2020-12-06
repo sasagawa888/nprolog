@@ -269,11 +269,11 @@ int main(int argc, char *argv[]){
         }
         else if(strcmp(argv[opt],"-h") == 0 || strcmp(argv[opt],"--help") == 0){
             printf("List of options:\n");
-            printf("-c filename  -- NPL starts after reading the file.\n");
-            printf("-h           -- display help.\n");
-            printf("-r           -- NPL does not use editable REPL.\n");
-            printf("-s filename  -- NPL run file with script mode.\n");
-            printf("-v           -- dislplay version number.\n");
+            printf("-c(--code) filename   -- NPL starts after reading the file.\n");
+            printf("-h(--help)            -- display help.\n");
+            printf("-r(--repl)            -- NPL does not use editable REPL.\n");
+            printf("-s(--script) filename -- NPL run file with script mode.\n");
+            printf("-v(--version)         -- dislplay version number.\n");
             return(0);
         }
         else if(strcmp(argv[opt],"-v") == 0 || strcmp(argv[opt],"--version") == 0){
