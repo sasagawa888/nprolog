@@ -359,7 +359,7 @@ int b_op(int arglist, int rest){
 int o_cons(int x, int y){
     if(operationp(y))
         y = operate(y);
-    return(cons(x,y));
+    return(listcons(x,y));
 }
 
 int b_ask(int arglist, int rest){
