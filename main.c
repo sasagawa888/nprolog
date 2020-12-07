@@ -56,6 +56,7 @@ int wp; //working pointer
 
 
 //flag
+int repl_flag = 1;  //for REPL read_line 1=on, 0=off
 int trace_flag = FULL;
 int open_flag = 0;
 int gbc_flag = 0;  // 0=not display massage 1=display message
@@ -159,7 +160,6 @@ int error_stream;
 
 
 //-----editor-----
-int repl_flag = 1;  //for REPL read_line 1=on, 0=off
 int buffer[BUFSIZE][10];
 int ed_tab = 4;
 int ed_indent = 0;
