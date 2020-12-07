@@ -36,6 +36,7 @@ test(number) :-
     verify(number(1.0e1)).
 
 test(integer) :-
+    verify(integer(0)),
     verify(integer(1)),
     verify(integer(10000000000)),
     verify(integer(-1)),
@@ -46,8 +47,10 @@ test(float) :-
     verify(float(1.0)),
     verify(float(0.000001)),
     verify(float(1.0e10)),
-    verify(not(float(1))).
-
+    verify(not(float(1))),
+    X is float(100),
+    verify(float(X)).
+    
 test(nonvar) :-
     X = a,
     verify(nonvar(X)),
