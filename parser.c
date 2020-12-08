@@ -609,8 +609,9 @@ void gettoken(void){
                         return;
                     }
                     else{
+                        stok.type = DOT;
                         unreadc(c);
-                        c = '.';
+                        return;
                     }
     }
 
@@ -1288,6 +1289,15 @@ int readitem(void){
         case RPAREN:    return(RIGHTPAREN);
         case LCURL:     return(list2(CURL,readcurl()));
         case OPERATOR:  return(makeatom(stok.buf,OPE));
+        case DOT:       gettoken();
+                        if(stok.type == LPAREN){
+                            temp1 = readparen();
+                            return(cons(DOTOBJ,temp1));
+                        }
+                        else{
+                            stok.flag = BACK;
+                            return(temp);
+                        }
         case BUILTIN:   temp = makeatom(stok.buf,SYS);
                         if(GET_OPT(temp) != NIL && temp != makesys("is"))
                             return(temp);

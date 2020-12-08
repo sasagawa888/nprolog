@@ -5,7 +5,6 @@ Thanks
 ?- solve(0x1ffffff).
 */
 
-
 pattern(0, 0x0000023). pattern(1, 0x0000047). pattern(2, 0x000008e). pattern(3, 0x000011c).
 pattern(4, 0x0000218). pattern(5, 0x0000461). pattern(6, 0x00008e2). pattern(7, 0x00011c4).
 pattern(8, 0x0002388). pattern(9, 0x0004310). pattern(10, 0x0008c20). pattern(11, 0x0011c40).
@@ -20,7 +19,6 @@ solve(Board) :-
     clear_light(5, NewBoard, Result, N, PushPattern),
     Result == 0,
     print_answer(PushPattern).
-
 
 push_button(_, 5, Board, Board) :- !.
 
@@ -53,4 +51,3 @@ print_answer(PushPattern) :-
     M is N mod 5,
     (M == 4 -> nl),
     fail.
-

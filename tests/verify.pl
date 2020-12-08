@@ -102,9 +102,12 @@ test(arithmetic) :-
     verify(2=\=3),
     verify(2\=0.3),
     verify(2>1),
+    verify(not(1>1)),
     verify(3.2>3),
     verify(2>=1),
+    verify(1>=1),
     verify(1<2),
+    verify(not(1<1)),
     verify(1<2.0),
     verify(1.0<999999999999999999999999),
     verify(1=<1).
