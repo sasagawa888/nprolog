@@ -172,7 +172,9 @@ test(univ) :-
     verify(Y == [cos,2]).
 
 test(functor) :-
-    verify(functor(book(pooh,miline,aa),book,3)).
+    verify(functor(book(pooh,miline,aa),book,3)),
+    functor([1,2,3],X,Y),X='.',Y=2.
+
 
 test(arg) :-
     arg(1,book(poetry,milne,poetry)),

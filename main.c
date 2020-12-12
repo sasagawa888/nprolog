@@ -984,7 +984,7 @@ void sprint(int addr){
 
 //for answer unified variable
 void printanswer(int addr){
-    if(operatorp(addr)){
+    if(operatorp(addr) || eqlp(addr,DOTOBJ)){
         printc('(');
         print(addr);
         printc(')');
