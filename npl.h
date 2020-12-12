@@ -12,7 +12,7 @@ address
 17,000,001 - 20,000,000  working area 
 20,000,001 - 40,000,000  variant area
 */
-#define VERSION     1.62
+#define VERSION     1.63
 #define CELLSIZE    20000000  // this is max on raspberryPI3B. If parsonal computer 30000000 is OK
 #define HEAPSIZE    17000000
 #define FREESIZE         500
@@ -27,7 +27,7 @@ address
 #define FUNCTION_NUMBER 20
 #define BUILTIN_NUMBER 200
 #define COMPILED_NUMBER 23
-#define EXTENDED_NUMBER  20
+#define EXTENDED_NUMBER 20
 #define NIL         0
 #define YES         2
 #define NO          4
@@ -132,6 +132,12 @@ typedef struct token {
     toktype type;
     char buf[BUFSIZE];
 } token;
+
+// for editable REPL
+typedef struct result {
+    int type;
+    int length;
+} result;
 
 
 extern cell heap[CELLSIZE];
@@ -402,6 +408,7 @@ extern int ed_function_color;
 extern int ed_incomment;
 extern int ed_hight;
 extern int ed_width;
+extern result rtok;
 
 #define ESCHOME printf("\33[1;1H")
 #define ESCTOP  printf("\33[2;1H")
@@ -1251,7 +1258,7 @@ char* get_fragment();
 void find_candidate();
 void replace_fragment(char* newstr);
 void display_buffer(void);
-int check_token_buffer(int col);
+void check_token_buffer(int col);
 int findlparen_buffer(int col);
 int findrparen_buffer(int col);
 int findlbracket_buffer(int col);

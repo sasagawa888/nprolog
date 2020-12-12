@@ -38,7 +38,7 @@ int getch(){
 
 //------------REPL read-line-----------------
 void display_buffer(){
-    int col,type;
+    int col,type,length;
 
     ESCMVLEFT(left_margin);
     ESCCLSL;
@@ -79,51 +79,36 @@ void display_buffer(){
             col++;
          }
          else{
-            type = check_token_buffer(col);
+            check_token_buffer(col);
+            type = rtok.type;
+            length = rtok.length;
             if(type == 1){//operator
                 ESCBOLD;
                 setcolor(ed_operator_color);
-                while(buffer[col][0] != ' ' &&
-                      buffer[col][0] != '(' &&
-                      buffer[col][0] != ')' &&
-                      buffer[col][0] != '[' &&
-                      buffer[col][0] != ']' &&
-                      buffer[col][0] != ',' &&
-                      buffer[col][0] != ';' &&
-                      buffer[col][0] != '.' &&
-                      buffer[col][0] != '\'' &&
-                      buffer[col][0] != NUL &&
-                      buffer[col][0] != EOL){
-                        printf("%c", buffer[col][0]);
-                        col++;
+                while(length > 0){
+                    printf("%c", buffer[col][0]);
+                    col++;
+                    length--;
                 }
                 ESCRST;
                 ESCFORG;
-                }
-                else if(type == 2){//builtin
-                        ESCBOLD;
-                    setcolor(ed_builtin_color);
-                    while(buffer[col][0] != ' ' &&
-                          buffer[col][0] != '(' &&
-                          buffer[col][0] != ')' &&
-                          buffer[col][0] != '[' &&
-                          buffer[col][0] != ']' &&
-                          buffer[col][0] != ',' &&
-                          buffer[col][0] != ';' &&
-                          buffer[col][0] != '.' &&
-                          buffer[col][0] != NUL &&
-                          buffer[col][0] != EOL){
-                        printf("%c", buffer[col][0]);
-                        col++;
-                        }
-                        ESCRST;
-                        ESCFORG;
-                }
-                else if(type == 3){// '...'
-                    ESCBOLD;
-                    setcolor(ed_quote_color);
+            }
+            else if(type == 2){//builtin
+                ESCBOLD;
+                setcolor(ed_builtin_color);
+                while(length > 0){
                     printf("%c", buffer[col][0]);
                     col++;
+                    length--;
+                }
+                ESCRST;
+                ESCFORG;
+            }
+            else if(type == 3){// '...'
+                ESCBOLD;
+                setcolor(ed_quote_color);
+                printf("%c", buffer[col][0]);
+                col++;
                     while(buffer[col][0] != NUL &&
                           buffer[col][0] != EOL){
                         printf("%c", buffer[col][0]);
@@ -133,107 +118,146 @@ void display_buffer(){
                    }
                    ESCRST;
                    ESCFORG;
-
-               }
-               else if(type == 4){// coment %
-                   ESCBOLD;
-                   setcolor(ed_comment_color);
-                   while(buffer[col][0] != NUL &&
-                         buffer[col][0] != EOL){
-                        printf("%c", buffer[col][0]);
-                        col++;
-                   }
-                   ESCRST;
-                   ESCFORG;
-               }
-               else if(type == 5){
-                   ESCBOLD;
-                   setcolor(ed_extended_color);
-                   while(buffer[col][0] != ' ' &&
-                          buffer[col][0] != '(' &&
-                          buffer[col][0] != ')' &&
-                          buffer[col][0] != '[' &&
-                          buffer[col][0] != ']' &&
-                          buffer[col][0] != ',' &&
-                          buffer[col][0] != ';' &&
-                          buffer[col][0] != '.' &&
-                          buffer[col][0] != NUL &&
-                          buffer[col][0] != EOL){
-                        printf("%c", buffer[col][0]);
-                        col++;
-                   }
-                   ESCRST;
-                   ESCFORG;
-               }
-               else if(type == 6){ //function
-                   ESCBOLD;
-                   setcolor(ed_function_color);
-                   while(isalpha(buffer[col][0]) ||
+            }
+            else if(type == 4){// coment %
+                ESCBOLD;
+                setcolor(ed_comment_color);
+                while(buffer[col][0] != NUL &&
+                        buffer[col][0] != EOL){
+                    printf("%c", buffer[col][0]);
+                    col++;
+                }
+                ESCRST;
+                ESCFORG;
+            }
+            else if(type == 5){// extened 
+                ESCBOLD;
+                setcolor(ed_extended_color);
+                while(length > 0){
+                    printf("%c", buffer[col][0]);
+                    col++;
+                }
+                ESCRST;
+                ESCFORG;
+            }
+            else if(type == 6){ //function
+                ESCBOLD;
+                setcolor(ed_function_color);
+                while(isalpha(buffer[col][0]) ||
                          buffer[col][0] == '_'   ||
                          isdigit(buffer[col][0]) ){
                         printf("%c", buffer[col][0]);
                         col++;
-                   }
-                   ESCRST;
-                   ESCFORG;
-               }
-               else if(type == 7){ //comment /*...*/
-                   ESCBOLD;
-                   setcolor(ed_function_color);
-                   ed_incomment = line;
-                   while(buffer[col][0] != EOL &&
+                }
+                ESCRST;
+                ESCFORG;
+            }
+            else if(type == 7){ //comment /*...*/
+                ESCBOLD;
+                setcolor(ed_function_color);
+                ed_incomment = line;
+                while(buffer[col][0] != EOL &&
                          buffer[col][0] != NUL){
-                             printf("%c", buffer[col][0]);
-                             col++;
-                             if(buffer[col-2][0] == '/' &&
-                                buffer[col-1][0] == '*'){
-                                 ed_incomment = -1;
-                                 ESCRST;
-                                 ESCFORG;
-                                 break;
-                             }
-                   }
-               }
-               else{
-                    while(buffer[col][0] != ' ' &&
-                          buffer[col][0] != '(' &&
-                          buffer[col][0] != ')' &&
-                          buffer[col][0] != ',' &&
-                          buffer[col][0] != ';' &&
-                          buffer[col][0] != '.' &&
-                          buffer[col][0] != NUL &&
-                          buffer[col][0] != EOL){
-                       printf("%c", buffer[col][0]);
-                       col++;
+                    printf("%c", buffer[col][0]);
+                    col++;
+                    if(buffer[col-2][0] == '/' &&
+                        buffer[col-1][0] == '*'){
+                        ed_incomment = -1;
+                        ESCRST;
+                        ESCFORG;
+                        break;
                     }
-               }
+                }
+            }
+            else if(type == 8){//number
+                while(length > 0){
+                    printf("%c", buffer[col][0]);
+                    col++;
+                    length--;
+                }
+            }
+            else if(type == 10){//normal atom
+                while(length > 0){
+                    printf("%c", buffer[col][0]);
+                    col++;
+                    length--;
+                }
+            }
+            else{
+                while(buffer[col][0] != ' ' &&
+                    buffer[col][0] != '(' &&
+                    buffer[col][0] != ')' &&
+                    buffer[col][0] != ',' &&
+                    buffer[col][0] != ';' &&
+                    buffer[col][0] != '.' &&
+                    buffer[col][0] != NUL &&
+                    buffer[col][0] != EOL){
+                printf("%c", buffer[col][0]);
+                col++;
+                }
             }
         }
+    }
     ESCRST;
     return;
 }
 
-int check_token_buffer(int col){
+/*
+assign rtok structure
+rtok.type 
+  1 operator token
+  2 builtin or compiled token
+  3 quoted token
+  4 coment token
+  5 extened token
+  6 function token
+  7 comment token
+  8 number token
+  
+  10 normal token
+*/
+void check_token_buffer(int col){
     char str[BUFSIZE];
     int pos,i;
 
     pos = 0;
-    if(buffer[col][0] == '\'')
-        return(3); //quote token
-    else if(buffer[col][0] == '%')
-       return(4); //comment token
-    else if(isalpha(buffer[col][0])){
-       while(isalpha(buffer[col][0])  ||
-             buffer[col][0] == '_' ||
-             isdigit(buffer[col][0])){
-          str[pos] = buffer[col][0];
-          col++;
-          pos++;
+    rtok.type = 0;
+    rtok.length = -1;
+    if(buffer[col][0] == '\''){
+        rtok.type = 3;
+        rtok.length = -1;
+        return; //quote token
+    }
+    else if(buffer[col][0] == '%'){
+        rtok.type = 4;
+        rtok.length = -1;
+        return; //comment token
+    }
+    else if(isdigit(buffer[col][0])){ //number
+        while(isdigit(buffer[col][0]) ||
+                buffer[col][0] == 'e' ||
+                buffer[col][0] == '.'){
+            str[pos] = buffer[col][0];
+            col++;
+            pos++;
+
         }
         str[pos] = NUL;
-        
+        rtok.type = 8;
+        rtok.length = strlen(str);
+        return;
     }
-    else if(buffer[col][0] == '_'){ //atom
+    else if(isalpha(buffer[col][0])){ //atom
+        while(isalpha(buffer[col][0])  ||
+             buffer[col][0] == '_' ||
+             isdigit(buffer[col][0])){
+            str[pos] = buffer[col][0];
+            col++;
+            pos++;
+        }
+        str[pos] = NUL;
+    }
+    else if(buffer[col][0] == '_'){ //variable atom
        while(isalpha(buffer[col][0])  ||
              buffer[col][0] == '_' ||
              isdigit(buffer[col][0])){
@@ -250,39 +274,55 @@ int check_token_buffer(int col){
           pos++;
        }
        str[pos] = NUL;
-       if(str[0] == '/' && str[1] == '*')
-          return(7); //comment /*...*/
+       if(str[0] == '/' && str[1] == '*'){
+            rtok.type = 7;
+            rtok.length = strlen(str);
+            return; //comment /*...*/
+        }
     }
     str[pos] = NUL;
     if(pos == 0) //null token
-        return(0);
+        return;
 
     for(i=0; i<OPERATOR_NUMBER; i++){
         if(strcmp(operator[i],str) == 0){
-            return(1); //operator token
+            rtok.type = 1;
+            rtok.length = strlen(str);
+            return; //operator token
         }
     }
     for(i=0; i<BUILTIN_NUMBER; i++){
         if(strcmp(builtin[i],str) == 0){
-            return(2); //builtin token
+            rtok.type = 2;
+            rtok.length = strlen(str);
+            return; //builtin token
         }
     }
     for(i=0; i<COMPILED_NUMBER; i++){
         if(strcmp(compiled[i],str) == 0){
-            return(2); //compiled token same as builtin
+            rtok.type = 2;
+            rtok.length = strlen(str);
+            return; //compiled token same as builtin
         }
     }
     for(i=0; i<EXTENDED_NUMBER; i++){
         if(strcmp(extended[i],str) == 0){
-            return(5); //extended token
+            rtok.type = 5;
+            rtok.length = strlen(str);
+            return; //extended token
         }
     }
     for(i=0; i<FUNCTION_NUMBER; i++){
         if(strcmp(function[i],str) == 0){
-            return(6); //function token
+            rtok.type = 6;
+            rtok.length = strlen(str);
+            return; //function token
         }
     }
-    return(0);
+    //normal token
+    rtok.type = 10;
+    rtok.length = strlen(str);
+    return;
 }
 
 

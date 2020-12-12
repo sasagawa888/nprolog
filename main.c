@@ -182,6 +182,7 @@ int ed_function_color = 2; //default green
 int ed_incomment = -1; /*...*/
 int ed_hight;
 int ed_width;
+result rtok;  // token type and length for editable REPL
 
 
 int main(int argc, char *argv[]){
