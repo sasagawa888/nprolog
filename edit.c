@@ -236,7 +236,11 @@ void check_token_buffer(int col){
     else if(isdigit(buffer[col][0])){ //number
         while(isdigit(buffer[col][0]) ||
                 buffer[col][0] == 'e' ||
-                buffer[col][0] == '.'){
+                buffer[col][0] == '.' ||
+                buffer[col][0] == 'x' ||
+                buffer[col][0] == 'o' ||
+                buffer[col][0] == 'b'
+                ){
             str[pos] = buffer[col][0];
             col++;
             pos++;
