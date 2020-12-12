@@ -30,6 +30,20 @@ npl -c init.pl
 指定しない場合にはREPLは編集可能となっています。
 ```
 
+他のオプション
+
+```
+$ npl -h
+List of options:
+-c(--code) filename   -- NPL starts after reading the file.
+-h(--help)            -- display help.
+-r(--repl)            -- NPL does not use editable REPL.
+-s(--script) filename -- NPL run file with script mode.
+-v(--version)         -- dislplay version number.
+
+```
+
+
 ## 目標
 私はPrologがより多くの人に親しまれることを望んでいます。多くの人にPrologを楽しんでいただきたいと思います。
 NPLは簡単な取扱を目指しています。

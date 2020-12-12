@@ -29,6 +29,19 @@ npl -c init.pl
 Default, REPL is editable.
 ```
 
+other option
+
+```
+$ npl -h
+List of options:
+-c(--code) filename   -- NPL starts after reading the file.
+-h(--help)            -- display help.
+-r(--repl)            -- NPL does not use editable REPL.
+-s(--script) filename -- NPL run file with script mode.
+-v(--version)         -- dislplay version number.
+
+```
+
 ## Goal
 I hope that Prolog will become more popular. I hope many people enjoy Prolog. NPL aims at easy handling.
 
