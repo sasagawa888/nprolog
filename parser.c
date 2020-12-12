@@ -620,54 +620,8 @@ void gettoken(void){
 
     }
 
-    //constant-atom in SJIS mode
-    if(mode_flag ==0 && (islower(c) || iskanji(c))){
-        pos = 0;
-        while((isalpha(c) || isdigit(c) || c == '_' ||
-              iskanji(c)) && !isatomch(c)){
-
-            stok.buf[pos++] = c;
-            if(iskanji(c)){
-                c = readc();
-                stok.buf[pos++] = c;
-                c = readc();
-            }
-            else
-                c = readc();
-        }
-        stok.buf[pos] = NUL;
-        stok.ch = c;
-        stok.ahead = c;
-        for(i=0;i<OPERATOR_NUMBER;i++){
-            if(strcmp(operator[i],stok.buf) == 0){
-                stok.type = OPERATOR;
-                return;
-            }
-        }
-        for(i=0;i<FUNCTION_NUMBER;i++){
-            if(strcmp(function[i],stok.buf) == 0){
-                stok.type = ATOMOBJ;
-                return;
-            }
-        }
-        for(i=0;i<BUILTIN_NUMBER;i++){
-            if(strcmp(builtin[i],stok.buf) == 0){
-                stok.type = BUILTIN;
-                return;
-            }
-        }
-        for(i=0;i<COMPILED_NUMBER;i++){
-            if(strcmp(compiled[i],stok.buf) == 0){
-                stok.type = COMPILED;
-                return;
-            }
-        }
-        stok.type = ATOMOBJ;
-        return;
-    }
-
-    //constant-atom in Unicode mode
-    if(mode_flag ==1 && (islower(c) || unicodep(c))){
+    //constant-atom in Unicode
+    if(islower(c) || unicodep(c)){
         pos = 0;
         while((isalpha(c) || isdigit(c) || c == '_' ||
               unicodep(c)) && !isatomch(c)){
@@ -779,38 +733,9 @@ void gettoken(void){
         stok.ahead = NUL;
         return;
     }
-    //variable in SJIS mode
-    if(mode_flag == 0 && c == '_'){
-        pos = 0;
-        stok.buf[pos++] = c;
-        c = readc();
-        while(isalpha(c) || isdigit(c) || c == '_' ||
-              iskanji(c)){
-            stok.buf[pos++] = c;
-            if(iskanji(c)){
-                c = readc();
-                stok.buf[pos++] = c;
-                c = readc();
-            }
-            else
-                c = readc();
-        }
-        stok.buf[pos] = NUL;
-        if(pos == 1){
-            stok.type = ANOYMOUS;
-            stok.ch = c;
-            stok.ahead = c;
-            return;
-        }
-        else{
-            stok.type = VARIABLE;
-            stok.ch = c;
-            stok.ahead = c;
-            return;
-        }
-    }
-    //variable in Unicode mode
-    if(mode_flag == 1 && c == '_'){
+    
+    //variable in Unicode 
+    if(c == '_'){
         pos = 0;
         stok.buf[pos++] = c;
         c = readc();
@@ -921,6 +846,30 @@ void gettoken(void){
         stok.buf[pos] = NUL;
         stok.ch = NUL;
         stok.ahead = c;
+        for(i=0;i<OPERATOR_NUMBER;i++){
+            if(strcmp(operator[i],stok.buf) == 0){
+                stok.type = OPERATOR;
+                return;
+            }
+        }
+        for(i=0;i<FUNCTION_NUMBER;i++){
+            if(strcmp(function[i],stok.buf) == 0){
+                stok.type = ATOMOBJ;
+                return;
+            }
+        }
+        for(i=0;i<BUILTIN_NUMBER;i++){
+            if(strcmp(builtin[i],stok.buf) == 0){
+                stok.type = BUILTIN;
+                return;
+            }
+        }
+        for(i=0;i<COMPILED_NUMBER;i++){
+            if(strcmp(compiled[i],stok.buf) == 0){
+                stok.type = COMPILED;
+                return;
+            }
+        }
         stok.type = ATOMOBJ;
         return;
     }

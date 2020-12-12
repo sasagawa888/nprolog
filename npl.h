@@ -83,9 +83,6 @@ address
 #define UTF3MSK1    31         //#b00011111
 #define UTF4MSK1    15         //#b00001111
 #define UTFOMSKO    127        //#b01111111
-// following are data for SJIS transform
-#define SJIS1       65280      //#b1111111100000000
-#define SJIS2       255        //#b0000000011111111
 
 
 typedef enum tag {EMP,INTN,FLTN,LONGN,BIGX,STRUCT,SINGLE,STREAM,STR} tag;
@@ -297,15 +294,6 @@ extern int error_stream;
                      ((unsigned char)(c) <= 0xfd))
 
 
-#define iskanji(c)  (((unsigned char)(c) >= 0x81 && \
-                      (unsigned char)(c) <= 0x9f) || \
-                     ((unsigned char)(c) >= 0xe0 && \
-                      (unsigned char)(c) <= 0xfc))
-#define iskanji2(c)  ((unsigned char)(c) >= 0x40 && \
-                      (unsigned char)(c) <= 0xfc && \
-                      (unsigned char)(c) != 0x7f)
-
-
 
 //operator
 #define FX  1   //0b0000001
@@ -355,7 +343,6 @@ extern int open_flag;
 extern int gbc_flag;
 extern int simp_flag;
 extern int assert_flag;
-extern int mode_flag;
 extern int debug_flag;
 extern int fskip_flag;
 extern int qskip_flag;
@@ -1056,7 +1043,6 @@ int see_trail(void);
 int singletonp(int x);
 int singleton_list(void);
 int single_operation_p(int x);
-int sjis_to_code(char *p);
 int smallerp(int x1, int x2);
 int sort(int x);
 int sortsmaller(int x, int y);
@@ -1177,7 +1163,6 @@ void recall_variant(int x);
 void release_variant(int x);
 void reset(int i);
 void set_sign(int x, int y);
-void sjis_to_char(int n , char *p);
 void sprint(int addr);
 void trace(int port, int goal, int bindings, int rest, int n);
 void ucs4_to_utf8(int n, char *p);

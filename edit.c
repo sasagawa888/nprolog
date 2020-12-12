@@ -665,27 +665,23 @@ int count_col_buffer(int x){
     pysical_col = 0;
     logical_col = 0;
     while(pysical_col < x){
-        if(mode_flag == 0 && iskanji(buffer[pysical_col][0])){
+        if(isUni2(buffer[pysical_col][0])){
             pysical_col = pysical_col + 2;
             logical_col = logical_col + 2;
         }
-        else if(mode_flag == 1 && isUni2(buffer[pysical_col][0])){
-            pysical_col = pysical_col + 2;
-            logical_col = logical_col + 2;
-        }
-        else if(mode_flag == 1 && isUni3(buffer[pysical_col][0])){
+        else if(isUni3(buffer[pysical_col][0])){
             pysical_col = pysical_col + 3;
             logical_col = logical_col + 2;
         }
-        else if(mode_flag == 1 && isUni4(buffer[pysical_col][0])){
+        else if(isUni4(buffer[pysical_col][0])){
             pysical_col = pysical_col + 4;
             logical_col = logical_col + 2;
         }
-        else if(mode_flag == 1 && isUni5(buffer[pysical_col][0])){
+        else if(isUni5(buffer[pysical_col][0])){
             pysical_col = pysical_col + 5;
             logical_col = logical_col + 2;
         }
-        else if(mode_flag == 1 && isUni6(buffer[pysical_col][0])){
+        else if(isUni6(buffer[pysical_col][0])){
             pysical_col = pysical_col + 6;
             logical_col = logical_col + 2;
         }
@@ -876,7 +872,7 @@ int read_line(int flag){
                         goto loop;
                     }
 
-                    if(mode_flag == 0 && iskanji(c)){
+                    if(isUni2(c)){
                         for(k=BUFSIZE-1;k>j;k--)
                             buffer[k][0] = buffer[k-2][0];
                         buffer[j++][0] = c;
@@ -893,24 +889,7 @@ int read_line(int flag){
                         if(ed_lbracket_col >= j-2)
                             ed_lbracket_col = ed_rbracket_col + 2;
                     }
-                    else if(mode_flag == 1 && isUni2(c)){
-                        for(k=BUFSIZE-1;k>j;k--)
-                            buffer[k][0] = buffer[k-2][0];
-                        buffer[j++][0] = c;
-                        c = getch();
-                        buffer[j++][0] = c;
-                        display_buffer();
-                        reset_paren_bracket_buffer();
-                        if(ed_rparen_col >= j-2)
-                            ed_rparen_col = ed_rparen_col + 2;
-                        if(ed_lparen_col >= j-2)
-                            ed_lparen_col = ed_rparen_col + 2;
-                        if(ed_rbracket_col >= j-2)
-                            ed_rbracket_col = ed_rbracket_col + 2;
-                        if(ed_lbracket_col >= j-2)
-                            ed_lbracket_col = ed_rbracket_col + 2;
-                    }
-                    else if(mode_flag == 1 && isUni3(c)){
+                    else if(isUni3(c)){
                         for(k=BUFSIZE-1;k>j;k--)
                             buffer[k][0] = buffer[k-3][0];
                         buffer[j++][0] = c;
@@ -929,7 +908,7 @@ int read_line(int flag){
                         if(ed_lbracket_col >= j-3)
                             ed_lbracket_col = ed_rbracket_col + 3;
                     }
-                    else if(mode_flag == 1 && isUni4(c)){
+                    else if(isUni4(c)){
                         for(k=BUFSIZE-1;k>j;k--)
                             buffer[k][0] = buffer[k-4][0];
                         buffer[j++][0] = c;
@@ -950,7 +929,7 @@ int read_line(int flag){
                         if(ed_lbracket_col >= j-4)
                             ed_lbracket_col = ed_rbracket_col + 4;
                     }
-                    else if(mode_flag == 1 && isUni5(c)){
+                    else if(isUni5(c)){
                         for(k=BUFSIZE-1;k>j;k--)
                             buffer[k][0] = buffer[k-5][0];
                         buffer[j++][0] = c;
@@ -973,7 +952,7 @@ int read_line(int flag){
                         if(ed_lbracket_col >= j-5)
                             ed_lbracket_col = ed_rbracket_col + 5;
                     }
-                    else if(mode_flag == 1 && isUni6(c)){
+                    else if(isUni6(c)){
                         for(k=BUFSIZE-1;k>j;k--)
                             buffer[k][0] = buffer[k-6][0];
                         buffer[j++][0] = c;

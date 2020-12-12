@@ -681,26 +681,20 @@ int b_get_code(int arglist, int rest){
             arg1 = GET_CAR(arg1);
         c = getc(GET_PORT(arg1));
 
-        if(mode_flag == 0 && iskanji(c)){
-            str[0] = c;
-            str[1] = getc(GET_PORT(arg1));
-            str[2] = NUL;
-            i = sjis_to_code(str);
-        }
-        else if(mode_flag == 1 && isUni2(c)){
+        if(isUni2(c)){
             str[0] = c;
             str[1] = getc(GET_PORT(arg1));
             str[2] = NUL;
             i = utf8_to_ucs4(str);
         }
-        else if(mode_flag == 1 && isUni3(c)){
+        else if(isUni3(c)){
             str[0] = c;
             str[1] = getc(GET_PORT(arg1));
             str[2] = getc(GET_PORT(arg1));
             str[3] = NUL;
             i = utf8_to_ucs4(str);
         }
-        else if(mode_flag == 1 && isUni4(c)){
+        else if(isUni4(c)){
             str[0] = c;
             str[1] = getc(GET_PORT(arg1));
             str[2] = getc(GET_PORT(arg1));
@@ -708,7 +702,7 @@ int b_get_code(int arglist, int rest){
             str[4] = NUL;
             i = utf8_to_ucs4(str);
         }
-        else if(mode_flag == 1 && isUni5(c)){
+        else if(isUni5(c)){
             str[0] = c;
             str[1] = getc(GET_PORT(arg1));
             str[2] = getc(GET_PORT(arg1));
@@ -717,7 +711,7 @@ int b_get_code(int arglist, int rest){
             str[5] = NUL;
             i = utf8_to_ucs4(str);
         }
-        else if(mode_flag == 1 && isUni6(c)){
+        else if(isUni6(c)){
             str[0] = c;
             str[1] = getc(GET_PORT(arg1));
             str[2] = getc(GET_PORT(arg1));
@@ -2388,30 +2382,25 @@ int b_name(int arglist, int rest){
                     str2[0] = str1[pos++];
                     str2[1] = str1[pos++];
                 }
-                else if(mode_flag == 0 && iskanji(str1[pos])){ //SJIS
+                else if(isUni2(str1[pos])){
                     str2[0] = str1[pos++];
                     str2[1] = str1[pos++];
                     str2[2] = NUL;
                 }
-                else if(mode_flag == 1 && isUni2(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = NUL;
-                }
-                else if(mode_flag == 1 && isUni3(str1[pos])){
+                else if(isUni3(str1[pos])){
                     str2[0] = str1[pos++];
                     str2[1] = str1[pos++];
                     str2[2] = str1[pos++];
                     str2[3] = NUL;
                 }
-                else if(mode_flag == 1 && isUni4(str1[pos])){
+                else if(isUni4(str1[pos])){
                     str2[0] = str1[pos++];
                     str2[1] = str1[pos++];
                     str2[2] = str1[pos++];
                     str2[3] = str1[pos++];
                     str2[4] = NUL;
                 }
-                else if(mode_flag == 1 && isUni5(str1[pos])){
+                else if(isUni5(str1[pos])){
                     str2[0] = str1[pos++];
                     str2[1] = str1[pos++];
                     str2[2] = str1[pos++];
@@ -2419,7 +2408,7 @@ int b_name(int arglist, int rest){
                     str2[4] = str1[pos++];
                     str2[5] = NUL;
                 }
-                else if(mode_flag == 1 && isUni6(str1[pos])){
+                else if(isUni6(str1[pos])){
                     str2[0] = str1[pos++];
                     str2[1] = str1[pos++];
                     str2[2] = str1[pos++];
@@ -2434,8 +2423,6 @@ int b_name(int arglist, int rest){
                 }
                 if(str2[0] == '\\')
                     code = ctrl_to_number(str2[1]);
-                else if(mode_flag == 0) //SJIS
-                    code = makeint(sjis_to_code(str2));
                 else //unicode
                     code = makeint(utf8_to_ucs4(str2));
                 ls = cons(code,ls);
@@ -2450,8 +2437,6 @@ int b_name(int arglist, int rest){
             while(!nullp(ls)){
                 if(GET_INT(car(ls)) < ' ')
                     sprintf(str2,"\\x%x\\",GET_INT(car(ls)));
-                else if(mode_flag == 0)
-                    sjis_to_char(GET_INT(car(ls)),str2);
                 else
                     ucs4_to_utf8(GET_INT(car(ls)),str2);
                 strcat(str1,str2);
@@ -2492,30 +2477,25 @@ int b_list_text(int arglist, int rest){
                     str2[0] = str1[pos++];
                     str2[1] = str1[pos++];
                 }
-                else if(mode_flag == 0 && iskanji(str1[pos])){ //SJIS
+                else if(isUni2(str1[pos])){
                     str2[0] = str1[pos++];
                     str2[1] = str1[pos++];
                     str2[2] = NUL;
                 }
-                else if(mode_flag == 1 && isUni2(str1[pos])){
-                    str2[0] = str1[pos++];
-                    str2[1] = str1[pos++];
-                    str2[2] = NUL;
-                }
-                else if(mode_flag == 1 && isUni3(str1[pos])){
+                else if(isUni3(str1[pos])){
                     str2[0] = str1[pos++];
                     str2[1] = str1[pos++];
                     str2[2] = str1[pos++];
                     str2[3] = NUL;
                 }
-                else if(mode_flag == 1 && isUni4(str1[pos])){
+                else if(isUni4(str1[pos])){
                     str2[0] = str1[pos++];
                     str2[1] = str1[pos++];
                     str2[2] = str1[pos++];
                     str2[3] = str1[pos++];
                     str2[4] = NUL;
                 }
-                else if(mode_flag == 1 && isUni5(str1[pos])){
+                else if(isUni5(str1[pos])){
                     str2[0] = str1[pos++];
                     str2[1] = str1[pos++];
                     str2[2] = str1[pos++];
@@ -2523,7 +2503,7 @@ int b_list_text(int arglist, int rest){
                     str2[4] = str1[pos++];
                     str2[5] = NUL;
                 }
-                else if(mode_flag == 1 && isUni6(str1[pos])){
+                else if(isUni6(str1[pos])){
                     str2[0] = str1[pos++];
                     str2[1] = str1[pos++];
                     str2[2] = str1[pos++];
@@ -2538,8 +2518,6 @@ int b_list_text(int arglist, int rest){
                 }
                 if(str2[0] == '\\')
                     code = ctrl_to_number(str2[1]);
-                else if(mode_flag == 0) //SJIS
-                    code = makeint(sjis_to_code(str2));
                 else //unicode
                     code = makeint(utf8_to_ucs4(str2));
                 ls = cons(code,ls);
@@ -2554,8 +2532,6 @@ int b_list_text(int arglist, int rest){
             while(!nullp(ls)){
                 if(GET_INT(car(ls)) < ' ')
                     sprintf(str2,"\\x%x\\",GET_INT(car(ls)));
-                else if(mode_flag == 0)
-                    sjis_to_char(GET_INT(car(ls)),str2);
                 else
                     ucs4_to_utf8(GET_INT(car(ls)),str2);
                 strcat(str1,str2);

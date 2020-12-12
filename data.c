@@ -138,15 +138,15 @@ int atom_length(int addr){
             n++;
             pos = pos + 2;
         }
-        else if(mode_flag == 1 && isUni2(c)){
+        else if(isUni2(c)){
             n++;
             pos = pos + 2;
         }
-        else if(mode_flag == 1 && isUni3(c)){
+        else if(isUni3(c)){
             n++;
             pos = pos + 3;
         }
-        else if(mode_flag == 1 && isUni4(c)){
+        else if(isUni4(c)){
             n++;
             pos = pos + 4;
         }
@@ -175,19 +175,15 @@ int string_length(int addr){
             n++;
             pos = pos + 2;
         }
-        else if(mode_flag == 0 && iskanji(c)){
+        else if(isUni2(c)){
             n++;
             pos = pos + 2;
         }
-        else if(mode_flag == 1 && isUni2(c)){
-            n++;
-            pos = pos + 2;
-        }
-        else if(mode_flag == 1 && isUni3(c)){
+        else if(isUni3(c)){
             n++;
             pos = pos + 3;
         }
-        else if(mode_flag == 1 && isUni4(c)){
+        else if(isUni4(c)){
             n++;
             pos = pos + 4;
         }
@@ -404,7 +400,6 @@ int atom_quote_p(int addr){
         while(str[pos] != NUL){
             if(!(str[pos] == '_' ||
                  isalnum(str[pos]) ||
-                 iskanji(str[pos]) ||
                  isUni2(str[pos]) ||
                  isUni3(str[pos]) ||
                  isUni4(str[pos]) ||
@@ -412,17 +407,16 @@ int atom_quote_p(int addr){
                  isUni6(str[pos])) || str[pos] == ' '){
                 return(1);
             }
-            if(mode_flag == 0 && iskanji(str[pos]))
+           
+            if(isUni2(str[pos]))
                 pos = pos + 2;
-            else if(mode_flag == 1 && isUni2(str[pos]))
-                pos = pos + 2;
-            else if(mode_flag == 1 && isUni3(str[pos]))
+            else if(isUni3(str[pos]))
                 pos = pos + 3;
-            else if(mode_flag == 1 && isUni4(str[pos]))
+            else if(isUni4(str[pos]))
                 pos = pos + 4;
-            else if(mode_flag == 1 && isUni5(str[pos]))
+            else if(isUni5(str[pos]))
                 pos = pos + 5;
-            else if(mode_flag == 1 && isUni6(str[pos]))
+            else if(isUni6(str[pos]))
                 pos = pos + 6;
             else
                 pos++;
@@ -1695,22 +1689,7 @@ int utf8_to_ucs4(char *p){
         return(-1);
 }
 
-int sjis_to_code(char *p){
-    int x,x1,res;
-    unsigned char jc;
 
-    jc = (unsigned char)*p;
-    x = (int)jc;
-    if(!(iskanji(x)))
-        return(x);
-    else{
-        p++;
-        jc = (unsigned char)*p;
-        x1 = (int)jc;
-        res = x*256 + x1;
-        return(res);
-    }
-}
 
 //transform from Unicode to UTF-8
 void ucs4_to_utf8(int n, char *p){
@@ -1771,23 +1750,6 @@ void ucs4_to_utf8(int n, char *p){
     *p = NUL;
 }
 
-//transform from SJIS to char
-void sjis_to_char(int n , char *p){
-    int x,y;
-
-    if(n <= 0xff)
-        *p = (char)n;
-    else{
-        x = SJIS1 & n;
-        x = x>>8;
-        *p = (char)x;
-        y = SJIS2 & n;
-        p++;
-        *p = (char)y;
-    }
-    p++;
-    *p = NUL;
-}
 
 int ctrl_to_number(char c){
     if(c == 'n')

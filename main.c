@@ -71,7 +71,6 @@ int xskip_flag = OFF;  // for debugger x command
 int semiskip_flag = OFF; //for debugger ; command
 int sexp_flag = 0;
 int arguments_flag = 1; //1= 1,2,3 -> (1,2,3) 0= 1,2,3 -> 1,2,3
-int mode_flag = 1;  // 0=SJIS, 1=Unicod
 int quoted_flag = 1; // 0=not print ' 1=print '
 int ignore_flag = 0; // 0=infix notation 2+2 1=prefix notation +(2,2)
 int error_flag = 0;  // flag in syntax error
@@ -1164,33 +1163,29 @@ void print_quoted(int addr){
             fprintf(GET_PORT(output_stream),"%c",'\\');
             pos++;
         }
-        else if(mode_flag == 0 && iskanji(c)){
+        else if(isUni2(c)){
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
         }
-        else if(mode_flag == 1 && isUni2(c)){
-            fprintf(GET_PORT(output_stream),"%c",str[pos++]);
-            fprintf(GET_PORT(output_stream),"%c",str[pos++]);
-        }
-        else if(mode_flag == 1 && isUni3(c)){
+        else if(isUni3(c)){
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
         }
-        else if(mode_flag == 1 && isUni4(str[0])){
+        else if(isUni4(str[0])){
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
         }
-        else if(mode_flag == 1 && isUni5(str[0])){
+        else if(isUni5(str[0])){
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
         }
-        else if(mode_flag == 1 && isUni6(str[0])){
+        else if(isUni6(str[0])){
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);
             fprintf(GET_PORT(output_stream),"%c",str[pos++]);

@@ -137,20 +137,20 @@ int b_atom_convert(int arglist, int rest){
                 strcat(str4,str2);
                 pos1++;
             }
-            else if(mode_flag == 1 && isUni1(str1[pos1])){
+            else if(isUni1(str1[pos1])){
                 str2[0] = str1[pos1];
                 str2[1] = NUL;
                 strcat(str4,str2);
                 pos1++;
             }
-            else if(mode_flag == 1 && isUni2(str1[pos1])){
+            else if(isUni2(str1[pos1])){
                 str2[0] = str1[pos1++];
                 str2[1] = str1[pos1++];
                 str2[2] = NUL;
                 sprintf(str3,"u%d",utf8_to_ucs4(str2));
                 strcat(str4,str3);
             }
-            else if(mode_flag == 1 && isUni3(str1[pos1])){
+            else if(isUni3(str1[pos1])){
                 str2[0] = str1[pos1++];
                 str2[1] = str1[pos1++];
                 str2[2] = str1[pos1++];
@@ -158,7 +158,7 @@ int b_atom_convert(int arglist, int rest){
                 sprintf(str3,"u%d",utf8_to_ucs4(str2));
                 strcat(str4,str3);
             }
-            else if(mode_flag == 1 && isUni4(str1[pos1])){
+            else if(isUni4(str1[pos1])){
                 str2[0] = str1[pos1++];
                 str2[1] = str1[pos1++];
                 str2[2] = str1[pos1++];
@@ -167,7 +167,7 @@ int b_atom_convert(int arglist, int rest){
                 sprintf(str3,"u%d",utf8_to_ucs4(str2));
                 strcat(str4,str3);
             }
-            else if(mode_flag == 1 && isUni5(str1[pos1])){
+            else if(isUni5(str1[pos1])){
                 str2[0] = str1[pos1++];
                 str2[1] = str1[pos1++];
                 str2[2] = str1[pos1++];
@@ -177,7 +177,7 @@ int b_atom_convert(int arglist, int rest){
                 sprintf(str3,"u%d",utf8_to_ucs4(str2));
                 strcat(str4,str3);
             }
-            else if(mode_flag == 1 && isUni6(str1[pos1])){
+            else if(isUni6(str1[pos1])){
                 str2[0] = str1[pos1++];
                 str2[1] = str1[pos1++];
                 str2[2] = str1[pos1++];
