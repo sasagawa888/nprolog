@@ -137,9 +137,9 @@ test(true_fail_not) :-
     verify(not(1==2)).
 
 test(system) :-
-    verify(system(write(1))),
-    verify(system(true)),
-    verify(system(halt)).
+    verify(system(write/1)),
+    verify(system(true/0)),
+    verify(system(halt/0)).
 
 test(unify) :-
     verify(c(Z) = c(c(z))),

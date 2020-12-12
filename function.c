@@ -481,13 +481,13 @@ void defbuiltin(char *name, int(*func)(int, int), int arity){
 
     atom = makeatom(name,SYS);
     SET_SUBR(atom,func);
-    if(arity != -1 && arity < HEAPSIZE)
-        builtins = cons(list3(SLASH,atom,makeint(arity)),builtins);
-    else if(structurep(arity))
+    if(arity > 2 && structurep(arity))
         while(!nullp(arity)){
             builtins = cons(list3(SLASH,atom,makeint(car(arity))),builtins);
             arity = cdr(arity);
         }
+    else if(arity != -1)
+        builtins = cons(list3(SLASH,atom,makeint(arity)),builtins);
     return;
 }
 
@@ -496,13 +496,14 @@ void defcompiled(char *name, int(*func)(int, int), int arity){
 
     atom = makeatom(name,COMP);
     SET_SUBR(atom,func);
-    if(arity != -1 && arity < HEAPSIZE)
-        builtins = cons(list3(SLASH,atom,makeint(arity)),builtins);
-    else if(structurep(arity))
+    
+    if(arity > 2 && structurep(arity))
         while(!nullp(arity)){
             builtins = cons(list3(SLASH,atom,makeint(car(arity))),builtins);
             arity = cdr(arity);
         }
+    else if(arity != -1)
+        builtins = cons(list3(SLASH,atom,makeint(arity)),builtins);
     return;
 }
 
