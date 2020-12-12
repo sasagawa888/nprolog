@@ -10,8 +10,8 @@ sigma(A - B,Sum) :-
     sigma_aux([A,C,Sum],0,A).
 
 sigma_aux([A,C,Sum],C,Sum).
-sigma_aux(Const,N,SUM) :-
+sigma_aux(Const,N,Sum) :-
     Const = [A|_],
     N1 is N+1,
-    SUM1 is SUM + N1 + A,
-    sigma_aux(Const,N1,SUM1).
+    Sum1 is Sum + N1 + A,
+    sigma_aux(Const,N1,Sum1).

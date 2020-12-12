@@ -465,8 +465,6 @@ int prove(int goal, int bindings, int rest, int n){
     int clause,clauses,clause1,varlis,save1,save2,res;
 
     proof++;
-    //if(n > 30000)
-    //    error(RESOURCE_ERR,"",NIL);
     if(ctrl_c_flag == 1){
         printf("ctrl+C\n\n");
         longjmp(buf,1);
