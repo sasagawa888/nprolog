@@ -3357,23 +3357,16 @@ int b_functor(int arglist, int rest){
             error(NOT_ATOM,"functor ", arg2);
 
 
-        if(listp(arg1) &&
-                 constantp(arg2) && integerp(arg3)){
+        if(listp(arg1) && atomp(arg2) && integerp(arg3)){
             i = GET_INT(arg3);
             if(i == 0)
                 return(unify(arg1,arg2));
             else{
-                res = NIL;
-                while(i > 0){
-                    res = cons(makevariant(),res);
-                    i--;
-                }
-                res = listreverse(res);
-                SET_AUX(arg2,PRED);
-                res = cons(arg2,res);
-                if(arg2 == DOTOBJ && GET_INT(arg3)==2)
-                    res = operate(res);
-                return(unify(arg1,res));
+                
+                if(eqlp(arg2,DOTOBJ) && GET_INT(arg3)==2)
+                    return(YES);
+                else
+                    return(NO);
             }
         }
         else if(listp(arg1) &&

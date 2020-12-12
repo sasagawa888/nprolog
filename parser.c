@@ -1296,7 +1296,7 @@ int readitem(void){
                         }
                         else{
                             stok.flag = BACK;
-                            return(temp);
+                            return(DOTOBJ);
                         }
         case BUILTIN:   temp = makeatom(stok.buf,SYS);
                         if(GET_OPT(temp) != NIL && temp != makesys("is"))

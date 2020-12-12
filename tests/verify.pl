@@ -173,7 +173,7 @@ test(univ) :-
 
 test(functor) :-
     verify(functor(book(pooh,miline,aa),book,3)),
-    functor([1,2,3],X,Y),X='.',Y=2.
+    verify(functor([1,2,3],'.',2)).
 
 
 test(arg) :-
