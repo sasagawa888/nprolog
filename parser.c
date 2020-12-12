@@ -616,6 +616,8 @@ void gettoken(void){
                         unreadc(c);
                         return;
                     }
+        case '#':   stok.type = SHARP; return;
+
     }
 
     //constant-atom in SJIS mode
@@ -1294,16 +1296,18 @@ int readitem(void){
         case OPERATOR:  return(makeatom(stok.buf,OPE));
         case DOT:       gettoken();
                         if(stok.type == LPAREN){
-                            temp1 = readparen();
-                            return(cons(DOTOBJ,temp1));
+                            temp = readparen();
+                            return(cons(DOTOBJ,temp));
                         }
                         else{
                             stok.flag = BACK;
                             return(DOTOBJ);
                         }
+        case SHARP:     gettoken();
+                        return(makeint(utf8_to_ucs4(stok.buf)));
         case BUILTIN:   temp = makeatom(stok.buf,SYS);
-                        if(GET_OPT(temp) != NIL && temp != makesys("is"))
-                            return(temp);
+                        //if(GET_OPT(temp) != NIL && temp != makesys("is"))
+                        //    return(temp);
                         gettoken();
                         if(stok.type == LPAREN){
                             if(stok.space == SKIP){
@@ -1313,6 +1317,10 @@ int readitem(void){
 
                             temp1 = readparen();
                             return(cons(temp,temp1));
+                        }
+                        else if(strcmp(stok.buf,"/") == 0){
+                            temp1 = readitem();
+                            return(list3(SLASH,temp,temp1));
                         }
                         else{
                             stok.flag = BACK;

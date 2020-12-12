@@ -472,22 +472,37 @@ void definfix(char *name, int(*func)(int, int), int weight, int spec){
     weight = makeint(weight);
     spec = makespec(spec);
     op_list = cons(list3(weight,spec,atom),op_list);
+    builtins = cons(list3(SLASH,atom,makeint(2)),builtins);
     return;
 }
 
-void defbuiltin(char *name, int(*func)(int, int)){
+void defbuiltin(char *name, int(*func)(int, int), int arity){
     int atom;
 
     atom = makeatom(name,SYS);
     SET_SUBR(atom,func);
+    if(arity != -1 && arity < HEAPSIZE)
+        builtins = cons(list3(SLASH,atom,makeint(arity)),builtins);
+    else if(structurep(arity))
+        while(!nullp(arity)){
+            builtins = cons(list3(SLASH,atom,makeint(car(arity))),builtins);
+            arity = cdr(arity);
+        }
     return;
 }
 
-void defcompiled(char *name, int(*func)(int, int)){
+void defcompiled(char *name, int(*func)(int, int), int arity){
     int atom;
 
     atom = makeatom(name,COMP);
     SET_SUBR(atom,func);
+    if(arity != -1 && arity < HEAPSIZE)
+        builtins = cons(list3(SLASH,atom,makeint(arity)),builtins);
+    else if(structurep(arity))
+        while(!nullp(arity)){
+            builtins = cons(list3(SLASH,atom,makeint(car(arity))),builtins);
+            arity = cdr(arity);
+        }
     return;
 }
 

@@ -65,6 +65,10 @@ test(radix) :-
     verify(0xff == 255), 
     verify(0o77 == 63).
 
+test(sharp) :-
+    verify(#x == 120),
+    verify(#0 == 48).
+
 test(arithmetic) :-
     verify(2 is 1+1),
     verify(-1 is 3-4),

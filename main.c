@@ -23,6 +23,7 @@ token stok = {GO,OTHER};
 jmp_buf buf;
 int variables = NIL;
 int predicates = NIL;
+int builtins = NIL;
 int spy_list = NIL;
 int reconsult_list = NIL;
 int execute_list = NIL;
@@ -106,7 +107,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"=="},{"\\=="},{"@<"},{"@=<"},{"@>"},{"@>="},
 {"=:="},{"=/="},{"=\\="},{"<"},{"=<"},{">"},
 {">="},{"\\="},{"="},{"reverse"},
-{"is"},{"edit"},{"open"},{"close"},{"system"},{"create"},{"dup"},
+{"is"},{"edit"},{"open"},{"close"},{"create"},{"dup"},
 {"delete"},{"rename"},
 {"op"},{"!"},{"assert"},{"asserta"},{"assertz"},
 {"abolish"},{"read"},{"write"},{"put"},{"get"},{"get0"},{"get0_noecho"},{"nl"},
@@ -135,7 +136,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 
 //compiled predicate
 char compiled[COMPILED_NUMBER][30] ={
-{"append"},{"member"},{"repeat"},
+{"append"},{"member"},{"repeat"},{"system"},
 {"retract"},{"clause"},{"call"},{"directory"},
 {"current_visible"},{"stream_property"},{"between"},
 {"current_predicate"},{"current_op"},{"retrieveh"},{"removeh"}

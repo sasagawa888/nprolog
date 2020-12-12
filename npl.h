@@ -116,7 +116,7 @@ typedef struct{
 } cell;
 
 
-typedef enum toktype {LPAREN,RPAREN,LBRACKET,RBRACKET,VERTICAL,LCURL,RCURL,
+typedef enum toktype {LPAREN,RPAREN,LBRACKET,RBRACKET,VERTICAL,LCURL,RCURL,SHARP,
                       STRING,INTEGER,FLOATN,CHARCODE,ATOMOBJ,BUILTIN,
                       COMPILED,OPERATOR,VARIABLE,ANOYMOUS,QUOTE,DOT,BACKQUOTE,
                       COMMA,SEMICOLON,BIGNUM,BINNUM,OCTNUM,HEXNUM,
@@ -152,6 +152,7 @@ extern int counter[31];
 extern int string_term_buffer[STRSIZE];
 extern int variables;
 extern int predicates;
+extern int builtins;
 extern int spy_list;
 extern int reconsult_list;
 extern int execute_list;
@@ -1122,8 +1123,8 @@ void checkgbc(void);
 void clrcell(int addr);
 void cut_zero(int x);
 void debugger(int end, int bindings, int choice, int n);
-void defbuiltin(char *name, int(*func)(int, int));
-void defcompiled(char *name, int(*func)(int, int));
+void defbuiltin(char *name, int(*func)(int, int), int arity);
+void defcompiled(char *name, int(*func)(int, int), int arity);
 void definfix(char *name, int(*func)(int, int), int weight, int spec);
 void defoperator(char *name, int(*func)(int, int), int weight, int spec, int opt);
 void defuserfunction(char *name, int weight, int spec);
