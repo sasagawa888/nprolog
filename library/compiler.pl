@@ -51,7 +51,7 @@ void init_declare(void){
 */
 
 % optimize flag
-jump_optimize(off).
+jump_optimize(on).
 
 % main
 compile_file(X) :-
@@ -164,7 +164,7 @@ jump_gen_c_def1.
 % generate deftpred for normal predicate
 jump_gen_def(P) :-
     not(jump_pred_data(P,type1)),
-    not(jump_pred_data(P,type2)),
+    %not(jump_pred_data(P,type2)),
 	write('(deftpred)("'),
     write(P),
     write('",'),
@@ -1267,7 +1267,7 @@ jump_analize(P) :-
     jump_deterministic(P,C1).
 
 jump_deterministic(P,C) :-
-    jump_type1_deterministic(C),
+    jump_type1_deterministic(C,0),
     jump_optimize(on),
     assert(jump_pred_data(P,type1)).
 
@@ -1279,14 +1279,15 @@ jump_deterministic(P,C) :-
 
 
 % type1 if clause has tail recursive and body is unidirectory
-jump_type1_deterministic([]).
-jump_type1_deterministic([(Head :- Body)|Cs]) :-
+jump_type1_deterministic([],1).
+jump_type1_deterministic([],0) :- fail.
+jump_type1_deterministic([(Head :- Body)|Cs],_) :-
     jump_tail_recursive(Head,Body),
     jump_unidirectory(Body),
-    jump_type1_deterministic(Cs).
-jump_type1_deterministic([C|Cs]) :-
+    jump_type1_deterministic(Cs,1).
+jump_type1_deterministic([C|Cs],Flag) :-
     n_property(C,predicate),
-    jump_type1_deterministic(Cs).
+    jump_type1_deterministic(Cs,Flag).
 
 % type2 if base has cut and other clause is tail recursive.
 jump_type2_deterministic([]).
@@ -1302,7 +1303,9 @@ jump_tail_recursive(Head,Body) :-
     functor(Head,Pred1,Arity1),
     functor(Last,Pred2,Arity2),
     Pred1 == Pred2,
-    Arity1 == Arity2.
+    Arity1 == Arity2,
+    jump_independence(Head,Last),
+    jump_self_independence(Head).
 
 jump_last_body((_,Body),Last) :-
     jump_last_body(Body,Last).
