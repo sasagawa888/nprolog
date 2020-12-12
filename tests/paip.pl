@@ -1,5 +1,6 @@
 %from PAIP example.
 
+
 likes(kim,robin).
 likes(sandy,lee).
 likes(sandy,kim).

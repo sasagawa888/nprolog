@@ -51,7 +51,7 @@ void init_declare(void){
 */
 
 % optimize flag
-jump_optimize(on).
+jump_optimize(off).
 
 % main
 compile_file(X) :-
@@ -1235,8 +1235,11 @@ jump_gen_tail_a_body(X >= Y,Head) :-
 % builtin call
 jump_gen_tail_a_body(X,Head) :-
     n_property(X,builtin),
-    X =.. L,
+    X =.. [P|L],
     write('Jcallsubr('),
+    write('Jmakesys("'),
+    write(P),
+    write('"),')
     jump_gen_a_argument(L),
     write(',NIL);'),nl.
 
