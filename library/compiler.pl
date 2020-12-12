@@ -1318,3 +1318,71 @@ jump_unidirectory((G,Gs)) :-
     jump_unidirectory(Gs).
 jump_unidirectory(_) :- fail.
 
+
+% foo([varA|varB])<=> foo(varA) false (depend)
+% foo([varA|varB])<=> foo(varC) true (independ)
+jump_independence(Pred1,Pred2) :-
+    n_argument_list(Pred1,Args1),
+    n_argument_list(Pred2,Args2),
+    jump_independence1(Args1,Args2).
+
+jump_independence1([],Y).
+jump_independence1([X|Xs],Y) :-
+    atomic(X),
+    jump_independence1(Xs,Y).
+jump_independence1([X|Xs],Y) :-
+    list(X),
+    jump_independence2(X,Y),
+    jump_independence1(Xs,Y).
+
+jump_independence2([],Y).
+jump_independence2(X,Y) :-
+    atomic(X).
+jump_independence2([X|Xs],Y) :-
+    atomic(X),
+    not(member(X,Y)),
+    jump_independence2(Xs,Y).
+jump_independence2([[X|Xs]|Ys],Y) :-
+    jump_independence2([X|Xs],Y),
+    jump_independence2(Ys,Y).
+
+
+% foo([varX|varL],[varX|1]) -> no
+% foo([varY|varL],[varX|1]) -> yes
+jump_self_independence(Pred) :-
+    n_argument_list(Pred,Args),
+    jump_self_independence1(Args).
+
+jump_self_independence1([]).
+jump_self_independence1([X]).
+jump_self_independence1([X1,X2|Xs]) :-
+    jump_self_independence2(X1,X2),
+    jump_self_independence1([X1|Xs]),
+    jump_self_independence1([X2|Xs]).
+
+jump_self_independence2(X,Y) :-
+    list(X),list(Y),
+    jump_list_member(X,Y),!,fail.
+jump_self_independence2(X,Y) :-
+    atom(X),list(Y),
+    member(X,Y),!,fail.
+jump_self_independence2(X,Y) :-
+    X = Y,!,fail.
+jump_self_independence2(X,Y).
+
+jump_deep_member(X,[X|Ys]) :-
+    n_compiler_variable(X).
+jump_deep_member(X,X) :-
+    n_compiler_variable(X).
+jump_deep_member(X,[Y|Ys]) :-
+    jump_deep_member(X,Ys).
+
+jump_list_member([],Y) :- fail.
+jump_list_member(X,Y) :-
+    atomic(X),jump_deep_member(X,Y).
+jump_list_member([L|Ls],Y) :-
+    jump_deep_member(L,Y).
+jump_list_member([L|Ls],Y) :-
+    jump_list_member(Ls,Y).
+
+

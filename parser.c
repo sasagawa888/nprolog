@@ -846,12 +846,6 @@ void gettoken(void){
         stok.buf[pos] = NUL;
         stok.ch = NUL;
         stok.ahead = c;
-        for(i=0;i<OPERATOR_NUMBER;i++){
-            if(strcmp(operator[i],stok.buf) == 0){
-                stok.type = OPERATOR;
-                return;
-            }
-        }
         for(i=0;i<FUNCTION_NUMBER;i++){
             if(strcmp(function[i],stok.buf) == 0){
                 stok.type = ATOMOBJ;
