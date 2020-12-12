@@ -136,6 +136,7 @@ void display_buffer(){
                 while(length > 0){
                     printf("%c", buffer[col][0]);
                     col++;
+                    length--;
                 }
                 ESCRST;
                 ESCFORG;
@@ -143,11 +144,10 @@ void display_buffer(){
             else if(type == 6){ //function
                 ESCBOLD;
                 setcolor(ed_function_color);
-                while(isalpha(buffer[col][0]) ||
-                         buffer[col][0] == '_'   ||
-                         isdigit(buffer[col][0]) ){
+                while(length > 0){
                         printf("%c", buffer[col][0]);
                         col++;
+                        length--;
                 }
                 ESCRST;
                 ESCFORG;

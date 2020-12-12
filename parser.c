@@ -32,8 +32,11 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
 
 
     gettoken();
-    if(stok.type == FILEEND) // end of file
+    if(stok.type == FILEEND){ // end of file
+        if(operand != NIL || operator != NIL)
+            error(SYNTAX_ERR,"expected period ",0);
         return(FEND);
+    }
     if(terminal == 1 &&
             (stok.type == PERIOD ||
             (parsemode == 1 && stok.type == COMMA) ||
