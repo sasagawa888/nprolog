@@ -174,4 +174,5 @@ void init_deftsys(tpred x){
 #define Jmakeuser(x)   (f4[7])(x)
 #define Jmakestrlong(x) (f4[8])(x)
 #define Jmakebig(x)    (f4[9])(x)
+#define Jmakestr(x)    (f4[10](x))
 

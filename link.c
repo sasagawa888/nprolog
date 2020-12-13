@@ -140,6 +140,7 @@ void dynamic_link(int x){
     init_f4(7,(tpred)makeuser);
     init_f4(8,(tpred)makestrlong);
     init_f4(9,(tpred)makebigx);
+    init_f4(10,(tpred)makestr);
 
     init_deftpred((tpred)defcompiled);
     init_deftsys((tpred)defbuiltin);

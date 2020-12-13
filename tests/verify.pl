@@ -258,4 +258,4 @@ test(atom_string) :-
     atom_string(Y,$apple$),
     verify(Y = apple).
 
-:- alltest,write('All tests are done\n').
+:- alltest,write('All tests are done'),nl.

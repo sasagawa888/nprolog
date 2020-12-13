@@ -1378,11 +1378,7 @@ int b_reconsult(int arglist, int rest){
             if(operationp(clause) && car(clause) == DEFINE && length(clause) == 2){
                 clause = cadr(clause);
                 prove_all(clause,sp,0);
-                while(structurep(clause) && car(clause) == AND){
-                    execute_list = cons(cadr(clause),execute_list);
-                    clause = caddr(clause);
-                }
-                execute_list = cons(clause,execute_list);
+                execute_list = listcons(clause,execute_list);
                 goto skip;
             }
             // DCG syntax e.g. a-->b.

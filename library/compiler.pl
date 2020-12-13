@@ -155,7 +155,7 @@ jump_gen_pred1(P) :-
 jump_gen_c_def :-
 	write('void init_tpredicate(void){'),
     jump_gen_c_def1,
-    write('}').
+    write('}'),nl.
 
 jump_gen_c_def1 :-
     n_reconsult_predicate(P),
@@ -763,6 +763,11 @@ jump_gen_a_argument(X) :-
     write(X),
     write('")').
 jump_gen_a_argument(X) :-
+	string(X),
+    write('Jmakestr("'),
+    write(X),
+    write('")').
+jump_gen_a_argument(X) :-
     n_defined_predicate(X),
     functor(X,Y,_),
     n_argument_list(X,Z),
@@ -899,15 +904,21 @@ generate execution
 */
 jump_gen_exec :-
     n_get_execute(X),
+    write('int body;'),nl,
     jump_gen_exec1(X).
 
 jump_gen_exec1([]).
 jump_gen_exec1([L|Ls]) :-
-    write('Jexecute(Jlist2(Jmakeope(":-"),'),
-    jump_gen_a_body(L),
-    write('));'),nl,
+    jump_gen_exec2(L),
+    nl,
     jump_gen_exec1(Ls).
 
+
+jump_gen_exec2(X) :-
+    write('body = '),
+    jump_gen_body1(X),
+    write(';'),nl,
+    write('Jprove_all(body,Jget_sp(),0);'),!.
 
 /*
 optimizer for deterministic predicate
