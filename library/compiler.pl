@@ -1310,6 +1310,7 @@ jump_type1_deterministic([(Head :- Body)|Cs],_) :-
     jump_type1_deterministic(Cs,1).
 jump_type1_deterministic([C|Cs],Flag) :-
     n_property(C,predicate),
+    jump_self_independence(C),
     jump_type1_deterministic(Cs,Flag).
 
 % type2 if base has cut and other clause is tail recursive.
@@ -1392,6 +1393,9 @@ jump_self_independence2(X,Y) :-
 jump_self_independence2(X,Y) :-
     atom(X),list(Y),
     member(X,Y),!,fail.
+jump_self_independence2(X,Y) :-
+    atom(Y),list(X),
+    member(Y,X),!,fail.
 jump_self_independence2(X,Y) :-
     X = Y,!,fail.
 jump_self_independence2(X,Y).
