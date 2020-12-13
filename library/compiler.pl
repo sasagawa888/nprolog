@@ -51,7 +51,7 @@ void init_declare(void){
 */
 
 % optimize flag
-jump_optimize(on).
+jump_optimize(off).
 % delete C source
 jump_delete(on).
 
