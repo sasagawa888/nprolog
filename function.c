@@ -576,121 +576,121 @@ int eval(int x){
         else
             error(EVALUATION_ERR,"eval ",x);
     }
-    else if(eqp(car(x),makeatom("abs",PRED))){
+    else if(eqp(car(x),makeatom("abs",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_abs(arg1));
     }
-    else if(eqp(car(x),makeatom("sin",PRED))){
+    else if(eqp(car(x),makeatom("sin",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_sin(arg1));
     }
-    else if(eqp(car(x),makeatom("asin",PRED))){
+    else if(eqp(car(x),makeatom("asin",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_asin(arg1));
     }
-    else if(eqp(car(x),makeatom("cos",PRED))){
+    else if(eqp(car(x),makeatom("cos",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_cos(arg1));
     }
-    else if(eqp(car(x),makeatom("acos",PRED))){
+    else if(eqp(car(x),makeatom("acos",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_acos(arg1));
     }
-    else if(eqp(car(x),makeatom("tan",PRED))){
+    else if(eqp(car(x),makeatom("tan",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_tan(arg1));
     }
-    else if(eqp(car(x),makeatom("atan",PRED))){
+    else if(eqp(car(x),makeatom("atan",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_atan(arg1));
     }
-    else if(eqp(car(x),makeatom("exp",PRED))){
+    else if(eqp(car(x),makeatom("exp",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_exp(arg1));
     }
-    else if(eqp(car(x),makeatom("log",PRED))){
+    else if(eqp(car(x),makeatom("log",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_log(arg1));
     }
-    else if(eqp(car(x),makeatom("floor",PRED))){
+    else if(eqp(car(x),makeatom("floor",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_floor(arg1));
     }
-    else if(eqp(car(x),makeatom("ceiling",PRED))){
+    else if(eqp(car(x),makeatom("ceiling",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_ceiling(arg1));
     }
-    else if(eqp(car(x),makeatom("truncate",PRED))){
+    else if(eqp(car(x),makeatom("truncate",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_truncate(arg1));
     }
-    else if(eqlp(car(x),makeatom("float",PRED))){
+    else if(eqlp(car(x),makeatom("float",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_float(arg1));
     }
-    else if(eqp(car(x),makeatom("float_integer_part",PRED))){
+    else if(eqp(car(x),makeatom("float_integer_part",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_float_integer_part(arg1));
     }
-    else if(eqp(car(x),makeatom("float_fraction_part",PRED))){
+    else if(eqp(car(x),makeatom("float_fraction_part",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_float_fraction_part(arg1));
     }
-    else if(eqp(car(x),makeatom("sign",PRED))){
+    else if(eqp(car(x),makeatom("sign",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_sign(arg1));
     }
-    else if(eqp(car(x),makeatom("sqrt",PRED))){
+    else if(eqp(car(x),makeatom("sqrt",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_sqrt(arg1));
     }
-    else if(eqp(car(x),makeatom("round",PRED))){
+    else if(eqp(car(x),makeatom("round",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_round(arg1));
     }
-    else if(eqp(car(x),makeatom("gcd",PRED))){
+    else if(eqp(car(x),makeatom("gcd",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         arg2 = result[2];
         return(gcd(arg1,arg2));
     }
-    else if(eqp(car(x),makeatom("lcm",PRED))){
+    else if(eqp(car(x),makeatom("lcm",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         arg2 = result[2];
         return(lcm(arg1,arg2));
     }
-    else if(eqp(car(x),makeatom("min",PRED))){
+    else if(eqp(car(x),makeatom("min",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         arg2 = result[2];
         return(f_min(arg1,arg2));
     }
-    else if(eqp(car(x),makeatom("max",PRED))){
+    else if(eqp(car(x),makeatom("max",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         arg2 = result[2];
         return(f_max(arg1,arg2));
     }
-    else if(eqp(car(x),makeatom("random",PRED))){
+    else if(eqp(car(x),makeatom("random",FUNC))){
         evalterm(x,result);
         arg1 = result[1];
         return(f_random(arg1));

@@ -759,6 +759,16 @@ int predicatep(int addr){
         return(0);
 }
 
+int functionp(int addr){
+    if(structurep(addr) && GET_AUX(addr) != LIST &&
+       IS_INCELL(car(addr)) && GET_AUX(car(addr)) == FUNC)
+        return(1);
+    else if(IS_INCELL(addr) && GET_AUX(addr) == FUNC)
+        return(1);
+    else
+        return(0);
+}
+
 int termp(int addr){
     if(structurep(addr) && GET_AUX(addr) != LIST &&
        IS_INCELL(car(addr)) && GET_AUX(car(addr)) == PRED)

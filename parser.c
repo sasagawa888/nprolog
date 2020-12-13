@@ -686,7 +686,7 @@ void gettoken(void){
         }
         for(i=0;i<FUNCTION_NUMBER;i++){
             if(strcmp(function[i],stok.buf) == 0){
-                stok.type = ATOMOBJ;
+                stok.type = FUNCTION;
                 return;
             }
         }
@@ -848,7 +848,7 @@ void gettoken(void){
         stok.ahead = c;
         for(i=0;i<FUNCTION_NUMBER;i++){
             if(strcmp(function[i],stok.buf) == 0){
-                stok.type = ATOMOBJ;
+                stok.type = FUNCTION;
                 return;
             }
         }
@@ -1117,7 +1117,7 @@ void gettoken(void){
         }
         for(i=0;i<FUNCTION_NUMBER;i++){
             if(strcmp(function[i],stok.buf) == 0){
-                stok.type = ATOMOBJ;
+                stok.type = FUNCTION;
                 return;
             }
         }
@@ -1274,6 +1274,19 @@ int readitem(void){
                         if(stok.type == LPAREN){
                             if(stok.space == SKIP)
                                 error(SYNTAX_ERR,"illegal compiled predicate ",temp);
+
+                            temp1 = readparen();
+                            return(cons(temp,temp1));
+                        }
+                        else{
+                            stok.flag = BACK;
+                            return(temp);
+                        }
+        case FUNCTION:  temp = makeatom(stok.buf,FUNC);
+                        gettoken();
+                        if(stok.type == LPAREN){
+                            if(stok.space == SKIP)
+                                error(SYNTAX_ERR,"illegal function ",temp);
 
                             temp1 = readparen();
                             return(cons(temp,temp1));

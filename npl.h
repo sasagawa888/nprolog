@@ -24,7 +24,7 @@ address
 #define BUFSIZE 256
 #define STRSIZE 256
 #define OPERATOR_NUMBER 24
-#define FUNCTION_NUMBER 20
+#define FUNCTION_NUMBER 22
 #define BUILTIN_NUMBER 200
 #define COMPILED_NUMBER 23
 #define EXTENDED_NUMBER 20
@@ -114,7 +114,7 @@ typedef struct{
 
 
 typedef enum toktype {LPAREN,RPAREN,LBRACKET,RBRACKET,VERTICAL,LCURL,RCURL,SHARP,
-                      STRING,INTEGER,FLOATN,CHARCODE,ATOMOBJ,BUILTIN,
+                      STRING,INTEGER,FLOATN,CHARCODE,ATOMOBJ,BUILTIN,FUNCTION,
                       COMPILED,OPERATOR,VARIABLE,ANOYMOUS,QUOTE,DOT,BACKQUOTE,
                       COMMA,SEMICOLON,BIGNUM,BINNUM,OCTNUM,HEXNUM,
                       PERIOD,FILEEND,OTHER} toktype;
@@ -331,6 +331,7 @@ extern int error_stream;
 #define CLAUSE  8 //clause
 #define COMP    9 //compiled predicate
 #define LIST    10 //list
+#define FUNC    11 //function
 
 
 //stream type
@@ -969,6 +970,7 @@ int makeflt(double floatn);
 int makeint(int num);
 int makelong(long long int lngnum);
 int makepred(char *name);
+int makefunc(char *name);
 int makespec(int spec);
 int makestr(char *name);
 int makesys(char *name);

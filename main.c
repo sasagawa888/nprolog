@@ -95,7 +95,7 @@ char operator[OPERATOR_NUMBER][5] = {
 char function[FUNCTION_NUMBER][12] = {
 {"abs"},{"sin"},{"cos"},{"tan"},{"asin"},{"acos"},{"atan"},
 {"exp"},{"log"},{"floor"},{"ceiling"},{"truncate"},
-{"sign"},{"sqrt"},{"round"},{"gcd"},{"lcm"},
+{"sign"},{"sqrt"},{"round"},{"gcd"},{"lcm"},{"max"},{"min"},
 {"random"},{"random_real"},
 };
 

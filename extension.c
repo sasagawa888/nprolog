@@ -453,6 +453,8 @@ int b_property(int arglist, int rest){
             return(unify(arg2,makeconst("builtin")));
         else if(predicatep(arg1))
             return(unify(arg2,makeconst("predicate")));
+        else if(functionp(arg1))
+            return(unify(arg2,makeconst("function")));
         else if(compiledp(arg1))
             return(unify(arg2,makeconst("compiled")));
         else if(operationp(arg1))

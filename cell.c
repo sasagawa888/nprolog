@@ -445,6 +445,10 @@ int makepred(char *name){
     return(makeatom(name,PRED));
 }
 
+int makefunc(char *name){
+    return(makeatom(name,FUNC));
+}
+
 int makeconst(char *name){
     return(makeatom(name,SIMP));
 }
