@@ -3586,9 +3586,6 @@ int b_univ(int arglist, int rest){
             SET_AUX(arg1,LIST);
             return(unify(arg1,arg2));
         }
-        else if(alpha_variable_p(arg2)){//for bug of OPL compiler
-            return(unify(arg1,arg2));
-        }
         else{
             return(unify(arg1,arg2));
         }

@@ -51,7 +51,9 @@ void init_declare(void){
 */
 
 % optimize flag
-jump_optimize(off).
+jump_optimize(on).
+% delete C source
+jump_delete(on).
 
 % main
 compile_file(X) :-
@@ -116,6 +118,7 @@ jump_invoke_gcc(X) :-
     atom_concat(Ofile,Cfile,Files),
     atom_concat('gcc -O3 -w -shared -fPIC -I$HOME/nprolog -o ',Files,Gen),
     shell(Gen),
+    jump_delete(on),
     atom_concat('rm ',Cfile,Del),
     shell(Del).
 
@@ -1190,6 +1193,13 @@ jump_gen_tail_a_body(X is Y,Head) :-
     jump_eval_form(Y),
     write(';'),nl.
 
+jump_gen_tail_a_body(X = Y,Head) :-
+    write('if(Junify('),
+    jump_gen_a_argument(X),
+    write(','),
+    jump_gen_a_argument(Y),
+    write(')==NO) return(NO);').
+
 jump_gen_tail_a_body(X =:= Y,Head) :-
     write('if(!Jnumeqp('),
     jump_eval_form(X),
@@ -1235,10 +1245,9 @@ jump_gen_tail_a_body(X >= Y,Head) :-
 % builtin call
 jump_gen_tail_a_body(X,Head) :-
     n_property(X,builtin),
+    write('Jcallsubr(Jmakesys("'),
     X =.. [P|L],
-    write('Jcallsubr('),
-    write('Jmakesys("'),
-    write(P),
+    write(user_output,P),
     write('"),')
     jump_gen_a_argument(L),
     write(',NIL);'),nl.
