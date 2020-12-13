@@ -427,8 +427,12 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
             paren_nest--;
             return(parser(cons(temp1,operand),operator,weight,spec,terminal,parsemode));
         }
-        else
+        else{
+            if(length(operand) >= 2)
+                error(SYNTAX_ERR,"expected operator ",temp);
+
             return(parser(cons(temp,operand),operator,weight,spec,terminal,parsemode));
+        }
     }
 
     return(NIL);
@@ -858,6 +862,7 @@ void gettoken(void){
                 return;
             }
         }
+        
         for(i=0;i<COMPILED_NUMBER;i++){
             if(strcmp(compiled[i],stok.buf) == 0){
                 stok.type = COMPILED;

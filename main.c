@@ -225,7 +225,6 @@ int main(int argc, char *argv[]){
         b_consult(list1(makeconst(str)),NIL);
         predicates = NIL;
     }
-    
     while(opt < argc){
         if(strcmp(argv[opt],"-c") == 0 || strcmp(argv[opt],"--code") == 0){
             opt++;

@@ -51,7 +51,7 @@ void init_declare(void){
 */
 
 % optimize flag
-jump_optimize(off).
+jump_optimize(on).
 % delete C source
 jump_delete(on).
 
@@ -1258,8 +1258,8 @@ jump_gen_tail_a_body(X,Head) :-
     n_property(X,builtin),
     write('Jcallsubr(Jmakesys("'),
     X =.. [P|L],
-    write(user_output,P),
-    write('"),')
+    write(P),
+    write('"),'),
     jump_gen_a_argument(L),
     write(',NIL);'),nl.
 

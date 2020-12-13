@@ -18,6 +18,7 @@ void error(int errnum, char *fun, int arg){
                               printf("Syntax error %s ", fun);
 														  if(!error_flag && arg > 24)
 																  print(arg);
+                                
                   					  if(error_flag)
                   							  printf("errNO=%d\n",arg);
                             } 
