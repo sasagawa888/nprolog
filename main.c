@@ -137,7 +137,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 char compiled[COMPILED_NUMBER][30] ={
 {"append"},{"member"},{"repeat"},{"system"},
 {"retract"},{"clause"},{"call"},{"directory"},
-{"current_visible"},{"stream_property"},{"between"},
+{"between"},
 {"current_predicate"},{"current_op"},{"retrieveh"},{"removeh"}
 };
 

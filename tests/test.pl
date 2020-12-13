@@ -17,3 +17,4 @@ sigma_aux(Const,N,Sum) :-
     sigma_aux(Const,N1,Sum1).
 
 
+
