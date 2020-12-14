@@ -36,14 +36,14 @@ int left_margin = 4;  //for read_line
 int break_nest = 0;   //for debugger b command
 int leap_point = NIL; //for debugger l command
 int port;             //for debugger
-int line;
-int column;
-int cursor_row = 0;
-int cursor_col = 0;
-int cursor_prop = 0;
-int cursor_row_store = 0;
-int cursor_col_store = 0;
-int cursor_prop_store = 0;
+int line;             //for error, display line of error point
+int column;           //for error, display column of error point
+int cursor_row = 0;       //for REPL editor
+int cursor_col = 0;       //for REPL editor
+int cursor_prop = 0;      //for REPL editor
+int cursor_row_store = 0; //for REPL editor
+int cursor_col_store = 0; //for REPL editor
+int cursor_prop_store = 0;//for REPL editor
 double timer;  // for timer_microseconds/1
 
 
@@ -58,10 +58,10 @@ int wp; //working pointer
 
 //flag
 int repl_flag = 1;  //for editable REPL read_line 1=on, 0=off
-int trace_flag = FULL;
-int open_flag = 0;
+int trace_flag = FULL; //for debugger
+int open_flag = 0;  //for error 0=not int reading file, 1=in reading file 
 int gbc_flag = 0;  // 0=not display massage 1=display message
-int simp_flag = 1;
+int simp_flag = 1;  //for bignum 1=if bignum become more simple, simplify, 0=not
 int assert_flag = 0; // 0=asserta, 1=assertz
 int debug_flag = OFF;  // 0=normal mode, 1=debug mode
 int fskip_flag = OFF;  // for debugger f command
@@ -69,7 +69,7 @@ int qskip_flag = OFF;  // for debugger q command
 int sskip_flag = OFF;  // for debugger s command 
 int xskip_flag = OFF;  // for debugger x command
 int semiskip_flag = OFF; //for debugger ; command
-int sexp_flag = 0;
+int sexp_flag = 0;      // for debug 0=normal, 1=print data as S expression like LISP
 int arguments_flag = 1; //1= 1,2,3 -> (1,2,3) 0= 1,2,3 -> 1,2,3
 int quoted_flag = 1; // 0=not print ' 1=print '
 int ignore_flag = 0; // 0=infix notation 2+2 1=prefix notation +(2,2)
@@ -173,11 +173,11 @@ int ed_rbracket_col;
 char ed_candidate[30][30];
 int ed_candidate_pt;
 int ed_operator_color = 5;   //default magenta
-int ed_builtin_color = 6;  //default cyan
-int ed_extended_color = 1; //default red
-int ed_quote_color = 3;   //default yellow
-int ed_comment_color = 4;  //default blue
-int ed_function_color = 2; //default green
+int ed_builtin_color = 6;    //default cyan
+int ed_extended_color = 1;   //default red
+int ed_quote_color = 3;      //default yellow
+int ed_comment_color = 4;    //default blue
+int ed_function_color = 2;   //default green
 int ed_incomment = -1; /*...*/
 int ed_hight;
 int ed_width;
@@ -410,27 +410,6 @@ int addtail_body(int x, int y){
         return(wlist3(car(y),cadr(y),addtail_body(x,caddr(y))));
 }
 
-/*
-int addtail_body(int x, int y){
-    if(!conjunctionp(y))
-        return(wlist3(AND,y,x));
-    else{
-        addtail_body1(x,y);
-        return(y);
-    }
-}
-
-
-//concat y and x by side eeffect.
-//set address directly
-
-void addtail_body1(int x, int y){
-    if(!conjunctionp(y))
-        y = wlist3(AND,y,x);
-    else
-        addtail_body1(x,caddr(y));
-}
-*/
 
 int prove_all(int goals, int bindings, int n){
     int res;

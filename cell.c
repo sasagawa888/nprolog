@@ -303,7 +303,7 @@ int makespec(int spec){
     return(res);
 }
 /*
-make exculsicve spec atom
+make exclusicve spec atom
 */
 int makeexspec(int old_spec, int spec){
     if(old_spec == FX_XFX){
