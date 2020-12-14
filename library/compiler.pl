@@ -57,9 +57,11 @@ jump_delete(on).
 
 % main
 compile_file(X) :-
+    n_strict(true),
     jump_pass1(X),
     jump_pass2(X),
-    jump_invoke_gcc(X).
+    jump_invoke_gcc(X),
+    n_strict(false).
 
 % generate object from c code
 compile_file1(X) :-
@@ -79,7 +81,7 @@ jump_pass1(X) :-
     nl(user_output),
     abolish(jump_pred_data/2),
     assert(jump_pred_data(jump_dummy,-1)),
-    reconsult(X),
+    reconsult(X,true),
     jump_pass1_analize.
 
 jump_pass1_analize :-

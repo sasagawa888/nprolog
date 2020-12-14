@@ -1337,12 +1337,14 @@ int b_consult(int arglist, int rest){
 
 
 int b_reconsult(int arglist, int rest){
-    int n,arg1,clause,head,atom,save;
+    int n,arg1,arg2,clause,head,atom,save;
     char str[STRSIZE];
 
     n = length(arglist);
+    arg2 = NIL;
     if(n == 1){
         arg1 = car(arglist);
+        reconsult:
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"reconsult ",arg1);
         if(!atomp(arg1))
@@ -1377,7 +1379,8 @@ int b_reconsult(int arglist, int rest){
             //e.g. :- op(...)
             if(operationp(clause) && car(clause) == DEFINE && length(clause) == 2){
                 clause = cadr(clause);
-                prove_all(clause,sp,0);
+                if(arg2 == NIL)
+                    prove_all(clause,sp,0);
                 execute_list = listcons(clause,execute_list);
                 goto skip;
             }
@@ -1415,6 +1418,11 @@ int b_reconsult(int arglist, int rest){
 
         exit:
         return(YES);
+    }
+    else if(n == 2){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        goto reconsult;
     }
     return(NO);
 }

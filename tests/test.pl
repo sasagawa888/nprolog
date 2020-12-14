@@ -16,5 +16,3 @@ sigma_aux(Const,N,Sum) :-
     Sum1 is Sum + N1 + A,
     sigma_aux(Const,N1,Sum1).
 
-
-
