@@ -180,7 +180,6 @@ extern char extended[EXTENDED_NUMBER][30];
 extern double timer;
 
 //flag
-extern int error_flag;
 extern int strict_flag;
 
 //stream

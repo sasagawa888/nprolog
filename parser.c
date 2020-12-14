@@ -34,7 +34,7 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
     gettoken();
     if(stok.type == FILEEND){ // end of file
         if(operand != NIL || operator != NIL)
-            error(SYNTAX_ERR,"expected period ",0);
+            error(SYNTAX_ERR,"expected period ",NIL);
         return(FEND);
     }
     if(terminal == 1 &&
@@ -57,13 +57,13 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
         exit:
         if(nullp(operator)){
             if(length(operand) != 1)
-                error(SYNTAX_ERR,"expected operator ",1);
+                error(SYNTAX_ERR,"expected operator ",NIL);
             else
                 return(car(operand));
         }
         else{
             if(length(operand) != 2)
-                error(SYNTAX_ERR,"expected two operand ",2);
+                error(SYNTAX_ERR,"expected two operand ",NIL);
             else
                 return(cons(car(operator),reverse(operand)));
         }
@@ -815,7 +815,7 @@ void gettoken(void){
         c = readc();
         while(c != '\''){
             if(c == EOL)
-                error(SYNTAX_ERR,"unexpected EOL",3);
+                error(SYNTAX_ERR,"unexpected EOL in quoted atom ",NIL);
 
             if(c == '\\'){
                 c = readc();
@@ -832,7 +832,7 @@ void gettoken(void){
                         stok.buf[pos++] = '\\';
                 }
                 else{
-                    error(SYNTAX_ERR,"illegal token ",9);
+                    error(SYNTAX_ERR,"illegal token in quoted atom ",NIL);
                 }
             }
 
@@ -883,7 +883,7 @@ void gettoken(void){
                 if(c1 == '$')
                     stok.buf[pos++] = c;
                 else
-                    error(SYNTAX_ERR,"double quotes",10);
+                    error(SYNTAX_ERR,"double $ in string token ",NIL);
             }
             else{
                 stok.buf[pos++] = c;
@@ -901,7 +901,7 @@ void gettoken(void){
     }
 
     if(c == '`')
-        error(SYNTAX_ERR,"illegal token ",11);
+        error(SYNTAX_ERR,"illegal token back quote ",NIL);
 
 
     //number octal ex 0o12345
@@ -994,11 +994,11 @@ void gettoken(void){
                     c = readc();
                     while(c != '\\'){
                         if(!ishexch(c))
-                            error(SYNTAX_ERR,"illegal hex char",12);
+                            error(SYNTAX_ERR,"illegal hex char",NIL);
                         stok.buf[i] = c;
                         c = readc();
                         if(c == EOL)
-                            error(SYNTAX_ERR,"unexpected EOL",13);
+                            error(SYNTAX_ERR,"unexpected EOL",NIL);
                         i++;
                     }
                     stok.buf[i] = NUL;
@@ -1009,11 +1009,11 @@ void gettoken(void){
                     i = 0;
                     while(c != '\\'){
                         if(!isoctch(c))
-                            error(SYNTAX_ERR,"illegal oct char",14);
+                            error(SYNTAX_ERR,"illegal oct char",NIL);
                         stok.buf[i] = c;
                         c = readc();
                         if(c == EOL)
-                            error(SYNTAX_ERR,"unexpected EOL",15);
+                            error(SYNTAX_ERR,"unexpected EOL in oct char",NIL);
                         i++;
                     }
                     stok.buf[i] = NUL;
@@ -1021,7 +1021,7 @@ void gettoken(void){
                     return;
                 }
                 else
-                    error(SYNTAX_ERR,"illegal token",16);
+                    error(SYNTAX_ERR,"illegal number token",NIL);
             }
         }
         else{
@@ -1043,7 +1043,7 @@ void gettoken(void){
         if(c == '.')
             goto float1;
         if(c == 'E' || c == 'e')
-            error(SYNTAX_ERR,"float number expcted dot", 17);
+            error(SYNTAX_ERR,"float number expected dot ", NIL);
 
         stok.buf[pos] = NUL;
         if(strlen(stok.buf) <= 9)
@@ -1088,7 +1088,7 @@ void gettoken(void){
         if(c != '+' && c != '-' && !isdigit(c)){
             stok.buf[pos++] = c;
             stok.buf[pos] = NUL;
-            error(SYNTAX_ERR,stok.buf,18);
+            error(SYNTAX_ERR,"illegal float token ",NIL);
         }
         stok.buf[pos++] = c;
         c = readc();
@@ -1143,7 +1143,7 @@ void gettoken(void){
         return;
 
     }
-    error(SYNTAX_ERR,"illegal token ",19);
+    error(SYNTAX_ERR,"illegal token ",NIL);
 }
 
 
@@ -1442,7 +1442,7 @@ int readparen(void){
         goto repeat;
     }
     else{
-        error(SYNTAX_ERR,"illegal paren ",20);
+        error(SYNTAX_ERR,"illegal paren ",NIL);
     }
     return(NIL);
 }
@@ -1525,7 +1525,7 @@ int readlist(void){
         goto repeat;
     }
     else{
-        error(SYNTAX_ERR,"illegal list ",22);
+        error(SYNTAX_ERR,"illegal list ",NIL);
     }
     return(NIL);
 }
@@ -1548,7 +1548,7 @@ int readcurl(void){
     gettoken();
     if(stok.type == COMMA){
         if(nullp(car))
-            error(SYNTAX_ERR,"illeagal curl {} ",23);
+            error(SYNTAX_ERR,"illeagal curl {} ",NIL);
         else
             return(list3(AND,car,readcurl()));
     }
@@ -1556,7 +1556,7 @@ int readcurl(void){
         return(car);
     }
     else
-        error(SYNTAX_ERR,"illegal curl {} ",24);
+        error(SYNTAX_ERR,"illegal curl {} ",NIL);
     return(NIL);
 }
 

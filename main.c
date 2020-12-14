@@ -73,7 +73,6 @@ int sexp_flag = 0;
 int arguments_flag = 1; //1= 1,2,3 -> (1,2,3) 0= 1,2,3 -> 1,2,3
 int quoted_flag = 1; // 0=not print ' 1=print '
 int ignore_flag = 0; // 0=infix notation 2+2 1=prefix notation +(2,2)
-int error_flag = 0;  // flag in syntax error
 int link_flag = 0;  // 0=not-link, 1=linked
 int listing_flag = 0;  //for print clause, 0=normal, 1=format print
 int colon_sets_calling_context_flag = 1; //1=true, 0=false
