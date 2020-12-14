@@ -28,7 +28,8 @@ test(atom) :-
 test(atomic) :-
     verify(atomic(1)),
     verify(atomic(abc)),
-    verify(atomic(1.0)).
+    verify(atomic(1.0)),
+    veirfy(atomic(人間)).
 
 test(number) :-
     verify(number(1)),
@@ -62,8 +63,12 @@ test(nonvar) :-
 
 test(var) :-
     verify(var(X)),
+    verify(var(_)),
+    verify(var(_abc)),
     Y = a,
-    verify(not(var(Y))).
+    verify(not(var(Y))),
+    _def = b,
+    verify(not(var_def)).
 
 test(radix) :-
     verify(0xff == 255), 
@@ -108,6 +113,8 @@ test(arithmetic) :-
     verify(2==2),
     verify(1.23==1.23),
     verify(0.00000000000001==0.00000000000001),
+    verify(9999999999999999999999==9999999999999999999999),
+    verify(-9999999999999999999999 == -9999999999999999999999),
     verify(2=:=2),
     verify(2\=3),
     verify(2=\=3),
@@ -145,8 +152,11 @@ test(true_fail_not) :-
 
 test(system) :-
     verify(system(write/1)),
+    verify(system(write/2)),
     verify(system(true/0)),
-    verify(system(halt/0)).
+    verify(system(halt/0)),
+    verify(system(is/2)),
+    verify(system('=='/2)).
 
 test(unify) :-
     verify(c(Z) = c(c(z))),
@@ -257,7 +267,9 @@ test(int_text) :-
 
 test(string_term) :-
     string_term($sin(3)$,X),
-    verify(X = sin(3)).
+    verify(X = sin(3)),
+    string_term($1+2+3$,Y),
+    verify(Y = 1+2+3).
 
 test(atom_string) :-
     atom_string('orange',X),
