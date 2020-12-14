@@ -33,7 +33,8 @@ test(atomic) :-
 test(number) :-
     verify(number(1)),
     verify(number(1.0)),
-    verify(number(1.0e1)).
+    verify(number(1.0e1)),
+    verify(number(0xffff)).
 
 test(integer) :-
     verify(integer(0)),
@@ -41,7 +42,10 @@ test(integer) :-
     verify(integer(10000000000)),
     verify(integer(-1)),
     verify(integer(-10000000001)),
-    verify(integer(100000000000000000000000000000000000000000001)).
+    verify(integer(100000000000000000000000000000000000000000001)),
+    verify(integer(0xface)),
+    verify(integer(0o3476)),
+    verify(integer(0b1010101)).
 
 test(float) :-
     verify(float(1.0)),
@@ -63,11 +67,13 @@ test(var) :-
 
 test(radix) :-
     verify(0xff == 255), 
-    verify(0o77 == 63).
+    verify(0o77 == 63),
+    verify(0b1111 == 15).
 
 test(sharp) :-
     verify(#x == 120),
-    verify(#0 == 48).
+    verify(#0 == 48),
+    verify(#夢 == 22818).
 
 test(arithmetic) :-
     verify(2 is 1+1),
@@ -98,6 +104,7 @@ test(arithmetic) :-
     verify(1 is sign(10)),
     verify(0 is sign(0)),
     verify(-1 is sign(-9)),
+    verify(3.141592653589793 is pi),
     verify(2==2),
     verify(1.23==1.23),
     verify(0.00000000000001==0.00000000000001),
@@ -246,7 +253,7 @@ test(int_text) :-
     verify(X = $6$),
     int_text(Y,$7$),
     verify(Y = 7),
-    verify(5,$5$).
+    verify(int_text(5,$5$)).
 
 test(string_term) :-
     string_term($sin(3)$,X),
