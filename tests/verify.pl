@@ -120,6 +120,8 @@ test(arithmetic) :-
     verify(2=\=3),
     verify(2\=0.3),
     verify(2>1),
+    verify(1+2>2),
+    verify(1+2>1+0),
     verify(not(1>1)),
     verify(3.2>3),
     verify(2>=1),

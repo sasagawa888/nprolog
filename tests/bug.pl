@@ -1,15 +1,34 @@
 
-pp(A,B,C) :- A^2 + B^2 =:= C^2,
-            write(A), write(', '), write(B), write(', '), write(C), nl.
-pp(A,B,C).
+clear_light(25, Board, Board, Push, Push) :- !.
 
-pa(A,B,C) :- A =:= B.
-pa(A,B,C) :- pp(A,B,C), N is A + 1, pa(N,B,C).
+clear_light(N, Board, Result, Push, PushResult) :-
+    M is N - 5,
+    (Board /\ (1 << M)) > 0,
+    pattern(N, Pattern),
+    NewBoard is Board xor Pattern,
+    NewPush is Push \/ (1 << N),
+    N1 is N + 1, !, clear_light(N1, NewBoard, Result, NewPush, PushResult).
 
-pb(A,B,C) :- B =:= C.
-pb(A,B,C) :- pa(A,B,C), N is B + 1, pb(1,N,C).
+clear_light(N, Board, Result, Push, PushResult) :-
+    N1 is N + 1, clear_light(N1, Board, Result, Push, PushResult).
 
-pc(A,B,C,Max) :- C > Max.
-pc(A,B,C,Max) :- pb(1,1,C), N is C + 2, pc(1,1,N,Max).
 
-run(Max) :- pc(1,1,1,Max).
+clear_light1(25, Board, Board, Push, Push) :- !.
+
+clear_light1(N, Board, Result, Push, PushResult) :-
+    M is N - 5,
+    %write(1),
+    (Board /\ (1 << M)) > 0,
+    %write(2),
+    pattern(N, Pattern),
+    %write(3),
+    NewBoard is Board xor Pattern,
+    write(4),
+    NewPush is Push \/ (1 << N),
+    write(5),
+    N1 is N + 1, !, clear_light1(N1, NewBoard, Result, NewPush, PushResult).
+
+clear_light(N, Board, Result, Push, PushResult) :-
+    N1 is N + 1, clear_light1(N1, Board, Result, Push, PushResult).
+
+
