@@ -6,6 +6,8 @@ thanks
 ?- depth_search([[left, left, left, left]]).
 */
 
+test :-
+    depth_search([[left, left, left, left]]).
 
 /* 農夫だけ */
 move([F, G, W, C], [NF, G, W, C]) :- (F == left -> NF = right ; NF = left).
