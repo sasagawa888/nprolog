@@ -16,3 +16,12 @@ sigma_aux(Const,N,Sum) :-
     Sum1 is Sum + N1 + A,
     sigma_aux(Const,N1,Sum1).
 
+not0(P) :- P,!,fail.
+not0(P).
+
+for(I =< I,I) :- !.
+for(I =< J,I).
+for(I =< J,K) :- I1 is I+1,for(I1 =< J,K).
+
+f99 :- for( 1 =< 9,X),for(1 =< 9,Y),
+        Z is X*Y, write((Z = X * Y)),nl,fail.
