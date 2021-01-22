@@ -12,7 +12,7 @@ address
 17,000,001 - 20,000,000  working area 
 20,000,001 - 40,000,000  variant area
 */
-#define VERSION     1.66
+#define VERSION     1.67
 #define CELLSIZE    20000000  // this is max on raspberryPI3B. If parsonal computer 30000000 is OK
 #define HEAPSIZE    17000000
 #define FREESIZE         500
@@ -429,6 +429,7 @@ extern result rtok;
 
 //-------read--------
 #define EOL     '\n'
+#define RET     '\r'
 #define TAB     '\t'
 #define SPACE   ' '
 #define ESCAPE  033

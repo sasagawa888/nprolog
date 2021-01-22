@@ -545,7 +545,7 @@ void gettoken(void){
         c = readc();
 
     skip:
-    while((c == SPACE) || (c == EOL) || (c == TAB)){
+    while(c == SPACE || c == EOL || c == TAB || c == RET){
         c=readc();
         stok.space = SKIP;
     }
