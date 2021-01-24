@@ -6,8 +6,7 @@ verify(X) :-
 	).
 
 alltest :-
-    test(Test),
-    fail.
+    test(Test).
 alltest.
 
 test(atmark) :-
