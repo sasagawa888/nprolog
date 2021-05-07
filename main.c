@@ -1078,7 +1078,8 @@ void print(int addr){
                     else if(operationp(addr) ||
                             predicatep(addr) ||
                             builtinp(addr) ||
-                            compiledp(addr)){
+                            compiledp(addr) ||
+                            functionp(addr)){
                                 print(car(addr));
                                 if(!nullp(cdr(addr))){
                                     fprintf(GET_PORT(output_stream),"(");
