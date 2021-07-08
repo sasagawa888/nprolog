@@ -1307,6 +1307,9 @@ int unify(int x, int y){
             return(unify(x1,y1));
         }
     }
+    else if(anoymousp(x) || anoymousp(y)){
+        return(YES);
+    }
     else if(constantp(x) && constantp(y)){
         if(eqlp(x,y))
             return(YES);
