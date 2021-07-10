@@ -230,7 +230,7 @@ int b_length(int arglist, int rest){
             i = GET_INT(arg2);
             res = NIL;
             while(i > 0){
-                res = wlistcons(makeatom("_",ANOY),res);
+                res = wlistcons(makevariant(),res);
                 i--;
             }
             return(unify(arg1,res));

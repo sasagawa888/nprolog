@@ -1,34 +1,15 @@
 
-clear_light(25, Board, Board, Push, Push) :- !.
+rotate(L1, L2) :-
+  append(Left, Right, L1),
+  append(Right, Left, L2). 
 
-clear_light(N, Board, Result, Push, PushResult) :-
-    M is N - 5,
-    (Board /\ (1 << M)) > 0,
-    pattern(N, Pattern),
-    NewBoard is Board xor Pattern,
-    NewPush is Push \/ (1 << N),
-    N1 is N + 1, !, clear_light(N1, NewBoard, Result, NewPush, PushResult).
+rotate1(L1, N, L2) :-
+  length(Right, N),
+  append(Left, Right, L1),
+  append(Right, Left, L2).
 
-clear_light(N, Board, Result, Push, PushResult) :-
-    N1 is N + 1, clear_light(N1, Board, Result, Push, PushResult).
+reverse_x( A,  B ) :- reverse_x( A, B, [] ).
+reverse_x( [], B, C ):- B = C.
+reverse_x( A,  B, C ):- A=[Ax|Ay], D=[Ax|C], reverse_x( Ay, B, D ).
 
-
-clear_light1(25, Board, Board, Push, Push) :- !.
-
-clear_light1(N, Board, Result, Push, PushResult) :-
-    M is N - 5,
-    %write(1),
-    (Board /\ (1 << M)) > 0,
-    %write(2),
-    pattern(N, Pattern),
-    %write(3),
-    NewBoard is Board xor Pattern,
-    write(4),
-    NewPush is Push \/ (1 << N),
-    write(5),
-    N1 is N + 1, !, clear_light1(N1, NewBoard, Result, NewPush, PushResult).
-
-clear_light(N, Board, Result, Push, PushResult) :-
-    N1 is N + 1, clear_light1(N1, Board, Result, Push, PushResult).
-
-
+foo(_) :- write(_).
