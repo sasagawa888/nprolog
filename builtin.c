@@ -1381,6 +1381,8 @@ int b_reconsult(int arglist, int rest){
                 clause = cadr(clause);
                 if(arg2 == NIL)
                     prove_all(clause,sp,0);
+                else if(arg2 != NIL && !predicatep(cadr(clause)))
+                    prove_all(clause,sp,0);
                 execute_list = listcons(clause,execute_list);
                 goto skip;
             }
