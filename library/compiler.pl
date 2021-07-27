@@ -53,7 +53,7 @@ void init_declare(void){
 % optimize flag
 jump_optimize(on).
 % delete C source
-jump_delete(off).
+jump_delete(on).
 
 % main
 compile_file(X) :-
@@ -869,7 +869,7 @@ jump_gen_a_argument(X) :-
 	write('Jwcons(Jmakeuser("'),
     write(Y),
     write('"),'),
-    jump_gen_a_argument(Z),
+    jump_gen_argument(Z),
     write(')').
 jump_gen_a_argument(X) :-
 	atom(X),
