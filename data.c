@@ -659,6 +659,7 @@ int alphabeticalp(int addr){
 }
 
 int operatorp(int addr){
+    
     if(singlep(addr) && GET_AUX(addr) == OPE)
         return(1);
     else

@@ -461,6 +461,8 @@ int b_property(int arglist, int rest){
             return(unify(arg2,makeconst("operation")));
         else if(operatorp(arg1))
             return(unify(arg2,makeconst("operator")));
+        else if(user_operator_p(arg1))
+            return(unify(arg2,makeconst("userop")));
         else if(user_operation_p(arg1))
             return(unify(arg2,makeconst("userop")));
         else
