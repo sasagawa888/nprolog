@@ -53,7 +53,7 @@ void init_declare(void){
 % optimize flag
 jump_optimize(on).
 % delete C source
-jump_delete(on).
+jump_delete(off).
 
 % main
 compile_file(X) :-

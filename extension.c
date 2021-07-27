@@ -465,6 +465,11 @@ int b_property(int arglist, int rest){
             return(unify(arg2,makeconst("userop")));
         else if(user_operation_p(arg1))
             return(unify(arg2,makeconst("userop")));
+        else if(singlep(arg1) && findatom(arg1,USER) == 1)
+            return(unify(arg2,makeconst("userop")));
+        else if(structurep(arg1) && GET_AUX(arg1) != LIST &&
+                IS_INCELL(car(arg1)) && findatom(car(arg1),USER) == 1)
+            return(unify(arg2,makeconst("userop")));
         else
             return(NO);
 

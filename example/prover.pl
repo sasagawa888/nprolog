@@ -12,6 +12,8 @@ rule7 rule5 rule6 rule7 rule5 rule6 yes
 :- op(600,xfy,&).
 :- op(500,fy,~).
 
+ccc(A+B,Y) :- write(Y).
+
 proof(X) :- cnf(X,Y),tautology(Y).
 
 %Logical expressions are represented by symbolic atoms
