@@ -12,7 +12,7 @@ address
 17,000,001 - 20,000,000  working area 
 20,000,001 - 40,000,000  variant area
 */
-#define VERSION     1.68
+#define VERSION     1.69
 #define CELLSIZE    20000000  // this is max on raspberryPI3B. If parsonal computer 30000000 is OK
 #define HEAPSIZE    17000000
 #define FREESIZE         500
@@ -88,11 +88,11 @@ address
 typedef enum tag {EMP,INTN,FLTN,LONGN,BIGX,STRUCT,SINGLE,STREAM,STR} tag;
 typedef enum flag {FRE,USE} flag;
 
-typedef struct{
+typedef struct __packed{
     union{
         double fltnum;
         long long int lngnum;
-        struct {
+        struct{
             union{
                 int intnum;
                 int     ( *subr) (int, int);
