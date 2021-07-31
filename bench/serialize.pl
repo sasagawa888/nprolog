@@ -9,9 +9,10 @@
 %   itemize (pick a "serial number" for each
 %   unique integer in) a list of 25 integers
 
+test :- between(1,1000,X),top,fail.
 top:-serialise.
 
-serialise :- serialise("ABLE WAS I ERE I SAW ELBA",_).
+serialise :- serialise($ABLE WAS I ERE I SAW ELBA$,_).
 
 serialise(L,R) :-
     pairlists(L,R,A),

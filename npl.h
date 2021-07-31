@@ -12,7 +12,7 @@ address
 17,000,001 - 20,000,000  working area 
 20,000,001 - 40,000,000  variant area
 */
-#define VERSION     1.69
+#define VERSION     1.70
 #define CELLSIZE    20000000  // this is max on raspberryPI3B. If parsonal computer 30000000 is OK
 #define HEAPSIZE    17000000
 #define FREESIZE         500
@@ -714,7 +714,7 @@ int b_retract(int arglist, int rest);
 int b_retrieveh(int arglist, int rest);
 int b_reverse(int arglist, int rest);
 int b_reconsult_predicate(int arglist, int rest);
-int b_reconsult_predicate_list(int arglist, int rest);
+int b_reconsult_abolish(int arglist, int rest);
 int b_rmdir(int arglist, int rest);
 int b_removeh(int arglist, int rest);
 int b_removeallh(int arglist, int rest);

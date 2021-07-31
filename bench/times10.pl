@@ -8,6 +8,7 @@
 %
 %   symbolic derivative of ((((((((x*x)*x)*x)*x)*x)*x)*x)*x)*x
 
+test :- between(1,1000,X),top,fail.
 top:-times10.
 
 times10 :- d(((((((((x*x)*x)*x)*x)*x)*x)*x)*x)*x,x,_).

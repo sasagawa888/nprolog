@@ -8,6 +8,7 @@
 %
 %   symbolic derivative of log(log(log(log(log(log(log(log(log(log(x))))))))))
 
+test :- between(1,1000,X),top,fail.
 top:-log10.
 
 log10 :- d(log(log(log(log(log(log(log(log(log(log(x)))))))))),x,_).

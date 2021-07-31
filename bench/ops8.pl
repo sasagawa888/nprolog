@@ -8,6 +8,7 @@
 %
 %   symbolic derivative of (x+1)*((^(x,2)+2)*(^(x,3)+3))
 
+test :- between(1,1000,X),top,fail.
 top:-ops8.
 
 ops8 :- d((x+1)*((^(x,2)+2)*(^(x,3)+3)),x,_).

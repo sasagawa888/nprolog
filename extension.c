@@ -32,6 +32,23 @@ int b_reconsult_predicate(int arglist, int rest){
     return(NO);
 }
 
+int b_reconsult_abolish(int arglist, int rest){
+    int n,lis,pred;
+
+    n = length(arglist);
+    if(n == 0){
+        lis = reconsult_list;
+        while(!nullp(lis)){
+            pred = makepred(GET_NAME(car(lis)));
+            SET_CAR(pred,NIL);
+            listremove(car(lis),predicates);
+            lis = cdr(lis);
+        }
+        return(YES);
+    }
+    return(NO);
+}
+
 int b_filename(int arglist, int rest){
 	int n,arg1,arg2,pos,len;
     char str1[STRSIZE];

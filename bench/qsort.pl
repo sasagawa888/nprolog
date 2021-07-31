@@ -8,6 +8,7 @@
 %
 %   quicksort a list of 50 integers
 
+test :- between(1,1000,X),top,fail.
 top:-qsort.
 
 qsort :- qsort([27,74,17,33,94,18,46,83,65, 2,

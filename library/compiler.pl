@@ -104,6 +104,8 @@ jump_pass2(X) :-
 	write('#include "jump.h"'),nl,
     jump_gen_c_pred,
     jump_gen_c_exec,
+    abolish(jump_pred_data/2),
+    n_reconsult_abolish,
     told.
 
 /*
