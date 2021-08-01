@@ -209,70 +209,70 @@ format is the same format as the C language format.
 Remove all characters in the type-ahead buffer.
 
 ### □ functor(Struct,Name,Arity)
-ストラクチャ名とアリティーを戻す。
+Returns the structure name and arity. 
 
 ### □ gc(Amount)
-ガベージコレクションを起動する。
-引数がfullのときはヒープ領域でもう必要としなくなったセルを回収する。
+Launch garbage collection.
+When the argument is full, the cells that are no longer needed in the heap area are collected. 
 
 ### □ get(Char)
-非印刷文字をスキップしながら、標準入力装置から次の文字を読み、
-ASCII値をCharとユニフィケーションする。
+Read the next character from a standard input device, skipping unprinted characters,
+Unify the ASCII value with Char. 
 
 ### □ get0(Char)
-非印刷文字をスキップしながら、標準入力装置から次の文字を読み、
-ASCII値をCharとユニフィケーションする。get0は非印刷文字をスキップしない。
+Read the next character from a standard input device, skipping unprinted characters,
+Unify the ASCII value with Char. get0 does not skip non-printing characters. 
 
 ### □ get0_noecho(Char)
-標準入力装置から次の文字を読み込み、ASCII値をCharにユニフィーケーションする。
-get0_noechoは標準出力装置にその文字を表示しない。
+Read the following characters from the standard input device and unify the ASCII value to Char.
+get0_noecho does not display the character on the standard output device. 
 
 ### □ halt
-インタープリタから抜け出す。
+Exits the interpreter. 
 
 ### □ instance(Ref,Term)
-その参照番号の項を戻す。
+Returns the term for that reference number. 
 
 ### □ integer(X)
-Ｘが整数かどうかを調べる。
+Check if X is an integer. 
 
 ### □int_text(Integer,String)
-整数をストリングに変換するか、又はストリングを整数に変換する。
+Convert an integer to a string, or convert a string to an integer. 
 
 ### □ X is E 
-Eを評価し、その値をXにユニフィケーションする
+Evaluate E and unify its value to X.
 
 ### □ keysort(L1,L2)
-リストL1を標準の順序に並べる。リストの要素はKey_Valueの形式でなければならない。
-ソートされたリストはL2に戻される。だぶっていても１つにされない。
+Sort the list L1 in standard order. List elements must be in the form Key_Value.
+The sorted list is returned to L2. Even if it is duplicated, it won't be united. 
 
 ### □ leash(Mode)
-ポートを指定のModeに拘束する。
+Constrain the port to the specified Mode. 
 
 ### □ length(L,N)
-リストの長さをNに戻す。
+Change the length of the list back to N. 
 
 ### □ listing
-標準出力装置に現在のデータベースの述語をすべて書き出す。
+Write all current database predicates to standard output. 
 
 ### □ listing(Name/Arith)
 ### □ listing([Name/Arity,Name/Arity])
-標準出力装置に現在のデータベースの中の指定の述語または述語のリストに対するすべての節を書き出す。
+Write all clauses to the specified predicate or list of predicates in the current database to standard output. 
 
 ### □ list_text(List,AtomString)
-文字リストをアトム（アトムが既に存在すれば）またはストリングに変換するか、アトムまたはストリングを
-文字リストに変換する。
+Convert a character list to an atom (if the atom already exists) or a string, or convert an atom or string
+Convert to a character list. 
 
 ### □ mkdir(Path)
-新しいディレクトリを作る。
+Create a new directory. 
 
 ### □ name(Atom,List)
-リストをアトムに変換するか、アトムまたは整数をリストに変換する。
+Convert a list to an atom, or convert an atom or an integer to a list. 
 
 ### □ open(Handle,Filename,Access)
-既存のファイルをオープンする。
+Open an existing file. 
 
-Accessは次のいずれか
+Access is one of the following 
 
 ```
 r read
