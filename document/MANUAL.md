@@ -283,135 +283,133 @@ ra read and append
 ```
 
 ### □ read(Term)
-標準入力装置から項を読み込む。
+Read terms from standard input devices. 
 
 ### □ read(Handle,Term)
-ファイルから項を読み込む。
+Read terms from a file. 
 
 ### □ read_line(Handle,X)
-Handleで指定したファイルから1行読む。
+Read one line from the file specified by Handle.
 
 ### □ recorda(Key,Term,Ref)
-述語の戦闘に項を加えて、その項の新しい参照番号を戻す。
+Predicates a term and returns a new reference number for that term. 
 
 ### □ recordz(Key,Term,Ref)
-述語の終わりに項を追加し、その項に割り当てられた参照番号を戻す。
+Adds a term at the end of the predicate and returns the reference number assigned to that term. 
 
 ### □ recordh(Table_name,Sort_key,Term)
-ハッシュテーブルに項を記録する。
+Record the term in the hash table. 
 
 ### □ ref(X)
-Xが参照番号かどうかを調べる。
+Check if X is a reference number. 
 
 ### □ removeallh(Table_name)
-ハッシュテーブルを削除する。
+Delete the hash table. 
 
 ### □ removeh(Table_name,Sort_key,Term)
-ハッシュテーブルから項を削除する。
+Remove a term from the hash table.
 
 ### □ reset_op
-演算子の定義をそのデフォールト値に戻す。
+Returns the operator definition to its default value.
 
 ### □ retrieveh(Table_name,Sort_key,Term)
-ハッシュテーブルから項を戻す。
-
+Returns a term from the hash table.
 
 ### □ rename(Filename,Newname)
-ファイル名を変更する。
+Rename the file. 
 
 ### □ rmdir(Path)
-ディレクトリを削除する。
+Delete the directory. 
 
 ### □ shell(Command)
-BASHコマンドを実行し、成功する。
+Execute the BASH command and succeed. 
 
 ### □sort(L1.L2)
-リストL1を標準の順序に並び替え、重複を排除しL2にソート済みリストを戻す。
+Sort list L1 into standard order, eliminate duplication and return sorted list to L2. 
 
 ### □ spy(Name/Arity)
-デバッグ用のスパイポイントとして述語を指定する。
+Set a predicate as a debug spy point. 
 
 ### □ stdin(FileHandle,Goal)
-そのゴールの間、標準入力を変更する。
+Change standard input during that goal.
 
 ### □ stdout(FileHandle.Goal)
-そのゴールの間、標準入力を変更する。
+Change standard input during that goal.
 
 ### □ stdinout(InFile,OutFile,goal)
-そのゴールの間、標準入力と標準出力を変更する。
+During that goal, change standard input and standard output. 
 
 ### □ string(X)
-Xがストリングかどうかを調べる。
+Check if X is a string. 
 
 ### □ string_length(String,Length)
-ストリングの長さを戻す。
+Returns the length of the string. 
 
 ### □ string_term(String,Term)
-ストリングを項に変更する。
+Change the string to a term.
 
 ### □ substring(InString,N,Length,OutString)
-ストリングからサブストリングを抽出する。
-Nは開始位置　１から始まる自然数
-Lengthは抽出する文字列の長さ
+Extract substrings from strings.
+N is a natural number starting from the starting position 1.
+Length is the length of the character string to be extracted 
 
 ### □ syntaxerrors(Old,New)
-文法エラーメッセージ出力の可否の指定を行うか、あるいは現在の設定をチェックする。
-yesでエラーメッセージ出力し、noでエラーメッセージを出力しない。
+Specify whether to output the syntax error message or check the current setting.
+An error message is output with yes, and no error message is output with no. 
 
 ### □ system(P)
-Pが組込述語かどうかを調べる。
+Check if P is an embedded predicate. 
 
 ### □ tab(N)
-スペース文字を指定の数だけ標準出力装置に書く。
+Write the specified number of space characters to the standard output device. 
 
 ### □ tab(Handle,N)
-スペース文字を指定の数だけファイルに書く。
+Write the specified number of space characters in the file. 
 
 ### □ tell(Filename)
-出力のためにファイルをオープンし、それを現在の出力ファイルにする。
+Open a file for output and make it the current output file. 
 
 ### □ telling(X) 
-tellによりオープンされている出力ファイルの名前を戻す。
-
+Returns the name of the output file opened by tell.
 
 ### □ time(time(Hours,Minutes,Seconds))
-時、分、秒を返す。
+Returns hour, minute, and second. 
 
 ```
-時 [0-23]
-分 [0-59]
-秒 [0-61]
+hour   [0-23]
+minute [0-59]
+second [0-61]
 ```
 
 ### □ trace
-デバッガをオンにする。
+Turn on the debugger. 
 
 ### □ true
-ゴールは常に成功する。
+Goals are always successful. 
 
 ### □ var(X)
-Xが代入された変数かどうかを調べる。
+Check if X is the assigned variable. 
 
 ### □ write(Term)
-標準出力装置に書く。
+Write to standard output device. 
 
 ### □ write(Handle,Term)
-指定のファイルに項を書く。
+Write the term in the specified file. 
 
 ### □ writeeq(Term)
-標準出力装置に書き、その項がProlog項として読み出しが可能なように、
-アトムと関数子を引用符で囲む。
+Write to standard output device so that the term can be read as a Prolog term
+Enclose the atom and function in quotation marks. 
 
 ### □ writeeq(Time,Term)
-項を指定のファイルに書き、その項がProlog項として読み出しが可能なように、
-アトムと関数子を引用符で囲む。
+Write the term to the specified file so that the term can be read as a Prolog term
+Enclose the atom and function in quotation marks. 
 
-## デバッガコマンド
-プログラムを起動することでデバッグを開始する。プログラムはスパイポイントに達する
-まで実行される。そこに達すると、デバッガはプログラムを停止させ、呼び出し晩坊、
-ポート、及び現在のプログラムの位置するゴールを表示する。
-例えば、デバッガをオンにし、スパイポイントを,my_appendnにセットして述語
-my_appendのデバッグを開始する。
+## Debugger command
+Start debugging by starting the program. Program reaches spy points
+Will be executed. When that happens, the debugger stops the program and calls it.
+Show the port and the goal where the current program is located.
+For example, turn on the debugger, set the spy point to, my_appendn and predicate
+Start debugging my_append. 
 
 ```
 ?- ['tests/test.pl'].
@@ -437,122 +435,120 @@ yes
 ?- 
 ```
 
-デバッグが終了したらnotraceを実行します。これをしないと実行が遅くなります。
+Run notrace when debugging is complete. Failure to do this will slow down execution. 
 
 ```
 ?- notrace.
 ```
 
-次の表示項目は、どのようにデバッガが現在のゴールに到達したかを示す記号である。
+The following display items are symbols that indicate how the debugger has reached its current goal. 
 
-- **　ゴールがスパイポイントであることを示す。
-- *>　ゴールがスパイポイントであり、かつスキップコマンドの結果このゴールに到達したことを示す。
-- >   ゴールはスパイポイントではないが、スキップコマンドの結果このゴールに到達したことを示す。
-- ->　xコマンドの結果デバッガが以前の選択点まで経路を逆に戻っていることを示す。
+- ** Indicates that the goal is a spy point.
+- *> Indicates that the goal is a spy point and that the goal has been reached as a result of the skip command.
+- > The goal is not a spy point, but indicates that you have reached this goal as a result of the skip command.
+- -> x command result Indicates that the debugger is reversing the path to the previous selection point. 
 
+There are the following four ports.
 
-次の４つのポートがある。
+- CALL is the port where the goal is called. The interpreter gives a number for each goal call.
+The numbers start at 0 when the debugger is called and end at 0 when debugging is finished.
 
--　CALLはゴールが呼ばれるポートである。インタプリタはゴールの呼び出し毎に番号を与える。
-数字はデバッガが呼び込まれたとき０から始まり、デバッグが終了したときに０で終わる。
+- EXIT is a port through which the program exits when the goal is successful.
 
-- EXITはゴールが成功したときプログラムが抜け出すポートである。
+- REDO is a port where the program re-enters the goal with backtracking.
 
-- REDOはプログラムがバックトラッキングでゴールに再び入るポートである。
-
-- FAILはゴールが失敗のときプログラムが抜け出すポートである。
+- FAIL is a port through which the program exits when the goal fails. 
 
 
 ### a
-プログラムを中断終了します。デバッガをオフにしてインタープリタのプロンプトを
-表示します。
+Suspend and terminate the program. Turn off the debugger and prompt for the interpreter
+Display. 
 
 ### b
-デバッグ中のプログラムは終了しないでインタープリタのプロンプトを表示します。
-end_of_fileと入力することにより、中断状態は解除され、デバッグを続けることが
-できます。有効な中断の数だけ、インタープリタのプロンプトに？が余計に付きます。
-例えば、中断が３回有効になっているときには、インタープリタのプロンプトは次の
-ように表示されます。
+The program being debugged does not exit and prompts for an interpreter.
+By typing end_of_file, the suspended state will be released and you can continue debugging.
+can. As many interpreter prompts as there are valid interruptions? Is added.
+For example, when interruption is enabled three times, the interpreter prompts:
+Is displayed.
 
 ```
 ???-
 ```
 
 ### c
-デバッガに次のポートまで１ステップずつ進む（creep)ように指示します。この方法で
-実行をステップ毎に追うことができます。エンターキーはｃを入力することと同じです。
+Instructs the debugger to creep to the next port. using this method
+You can follow the execution step by step. Enter key is the same as entering c. 
 
 ### d
-現在のゴールを表示します。
+Shows the current goal. 
 
 ### e
-インタープリタを終了します。このコマンドでLinuxのプロンプトに戻ります。
+Exit the interpreter. This command returns you to the Linux prompt. 
 
 ### f
-デバッガを直接FAILポートまで進ませます。すでにそのゴールが失敗であることが
-わかっている場合に有効なコマンドです。
+Advance the debugger directly to the FAIL port. That the goal is already a failure
+This command is valid if you know it. 
 
 ### h
-ヘルプスクリーンを表示します。
+Display the help screen. 
 
-### l（エル）
-スパイポイントからスパイポイントへ飛ば（leap)します。
-現在のスパイポイントのプログラム実行をステップ毎においことはしないで、
-次のスパイポイントまでスキップすることができます。
+### l
+Leap from spy point to spy point.
+Don't go step-by-step at the current spypoint program execution
+You can skip to the next spy point. 
 
 ### n
-デバッガをオフにします。
+Turn off the debugger. 
 
 ### q
-ゴールのEXITポートあるいはFAILポートにスキップします。
-しかし、そのゴールの中にスパイポイントのセットがあればそのスパイポイントで実行は止まります。
+Skip to the goal's EXIT or FAIL port.
+However, if there is a set of spy points in that goal, execution will stop at that spy point. 
 
 ### s
-ゴールの中に他のスパイポイントがあっても、そのゴールのexitポートあるいは、FAILポートにスキップ
-します。このコマンドはCALLポートまたはREDOポートからだけ使用できます。
+Even if there are other spy points in the goal, skip to the exit port or FAIL port of that goal
+To do. This command is only available from the CALL or redo ports. 
 
 ### <esc>
-エスケープキー　sを入力することと同じです。
+It is the same as entering the escape key s. 
 
 ### w
-現在のゴールを書き出します。
+Write down the current goal. 
 
 ### X
-FAILポートあるいはREDOポートで使用できます。
-CALLポートあるいはEXITポートに達するまで、デバッガに失敗を続けさせます。
+It can be used on the FAIL port or the redo port.
+Causes the debugger to continue failing until it reaches the CALL or EXIT port. 
 
 ### @
-二次のゴールを呼び出し、ゴールが終了したとき、直ちにデバッガに戻ります。
+Calls a secondary goal and returns to the debugger as soon as the goal is finished. 
 
 ### ;
-EXITポートで使用され、デバッガに現在のゴールのREDOポートに進ませます。
-
-
+Used on the EXIT port, which causes the debugger to go to the redo port of the current goal. 
 
 
 
 
 ## DCG：限定節文法
-以下は中島秀之先生の「Prolog」（産業図書）にある例です。
+The following is an example from Professor Hideyuki Nakashima's "Prolog".
 
 A dog bites a postman.
 
-この英文は構造をもっています。その構造は一定の文法規則に従っています。
+This English sentence has a structure. Its structure follows certain grammatical rules. 
+
 
 ```
-文 -> 名詞句、動詞句
-名詞句　->冠詞、名詞
-冠詞　->a
-名詞　->dog
-名詞　->postman
-動詞句　->動詞、名詞句
-動詞　->bites
+Sentence-> noun phrase, verb phrase
+Noun phrases-> articles, nouns
+Article-> a
+Noun-> dog
+Noun-> postman
+Verb phrase-> verb, noun phrase
+Verb-> bits 
 ```
+It's possible to write this directly in Prolog, but there's an easier way.
+That is DCG. It is possible to write the above rules almost as they are.
 
-これを直接にPrologで記述することも可能ではあるのですが、もっと楽な方法があります。
-それがDCGです。上記の規則をほぼそのままの形で記述することが可能です。
+Write the following code to a file and load it with consult in the same way as the Prolog code. 
 
-下記のコードをファイルに書き込み、Prologコードと同様にconsultで読み込ませます。
 
 ```
 s --> np,vp.
@@ -564,19 +560,19 @@ vp --> v,np.
 v -->[bites].
 ```
 
-なお、文法カテゴリーは省略形によっています。
+The grammar category is abbreviated. 
 
 ```
-文　sentence　s
-名詞　noun　n
-名詞句　noun　phrase　np
-動詞　verb　v
-限定詞　determiner　det
-動詞句　verb　phrase
+sentence　s
+noun　n
+noun　phrase　np
+verb　v
+determiner　det
+verb　phrase
 ```
 
-これをN-Prolog処理系で動かしてみましょう。
-phraseという述語で文が正しいかどうかを確認することができます。
+Let's run this on the N-Prolog processing system.
+You can check if the sentence is correct with the predicate phrase. 
 
 
 ```
@@ -585,8 +581,7 @@ yes
 | 
 ```
 
-
-このようにリストで与えられた文が与えられた文構造になっていることが確かめられました。間違った文を与えたらどうでしょう？
+In this way, it was confirmed that the sentence given in the list has the given sentence structure. What if you give the wrong sentence? 
 
 
 ```
@@ -595,11 +590,9 @@ no
 |
 ```
 
-偽が返っています。文法規則に反しています。
+False is returned. It violates the grammar rules.
 
-
-面白いことに文法規則にかなった文を生成させることもできます。
-
+Interestingly, you can also generate sentences that meet grammatical rules. 
 
 ```
 | ?- phrase(s,X).
@@ -611,27 +604,28 @@ no
 | 
 ```
 
-セミコロンを入力しバックトラックさせるといくつかの文がでてきました。
-意味は変ですが文法規則には則っています。
+When I typed a semicolon and backtracked, some sentences came out.
+The meaning is strange, but it follows the grammatical rules. 
 
 
-## コンパイラ
-まだ不完全ながらコンパイラも付属しています。起動時にコンパイラを読み込んでいます。
+## compiler
+It's still incomplete, but it also comes with a compiler. Loading the compiler at startup.
 
 compile_file(filename)
 
-このようにしてコンパイルするPrologコードの記述されたファイルをしてしてください。
-C言語に変換し、さらにGCCでオブジェクトファイルにコンパイルします。
+Make a file with the Prolog code to compile in this way.
+Convert to C language and compile to object file with GCC.
 
-例えば9queensをコンパイルする場合には
+For example, when compiling 9queens
 
 compile_file('tests/queens.pl').
-とします。これによりqueens.oというファイルが生成されます。
 
-['tests/queens.o']. あるいは　consult('queens.o').　と入力すると読み込まれます。
-あとは通常の述語と同様に使えます。
+will do. This will generate a file called queens.o.
 
-部分的に末尾再帰最適化の処理をしました。queensではSWI-Prologに近い実行速度がでます。
+Enter ['tests/queens.o']. Or consult('queens.o'). To load it.
+After that, you can use it like a normal predicate.
+
+Partially processed tail recursive optimization. With queens, the execution speed is close to that of SWI-Prolog. 
 
 
 ## Hello
