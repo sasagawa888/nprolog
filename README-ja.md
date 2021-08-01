@@ -4,6 +4,17 @@ N-PrologはISO-Prolog互換ではありません.
 Arity/prolog32については右記をご参照ください。  http://petergabel.info/ArityProlog32/ArityProlog32PredList/
 
 manual.txtにユーザーズマニュアルがあります。ご参照ください。
+ライセンスは修正BSDに基づいています。無償でお使いいただけます。
+
+## OS
+下記のOSでの動作を確認しております。
+
+- Ubuntu
+- Linux MINT
+- RaspberryPI Raspbian
+
+Windowsでお使いの場合にはWSLをお使いください。
+
 
 ## インストール
 homeディレクトリにおいてGithubからクローンを作るか、あるいはzipファイルをダウンロードします。
