@@ -109,6 +109,25 @@ key-bindings are as follows:
 - back-space  backspace
 - Esc Tab completion
 
+# unicode
+You can use unicode.
+
+```
+
+動物(人間).
+人間(ジョー).
+
+動物(X) :- 人間(X).
+
+?- ['tests/animal.pl'].
+yes
+?- 動物(ジョー).
+yes
+?- 動物(X).
+X = 人間 .
+yes
+
+```
 
 # builtin predicate
 

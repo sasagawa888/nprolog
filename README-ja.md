@@ -113,6 +113,25 @@ no
 - back-space  backspace
 - Esc Tab completion
 
+# ユニコード
+unicodeが使用可能です。
+
+```
+
+動物(人間).
+人間(ジョー).
+
+動物(X) :- 人間(X).
+
+?- ['tests/animal.pl'].
+yes
+?- 動物(ジョー).
+yes
+?- 動物(X).
+X = 人間 .
+yes
+
+```
 
 # 組込み述語
 
