@@ -527,7 +527,7 @@ Used on the EXIT port, which causes the debugger to go to the redo port of the c
 
 
 
-## DCG：限定節文法
+## DCG
 The following is an example from Professor Hideyuki Nakashima's "Prolog".
 
 A dog bites a postman.
