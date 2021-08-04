@@ -343,7 +343,6 @@ void init_repl(void){
         SET_CDR(car(i),UNBIND);
         i = cdr(i);
     }
-
 }
 
 void query(int x){
@@ -370,6 +369,7 @@ void query(int x){
 
     variables = listreverse(unique(varslist(x)));
     res = prove_all(addask(x),sp,0);
+    ESCRST;
     print(res);printf("\n");
     return;
 }
