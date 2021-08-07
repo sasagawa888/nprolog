@@ -157,6 +157,7 @@ void init_deftsys(tpred x){
 #define Jwlist2(x,y)       (f2[37])(x,y)
 #define Jwlistcons(x,y)    (f2[38])(x,y)
 #define Jaddtail_body(x,y)      (f2[39])(x,y)
+#define Jnth(x,y)          (f2[40])(x,y)
 
 
 #define Jprove_all(x,y,z) (f3[0])(x,y,z)

@@ -6,16 +6,15 @@ int b_<name>(int arglist, int rest){
 int arg1,arg2,arg4,varX,varY,varZ,...,save1,save2,body;
 save2 = Jget_sp();
 if(n == 2){
-    arglist = Jderef(arglist);
-    arg1 = Jcar(arglist);
-    arg2 = Jcadr(arglist);
+    arg1 = Jnth(arglist,1);
+    arg2 = Jnth(arglist,2);
   
     % first clause
     varX = Jmakevariant();
     varZ = Jmakevariant();
     varY = Jmakevariant();
     save1 = Jget_wp();
-    if(Junify(cdr(<head>),arglist) == YES){
+    if(Junify(term1,arg1) == YES && Junify_var(term2,arg2) == YES){
         body =Jwcons(119,Jwcons(varX,Jwcons(varY,NIL)));
         if(Jpove_all(Jaddtail_body(rest,body),save2,0) == YES)
             return(YES);
@@ -29,7 +28,7 @@ if(n == 2){
     varZ1 = Jmakevariant();
     ...
     save1 = Jget_wp();
-    if(Junify(cdr(<head>),arglist) == YES){
+    if(Junify(term1,arg1) == YES && Junify_const(term1,arg2) == YES){
         body = Jwlist3(Jmakeope(","),Jwcons(173,Jwc ....)));
         if(Jprove_all(Jaddtail_body(rest,body),save2,0) == YES)
             return(YES);
@@ -48,6 +47,12 @@ void init_declare(void){
   ...execution 
 }
 
+
+unification 
+Junify(head,arg)  all-round
+Junify_const(head,arg)  for constant term
+Junify_var(head,arg)    for variable term
+Junify_list(head,arg)   for list term
 */
 
 % optimize flag
@@ -223,11 +228,21 @@ int arg1,arg2 ... argN,body,save1,save2;
 
 */
 jump_gen_var_declare(P) :-
-	n_arity_count(P,L),
     write('int '),
+    n_arity_count(P,L),
+    jump_max_list(L,E),
+    jump_gen_var_declare1(1,E),
     n_generate_all_variable(P,V),
     jump_gen_all_var(V),
     write('n,body,save1,save2,res;'),nl,!.
+
+jump_max_list([N],N).
+jump_max_list([X|Xs],X) :-
+    jump_max_list(Xs,Y),
+    X >= Y.
+jump_max_list([X|Xs],Y) :-
+    jump_max_list(Xs,Y),
+    X < Y.
 
 % arg1,arg2,...argN
 jump_gen_var_declare1(S,E) :-

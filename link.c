@@ -122,6 +122,7 @@ void dynamic_link(int x){
     init_f2(37,(tpred)wlist2);
     init_f2(38,(tpred)wlistcons);
     init_f2(39,(tpred)addtail_body);
+    init_f2(40,(tpred)nth);
 
     //argument-3
     init_f3(0,(tpred)prove_all);
