@@ -53,6 +53,7 @@ Junify(head,arg)  all-round
 Junify_const(head,arg)  for constant term
 Junify_var(head,arg)    for variable term
 Junify_list(head,arg)   for list term
+Junify_nil(head,arg)    for [] check.
 */
 
 % optimize flag

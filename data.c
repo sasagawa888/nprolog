@@ -1247,12 +1247,8 @@ int deref1(int x){
     return(NIL);
 }
 
-
-
 int unify(int x, int y){
     int x1,y1;
-
-    
     if(nullp(x) && nullp(y))
         return(YES);
     else if(variablep(x) && !variablep(y)){
@@ -1335,10 +1331,108 @@ int unify(int x, int y){
 
 
 
-//y = not binded variable;
+//typed unify. x is a variable;
 int unify_var(int x, int y){
-    bindsym(y,x);
-    return(YES);
+    int x1,y1;
+    
+    if(!variablep(y)){
+        x1 = deref1(x);
+        if(x1 == x){
+            bindsym(x,y);
+            return(YES);
+        }
+        else
+            return(unify(x1,y));
+    }
+    else if(variablep(y)){
+        x1 = deref1(x);
+        y1 = deref1(y);
+        if(variablep(x1) && variablep(y1)){
+            if(x != y){//ordinaly case
+                bindsym(x1,y1);
+            }
+            else{
+                bindsym(x1,makevariant()); // ex ?- X = X
+            }
+            return(YES);
+        }
+        else if(variablep(x1) && !variablep(y1)){
+            bindsym(x1,y1);
+            return(YES);
+        }
+        else if(!variablep(x1) && variablep(y1)){
+            bindsym(y1,x1);
+            return(YES);
+        }
+        else{
+            return(unify(x1,y1));
+        }
+    }
+    else if(anoymousp(x) || anoymousp(y)){
+        return(YES);
+    }
+
+    return(NO);
+}
+
+// typed unify. x is constant
+int unify_const(int x, int y){
+    int y1;
+
+    if(constantp(x) && constantp(y)){
+        if(eqlp(x,y))
+            return(YES);
+        else
+            return(NO);
+    }
+    else if(variablep(y)){
+        y1 = deref1(y);
+        if(variablep(y1)){
+            bindsym(y1,x);
+            return(YES);
+        }
+        else{
+            return(eqlp(x,y1));
+        }
+    }
+    else if(anoymousp(y)){
+        return(YES);
+    }
+
+    return(NO);
+}
+
+
+// typed unify. x is list.
+int unify_list(int x, int y){
+    if(!listp(y))
+        return(NO);
+    else if(unify(car(x),car(y)) == YES &&
+            unify(cdr(x),cdr(y)) == YES)
+        return(YES);
+    
+    return(NO);
+
+}
+
+// typed unify. x is [] (empty list)
+int unify_nil(int x, int y){
+    int y1;
+
+    if(y == NIL)
+        return(YES);
+    else if(variablep(y)){
+        y1 = deref1(y);
+        if(variablep(y1)){
+            bindsym(y1,x);
+            return(YES);
+        }
+        else{
+            return(eqlp(x,y1));
+        }
+    }
+
+    return(NO);
 }
 
 //unbind to local-stack x
