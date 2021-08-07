@@ -1247,18 +1247,7 @@ int deref1(int x){
     return(NIL);
 }
 
-int deref_array(int arity[256], int head){
-    int n,res;
 
-    n = length(head)-1;
-    res = NIL;
-    while(n > 0){
-        res = cons(deref(arity[n]),res);
-        n--;
-    }
-    res = cons(car(head),res);
-    return(res);
-}
 
 int unify(int x, int y){
     int x1,y1;
@@ -1344,21 +1333,6 @@ int unify(int x, int y){
     return(NO);
 }
 
-int unify_array(int arity[256], int head){
-    int n,res;
-
-    n = 0;
-    while(!nullp(head)){
-        res = unify(car(head),arity[n]);
-        if(res == NO)
-            return(NO);
-        else{
-            n++;
-            head = cdr(head);
-        }
-    }
-    return(YES);
-}
 
 
 //y = not binded variable;
