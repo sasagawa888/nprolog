@@ -57,8 +57,6 @@ Junify_list(head,arg)   for list term
 
 % optimize flag
 jump_optimize(on).
-% delete C source
-jump_delete(on).
 
 % main
 compile_file(X) :-
@@ -66,6 +64,14 @@ compile_file(X) :-
     jump_pass1(X),
     jump_pass2(X),
     jump_invoke_gcc(X),
+    n_strict(false).
+
+% for debug not remove C code.
+compile_file1(X) :-
+    n_strict(true),
+    jump_pass1(X),
+    jump_pass2(X),
+    jump_invoke_gcc_not_remove(X),
     n_strict(false).
 
 % generate object from c code
@@ -127,9 +133,18 @@ jump_invoke_gcc(X) :-
     atom_concat(Ofile,Cfile,Files),
     atom_concat('gcc -O3 -w -shared -fPIC -I$HOME/nprolog -o ',Files,Gen),
     shell(Gen),
-    jump_delete(on),
     atom_concat('rm ',Cfile,Del),
     shell(Del).
+
+jump_invoke_gcc_not_remove(X) :-
+	write(user_output,'invoke GCC'),
+    nl(user_output),
+	n_filename(X,F),
+    atom_concat(F,'.c ',Cfile),
+    atom_concat(F,'.o ',Ofile),
+    atom_concat(Ofile,Cfile,Files),
+    atom_concat('gcc -O3 -w -shared -fPIC -I$HOME/nprolog -o ',Files,Gen),
+    shell(Gen).
 
 
 /*
@@ -297,14 +312,29 @@ jump_gen_a_pred1(P,[L|Ls]) :-
 jump_gen_a_pred2(P,N) :-
 	write('if(n == '),
     write(N),
-    write('){'),
+    write('){\n'),
     jump_gen_a_pred3(P,N),
     write('}'),!.
 
 % select all clauses that arity is N
 jump_gen_a_pred3(P,N) :-
+    jump_gen_var_assign(1,N),
 	n_clause_with_arity(P,N,C),
     jump_gen_a_pred4(C).
+
+% arg1 = Jnth(arglist,1);
+% arg2 = Jnth(arglist,2);
+% argn = Jnth(artglist,n);
+jump_gen_var_assign(S,E) :-
+	S > E.
+jump_gen_var_assign(S,E) :-
+	write(arg),
+    write(S),
+    write(' = Jnth(arglist,'),
+    write(S),
+    write(');\n'),
+    S1 is S+1,
+    jump_gen_var_assign(S1,E).
 
 % generate each clause
 jump_gen_a_pred4([]).
@@ -519,7 +549,7 @@ jump_gen_a_body(X) :-
 
 /*
 generate_unify of head
-e.g.  foo(X) -> if(Junify(arg1,varX))
+e.g.  foo(X) -> if(Junify(arg1,varX) == YES)
 anoymous variable generate 1 as true.
 e.g   foo(_) -> if(1)
 */
@@ -528,10 +558,20 @@ jump_gen_head(X) :-
     functor(X,_,0).
 jump_gen_head(X) :-
     n_argument_list(X,Y),
-    write('if(Junify('),
-    jump_gen_argument(Y),
-    write(',arglist) == YES)'),nl.
+    write('if('),
+    jump_gen_head1(Y,1),
+    write(')\n').
 
+jump_gen_head1([],_) :-
+    write(1).
+jump_gen_head1([X|Xs],N) :-
+    write('Junify('),
+    jump_gen_a_argument(X),
+    write(',arg'),
+    write(N),
+    write(') == YES && '),
+    N1 is N + 1,
+    jump_gen_head1(Xs,N1).
 
 /*
 generate evauation code
