@@ -1067,7 +1067,7 @@ int unify(int x, int y);
 int unify_const(int x, int y);
 int unify_var(int x, int y);
 int unify_list(int x, int y);
-int unifu_nil(int x, int y);
+int unify_nil(int x, int y);
 int unique(int x);
 int user_operation_p(int addr);
 int user_operator_p(int addr);
