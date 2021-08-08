@@ -1403,18 +1403,6 @@ int unify_const(int x, int y){
 }
 
 
-// typed unify. x is list.
-int unify_list(int x, int y){
-    if(!listp(y))
-        return(NO);
-    else if(unify(car(x),car(y)) == YES &&
-            unify(cdr(x),cdr(y)) == YES)
-        return(YES);
-    
-    return(NO);
-
-}
-
 // typed unify. x is [] (empty list)
 int unify_nil(int x, int y){
     int y1;

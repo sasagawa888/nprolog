@@ -160,8 +160,7 @@ void init_deftsys(tpred x){
 #define Jnth(x,y)          (f2[40])(x,y)
 #define Junify_const(x,y)  (f2[41])(x,y)
 #define Junify_var(x,y)    (f2[42])(x,y)
-#define Junify_list(x,y)   (f2[43])(x,y)
-#define Junify_nil(x,y)    (f2[44])(x,y)
+#define Junify_nil(x,y)   (f2[43])(x,y)
 
 
 #define Jprove_all(x,y,z) (f3[0])(x,y,z)

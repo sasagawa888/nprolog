@@ -52,7 +52,6 @@ unification
 Junify(head,arg)  all-round
 Junify_const(head,arg)  for constant term
 Junify_var(head,arg)    for variable term
-Junify_list(head,arg)   for list term
 Junify_nil(head,arg)    for [] check.
 */
 
@@ -573,6 +572,24 @@ jump_gen_head1([[]|Xs],N) :-
     write(') == YES && '),
     N1 is N + 1,
     jump_gen_head1(Xs,N1).
+jump_gen_head1([X|Xs],N) :-
+    n_compiler_variable(X),
+    write('Junify_var('),
+    jump_gen_a_argument(X),
+    write(',arg'),
+    write(N),
+    write(') == YES && '),
+    N1 is N + 1,
+    jump_gen_head1(Xs,N1).    
+jump_gen_head1([X|Xs],N) :-
+    atomic(X),
+    write('Junify_const('),
+    jump_gen_a_argument(X),
+    write(',arg'),
+    write(N),
+    write(') == YES && '),
+    N1 is N + 1,
+    jump_gen_head1(Xs,N1). 
 jump_gen_head1([X|Xs],N) :-
     write('Junify('),
     jump_gen_a_argument(X),
