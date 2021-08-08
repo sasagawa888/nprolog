@@ -3578,6 +3578,10 @@ int b_univ(int arglist, int rest){
             res = structure_to_list(arg1);
             return(unify(res,arg2));
         }
+        else if(user_operation_p(arg1)){
+            res = structure_to_list(arg1);
+            return(unify(res,arg2));
+        }
         else if(variablep(arg1) && listp(arg2)){
             if(GET_AUX(car(arg2)) != SYS &&
                GET_AUX(car(arg2)) != COMP &&
