@@ -599,6 +599,7 @@ jump_gen_head1([X|Xs],N) :-
     N1 is N + 1,
     jump_gen_head1(Xs,N1).
 
+
 /*
 generate evauation code
 e.g.  X is 1+2.  X == 3*4.

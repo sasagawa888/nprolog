@@ -81,6 +81,8 @@ void dynamic_link(int x){
     init_f1(34,(tpred)set_wp);
     init_f1(35,(tpred)wlist1);
     init_f1(36,(tpred)operate);
+    init_f1(37,(tpred)listp);
+    init_f1(38,(tpred)structurep);
 
     //argument-2 type
     init_f2(0,(tpred)cons);

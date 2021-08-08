@@ -50,7 +50,6 @@ int cadar(int addr){
     return(car(cdr(car(addr))));
 }
 
-
 int cons(int car, int cdr){
     int addr;
 

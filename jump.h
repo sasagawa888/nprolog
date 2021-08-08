@@ -116,6 +116,8 @@ void init_deftsys(tpred x){
 #define Jset_wp(x)   (f1[34])(x)
 #define Jwlist1(x)   (f1[35])(x)
 #define Jexecute(x)  (f1[36])(x)
+#define Jlistp(x)    (f1[37])(x)
+#define Jstructurep(x) (f1[38])(x)
 
 #define Jcons(x,y)   (f2[0])(x,y)
 #define Jplus(x,y)   (f2[1])(x,y)
