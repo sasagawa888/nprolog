@@ -1,4 +1,9 @@
 
+my_length([],0).
+my_length([L|Ls],N) :-
+  my_length(Ls,N1),
+  N is N1 + 1.
+
 rotate(L1, L2) :-
   append(Left, Right, L1),
   append(Right, Left, L2). 

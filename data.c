@@ -1427,9 +1427,10 @@ int unify_nil(int x, int y){
             bindsym(y1,x);
             return(YES);
         }
-        else{
-            return(eqlp(x,y1));
-        }
+        else if(y1 == NIL)
+            return(YES);
+        else    
+            return(NO);
     }
 
     return(NO);

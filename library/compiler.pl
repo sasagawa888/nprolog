@@ -565,6 +565,14 @@ jump_gen_head(X) :-
 
 jump_gen_head1([],_) :-
     write(1).
+jump_gen_head1([[]|Xs],N) :-
+    write('Junify_nil('),
+    jump_gen_a_argument(X),
+    write(',arg'),
+    write(N),
+    write(') == YES && '),
+    N1 is N + 1,
+    jump_gen_head1(Xs,N1).
 jump_gen_head1([X|Xs],N) :-
     write('Junify('),
     jump_gen_a_argument(X),
