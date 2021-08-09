@@ -376,6 +376,16 @@ int pop_stack(void){
     return(stack[--sp]);
 }
 
+void push_unify(int x){
+    ustack[up++] = x;
+    if(up >= STACKSIZE)
+        error(STACK_OVERF,NIL,NIL);
+}
+int pop_unify(void){
+    return(ustack[--up]);
+}
+
+
 
 //------for JUMP compiler-----
 int get_sp(void){

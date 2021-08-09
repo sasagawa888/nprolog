@@ -140,6 +140,7 @@ typedef struct result {
 extern cell heap[CELLSIZE];
 extern int variant[VARIANTSIZE];
 extern int stack[STACKSIZE];
+extern int ustack[STACKSIZE];
 extern token stok;
 extern jmp_buf buf;
 extern int cell_hash_table[HASHTBSIZE];
@@ -364,7 +365,7 @@ extern int sp; //stack pointer
 extern int fc; //free counter
 extern int ac; //alpha conversion variable counter
 extern int wp; //working pointer
-
+extern int up; //unify stack pointer
 
 //-----editor-----
 extern int repl_flag;

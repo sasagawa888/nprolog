@@ -15,6 +15,7 @@ cell heap[CELLSIZE];
 int cell_hash_table[HASHTBSIZE];
 int variant[VARIANTSIZE];
 int stack[STACKSIZE];
+int ustack[STACKSIZE];
 int record_hash_table[HASHTBSIZE][RECORDMAX];  // for hash record database 
 int record_pt = 1;                             // current index of record database
 int counter[31];                               // counter str_set,str_dec ... 
@@ -54,6 +55,7 @@ int sp; //stack pointer
 int fc; //free counter
 int ac; //alpha conversion variable count
 int wp; //working pointer
+int up; //unify stack pointer
 
 
 //flag
@@ -326,6 +328,7 @@ void init_repl(void){
     wp = HEAPSIZE+1;
     unbind(0);
     sp = 0;
+    up = 0;
     ctrl_c_flag = 0;
     fskip_flag = OFF;
     sskip_flag = OFF;
