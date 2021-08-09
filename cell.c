@@ -376,12 +376,12 @@ int pop_stack(void){
     return(stack[--sp]);
 }
 
-void push_unify(int x){
+void push_ustack(int x){
     ustack[up++] = x;
     if(up >= STACKSIZE)
         error(STACK_OVERF,NIL,NIL);
 }
-int pop_unify(void){
+int pop_ustack(void){
     return(ustack[--up]);
 }
 
@@ -406,6 +406,11 @@ int get_wp(void){
 
 int set_wp(int x){
     wp = x;
+    return(0);
+}
+
+int set_up(int x){
+    up = x;
     return(0);
 }
 
