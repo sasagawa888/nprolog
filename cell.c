@@ -386,7 +386,6 @@ int pop_unify(void){
 }
 
 
-
 //------for JUMP compiler-----
 int get_sp(void){
 	return(sp);
