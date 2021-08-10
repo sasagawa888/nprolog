@@ -892,6 +892,7 @@ int get_nth(int x, int n);
 int get_sign(int x);
 int get_sp(void);
 int get_wp(void);
+int get_up(void);
 int get_goal(int n);
 int get_cut_jmp(void);
 int get_notfree_variable(int x);

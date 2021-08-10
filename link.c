@@ -49,6 +49,7 @@ void dynamic_link(int x){
     init_f0(6,(tpred)debug);
     init_f0(7,(tpred)inc_proof);
     init_f0(8,(tpred)pop_ustack);
+    init_f0(9,(tpred)get_up);
 
     //argument-1 type
     init_f1(0,(tpred)car);
@@ -62,7 +63,7 @@ void dynamic_link(int x){
     init_f1(9,(tpred)unbind);
     init_f1(12,(tpred)length);
     init_f1(13,(tpred)set_sp);
-    init_f1(14,(tpred)set_up);
+    
     init_f1(15,(tpred)deref);
     init_f1(16,(tpred)push_ustack);
     init_f1(17,(tpred)get_int);
@@ -86,6 +87,8 @@ void dynamic_link(int x){
     init_f1(36,(tpred)operate);
     init_f1(37,(tpred)listp);
     init_f1(38,(tpred)structurep);
+    init_f1(39,(tpred)set_up);
+    init_f1(40,(tpred)variablep);
 
     //argument-2 type
     init_f2(0,(tpred)cons);

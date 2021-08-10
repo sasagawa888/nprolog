@@ -3,8 +3,9 @@
 #include "jump.h"
 int b_<name>(int arglist, int rest);
 int b_<name>(int arglist, int rest){
-int arg1,arg2,arg4,varX,varY,varZ,...,save1,save2,body;
+int arg1,arg2,arg4,varX,varY,varZ,...,save1,save2,save3,tree,body;
 save2 = Jget_sp();
+save3 = Jget_up();
 if(n == 2){
     arg1 = Jnth(arglist,1);
     arg2 = Jnth(arglist,2);
@@ -19,6 +20,7 @@ if(n == 2){
         if(Jpove_all(Jaddtail_body(rest,body),save2,0) == YES)
             return(YES);
     }
+    Jset_up(save3);
     Junbind(save2);
     Jset_wp(save1);}
 
@@ -33,6 +35,7 @@ if(n == 2){
         if(Jprove_all(Jaddtail_body(rest,body),save2,0) == YES)
             return(YES);
     }
+    Jset_up(save3);
     Junbind(save2);
     Jset_wp(save1);
 
@@ -249,7 +252,7 @@ jump_gen_var_declare(P) :-
     jump_gen_var_declare1(1,E),
     n_generate_all_variable(P,V),
     jump_gen_all_var(V),
-    write('n,body,save1,save2,res;'),nl,!.
+    write('n,body,save1,save2,save3,tree,res;'),nl,!.
 
 jump_max_list([N],N).
 jump_max_list([X|Xs],X) :-
@@ -293,6 +296,8 @@ jump_gen_a_pred(P) :-
     nl,
     jump_gen_var_declare(P),
     write('save2 = Jget_sp();'),
+    nl,
+    write('save3 = Jget_up();'),
     nl,
     write('n = Jlength(arglist);'),
     nl,
@@ -372,6 +377,7 @@ jump_gen_a_pred5(P) :-
 	jump_gen_head(P),
     write('if(Jprove_all(rest,Jget_sp(),0) == YES)'),nl,
     write('return(YES);'),nl,
+    write('Jset_up(save3);'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
@@ -590,6 +596,23 @@ jump_gen_head1([X|Xs],N) :-
     write(') == YES && '),
     N1 is N + 1,
     jump_gen_head1(Xs,N1). 
+/*
+jump_gen_head1([X|Xs],N) :-
+    list(X),
+    write('( (({tree = arg'),
+    write(N),
+    write(';YES;}) == YES && '),
+    jump_gen_head_list(X),
+    write(') || ((Jvariablep(Jderef(arg'),
+    write(N),
+    write(')) && Junify_var(arg'),
+    write(N),
+    write(','),
+    jump_gen_a_argument(X),
+    write(')==YES)) ) && '),
+    N1 is N + 1,
+    jump_gen_head1(Xs,N1). 
+*/
 jump_gen_head1([X|Xs],N) :-
     write('Junify('),
     jump_gen_a_argument(X),
@@ -599,6 +622,66 @@ jump_gen_head1([X|Xs],N) :-
     N1 is N + 1,
     jump_gen_head1(Xs,N1).
 
+
+jump_gen_head_list(L) :-
+    write('({int res;'),
+    write('Jpush_ustack(tree);'),
+    write('res = Jlistp(Jderef(tree));'),
+    write('if(res=1) res = YES; else res = NO;'),
+    write('res;})==YES && '),
+    jump_gen_head_list1(L).
+
+jump_gen_head_list1([]) :-
+    write('({int res;'),
+    write('res = Junify_nil(NIL,tree);'),
+    write('tree = Jpop_ustack();'),
+    write('res;})==YES ').
+
+jump_gen_head_list1(L) :-
+    n_compiler_variable(L),
+    write('({int res;'),
+    write('res = Junify_var('),
+    jump_gen_a_argument(L),
+    write(',tree);'),
+    write('tree = Jpop_ustack();'),
+    write('res;})==YES ').
+
+jump_gen_head_list1(L) :-
+    atomic(L),
+    write('({int res;'),
+    write('res = Junify_const('),
+    jump_gen_a_argument(L),
+    write(',tree);'),
+    write('tree = Jpop_ustack();'),
+    write('res;})==YES ').
+
+jump_gen_head_list1([L|Ls]) :-
+    n_compiler_variable(L),
+    write('({int res;'),
+    write('res = Junify_var('),
+    jump_gen_a_argument(L),
+    write(',Jcar(tree));'),
+    write('tree = Jcdr(tree);'),
+    write('res;})==YES && '),
+    jump_gen_head_list1(Ls).
+
+jump_gen_head_list1([L|Ls]) :-
+    atomic(L),
+    write('({int res;'),
+    write('res = Junify_const('),
+    jump_gen_a_argument(L),
+    write(','),
+    write('Jcar(tree));'),
+    write('tree = Jcdr(tree);'),
+    write('res;})==YES && '),
+    jump_gen_head_list1(Ls).
+
+jump_gen_head_list1([L|Ls]) :-
+    list(L),
+    write('('),
+    jump_gen_head_list(L),
+    write(')'),
+    jump_gen_head_list1(Ls,N,I1,Pos).
 
 /*
 generate evauation code

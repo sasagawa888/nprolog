@@ -81,6 +81,7 @@ void init_deftsys(tpred x){
 #define Jdebug()     (f0[6])()
 #define Jinc_proof() (f0[7])()
 #define Jpop_ustack() (f0[8])()
+#define Jget_up()    (f0[9])()
 
 #define Jcar(x)      (f1[0])(x)
 #define Jcdr(x)      (f1[1])(x)
@@ -94,7 +95,7 @@ void init_deftsys(tpred x){
 #define Junbind(x)   (f1[9])(x)
 #define Jlength(x)   (f1[12])(x)
 #define Jset_sp(x)   (f1[13])(x)
-#define Jset_up(x)   (f1[14])(x)
+
 #define Jderef(x)    (f1[15])(x)
 #define Jpush_ustack(x) (f1[16])(x)
 #define Jget_int(x)  (f1[17])(x)
@@ -119,6 +120,8 @@ void init_deftsys(tpred x){
 #define Jexecute(x)  (f1[36])(x)
 #define Jlistp(x)    (f1[37])(x)
 #define Jstructurep(x) (f1[38])(x)
+#define Jset_up(x)   (f1[39])(x)
+#define Jvariablep(x) (f1[40])(x)
 
 #define Jcons(x,y)   (f2[0])(x,y)
 #define Jplus(x,y)   (f2[1])(x,y)
