@@ -1334,7 +1334,10 @@ int unify(int x, int y){
 int unify_var(int x, int y){
     int x1,y1;
     
-    if(!variablep(y)){
+    if(anoymousp(x)){
+        return(YES);
+    }
+    else if(!variablep(y)){
         x1 = deref1(x);
         if(x1 == x){
             bindsym(x,y);
@@ -1367,10 +1370,7 @@ int unify_var(int x, int y){
             return(unify(x1,y1));
         }
     }
-    else if(anoymousp(x) || anoymousp(y)){
-        return(YES);
-    }
-
+    
     return(NO);
 }
 

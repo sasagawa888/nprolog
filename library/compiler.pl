@@ -60,6 +60,11 @@ Junify_nil(head,arg)    for [] check.
 
 % optimize flag
 jump_optimize(on).
+jump_typed_optimize(off).
+
+optimize(X) :-
+    abolish(jump_typed_optimize/1),
+    assert(jump_typed_optimize(X)).
 
 % main
 compile_file(X) :-
@@ -596,23 +601,24 @@ jump_gen_head1([X|Xs],N) :-
     write(') == YES && '),
     N1 is N + 1,
     jump_gen_head1(Xs,N1). 
-/*
+%testting list term compile
 jump_gen_head1([X|Xs],N) :-
+    jump_typed_optimize(on),
     list(X),
     write('( (({tree = arg'),
     write(N),
     write(';YES;}) == YES && '),
     jump_gen_head_list(X),
-    write(') || ((Jvariablep(Jderef(arg'),
+    write(') || (Jvariablep(Jderef(arg'),
     write(N),
     write(')) && Junify_var(arg'),
     write(N),
     write(','),
     jump_gen_a_argument(X),
-    write(')==YES)) ) && '),
+    write(')==YES) ) && '),
     N1 is N + 1,
     jump_gen_head1(Xs,N1). 
-*/
+
 jump_gen_head1([X|Xs],N) :-
     write('Junify('),
     jump_gen_a_argument(X),
@@ -627,8 +633,7 @@ jump_gen_head_list(L) :-
     write('({int res;'),
     write('Jpush_ustack(tree);'),
     write('res = Jlistp(Jderef(tree));'),
-    write('if(res=1) res = YES; else res = NO;'),
-    write('res;})==YES && '),
+    write('res;}) && '),
     jump_gen_head_list1(L).
 
 jump_gen_head_list1([]) :-
