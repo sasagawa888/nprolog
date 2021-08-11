@@ -398,7 +398,7 @@ jump_gen_all_var([L|Ls]) :-
 jump_gen_var([]).
 jump_gen_var([L|Ls]) :-
     n_compiler_anoymous(L),
-    jmp_gen_var(Ls).
+    jump_gen_var(Ls).
 jump_gen_var([L|Ls]) :-
     write(L),
     write(' = Jmakevariant();'),nl,
@@ -583,6 +583,10 @@ jump_gen_head1([[]|Xs],N) :-
     write(') == YES && '),
     N1 is N + 1,
     jump_gen_head1(Xs,N1).
+jump_gen_head1([X|Xs],N) :-
+    n_compiler_anoymous(X),
+    N1 is N + 1,
+    jump_gen_head1(Xs,N1).  
 jump_gen_head1([X|Xs],N) :-
     n_compiler_variable(X),
     write('Junify_var('),

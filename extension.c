@@ -302,19 +302,31 @@ int b_compiler_anoymous(int arglist, int rest){
 
     n = length(arglist);
     if(n == 1){
-        arg1 = deref(car(arglist));
-        if(!!structurep(arg1))
-            return(NO);
-        else if(numberp(arg1))
-        	return(NO);
-
-        if(strcmp(GET_NAME(arg1),"var_") == 0)
-            return(YES);
+    	arg1 = deref(car(arglist));
+        if(compiler_anoymous_p(arg1))
+        	return(YES);
         else
-            return(NO);
+        	return(NO);
     }
     return(NO);
 }
+
+int compiler_anoymous_p(int x){
+	char str[256];
+
+    if(numberp(x))
+    	return(0);
+    if(!!structurep(x))
+    	return(0);
+    strcpy(str,GET_NAME(x));
+    str[4] = NUL;
+    if(strcmp(str,"var_") == 0)
+    	return(1);
+    else
+    	return(0);
+}
+
+
 
 int b_compiler_variable(int arglist, int rest){
 	int n,arg1;
@@ -413,7 +425,7 @@ int variable_convert4(int x){
         return(0);
     }
 
-    strcpy(str1,"var");
+    strcpy(str1,"var_");
     sprintf(str2,"%d",n);
     strcat(str1,str2);
     res = makeconst(str1);

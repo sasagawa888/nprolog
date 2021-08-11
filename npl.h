@@ -801,6 +801,7 @@ int cdr(int addr);
 int characterp(int addr);
 int clausep(int addr);
 int colonp(int addr);
+int compiler_anoymous_p(int x);
 int compiler_variable_p(int x);
 int compiled_zero_p(int addr);
 int compiledp(int addr);
