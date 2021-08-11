@@ -397,9 +397,6 @@ jump_gen_all_var([L|Ls]) :-
 % varA = Jmakevariant(), varB = Jmakevariant();
 jump_gen_var([]).
 jump_gen_var([L|Ls]) :-
-    n_compiler_anoymous(L),
-    jump_gen_var(Ls).
-jump_gen_var([L|Ls]) :-
     write(L),
     write(' = Jmakevariant();'),nl,
     jump_gen_var(Ls).
@@ -912,9 +909,6 @@ there are all type of prolog object
 */
 jump_gen_a_argument([]) :-
 	write('NIL').
-jump_gen_a_argument(X) :-
-    n_compiler_anoymous(X),
-    write('ANOYVAR').
 jump_gen_a_argument(X) :-
 	n_compiler_variable(X),
     write(X).
