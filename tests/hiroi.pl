@@ -43,9 +43,7 @@ clear_light(N, Board, Result, Push, PushResult) :-
     (Board /\ (1 << M)) > 0,
     pattern(N, Pattern),
     NewBoard is Board xor Pattern,
-    1 == 1, %これがないとコンパイラでおかしい
     NewPush is Push \/ (1 << N),
-    2 == 2, %これがないとコンパイラでおかしい
     N1 is N + 1, !, clear_light(N1, NewBoard, Result, NewPush, PushResult).
 
 clear_light(N, Board, Result, Push, PushResult) :-
