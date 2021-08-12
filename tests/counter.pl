@@ -1,3 +1,4 @@
+%example of counter predicates
 
 now_tenof :-
     ctr_set(0,1),

@@ -2,7 +2,7 @@
 
 db_load(Fname,Key) :-
     open(H,Fname,r),
-    geto(H,X),
+    get0(H,X),
     (x == 26,
     close(H);
     gets(H,X,L),
