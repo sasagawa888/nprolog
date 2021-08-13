@@ -1272,13 +1272,17 @@ int unify(int x, int y){
         x1 = deref1(x);
         y1 = deref1(y);
         if(variablep(x1) && variablep(y1)){
-            if(x != y){//ordinaly case
+            if(x1 == y1 || x == y1 || x1 == y || x == y){
+                return(YES);
+            }
+            else if(x != y){//ordinaly case
                 bindsym(x1,y1);
+                return(YES);
             }
             else{
                 bindsym(x1,makevariant()); // ex ?- X = X
+                return(YES);
             }
-            return(YES);
         }
         else if(variablep(x1) && !variablep(y1)){
             bindsym(x1,y1);
