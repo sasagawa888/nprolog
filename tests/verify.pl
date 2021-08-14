@@ -180,7 +180,10 @@ test(unify) :-
     verify(a(a,A1) = a(A1,a)),
     verify(A1 == a),
 
-    verify(not(a(a,B1) = a(B1,b))).
+    verify(not(a(a,B1) = a(B1,b))),
+
+    verify(X=X),
+    verify((X=Y,Y=X)).
 
 test(list_difference) :-
     L = [a|T]-T, T = [], L = L1-[], 

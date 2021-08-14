@@ -20,7 +20,6 @@ canget(state(_,_,_,has)).
 canget(State1) :-
     move(State1,Move,State2),
     write(Move),
-    write(State2),
     canget(State2).
     
 

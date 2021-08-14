@@ -1060,10 +1060,10 @@ int equalp(int addr1, int addr2){
     else if(!nullp(addr1) && nullp(addr2))
         return(0);
     else if(!structurep(addr1) && !structurep(addr2))
-        return(eqp(addr1,addr2));
-    else if(!structurep(addr1) && !!structurep(addr2))
+        return(eqlp(addr1,addr2));
+    else if(!structurep(addr1) && structurep(addr2))
         return(0);
-    else if(!!structurep(addr1) && !structurep(addr2))
+    else if(structurep(addr1) && !structurep(addr2))
         return(0);
     else if(equalp(car(addr1),car(addr2)) &&
             equalp(cdr(addr1),cdr(addr2)))

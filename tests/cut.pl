@@ -17,3 +17,6 @@ fact(X,Y) :-
     X1 is X-1,
     fact(X1,Y1),
     Y is X*Y1.
+
+yes_or_no(X) :- 
+    repeat, write('yes or no >'), read(X), (X == yes ; X == no), !.
