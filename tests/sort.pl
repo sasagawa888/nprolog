@@ -51,3 +51,25 @@ merge([X|Xs],[Y|Ys],[Y|Z]) :-
     X > Y,
     merge([X|Xs],Ys,Z).
 
+
+% tests code from M.Hiroi's page
+quick([X | Xs], Ys) :-
+        partition(Xs, X, Littles, Bigs),
+        quick(Littles, Ls),
+        quick(Bigs, Bs),
+        append(Ls, [X | Bs], Ys).
+quick([], []).
+
+
+partition([X | Xs], Y, [X | Ls], Bs) :-
+        X =< Y, partition(Xs, Y, Ls, Bs).
+partition([X | Xs], Y, Ls, [X | Bs]) :-
+        X > Y, partition(Xs, Y, Ls, Bs).
+partition([], Y, [], []).
+
+quick1(Xs, Ys) :- quick_sub(Xs, [Ys, []]).
+quick_sub([X | Xs], [Ys, Zs]) :-
+        partition(Xs, X, Littles, Bigs),
+        quick_sub(Littles, [Ys, [X | Ys1]]),
+        quick_sub(Bigs, [Ys1, Zs]).
+quick_sub([], [Xs, Xs]).
