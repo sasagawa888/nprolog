@@ -152,7 +152,9 @@ test(true_fail_not) :-
     verify(not(fail)),
     verify((fail;true)),
     verify(not(not(true))),
-    verify(not(1==2)).
+    verify(not(1==2)),
+    verify(not(X == 2)),
+    verify(not(X \= 2)).
 
 test(system) :-
     verify(system(write/1)),
