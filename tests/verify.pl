@@ -6,7 +6,7 @@ verify(X) :-
 	).
 
 alltest :-
-    test(Test).
+    test(Test),fail.
 alltest.
 
 test(atmark) :-
@@ -285,5 +285,11 @@ test(atom_string) :-
     verify(X = $orange$),
     atom_string(Y,$apple$),
     verify(Y = apple).
+
+test(dot) :-
+    L = .(a,b),
+    verify(L = [a|b]),
+    M = .(a,[b,c]),
+    verify(M = [a,b,c]).
 
 :- alltest,write('All tests are done'),nl.
