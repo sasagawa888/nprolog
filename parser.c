@@ -621,7 +621,7 @@ void gettoken(void){
                         return;
                     }
         case '#':   stok.type = SHARP; return;
-
+        case '"':   stok.type = DBLQUOTE; return;
     }
 
     //constant-atom in Unicode
@@ -1370,6 +1370,10 @@ int readitem(void){
                         if(!nullp(temp))
                             SET_AUX(temp,LIST);
                         return(temp);
+        case DBLQUOTE:  temp = readtext();
+                        if(!nullp(temp))
+                            SET_AUX(temp,LIST);
+                        return(temp);
         case FILEEND:   return(FEND);
         default:        break;
     }
@@ -1527,6 +1531,20 @@ int readlist(void){
     else{
         error(SYNTAX_ERR,"illegal list ",NIL);
     }
+    return(NIL);
+}
+
+int readtext(void){
+    int temp;
+
+    temp = readc();
+    if(temp == '"')
+        return(NIL);
+    else if(temp == EOF)
+        error(SYNTAX_ERR,"expected double quote",NIL);
+    else
+        return(cons(makeint(temp),readtext()));
+    
     return(NIL);
 }
 

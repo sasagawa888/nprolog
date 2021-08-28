@@ -115,7 +115,7 @@ typedef struct __packed{
 
 typedef enum toktype {LPAREN,RPAREN,LBRACKET,RBRACKET,VERTICAL,LCURL,RCURL,SHARP,
                       STRING,INTEGER,FLOATN,CHARCODE,ATOMOBJ,BUILTIN,FUNCTION,
-                      COMPILED,OPERATOR,VARIABLE,ANOYMOUS,QUOTE,DOT,BACKQUOTE,
+                      COMPILED,OPERATOR,VARIABLE,ANOYMOUS,QUOTE,DOT,BACKQUOTE,DBLQUOTE,
                       COMMA,SEMICOLON,BIGNUM,BINNUM,OCTNUM,HEXNUM,
                       PERIOD,FILEEND,OTHER} toktype;
 typedef enum backtrack {GO,BACK} backtrack;
@@ -1032,6 +1032,7 @@ int readitem(void);
 int readcurl(void);
 int readlist(void);
 int readparen(void);
+int readtext(void);
 int read_string_term(int flag);
 int remove_cut(int x);
 int replace(int x, int lis);

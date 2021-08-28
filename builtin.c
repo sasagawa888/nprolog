@@ -2467,7 +2467,7 @@ int b_list_text(int arglist, int rest){
         arg2 = cadr(arglist); //atomstring
         if(listp(arg1) && length(arg1) == -1 && wide_variable_p(arg2))
             error(INSTANTATION_ERR,"list_text ",arg2);
-        if(!wide_variable_p(arg1) && !listp(arg1))
+        if(!wide_variable_p(arg1) && !listp(arg1) && !nullp(arg1))
             error(NOT_LIST,"list_text ",arg1);
         if(wide_variable_p(arg1) && !atomp(arg2) && !stringp(arg2))
             error(NOT_ATOM,"list_text ",arg2);
