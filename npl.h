@@ -1032,7 +1032,7 @@ int readitem(void);
 int readcurl(void);
 int readlist(void);
 int readparen(void);
-int readtext(void);
+int readdouble(void);
 int read_string_term(int flag);
 int remove_cut(int x);
 int replace(int x, int lis);

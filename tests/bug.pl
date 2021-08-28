@@ -30,3 +30,5 @@ ack(M,N,A) :-
     asserta(ack(M1,A1,A)).
 
 a([1,2]).
+
+test(_文字) :- write(_文字).

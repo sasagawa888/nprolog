@@ -1370,7 +1370,7 @@ int readitem(void){
                         if(!nullp(temp))
                             SET_AUX(temp,LIST);
                         return(temp);
-        case DBLQUOTE:  temp = readtext();
+        case DBLQUOTE:  temp = readdouble();
                         if(!nullp(temp))
                             SET_AUX(temp,LIST);
                         return(temp);
@@ -1534,7 +1534,7 @@ int readlist(void){
     return(NIL);
 }
 
-int readtext(void){
+int readdouble(void){
     int temp;
 
     temp = readc();
@@ -1543,7 +1543,7 @@ int readtext(void){
     else if(temp == EOF)
         error(SYNTAX_ERR,"expected double quote",NIL);
     else
-        return(cons(makeint(temp),readtext()));
+        return(cons(makeint(temp),readdouble()));
     
     return(NIL);
 }
