@@ -1543,7 +1543,7 @@ int readdouble(void){
     else if(temp == EOF)
         error(SYNTAX_ERR,"expected double quote",NIL);
     else
-        return(cons(makeint(temp),readdouble()));
+        return(listcons(makeint(temp),readdouble()));
     
     return(NIL);
 }

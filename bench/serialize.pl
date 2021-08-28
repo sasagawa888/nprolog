@@ -12,7 +12,7 @@
 test :- between(1,1000,X),top,fail.
 top:-serialise.
 
-serialise :- serialise($ABLE WAS I ERE I SAW ELBA$,_).
+serialise :- serialise("ABLE WAS I ERE I SAW ELBA",_).
 
 serialise(L,R) :-
     pairlists(L,R,A),
