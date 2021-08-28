@@ -28,3 +28,5 @@ ack(M,N,A) :-
     ack(M,N1,A1), ack(M1,A1,A),
     asserta(ack(M,N1,A1)),
     asserta(ack(M1,A1,A)).
+
+a([1,2]).

@@ -949,8 +949,6 @@ int callablep(int addr){
         else
             return(0);
     }
-    else if(operationp(addr))
-        return(1);
     else if(user_operation_p(addr))
         return(1);
     else

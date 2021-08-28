@@ -26,8 +26,6 @@ void initbuiltin(void){
     definfix("\\==",b_notequalp,700,XFX);
     definfix("\\=",b_notunify,700,XFX);
     definfix("=..",b_univ,700,XFX);
-    definfix("@",o_ignore,100,XFX);
-    definfix(":",b_colon,50,XFX);
     definfix("->",b_ifthen,1050,XFY);
     definfix("\\+",b_not,900,FY);
 
