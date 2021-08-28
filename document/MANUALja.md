@@ -313,6 +313,10 @@ Xが参照番号かどうかを調べる。
 ### □ reset_op
 演算子の定義をそのデフォールト値に戻す。
 
+### □ retract(Clause)
+データベースから節を除く。
+
+
 ### □ retrieveh(Table_name,Sort_key,Term)
 ハッシュテーブルから項を戻す。
 

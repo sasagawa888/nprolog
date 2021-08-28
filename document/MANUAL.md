@@ -312,6 +312,9 @@ Remove a term from the hash table.
 ### □ reset_op
 Returns the operator definition to its default value.
 
+### □ retract (Clause)
+Remove a clause from the database. 
+
 ### □ retrieveh(Table_name,Sort_key,Term)
 Returns a term from the hash table.
 
