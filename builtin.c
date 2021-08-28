@@ -2131,7 +2131,7 @@ int b_assert(int arglist, int rest){
             checkgbc();
             return(YES);
         }
-        else if(operationp(arg1)){
+        else if(clausep(arg1)){
             if(!callablep(caddr(arg1)))
                 error(NOT_CALLABLE,"assertz ",arg1);
             if(operationp(cadr(arg1)))
@@ -2142,7 +2142,7 @@ int b_assert(int arglist, int rest){
             checkgbc();
             return(YES);
         }
-        error(NOT_CALLABLE,"assertz ",arg1);
+        error(SYNTAX_ERR,"assertz ",arg1);
     }
     return(NO);
 }
@@ -2174,7 +2174,7 @@ int b_asserta(int arglist, int rest){
             checkgbc();
             return(YES);
         }
-        else if(operationp(arg1)){
+        else if(clausep(arg1)){
             if(!callablep(caddr(arg1)))
                 error(NOT_CALLABLE,"asserta ",arg1);
             if(operationp(cadr(arg1)))
@@ -2186,7 +2186,7 @@ int b_asserta(int arglist, int rest){
             checkgbc();
             return(YES);
         }
-        error(NOT_CALLABLE,"asserta ",arg1);
+        error(SYNTAX_ERR,"asserta ",arg1);
     }
     return(NO);
 }
