@@ -2827,7 +2827,7 @@ int b_substring(int arglist, int rest){
 
 int b_float_text(int arglist, int rest){
     int n,arg1,arg2,arg3;
-    char str[STRSIZE];
+    char str[STRSIZE],format[STRSIZE];
     double flt;
 
     n = length(arglist);
@@ -2840,12 +2840,29 @@ int b_float_text(int arglist, int rest){
             error(NOT_FLT,"float_text ",arg1);
         if(!wide_variable_p(arg2) && !stringp(arg2))
             error(NOT_STR,"float_text ",arg2);
-        if(!wide_variable_p(arg3) && !stringp(arg3))
-            error(NOT_STR,"float_text ",arg3);
 
         if(floatp(arg1)){
-            sprintf(str,"%g",GET_FLT(arg1));
-            return(unify(arg2,makestr(str)));
+            int n,d;
+            n = makevariant();
+            if(unify(arg3,makeconst("general")) == YES){
+                sprintf(str,"%g",GET_FLT(arg1));
+                return(unify(arg2,makestr(str)));
+            }
+            else if(unify(arg3,wcons(makepred("fixed"),wcons(n,NIL))) == YES){
+                d = GET_INT(deref(n));
+                sprintf(format,"%%-%d.%df",d,d);
+                sprintf(str,format,GET_FLT(arg1));
+                return(unify(arg2,makestr(str)));
+            }
+            else if(unify(arg3,wcons(makepred("scientific"),wcons(n,NIL))) == YES){
+                d = GET_INT(deref(n));
+                sprintf(format,"%%-.%de",d);
+                sprintf(str,format,GET_FLT(arg1));
+                return(unify(arg2,makestr(str)));
+            }
+            else
+                return(NO);
+            
         }
         else if(stringp(arg2)){
             flt = atof(GET_NAME(arg2));
