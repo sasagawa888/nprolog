@@ -2850,12 +2850,20 @@ int b_float_text(int arglist, int rest){
             }
             else if(unify(arg3,wcons(makepred("fixed"),wcons(n,NIL))) == YES){
                 d = GET_INT(deref(n));
+                if(d > 15)
+                    d = 15;
+                else if(d < 0)
+                    d = 0;
                 sprintf(format,"%%-%d.%df",d,d);
                 sprintf(str,format,GET_FLT(arg1));
                 return(unify(arg2,makestr(str)));
             }
             else if(unify(arg3,wcons(makepred("scientific"),wcons(n,NIL))) == YES){
                 d = GET_INT(deref(n));
+                if(d > 15)
+                    d = 15;
+                else if(d < 0)
+                    d = 0;
                 sprintf(format,"%%-.%de",d);
                 sprintf(str,format,GET_FLT(arg1));
                 return(unify(arg2,makestr(str)));

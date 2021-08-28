@@ -203,7 +203,12 @@ Check if X is a floating point number.
 
 ### □ float_text(Float,Text,Format)
 Converts a floating point number to a string according to the Format specification, or converts a string to a floating point number.
-format is the same format as the C language format. 
+
+format is one of the following:
+
+- general 0s following are suppressed.
+- fixed (N) N gives the position of the decimal point (0-15).
+- scientific (N) N gives the number of decimal places in exponential notation. 
 
 ### □ flush
 Remove all characters in the type-ahead buffer.
