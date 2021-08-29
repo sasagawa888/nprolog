@@ -3606,15 +3606,18 @@ int b_univ(int arglist, int rest){
             return(unify(res,arg2));
         }
         else if(variablep(arg1) && listp(arg2)){
-            if(GET_AUX(car(arg2)) != SYS &&
+            if(car(arg2) == DOTOBJ){
+                arg2 = operate(arg2);
+                SET_AUX(arg2,0);
+            }
+            else if(GET_AUX(car(arg2)) != SYS &&
                GET_AUX(car(arg2)) != COMP &&
                GET_AUX(car(arg2)) != OPE){
                 arg2 = list_to_structure(arg2);
                 SET_AUX(car(arg2),PRED);
-               }
-            if(car(arg2) == DOTOBJ){
-                arg2 = operate(arg2);
-                SET_AUX(arg2,0);
+            }
+            else{
+                arg2 = list_to_structure(arg2);
             }
             return(unify(arg1,arg2));
         }
