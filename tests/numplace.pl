@@ -116,6 +116,19 @@ maplist(P,[L|Ls]) :-
 
 % maplist/3
 % require call/3 but N-Prolog does not have call/3
+maplist(_,[],[]).
+maplist(P,[L|Ls],X) :-
+    my_call2(P,L,Y),
+    maplist(P,Ls,[Y|X]).
+
+my_call2(X,A,Y) :-
+    P =.. [X,A,Y],
+    call(P).
+
+nth0(0,[X|_],X).
+nth0(N,[_|Xs],Y) :-
+    N1 is N-1,
+    nth0(N1,Xs,Y).
 
 % 問題 (出典: 数独 - Wikipedia の問題例)
 problem(0, [[5,3,_,  _,7,_,  _,_,_],
