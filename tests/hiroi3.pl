@@ -1,20 +1,36 @@
-% Thanks to M.Hiroi
+%
+% kaeru.swi : 蛙跳びゲーム
+%
+%             Copyright (C) 2005 Makoto Hiroi
+%
 
-next(a, f). next(a, h). next(b, g). next(b, i).
-next(c, d). next(c, h). next(d, i). next(d, k).
-next(e, j). next(e, l). next(f, g). next(f, k).
-next(g, l). next(i, j).
+% 新しい局面の生成
+new_state([b, s | Rest], [s, b | Rest]).
+new_state([s, w | Rest], [w, s | Rest]).
+new_state([b, w, s | Rest], [s, w, b | Rest]).
+new_state([s, b, w | Rest], [w, b, s | Rest]).
+new_state([X | R1], [X | R2]) :- new_state(R1, R2).
 
-jump(X, Y) :- next(X, Y).
-jump(X, Y) :- next(Y, X).
+% 手順の表示
+print_answer([]) :- !.
+print_answer([State | Rest]) :-
+    print_answer(Rest), write(State), nl. 
 
-search(12, Path) :-
-    reverse(Answer, Path), write(Answer), nl, !, fail.
+% 反復深化による解法
+depth_search(Limit, Limit, [State | History]) :-
+    State == [w,w,w,s,b,b,b], 
+    write(Limit),nl,
+    print_answer([State | History]),
+    fail.
 
-search(N, [Postion | Rest]) :-
-    jump(Postion, NextPostion),
-    not(member(NextPostion, Rest)),
-    N1 is N + 1,
-    search(N1, [NextPostion, Postion | Rest]).
+depth_search(N, Limit, [State | History]) :-
+    N < Limit,
+    new_state(State, NewState),
+    not(member(NewState, History)),
+    N1 is N + 1, 
+    depth_search(N1, Limit, [NewState, State | History]).
 
-test :- search(1, [a]).
+solve :- 
+    between(1, 20, N),
+    depth_search(0, N, [[b,b,b,s,w,w,w]]).
+
