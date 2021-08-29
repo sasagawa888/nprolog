@@ -3609,12 +3609,13 @@ int b_univ(int arglist, int rest){
             if(GET_AUX(car(arg2)) != SYS &&
                GET_AUX(car(arg2)) != COMP &&
                GET_AUX(car(arg2)) != OPE){
-                SET_AUX(arg2,NIL);
+                arg2 = list_to_structure(arg2);
                 SET_AUX(car(arg2),PRED);
                }
-            if(car(arg2) == DOTOBJ)
+            if(car(arg2) == DOTOBJ){
                 arg2 = operate(arg2);
-            SET_AUX(arg2,0);
+                SET_AUX(arg2,0);
+            }
             return(unify(arg1,arg2));
         }
         else if(listp(arg1)){

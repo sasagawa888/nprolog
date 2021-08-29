@@ -28,7 +28,7 @@ test(atomic) :-
     verify(atomic(1)),
     verify(atomic(abc)),
     verify(atomic(1.0)),
-    veirfy(atomic(人間)).
+    verify(atomic(人間)).
 
 test(number) :-
     verify(number(1)),
@@ -121,7 +121,7 @@ test(arithmetic) :-
     verify(2>1),
     verify(1+2>2),
     verify(1+2>1+0),
-    verity(1+2>=2+1),
+    verify(1+2>=2+1),
     verify(not(1>1)),
     verify(3.2>3),
     verify(2>=1),
