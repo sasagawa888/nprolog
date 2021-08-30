@@ -117,9 +117,9 @@ maplist(P,[L|Ls]) :-
 % maplist/3
 % require call/3 but N-Prolog does not have call/3
 maplist(_,[],[]).
-maplist(P,[L|Ls],X) :-
+maplist(P,[L|Ls],[Y|Z]) :-
     my_call2(P,L,Y),
-    maplist(P,Ls,[Y|X]).
+    maplist(P,Ls,Z).
 
 my_call2(X,A,Y) :-
     P =.. [X,A,Y],
