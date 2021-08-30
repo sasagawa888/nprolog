@@ -130,6 +130,14 @@ nth0(N,[_|Xs],Y) :-
     N1 is N-1,
     nth0(N1,Xs,Y).
 
+partition(_,[],[],[]).
+partition(P,[L|Ls],[L|Y],Z) :-
+    P1 =.. [P,L],
+    call(P1),
+    partition(P,Ls,Y,Z).
+partition(P,[L|Ls],Y,[L|Z]) :-
+    partition(P,Ls,Y,Z).
+
 % 問題 (出典: 数独 - Wikipedia の問題例)
 problem(0, [[5,3,_,  _,7,_,  _,_,_],
             [6,_,_,  1,9,5,  _,_,_],
