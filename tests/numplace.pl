@@ -106,10 +106,10 @@ solver(N) :-
 % N-Prologのための追加
 writeln(X) :-
     write(X),
-    nl.
+    nl,!.
 
 % maplist/2
-maplist(_,[]) :- !.
+maplist(_,[]).
 maplist(P,[L|Ls]) :-
     atom(P),
     P1 =.. [P,L],!,
@@ -122,21 +122,22 @@ maplist(P,[L|Ls]) :-
     call(P1),
     maplist(P,Ls).
 
+
 % maplist/3
 % require call/3 but N-Prolog does not have call/3
-maplist(_,[],[]) :- !.
+maplist(_,[],[]).
 maplist(P,[L|Ls],[Y|Z]) :-
-    !,
-    my_call2(P,L,Y),
+    my_call2(P,L,Y),!,
     maplist(P,Ls,Z).
 
 my_call2(X,A,Y) :-
-    P =.. [X,A,Y],!,
-    call(P).
+    P =.. [X,A,Y],
+    call(P),!.
 
 
 nth0(0,[X|_],X).
 nth0(N,[_|Xs],Y) :-
+    N>0,
     N1 is N-1,
     nth0(N1,Xs,Y).
 
