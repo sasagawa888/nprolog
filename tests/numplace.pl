@@ -92,6 +92,10 @@ dfs([[N, As, Bs] | Vs]) :-
     N = I,
     dfs(Vs).
 
+% N-Prologのための追加
+writeln(X) :-
+    write(X),
+    nl.
 
 % 解法
 solver(N) :-
@@ -103,13 +107,9 @@ solver(N) :-
     maplist(writeln, Ls),
     fail.
 
-% N-Prologのための追加
-writeln(X) :-
-    write(X),
-    nl,!.
 
 % maplist/2
-maplist(_,[]).
+maplist(_,[]) :- !.
 maplist(P,[L|Ls]) :-
     atom(P),
     P1 =.. [P,L],!,
@@ -125,13 +125,13 @@ maplist(P,[L|Ls]) :-
 
 % maplist/3
 % require call/3 but N-Prolog does not have call/3
-maplist(_,[],[]).
+maplist(_,[],[]) :-!.
 maplist(P,[L|Ls],[Y|Z]) :-
     my_call2(P,L,Y),!,
     maplist(P,Ls,Z).
 
 my_call2(X,A,Y) :-
-    P =.. [X,A,Y],
+    P =.. [X,A,Y],!,
     call(P),!.
 
 
