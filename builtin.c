@@ -154,22 +154,22 @@ void initbuiltin(void){
     defbuiltin("write",b_write,list2(1,2));
     defbuiltin("writeq",b_writeq,list2(1,2));
     
-    defcompiled("call",b_call,1);
-    defcompiled("repeat",b_repeat,0);
-    defcompiled("system",b_system,1);
+    defbuiltin("call",b_call,1);
+    defbuiltin("repeat",b_repeat,0);
+    defbuiltin("system",b_system,1);
     defbuiltin("append",b_append,3);
     defbuiltin("member",b_member,2);
-    defcompiled("retract",b_retract,1);
-    defcompiled("clause",b_clause,2);
-    defcompiled("current_predicate",b_current_predicate,1);
-    defcompiled("current_op",b_current_op,3);
-    defcompiled("between",b_between,3);
-    defcompiled("retrieveh",b_retrieveh,3);
-    defcompiled("removeh",b_removeh,3);
-    defcompiled("directory",b_directory,6);
+    defbuiltin("retract",b_retract,1);
+    defbuiltin("clause",b_clause,2);
+    defbuiltin("current_predicate",b_current_predicate,1);
+    defbuiltin("current_op",b_current_op,3);
+    defbuiltin("between",b_between,3);
+    defbuiltin("retrieveh",b_retrieveh,3);
+    defbuiltin("removeh",b_removeh,3);
+    defbuiltin("directory",b_directory,6);
 
     //-----JUMP project---------
-    defcompiled("n_reconsult_predicate",b_reconsult_predicate,-1);
+    defbuiltin("n_reconsult_predicate",b_reconsult_predicate,-1);
     defbuiltin("n_reconsult_abolish",b_reconsult_abolish,-1);
     defbuiltin("n_filename",b_filename,-1);
     defbuiltin("n_atom_convert",b_atom_convert,-1);

@@ -132,15 +132,14 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"stdin"},{"stdout"},{"stdinout"},
 {"ctr_set"},{"ctr_dec"},{"ctr_inc"},{"ctr_is"},
 {"heapd"},{"list_text"},
-{"member"},{"append"},
+{"member"},{"append"},{"repeat"},{"system"},
+{"retract"},{"clause"},{"call"},{"directory"},
+{"between"},
+{"current_predicate"},{"current_op"},{"retrieveh"},{"removeh"}
 };
 
 //compiled predicate
 char compiled[COMPILED_NUMBER][30] ={
-{"repeat"},{"system"},
-{"retract"},{"clause"},{"call"},{"directory"},
-{"between"},
-{"current_predicate"},{"current_op"},{"retrieveh"},{"removeh"}
 };
 
 //extened predicate
@@ -540,6 +539,9 @@ int prove(int goal, int bindings, int rest){
                     }
                     else{
                         if(res == NPLFALSE){ // when after cut occurs NO
+                            //trace
+                            if(debug_flag == ON)
+                                trace(DBCUTFAIL,goal,bindings,rest);
                             wp = save1;
                             ac = save2;
                             unbind(bindings);
@@ -727,6 +729,44 @@ void trace(int port, int goal, int bindings, int rest){
                             
             printf("(%d) FAIL: ", gettrace(goal)); print(goal);
             dectrace(goal);
+            port = DBFAIL;
+            debugger(goal,bindings,rest);
+            }
+    }
+    else if(port == DBCUTFAIL){
+        if(trace_flag == FULL || trace_flag == TIGHT){
+            spy = spypointp(goal);
+            leap = leappointp(goal);
+            if(spy && !leap && fskip_flag == OFF && qskip_flag == OFF && sskip_flag == OFF)
+                printf("** ");
+            else if(spy && !leap && (fskip_flag == ON || qskip_flag == ON || qskip_flag == ON))
+                printf("*> ");
+            else if(!spy && fskip_flag == OFF && qskip_flag == OFF && sskip_flag == OFF)
+                return;
+            else if(fskip_flag == ON){
+                printf(">  ");
+                fskip_flag = OFF;
+            }
+            else if(qskip_flag == ON){
+                printf(">  ");
+                qskip_flag = OFF;
+            }
+            else if(sskip_flag == ON){
+                printf(">  ");
+                sskip_flag = OFF;
+            }
+            else if(xskip_flag == ON)
+                return;
+            else if(semiskip_flag == ON)
+                return;
+                            
+            if(leap)
+                return;
+            else
+                leap_point = NIL;
+                            
+            printf("(%d) CUTFAIL: ", gettrace(goal)); print(goal);
+            clrtrace(goal);
             port = DBFAIL;
             debugger(goal,bindings,rest);
             }

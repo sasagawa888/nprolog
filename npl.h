@@ -209,6 +209,7 @@ extern int error_stream;
 #define DBEXIT  6
 #define DBREDO  7
 #define DBFAIL  8
+#define DBCUTFAIL   9
 
 //debugger
 #define OFF     0
