@@ -131,12 +131,13 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"recordh"},{"recorda"},{"recordz"},{"instance"},{"removeallh"},
 {"stdin"},{"stdout"},{"stdinout"},
 {"ctr_set"},{"ctr_dec"},{"ctr_inc"},{"ctr_is"},
-{"heapd"},{"list_text"}
+{"heapd"},{"list_text"},
+{"member"},{"append"},
 };
 
 //compiled predicate
 char compiled[COMPILED_NUMBER][30] ={
-{"append"},{"member"},{"repeat"},{"system"},
+{"repeat"},{"system"},
 {"retract"},{"clause"},{"call"},{"directory"},
 {"between"},
 {"current_predicate"},{"current_op"},{"retrieveh"},{"removeh"}
@@ -458,16 +459,14 @@ int prove(int goal, int bindings, int rest){
     else if(builtinp(goal)){
         if(atomp(goal)){
             if((GET_SUBR(goal))(NIL,rest) == YES)
-                return(prove_all(rest,sp));
+                return(YES);
 
-            unbind(bindings);
             return(NO);
         }
         else{
             if((GET_SUBR(car(goal)))(cdr(goal),rest) == YES)
-                return(prove_all(rest,sp));
+                return(YES);
 
-            unbind(bindings);
             return(NO);
         }
     }

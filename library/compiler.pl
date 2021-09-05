@@ -32,7 +32,7 @@ if(n == 2){
     save1 = Jget_wp();
     if(Junify(term1,arg1) == YES && Junify_const(term1,arg2) == YES){
         body = Jwlist3(Jmakeope(","),Jwcons(173,Jwc ....)));
-        if(Jprove_all(Jaddtail_body(rest,body),save2,0) == YES)
+        if(Jprove_all(Jaddtail_body(rest,body),save2) == YES)
             return(YES);
     }
     Jset_up(save3);
@@ -380,7 +380,7 @@ jump_gen_a_pred5(P) :-
 	n_property(P,predicate),
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(P),
-    write('if(Jprove_all(rest,Jget_sp(),0) == YES)'),nl,
+    write('if(Jprove_all(rest,Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
     write('Jset_up(save3);'),nl,
     write('Junbind(save2);'),nl,
@@ -409,7 +409,7 @@ foo(X),bar(X),boo(X).
 
 if(unify(....)){
     body = ...;
-    if(Jprove_all(body,Jget_sp(),0) == YES)
+    if(Jprove_all(body,Jget_sp()) == YES)
         return(YES)};
 
 Junbind(save2);
@@ -421,7 +421,7 @@ jump_gen_body(X) :-
     write('{body = '),
     jump_gen_body1(X),
     write(';'),nl,
-    write('if((res=Jprove_all(Jaddtail_body(rest,body),Jget_sp(),0)) == YES)'),nl,
+    write('if((res=Jprove_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
     write('return(YES);}'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl,
@@ -1090,7 +1090,7 @@ jump_gen_exec2(X) :-
     write('body = '),
     jump_gen_body1(X),
     write(';'),nl,
-    write('Jprove_all(body,Jget_sp(),0);'),!.
+    write('Jprove_all(body,Jget_sp());'),!.
 
 /*
 optimizer for deterministic predicate

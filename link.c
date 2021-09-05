@@ -134,10 +134,10 @@ void dynamic_link(int x){
     init_f2(41,(tpred)unify_const);
     init_f2(42,(tpred)unify_var);
     init_f2(43,(tpred)unify_nil);
+    init_f2(44,(tpred)prove_all);
 
 
     //argument-3
-    init_f3(0,(tpred)prove_all);
     init_f3(1,(tpred)list3);
     init_f3(2,(tpred)callsubr);
     init_f3(3,(tpred)wlist3);

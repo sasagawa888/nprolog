@@ -6,8 +6,10 @@ verify(X) :-
 	).
 
 alltest :-
-    test(Test),fail.
+    test(Test),write(Test),nl,fail.
 alltest.
+
+test1 :- test(number),write('ok'),nl.
 
 test(atmark) :-
     verify(3 @> 2.1),
@@ -136,9 +138,9 @@ test(arithmetic) :-
 
 test(sort) :-
     sort([2,3,1],X),
-    verify(X = [1,2,3]),
+    verify(X == [1,2,3]),
     keysort([25-a, e-100, n-5, 12-o, 50-t], Y),
-    verify(Y,[12-o,25-a,50-t,e-100,n-5]).
+    verify(Y == [12-o,25-a,50-t,e-100,n-5]).
 
 test(string) :-
     verify(string($asdf$)),
