@@ -20,7 +20,7 @@ int b_reconsult_predicate(int arglist, int rest){
         lis = reverse(reconsult_list);
         while(!nullp(lis)){
             unify(arg1,car(lis));
-            if(prove_all(rest,sp,0) == YES)
+            if(prove_all(rest,sp) == YES)
                 return(YES);
 
             lis = cdr(lis);

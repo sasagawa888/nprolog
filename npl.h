@@ -110,6 +110,7 @@ typedef struct __packed{
     flag    flag;
     char    *name;
     unsigned char option;
+    char    trace;
 } cell;
 
 
@@ -235,6 +236,7 @@ extern int error_stream;
 #define GET_TAG(addr)       get_tag(addr)
 #define GET_CAR(addr)       heap[addr].val.car.intnum
 #define GET_OPT(addr)       heap[addr].option
+#define GET_TR(addr)        heap[addr].trace
 #define GET_FLAG(addr)      heap[addr].flag
 #define SET_TAG(addr,x)     heap[addr].tag = x
 #define SET_CAR(addr,x)     heap[addr].val.car.intnum = x
@@ -248,6 +250,7 @@ extern int error_stream;
 #define SET_SUBR(addr,x)    heap[addr].val.car.subr = x
 #define SET_PORT(addr,x)    heap[addr].val.car.port = x
 #define SET_OPT(addr,x)     heap[addr].option = x
+#define SET_TR(addr,x)      heap[addr].trace = x
 #define SET_CHAR(addr,x)    heap[addr].name[0] = x
 #define SET(addr,x)         heap[addr] = heap[x]
 #define IS_INCELL(addr)     (addr >= 0 && addr < CELLSIZE)
@@ -901,6 +904,7 @@ int get_free_variable(int x, int y);
 int get_predicate(int x);
 int getatom(char *name, int property, int index);
 int getsym(char *name, int index);
+int gettrace(int goal);
 int greaterp(int x1, int x2);
 int groundp(int addr);
 int has_cut_p(int addr);
@@ -1023,8 +1027,8 @@ int postfixp(int addr);
 int predicatep(int addr);
 int prefixp(int addr);
 int prev(int x);
-int prove(int goal, int bindings, int rest, int n);
-int prove_all(int goals, int bindings, int n);
+int prove(int goal, int bindings, int rest);
+int prove_all(int goals, int bindings);
 int quoted_option_p(int x);
 int quotient(int x, int y);
 int readparse(void);
@@ -1115,8 +1119,10 @@ void cellprint(int addr);
 void checkarg(int test, char *fun, int arg);
 void checkgbc(void);
 void clrcell(int addr);
+void clrtrace(int goal);
 void cut_zero(int x);
-void debugger(int end, int bindings, int choice, int n);
+void debugger(int end, int bindings, int choice);
+void dectrace(int goal);
 void defbuiltin(char *name, int(*func)(int, int), int arity);
 void defcompiled(char *name, int(*func)(int, int), int arity);
 void definfix(char *name, int(*func)(int, int), int weight, int spec);
@@ -1132,6 +1138,7 @@ void gbcmark(void);
 void gbcsweep(void);
 void gettoken(void);
 void heapdump(int start, int end);
+void inctrace(int goal);
 void init_repl(void);
 void initbuiltin(void);
 void initcell(void);
@@ -1173,7 +1180,7 @@ void release_variant(int x);
 void reset(int i);
 void set_sign(int x, int y);
 void sprint(int addr);
-void trace(int port, int goal, int bindings, int rest, int n);
+void trace(int port, int goal, int bindings, int rest);
 void ucs4_to_utf8(int n, char *p);
 void unbind(int x);
 void unreadc(char c);

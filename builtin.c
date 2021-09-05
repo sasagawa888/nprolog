@@ -250,7 +250,7 @@ int b_repeat(int arglist, int rest){
     n = length(arglist);
     if(n == 0){
         loop:
-        if(prove_all(rest,sp,0) == YES){
+        if(prove_all(rest,sp) == YES){
             return(YES);
         }
     wp = save1;
@@ -940,7 +940,7 @@ int b_stdin(int arglist, int rest){
         
         save1 = input_stream;
         save2 = sp;
-        if(prove_all(arg2,sp,0) == YES){
+        if(prove_all(arg2,sp) == YES){
             input_stream = save1;
             return(YES);
         }
@@ -966,7 +966,7 @@ int b_stdout(int arglist, int rest){
         
         save1 = output_stream;
         save2 = sp;
-        if(prove_all(arg2,sp,0) == YES){
+        if(prove_all(arg2,sp) == YES){
             output_stream = save1;
             return(YES);
         }
@@ -996,7 +996,7 @@ int b_stdinout(int arglist, int rest){
         save1 = input_stream;
         save2 = output_stream;
         save3 = sp;
-        if(prove_all(arg3,sp,0) == YES){
+        if(prove_all(arg3,sp) == YES){
             input_stream = save1;
             output_stream = save2;
             return(YES);
@@ -1312,7 +1312,7 @@ int b_consult(int arglist, int rest){
             //e.g. :- op(...)
             if(operationp(clause) && car(clause) == DEFINE && length(clause) == 2){
                 clause = cadr(clause);
-                prove_all(clause,sp,0);
+                prove_all(clause,sp);
                 goto skip;
             }
             // DCG syntax e.g. a-->b.
@@ -1379,9 +1379,9 @@ int b_reconsult(int arglist, int rest){
             if(operationp(clause) && car(clause) == DEFINE && length(clause) == 2){
                 clause = cadr(clause);
                 if(arg2 == NIL)
-                    prove_all(clause,sp,0);
+                    prove_all(clause,sp);
                 else if(arg2 != NIL && !predicatep(cadr(clause)))
-                    prove_all(clause,sp,0);
+                    prove_all(clause,sp);
                 execute_list = listcons(clause,execute_list);
                 goto skip;
             }
@@ -1518,7 +1518,7 @@ int b_directory(int arglist, int rest){
                 unify(arg4,time);
                 unify(arg5,date);
                 unify(arg6,makeint(stat_buf.st_size));
-                if(prove_all(rest,sp,0) == YES)
+                if(prove_all(rest,sp) == YES)
                     return(YES);
             }
             else
@@ -2063,7 +2063,7 @@ int b_call(int arglist, int rest){
         if(wide_variable_p(arg1))
             error(INSTANTATION_ERR,"call ",arg1);
 
-        res = prove_all(addtail_body(rest,arg1),sp,n);
+        res = prove_all(addtail_body(rest,arg1),sp);
         return(res);
     }
     
@@ -2081,7 +2081,7 @@ int b_not(int arglist, int rest){
         if(!callablep(arg1))
             error(NOT_CALLABLE,"not ", arg1);
 
-        res = prove(arg1,sp,NIL,0);
+        res = prove(arg1,sp,NIL);
         if(res == YES)
             return(NO);
         else
@@ -2236,7 +2236,7 @@ int b_retract(int arglist, int rest){
                 else if(clausep(arg1))
                     SET_CAR(car(cadr(arg1)),append(listreverse(new_clauses),clauses));
 
-                if(prove_all(rest,sp,0) == YES)
+                if(prove_all(rest,sp) == YES)
                     return(YES);
                 else
                     goto next;
@@ -2340,12 +2340,12 @@ int b_clause(int arglist, int rest){
             clauses = cdr(clauses);
             if(clausep(clause) && unify(arg1,cadr(clause)) == YES &&
                 unify(arg2,caddr(clause)) == YES){
-                if(prove_all(rest,sp,0) == YES)
+                if(prove_all(rest,sp) == YES)
                     return(YES);
             }
             else if(predicatep(clause) && unify(arg1,clause) == YES &&
                     unify(arg2,NPLTRUE) == YES){
-                if(prove_all(rest,sp,0) == YES)
+                if(prove_all(rest,sp) == YES)
                     return(YES);
             }
             wp = save1;
@@ -2933,8 +2933,8 @@ int b_ifthen(int arglist, int rest){
         if(variablep(arg2))
             error(INSTANTATION_ERR,"ifthen ",arg2);
 
-        if(prove_all(arg1,sp,0) == YES){
-            return(prove_all(arg2,sp,0));
+        if(prove_all(arg1,sp) == YES){
+            return(prove_all(arg2,sp));
         }
         else{
             unbind(save1);
@@ -2964,12 +2964,12 @@ int b_ifthenelse(int arglist, int rest){
             error(INSTANTATION_ERR,"ifthenelse ",arg3);    
 
         save = sp;
-        if(prove_all(arg1,sp,0) == YES){
-            return(prove_all(arg2,sp,0));
+        if(prove_all(arg1,sp) == YES){
+            return(prove_all(arg2,sp));
         }
         else{
             unbind(save);
-            return(prove_all(arg3,sp,0));
+            return(prove_all(arg3,sp));
         }
     }
     return(NO);
@@ -2998,7 +2998,7 @@ int b_measure(int arglist, int rest){
         arg1 = car(arglist);
         proof = 0;
         start_time = getETime(); //time_flag on and it store start time
-        res = prove_all(arg1,sp,0);
+        res = prove_all(arg1,sp);
         end_time = getETime();
         time = end_time - start_time;
         lips = (double)proof / time; 
@@ -3261,7 +3261,7 @@ int b_system(int arglist, int rest){
                 pred = car(syslist);
                 syslist = cdr(syslist);
                 if(unify(arg1,pred) == YES)
-                    if(prove(NIL,sp,rest,0) == YES)
+                    if(prove(NIL,sp,rest) == YES)
                         return(YES);
                 
                 wp = save1;
@@ -3650,7 +3650,7 @@ int b_current_predicate(int arglist, int rest){
                 arity = car(aritylist);
                 aritylist = cdr(aritylist);   
                 if(unify(arg1,list3(makeatom("/",OPE),pred,arity)) == YES)
-                    if(prove(NIL,sp,rest,0) == YES)
+                    if(prove(NIL,sp,rest) == YES)
                         return(YES);
                 
                 wp = save1;
@@ -3694,7 +3694,7 @@ int b_current_op(int arglist, int rest){
             s = unify(arg2,spec);
             o = unify(arg3,op);
             if(w == YES && s == YES && o == YES)
-                if(prove(NIL,sp,rest,0) == YES)
+                if(prove(NIL,sp,rest) == YES)
                     return(YES);
             lis = cdr(lis);
             wp = save1;
@@ -3780,7 +3780,7 @@ int o_define(int x, int y){
     }
     // :- predicate.
     else{
-        return(prove_all(x,sp,0));
+        return(prove_all(x,sp));
     }
     return(NO);
 }
@@ -3791,7 +3791,7 @@ int o_dcg(int x, int y){
     clause = list2(makepred("dcg_expand"),
                 list3(makeatom("-->",OPE),x,y));
 
-    res = prove_all(clause,sp,0);
+    res = prove_all(clause,sp);
     return(res);
 }
 
@@ -4023,7 +4023,7 @@ int b_member(int arglist, int rest){
         x = makevariant();
         l = makevariant();
         if(unify(arg1,x) == YES && unify(arg2,wlistcons(x,l)) == YES){
-            if(prove(NIL,sp,rest,0) == YES)
+            if(prove(NIL,sp,rest) == YES)
                 return(YES);
         }
         wp = save1;
@@ -4036,7 +4036,7 @@ int b_member(int arglist, int rest){
         if(unify(arg1,x) == YES &&
            unify(arg2,wlistcons(y,l)) == YES){
             body = wlist3(makeatom("member",COMP),x,l);
-            if(prove(body,sp,rest,0) == YES)
+            if(prove(body,sp,rest) == YES)
                 return(YES);
         }
         wp = save1;
@@ -4061,7 +4061,7 @@ int b_append(int arglist, int rest){
 
         save1 = wp;
         if(unify(arg1,NIL) == YES && unify(arg2,arg3) == YES){
-            if(prove(NIL,sp,rest,0) == YES)
+            if(prove(NIL,sp,rest) == YES)
                 return(YES);
         }
         wp = save1;
@@ -4076,7 +4076,7 @@ int b_append(int arglist, int rest){
            unify(arg2,ys) == YES &&
            unify(arg3,wlistcons(x,zs)) == YES){
             body = wlist4(makeatom("append",COMP),ls,ys,zs);
-            if(prove(body,sp,rest,0) == YES)
+            if(prove(body,sp,rest) == YES)
                 return(YES);
         }
         wp = save1;
@@ -4138,7 +4138,7 @@ int b_between(int arglist, int rest){
         while(low <= high){
             //printf("%d",low);
             unify(arg3,makeint(low));
-            if(prove_all(rest,sp,0) == YES)
+            if(prove_all(rest,sp) == YES)
                 return(YES);
             
             low++;
@@ -4597,7 +4597,7 @@ int b_retrieveh(int arglist, int rest){
                 goto skip;
 
             unify(arg3,term);
-            if(prove_all(rest,sp,0) == YES)
+            if(prove_all(rest,sp) == YES)
                 return(YES);
             
             unbind(save1);
@@ -4733,7 +4733,7 @@ int b_removeh(int arglist, int rest){
                 else
                     record_hash_table[index][record_id] = cdr(lis); 
                     // if term is first one of list, set hashtable cdr of lis
-                if(prove_all(rest,sp,0) == YES)
+                if(prove_all(rest,sp) == YES)
                     return(YES);
             }
             unbind(save1);

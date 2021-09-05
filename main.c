@@ -371,7 +371,7 @@ void query(int x){
         error(NOT_CALLABLE,"?- ", x);
 
     variables = listreverse(unique(varslist(x)));
-    res = prove_all(addask(x),sp,0);
+    res = prove_all(addask(x),sp);
     ESCRST;
     print(res);printf("\n");
     return;
@@ -414,20 +414,20 @@ int addtail_body(int x, int y){
 }
 
 
-int prove_all(int goals, int bindings, int n){
+int prove_all(int goals, int bindings){
     int res;
 
     if(nullp(goals))
         return(YES);
     else if(car(goals) != AND)
-        return(prove(goals,bindings,NIL,n));
+        return(prove(goals,bindings,NIL));
     else{
         if(!has_cut_p(goals)){
-            return(prove(cadr(goals),bindings,caddr(goals),n));
+            return(prove(cadr(goals),bindings,caddr(goals)));
         }
         else{
-            if(prove_all(before_cut(goals),bindings,n) == YES){
-                res = prove_all(after_cut(goals),sp,n);
+            if(prove_all(before_cut(goals),bindings) == YES){
+                res = prove_all(after_cut(goals),sp);
                 if(res == YES)
                     return(YES);
                 else if(res == NO)
@@ -441,7 +441,7 @@ int prove_all(int goals, int bindings, int n){
     return(NO);
 }
 
-int prove(int goal, int bindings, int rest, int n){
+int prove(int goal, int bindings, int rest){
     int clause,clauses,clause1,varlis,save1,save2,res;
 
     proof++;
@@ -453,19 +453,19 @@ int prove(int goal, int bindings, int rest, int n){
     goal = deref(goal);
     
     if(nullp(goal)){
-        return(prove_all(rest,bindings,n));
+        return(prove_all(rest,bindings));
     }
     else if(builtinp(goal)){
         if(atomp(goal)){
             if((GET_SUBR(goal))(NIL,rest) == YES)
-                return(prove_all(rest,sp,n));
+                return(prove_all(rest,sp));
 
             unbind(bindings);
             return(NO);
         }
         else{
             if((GET_SUBR(car(goal)))(cdr(goal),rest) == YES)
-                return(prove_all(rest,sp,n));
+                return(prove_all(rest,sp));
 
             unbind(bindings);
             return(NO);
@@ -488,7 +488,7 @@ int prove(int goal, int bindings, int rest, int n){
     else if(predicatep(goal)){
         //trace
         if(debug_flag == ON)
-            trace(DBCALL,goal,bindings,rest,n);
+            trace(DBCALL,goal,bindings,rest);
 
         if(atomp(goal))
             clauses = GET_CAR(goal);
@@ -514,17 +514,17 @@ int prove(int goal, int bindings, int rest, int n){
             // case of predicate
             if(predicatep(clause1)){
                 if(unify(goal,clause1) == YES){
-                    if(prove_all(rest,sp,n+1) == YES){
+                    if(prove_all(rest,sp) == YES){
                         //trace
                         if(debug_flag == ON)
-                            trace(DBEXIT,goal,bindings,rest,n);
+                            trace(DBEXIT,goal,bindings,rest);
                         
                         return(YES);
                     }
                     else{
                         //trace
                         if(debug_flag == ON)
-                            trace(DBFAIL,goal,bindings,rest,n);
+                            trace(DBFAIL,goal,bindings,rest);
                     }
                 }
             }
@@ -532,10 +532,10 @@ int prove(int goal, int bindings, int rest, int n){
             else{
                 if(unify(goal,(cadr(clause1))) == YES){
                     clause1 = addtail_body(rest,caddr(clause1));
-                    if((res=prove_all(clause1,sp,n+1)) == YES){
+                    if((res=prove_all(clause1,sp)) == YES){
                         //trace
                         if(debug_flag == ON)
-                            trace(DBEXIT,goal,bindings,rest,n);
+                            trace(DBEXIT,goal,bindings,rest);
 
                         return(YES);
                     }
@@ -551,7 +551,7 @@ int prove(int goal, int bindings, int rest, int n){
             }
             //trace
             if(debug_flag == ON)
-                trace(DBREDO,goal,bindings,rest,n);
+                trace(DBREDO,goal,bindings,rest);
             
             wp = save1;
             ac = save2;
@@ -559,16 +559,16 @@ int prove(int goal, int bindings, int rest, int n){
         }
         //trace
         if(debug_flag == ON)
-            trace(DBFAIL,goal,bindings,rest,n);
+            trace(DBFAIL,goal,bindings,rest);
         
     }
     else if(disjunctionp(goal)){
         if(ifthenp(cadr(goal))){
             goal = wcons(IFTHENELSE,wcons(cadr(cadr(goal)),wcons(caddr(cadr(goal)),wcons(caddr(goal),NIL))));
             // redefine goal = ifthenelse(if,then,else)
-            return(prove(goal,bindings,rest,n));
+            return(prove(goal,bindings,rest));
         }
-        else if((res=prove_all(addtail_body(rest,cadr(goal)),bindings,n)) == YES)
+        else if((res=prove_all(addtail_body(rest,cadr(goal)),bindings)) == YES)
             return(YES);
         else{
             if(res == NPLFALSE){
@@ -576,7 +576,7 @@ int prove(int goal, int bindings, int rest, int n){
                 return(NO);
             }
             unbind(bindings);
-            if(prove_all(addtail_body(rest,caddr(goal)),bindings,n) == YES)
+            if(prove_all(addtail_body(rest,caddr(goal)),bindings) == YES)
                 return(YES)
 ;            else{
                 unbind(bindings);
@@ -619,7 +619,7 @@ int after_cut(int x){
     
 }
 
-void trace(int port, int goal, int bindings, int rest, int n){
+void trace(int port, int goal, int bindings, int rest){
     int spy,leap;
 
     if(port == DBCALL){
@@ -651,10 +651,10 @@ void trace(int port, int goal, int bindings, int rest, int n){
             else
                 leap_point = NIL;
             
-
-            printf("(%d) CALL: ", n); print(goal);
+            printf("(%d) CALL: ", gettrace(goal)); print(goal);
+            inctrace(goal);
             port = DBCALL;
-            debugger(goal,bindings,rest,n);
+            debugger(goal,bindings,rest);
         }
     }
     else if(port == DBREDO){
@@ -688,9 +688,10 @@ void trace(int port, int goal, int bindings, int rest, int n){
             else
                 leap_point = NIL;
                 
-            printf("(%d) REDO: ", n); print(goal);
+            printf("(%d) REDO: ", gettrace(goal)); print(goal);
+            inctrace(goal);
             port = DBREDO;
-            debugger(goal,bindings,rest,n);
+            debugger(goal,bindings,rest);
         }
     }
     else if(port == DBFAIL){
@@ -725,9 +726,10 @@ void trace(int port, int goal, int bindings, int rest, int n){
             else
                 leap_point = NIL;
                             
-            printf("(%d) FAIL: ", n); print(goal);
+            printf("(%d) FAIL: ", gettrace(goal)); print(goal);
+            dectrace(goal);
             port = DBFAIL;
-            debugger(goal,bindings,rest,n);
+            debugger(goal,bindings,rest);
             }
     }
     else if(port == DBEXIT){
@@ -764,14 +766,43 @@ void trace(int port, int goal, int bindings, int rest, int n){
                 leap_point = NIL;
                             
                 
-            printf("(%d) EXIT: ", n); print(goal);
+            printf("(%d) EXIT: ", gettrace(goal)); print(goal);
+            dectrace(goal);
             port = DBEXIT;
-            debugger(goal,bindings,rest,n);
+            debugger(goal,bindings,rest);
         }
     }
 }
 
-void debugger(int goal, int bindings, int rest, int n){
+void inctrace(int goal){
+    if(atomp(goal))
+        SET_TR(goal,GET_TR(goal)+1);
+    else
+        SET_TR(car(goal),GET_TR(car(goal))+1);
+}
+
+void dectrace(int goal){
+    if(atomp(goal))
+        SET_TR(goal,GET_TR(goal)-1);
+    else
+        SET_TR(car(goal),GET_TR(car(goal))-1);
+}
+
+void clrtrace(int goal){
+    if(atomp(goal))
+        SET_TR(goal,0);
+    else
+        SET_TR(car(goal),0);
+}
+
+int gettrace(int goal){
+    if(atomp(goal))
+        return(GET_TR(goal));
+    else
+        return(GET_TR(car(goal)));
+}
+
+void debugger(int goal, int bindings, int rest){
     int c,save,i,read;
 
     loop:
