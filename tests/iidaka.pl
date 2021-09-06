@@ -6,3 +6,6 @@ test :-
     write(A),
     tab(1),
     fail.
+
+positive(L) :- member(X,L),ifthenelse(X>0,fail,(!,fail)).
+positive(L).

@@ -4177,9 +4177,10 @@ int b_keysort(int arglist, int rest){
 }
 
 int b_member(int arglist, int rest){
-    int n,arg1,arg2,x,y,l,save1,save2,body;
+    int n,arg1,arg2,x,y,l,save1,save2,body,res;
 
     save2 = sp;
+    res = NIL;
     n = length(arglist);
     if(n == 2){
         arg1 = car(arglist);
@@ -4190,11 +4191,14 @@ int b_member(int arglist, int rest){
         x = makevariant();
         l = makevariant();
         if(unify(arg1,x) == YES && unify(arg2,wlistcons(x,l)) == YES){
-            if(prove(NIL,sp,rest) == YES)
+            if((res=prove(NIL,sp,rest)) == YES)
                 return(YES);
         }
+        
         wp = save1;
         unbind(save2);
+        if(res == NPLFALSE)
+            return(res);
 
         save1 = wp;
         x = makevariant();
@@ -4203,12 +4207,12 @@ int b_member(int arglist, int rest){
         if(unify(arg1,x) == YES &&
            unify(arg2,wlistcons(y,l)) == YES){
             body = wlist3(makeatom("member",SYS),x,l);
-            if(prove(body,sp,rest) == YES)
+            if((res=prove(body,sp,rest)) == YES)
                 return(YES);
         }
         wp = save1;
         unbind(save2);
-        return(NO);
+        return(res);
     }
     return(NO);
 }

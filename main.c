@@ -457,16 +457,16 @@ int prove(int goal, int bindings, int rest){
     }
     else if(builtinp(goal)){
         if(atomp(goal)){
-            if((GET_SUBR(goal))(NIL,rest) == YES)
+            if((res=(GET_SUBR(goal))(NIL,rest)) == YES)
                 return(YES);
 
-            return(NO);
+            return(res);
         }
         else{
-            if((GET_SUBR(car(goal)))(cdr(goal),rest) == YES)
+            if((res=(GET_SUBR(car(goal)))(cdr(goal),rest)) == YES)
                 return(YES);
 
-            return(NO);
+            return(res);
         }
     }
     else if(compiledp(goal)){
