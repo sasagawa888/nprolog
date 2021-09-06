@@ -1124,7 +1124,10 @@ int n,arg1,arg2,arg3,varD1,varN,varL,varB,varD;
 if(n == 3){
     loop:
     head = Jwlist3(NIL,makeconst("_"),makeconst("_"));
-    if(Jcar(arglist) == NIL) return(Junify(arglist,head));
+    if(Jcar(arglist) == NIL){if(Junify(arglist,head)==YES) 
+                                  return(Jprove_all(rest,Jget_sp()));
+                             else 
+                                  return(NO);}
 
     varN = Jcar(car(arglist));
     varL = Jcdr(car(arglist));
@@ -1290,7 +1293,7 @@ jump_gen_tail_head_unify1([X|Xs]) :-
 jump_gen_tail_head_unify2(X) :-
     write('if('),
     jump_gen_tail_head2(X,[]),
-    write(') return(Junify(arglist,head));'),
+    write('){if(Junify(arglist,head)==YES) return(Jprove_all(rest,Jget_sp())); else return(NO);}'),
     nl.
     
 % unify head
