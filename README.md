@@ -1,8 +1,3 @@
-# caution
-
-We are currently making major changes to the proof code.
-Therefore, the operation is unstable. Please use the released code. 
-
 # N-Prolog
 N-Prolog(NPL) is an interpreter and compiler to be compatible with Arity/Prolog32.
 
