@@ -803,6 +803,8 @@ int f_mod(int x, int y){
         error(NOT_NUM,"mod ",x);
     if(!numberp(y))
         error(NOT_NUM,"mod ",y);
+    if(y == makeint(0))
+        error(DIV_ZERO, "mod",y);
     if(!wide_integer_p(x))
         error(NOT_INT,"mod ",x);
     if(!wide_integer_p(y))
