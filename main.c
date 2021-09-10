@@ -11,6 +11,7 @@ written by kenichi sasagawa 2016/8~
 
 //global vers
 int proof = 0;
+int nest = 0;
 cell heap[CELLSIZE];
 int cell_hash_table[HASHTBSIZE];
 int variant[VARIANTSIZE];
@@ -324,6 +325,7 @@ void init_repl(void){
 
     stok.flag = GO;
     proof = 0;
+    nest  = 0;
     ac = CELLSIZE+1;
     wp = HEAPSIZE+1;
     unbind(0);
@@ -449,6 +451,8 @@ int prove(int goal, int bindings, int rest){
         printf("ctrl+C\n\n");
         longjmp(buf,1);
     }
+    if(nest > 50000)
+        error(RESOURCE_ERR,"",NIL);
 
     goal = deref(goal);
     
@@ -530,7 +534,9 @@ int prove(int goal, int bindings, int rest){
             else{
                 if(unify(goal,(cadr(clause1))) == YES){
                     clause1 = addtail_body(rest,caddr(clause1));
+                    nest++;
                     if((res=prove_all(clause1,sp)) == YES){
+                        nest--;
                         //trace
                         if(debug_flag == ON)
                             trace(DBEXIT,goal,bindings,rest);
@@ -538,6 +544,7 @@ int prove(int goal, int bindings, int rest){
                         return(YES);
                     }
                     else{
+                        nest--;
                         if(res == NPLFALSE){ // when after cut occurs NO
                             //trace
                             if(debug_flag == ON)

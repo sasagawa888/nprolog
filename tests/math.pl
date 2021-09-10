@@ -1,3 +1,6 @@
+foo(N) :-
+    N1 is N+1,foo(N1).
+
 
 divisor(N,L) :-
     divisor1(N,N,L).
