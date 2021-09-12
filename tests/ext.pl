@@ -63,3 +63,14 @@ partition(P,[L|Ls],Y,[L|Z]) :-
     partition(P,Ls,Y,Z).
 
 
+bagof(V,G,L) :-
+a(1)
+.
+
+free_var(V^G,L) :-
+    free_var1(V,L).
+free_var(G,[]).
+
+free_var1(V1^V2,[V1|L]) :-
+    free_var1(V2,L).
+free_var1(V,[V]).

@@ -12,7 +12,7 @@ address
 17,000,001 - 20,000,000  working area 
 20,000,001 - 40,000,000  variant area
 */
-#define VERSION     1.77
+#define VERSION     1.80
 #define CELLSIZE    20000000  // this is max on raspberryPI3B. If parsonal computer 30000000 is OK
 #define HEAPSIZE    17000000
 #define FREESIZE         500
@@ -158,6 +158,8 @@ extern int execute_list;
 extern int op_list;
 extern int record_list;
 extern int error_code;
+extern int bag_list;
+extern int nonfree_list;
 extern int proof;
 extern int parse_mode;
 extern int left_margin;
@@ -599,6 +601,8 @@ int b_atom_concat(int arglist, int rest);
 int b_atomic(int arglist, int rest);
 int b_atom_convert(int arglist, int rest);
 int b_atsmaller(int arglist, int rest);
+int b_bagof(int arglist, int rest);
+int b_bagofhelper(int arglist, int rest);
 int b_between(int arglist, int rest);
 int b_bignum(int arglist, int rest);
 int b_break(int arglist, int rest);
@@ -646,6 +650,7 @@ int b_eqsmaller(int arglist, int rest);
 int b_equalp(int arglist, int rest);
 int b_errorcode(int arglist, int rest);
 int b_fail(int arglist, int rest);
+int b_findall(int arglist, int rest);
 int b_findatom(int arglist, int rest);
 int b_filename(int arglist, int rest);
 int b_float_text(int arglist, int rest);
@@ -726,6 +731,7 @@ int b_removeallh(int arglist, int rest);
 int b_see(int arglist, int rest);
 int b_seeing(int arglist, int rest);
 int b_seen(int arglist, int rest);
+int b_setof(int arglist, int rest);
 int b_set_input(int arglist, int rest);
 int b_set_output(int arglist, int rest);
 int b_shell(int arglist, int rest);
@@ -900,8 +906,9 @@ int get_wp(void);
 int get_up(void);
 int get_goal(int n);
 int get_cut_jmp(void);
-int get_notfree_variable(int x);
-int get_free_variable(int x, int y);
+int get_free(int x);
+int get_goal(int x);
+int get_nonfree(int x, int y, int z);
 int get_predicate(int x);
 int getatom(char *name, int property, int index);
 int getsym(char *name, int index);
@@ -1040,6 +1047,7 @@ int readparen(void);
 int readdouble(void);
 int read_string_term(int flag);
 int remove_cut(int x);
+int remove_duplicate(int x);
 int replace(int x, int lis);
 int reposition_option_p(int x);
 int resolve_all(int end, int bindings, int n);
@@ -1068,6 +1076,7 @@ int string_length(int addr);
 int singlep(int addr);
 int streqp(int x, int y);
 int symboltoken(char buf[]);
+int takeoutbug(int key);
 int termp(int addr);
 int term_variables(int x, int y);
 int type_option_p(int x);
@@ -1111,6 +1120,7 @@ int zerop(int x);
 void add_hash_pred(int pred, int record_id, int index);
 void add_data(int pred, int data);
 void addtail_body1(int x, int y);
+void apply_unify(int x);
 void assign_variant(int x);
 void bigx_gbc(int x);
 void bigx_minus2(int arg, int c, int msb);
@@ -1175,6 +1185,7 @@ void printsexp(int addr);
 void printtuple(int addr);
 void push_stack(int x);
 void push_ustack(int x);
+void putinbag(int key, int data);
 void query(int x);
 void recall_variant(int x);
 void release_variant(int x);

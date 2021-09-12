@@ -32,6 +32,8 @@ int execute_list = NIL;
 int op_list = NIL;
 int record_list = NIL;
 int error_code = 0;
+int bag_list;
+int nonfree_list;
 int unread = NIL;     //for parse
 int paren_nest = 0;   //for parse check ((()))
 int left_margin = 4;  //for read_line 
@@ -135,7 +137,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 {"heapd"},{"list_text"},
 {"member"},{"append"},{"repeat"},{"system"},
 {"retract"},{"clause"},{"call"},{"directory"},
-{"between"},
+{"between"},{"bagof"},{"setof"},{"findall"},
 {"current_predicate"},{"current_op"},{"retrieveh"},{"removeh"}
 };
 

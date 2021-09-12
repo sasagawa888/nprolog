@@ -1108,6 +1108,15 @@ int listremove(int x, int y){
         return(cons(car(y),listremove(x,cdr(y))));
 }
 
+int remove_duplicate(int x){
+    if(nullp(x))
+        return(NIL);
+    else if(memq(car(x),cdr(x)))
+        return(remove_duplicate(cdr(x)));
+    else
+        return(listcons(car(x),remove_duplicate(cdr(x))));
+}
+
 /*
 x1 is ignore
 */

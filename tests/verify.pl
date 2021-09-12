@@ -9,12 +9,13 @@ alltest :-
     test(Test),write(Test),nl,fail.
 alltest.
 
-test1 :- test(number),write('ok'),nl.
 
 test(atmark) :-
     verify(3 @> 2.1),
     verify([1,2,3] @>= [1,2,3]),
-    verify([2,2,3] @> [1,2,3]).
+    verify([2,2,3] @> [1,2,3]),
+    verify(prolog @>pro),
+    verify(pro @< prolog).
 
 test(atom) :-
     verify(atom(a)),

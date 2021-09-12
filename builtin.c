@@ -53,6 +53,8 @@ void initbuiltin(void){
     defbuiltin("atom",b_atom,1);
     defbuiltin("atom_string",b_atom_string,2);
     defbuiltin("atomic",b_atomic,1);
+    defbuiltin("bagof",b_bagof,3);
+    defbuiltin("%bagofhelper",b_bagofhelper,-1);
     defbuiltin("break",b_break,0);
     defbuiltin("char_code",b_char_code,2);
     defbuiltin("chdir",b_chdir,1);
@@ -77,6 +79,7 @@ void initbuiltin(void){
     defbuiltin("eq",b_eq,2);
     defbuiltin("errorcode",b_errorcode,1);
     defbuiltin("fail",b_fail,0);
+    defbuiltin("findall",b_findall,3);
     defbuiltin("flush",b_flush_output,0);
     defbuiltin("float",b_real,1);
     defbuiltin("float_text",b_float_text,3);
@@ -131,6 +134,7 @@ void initbuiltin(void){
     defbuiltin("see",b_see,1);
     defbuiltin("seeing",b_seeing,1);
     defbuiltin("seen",b_seen,0);
+    defbuiltin("setof",b_setof,3);
     defbuiltin("shell",b_shell,1);
     defbuiltin("skip",b_skip,1);
     defbuiltin("sort",b_sort,2);
@@ -4332,6 +4336,208 @@ int b_between(int arglist, int rest){
     return(NO);
 }
 
+
+int b_bagof(int arglist, int rest){
+    int n,arg1,arg2,arg3,save1,save2,free,vars,nonfree,goal,lis;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        arg3 = caddr(arglist);
+
+        save1 = wp;
+        save2 = sp;
+        vars = listreverse(unique(varslist(arg2)));
+        free = get_free(arg2);
+        nonfree = get_nonfree(vars,free,arg1);
+        goal = get_goal(arg2);
+        goal = addtail_body(list2(makesys("%bagofhelper"),arg1),goal);
+        bag_list = NIL;
+        nonfree_list = nonfree;
+        prove_all(goal,sp);
+
+        lis = reverse(bag_list);
+        while(!nullp(lis)){
+            apply_unify(caar(lis));
+            unify(arg3,listreverse(cdar(lis)));
+            if(prove_all(rest,sp) == YES)
+                return(YES);
+            
+            wp = save1;
+            unbind(save2);
+            lis = cdr(lis);
+        }
+        return(NO);
+    }
+    return(NO);
+}
+
+
+int b_setof(int arglist, int rest){
+    int n,arg1,arg2,arg3,save1,save2,free,vars,nonfree,goal,lis;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        arg3 = caddr(arglist);
+
+        save1 = wp;
+        save2 = sp;
+        vars = listreverse(unique(varslist(arg2)));
+        free = get_free(arg2);
+        nonfree = get_nonfree(vars,free,arg1);
+        goal = get_goal(arg2);
+        goal = addtail_body(list2(makesys("%bagofhelper"),arg1),goal);
+        bag_list = NIL;
+        nonfree_list = nonfree;
+        prove_all(goal,sp);
+
+        lis = reverse(bag_list);
+        while(!nullp(lis)){
+            apply_unify(caar(lis));
+            unify(arg3,sort(remove_duplicate(cdar(lis))));
+            if(prove_all(rest,sp) == YES)
+                return(YES);
+            
+            wp = save1;
+            unbind(save2);
+            lis = cdr(lis);
+        }
+        return(NO);
+    }
+    return(NO);
+}
+
+int b_findall(int arglist, int rest){
+    int n,arg1,arg2,arg3,save1,save2,goal;
+
+    n = length(arglist);
+    if(n == 3){
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        arg3 = caddr(arglist);
+
+        save1 = wp;
+        save2 = sp;
+        goal = get_goal(arg2);
+        goal = addtail_body(list2(makesys("%bagofhelper"),arg1),goal);
+        bag_list = NIL;
+        nonfree_list = NIL;
+        prove_all(goal,sp);
+
+        unify(arg3,listreverse(cdar(bag_list)));
+        if(prove_all(rest,sp) == YES)
+            return(YES);
+            
+        wp = save1;
+        unbind(save2);
+        return(NO);
+    }
+    return(NO);
+}
+
+
+/*
+X^Y^foo(Z) == ^(X,^(Y,foo(Z)))  -> [X,Y]
+*/
+int get_free(int x){
+    if(car(x) == makeope("^"))
+        return(listcons(cadr(x),get_free(caddr(x))));
+    else
+        return(NIL);    
+}
+
+/*
+X^Y^foo(Z) == ^(X,^(Y,foo(Z)))  -> foo(Z)
+*/
+int get_goal(int x){
+    if(car(x) == makeope("^"))
+        return(get_goal(caddr(x)));
+    else
+        return(x);
+}
+
+/*
+x = [A,B,C]  y = [C] -> [A,B]
+*/
+int get_nonfree(int x, int y, int z){
+    if(nullp(x))
+        return(NIL);
+    else if(eqlp(car(x),z))
+        return(get_nonfree(cdr(x),y,z));
+    else if(memq(car(x),y))
+        return(get_nonfree(cdr(x),y,z));
+    else 
+        return(listcons(car(x),get_nonfree(cdr(x),y,z)));
+}
+
+/*
+key = ((A.1)(B.2)) -> unify(A,1) unify(B,2)
+*/
+void apply_unify(int x){
+    int lis;
+
+    lis = x;
+    while(!nullp(lis)){
+        unify(caar(lis),cdar(lis));
+        lis = cdr(lis);
+    }
+}
+
+int b_bagofhelper(int arglist, int rest){
+    int n,arg1,nonfree,key;
+
+    n = length(arglist);
+    if(n == 1){
+        arg1 = car(arglist);   //target var    
+
+        nonfree = nonfree_list;
+        key = NIL;
+        while(!nullp(nonfree)){
+            key = cons(cons(car(nonfree),deref(car(nonfree))),key);
+            nonfree = cdr(nonfree);
+        }
+        putinbag(key,deref(arg1));
+        return(NO);
+    }
+    return(NO);
+}
+
+
+/*
+bag data structure
+((key1 . data1)(key2 . data2)...)
+key = ((var1 . val1)(var2 . val2)...)
+data = [a,b,a,d...]
+*/
+void putinbag(int key, int data){
+    int lis;
+
+    lis = bag_list;
+    while(!nullp(lis)){
+        if(equalp(key,caar(lis))){
+            SET_CDR(car(lis),listcons(data,cdar(lis)));
+            return;
+        }
+        lis = cdr(lis);
+    }
+    bag_list = cons(cons(key,listcons(data,NIL)),bag_list);
+}
+
+int takeoutbug(int key){
+    int lis;
+
+    lis = bag_list;
+    while(!nullp(lis)){
+        if(equalp(key,caar(lis))){
+            return(cdar(lis));
+        }
+        lis = cdr(lis);
+    }
+    return(NIL);
+}
 
 //------------------------------------------------
 
