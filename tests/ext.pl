@@ -1,23 +1,3 @@
-findall(X,G,_) :-
-    asserta(item(no_more)),
-    call(G),
-    asserta(item(X)),
-    fail.
-
-findall(_,_,List) :-
-    collect_item([],L),!,
-    List = L.
-
-
-collect_item(S,L) :-
-    next_item(X),!,
-    collect_item([X|S],L).
-collect_item(L,L).
-
-next_item(X) :-
-    retract(item(X)),!,
-    X \== no_more.
-
 
 writeln(X) :-
     write(X),
@@ -63,14 +43,31 @@ partition(P,[L|Ls],Y,[L|Z]) :-
     partition(P,Ls,Y,Z).
 
 
-bagof(V,G,L) :-
-a(1)
-.
+conc([],List,List).
+conc([X|L1],L2,[X|List]) :-
+    conc(L1,L2,List).
 
-free_var(V^G,L) :-
-    free_var1(V,L).
-free_var(G,[]).
+last([X],X).
+last([_|List],X) :-
+    last(List,X).
 
-free_var1(V1^V2,[V1|L]) :-
-    free_var1(V2,L).
-free_var1(V,[V]).
+list_to_atom(Atoms,Name) :-
+    ascii(Atoms,List),
+    name(Name,List).
+
+ascii([Atom],List) :-!,
+    name(Atom,List).
+ascii([Atom|Atoms],List)    :-
+    name(Atom,L),
+    conc(L,Rest,List),
+    !,
+    ascii(Atoms,Rest).
+
+
+retract_all(X) :-
+    retract(X),
+    fail.
+retract_all(X) :-
+    retract((X :- _)),
+    fail.
+retract_all(_).
