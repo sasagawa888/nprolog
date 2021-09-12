@@ -278,6 +278,9 @@ heapd/2     (dump heap area from 1st arg to 2nd arg)
 member/2
 measure/1   (measure elapsed time)
 reverse/2 
+bagof/3
+setof/3
+finall/3
 ```
 
 # wiringPi 

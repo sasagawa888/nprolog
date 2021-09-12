@@ -275,6 +275,9 @@ member/2
 measure/1   (measure elapsed time)
 predicate_property/2
 reverse/2 
+bagof/3
+setof/3
+findall/3
 ```
 
 # wiringPi 
