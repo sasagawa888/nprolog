@@ -4327,6 +4327,7 @@ int b_between(int arglist, int rest){
             low++;
             wp = save1;
             unbind(save2);
+            ac = save3;
         }
         wp = save1;
         unify(arg3,arg2);

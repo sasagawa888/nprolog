@@ -33,6 +33,9 @@ houses(Hs) :-
 adjacent(A, B, Ls) :- append(_, [A,B|_], Ls).
 adjacent(A, B, Ls) :- append(_, [B,A|_], Ls).
 
+
+test :- between(1,1000,N),zebra_owner(O),fail.
+
 /*
 Queries
 ?- zebra_owner(Owner).
