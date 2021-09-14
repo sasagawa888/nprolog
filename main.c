@@ -350,6 +350,13 @@ void init_repl(void){
         SET_CDR(car(i),UNBIND);
         i = cdr(i);
     }
+    //initialize spy-point trace-level
+    i = spy_list;
+    while(!nullp(i)){
+        SET_TR(cadar(i),0);
+        i = cdr(i);
+    }
+    
 }
 
 void query(int x){
