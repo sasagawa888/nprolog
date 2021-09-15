@@ -668,8 +668,8 @@ void trace(int port, int goal, int bindings, int rest){
             else
                 leap_point = NIL;
             
-            printf("(%d) CALL: ", gettrace(goal)); print(goal);
             inctrace(goal);
+            printf("(%d) CALL: ", gettrace(goal)); print(goal);
             port = DBCALL;
             debugger(goal,bindings,rest);
         }
@@ -706,7 +706,6 @@ void trace(int port, int goal, int bindings, int rest){
                 leap_point = NIL;
                 
             printf("(%d) REDO: ", gettrace(goal)); print(goal);
-            //inctrace(goal);
             port = DBREDO;
             debugger(goal,bindings,rest);
         }
