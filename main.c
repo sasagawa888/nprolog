@@ -567,7 +567,7 @@ int prove(int goal, int bindings, int rest){
                 }
             }
             //trace
-            if(debug_flag == ON)
+            if(debug_flag == ON && !nullp(clauses))
                 trace(DBREDO,goal,bindings,rest);
             
             wp = save1;
@@ -706,7 +706,7 @@ void trace(int port, int goal, int bindings, int rest){
                 leap_point = NIL;
                 
             printf("(%d) REDO: ", gettrace(goal)); print(goal);
-            inctrace(goal);
+            //inctrace(goal);
             port = DBREDO;
             debugger(goal,bindings,rest);
         }
