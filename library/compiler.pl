@@ -198,7 +198,7 @@ jump_gen_c_def1.
 
 % generate deftpred for normal predicate
 jump_gen_def(P) :-
-    not(jump_pred_data(P,type1)),
+    %not(jump_pred_data(P,type1)),
     %not(jump_pred_data(P,type2)),
 	write('(deftpred)("'),
     write(P),
@@ -209,17 +209,6 @@ jump_gen_def(P) :-
     write(');'),
     nl,!.
 
-% generate deftpred for optimized predicate
-jump_gen_def(P) :-
-    jump_pred_data(P,type1),
-	write('(deftsys)("'),
-    write(P),
-    write('",'),
-    write('b_'),
-    n_atom_convert(P,P1),
-    write(P1),
-    write(');'),
-    nl,!.
 
 /*
 last C code to make direct execute
@@ -456,26 +445,6 @@ jump_gen_a_body((X;Xs)) :-
     write(','),
     jump_gen_body1(Xs),
     write(')').
-% defined predicate will become optimized builtin predicate
-jump_gen_a_body(X) :-
-    n_defined_predicate(X),
-    functor(X,P,0),
-    jump_pred_data(P,type1),
-    write('Jmakesys("'),
-    write(P),
-    write('")').
-% defined predicate will become optimized builtin predicate
-jump_gen_a_body(X) :-
-    n_defined_predicate(X),
-    functor(X,P,_),
-    jump_pred_data(P,type1),
-    n_argument_list(X,L),
-    write('Jwcons(Jmakesys("'),
-    write(P),
-    write('"),'),
-    jump_gen_argument(L),
-    write(')').
-
 % defined predicate will become compiled predicate
 jump_gen_a_body(X) :-
     n_defined_predicate(X),

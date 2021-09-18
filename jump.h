@@ -40,6 +40,7 @@ fn2 f2[50];
 fn3 f3[50];
 fn4 f4[50];
 tpred deftpred;
+tpred deftinfix;
 tpred deftsys;
 
 void init0(int n, tpred x){
@@ -66,6 +67,12 @@ void init4(int n, tpred x){
 void init_deftpred(tpred x){
     deftpred = (tpred)x;
 }
+
+//for define infix compiled builtin predicate
+void init_deftinfix(tpred x){
+    deftinfix = (tpred)x;
+}
+
 
 //for define system builtin predicate
 void init_deftsys(tpred x){

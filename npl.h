@@ -1139,6 +1139,7 @@ void defcompiled(char *name, int(*func)(int, int), int arity);
 void definfix(char *name, int(*func)(int, int), int weight, int spec);
 void defoperator(char *name, int(*func)(int, int), int weight, int spec, int opt);
 void defuserfunction(char *name, int weight, int spec);
+void definfixcomp(char *name, int(*func)(int, int), int weight, int spec);
 void discard_trail(void);
 void discard_trail_n(int n);
 void dynamic_link(int x);
