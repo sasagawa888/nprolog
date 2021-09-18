@@ -685,7 +685,7 @@ int notated_builtinp(int addr){
     int opt;
 
     if(singlep(addr) &&
-            (GET_AUX(addr) == SYS || GET_AUX(addr) == OPE) &&
+            (GET_AUX(addr) == SYS || GET_AUX(addr) == OPE || GET_AUX(addr) == COMP) &&
            ((opt=GET_OPT(addr)) == XFX ||
             opt == YFX ||
             opt == XFY ||

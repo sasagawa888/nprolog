@@ -74,11 +74,6 @@ void init_deftinfix(tpred x){
 }
 
 
-//for define system builtin predicate
-void init_deftsys(tpred x){
-    deftsys = (tpred)x;
-}
-
 #define Jcheckgbc()  (f0[0])()
 #define Jgbc()	     (f0[1])()
 #define Jfreshcell() (f0[2])()

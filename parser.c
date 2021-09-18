@@ -1346,14 +1346,14 @@ int readitem(void){
                             elseexit:
                             stok.flag = BACK;
                             elseexit1:
-                            if(getatom(str,USER,hash(str)))
-                                temp = makeatom(str,USER);
-                            else if(getatom(str,COMP,hash(str)))
+                            if(getatom(str,COMP,hash(str)))
                                 temp = makeatom(str,COMP);
                             else if(getatom(str,PRED,hash(str)))
                                 temp = makeatom(str,PRED);
                             else if(getatom(str,SYS,hash(str)))
                                 temp = cons(makeatom(str,SYS),NIL);
+                            else if(getatom(str,USER,hash(str)))
+                                temp = makeatom(str,USER);
                             else
                                 temp = makeatom(str,SIMP);
                             return(temp);

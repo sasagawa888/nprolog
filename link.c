@@ -17,7 +17,6 @@ void dynamic_link(int x){
     int (*init_f4)(int x, tpred y);
     void (*init_deftpred)(tpred x);
     void (*init_deftinfix)(tpred x);
-    void (*init_deftsys)(tpred x);
     void (*init_tpredicate)();
     void (*init_declare)();
 
@@ -37,7 +36,6 @@ void dynamic_link(int x){
     init_f4 = dlsym(hmod, "init4");
     init_deftpred = dlsym(hmod, "init_deftpred");
     init_deftinfix = dlsym(hmod, "init_deftinfix");
-    init_deftsys = dlsym(hmod, "init_deftsys");
     init_tpredicate = dlsym(hmod, "init_tpredicate");
     init_declare = dlsym(hmod, "init_declare");
 
@@ -160,7 +158,6 @@ void dynamic_link(int x){
 
     init_deftpred((tpred)defcompiled);
     init_deftinfix((tpred)definfixcomp);
-    init_deftsys((tpred)defbuiltin);
     init_tpredicate();
     init_declare();
     link_flag = 1;
