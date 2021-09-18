@@ -198,8 +198,7 @@ jump_gen_c_def1.
 
 % generate deftpred for normal predicate
 jump_gen_def(P) :-
-    %not(jump_pred_data(P,type1)),
-    %not(jump_pred_data(P,type2)),
+    n_defined_predicate(P),
 	write('(deftpred)("'),
     write(P),
     write('",'),
@@ -208,6 +207,41 @@ jump_gen_def(P) :-
     write(P1),
     write(');'),
     nl,!.
+
+% generate deftinfix for user op
+jump_gen_def(P) :-
+    n_defined_userop(P),
+	write('(deftinfix)("'),
+    write(P),
+    write('",'),
+    write('b_'),
+    n_atom_convert(P,P1),
+    write(P1),
+    write(','),
+    current_op(W,S,P),
+    jump_spec_to_c(S,S1),
+    write(W),
+    write(','),
+    write(S1),
+    write(');'),
+    nl,!.
+
+
+jump_spec_to_c(fx,'FX').
+jump_spec_to_c(fy,'FY').
+jump_spec_to_c(xfx,'XFX').
+jump_spec_to_c(xfy,'XFY').
+jump_spec_to_c(yfx,'YFX').
+jump_spec_to_c(xf,'XF').
+jump_spec_to_c(yf,'YF').
+jump_spec_to_c(fx_xfx,'FX_XFX').
+jump_spec_to_c(fy_xfx,'FY_XFX').
+jump_spec_to_c(fx_yfx,'FX_YFX').
+jump_spec_to_c(fy_yfx,'FY_YFX').
+jump_spec_to_c(fx_xf,'FX_XF').
+jump_spec_to_c(fx_yf,'FX_YF').
+jump_spec_to_c(fy_xf,'FY_XF').
+jump_spec_to_c(fy_yf,'FY_YF').
 
 
 /*
@@ -506,6 +540,15 @@ jump_gen_a_body(X) :-
     write('Jmakeuser("'),
     write(P),
     write('")').
+jump_gen_a_body(X) :-
+    n_defined_userop(X),
+    functor(X,P,_),
+    n_argument_list(X,L),
+    write('Jwcons(Jmakecomp("'),
+    write(P),
+    write('"),'),
+    jump_gen_argument(L),
+    write(')').
 jump_gen_a_body(X) :-
     n_property(X,userop),
     functor(X,P,_),

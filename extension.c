@@ -677,7 +677,7 @@ int b_defined_userop(int arglist, int rest){
     if(n == 1){
     	arg1 = deref(car(arglist));
 
-        if(user_operation_p(arg1)){
+        if(user_operation_p(arg1) || user_operator_p(arg1)){
             if(atomp(arg1) && GET_CAR(arg1) != NIL)
                 return(prove_all(rest,sp));
             else if(structurep(arg1) && GET_CAR(car(arg1)) != NIL)

@@ -26,13 +26,33 @@
 #define UNDERBAR    42
 #define DOTOBJ  44
 
+//operator
+#define FX  1   //0b0000001
+#define FY  2   //0b0000010
+#define XFX 4   //0b0000100
+#define XFY 8   //0b0001000
+#define YFX 16  //0b0010000
+#define XF  32  //0b0100000
+#define YF  64  //0b1000000
+#define FX_XFX  5 //0b0000101
+#define FY_XFX  6 //0b0000110
+#define FX_XFY  9 //0b0001001
+#define FY_XFY 10 //0b0001010
+#define FX_YFX 17 //0b0010001
+#define FY_YFX 18 //0b0010010
+#define FX_XF  33 //0b0100001
+#define FX_YF  65 //0b1000001
+#define FY_XF  34 //0b0100010
+#define FY_YF  66 //0b1000010
+
+
 typedef int (*fn0)();
 typedef int (*fn1)(int);
 typedef int (*fn2)(int , int);
 typedef int (*fn3)(int , int , int);
 typedef int (*fn4)(char*);
 typedef void (*tpred)(char*, int(*pred)(int , int));
-
+typedef void (*tuser)(char*, int(*user)(int , int), int weight, int spec);
 
 fn0 f0[50];
 fn1 f1[50];
@@ -40,7 +60,7 @@ fn2 f2[50];
 fn3 f3[50];
 fn4 f4[50];
 tpred deftpred;
-tpred deftinfix;
+tuser deftinfix;
 tpred deftsys;
 
 void init0(int n, tpred x){
@@ -69,8 +89,8 @@ void init_deftpred(tpred x){
 }
 
 //for define infix compiled builtin predicate
-void init_deftinfix(tpred x){
-    deftinfix = (tpred)x;
+void init_deftinfix(tuser x){
+    deftinfix = (tuser)x;
 }
 
 
