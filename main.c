@@ -496,7 +496,7 @@ int prove(int goal, int bindings, int rest){
             return(NO);
         }
     }
-    else if(predicatep(goal)){
+    else if(predicatep(goal) || user_operation_p(goal)){
         //trace
         if(debug_flag == ON)
             trace(DBCALL,goal,bindings,rest);
@@ -523,7 +523,7 @@ int prove(int goal, int bindings, int rest){
             release_variant(varlis);
             
             // case of predicate
-            if(predicatep(clause1)){
+            if(predicatep(clause1) || user_operation_p(clause1)){
                 if(unify(goal,clause1) == YES){
                     if(prove_all(rest,sp) == YES){
                         //trace
