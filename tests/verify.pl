@@ -210,8 +210,8 @@ test(functor) :-
 
 
 test(arg) :-
-    arg(1,book(poetry,milne,poetry)),
-    arg0(0,book(poetry,milne,poetry)).
+    arg(1,book(poetry,milne,poetry),poetry),
+    arg0(0,book(poetry,milne,poetry),poetry).
 
 test(concat) :-
     concat(a123,asdf,X),
