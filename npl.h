@@ -183,8 +183,6 @@ extern char compiled[COMPILED_NUMBER][30];
 extern char extended[EXTENDED_NUMBER][30];
 extern double timer;
 
-//flag
-extern int strict_flag;
 
 //stream
 extern int standard_input;
@@ -530,6 +528,7 @@ extern result rtok;
 #define RECORD_OVERF        70
 #define NOT_RECORD          71
 #define VARIANT_OVERF       72
+#define ARITY_ERR           73
 
 
 double getETime(void);
@@ -740,7 +739,6 @@ int b_sort(int arglist, int rest);
 int b_spy(int arglist, int rest);
 int b_stdin(int arglist, int rest);
 int b_stdout(int arglist, int rest);
-int b_strict(int arglist, int rest);
 int b_stdinout(int arglist, int rest);
 int b_string(int arglist, int rest);
 int b_string_length(int arglist, int rest);
@@ -1143,6 +1141,7 @@ void discard_trail(void);
 void discard_trail_n(int n);
 void dynamic_link(int x);
 void error(int errnum, char *fun, int arg);
+void errorcomp(int errnum, int name, int arg);
 void execute(int x);
 void gbc(void);
 void gbcmark(void);

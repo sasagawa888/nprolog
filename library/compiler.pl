@@ -39,6 +39,7 @@ if(n == 2){
     Junbind(save2);
     Jset_wp(save1);
 
+    Jerrorcomp(makeint(AIRTY_ERR),Jmakecomp(<name>),arglist);
     return(NO);
 }
 
@@ -68,11 +69,9 @@ optimize(X) :-
 
 % main
 compile_file(X) :-
-    n_strict(true),
     jump_pass1(X),
     jump_pass2(X),
-    jump_invoke_gcc(X),
-    n_strict(false).
+    jump_invoke_gcc(X).
 
 % for debug not remove C code.
 compile_file1(X) :-
@@ -335,6 +334,10 @@ jump_gen_a_pred(P) :-
 
 % pred1,pred2,...,predN
 jump_gen_a_pred1(P,[]) :-
+    nl,
+    write('Jerrorcomp(Jmakeint(ARITY_ERR),Jmakecomp("'),
+    write(P),
+    write('"),arglist);'),nl,
 	write('return(NO);').
 
 jump_gen_a_pred1(P,[L|Ls]) :-
@@ -347,7 +350,7 @@ jump_gen_a_pred2(P,N) :-
     write(N),
     write('){\n'),
     jump_gen_a_pred3(P,N),
-    write('}'),!.
+    write('return(NO);}'),!.
 
 % select all clauses that arity is N
 jump_gen_a_pred3(P,N) :-
@@ -448,7 +451,7 @@ jump_gen_body(X) :-
     write('return(YES);}'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl,
-    write('if(res == NPLFALSE) return(NO);'),nl,
+    write('if(res == NPLFALSE) return(NO); '),nl,
     !.
 
 

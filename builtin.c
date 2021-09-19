@@ -191,7 +191,6 @@ void initbuiltin(void){
     defbuiltin("n_defined_predicate",b_defined_predicate,-1);
     defbuiltin("n_defined_userop",b_defined_userop,-1);
     defbuiltin("n_get_execute",b_get_execute,-1);
-    defbuiltin("n_strict",b_strict,-1);
 
      #ifdef __arm__
     defbuiltin("wiringpi_setup_gpio",b_wiringpi_setup_gpio,2);
@@ -242,6 +241,7 @@ int b_length(int arglist, int rest){
         }
         return(NO);
     }
+    error(ARITY_ERR,"length ",arglist);
     return(NO);
 }
 
@@ -264,6 +264,8 @@ int b_repeat(int arglist, int rest){
     ac = save3;
     goto loop;
     }
+
+    error(ARITY_ERR,"repeat ",arglist);
     return(NO);
 }
 
@@ -357,6 +359,7 @@ int b_op(int arglist, int rest){
         }
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"op ",arglist);
     return(NO);
 }
 
@@ -434,6 +437,7 @@ int b_unify(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"= ",arglist);
     return(NO);
 }
 
@@ -454,6 +458,7 @@ int b_notunify(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"\\= ",arglist);
     return(NO);
 }
 
@@ -493,6 +498,7 @@ int b_write(int arglist, int rest){
         output_stream = save;
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"write ",arglist);
     return(NO);
 }
 
@@ -528,6 +534,7 @@ int b_write_canonical(int arglist, int rest){
         output_stream = save;
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"write_canonical ",arglist);
     return(NO);
 }
 
@@ -561,6 +568,7 @@ int b_writeq(int arglist, int rest){
         output_stream = save;
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"writeq ",arglist);
     return(NO);
 }
 
@@ -587,6 +595,7 @@ int b_nl(int arglist, int rest){
         output_stream = save;
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"nl ",arglist);
     return(NO);
 }
 
@@ -601,6 +610,7 @@ int b_put(int arglist, int rest){
         fprintf(GET_PORT(output_stream), "%c", (char)GET_INT(arg1));
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"put ",arglist);
     return(NO);
 }
 
@@ -621,6 +631,7 @@ int b_get0(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"get0 ",arglist);
     return(NO);
 }
 
@@ -648,6 +659,7 @@ int b_get(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"get ",arglist);
     return(NO);
 }
 
@@ -666,6 +678,7 @@ int b_get0_noecho(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"get0_noecho ",arglist);
     return(NO);
 }
 
@@ -750,6 +763,7 @@ int b_get_code(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"get_code ",arglist);
     return(NO);
 }
 
@@ -784,6 +798,7 @@ int b_get_byte(int arglist, int rest){
         else 
             return(NO);
     }
+    error(ARITY_ERR,"get_byte ",arglist);
     return(NO);
 }
 
@@ -806,6 +821,7 @@ int b_tab(int arglist, int rest){
         }
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"tab ",arglist);
     return(NO);
 }
 
@@ -869,6 +885,7 @@ int b_read(int arglist, int rest){
         else 
             return(NO);
     }
+    error(ARITY_ERR,"read ",arglist);
     return(NO);
 }
 
@@ -914,6 +931,7 @@ int b_read_line(int arglist, int rest){
         else 
             return(NO);
     }
+    error(ARITY_ERR,"read_line ",arglist);
     return(NO);
 }
 
@@ -951,6 +969,7 @@ int b_skip(int arglist, int rest){
         input_stream = save;
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"skip ",arglist);
     return(NO);
 }
 
@@ -978,6 +997,7 @@ int b_stdin(int arglist, int rest){
         input_stream = save1; 
         return(NO);
     }
+    error(ARITY_ERR,"stdin ",arglist);
     return(NO);
 }
 
@@ -1004,6 +1024,7 @@ int b_stdout(int arglist, int rest){
         output_stream = save1; 
         return(NO);
     }
+    error(ARITY_ERR,"stdin ",arglist);
     return(NO);
 }
 
@@ -1036,6 +1057,7 @@ int b_stdinout(int arglist, int rest){
         output_stream = save2; 
         return(NO);
     }
+    error(ARITY_ERR,"stdinout ",arglist);
     return(NO);
 }
 
@@ -1065,6 +1087,7 @@ int b_create(int arglist, int rest){
             return(prove_all(rest,sp));
         }
     }
+    error(ARITY_ERR,"create ",arglist);
     return(NO);
 }
 
@@ -1131,6 +1154,7 @@ int b_open(int arglist, int rest){
             error(NOT_OPEN_OPTION,"open ", arg3);
         }
     }
+    error(ARITY_ERR,"open ",arglist);
     return(NO);
 }
 
@@ -1155,6 +1179,7 @@ int b_dup(int arglist, int rest){
         if(unify(arg2,addr) == YES)
             return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"dup ",arglist);
     return(NO);
 }
 
@@ -1168,6 +1193,7 @@ int b_close(int arglist, int rest){
         fclose(GET_PORT(arg1));
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"close ",arglist);
     return(NO);
 }
 
@@ -1195,6 +1221,7 @@ int b_see(int arglist, int rest){
             return(prove_all(rest,sp));
         }
     }
+    error(ARITY_ERR,"see ",arglist);
     return(NO);
 }
 
@@ -1206,6 +1233,7 @@ int b_seeing(int arglist, int rest){
         arg1 = car(arglist);
         return(unify(arg1,GET_CDR(input_stream)));
     }
+    error(ARITY_ERR,"seeing ",arglist);
     return(NO);
 }
 
@@ -1221,6 +1249,7 @@ int b_seen(int arglist, int rest){
         }
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"seen ",arglist);
     return(NO);
 }
 
@@ -1247,6 +1276,7 @@ int b_tell(int arglist, int rest){
             return(prove_all(rest,sp));
         }
     }
+    error(ARITY_ERR,"tell ",arglist);
     return(NO);
 }
 
@@ -1259,6 +1289,7 @@ int b_telling(int arglist, int rest){
         if(unify(arg1,GET_CDR(output_stream)) == YES)
             return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"telling ",arglist);
     return(NO);
 }
 
@@ -1273,6 +1304,7 @@ int b_told(int arglist, int rest){
         }
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"told ",arglist);
     return(NO);
 }
 
@@ -1299,6 +1331,7 @@ int b_flush_output(int arglist, int rest){
         fflush(GET_PORT(arg1));
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"flush_output ",arglist);
     return(NO);
 }
 
@@ -1363,6 +1396,7 @@ int b_consult(int arglist, int rest){
         exit:
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"consult ",arglist);
     return(NO);
 }
 
@@ -1457,6 +1491,7 @@ int b_reconsult(int arglist, int rest){
         arg2 = cadr(arglist);
         goto reconsult;
     }
+    error(ARITY_ERR,"reconsult ",arglist);
     return(NO);
 }
 
@@ -1564,6 +1599,7 @@ int b_directory(int arglist, int rest){
         unbind(save);
         return(NO);
     }
+    error(ARITY_ERR,"directory ",arglist);
     return(NO);
 }
         
@@ -1588,6 +1624,7 @@ int b_is(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"is ",arglist);
     return(NO);
 }
 
@@ -1618,6 +1655,7 @@ int b_greater(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"> ",arglist);
     return(NO);
 }
 
@@ -1646,6 +1684,7 @@ int b_smaller(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"< ",arglist);
     return(NO);
 }
 
@@ -1672,6 +1711,7 @@ int b_eqsmaller(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"=< ",arglist);
     return(NO);
 }
 
@@ -1699,6 +1739,7 @@ int b_eqgreater(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,">= ",arglist);
     return(NO);
 }
 
@@ -1719,6 +1760,7 @@ int b_numeq(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"=:= ",arglist);
     return(NO);
 }
 
@@ -1730,15 +1772,16 @@ int b_notnumeq(int arglist, int rest){
         arg1 = eval(car(arglist));
         arg2 = eval(cadr(arglist));
         if(!numberp(arg1))
-            error(NOT_NUM,"=:= ",arg1);
+            error(NOT_NUM,"=\\= ",arg1);
         if(!numberp(arg2))
-            error(NOT_NUM,"=:= ",arg2);
+            error(NOT_NUM,"=\\= ",arg2);
 
         if(!numeqp(arg1,arg2))
             return(prove_all(rest,sp));
         else
             return(NO);
     }
+    error(ARITY_ERR,"=\\= ",arglist);
     return(NO);
 }
 
@@ -1757,6 +1800,7 @@ int b_equalp(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"== ",arglist);
     return(NO);
 }
 
@@ -1775,6 +1819,7 @@ int b_notequalp(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"\\== ",arglist);
     return(NO);
 }
 
@@ -1791,6 +1836,7 @@ int b_eq(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"eq ",arglist);
     return(NO);
 }
 
@@ -1826,6 +1872,7 @@ int b_compare(int arglist, int rest){
         }
 
     }
+    error(ARITY_ERR,"compare ",arglist);
     return(NO);
 }
 
@@ -1842,7 +1889,7 @@ int b_atsmaller(int arglist, int rest){
         else
             return(NO);
     }
-    error(UNDEF_PRED,"@< ", makeint(n));
+    error(ARITY_ERR,"@< ",arglist);
     return(NO);
 }
 
@@ -1944,7 +1991,7 @@ int b_ateqsmaller(int arglist, int rest){
         else
             return(NO);
     }
-    error(UNDEF_PRED,"@=< ", makeint(n));
+    error(ARITY_ERR,"@=< ",arglist);
     return(NO);
 }
 
@@ -1963,7 +2010,7 @@ int b_atgreater(int arglist, int rest){
         else
             return(NO);
     }
-    error(UNDEF_PRED,"@> ", makeint(n));
+    error(ARITY_ERR,"@> ",arglist);
     return(NO);
 }
 
@@ -1981,7 +2028,7 @@ int b_ateqgreater(int arglist, int rest){
         else
             return(NO);
     }
-    error(UNDEF_PRED,"@>= ", makeint(n));
+    error(ARITY_ERR,"@>= ",arglist);
     return(NO);
 }
 
@@ -2005,6 +2052,7 @@ int b_ctr_set(int arglist, int rest){
         return(prove_all(rest,sp));
 
     }
+    error(ARITY_ERR,"ctr_set ",arglist);
     return(NO);
 }
 
@@ -2019,7 +2067,7 @@ int b_ctr_dec(int arglist, int rest){
         if(!integerp(arg1))
             error(NOT_INT,"ctr_dec ",arg1);
         if(GET_INT(arg1) > 30)
-            error(ILLEGAL_ARGS,"str_set ",arg1);
+            error(ILLEGAL_ARGS,"str_dec ",arg1);
         if(!wide_variable_p(arg2))
             error(NOT_VAR,"ctr_dec ",arg2);
         
@@ -2029,6 +2077,7 @@ int b_ctr_dec(int arglist, int rest){
             return(prove_all(rest,sp));
 
     }
+    error(ARITY_ERR,"ctr_dec ",arglist);
     return(NO);
 }
 
@@ -2041,11 +2090,11 @@ int b_ctr_inc(int arglist, int rest){
         arg2 = cadr(arglist);
 
         if(!integerp(arg1))
-            error(NOT_INT,"ctr_dec ",arg1);
+            error(NOT_INT,"ctr_inc ",arg1);
         if(GET_INT(arg1) > 30)
-            error(ILLEGAL_ARGS,"str_set ",arg1);
+            error(ILLEGAL_ARGS,"str_inc ",arg1);
         if(!wide_variable_p(arg2))
-            error(NOT_VAR,"ctr_dec ",arg2);
+            error(NOT_VAR,"ctr_inc ",arg2);
         
         i = counter[GET_INT(arg1)];
         counter[GET_INT(arg1)] = i+1;
@@ -2053,6 +2102,7 @@ int b_ctr_inc(int arglist, int rest){
             return(prove_all(rest,sp));
 
     }
+    error(ARITY_ERR,"ctr_dec ",arglist);
     return(NO);
 }
 
@@ -2065,17 +2115,18 @@ int b_ctr_is(int arglist, int rest){
         arg2 = cadr(arglist);
 
         if(!integerp(arg1))
-            error(NOT_INT,"ctr_dec ",arg1);
+            error(NOT_INT,"ctr_is ",arg1);
         if(GET_INT(arg1) > 30)
-            error(ILLEGAL_ARGS,"str_set ",arg1);
+            error(ILLEGAL_ARGS,"str_is ",arg1);
         if(!wide_variable_p(arg2))
-            error(NOT_VAR,"ctr_dec ",arg2);
+            error(NOT_VAR,"ctr_is ",arg2);
         
         i = counter[GET_INT(arg1)];
         if(unify(arg2,makeint(i)) == YES)
             return(prove_all(rest,sp));
 
     }
+    error(ARITY_ERR,"str_is ",arglist);
     return(NO);
 }
 
@@ -2108,7 +2159,7 @@ int b_call(int arglist, int rest){
 
         return(prove_all(addtail_body(rest,arg1),sp));
     }
-    
+    error(ARITY_ERR,"call ",arglist);
     return(NO);
 }
 
@@ -2129,6 +2180,7 @@ int b_not(int arglist, int rest){
         else
             return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"not ",arglist);
     return(NO);
 }
 
@@ -2184,6 +2236,7 @@ int b_assert(int arglist, int rest){
         }
         error(SYNTAX_ERR,"assertz ",arg1);
     }
+    error(ARITY_ERR,"assertz ",arglist);
     return(NO);
 }
 
@@ -2228,6 +2281,7 @@ int b_asserta(int arglist, int rest){
         }
         error(SYNTAX_ERR,"asserta ",arg1);
     }
+    error(ARITY_ERR,"asserta ",arglist);
     return(NO);
 }
 
@@ -2292,6 +2346,7 @@ int b_retract(int arglist, int rest){
         sp = save2;
         return(NO);
     }
+    error(ARITY_ERR,"retract ",arglist);
     return(NO);
 }
 
@@ -2349,6 +2404,7 @@ int b_abolish(int arglist, int rest){
             listremove(cadr(arg1),predicates);
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"abolish ",arglist);
     return(NO);
 }
 
@@ -2397,6 +2453,7 @@ int b_clause(int arglist, int rest){
         unbind(save2);
         return(NO);
     }
+    error(ARITY_ERR,"clause ",arglist);
     return(NO);
 }
 
@@ -2502,6 +2559,7 @@ int b_name(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"name ",arglist);
     return(NO);
 }
 
@@ -2619,6 +2677,7 @@ int b_list_text(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"list_text ",arglist);
     return(NO);
 }
 
@@ -2650,6 +2709,7 @@ int b_atom_concat(int arglist, int rest){
             return(NO);
 
     }
+    error(ARITY_ERR,"atom_concat ",arglist);
     return(NO);
 }
 
@@ -2681,6 +2741,7 @@ int b_atom_string(int arglist, int rest){
                 return(NO);
         }
     }
+    error(ARITY_ERR,"atom_string ",arglist);
     return(NO);
 }
 
@@ -2742,6 +2803,7 @@ int b_char_code(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"char_code ",arglist);
     return(NO);
 }
 
@@ -2776,6 +2838,7 @@ int b_concat(int arglist, int rest){
             return(NO);
 
     }
+    error(ARITY_ERR,"concat ",arglist);
     return(NO);
 }
 
@@ -2801,6 +2864,7 @@ int b_string_length(int arglist, int rest){
         else 
             return(NO);
     }
+    error(ARITY_ERR,"string_length ",arglist);
     return(NO);
 }
 
@@ -2835,6 +2899,7 @@ int b_string_term(int arglist, int rest){
         else 
             return(NO);
     }
+    error(ARITY_ERR,"string_term ",arglist);
     return(NO);
 }
 
@@ -2902,6 +2967,7 @@ int b_substring(int arglist, int rest){
         else 
             return(NO);
     }
+    error(ARITY_ERR,"substring ",arglist);
     return(NO);
 }
 
@@ -2971,6 +3037,7 @@ int b_float_text(int arglist, int rest){
         }
         return(NO);
     }
+    error(ARITY_ERR,"float_text ",arglist);
     return(NO);
 }
 
@@ -3004,6 +3071,7 @@ int b_int_text(int arglist, int rest){
         }
         return(NO);
     }
+    error(ARITY_ERR,"int_text ",arglist);
     return(NO);
 }
 
@@ -3016,6 +3084,7 @@ int b_cut(int arglist, int rest){
     if(n == 0){
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"! ",arglist);
     return(NO);
 }
 
@@ -3043,6 +3112,7 @@ int b_ifthen(int arglist, int rest){
         unbind(save1);
         return(NO);
     }
+    error(ARITY_ERR,"ifthen ",arglist);
     return(NO);
 }
 
@@ -3071,6 +3141,7 @@ int b_ifthenelse(int arglist, int rest){
             return(prove_all(addtail_body(rest,arg3),sp));
         }
     }
+    error(ARITY_ERR,"ifthenelse ",arglist);
     return(NO);
 }
 
@@ -3100,6 +3171,7 @@ int b_measure(int arglist, int rest){
         ESCFORG;
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"measure ",arglist);
     return(NO);
 }
 
@@ -3112,6 +3184,7 @@ int b_trace(int arglist, int rest){
         debug_flag = ON;
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"trace ",arglist);
     return(NO);
 }
 
@@ -3123,6 +3196,7 @@ int b_notrace(int arglist, int rest){
         debug_flag = OFF;
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"notrace ",arglist);
     return(NO);
 }
 
@@ -3142,6 +3216,7 @@ int b_spy(int arglist, int rest){
             spy_list = cons(arg1,spy_list);
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"spy ",arglist);
     return(NO);
 }
 
@@ -3161,6 +3236,7 @@ int b_nospy(int arglist, int rest){
         spy_list = listremove(arg1,spy_list);
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"nospy ",arglist);
     return(NO);
 }
 
@@ -3189,6 +3265,7 @@ int b_leash(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"leash ",arglist);
     return(NO);
 }
 
@@ -3204,6 +3281,7 @@ int b_debug(int arglist, int rest){
         printf("\n");
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"debug ",arglist);
     return(NO);
 }
 
@@ -3220,6 +3298,7 @@ int b_break(int arglist, int rest){
             
         }
     }
+    error(ARITY_ERR,"break ",arglist);
     return(NO);
 }
 
@@ -3231,6 +3310,7 @@ int b_halt(int arglist, int rest){
         printf("- good bye -\n");
         longjmp(buf,2);
     }
+    error(ARITY_ERR,"halt ",arglist);
     return(NO);
 }
 
@@ -3241,6 +3321,7 @@ int b_abort(int arglist, int rest){
     if(n == 0){
         longjmp(buf,1);
     }
+    error(ARITY_ERR,"abort ",arglist);
     return(NO);
 }
 
@@ -3258,6 +3339,7 @@ int b_atom(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"atom ",arglist);
     return(NO);
 }
 
@@ -3272,6 +3354,7 @@ int b_integer(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"integer ",arglist);
     return(NO);
 }
 
@@ -3286,6 +3369,7 @@ int b_real(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"real ",arglist);
     return(NO);
 }
 
@@ -3300,6 +3384,7 @@ int b_number(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"number ",arglist);
     return(NO);
 }
 
@@ -3315,6 +3400,7 @@ int b_compound(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"compound ",arglist);
     return(NO);
 }
 
@@ -3330,6 +3416,7 @@ int b_ground(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"ground ",arglist);
     return(NO);
 }
 
@@ -3365,6 +3452,7 @@ int b_system(int arglist, int rest){
             return(NO);
         }
     }
+    error(ARITY_ERR,"system ",arglist);
     return(NO);
 }
 
@@ -3381,6 +3469,7 @@ int b_var(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"var ",arglist);
     return(NO);
 }
 
@@ -3398,6 +3487,7 @@ int b_nonvar(int arglist, int rest){
         else
             return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"nonvar ",arglist);
     return(NO);
 }
 
@@ -3413,6 +3503,7 @@ int b_atomic(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"atomic ",arglist);
     return(NO);
 }
 
@@ -3427,6 +3518,7 @@ int b_list(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"list ",arglist);
     return(NO);
 }
 
@@ -3442,6 +3534,7 @@ int b_string(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"string ",arglist);
     return(NO);
 }
 
@@ -3542,6 +3635,7 @@ int b_functor(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"functor ",arglist);
     return(NO);
 }
 
@@ -3576,6 +3670,7 @@ int b_arg(int arglist, int rest){
                 return(NO);
         }
     }
+    error(ARITY_ERR,"arg ",arglist);
     return(NO);
 }
 
@@ -3589,15 +3684,15 @@ int b_arg0(int arglist, int rest){
         arg3 = caddr(arglist);
 
         if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"arg ", arg1);
+            error(INSTANTATION_ERR,"arg0 ", arg1);
         if(wide_variable_p(arg2))
-            error(INSTANTATION_ERR,"arg ", arg2);
+            error(INSTANTATION_ERR,"arg0 ", arg2);
         if(!integerp(arg1))
-            error(NOT_INT,"arg ", arg1);
+            error(NOT_INT,"arg0 ", arg1);
         if(!compoundp(arg2))
-            error(NOT_COMPOUND,"arg ", arg2);
+            error(NOT_COMPOUND,"arg0 ", arg2);
         if(integerp(eval(arg1)) && GET_INT(eval(arg1)) < 0)
-            error(NOT_LESS_THAN_ZERO,"arg ", arg1);
+            error(NOT_LESS_THAN_ZERO,"arg0 ", arg1);
 
         if(integerp(arg1) && structurep(arg2)){
             i = GET_INT(arg1)+1;
@@ -3610,6 +3705,7 @@ int b_arg0(int arglist, int rest){
                 return(NO);
         }
     }
+    error(ARITY_ERR,"arg0 ",arglist);
     return(NO);
 }
 
@@ -3668,6 +3764,7 @@ int b_listing(int arglist, int rest){
             return(prove_all(rest,sp));
         }
     }
+    error(ARITY_ERR,"listing ",arglist);
     return(NO);
 }
 
@@ -3774,6 +3871,7 @@ int b_univ(int arglist, int rest){
                 return(NO);
         }
     }
+    error(ARITY_ERR,"=.. ",arglist);
     return(NO);
 }
 
@@ -3805,6 +3903,7 @@ int b_current_predicate(int arglist, int rest){
         unbind(save2);
         return(NO);
     }
+    error(ARITY_ERR,"current_predicate ",arglist);
     return(NO);
 }
 
@@ -3848,6 +3947,7 @@ int b_current_op(int arglist, int rest){
         unbind(save2);
         return(NO);
     }
+    error(ARITY_ERR,"current_op ",arglist);
     return(NO);
 }
 
@@ -3903,6 +4003,7 @@ int b_predicate_property(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"predicate_property ",arglist);
     return(NO);
 
 }
@@ -3916,6 +4017,7 @@ int b_reset_op(int arglist, int rest){
         initoperator();
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"reset_op ",arglist);
     return(NO);
 }
 
@@ -3975,7 +4077,7 @@ int b_gbc(int arglist, int rest){
             gbc();
         return(prove_all(rest,sp));
     }
-    
+    error(ARITY_ERR,"gc ",arglist);
     return(NO);
 }
 
@@ -4001,6 +4103,7 @@ int b_mkdir(int arglist, int rest){
         mkdir(GET_NAME(arg1),0777);
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"mkdir ",arglist);
     return(NO);
 }
 
@@ -4019,6 +4122,7 @@ int b_rmdir(int arglist, int rest){
         rmdir(GET_NAME(arg1));
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"rmdir ",arglist);
     return(NO);
 }
 
@@ -4039,6 +4143,7 @@ int b_chdir(int arglist , int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"chdir ",arglist);
     return(NO);
 }
 
@@ -4056,6 +4161,7 @@ int b_delete(int arglist, int rest){
         remove(GET_NAME(arg1));
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"delete ",arglist);
     return(NO);
 }
 
@@ -4080,6 +4186,7 @@ int b_rename(int arglist, int rest){
         rename(GET_NAME(arg1),GET_NAME(arg2));
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"rename ",arglist);
     return(NO);
 }
 
@@ -4111,6 +4218,7 @@ int b_edit(int arglist, int rest){
         b_reconsult(list1(arg1),NIL);
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"edit ",arglist);
     return(NO);
 }
 
@@ -4131,6 +4239,7 @@ int b_shell(int arglist, int rest){
             error(SYSTEM_ERROR,"shell",arg1);
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"shell ",arglist);
     return(NO);
 }
 
@@ -4150,6 +4259,7 @@ int b_syntaxerrors(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"syntaxerrors ",arglist);
     return(NO);
 }
 
@@ -4167,6 +4277,7 @@ int b_sort(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"sort ",arglist);
     return(NO);
 }
 
@@ -4183,6 +4294,7 @@ int b_keysort(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"keysort ",arglist);
     return(NO);
 }
 
@@ -4224,6 +4336,7 @@ int b_member(int arglist, int rest){
         unbind(save2);
         return(res);
     }
+    error(ARITY_ERR,"member ",arglist);
     return(NO);
 }
 
@@ -4264,6 +4377,7 @@ int b_append(int arglist, int rest){
         unbind(save2);
         return(NO);
     }
+    error(ARITY_ERR,"append ",arglist);
     return(NO);
 }
 
@@ -4296,6 +4410,7 @@ int b_reverse(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"reverse ",arglist);
     return(NO);
 }
 
@@ -4340,6 +4455,7 @@ int b_between(int arglist, int rest){
         ac = save3;
         return(NO);
     }
+    error(ARITY_ERR,"between ",arglist);
     return(NO);
 }
 
@@ -4377,6 +4493,7 @@ int b_bagof(int arglist, int rest){
         }
         return(NO);
     }
+    error(ARITY_ERR,"bagof ",arglist);
     return(NO);
 }
 
@@ -4414,6 +4531,7 @@ int b_setof(int arglist, int rest){
         }
         return(NO);
     }
+    error(ARITY_ERR,"setof ",arglist);
     return(NO);
 }
 
@@ -4442,6 +4560,7 @@ int b_findall(int arglist, int rest){
         unbind(save2);
         return(NO);
     }
+    error(ARITY_ERR,"findall ",arglist);
     return(NO);
 }
 
@@ -4591,6 +4710,7 @@ int b_inc(int arglist, int rest){
         }
 
     }
+    error(ARITY_ERR,"inc ",arglist);
     return(NO);
 }
 
@@ -4637,6 +4757,7 @@ int b_dec(int arglist, int rest){
         }
 
     }
+    error(ARITY_ERR,"dec ",arglist);
     return(NO);
 }
 
@@ -4668,6 +4789,7 @@ int b_ansi_cup(int arglist, int rest){
         cursor_col = c;
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"ansi_cup ",arglist);
     return(NO);
 }
 
@@ -4688,6 +4810,7 @@ int b_ansi_cpr(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"ansi_cpr ",arglist);
     return(NO);
 }
 
@@ -4701,6 +4824,7 @@ int b_ansi_scp(int arglist, int rest){
         cursor_prop_store = cursor_prop;
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"ansi_scp ",arglist);
     return(NO);
 }
 
@@ -4714,6 +4838,7 @@ int b_ansi_rcp(int arglist, int rest){
         cursor_prop = cursor_prop_store;
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"ansi_rcp ",arglist);
     return(NO);
 }
 
@@ -4726,6 +4851,7 @@ int b_ansi_ed(int arglist, int rest){
         ESCTOP;
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"ansi_ed ",arglist);
     return(NO);
 }
 
@@ -4738,6 +4864,7 @@ int b_ansi_el(int arglist, int rest){
         ESCMVLEFT(0);
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"ansi_el ",arglist);
     return(NO);
 }
 
@@ -4762,6 +4889,7 @@ int b_ansi_cuu(int arglist, int rest){
         }
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"ansi_cuu ",arglist);
     return(NO);
 }
 
@@ -4785,6 +4913,7 @@ int b_ansi_cud(int arglist, int rest){
         }
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"ansi_cud ",arglist);
     return(NO);
 }
 
@@ -4808,6 +4937,7 @@ int b_ansi_cuf(int arglist, int rest){
         }
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"ansi_cuf ",arglist);
     return(NO);
 }
 
@@ -4831,6 +4961,7 @@ int b_ansi_cub(int arglist, int rest){
         }
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"ansi_cub ",arglist);
     return(NO);
 }
 
@@ -4851,6 +4982,7 @@ int b_ansi_sgr(int arglist, int rest){
         cursor_prop = m;
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"ansi_sgr ",arglist);
     return(NO);
 }
 
@@ -4873,6 +5005,7 @@ int b_date(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"date ",arglist);
     return(NO);
 }
 
@@ -4897,6 +5030,7 @@ int b_date_day(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"date_day ",arglist);
     return(NO);
 }
 
@@ -4917,6 +5051,7 @@ int b_time(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"time ",arglist);
     return(NO);
 }
 
@@ -4931,6 +5066,7 @@ int b_errorcode(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"errorcode ",arglist);
     return(NO);
 }
 
@@ -4992,6 +5128,7 @@ int b_recordh(int arglist, int rest){
         checkgbc();
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"recordh ",arglist);
     return(NO);
 }
 
@@ -5034,6 +5171,7 @@ int b_retrieveh(int arglist, int rest){
         }
         return(NO);
     }
+    error(ARITY_ERR,"retrieveh ",arglist);
     return(NO);
 }
 
@@ -5056,6 +5194,7 @@ int b_instance(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"instance ",arglist);
     return(NO);
 }
 
@@ -5097,6 +5236,7 @@ int b_recordz(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"recordz ",arglist);
     return(NO);
 }
 
@@ -5129,6 +5269,7 @@ int b_recorda(int arglist, int rest){
             return(NO);
         
     }
+    error(ARITY_ERR,"recorda ",arglist);
     return(NO);
 }
 
@@ -5142,19 +5283,19 @@ int b_removeh(int arglist, int rest){
         arg2 = cadr(arglist);
         arg3 = caddr(arglist);
         if(wide_variable_p(arg1))
-            error(INSTANTATION_ERR,"remove ", arg1);
+            error(INSTANTATION_ERR,"removeh ", arg1);
         if(!wide_variable_p(arg1) && !atomp(arg1))
-            error(NOT_ATOM,"remove ",arg1);
+            error(NOT_ATOM,"removeh ",arg1);
         if(wide_variable_p(arg2))
-            error(INSTANTATION_ERR,"remove ", arg2);
+            error(INSTANTATION_ERR,"removeh ", arg2);
         if(!wide_variable_p(arg2) && !atomp(arg2))
-            error(NOT_ATOM,"remove ",arg2);
+            error(NOT_ATOM,"removeh ",arg2);
     
         
         save1 = sp;
         record_id = GET_ARITY(arg1)-1; //id starts from 1
         if(record_id < 0)
-            error(NOT_RECORD,"remove ",arg1);
+            error(NOT_RECORD,"removeh ",arg1);
         index = hash(GET_NAME(arg2));
         repeat:
         lis = record_hash_table[index][record_id];
@@ -5182,6 +5323,7 @@ int b_removeh(int arglist, int rest){
         }
         return(NO);
     }
+    error(ARITY_ERR,"removeh ",arglist);
     return(NO);
 }
 
@@ -5198,6 +5340,7 @@ int b_removeallh(int arglist, int rest){
         //as a result, removed term will be retrieve by GC
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"removeallh ",arglist);
     return(NO);
 }
 
@@ -5209,12 +5352,13 @@ int b_ref(int arglist, int rest){
         arg1 = car(arglist);
 
         if(!integerp(arg1))
-            error(NOT_INT,"resf ",arg1);
+            error(NOT_INT,"ref ",arg1);
         
         if(predicatep(GET_INT(arg1)))
             return(prove_all(rest,sp));
         else 
             return(NO);
     }
+    error(ARITY_ERR,"ref ",arglist);
     return(NO);
 }

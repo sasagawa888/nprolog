@@ -8,6 +8,12 @@
 #endif
 #include "npl.h"
 
+//------error for compier-----
+void errorcomp(int errnum, int name, int arg){
+  error(GET_INT(errnum),GET_NAME(name),arg);
+}
+
+
 //-------error------
 void error(int errnum, char *fun, int arg){
 
@@ -154,6 +160,10 @@ void error(int errnum, char *fun, int arg){
                             break;
         case EXISTENCE_ERR: 
                             printf("Existence error %s ", fun);
+                            print(arg);
+                            break;
+        case ARITY_ERR: 
+                            printf("Arity error %s ", fun);
                             print(arg);
                             break;
         case NOT_SOURCE:    

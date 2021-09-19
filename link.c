@@ -142,6 +142,7 @@ void dynamic_link(int x){
     init_f3(1,(tpred)list3);
     init_f3(2,(tpred)callsubr);
     init_f3(3,(tpred)wlist3);
+    init_f3(4,(tpred)errorcomp);
 
     //argument-1 string type
     init_f4(0,(tpred)makeconst);

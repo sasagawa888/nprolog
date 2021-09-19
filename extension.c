@@ -690,31 +690,6 @@ int b_get_execute(int arglist, int rest){
     return(NO);
 }
 
-int b_strict(int arglist, int rest){
-    int n,arg1;
-
-    n = length(arglist);
-    if(n == 1){
-        arg1 = car(arglist);
-
-        if(eqlp(arg1,NPLTRUE))
-            strict_flag = 1;
-        else if(eqlp(arg1,NPLFALSE))
-            strict_flag = 0;
-        else if(variablep(arg1))
-            if(strict_flag == 1)
-                unify(arg1,NPLTRUE);
-            else 
-                unify(arg1,NPLFALSE);
-        else
-            error(WRONG_ARGS, "n_strict ",arg1);
-        
-        return(prove_all(rest,sp));
-    }
-    return(NO);
-}
-
-
 int b_heapdump(int arglist, int rest){
     int n,arg1,arg2;
 
@@ -746,6 +721,7 @@ int b_wiringpi_setup_gpio(int arglist, int rest){
         wiringPiSetupGpio();
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"wiringpi_setup_gpio ",arglist);
     return(NO);
 } 
 
@@ -758,9 +734,9 @@ int b_wiringpi_spi_setup_ch_speed(int arglist, int rest){
         arg2 = cadr(arglist);
 
         if(!integerp(arg1))
-            error(NOT_INT,"wiringpi_spi_setup_ch_speed",arg1);
+            error(NOT_INT,"wiringpi_spi_setup_ch_speed ",arg1);
         if(!integerp(arg2))
-            error(NOT_INT,"wiringpi_spi_setup_ch_speed",arg2);
+            error(NOT_INT,"wiringpi_spi_setup_ch_speed ",arg2);
 
 
         x = GET_INT(arg1);
@@ -768,6 +744,7 @@ int b_wiringpi_spi_setup_ch_speed(int arglist, int rest){
         wiringPiSPISetup(x, y);
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"wiringpi_spi_setup_ch_speed ",arglist);
     return(NO);
 }
 
@@ -787,6 +764,7 @@ int b_pwm_set_mode(int arglist, int rest){
     
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"pwm_set_mode ",arglist);
     return(NO);    
 }
 
@@ -803,6 +781,7 @@ int b_pwm_set_range(int arglist, int rest){
         pwmSetRange(x);
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"pwm_set_range ",arglist);
     return(NO);
 }
 
@@ -819,6 +798,7 @@ int b_pwm_set_clock(int arglist, int rest){
         pwmSetClock(x);
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"pwm_set_clock ",arglist);
     return(NO);
 }
 
@@ -831,7 +811,7 @@ int b_pin_mode(int arglist, int rest){
         arg1 = car(arglist);
         arg2 = cadr(arglist);
         if(!integerp(arg1))
-            error(NOT_INT,"pin_mode",arg1);
+            error(NOT_INT,"pin_mode ",arg1);
     
         x = GET_INT(arg1);
         if(arg2 == makeconst("intput"))
@@ -845,6 +825,7 @@ int b_pin_mode(int arglist, int rest){
     
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"pin_mode ",arglist);
     return(NO);
 }
 
@@ -856,15 +837,16 @@ int b_digital_write(int arglist, int rest){
         arg1 = car(arglist);
         arg2 = cadr(arglist);
         if(!integerp(arg1))
-            error(NOT_INT,"digital_write",arg1);
+            error(NOT_INT,"digital_write ",arg1);
         if(!integerp(arg2))
-            error(NOT_INT,"digital_write",arg2);    
+            error(NOT_INT,"digital_write ",arg2);    
 
         x = GET_INT(arg1);
         y = GET_INT(arg2);
         digitalWrite(x,y);
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"digital_write ",arglist);
     return(NO);
 }
 
@@ -875,12 +857,13 @@ int b_digital_write_byte(int arglist, int rest){
     if(n == 1){
         arg1 = car(arglist);
         if(!integerp(arg1))
-            error(NOT_INT,"digital_write_byte",arg1);
+            error(NOT_INT,"digital_write_byte ",arg1);
 
         x = GET_INT(arg1);
         digitalWriteByte(x);
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"digital_write_byte ",arglist);
     return(NO);
 } 
 
@@ -893,15 +876,16 @@ int b_pull_up_dn_control(int arglist, int rest){
         arg1 = car(arglist);
         arg2 = cadr(arglist);
         if(!integerp(arg1))
-            error(NOT_INT,"pull_up_dn_control",arg1);
+            error(NOT_INT,"pull_up_dn_control ",arg1);
         if(!integerp(arg2))
-            error(NOT_INT,"pull_up_dn_control",arg2);
+            error(NOT_INT,"pull_up_dn_control ",arg2);
 
         x = GET_INT(arg1);
         y = GET_INT(arg2);
         pullUpDnControl(x,y);
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"pull_up_dn_control ",arglist);
     return(NO);
 }
 
@@ -922,6 +906,7 @@ int b_digital_read(int arglist, int rest){
         else
             return(NO);
     }
+    error(ARITY_ERR,"digital_read ",arglist);
     return(NO);
 }
 
@@ -938,6 +923,7 @@ int b_delay(int arglist, int rest){
         delay(x);
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"delay ",arglist);
     return(NO);
 }
 
@@ -948,12 +934,13 @@ int b_delay_microseconds(int arglist, int rest){
     if(n == 1){
         arg1 = car(arglist);
         if(!integerp(arg1))
-            error(NOT_INT,"delay_microseconds",arg1);
+            error(NOT_INT,"delay_microseconds ",arg1);
     
         x = GET_INT(arg1);
         delayMicroseconds(x);
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"delay_microseconds ",arglist);
     return(NO);
 }
 
@@ -975,6 +962,7 @@ int b_timer_microseconds(int arglist, int rest){
 
         return(prove_all(rest,sp));
     }
+    error(ARITY_ERR,"timer_microseconds ",arglist);
     return(NO);
 }
 
