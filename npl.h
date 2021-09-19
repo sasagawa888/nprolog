@@ -584,7 +584,6 @@ int b_ansi_el(int arglist, int rest);
 int b_append(int arglist, int rest);
 int b_arg(int arglist, int rest);
 int b_arg0(int arglist, int rest);
-int b_argument_list(int arglist, int rest);
 int b_arity_count(int arglist, int rest);
 int b_ask(int arglist, int rest);
 int b_assert(int arglist, int rest);

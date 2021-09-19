@@ -187,7 +187,6 @@ void initbuiltin(void){
     defbuiltin("n_property",b_property,-1);
     defbuiltin("n_bignum",b_bignum,-1);
     defbuiltin("n_longnum",b_longnum,-1);
-    defbuiltin("n_argument_list",b_argument_list,-1);
     defbuiltin("n_findatom",b_findatom,-1);
     defbuiltin("n_defined_predicate",b_defined_predicate,-1);
     defbuiltin("n_defined_userop",b_defined_userop,-1);
@@ -3734,6 +3733,13 @@ int b_univ(int arglist, int rest){
             else
                 return(NO);
         }
+        else if(functionp(arg1)){
+            res = structure_to_list(arg1);
+            if(unify(res,arg2) == YES)
+                return(prove_all(rest,sp));
+            else
+                return(NO);
+        }
         else if(variablep(arg1) && listp(arg2)){
             if(car(arg2) == DOTOBJ){
                 arg2 = operate(arg2);
@@ -3917,7 +3923,7 @@ int o_define(int x, int y){
     int clause;
 
     if(!nullp(y)){
-        if(builtinp(x) || compiledp(x))
+        if(builtinp(x))
             error(BUILTIN_EXIST,"assertz",x);
         if(atomp(x))
             SET_AUX(x,PRED);

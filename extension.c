@@ -594,28 +594,6 @@ int b_longnum(int arglist, int rest){
     return(NO);
 }
 
-int b_argument_list(int arglist, int rest){
-    int n,arg1,arg2,res;
-
-    n = length(arglist);
-    if(n == 2){
-        arg1 = car(arglist);
-        arg2 = cadr(arglist);
-
-        arg1 = listreverse(cdr(arg1));
-        res = NIL;
-        while(!nullp(arg1)){
-           res = listcons(car(arg1),res);
-           arg1 = cdr(arg1);
-        }
-        if(unify(arg2,res) == YES)
-            return(prove_all(rest,sp));
-        else
-            return(NO);
-    }
-    return(NO);
-}
-
 int b_findatom(int arglist, int rest){
     int n,arg1,arg2,arg3,res;
 

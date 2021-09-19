@@ -489,8 +489,7 @@ jump_gen_a_body(X) :-
 % defined predicate will become compiled predicate
 jump_gen_a_body(X) :-
     n_defined_predicate(X),
-    functor(X,P,_),
-    n_argument_list(X,L),
+    X =.. [P|L],
     write('Jwcons(Jmakecomp("'),
     write(P),
     write('"),'),
@@ -498,8 +497,9 @@ jump_gen_a_body(X) :-
     write(')').
 jump_gen_a_body(X) :-
     n_property(X,predicate),
-    functor(X,P,_),
-    n_argument_list(X,L),
+    X =.. [P|L],
+    %functor(X,P,_),
+    %n_argument_list(X,L),
     write('Jwcons(Jmakepred("'),
     write(P),
     write('"),'),
@@ -513,8 +513,9 @@ jump_gen_a_body(X) :-
     write(A).
 jump_gen_a_body(X) :-
     n_property(X,builtin),
-    functor(X,P,_),
-    n_argument_list(X,L),
+    X =.. [P|L],
+    %functor(X,P,_),
+    %n_argument_list(X,L),
     n_findatom(P,builtin,A),
     write('Jwcons('),
     write(A),
@@ -526,8 +527,9 @@ jump_gen_a_body(X) :-
     gen_body1(X).
 jump_gen_a_body(X) :-
     n_property(X,compiled),
-    functor(X,P,_),
-    n_argument_list(X,L),
+    X =.. [P|L],
+    %functor(X,P,_),
+    %n_argument_list(X,L),
     write('Jwcons(Jmakecomp("'),
     write(P),
     write('"),'),
@@ -536,14 +538,15 @@ jump_gen_a_body(X) :-
 jump_gen_a_body(X) :-
     n_property(X,userop),
     functor(X,P,0),
-    n_argument_list(X,L),
+    %n_argument_list(X,L),
     write('Jmakeuser("'),
     write(P),
     write('")').
 jump_gen_a_body(X) :-
     n_defined_userop(X),
-    functor(X,P,_),
-    n_argument_list(X,L),
+    X =.. [P|L],
+    %unctor(X,P,_),
+    %n_argument_list(X,L),
     write('Jwcons(Jmakecomp("'),
     write(P),
     write('"),'),
@@ -551,8 +554,9 @@ jump_gen_a_body(X) :-
     write(')').
 jump_gen_a_body(X) :-
     n_property(X,userop),
-    functor(X,P,_),
-    n_argument_list(X,L),
+    X =.. [P|L],
+    %functor(X,P,_),
+    %n_argument_list(X,L),
     write('Jwcons(Jmakeuser("'),
     write(P),
     write('"),'),
@@ -577,7 +581,8 @@ e.g   foo(_) -> if(1)
 jump_gen_head(X) :-
     functor(X,_,0).
 jump_gen_head(X) :-
-    n_argument_list(X,Y),
+    X =.. [_|Y],
+    %n_argument_list(X,Y),
     write('if('),
     jump_gen_head1(Y,1),
     write(')\n').
@@ -953,8 +958,9 @@ jump_gen_a_argument(X) :-
     write('")').
 jump_gen_a_argument(X) :-
     n_defined_predicate(X),
-    functor(X,Y,_),
-    n_argument_list(X,Z),
+    X =.. [Y|Z],
+    %functor(X,Y,_),
+    %n_argument_list(X,Z),
     write('Jwcons(Jmakecomp("'),
     write(Y),
     write('"),'),
@@ -962,8 +968,9 @@ jump_gen_a_argument(X) :-
     write(')').
 jump_gen_a_argument(X) :-
     n_property(X,predicate),
-    functor(X,Y,_),
-    n_argument_list(X,Z),
+    X =.. [Y|Z],
+    %functor(X,Y,_),
+    %n_argument_list(X,Z),
     write('Jwcons(Jmakepred("'),
     write(Y),
     write('"),'),
@@ -976,9 +983,10 @@ jump_gen_a_argument(X) :-
     write(A).
 jump_gen_a_argument(X) :-
     n_property(X,builtin),
-    functor(X,Y,_),
+    X =.. [Y|Z],
+    %functor(X,Y,_),
     n_findatom(Y,builtin,A),
-    n_argument_list(X,Z),
+    %n_argument_list(X,Z),
 	write('Jwcons('),
     write(A),
     write(','),
@@ -991,9 +999,10 @@ jump_gen_a_argument(X) :-
     write(A).
 jump_gen_a_argument(X) :-
     n_property(X,compiled),
-    functor(X,Y,_),
+    X =.. [Y|Z],
+    %functor(X,Y,_),
     n_findatom(Y,compiled,A),
-    n_argument_list(X,Z),
+    %n_argument_list(X,Z),
     write('Jwcons('),
     write(A),
     write(','),
@@ -1006,9 +1015,10 @@ jump_gen_a_argument(X) :-
     write(A).
 jump_gen_a_argument(X) :-
     n_property(X,operation),
-    functor(X,Y,_),
+    X =.. [Y|Z],
+    %functor(X,Y,_),
     n_findatom(Y,operator,A),
-    n_argument_list(X,Z),
+    %n_argument_list(X,Z),
 	write('Jwcons('),
     write(A),
     write(','),
@@ -1031,8 +1041,9 @@ jump_gen_a_argument(X) :-
     write('")').
 jump_gen_a_argument(X) :-
     n_property(X,function),
-    functor(X,F,_),
-    n_argument_list(X,Z),
+    X =.. [F|Z],
+    %functor(X,F,_),
+    %n_argument_list(X,Z),
 	write('Jwcons(Jmakefun("'),
     write(F),
     write('"),'),
@@ -1046,8 +1057,9 @@ jump_gen_a_argument(X) :-
     write('")').
 jump_gen_a_argument(X) :-
     n_property(X,userop),
-    functor(X,Y,_),
-    n_argument_list(X,Z),
+    X =.. [Y|Z],
+    %functor(X,Y,_),
+    %n_argument_list(X,Z),
 	write('Jwcons(Jmakeuser("'),
     write(Y),
     write('"),'),
@@ -1242,7 +1254,8 @@ jump_gen_tail_pred4(P) :-
 jump_gen_tail_var(X) :-
     functor(X,_,0).
 jump_gen_tail_var(X) :-
-    n_argument_list(X,Y),
+    X =.. [_|Y],
+    %n_argument_list(X,Y),
     jump_gen_tail_var1(Y,[]).
 
 jump_gen_tail_var1([],L).
@@ -1273,11 +1286,13 @@ jump_gen_tail_head(X) :-
     functor(X,_,0).
 % if element of X is all compiler var -> ignore
 jump_gen_tail_head(X) :-
-    n_argument_list(X,Y),
+    X =.. [_|Y],
+    %n_argument_list(X,Y),
     jump_all_var(Y).
 % if element of X include constant
 jump_gen_tail_head(X) :-
-    n_argument_list(X,Y),
+    X =.. [_|Y],
+    %n_argument_list(X,Y),
     write('if('),
     jump_gen_tail_head2(Y,[]),
     write(')').
@@ -1286,7 +1301,8 @@ jump_gen_tail_head(X) :-
 %  head = wlist1(varA);
 %  if(o && o && ... &1) return(Junify(arglist,head));
 jump_gen_tail_head_unify(Pred) :-
-    n_argument_list(Pred,Args),
+    Pred =.. [_|Args],
+    %n_argument_list(Pred,Args),
     n_generate_variable(Args,V),
     jump_gen_tail_head_unify1(V),
     write('head = '),
@@ -1454,7 +1470,8 @@ jump_gen_tail_a_body(X,Head) :-
 jump_gen_tail_a_body(X,Head) :-
     functor(X,P,A),
     functor(Head,P,A),
-    n_argument_list(X,Xs),
+    X =.. [_|Xs],
+    %n_argument_list(X,Xs),
     jump_gen_tail_call(Xs).
 
 % gen_tail_a_body(X,Head) :-
@@ -1536,8 +1553,10 @@ jump_unidirectory(_) :- fail.
 % foo([varA|varB])<=> foo(varA) false (depend)
 % foo([varA|varB])<=> foo(varC) true (independ)
 jump_independence(Pred1,Pred2) :-
-    n_argument_list(Pred1,Args1),
-    n_argument_list(Pred2,Args2),
+    pred1 =.. [_|Args1],
+    pred2 =.. [_|Args2],
+    %n_argument_list(Pred1,Args1),
+    %n_argument_list(Pred2,Args2),
     jump_independence1(Args1,Args2).
 
 jump_independence1([],Y).
@@ -1564,7 +1583,8 @@ jump_independence2([[X|Xs]|Ys],Y) :-
 % foo([varX|varL],[varX|1]) -> no
 % foo([varY|varL],[varX|1]) -> yes
 jump_self_independence(Pred) :-
-    n_argument_list(Pred,Args),
+    Pred =.. [_|Args],
+    %n_argument_list(Pred,Args),
     jump_self_independence1(Args).
 
 jump_self_independence1([]).
