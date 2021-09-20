@@ -12,6 +12,7 @@ int readparse(void){
     res = parser(NIL,NIL,NIL,NIL,0,0);
     if(paren_nest != 0)
         error(SYNTAX_ERR,"extra paren ",NIL);
+
     return(res);
 }
 
@@ -1241,7 +1242,16 @@ int readitem(void){
         case LPAREN:    return(LEFTPAREN);
         case RPAREN:    return(RIGHTPAREN);
         case LCURL:     return(list2(CURL,readcurl()));
-        case OPERATOR:  return(makeatom(stok.buf,OPE));
+        case OPERATOR:  temp = makeatom(stok.buf,OPE);
+                        gettoken();
+                        if(strcmp(stok.buf,"/") == 0){
+                            temp1 = readitem();
+                            return(list3(SLASH,temp,temp1));
+                        }
+                        else{
+                            stok.flag = BACK;
+                            return(temp);
+                        }
         case DOT:       gettoken();
                         if(stok.type == LPAREN){
                             temp = readparen();
@@ -1262,7 +1272,7 @@ int readitem(void){
                                 stok.flag = BACK;
                                 return(temp);
                             }
-
+                        
                             temp1 = readparen();
                             return(cons(temp,temp1));
                         }
@@ -1342,6 +1352,21 @@ int readitem(void){
                             prefix_flag = 1;
                             return(cons(temp,temp1));
                         }
+                        else if(strcmp(stok.buf,"/") == 0){
+                            if(getatom(str,SYS,hash(str)))
+                                temp = makeatom(str,SYS);
+                            else if(getatom(str,COMP,hash(str)))
+                                temp = makeatom(str,COMP);
+                            else if(getatom(str,OPE,hash(str)))
+                                temp = makeatom(str,OPE);
+                            else if(getatom(str,USER,hash(str)))
+                                temp = makeatom(str,USER);
+                            else
+                                temp = makeatom(str,PRED);
+
+                            temp1 = readitem();
+                            return(list3(SLASH,temp,temp1));
+                        }
                         else{
                             elseexit:
                             stok.flag = BACK;
@@ -1391,6 +1416,7 @@ int readparen(void){
     else if(stok.type == LPAREN){ //assert((foo(X) :- boo(X))).
         gettoken(); //atom as operand ex (*)
         if(stok.ahead == ')'){
+            paren_nest++;
             stok.flag = BACK;
             car = readitem();
             goto next;
@@ -1427,6 +1453,7 @@ int readparen(void){
             error(SYNTAX_ERR,"expected ( ) ",car);
 
     }
+
     repeat:
     gettoken();
     if(stok.type == PERIOD){

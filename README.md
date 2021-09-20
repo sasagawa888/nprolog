@@ -22,7 +22,7 @@ On Linux  type "make" on terminal. and type "sudo make install" on terminal.
 see https://www.youtube.com/watch?v=36vUd8ThMF0
 
 ## Uninstall
-On Linux type "sudo make uninstall" ont terminal.
+On Linux type "sudo make uninstall" on terminal.
 
 
 # invoke
