@@ -1458,7 +1458,7 @@ int b_reconsult(int arglist, int rest){
             }
 
             //delete old definition
-            if(predicatep(clause)){
+            if(predicatep(clause) || user_operation_p(clause)){
                 if(atomp(clause))
                     atom  = clause;
                 else
@@ -2214,7 +2214,7 @@ int b_assert(int arglist, int rest){
 
         arg1 = variable_to_call(arg1); //P -> call(P)
         arg1 = copy_heap(arg1); //copy arg1 to heap area
-        if(predicatep(arg1)){
+        if(predicatep(arg1) || user_operation_p(arg1)){
             SET_VAR(arg1,unique(varslist(arg1)));
             if(atomp(arg1))
                 add_data(arg1,arg1);
@@ -2234,7 +2234,7 @@ int b_assert(int arglist, int rest){
             checkgbc();
             return(prove_all(rest,sp));
         }
-        error(SYNTAX_ERR,"assertz ",arg1);
+        error(SYNTAX_ERR,"assertzasdf ",arg1);
     }
     error(ARITY_ERR,"assertz ",arglist);
     return(NO);
@@ -2258,7 +2258,7 @@ int b_asserta(int arglist, int rest){
 
         arg1 = variable_to_call(arg1); //P -> call(P)
         arg1 = copy_heap(arg1); //copy arg1 to heap area
-        if(predicatep(arg1)){
+        if(predicatep(arg1) || user_operation_p(arg1)){
             SET_VAR(arg1,unique(varslist(arg1)));
             if(atomp(arg1))
                 insert_data(arg1,arg1);
