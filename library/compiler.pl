@@ -75,11 +75,9 @@ compile_file(X) :-
 
 % for debug not remove C code.
 compile_file1(X) :-
-    n_strict(true),
     jump_pass1(X),
     jump_pass2(X),
-    jump_invoke_gcc_not_remove(X),
-    n_strict(false).
+    jump_invoke_gcc_not_remove(X).
 
 % generate object from c code
 compile_file1(X) :-
