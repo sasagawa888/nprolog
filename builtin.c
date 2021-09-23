@@ -1500,7 +1500,7 @@ X)->foo, foo(X) :- bar(X)->foo
  set CDR part of atom the arity. e.g. cdr(atom) = #[2,3]
 */
 void memoize_arity(int clause, int atom){
-    if(predicatep(clause)){
+    if(predicatep(clause) || user_operation_p(clause)){
         if(atomp(clause) && !memq(makeint(0),GET_ARITY(atom))){
             SET_ARITY(atom,cons(makeint(0),GET_ARITY(atom)));
         }
@@ -2234,7 +2234,7 @@ int b_assert(int arglist, int rest){
             checkgbc();
             return(prove_all(rest,sp));
         }
-        error(SYNTAX_ERR,"assertzasdf ",arg1);
+        error(SYNTAX_ERR,"assertz ",arg1);
     }
     error(ARITY_ERR,"assertz ",arglist);
     return(NO);

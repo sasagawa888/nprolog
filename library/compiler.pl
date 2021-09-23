@@ -410,6 +410,16 @@ jump_gen_a_pred5(P) :-
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
+jump_gen_a_pred5(P) :-
+	n_property(P,userop),
+    write('save1 = Jget_wp();'),nl,
+	jump_gen_head(P),
+    write('if(Jprove_all(rest,Jget_sp()) == YES)'),nl,
+    write('return(YES);'),nl,
+    write('Jset_up(save3);'),nl,
+    write('Junbind(save2);'),nl,
+    write('Jset_wp(save1);'),nl.
+
 
 % varA,varB,...
 jump_gen_all_var([]).

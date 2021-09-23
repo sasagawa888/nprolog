@@ -474,6 +474,8 @@ int b_clause_with_arity(int arglist, int rest){
                 res = cons(clause,res);
             else if(predicatep(clause) && length(clause) == l+1)
                 res = cons(clause,res);
+            else if(user_operation_p(clause) && length(clause) == l+1)
+                res = cons(clause,res);    
             else if(clausep(clause) && atomp(cadr(clause)) && l == 0)
                 res = cons(clause,res);
             else if(clausep(clause) && length(cadr(clause)) == l+1)
