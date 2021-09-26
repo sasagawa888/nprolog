@@ -424,14 +424,16 @@ jump_gen_a_pred5(P) :-
 % varA,varB,...
 jump_gen_all_var([]).
 jump_gen_all_var([L|Ls]) :-
-	write(L),
+    n_atom_convert(L,L1),
+	write(L1),
     write(','),
     jump_gen_all_var(Ls).
 
 % varA = Jmakevariant(), varB = Jmakevariant();
 jump_gen_var([]).
 jump_gen_var([L|Ls]) :-
-    write(L),
+    n_atom_convert(L,L1),
+    write(L1),
     write(' = Jmakevariant();'),nl,
     jump_gen_var(Ls).
 
@@ -740,8 +742,9 @@ jump_eval_form(X) :-
 jump_eval_form(X) :-
 	atom(X),
     n_compiler_variable(X),
+    n_atom_convert(X,X1),
     write('Jderef('),
-    write(X),
+    write(X1),
     write(')').
 jump_eval_form(X) :-
 	atom(X),
@@ -927,7 +930,8 @@ jump_gen_a_argument([]) :-
 	write('NIL').
 jump_gen_a_argument(X) :-
 	n_compiler_variable(X),
-    write(X).
+    n_atom_convert(X,X1),
+    write(X1).
 jump_gen_a_argument(pi) :-
 	write('Jmakestrflt("3.14159265358979")').
 jump_gen_a_argument(X) :-
@@ -1249,7 +1253,8 @@ jump_gen_tail_var1(X,L) :-
 % normal variable
 jump_gen_tail_var1(X,L) :-
     n_compiler_variable(X),
-    write(X),
+    n_atom_convert(X,X1),
+    write(X1),
     write(' = '),
     jump_gen_tail_head3(X,L),
     write(';'),nl.

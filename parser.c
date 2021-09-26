@@ -1242,16 +1242,7 @@ int readitem(void){
         case LPAREN:    return(LEFTPAREN);
         case RPAREN:    return(RIGHTPAREN);
         case LCURL:     return(list2(CURL,readcurl()));
-        case OPERATOR:  temp = makeatom(stok.buf,OPE);
-                        gettoken();
-                        if(strcmp(stok.buf,"/") == 0){
-                            temp1 = readitem();
-                            return(list3(SLASH,temp,temp1));
-                        }
-                        else{
-                            stok.flag = BACK;
-                            return(temp);
-                        }
+        case OPERATOR:  return(makeatom(stok.buf,OPE));
         case DOT:       gettoken();
                         if(stok.type == LPAREN){
                             temp = readparen();
