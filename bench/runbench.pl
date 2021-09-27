@@ -9,7 +9,7 @@
 :- consult('bench/ops8.o').
 :- write('ops8'),nl,measure(test).
 :- consult('bench/qsort.o').
-:- write('qsorte'),nl,measure(test).
+:- write('qsort'),nl,measure(test).
 :- consult('bench/serialize.o').
 :- write('serialize'),nl,measure(test).
 :- consult('bench/times10.o').
