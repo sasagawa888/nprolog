@@ -1,9 +1,11 @@
 /*
 Turing machine in prolog
-from Kaname Yoshida' book
+from Kaname Yoshida's book
 
 tm(State,Position,Tape).
 state: q0.q1...qN)
+position: start from 1
+tape: list
 
 ?- tm(q0,2,[0,1,1,1,0,1,1,1,1,0]).
 this calculates 2+3=5
