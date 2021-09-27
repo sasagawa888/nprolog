@@ -1,6 +1,6 @@
 /*
 Turing machine in prolog
-from Kaname Yoshida's book
+from Dr. Kaname Yoshida's book
 
 tm(State,Position,Tape).
 state: q0.q1...qN)
