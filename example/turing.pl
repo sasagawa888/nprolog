@@ -67,14 +67,8 @@ set(N,[L|Ls],X,[L|Y]) :-
     set(N1,Ls,X,Y).
 
 state(S,P,T) :-
-    space(P),
+    P1 is P*2,
+    tab(P1),
     write(S),nl,
     write(T),nl.
     
-
-space(1).
-space(N) :-
-    N>1,
-    write('  '),
-    N1 is N-1,
-    space(N1).
