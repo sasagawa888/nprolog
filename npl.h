@@ -791,6 +791,7 @@ int bigx_mult(int arg1, int arg2);
 int bigx_mult_i(int x, int y);
 int bigx_mult1(int arg1, int arg2);
 int bigx_negativep(int x);
+int bigx_ntt_mult(int arg1, int arg2);
 int bigx_plus(int arg1, int arg2);
 int bigx_plus1(int arg1, int arg2);
 int bigx_positivep(int x);
