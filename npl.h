@@ -801,6 +801,7 @@ int bigx_remainder_i(int x, int y);
 int bigx_shift(int x, int rest);
 int bigx_simplify(int x);
 int bigx_smallerp(int arg1, int arg2);
+int bigx_to_parmanent(int x);
 int builtin_zero_p(int addr);
 int builtinp(int addr);
 int butlast(int addr);

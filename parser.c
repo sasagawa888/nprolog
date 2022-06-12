@@ -1316,7 +1316,10 @@ int readitem(void){
                         else
                             return(makehexbigx(stok.buf));
         case FLOATN:    return(makeflt(atof(stok.buf)));
-        case BIGNUM:    return(makebigx(stok.buf));
+        case BIGNUM:    if(open_flag)
+                            return(bigx_to_parmanent(makebigx(stok.buf)));
+                        else
+                            return(makebigx(stok.buf));
         case CHARCODE:  return(makeint(stok.buf[0]));
         case ATOMOBJ:   strcpy(str,stok.buf);
                         if(stok.ch == EOL || stok.ch == CR)
