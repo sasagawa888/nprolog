@@ -547,11 +547,11 @@ int quotient(int x, int y){
     else if(longnump(x) && longnump(y))
         return(long_long_quotient(x,y));
     else if(bignump(x) && integerp(y))
-        return(bigx_quotient_i(x,y));
+        return(bigx_div_i(x,y));
     else if(bignump(x) && longnump(y))
-        return(bigx_quotient(x,bigx_long_to_big(y)));   
+        return(bigx_div(x,bigx_long_to_big(y)));   
     else if(bignump(x) && bignump(y))
-        return(bigx_quotient(x,y));
+        return(bigx_div(x,y));
     else
         error(ILLEGAL_ARGS, "div", list2(x,y));
     

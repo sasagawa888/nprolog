@@ -1,78 +1,142 @@
-/*
-ported from Normal-Scheme
-data type  BIGX
-two way list. to become easy to access from LSB and MSB.
-car=int data of number
-cdr  next pointer to MSB
-aux  prev pointer to LSB
-aux of MSB store NIL.
-opt has sign data. plus=1,minus=-1,zero=0.
-number of data is absolute.
+/* New bignum
+* I am designing a new bignum data structure.
+*  bigcell[BIGISZE]  array of 32bit integer.
+*  big_pt0  pointer of temporaly bignum. 
+*  big_pt1  pointer of parmanent bignum.
+*  90% of bigcell is temporaly area and rest 10% is parmanent area.
+*  in temporaly area rear 10% is working area for divide function.
+*  bigcell = [[temporaly50%,temporalyworking40%],parmanent10%]
+*  each bignum   elementn ... element1,element0
+*  Car-part of the cell has the pointer of MSB.
+*  Cdr-part of then cell has the length
+*  
+   bigcell[int]                  heap[cell structure]
+   |(temporarly)|               |          |
+   |LSB  ^      |      |-------<|BIGX(car) |
+   |     |      |      |        |          |
+   |MSB         |<------        |          |
+   |(working)   | big_pt0       |          |
+   |            |               |          |
+   |(parmanent) | big_pt1       |          |
 
+
+* FFT-Multiply
+* bigcell 32bit integer -> radix 10^3 complex
+* bignum-x bignum-y     IFFT(FFT(x)*FFT(y)) -> bigcell 32bit integer(normalize) 
+* complex data type uses double complex. 
+* It will be calculated correctly by multiplying by about 6000 digits.
+* But beyond that, a complex overflow will occur. The calculation is inaccurate.
 */
+
+
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
 #include <stdlib.h>
 #include <math.h>
 #include "npl.h"
 
 
-int makebigx(char *bignum){ 
-    char integer[15];
-    int i,j,res,sign,len,msb;
-    long long int l,m;
-    
-    //check sign
-    if(bignum[0] == '-')
-        sign = -1;
-    else
-        sign = 1;
-    //remove sign
-    if(bignum[0] == '-' || bignum[0] == '+'){
-        i = laststr(bignum);
-        for(j=0;j<i;j++)
-            bignum[j] = bignum[j+1];
-        
-        bignum[j] = NUL;
+#define CHECKBIG0 if(big_pt0<0 || big_pt0>=BIGNUM_PARMA){error(RESOURCE_ERR,"bigcell pt0",big_pt0);}
+#define CHECKBIG1 if(big_pt1<0 || big_pt1>=BIGSIZE){error(RESOURCE_ERR,"bigcell pt1",big_pt1);}
+
+
+int
+get_length (int x)
+{
+  return (GET_CDR (x));
+}
+
+void
+set_length (int x, int y)
+{
+  SET_CDR (x, y);
+}
+
+int
+get_pointer (int x)
+{
+  return (GET_CAR (x));
+}
+
+void
+set_pointer (int x, int y)
+{
+  SET_CAR (x, y);
+}
+
+
+int
+makebigx (char *bignum)
+{
+  char integer[15];
+  int i, j, res, sign, len;
+
+  // check sign
+  if (bignum[0] == '-')
+    sign = -1;
+  else
+    sign = 1;
+  // remove sign
+  if (bignum[0] == '-' || bignum[0] == '+')
+    {
+      i = laststr (bignum);
+      for (j = 0; j < i; j++)
+	bignum[j] = bignum[j + 1];
+
+      bignum[j] = NUL;
     }
-    //length to check long-integer
-    len = 0;
-    //generate origin of BIGNUM 
-    msb = res = gen_big();
-    
-    i = laststr(bignum);
-    while(i >= 0){
-        if(i > 8){
-            for(j=8; j>=0; j--){
-                integer[j] = bignum[i];
-                i--;
-            }
-            integer[9] = NUL;
-            msb = cons_next(atoi(integer),msb);
-            len++;
-        }
-        else{
-            integer[i+1] = NUL;
-            while(i >= 0){
-                integer[i] = bignum[i];
-                i--;
-            }
-            msb = cons_next(atoi(integer),msb);
-            len++;
-        }
+  // length to check long data type
+  len = 0;
+  // generate bignum data cell
+  res = gen_big ();
+
+  i = laststr (bignum);
+  while (i >= 0)
+    {
+      if (i > 8)
+	{
+	  for (j = 8; j >= 0; j--)
+	    {
+	      integer[j] = bignum[i];
+	      i--;
+	    }
+	  integer[9] = NUL;
+	  CHECKBIG0 bigcell[big_pt0++] = atoi (integer);
+	  len++;
+	}
+      else
+	{
+	  integer[i + 1] = NUL;
+	  while (i >= 0)
+	    {
+	      integer[i] = bignum[i];
+	      i--;
+	    }
+	  CHECKBIG0 bigcell[big_pt0++] = atoi (integer);
+	  len++;
+	}
     }
-    
-    if(len==2){ 
-        l = (long long int)GET_CAR(next(res))*BIGNUM_BASE; 
-        m = (long long int)GET_CAR(res);
-        m = (l+m)*sign;
-        SET_TAG(res,LONGN);
-        SET_LONG(res,m);
-        return(res);
+
+  if (len == 2)
+    {
+      long long int l, m;
+
+      CHECKBIG0 l = (long long int) bigcell[big_pt0 - 1] * BIGNUM_BASE;
+      m = (long long int) bigcell[big_pt0 - 2];
+      m = (l + m) * sign;
+      SET_TAG (res, LONGN);
+      SET_LONG (res, m);
+      return (res);
     }
-    else{
-        SET_TAG(res,BIGX);
-        set_sign(res,sign);
-        return(res);
-    }    
+  else
+    {
+      SET_TAG (res, BIGX);
+      set_pointer (res, big_pt0 - 1);
+      set_length (res, len);
+      set_sign (res, sign);
+      return (res);
+    }
 }
 
 int makehexbigx(char *bignum){ 
@@ -111,6 +175,7 @@ int makehexbigx(char *bignum){
     }
     return(num);    
 }
+
 
 int makeoctbigx(char *bignum){ 
     int num,i,j;
@@ -152,6 +217,8 @@ int makebinbigx(char *bignum){
     return(num);    
 }
 
+
+/* old code
 void print_bigx(int x){
     int y;
     
@@ -166,956 +233,1387 @@ void print_bigx(int x){
         y = prev(y);
     }while(!nullp(y));
 }
-
-/*
-x=new y=link
-if it is first cell, store the cell, else chain a new cell.
 */
-int cons_next(int x, int y){
-    int res;
-    
-    if(GET_AUX(y) == -1){
-        SET_AUX(y,NIL);
-        SET_CAR(y,x);
-        res = y;
+void
+print_bigx (int x)
+{
+  int y, len;
+  
+  if (get_sign (x) == -1)
+    fputc ('-', GET_PORT (output_stream));
+	
+  y = get_pointer (x);		//get pointer of bigcell
+  len = get_length (x);		//get length of bignum;
+  fprintf(GET_PORT(output_stream),"%d", bigcell[y]);
+  y--;
+  len--;
+
+  do
+    {   
+	  fprintf(GET_PORT(output_stream),"%09d", bigcell[y]);
+      y--;
+      len--;
     }
-    else{
-        res = freshcell();
-        SET_CAR(res,x);
-        SET_CDR(y,res);
-        SET_AUX(res,y);
-        SET_CDR(res,NIL);
+  while (len > 0);  
+}
+
+
+int
+gen_big (void)
+{
+  int res;
+
+  res = freshcell ();
+  SET_CDR (res, NIL);
+  SET_ARITY (res, -1); //in eisl SET_PROP
+  return (res);
+}
+
+
+// set sign
+void
+set_sign (int x, int y)
+{
+  SET_OPT (x, y);
+}
+
+// get sign
+int
+get_sign (int x)
+{
+  return (GET_OPT (x));
+}
+
+int
+bigx_positivep (int x)
+{
+  if (get_sign (x) == 1)
+    return (1);
+  else
+    return (0);
+}
+
+int
+bigx_negativep (int x)
+{
+  if (get_sign (x) == -1)
+    return (1);
+  else
+    return (0);
+}
+
+
+
+int
+bigx_eqp (int x, int y)
+{
+  int len, pointerx, pointery;
+
+  if (get_sign (x) != get_sign (y))
+    return (0);
+  else if (get_length (x) != get_length (y))
+    return (0);
+
+  len = get_length (x);
+  pointerx = get_pointer (x);
+  pointery = get_pointer (y);
+  do
+    {
+      if (bigcell[pointerx] != bigcell[pointery])
+	return (0);
+
+      pointerx--;
+      pointery--;
+      len--;
     }
-    return(res);
+  while (len > 0);
+
+  return (1);
+
 }
 
-//x=link y=new
-int cons_prev(int x, int y){
-    int res;
-    
-    if(GET_AUX(x) == -1){
-        SET_AUX(x,NIL);
-        SET_CAR(x,y);
-        res = x;
+
+int
+bigx_abs_smallerp (int x, int y)
+{
+  int len1, len2, pointerx, pointery;
+
+  len1 = get_length (x);
+  len2 = get_length (y);
+
+  if (len1 < len2)
+    return (1);
+  else if (len1 > len2)
+    return (0);
+  else
+    {
+      pointerx = get_pointer (x);
+      pointery = get_pointer (y);
+      do
+	{
+	  if (bigcell[pointerx] < bigcell[pointery])
+	    return (1);
+	  if (bigcell[pointerx] > bigcell[pointery])
+	    return (0);
+
+	  pointerx--;
+	  pointery--;
+	  len1--;
+	}
+      while (len1 > 0);
+      return (0);
     }
-    else{
-        res = freshcell();
-        SET_CAR(res,y);
-        SET_CDR(res,x);
-        SET_AUX(x,res);
-        SET_AUX(res,NIL);
+
+}
+
+int
+bigx_smallerp (int x, int y)
+{
+
+  if (bigx_positivep (x) && bigx_negativep (x))
+    return (0);
+  else if (bigx_negativep (x) && bigx_positivep (y))
+    return (1);
+  else if (bigx_positivep (x) && bigx_positivep (y))
+    return (bigx_abs_smallerp (x, y));
+  else if (bigx_negativep (x) && bigx_negativep (y))
+    return (bigx_abs_smallerp (y, x));
+  else
+    return (0);
+
+  return (0);
+}
+
+
+
+
+int
+bigx_int_to_big (int x)
+{
+  int res, y;
+
+  y = GET_INT (x);
+  CHECKBIG0 bigcell[big_pt0++] = abs (y);
+  res = gen_big ();
+  SET_TAG (res, BIGX);
+  set_pointer (res, big_pt0 - 1);
+  set_length (res, 1);
+  if (y >= 0)
+    set_sign (res, 1);
+  else
+    set_sign (res, -1);
+  return (res);
+}
+
+int
+bigx_long_to_big (int x)
+{
+  int res, i2, i1;
+  long long int l;
+
+  l = GET_LONG (x);
+  i2 = llabs (l) % BIGNUM_BASE;
+  i1 = llabs (l) / BIGNUM_BASE;
+  CHECKBIG0 bigcell[big_pt0++] = i2;
+  CHECKBIG0 bigcell[big_pt0++] = i1;
+  res = gen_big ();
+  SET_TAG (res, BIGX);
+  set_pointer (res, big_pt0 - 1);
+  set_length (res, 2);
+  if (l >= 0)
+    set_sign (res, 1);
+  else
+    set_sign (res, -1);
+  return (res);
+}
+
+
+int
+bigx_simplify (int x)
+{
+  int i1;
+  long long int l, l1, l2;
+
+  if (get_length (x) == 0)
+    {
+      return (makeint (0));
     }
-    return(res);
-}
-/*
-To check first cell, prop=-1.
-therefor when compute bignum, if it is first cell, store data the cell.
-or else chain cell with cons_next. 
-
-*/
-int gen_big(void){
-    int res;
-    
-    res = freshcell();
-    SET_CDR(res,NIL);
-    SET_AUX(res,-1);
-    return(res);
-}
-
-//get address of upper digit
-int next(int x){    
-    return(GET_CDR(x));
-}
-
-//get address of lower digit
-int prev(int x){
-    return(GET_AUX(x)); 
-}
-
-//set sign
-void set_sign(int x, int y){
-    SET_OPT(x,y);
-}
-//get sign
-int get_sign(int x){
-    return(GET_OPT(x));
-}
-
-int bigx_positivep(int x){
-    if(get_sign(x) == 1)
-        return(1);
-    else
-        return(0);
-}
-
-int bigx_negativep(int x){
-    if(get_sign(x) == -1)
-        return(1);
-    else
-        return(0);
-}
-/*
-count number of bignum cell.
-if value is zero, count is zero.
-It is reason for matching to division
-
-*/
-int bigx_length(int x){
-    int len,y;
-    
-    len = 0;
-    y = x;
-    do{
-        len++;
-        y = next(y);
-    }while(!nullp(y));
-    if(len==1 && GET_CAR(x)==0)
-        return(0);
-    else
-        return(len);
-}
-
-//get address of MSB
-int get_msb(int x){
-    while(!nullp(next(x)))
-        x = next(x);
-    
-    return(x);
-}
-
-//garbage collection of unnecessary bignum cell.
-void bigx_gbc(int x){
-    int addr,addr1;
-    
-    addr = x;
-    do{ addr1 = next(addr);
-        clrcell(addr);
-        fc++;
-        SET_CDR(addr,hp);
-        hp = addr;
-        addr = addr1;
-    }while(!nullp(addr));     
-}
-
-
-int bigx_eqp(int x, int y){
-    do{
-        if(GET_CAR(x) != GET_CAR(y))
-            return(0);
-        
-        x = next(x);
-        y = next(y);
-    }while(!nullp(x) && !nullp(y));
-    if(nullp(x) && nullp(y))
-        return(1);
-    else
-        return(0);
-}
-
-int bigx_greaterp(int arg1, int arg2){
-    int l1,l2,a1,a2;
-    
-    if(bigx_positivep(arg1) && bigx_negativep(arg2))
-        return(1);
-    if(bigx_negativep(arg1) && bigx_positivep(arg2))
-        return(0);
-    
-    l1 = bigx_length(arg1);
-    l2 = bigx_length(arg2);
-    
-
-    if(bigx_positivep(arg1) && bigx_positivep(arg2) && l1 > l2)
-        return(1);
-    else if(bigx_negativep(arg1) && bigx_negativep(arg2) && l1 < l2)
-        return(1);
-    else if(l1 == l2 && bigx_positivep(arg1) && bigx_positivep(arg2)){
-        a1 = get_msb(arg1);
-        a2 = get_msb(arg2);
-        do{
-            if(GET_CAR(a1) > GET_CAR(a2))
-                return(1);
-            else
-                return(0);
-            a1 = prev(a1);
-            a2 = prev(a2);
-        }while(!nullp(a1));
-        return(0);
+  else if (get_length (x) == 1)
+    {
+      i1 = bigcell[get_pointer (x)];
+      i1 = i1 * get_sign (x);
+      return (makeint (i1));
     }
-    else if(l1 == l2 && bigx_negativep(arg1) && bigx_negativep(arg2)){
-        a1 = get_msb(arg1);
-        a2 = get_msb(arg2);
-        do{
-            if(GET_CAR(a1) < GET_CAR(a2))
-                return(1);
-            else
-                return(0);
-            a1 = prev(a1);
-            a2 = prev(a2);
-        }while(!nullp(a1));
-        return(0);
-    }   
-    else
-        return(0);  
+  else if (get_length (x) == 2)
+    {
+      l1 = bigcell[get_pointer (x)];
+      l2 = bigcell[get_pointer (x) - 1];
+      l = (l1 * BIGNUM_BASE + l2) * get_sign (x);
+      return (makelong (l));
+    }
+  else
+    return (x);
 }
 
-int bigx_abs_smallerp(int arg1, int arg2){
-    int l1,l2,a1,a2;
-    
-    l1 = bigx_length(arg1);
-    l2 = bigx_length(arg2);
-    
+// add n-zero-cells to x
+int
+bigx_shift (int x, int n)
+{
+  int res, len, pointer;
 
-    if(l1 < l2)
-        return(1);
-    else if(l1 > l2)
-        return(0);
-    else {
-        a1 = get_msb(arg1); 
-        a2 = get_msb(arg2);
-        do{
-            if(GET_CAR(a1) < GET_CAR(a2))
-                return(1);
-            if(GET_CAR(a1) > GET_CAR(a2))
-                return(0);
-                
-            a1 = prev(a1);
-            a2 = prev(a2);
-        }while(!nullp(a1));
-        return(0);
+  len = get_length (x);
+  pointer = get_pointer (x) - len + 1;	// LSB
+  res = gen_big ();
+  SET_TAG (res, BIGX);
+  set_sign (res, get_sign (x));
+
+  int i;
+  for (i = 0; i < n; i++)
+    {
+      CHECKBIG0 bigcell[big_pt0++] = 0;
     }
-        
+  for (i = 0; i < len; i++)
+    {
+      CHECKBIG0 bigcell[big_pt0++] = bigcell[pointer + i];
+    }
+
+  set_pointer (res, big_pt0 - 1);
+  set_length (res, len + n);
+  return (res);
 }
 
+int
+bigx_to_parmanent (int x)
+{
+  int len, pointer;
 
-int bigx_smallerp(int arg1, int arg2){ 
-    int l1,l2,a1,a2;
-    
-    if(bigx_positivep(arg1) && bigx_negativep(arg2))
-        return(0);
-    if(bigx_negativep(arg1) && bigx_positivep(arg2))
-        return(1);
-    
-    l1 = bigx_length(arg1);
-    l2 = bigx_length(arg2);
+  pointer = get_pointer (x);
+  len = get_length (x);
+  pointer = get_pointer (x);
 
-    if(l1 == l2 && bigx_positivep(arg1) && bigx_positivep(arg2)){
-        a1 = get_msb(arg1);
-        a2 = get_msb(arg2);
-        do{
-            if(GET_CAR(a1) < GET_CAR(a2)){
-                return(1);
-            }
-            if(GET_CAR(a1) > GET_CAR(a2)){
-                return(0);
-            }
-            a1 = prev(a1);
-            a2 = prev(a2);
-        }while(!nullp(a1));
-        return(0);
+  big_pt1 = big_pt1 + len;
+  CHECKBIG1 int i;
+  for (i = 0; i < len; i++)
+    {
+      bigcell[big_pt1 - i] = bigcell[pointer - i];
     }
-    else if(l1 == l2 && bigx_negativep(arg1) && bigx_negativep(arg2)){
-        a1 = get_msb(arg1);
-        a2 = get_msb(arg2);
-        do{
-            if(GET_CAR(a1) > GET_CAR(a2))
-                return(1);
-            if(GET_CAR(a1) < GET_CAR(a2))
-                return(0);    
-            
-            a1 = prev(a1);
-            a2 = prev(a2);
-        }while(!nullp(a1));
-        return(0);
-    }   
-    if(bigx_positivep(arg1) && bigx_positivep(arg2)){
-        if(l1 > l2)
-            return(0);
-        else if(l1 < l2)
-            return(1);
-    }
-    else if(bigx_negativep(arg1) && bigx_negativep(arg2)){
-        if(l1 < l2)
-            return(0);
-        else if(l1 > l2)
-            return(1);
-    }
-    
-    
-    return(0);  
+
+  big_pt1++;
+  set_pointer (x, big_pt1 - 1);
+  return (x);
 }
 
-//find nth cell address
-int get_nth(int x, int n){
-    int m,msb;
-    
-   
-    m = 1;
-    msb = x;
-    while(m<=n){
-        msb = next(msb);
-        m++;
-    }
-    return(msb);
+int
+bigx_abs (int x)
+{
+  int res;
+
+  res = gen_big ();
+  SET_TAG (res, BIGX);
+  set_sign (res, 1);
+  set_pointer (res, get_pointer (x));
+  set_length (res, get_length (x));
+  return (res);
 }
 
+int
+bigx_zerop (int x)
+{
+  int len, pointer;
 
-//generate bignum data of n-cells
-int gen_n(int n){
-    int i,msb,res;
-    
-    msb = res = gen_big();
-    SET_TAG(res,BIGX);
-    SET_CAR(res,0);
-    SET_AUX(res,NIL);
-    for(i=1;i<n;i++)
-        msb = cons_next(0,msb);
-    
-    return(res);
+  len = get_length (x);
+  pointer = get_pointer (x);
+  while (len > 0)
+    {
+      if (bigcell[pointer--] != 0)
+	return (0);
+      len--;
+    }
+  return (1);
 }
 
+int
+bigx_plus (int arg1, int arg2)
+{
+  int res;
 
-/*
-cut of head zero cell.
-at least keep one cell, because possibility of all-zero. 
+  res = UNDEF;
+  if (bigx_positivep (arg1) && bigx_positivep (arg2))
+    {
+      res = bigx_plus1 (arg1, arg2);
+      set_sign (res, 1);
+    }
+  else if (bigx_negativep (arg1) && bigx_negativep (arg2))
+    {
+      res = bigx_plus1 (arg1, arg2);
+      set_sign (res, -1);
+    }
+  else if (bigx_positivep (arg1) && bigx_negativep (arg2))
+    {
+      if (bigx_abs_smallerp (arg1, arg2))
+	{
+	  res = bigx_minus1 (arg2, arg1);
+	  set_sign (res, -1);
+	}
+      else
+	{
+	  res = bigx_minus1 (arg1, arg2);
+	  set_sign (res, 1);
+	}
+    }
+  else if (bigx_negativep (arg1) && bigx_positivep (arg2))
+    {
+      if (bigx_abs_smallerp (arg1, arg2))
+	{
+	  res = bigx_minus1 (arg2, arg1);
+	  set_sign (res, 1);
+	}
+      else
+	{
+	  res = bigx_minus1 (arg1, arg2);
+	  set_sign (res, -1);
+	}
+    }
 
-*/
-void cut_zero(int x){
-    int msb,dig;
-    
-    dig = bigx_length(x);
-    msb = get_msb(x);
-    while(GET_CAR(msb) == 0 && dig > 1){
-        msb = prev(msb);
-        dig--;
-    }
-    SET_CDR(msb,NIL);
-}
-int bigx_int_to_big(int x){
-    int res,y;
-    
-    y = GET_INT(x);
-    res = gen_big();
-    SET_TAG(res,BIGX);
-    cons_next(abs(y),res);
-    if(y>=0)
-        set_sign(res,1);
-    else
-        set_sign(res,-1);
-    return(res);
-}
+  if (simp_flag)
+    res = bigx_simplify (res);
 
-int bigx_long_to_big(int x){
-    int res,i2,i1;
-    long long int l;
-    
-    l = GET_LONG(x);
-    i2 = llabs(l) % BIGNUM_BASE; 
-    i1 = llabs(l) / BIGNUM_BASE;
-    res = gen_big();
-    SET_TAG(res,BIGX);
-    if(l>=0)
-        set_sign(res,1);
-    else
-        set_sign(res,-1);
-    cons_next(i1,cons_next(i2,res));
-    return(res);
-}
-
-int bigx_simplify(int x){ 
-    int i1;
-    long long int l,l1,l2;
-        
-    if(bigx_length(x) == 0){
-        return(makeint(0));
-    }
-    else if(bigx_length(x) == 1){
-        i1 = GET_CAR(x);
-        i1 = i1 * get_sign(x);
-        bigx_gbc(x);
-        return(makeint(i1));
-    }
-    else if(bigx_length(x) == 2){
-        l2 = GET_CAR(x);
-        l1 = GET_CAR(next(x));
-        l = (l1 * BIGNUM_BASE + l2) * get_sign(x);
-        bigx_gbc(x);
-        return(makelong(l));
-    }
-    else
-        return(x);
-    
-}
-//add n-zero-cells to x
-int bigx_shift(int x, int n){
-    int res,msb;
-    
-    msb = res = gen_big();
-    SET_TAG(res,BIGX);
-    set_sign(res,get_sign(x));
-    
-    while(n > 0){
-        msb = cons_next(0,msb);
-        n--;
-    }
-    do{
-        msb = cons_next(GET_CAR(x),msb);
-        x = next(x);
-    }while(!nullp(x));
-    return(res);
+  return (res);
 }
 
 
-int bigx_abs(int x){
-    int res,msb,y;
-    
-    msb = res = gen_big();
-    SET_TAG(res,BIGX);
-    set_sign(res,1);
-    do{
-        y = GET_CAR(x);
-        msb = cons_next(y,msb);
-        x = next(x);
-    }while(!nullp(x));
-    
-    return(res);
+int
+bigx_plus1 (int arg1, int arg2)
+{
+  int len1, len2, pointerx, pointery, c, len, res;
+
+  len1 = get_length (arg1);
+  len2 = get_length (arg2);
+  pointerx = get_pointer (arg1) - len1 + 1;	//LSB
+  pointery = get_pointer (arg2) - len2 + 1;	//LSB
+  res = gen_big ();
+  SET_TAG (res, BIGX);
+  set_sign (res, 1);
+  c = 0;
+  len = 0;
+  do
+    {
+      int x, y, z, q;
+
+      if (len1 > 0)
+	x = bigcell[pointerx];
+      else
+	x = 0;
+
+      if (len2 > 0)
+	y = bigcell[pointery];
+      else
+	y = 0;
+
+      z = x + y + c;
+      c = z / BIGNUM_BASE;
+      q = z % BIGNUM_BASE;
+      CHECKBIG0 bigcell[big_pt0++] = q;
+      pointerx++;
+      pointery++;
+      len1--;
+      len2--;
+      len++;
+    }
+  while (len1 > 0 || len2 > 0);
+  if (c != 0)
+    {
+      CHECKBIG0 bigcell[big_pt0++] = c;
+    }
+  set_pointer (res, big_pt0 - 1);
+  set_length (res, len);
+  return (res);
 }
 
 
-int bigx_plus(int arg1, int arg2){
-    int res;
-    
-    res = UNDEF;
-    if(bigx_positivep(arg1) && bigx_positivep(arg2)){
-        res = bigx_plus1(arg1,arg2);
-        set_sign(res,1);
+int
+bigx_minus (int arg1, int arg2)
+{
+  int res;
+
+  res = UNDEF;
+  if (bigx_positivep (arg1) && bigx_positivep (arg2))
+    {
+      if (bigx_smallerp (arg1, arg2))
+	{
+	  res = bigx_minus1 (arg2, arg1);
+	  set_sign (res, -1);
+	}
+      else
+	{
+	  res = bigx_minus1 (arg1, arg2);
+	  set_sign (res, 1);
+	}
     }
-    else if(bigx_negativep(arg1) && bigx_negativep(arg2)){
-        res = bigx_plus1(arg1,arg2);
-        set_sign(res,-1);
+  else if (bigx_positivep (arg1) && bigx_negativep (arg2))
+    {
+      res = bigx_plus1 (arg1, arg2);
+      set_sign (res, 1);
     }
-    else if(bigx_positivep(arg1) && bigx_negativep(arg2)){
-        if(bigx_abs_smallerp(arg1,arg2)){
-            res = bigx_minus1(arg2,arg1);
-            set_sign(res,-1);
-        }
-        else{
-            res = bigx_minus1(arg1,arg2);
-            set_sign(res,1);
-        }
+  else if (bigx_negativep (arg1) && bigx_positivep (arg2))
+    {
+      res = bigx_plus1 (arg1, arg2);
+      set_sign (res, -1);
     }
-    else if(bigx_negativep(arg1) && bigx_positivep(arg2)){
-        if(bigx_abs_smallerp(arg1,arg2)){
-            res = bigx_minus1(arg2,arg1);
-            set_sign(res,1);
-        }
-        else{
-            res = bigx_minus1(arg1,arg2); 
-            set_sign(res,-1); 
-        }
+  else if (bigx_negativep (arg1) && bigx_negativep (arg2))
+    {
+      if (bigx_abs_smallerp (arg1, arg2))
+	{
+	  res = bigx_minus1 (arg2, arg1);
+	  set_sign (res, 1);
+	}
+      else
+	{
+	  res = bigx_minus1 (arg1, arg2);
+	  set_sign (res, -1);
+	}
     }
-    
-    if(simp_flag)
-        res = bigx_simplify(res);
-        
-    return(res);
+  if (simp_flag)
+    res = bigx_simplify (res);
+
+  return (res);
 }
 
-int bigx_plus1(int arg1, int arg2){
-    int x,y,z,c,q,res,msb;
-    
-    msb = res = gen_big();
-    SET_TAG(res,BIGX);
-    set_sign(res,1);
-    c = 0;
-    do{
-        x = GET_CAR(arg1);
-        y = GET_CAR(arg2);
-        z = x + y + c;
-        c = z / BIGNUM_BASE;
-        q = z % BIGNUM_BASE;
-        msb = cons_next(q,msb);
-        arg1 = next(arg1);
-        arg2 = next(arg2); 
-    }while(!nullp(arg1) && !nullp(arg2));
-    if(nullp(arg1))
-        bigx_plus2(arg2,c,msb);
-    else
-        bigx_plus2(arg1,c,msb);
-    cut_zero(res);
-    return(res);
-}
-
-void bigx_plus2(int arg, int c, int msb){
-    int q;
-    long long int l;
-    
-    do{
-        l = GET_CAR(arg) + c;
-        c = l / BIGNUM_BASE;
-        q = l % BIGNUM_BASE;
-        msb = cons_next(q,msb);
-        arg = next(arg);
-    }while(!nullp(arg));
-    if(c!=0)
-        msb = cons_next(c,msb);
-}   
-
-int bigx_minus(int arg1, int arg2){
-    int res;
-    
-    res = UNDEF;
-    if(bigx_positivep(arg1) && bigx_positivep(arg2)){
-        if(bigx_smallerp(arg1,arg2)){
-            res = bigx_minus1(arg2,arg1);
-            set_sign(res,-1);
-        }
-        else{
-            res = bigx_minus1(arg1,arg2);
-            set_sign(res,1);
-        }
-    }
-    else if(bigx_positivep(arg1) && bigx_negativep(arg2)){
-        res = bigx_plus1(arg1,arg2);
-        set_sign(res,1);
-    }
-    else if(bigx_negativep(arg1) && bigx_positivep(arg2)){
-        res = bigx_plus1(arg1,arg2);
-        set_sign(res,-1);
-    }
-    else if(bigx_negativep(arg1) && bigx_negativep(arg2)){
-        if(bigx_abs_smallerp(arg1,arg2)){
-            res = bigx_minus1(arg2,arg1);
-            set_sign(res,1);
-        }
-        else{
-            res = bigx_minus1(arg1,arg2);
-            set_sign(res,-1);
-        }
-    }
-    if(simp_flag)
-        res = bigx_simplify(res);
-        
-    return(res);        
-}
 
 // arg1 > arg2
-int bigx_minus1(int arg1, int arg2){
-    int x,y,z,c,res,msb;
-     
-    msb = res = gen_big();
-    SET_TAG(res,BIGX);
-    set_sign(res,1);
-    c = 0;
-    do{
-        x = GET_CAR(arg1);
-        y = GET_CAR(arg2);
-        if((x + c - y) < 0){
-            z = (x + BIGNUM_BASE + c) - y;
-            c = -1;
-        }
-        else{
-            z = (x + c) - y;
-            c = 0;
-        }
-        
-        msb = cons_next(z,msb);
-        arg1 = next(arg1);
-        arg2 = next(arg2);
-    }while(!nullp(arg2));
+int
+bigx_minus1 (int arg1, int arg2)
+{
+  int len1, len2, pointerx, pointery, len, z, c, res;
 
-    if(!nullp(arg1))
-        bigx_minus2(arg1,c,msb);
-    
-    cut_zero(res);
-    return(res);
-}
 
-void bigx_minus2(int arg, int c, int msb){
-    int q,x;
+  len1 = get_length (arg1);
+  len2 = get_length (arg2);
+  pointerx = get_pointer (arg1) - len1 + 1;	// LSB
+  pointery = get_pointer (arg2) - len2 + 1;	// LSB
+  res = gen_big ();
+  SET_TAG (res, BIGX);
+  set_sign (res, 1);
+  c = 0;
+  len = 0;
+  do
+    {
+      int x, y;
 
-    while(!nullp(arg)){
-        x = GET_CAR(arg);
-        if(x + c  < 0){
-            q = x + BIGNUM_BASE + c;
-            c = -1;
-        }
-        else{
-            q = x + c;
-            c = 0;
-        }
-        msb = cons_next(q,msb);
-        arg = next(arg);
+      if (len1 > 0)
+	x = bigcell[pointerx];
+      else
+	x = 0;
+
+      if (len2 > 0)
+	y = bigcell[pointery];
+      else
+	y = 0;
+
+
+      if ((x + c - y) < 0)
+	{
+	  z = (x + BIGNUM_BASE + c) - y;
+	  c = -1;
+	}
+      else
+	{
+	  z = (x + c) - y;
+	  c = 0;
+	}
+      CHECKBIG0 bigcell[big_pt0++] = z;
+      pointerx++;
+      pointery++;
+      len1--;
+      len2--;
+      len++;
     }
-}
+  while (len1 > 0 || len2 > 0);
 
-int bigx_mult(int arg1, int arg2){
-    int res;
-    
-    res = UNDEF;
-    if(bigx_positivep(arg1) && bigx_positivep(arg2)){
-        res = bigx_mult1(arg1,arg2);
-        set_sign(res,1);
+  big_pt0--;
+  while (bigcell[big_pt0] == 0 && len > 1)
+    {
+      big_pt0--;
+      len--;
     }
-    else if(bigx_positivep(arg1) && bigx_negativep(arg2)){
-        res = bigx_mult1(arg1,arg2);
-        set_sign(res,-1);
-    }
-    else if(bigx_negativep(arg1) && bigx_positivep(arg2)){
-        res = bigx_mult1(arg1,arg2);
-        set_sign(res,-1);
-    }
-    else if(bigx_negativep(arg1) && bigx_negativep(arg2)){
-        res = bigx_mult1(arg1,arg2);
-        set_sign(res,1);
-    } 
-    if(simp_flag)
-        res = bigx_simplify(res);
-        
-    return(res);
-}
 
-int bigx_mult1(int arg1, int arg2){
-    int res,msb,dig1,dig2,n;
-    long long int x,y,z,l1,l2,c;
-    
-    msb = res = gen_n(bigx_length(arg1)+bigx_length(arg2));
-    set_sign(res,1);
-    dig2 = arg2;
-    n = 0; 
-    do{
-        dig1 = arg1;
-        msb = get_nth(res,n);
-        do{
-            x = (long long int)GET_CAR(dig1);
-            y = (long long int)GET_CAR(dig2);
-            z = x * y; 
-            l2 = z % BIGNUM_BASE;
-            l1 = z / BIGNUM_BASE;
-            l2 = l2 + (long long int)GET_CAR(msb);
-            if(l2 >= BIGNUM_BASE){
-                c = l2 / BIGNUM_BASE;
-                l2 = l2 % BIGNUM_BASE;
-            }
-            else{
-                c = 0;
-            }
-            l1 = l1 + c + (long long int)GET_CAR(next(msb));
-            SET_CAR(msb,(int)l2);
-            SET_CAR(next(msb),(int)l1);
-            dig1 = next(dig1);
-            msb = next(msb);
-        }while(!nullp(dig1)); 
-        dig2 = next(dig2);
-        n++;
-    }while(!nullp(dig2)); 
-    cut_zero(res);
-    return(res);
+  big_pt0++;
+  set_pointer (res, big_pt0 - 1);
+  set_length (res, len);
+  return (res);
 }
 
 
 
-int bigx_quotient(int arg1, int arg2){
-    int res,x,y;
-    
-    res = UNDEF;
-    //if devidend is smaller than divisor,return 0
-    if(bigx_abs_smallerp(arg1,arg2))
-        return(makeint(0));
-        
-    if(bigx_positivep(arg1) && bigx_positivep(arg2)){
-        res = bigx_quotient1(arg1,arg2);
+int
+bigx_mult (int arg1, int arg2)
+{
+  int res;
+
+
+  res = UNDEF;
+  if (bigx_positivep (arg1) && bigx_positivep (arg2))
+    {
+      res = bigx_mult1 (arg1, arg2);
+      set_sign (res, 1);
     }
-    else if(bigx_positivep(arg1) && bigx_negativep(arg2)){
-        y = bigx_abs(arg2);
-        res = bigx_quotient1(arg1,y);
-        set_sign(res,-1);
-        bigx_gbc(y);
+  else if (bigx_positivep (arg1) && bigx_negativep (arg2))
+    {
+      res = bigx_mult1 (arg1, arg2);
+      set_sign (res, -1);
     }
-    else if(bigx_negativep(arg1) && bigx_positivep(arg2)){
-        x = bigx_abs(arg1); 
-        res = bigx_quotient1(x,arg2);
-        set_sign(res,-1);
-        bigx_gbc(x);
+  else if (bigx_negativep (arg1) && bigx_positivep (arg2))
+    {
+      res = bigx_mult1 (arg1, arg2);
+      set_sign (res, -1);
     }
-    else if(bigx_negativep(arg1) && bigx_negativep(arg2)){
-        x = bigx_abs(arg1);
-        y = bigx_abs(arg2);
-        res = bigx_quotient1(x,y);
-        set_sign(res,1);
-        bigx_gbc(x);
-        bigx_gbc(y);
+  else if (bigx_negativep (arg1) && bigx_negativep (arg2))
+    {
+      res = bigx_mult1 (arg1, arg2);
+      set_sign (res, 1);
     }
-    //else
-    //  exception("big_quotient", ILLEGAL_ARGUMENT, list2(arg1,arg2));
-    
-    if(simp_flag)
-        res = bigx_simplify(res);
-    return(res);
+  if (simp_flag)
+    {
+      res = bigx_simplify (res);
+    }
+
+  return (res);
 }
+
+
+int
+bigx_mult1 (int arg1, int arg2)
+{
+  int res, len1, len2, pointerx, pointery, len;
+  long long int x, y, z, l1, l2, c;
+
+
+  res = gen_big ();
+  SET_TAG (res, BIGX);
+  len1 = get_length (arg1);
+  len2 = get_length (arg2);
+  len = len1 + len2;
+  set_sign (res, 1);
+
+  // clear area of calculate
+  int i, j;
+  for (i = 0; i <= len; i++)
+    {
+      CHECKBIG0 bigcell[i + big_pt0] = 0;
+    }
+  pointery = get_pointer (arg2) - len2 + 1;	//LSB
+  for (j = 0; j < len2; j++)
+    {
+      pointerx = get_pointer (arg1) - len1 + 1;	//LSB
+      for (i = 0; i < len1; i++)
+	{
+	  x = (long long int) bigcell[pointerx + i];
+	  y = (long long int) bigcell[pointery + j];
+	  z = x * y;
+	  l2 = z % BIGNUM_BASE;
+	  l1 = z / BIGNUM_BASE;
+	  l2 = l2 + (long long int) bigcell[big_pt0 + j + i];
+	  if (l2 >= BIGNUM_BASE)
+	    {
+	      c = l2 / BIGNUM_BASE;
+	      l2 = l2 % BIGNUM_BASE;
+	    }
+	  else
+	    {
+	      c = 0;
+	    }
+	  l1 = l1 + c + (long long int) bigcell[big_pt0 + j + i + 1];
+	  CHECKBIG0 bigcell[big_pt0 + j + i] = (int) l2;
+	  bigcell[big_pt0 + j + i + 1] = (int) l1;
+	}
+    }
+
+  big_pt0 = big_pt0 + len;
+
+  while (bigcell[big_pt0] == 0 && len > 1)
+    {
+      big_pt0--;
+      len--;
+    }
+  big_pt0++;
+  set_pointer (res, big_pt0 - 1);
+  set_length (res, len + 1);
+  return (res);
+}
+
+int
+bigx_div (int arg1, int arg2)
+{
+  int res, x, y;
+
+
+  res = UNDEF;
+  // if devidend is smaller than divisor,return 0
+  if (bigx_abs_smallerp (arg1, arg2))
+    return (makeint (0));
+
+  if (bigx_positivep (arg1) && bigx_positivep (arg2))
+    {
+      res = bigx_div1 (arg1, arg2);
+    }
+  else if (bigx_positivep (arg1) && bigx_negativep (arg2))
+    {
+      y = bigx_abs (arg2);
+      res = bigx_div1 (arg1, y);
+      set_sign (res, -1);
+    }
+  else if (bigx_negativep (arg1) && bigx_positivep (arg2))
+    {
+      x = bigx_abs (arg1);
+      res = bigx_div1 (x, arg2);
+      set_sign (res, -1);
+    }
+  else if (bigx_negativep (arg1) && bigx_negativep (arg2))
+    {
+      x = bigx_abs (arg1);
+      y = bigx_abs (arg2);
+      res = bigx_div1 (x, y);
+      set_sign (res, 1);
+    }
+
+  if (simp_flag)
+    res = bigx_simplify (res);
+  return (res);
+}
+
+
+
+int
+bigx_div1 (int arg1, int arg2)
+{
+  int shift, save0, save1, d,
+    res, len, q, dividend, subtract, pointerx, pointery, msb1, msb2;
+  long long int lmsb1;
+
+
+  // arg1 < arg2 -> 0
+  if (smallerp (arg1, arg2))
+    return (makeint (0));
+
+  simp_flag = 0;
+  pointery = get_pointer (arg2);	//MSB pointer
+
+  // Knuth The art of computer programing D-algorithm
+  if (bigcell[pointery] < BIGNUM_BASE / 2)
+    {
+      d = BIGNUM_BASE / (1 + bigcell[pointery]);
+      arg1 = bigx_mult1 (arg1, bigx_int_to_big (makeint (d)));
+      arg2 = bigx_mult1 (arg2, bigx_int_to_big (makeint (d)));
+    }
+
+  res = gen_big ();
+  SET_TAG (res, BIGX);
+  set_sign (res, 1);
+  len = 0;
+  big_pt0 = big_pt0 + get_length (arg1);	// prepare area of answer. 
+  set_pointer (res, big_pt0);
+  pointery = get_pointer (arg2);	//MSB pointer
+  msb2 = bigcell[pointery];	// value of MSB
+  dividend = arg1;
+  save1 = BIGNUM_WORK;
+
+  do
+    {
+      save0 = big_pt0;
+      big_pt0 = save1;
+      shift = get_length (dividend) - get_length (arg2);
+      pointerx = get_pointer (dividend);	// MSB
+      msb1 = bigcell[pointerx];
+      if (msb1 >= msb2)
+	{
+	  q = msb1 / msb2;
+
+	}
+      else
+	{
+	  lmsb1 =
+	    (long long int) bigcell[pointerx] * BIGNUM_BASE +
+	    (long long int) bigcell[pointerx - 1];
+	  q = (int) (lmsb1 / (long long int) msb2);
+	  shift--;
+	}
+
+
+      subtract =
+	bigx_shift (bigx_mult1 (arg2, bigx_int_to_big (makeint (q))), shift);
+      dividend = bigx_minus (dividend, subtract);
+
+      // e.g. (div 100000000000000000000000000 25000000000000000000000002) = 3 (not 4)
+      while (negativep (dividend))
+	{
+	  dividend = plus (dividend, bigx_shift (arg2, shift));
+	  q--;
+	}
+
+      save1 = big_pt0;
+      big_pt0 = save0;
+      CHECKBIG0 bigcell[big_pt0 - len] = q;
+      len++;
+
+    }
+  while (!bigx_zerop (dividend) && !smallerp (dividend, arg2));
+
+  // when divident is smaller than divisior and shift > 0 insert zero
+  //e.q.  div(3000000000000000000,30000000000)
+  while (shift > 0)
+    {
+      CHECKBIG0 bigcell[big_pt0 - len] = 0;
+      shift--;
+      len++;
+    }
+
+  simp_flag = 1;
+  big_pt0++;
+  set_pointer (res, big_pt0 - 1);
+  set_length (res, len);
+  return (res);
+}
+
+
+int
+bigx_remainder (int arg1, int arg2)
+{
+  int shift,
+    res, len, q, dividend, subtract,
+    pointerx, pointery, save0, pointer, msb1, msb2;
+  long long int lmsb1;
+
+
+  // arg1 > arg2 -> 0
+  if (smallerp (arg1, arg2))
+    return (makeint (0));
+
+  res = gen_big ();
+  SET_TAG (res, BIGX);
+  set_sign (res, 1);
+  big_pt0 = big_pt0 + get_length (arg1);	// prepare area of answer. 
+  set_pointer (res, big_pt0);
+  pointery = get_pointer (arg2);	//MSB pointer
+  msb2 = bigcell[pointery];	// value of MSB
+  dividend = arg1;
+  save0 = big_pt0;
+  big_pt0 = BIGNUM_WORK;	// change to working area
+
+  do
+    {
+      shift = get_length (dividend) - get_length (arg2);
+      pointerx = get_pointer (dividend);	// MSB
+      msb1 = bigcell[pointerx];
+      if (msb1 >= msb2)
+	{
+	  q = msb1 / msb2;
+
+	}
+      else
+	{
+	  lmsb1 =
+	    (long long int) bigcell[pointerx] * BIGNUM_BASE +
+	    (long long int) bigcell[pointerx - 1];
+	  q = (int) (lmsb1 / (long long int) msb2);
+	  shift--;
+	}
+      subtract =
+	bigx_shift (bigx_mult1 (arg2, bigx_int_to_big (makeint (q))), shift);
+      dividend = bigx_minus (dividend, subtract);
+
+      // e.g. (div 100000000000000000000000000 25000000000000000000000002) = 3 (not 4)
+      while (negativep (dividend))
+	{
+	  dividend = plus (dividend, bigx_shift (arg2, shift));
+	  q--;
+	}
+
+    }
+  while (!smallerp (dividend, arg2));
+
+  big_pt0 = save0;		//restore pointer
+  // copy dividend to big_pt0 temporarly area
+
+  len = get_length (dividend);
+  pointer = get_pointer (dividend) - len + 1;	//LSB
+  int i;
+  for (i = 0; i < len; i++)
+    {
+      CHECKBIG0 bigcell[big_pt0++] = bigcell[pointer++];
+    }
+  set_pointer (res, big_pt0 - 1);
+  set_length (res, len);
+  return (res);
+}
+
+
+int
+bigx_big_to_flt (int x)
+{
+  double val;
+  int pointer, len, res;
+
+  res = freshcell ();
+  val = 0.0;
+  pointer = get_pointer (x);
+  len = get_length (x);
+  do
+    {
+      int i;
+
+      i = bigcell[pointer];
+      val = val * (double) BIGNUM_BASE + (double) i;
+      pointer--;
+      len--;
+    }
+  while (len > 0);
+  val = val * get_sign (x);
+  SET_TAG (res, FLTN);
+  SET_FLT (res, val);
+  return (res);
+}
+
+
+// bignum remainder of bignum and int
+int
+bigx_remainder_i (int x, int y)
+{
+  int abs, pointer, len, sign1, sign2;
+  long long int j, r;
+
+  abs = bigx_abs (x);
+  pointer = get_pointer (abs);
+  len = get_length (abs);
+  sign1 = get_sign (x);
+
+  j = GET_INT (y);
+  if (j < 0)
+    {
+      j = llabs (j);
+      sign2 = -1;
+    }
+  else
+    {
+      sign2 = 1;
+    }
+
+  r = 0;
+
+  do
+    {
+      long long int i;
+
+      i = bigcell[pointer];
+      i = i + r * BIGNUM_BASE;
+      if (i >= j)
+	r = i % j;
+      else
+	r = i + r;
+      pointer--;
+      len--;
+    }
+  while (len > 0);
+  return (makeint ((int) r * sign1 * sign2));
+}
+
+int
+bigx_div_i (int x, int y)
+{
+  int res, pointer, msb, len, n, sign1, sign2;
+  long long int j, r, q;
+
+
+  res = gen_big ();
+  len = n = get_length (x);
+  msb = get_pointer (bigx_abs (x));
+  sign1 = get_sign (x);
+
+  j = GET_INT (y);
+  if (j < 0)
+    {
+      j = llabs (j);
+      sign2 = -1;
+    }
+  else
+    {
+      sign2 = 1;
+    }
+
+  r = 0;
+
+  big_pt0 = big_pt0 + len;
+  pointer = big_pt0;
+  do
+    {
+      long long int i;
+
+      i = bigcell[msb];
+      i = i + r * BIGNUM_BASE;
+      if (i >= j)
+	{
+	  r = i % j;
+	  q = i / j;
+	  bigcell[pointer--] = (int) q;
+	}
+      else
+	{
+	  r = i + r;
+	  bigcell[pointer--] = 0;
+	}
+      msb--;
+      n--;
+    }
+  while (n > 0);
+  SET_TAG (res, BIGX);
+  while (bigcell[big_pt0] == 0 && len > 1)
+    {
+      big_pt0--;
+      len--;
+    }
+  big_pt0++;
+  set_pointer (res, big_pt0 - 1);
+  set_length (res, len);
+  set_sign (res, sign1 * sign2);
+  if (simp_flag)
+    res = bigx_simplify (res);
+  return (res);
+}
+
+
+// multple of bignum and int
+int
+bigx_mult_i (int x, int y)
+{
+  int res, len, pointer, n, sign1, sign2;
+  long long int j, c;
+
+
+  res = gen_big ();
+  len = n = get_length (x);
+  pointer = get_pointer (x) - len + 1;	//LSB
+  sign1 = get_sign (x);
+
+  j = GET_INT (y);
+  if (j < 0)
+    {
+      j = llabs (j);
+      sign2 = -1;
+    }
+  else
+    {
+      sign2 = 1;
+    }
+
+  c = 0;
+
+  do
+    {
+      long long int i, z;
+
+      i = bigcell[pointer];
+      z = i * j + c;
+      if (z >= BIGNUM_BASE)
+	{
+	  c = z / BIGNUM_BASE;
+	  z = z % BIGNUM_BASE;
+
+	  CHECKBIG0 bigcell[big_pt0++] = (int) z;
+	}
+      else
+	{
+	  c = 0;
+	  CHECKBIG0 bigcell[big_pt0++] = (int) z;
+	}
+      pointer++;
+      len--;
+    }
+  while (len > 0);
+
+  CHECKBIG0 bigcell[big_pt0] = (int) c;
+  len = n + 1;
+  while (bigcell[big_pt0] == 0 && len > 1)
+    {
+      big_pt0--;
+      len--;
+    }
+  big_pt0++;
+
+  SET_TAG (res, BIGX);
+  set_pointer (res, big_pt0 - 1);
+  set_length (res, len);
+  set_sign (res, sign1 * sign2);
+  res = bigx_simplify (res);
+  return (res);
+}
+
 /*
-Knuth TAOCP fourth. see p88
-s=sift is for match digits, ds is divisor, p=plus adding again, 
-bv= if u/v > BIGNUM_BASE, cell of MSB.
+* ---------------FFT/NTT----------------------
+* FFT with number theory transformation(NTT) for fast multiplication.
+* One big cell is decomposed into 3 NTT data.
+* Multipliers and multipliers are stored as follows.
 
+  nttx[0]     0  
+  nttx[1]     123
+  ...         456
+  nttx[n/2-1] 789
+  nttx[n/2]   0
+  ...         0
+  nttx[n-1]   0 
+
+* Number data is stored in the first half. The remaining area is filled with 0.
+* rest half of the area is filled with 0 to avoid cyclic calculation.
+
+* One NTT DATA is 3 digits in decimal notation.
+* It contains 0 ~ 999 data. The data is the remainder of the prime number P.
+* It can be stored in 32bit itself, but it is stored in 64bit because it is necessary to calculate the remainder by multiplication.
+* At maximum, 999 * 2 ^ 18 (261881856) can be stored in one NTT cell as a remainder of the prime number P.
+* NTT is a forward calculation. INTT is the inverse map. 
+* Each calculates nttx [] as a vector and returns a value with ntty [] as a vector.
+* ntt_set_w_factor calculates the rotation factor in advance and saves it in ntt_factor[][].
+* Save the forward rotation factor in ntt_factor [i][0]. Save the rotation factor for inverse mapping in ntt_factor [i][1].
 */
+#define NTTSIZE 262144 // 2^18
+#define P 1541406721 //prime-number 5880*2^18+1
+#define OMEGA 103  //primitive-root (mod P)
+long long int nttx[NTTSIZE],ntty[NTTSIZE],nttz[NTTSIZE]; // data area ntty=ntt(nttx),ntty=intt(nttx), nttz is to save data.
+long long int ntt_factor[NTTSIZE][2];
+int ntti[NTTSIZE]; // index of bit-reversal
 
-//#define TEST
+// return size of binary. e.g. 7=111 3bit
+int
+get_bit (int n)
+{
+  int bit;
 
-int bigx_quotient1(int arg1, int arg2){ 
-    int s,ss,ds,p,t,res,flag1,flag2,i,dig1,dig2; 
-    long long int d,u,v,q,l1,l2;
-    #ifdef TEST
-    int c;
-    c = 10;
-    #endif    
-
-    flag1 = 0;
-    flag2 = 0;
-    ss = 0;
-    //devidend is smaller than 2 times divisor, return 1
-    //if quotient is 1, theorem is not hold
-    s = bigx_mult1(arg2,bigx_int_to_big(makeint(2)));
-    if(bigx_abs_smallerp(arg1,s))
-        return(makeint(1));
-    
-    //following code, calcuration is required in bignum 
-    //so, stop simlification.
-    simp_flag = 0;
-    
-    res = gen_big();
-    //if divisor is smaller, become bigger to hold theolem 
-    v = (long long int)GET_CAR(get_msb(arg2));
-    if(v < (BIGNUM_BASE / 2)){
-        d = BIGNUM_BASE / (v + 1);
-        arg1 = bigx_mult1(arg1,bigx_long_to_big(makelong(d)));
-        arg2 = bigx_mult1(arg2,bigx_long_to_big(makelong(d)));
-        flag1 = 1;
-        flag2 = 1;
+  bit = 0;
+  while (n >= 2)
+    {
+      n = n / 2;
+      bit++;
     }
-    
-    #ifdef TEST
-    printf("arg1=");print(arg1);printf("\n");
-    printf("arg2=");print(arg2);printf("\n");
-    #endif
-    
-    do{ dig1 = bigx_length(arg1);
-        dig2 = bigx_length(arg2);
-        if(dig1 > dig2){
-            l1 = (long long int)GET_CAR(get_msb(arg1));
-            l2 = (long long int)GET_CAR(prev(get_msb(arg1)));
-            u = l1 * BIGNUM_BASE + l2;
-            v = (long long int)GET_CAR(get_msb(arg2));
-        }
-        else{
-            u = (long long int)GET_CAR(get_msb(arg1));
-            v = (long long int)GET_CAR(get_msb(arg2));
-        }
-            
-        q = u / v;
-        if(q == 1 && dig1!=dig2)
-            q = 10;
-        ds = bigx_mult1(arg2,bigx_long_to_big(makelong(q)));
-        
-    
-        s = bigx_length(arg1)- bigx_length(ds);
-        ds = bigx_shift(ds,s);
-        p = bigx_shift(arg2,s); 
-        #ifdef TEST
-        printf("q= %I64d (u=%I64d/ v=%I64d)\n", q,u,v);
-        printf("ds=");print(ds);printf("\n");
-        printf("p=");print(p);printf("\n");
-        printf("s=%d\n", s);
-        #endif
-        t = bigx_minus(arg1,ds);
-        if(flag1)
-            bigx_gbc(arg1); //garbage collection
-        arg1 = t;
-        flag1 = 1;
-        
-        
-        
-        while(bigx_negativep(arg1)){ 
-            t = bigx_plus(arg1,p);
-            bigx_gbc(arg1); //garbage collection
-            arg1 = t;
-            q--;
-        } 
-        #ifdef TEST
-        printf("after arg1=");print(arg1);printf("\n");
-        #endif
+  return (bit);
+}
 
-        bigx_gbc(ds);//garbage collection
-        bigx_gbc(p);
-        
-        if((ss - s) > 1){
-            i = ss- s;
-            while(i>1){
-                res = cons_prev(res,0);
-                i--;
-            }
-        }
-        //if q is bigger than BIGNUM_BASE, number span two cells. 
-        if(q < BIGNUM_BASE){
-            res = cons_prev(res,(int)q);
-        }
-        else{
-            l2 = q % BIGNUM_BASE;
-            l1 = q / BIGNUM_BASE;
-            res = cons_prev(cons_prev(res,(int)l1),(int)l2);
-        }
-        ss = s;
-        #ifdef TEST
-        c--;
-        if(c==0)
-            {DEBUG}
-        #endif
-    }while(!bigx_abs_smallerp(arg1,arg2));
-    
-    res = bigx_shift(res,s);
-    
-    if(flag2)
-        bigx_gbc(arg2);
-                
-    //restore flag
-    simp_flag = 1;
-    SET_TAG(res,BIGX);
-    set_sign(res,1);
-    cut_zero(res);
-    return(res);
+//return reversed bit number. e.g.  6=110 -> 011=3
+int
+bit_reverse (long long int n, int bit)
+{
+  int binary[32], i;
+
+
+  for (i = 0; i < bit; i++)
+    {
+      binary[i] = n % 2;
+      n = n / 2;
+    }
+
+  n = 0;
+  for (i = 0; i < bit; i++)
+    {
+      n = binary[i] + n * 2;
+    }
+
+  return (n);
+}
+
+// save index of bit-reverse
+void
+ntt_set_bit_reverse (long long int n)
+{
+  int i, bit;
+
+  bit = get_bit (n);
+  for (i = 0; i < n; i++)
+    {
+      ntti[i] = bit_reverse (i, bit);
+    }
+}
+
+// exponentation x^y (mod z). see SICP
+long long int
+expmod (long long int x, int y, long long int z)
+{
+  long long int res, p;
+
+  res = 1;
+  p = x;
+  while (y > 0)
+    {
+      if ((y % 2) == 0)
+	{
+	  p = (p * p) % z;
+	  y = y / 2;
+	}
+      else
+	{
+	  res = (res * p) % z;
+	  y = y - 1;
+	}
+    }
+  return (res);
+}
+
+// x+y (mod P)
+long long int
+plusmod(long long int x, long long int y){
+  return((x + y) % P);
+}
+
+// x*y (mod P)
+long long int
+multmod(long long int x, long long int y){
+  return((x * y) % P);
+}
+
+// x-y (mod P)
+long long int
+minusmod(long long int x, long long int y){
+  return((x - y + P) % P);
+}
+
+void
+ntt_set_w_factor(int n){
+  int i,base,base_inv;
+
+  base = expmod(OMEGA,NTTSIZE/n,P);
+  base_inv = expmod(base,P-2,P);
+  ntt_factor[0][0] = 1;
+  ntt_factor[0][1] = 1;
+  for(i=1;i<n;i++){
+    ntt_factor[i][0] = multmod(ntt_factor[i-1][0],base);
+    ntt_factor[i][1] = multmod(ntt_factor[i-1][1],base_inv);
+  }
+
 }
 
 
-int bigx_big_to_flt(int x){
-    double val;
-    int i,msb,res;
-    
-    res = freshcell();
-    val = 0.0;
-    msb = get_msb(x);
-    do{
-        i = GET_CAR(msb);
-        val = val * (double)BIGNUM_BASE + (double)i;
-        msb = prev(msb);
-    }while(!nullp(msb));
-    val = val * get_sign(x);
-    SET_TAG(res,FLTN);
-    SET_FLT(res,val);
-    return(res);
+void
+ntt1 (int n, int h, int pos, int index)
+{
+
+  long long int temp;
+  if (h == 0)
+    {
+      return;
+    }
+  else
+    {
+      //recursion
+      ntt1 (n, h/2, pos, index);
+      ntt1 (n, h/2, pos + h, index);
+    }
+      int i,r;
+      r = (n/2)/h; //Adjustment ratio with the original
+      for (i = 0; i < h; i++)
+	{
+	  temp = plusmod(ntty[pos + i],multmod(ntt_factor[i*r][index],ntty[pos + h + i]));
+	  ntty[pos + h + i] =
+	    plusmod(ntty[pos + i],multmod(ntt_factor[(i+h)*r][index],ntty[pos + h + i]));
+	  ntty[pos + i] = temp;
+	}
+   
 }
 
-//bignum remainder of bignum and int
-int bigx_remainder_i(int x, int y){
-    int msb,sign1,sign2;
-    long long int i,j,r;
-    
-    
-    msb = get_msb(bigx_abs(x));
-    sign1 = get_sign(x);
-    
-    j = GET_INT(y);
-    if(j < 0){
-        j = abs(j);
-        sign2 = -1;
+void
+ntt (int n)
+{
+  int i;
+  for (i = 0; i < n; i++)
+    {
+      ntty[ntti[i]] = nttx[i];
     }
-    else{
-        sign2 = 1;
-    }
-        
-    r = 0;
-    
-    do{
-        i = GET_CAR(msb);
-        i = i + r * BIGNUM_BASE;
-        if(i >= j)
-            r = i % j;
-        else
-            r = i + r;
-        msb = prev(msb);
-    }while(!nullp(msb));
-    return(makeint((int)r*sign1*sign2));
+  ntt1 (n, n/2, 0, 0); // n,n/1,0=start-position of vector,0=base-index for forward
+
 }
 
-//quotient of bignum and int
-int bigx_quotient_i(int x, int y){
-    int res,msb,sign1,sign2;
-    long long int i,j,r,q;
-    
-    
-    res = gen_big();
-    msb = get_msb(bigx_abs(x));
-    sign1 = get_sign(x);
-    
-    j = GET_INT(y);
-    if(j < 0){
-        j = abs(j);
-        sign2 = -1;
+
+void
+intt (int n)
+{
+  long long int n_inv;
+
+  int i;
+  for (i = 0; i < n; i++)
+    {
+      ntty[ntti[i]] = nttx[i];
     }
-    else{
-        sign2 = 1;
-    }
-        
-    r = 0;
-    
-    do{
-        i = GET_CAR(msb);
-        i = i + r * BIGNUM_BASE;
-        if(i >= j){
-            r = i % j;
-            q = i / j;
-            res = cons_prev(res,(int)q);
-        }
-        else{
-            r = i + r;
-            res = cons_prev(res,0);
-        }
-        msb = prev(msb);
-    }while(!nullp(msb));
-    SET_TAG(res,BIGX);
-    cut_zero(res);
-    set_sign(res,sign1*sign2);
-    res = bigx_simplify(res);
-    return(res);
+  ntt1 (n, n/2, 0, 1); // n,n/1,0=start-position of vector,1=base-index for inverse
+  n_inv = expmod(n,P-2,P); // n_env is 1/n (mod P). inverse is 1/nΣ...
+  for(i=0;i<n;i++){
+    ntty[i] = (ntty[i]*n_inv) % P; 
+  }
 }
 
-//multiple of bignum and int
-int bigx_mult_i(int x, int y){
-    int res,msb,sign1,sign2;
-    long long int i,j,c,z;
-    
-    
-    msb = res = gen_big();
-    sign1 = get_sign(x);
-    
-    j = GET_INT(y);
-    if(j < 0){
-        j = abs(j);
-        sign2 = -1;
+
+//-------mult with NTT-------
+int
+bigx_ntt_mult (int x, int y)
+{
+  int pointer, lenx, leny, max_len, ans_len, i, n, half, res;
+
+  lenx = get_length (x);
+  leny = get_length (y);
+  if (lenx >= leny)
+    {
+      max_len = lenx;
     }
-    else{
-        sign2 = 1;
+  else
+    {
+      max_len = leny;
     }
-        
-    c = 0;
-    
-    do{
-        i = GET_CAR(x);
-        z = i * j + c;
-        if(z >= BIGNUM_BASE){
-            c = z / BIGNUM_BASE;
-            z = z % BIGNUM_BASE;
-            msb = cons_next((int)z,msb);
-        }
-        else{
-            c = 0;
-            msb = cons_next((int)z,msb);
-        }
-        x = next(x);
-    }while(!nullp(x));
-    if(c != 0)
-        msb = cons_next((int)c,msb);
-    SET_TAG(res,BIGX);
-    cut_zero(res);
-    set_sign(res,sign1*sign2);
-    res = bigx_simplify(res);
-    return(res);
+
+  ans_len = lenx + leny + 1;
+  if (ans_len * 2 * 3 > NTTSIZE)
+    error (RESOURCE_ERR, "ntt-mult", makeint (ans_len));
+
+  //prepare NTT data. datasize is twice of max_len
+  //Each one bigcell needs 3 NTT data.  n= 2^x >= max_len*2*3
+  n = 1;
+  while((max_len * 2 * 3) > n){
+      n = 2 * n;
+  }
+  ntt_set_bit_reverse (n);
+  ntt_set_w_factor(n);
+
+  //------ntt(x)-----
+  for (i = 0; i < NTTSIZE; i++)
+    {
+      nttx[i] = 0;
+    }
+
+  pointer = get_pointer (x) - lenx + 1;	//LSB
+  half = n / 2 - 1;
+
+  for (i = 0; i < lenx; i++)
+    {
+      //one bigcell separate to three NTT data. NTTBASE is 1000
+      nttx[half-(3 * i)] = bigcell[pointer + i] % NTTBASE;
+      nttx[half-(3 * i + 1)] = (bigcell[pointer + i] / NTTBASE) % NTTBASE;
+      nttx[half-(3 * i + 2)] = bigcell[pointer + i] / (NTTBASE * NTTBASE);
+    }
+
+  ntt (n);
+  // save to nttz[]
+  for (i = 0; i < n; i++)
+    {
+      nttz[i] = ntty[i];
+    }
+
+
+  //-----ntt(y)--------
+  for (i = 0; i < NTTSIZE; i++)
+    {
+      nttx[i] = 0;
+    }
+
+  pointer = get_pointer (y) - leny + 1;	//LSB
+  for (i = 0; i < leny; i++)
+    {
+      nttx[half-(3 * i)] = bigcell[pointer + i] % NTTBASE;
+      nttx[half-(3 * i + 1)] = (bigcell[pointer + i] / NTTBASE) % NTTBASE;
+      nttx[half-(3 * i + 2)] = bigcell[pointer + i] / (NTTBASE * NTTBASE);
+    }
+
+  ntt (n);
+
+  //----mult---------
+  for (i = 0; i < n; i++)
+    {
+      nttx[i] = multmod(ntty[i],nttz[i]);
+    }
+
+  //---inverse NTT---
+  intt (n);
+
+  //---generate-answer
+  res = gen_big ();
+  SET_TAG (res, BIGX);
+  set_sign (res, get_sign (x) * get_sign (y));
+  for (i = 0; i < ans_len; i++)
+    {
+      bigcell[big_pt0 + i] = 0;
+    }
+
+  // normalize
+  int pool, carry;
+  n = n - 2;
+  carry = 0;
+  for (i = 0; i < ans_len; i++)
+    {
+      pool = ((int)ntty[n-(3 * i)] + carry) % NTTBASE;
+      carry = ((int)ntty[n-(3 * i)] + carry) / NTTBASE;
+      pool =
+	pool +
+	(((int)ntty[n-(3 * i + 1)] + carry) % NTTBASE) * NTTBASE;
+      carry = ((int)ntty[n-(3 * i + 1)] + carry) / NTTBASE;
+      pool =
+	pool +
+	(((int)ntty[n-(3 * i + 2)] + carry) % NTTBASE) * (NTTBASE * NTTBASE);
+      carry = ((int)ntty[n-(3 * i + 2)] + carry) / NTTBASE;
+      bigcell[big_pt0++] = pool;
+    }
+
+  //zero cut
+  big_pt0--;
+  while (bigcell[big_pt0] == 0 && ans_len > 0)
+    {
+      big_pt0--;
+      ans_len--;
+    }
+
+  big_pt0++;
+  set_pointer (res, big_pt0 - 1);
+  set_length (res, ans_len);
+  return (res);
 }
+
+
+//-----------simple test------------
+
+void ntt_test(){
+  int n,i;
+
+  n = 8;
+
+  nttx[0] = 0;
+  nttx[1] = 0;
+  nttx[2] = 0;
+  nttx[3] = 4;
+  nttx[4] = 0;
+  nttx[5] = 0;
+  nttx[6] = 0;
+  nttx[7] = 0;
+  ntt_set_bit_reverse(n);
+  ntt_set_w_factor(n);
+
+  ntt(n);
+  for(i = 0 ;i < n; i++){
+    nttz[i] = ntty[i];
+  }
+
+  nttx[0] = 0;
+  nttx[1] = 0;
+  nttx[2] = 0;
+  nttx[3] = 5;
+  nttx[4] = 0;
+  nttx[5] = 0;
+  nttx[6] = 0;
+  nttx[7] = 0;
+
+  ntt(n);
+
+  for(i = 0 ;i < n; i++){
+    nttx[i] = multmod(nttz[i],ntty[i]);
+  }
+
+  
+  intt(n);
+
+
+  for(i=0;i<n;i++){
+    printf("%d\n", (int)ntty[i]);
+  }
+
+
+}
+

@@ -29,7 +29,6 @@ void gbc(void){
 
 
 void markcell(int addr){
-    int x;
 
     if(IS_ALPHA(addr)){
         if(variant[addr - CELLSIZE] != UNBIND){
@@ -60,11 +59,7 @@ void markcell(int addr){
                     markcell(cdr(addr));
                     markcell(GET_VAR(addr));
                     return;
-        case BIGX:  x=addr;
-                    do{
-                        MARK_CELL(x);
-                        x = next(x);
-                    }while(!nullp(x));
+        case BIGX:  
                     return;
 
         case STRUCT:

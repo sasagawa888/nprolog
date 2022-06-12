@@ -12,13 +12,15 @@ address
 17,000,001 - 20,000,000  working area 
 20,000,001 - 40,000,000  variant area
 */
-#define VERSION     1.84
+#define VERSION     1.85
 #define CELLSIZE    20000000  // this is max on raspberryPI3B. If parsonal computer 30000000 is OK
 #define HEAPSIZE    17000000
 #define FREESIZE         500
 #define STACKSIZE    1000000
 #define VARIANTSIZE 20000000
 #define VARIANTMAX  CELLSIZE + VARIANTSIZE
+#define BIGSIZE 20000000
+#define NTTBASE 1000
 #define RECORDMAX 12
 #define ATOMSIZE 256
 #define BUFSIZE 256
@@ -140,6 +142,7 @@ typedef struct result {
 
 extern cell heap[CELLSIZE];
 extern int variant[VARIANTSIZE];
+extern int bigcell[BIGSIZE];
 extern int stack[STACKSIZE];
 extern int ustack[STACKSIZE];
 extern token stok;
@@ -183,6 +186,9 @@ extern char compiled[COMPILED_NUMBER][30];
 extern char extended[EXTENDED_NUMBER][30];
 extern double timer;
 
+// bignum pointer
+extern int big_pt0;
+extern int big_pt1;
 
 //stream
 extern int standard_input;
@@ -402,6 +408,9 @@ extern int ed_incomment;
 extern int ed_hight;
 extern int ed_width;
 extern result rtok;
+
+static const int BIGNUM_WORK = BIGSIZE * 5 / 10; // from 50% to 90% of bigcell area is working area.
+static const int BIGNUM_PARMA = BIGSIZE * 9 / 10; //from 90% to 100% of bigcell area is parmanent area
 
 #define ESCHOME printf("\33[1;1H")
 #define ESCTOP  printf("\33[2;1H")
@@ -768,6 +777,9 @@ int bignump(int x);
 int bigx_abs(int x);
 int bigx_abs_smallerp(int arg1, int arg2);
 int bigx_big_to_flt(int x);
+int bigx_div (int arg1, int arg2);
+int bigx_div1 (int arg1, int arg2);
+int bigx_div_i (int x, int y);
 int bigx_eqp(int x, int y);
 int bigx_greaterp(int arg1, int arg2);
 int bigx_int_to_big(int x);

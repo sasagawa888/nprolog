@@ -15,6 +15,7 @@ int nest = 0;
 cell heap[CELLSIZE];
 int cell_hash_table[HASHTBSIZE];
 int variant[VARIANTSIZE];
+int bigcell[BIGSIZE];
 int stack[STACKSIZE];
 int ustack[STACKSIZE];
 int record_hash_table[HASHTBSIZE][RECORDMAX];  // for hash record database 
@@ -60,6 +61,9 @@ int ac; //alpha conversion variable count
 int wp; //working pointer
 int up; //unify stack pointer
 
+// bignum pointer
+int big_pt0 = 0;		// pointer of temporaly bignum
+int big_pt1 = BIGNUM_PARMA;	// pointer of parmanent bignum
 
 //flag
 int repl_flag = 1;  //for editable REPL read_line 1=on, 0=off
@@ -339,6 +343,7 @@ void init_repl(void){
     semiskip_flag = OFF;
     leap_point = NIL;
     left_margin = 4;
+    big_pt0 = 0;
     //initialize variant variable
     for(i=0; i<VARIANTSIZE; i++){
         variant[i] = UNBIND;
