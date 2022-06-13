@@ -1,3 +1,8 @@
-:- op(700,xfx,isc).
+ifx(Test, Then, _) :- Test, !, Then.
+ifx(_ , _ , Else) :- Else.
+ticket(Age, Money) :-  
+ ifx(Age < 13, Money is 500, Money is 1000).
 
-R isc real_part(c(R,I)).
+
+ foo(Test) :- call(Test).
+ bar(Test).

@@ -38,7 +38,7 @@ void initcell(void){
     makeatom(";",OPE);    //address = 14
     makeatom("<leftparen>",SIMP);   //address = 16 '('
     makeatom("<rightparen>",SIMP);  //address = 18 ')'
-    makeatom("call",COMP);  //address = 20
+    makeatom("call",SYS);  //address = 20
     makeatom("?-",OPE);    //address = 22
     makeatom("_",ANOY);     //address = 24
     makeatom(":-",OPE);    //address = 26
