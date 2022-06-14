@@ -525,7 +525,7 @@ prove (int goal, int bindings, int rest)
       longjmp (buf, 1);
     }
   if (nest > 50000)
-    error (RESOURCE_ERR, "", NIL);
+    error (RESOURCE_ERR, "prove recursion over max", NIL);
 
   goal = deref (goal);
 

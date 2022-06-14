@@ -1,8 +1,9 @@
-ifx(Test, Then, _) :- Test, !, Then.
-ifx(_ , _ , Else) :- Else.
-ticket(Age, Money) :-  
- ifx(Age < 13, Money is 500, Money is 1000).
+hanoi(1, From, To, _) :-
+  write([From, to, To]), nl.
+hanoi(N, From, To, Via) :-
+  N1 is N - 1, hanoi(N1, From, Via, To),
+  write([From, to, To]), nl,
+  hanoi(N1, Via, To, From).
 
+%?- hanoi( 16, a, b, c).
 
- foo(Test) :- call(Test).
- bar(Test).
