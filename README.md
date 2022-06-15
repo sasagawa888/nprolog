@@ -340,5 +340,6 @@ float_fraction_part
 sign
 min
 max
-random
+random(n)   generate random integer (n >= x >= 0) 
+randome_real generate random float (1 >= x >= 0)
 ```

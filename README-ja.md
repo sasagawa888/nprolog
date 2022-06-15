@@ -343,5 +343,6 @@ float_fraction_part
 sign
 min
 max
-random
+random(n) n以下0以上の整数乱数
+randome_real()　１以下０以上の浮動小数点数乱数
 ```
