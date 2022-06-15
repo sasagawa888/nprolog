@@ -847,6 +847,12 @@ eval (int x)
       arg1 = result[1];
       return (f_random (arg1));
     }
+  else if (eqp (car (x), makeatom ("random_real", FUNC)))
+    {
+      evalterm (x, result);
+      arg1 = result[1];
+      return (f_random_real (arg1));
+    }
   else if (structurep (x) && operatorp (car (x)))
     {
       evalterm (x, result);
@@ -1596,4 +1602,16 @@ f_random (int x)
 
   x = GET_INT (x);
   return (makeint (rand () & x));
+}
+
+int
+f_random_real(int x)
+{
+double d;
+
+  if (!nullp (x))
+    error (WRONG_ARGS, "random-real", x);
+
+  d = (double) rand () / RAND_MAX;
+  return (makeflt (d));
 }

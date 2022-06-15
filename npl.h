@@ -892,6 +892,7 @@ int f_float_fraction_part(int x);
 int f_min(int x, int y);
 int f_max(int x, int y);
 int f_random(int x);
+int f_random_real(int x);
 int findatom(int x, int property);
 int findvar(int sym);
 int floatp(int x);
