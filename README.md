@@ -309,37 +309,41 @@ usage:  timer_microseconds(on).   timer on
 
 # function
 ```
-+
--
-*
-/
-^  expt
-** expt
-<< leftshift
->> rightshift
-/\ logical and
-\/ logical or
+pi  constant 3.1415...
+X + Y
+X - Y
+X * Y
+X / Y
+X // Y
+X ^ Y  expt
+X ** Y expt
+X << Y leftshift
+X >> Y rightshift
+X /\ Y logical and
+X \/ Y logical or
 \  complement
-xor exclusive or
-iand inclusive and
-abs 
-sin
-asin
-cos 
-acos
-tan
-atan
-exp
-log
-floor
-ceiling
-truncate
-float
-float_integer_part
-float_fraction_part
-sign
-min
-max
+X xor Y exclusive or
+X iand Y inclusive and
+X mod Y 
+abs(X) 
+sin(X)
+asin(X)
+cos(X)
+acos(X)
+tan(X)
+atan(X)
+exp(X)
+log(X)
+floor(X)
+ceiling(X)
+truncate(X)
+float(X)
+float_integer_part(X)
+float_fraction_part(X)
+sign(X)
+min(X,Y)
+max(X,Y)
+sqrt(X)
 random(n)   generate random integer (n >= x >= 0) 
-randome_real generate random float (1 >= x >= 0)
+random_real generate random float (1 >= x >= 0)
 ```

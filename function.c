@@ -700,8 +700,10 @@ eval (int x)
     return (deref (x));
   else if (!structurep (x))
     {
-      if (eqp (x, makeconst ("pi")))
+      if (eqp (x, makefunc ("pi")))
 	return (makeflt (3.14159265358979323846));
+      else if(eqp (x,makefunc ("random_real")))
+  return (f_random_real(NIL));
       else
 	error (EVALUATION_ERR, "eval ", x);
     }
