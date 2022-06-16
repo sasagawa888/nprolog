@@ -312,37 +312,39 @@ usage:  timer_microseconds(on).   timer on
 
 # 関数
 ```
-+
--
-*
-/
-^  expt
-** expt
-<< leftshift
->> rightshift
-/\ logical and
-\/ logical or
-\  complement
-xor exclusive or
-iand inclusive and
-abs 
-sin
-asin
-cos 
-acos
-tan
-atan
-exp
-log
-floor
-ceiling
-truncate
-float
-float_integer_part
-float_fraction_part
-sign
-min
-max
+pi 定数　円周率
+X + Y
+X - Y
+X * Y
+X / Y
+X // Y
+X ^ Y  expt
+X ** Y expt
+X << Y leftshift
+X >> Y rightshift
+X /\ Y logical and
+X \/ Y logical or
+\X  complement
+X xor Y exclusive or
+X iand Y inclusive and
+abs(X) 
+sin(X)
+asin(X)
+cos(X) 
+acos(X)
+tan(X)
+atan(X)
+exp(X)
+log(X)
+floor(X)
+ceiling(X)
+truncate(X)
+float(X)
+float_integer_part(X)
+float_fraction_part(X)
+sign(X)
+min(X,Y)
+max(X,Y)
 random(n) n以下0以上の整数乱数
-randome_real()　１以下０以上の浮動小数点数乱数
+randome_real　１以下０以上の浮動小数点数乱数
 ```
