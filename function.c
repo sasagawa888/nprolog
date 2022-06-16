@@ -779,7 +779,13 @@ eval (int x)
       arg1 = result[1];
       return (f_truncate (arg1));
     }
-  else if (eqlp (car (x), makeatom ("float", FUNC)))
+  else if (eqp (car (x), makeatom ("integer", SYS)))
+    {
+      evalterm (x, result);
+      arg1 = result[1];
+      return (f_truncate (arg1));
+    }
+  else if (eqlp (car (x), makeatom ("float", SYS)))
     {
       evalterm (x, result);
       arg1 = result[1];

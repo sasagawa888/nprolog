@@ -345,6 +345,7 @@ float_fraction_part(X)
 sign(X)
 min(X,Y)
 max(X,Y)
+sqrt(X)
 random(n) n以下0以上の整数乱数
 randome_real　１以下０以上の浮動小数点数乱数
 ```
