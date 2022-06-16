@@ -312,30 +312,31 @@ usage:  timer_microseconds(on).   timer on
 
 # 関数
 ```
-pi 定数　円周率
-X + Y
-X - Y
-X * Y
-X / Y
-X // Y
-X ^ Y  expt
-X ** Y expt
-X << Y leftshift
-X >> Y rightshift
-X /\ Y logical and
-X \/ Y logical or
+pi             定数　円周率
+X + Y          加算
+X - Y　        減算
+X * Y　        乗算
+X / Y　        通常の除算　結果は浮動小数点数
+X // Y　       整数の除算　結果は整数。
+X ^ Y          べき乗
+X ** Y         べき乗
+X << Y         XをYだけ左へビットシフトする。（整数のみ）
+X >> Y         XをYだけ右へビットシフトする。（整数のみ）
+X mod Y        XをYで割った剰余（整数のみ）
+X /\ Y         論理積
+X \/ Y         論理和
 \X  complement
 X xor Y exclusive or
 X iand Y inclusive and
-abs(X) 
-sin(X)
-asin(X)
-cos(X) 
-acos(X)
-tan(X)
-atan(X)
-exp(X)
-log(X)
+abs(X)         Xの値の絶対値
+sin(X)　       Xの正弦関数
+asin(X)　      Xの逆正弦関数
+cos(X) 　      Xの余弦関数
+acos(X)　      Xの逆余弦関数
+tan(X)　       Xの正接関数
+atan(X)　      Xの逆正接関数
+exp(X)　　     Xの指数関数
+log(X)　　     Xの対数関数
 floor(X)
 ceiling(X)
 truncate(X)
@@ -346,6 +347,6 @@ sign(X)
 min(X,Y)
 max(X,Y)
 sqrt(X)
-random(n) n以下0以上の整数乱数
-randome_real　１以下０以上の浮動小数点数乱数
+randi(n)      n以下0以上の整数乱数
+randome　    １以下０以上の浮動小数点数乱数
 ```

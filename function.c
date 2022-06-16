@@ -702,7 +702,7 @@ eval (int x)
     {
       if (eqp (x, makefunc ("pi")))
 	return (makeflt (3.14159265358979323846));
-      else if(eqp (x,makefunc ("random_real")))
+      else if(eqp (x,makefunc ("random")))
   return (f_random_real(NIL));
       else
 	error (EVALUATION_ERR, "eval ", x);
@@ -785,7 +785,7 @@ eval (int x)
       arg1 = result[1];
       return (f_truncate (arg1));
     }
-  else if (eqlp (car (x), makeatom ("float", SYS)))
+  else if (eqp (car (x), makeatom ("float", SYS)))
     {
       evalterm (x, result);
       arg1 = result[1];
@@ -849,7 +849,7 @@ eval (int x)
       arg2 = result[2];
       return (f_max (arg1, arg2));
     }
-  else if (eqp (car (x), makeatom ("random", FUNC)))
+  else if (eqp (car (x), makeatom ("randi", FUNC)))
     {
       evalterm (x, result);
       arg1 = result[1];

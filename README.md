@@ -344,6 +344,6 @@ sign(X)
 min(X,Y)
 max(X,Y)
 sqrt(X)
-random(n)   generate random integer (n >= x >= 0) 
-random_real generate random float (1 >= x >= 0)
+randi(n)   generate random integer (n >= x >= 0) 
+random generate random float (1 >= x >= 0)
 ```
