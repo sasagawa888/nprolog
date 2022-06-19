@@ -21,7 +21,8 @@ NPL_OBJS = main.o \
 	error.o \
 	bignum.o \
 	compute.o \
-	edit.o
+	edit.o \
+	sam.o
 
 
 
