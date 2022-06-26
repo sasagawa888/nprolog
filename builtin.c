@@ -1,4 +1,6 @@
+#ifndef __APPLE__
 #include <stdio_ext.h>
+#endif
 #include <stdlib.h>
 #include <unistd.h>
 #include <string.h>

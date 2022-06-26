@@ -5,7 +5,9 @@ written by kenichi sasagawa 2016/8~
 #include <string.h>
 #include <math.h>
 #include <signal.h>
+#ifndef __APPLE__
 #include <stdio_ext.h>
+#endif
 #include <stdlib.h>
 #include "npl.h"
 
@@ -1514,10 +1516,8 @@ print_not_quoted (int addr)
 	  else if (c == 'a')
 #if _WIN32
 	    MessageBeep (-1);
-#elif __linux
-	    printf ("\a");
-#elif __OpenBSD__
-	    printf ("\a");
+#else
+      printf("\a");
 #endif
 	  else if (c == 'b')
 	    fprintf (GET_PORT (output_stream), "%c", BS);
