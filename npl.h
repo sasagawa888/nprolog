@@ -222,7 +222,11 @@ extern int error_stream;
 #define ON      1
     
 
+#ifdef __APPLE__
+#define FLUSH               fpurge(stdin);
+#else
 #define FLUSH               __fpurge(stdin); 
+#endif
 #define DEBUG               printf("debug\n"); longjmp(buf,2);
 #define GET_FLT(addr)       heap[addr].val.fltnum
 #define GET_CAR(addr)       heap[addr].val.car.intnum
