@@ -12,6 +12,7 @@ I have confirmed the operation on the following OS.
 - Ubuntu
 - Linux MINT
 - RaspberryPI Raspbian
+- macOS
 
 Please use WSL when using it on Windows. 
 
