@@ -258,7 +258,7 @@ main (int argc, char *argv[])
 	      printf ("Not exist %s\n", argv[opt]);
 	      break;
 	    }
-	  b_reconsult (list1 (makeconst (argv[opt])), NIL);
+	  b_consult (list1 (makeconst (argv[opt])), NIL);
 	  opt++;
 	}
       else if (strcmp (argv[opt], "-s") == 0
@@ -273,7 +273,7 @@ main (int argc, char *argv[])
 	      printf ("Not exist %s\n", argv[opt]);
 	      return (0);
 	    }
-	  b_reconsult (list1 (makeconst (argv[opt])), NIL);
+	  b_consult (list1 (makeconst (argv[opt])), NIL);
 	  return (0);
 	}
       else if (strcmp (argv[opt], "-r") == 0
