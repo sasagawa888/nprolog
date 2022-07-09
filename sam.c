@@ -24,7 +24,10 @@ query ?- foo(X,Y,Z) -> ld,A0,X,ld,A1,Y,ld,A2,Z,call,foo.
 */
 
 //register
-int a1,a2,a3,a4,a5,a6,b,pc;
+int a1,a2,a3,a4,a5,a6; // input register
+int b;  // bias register
+int pc; //program counter
+int flag;  // if unify success 1 else 0
 
 // byte code
 int code[1024];
@@ -34,14 +37,31 @@ void sam(){
   static const void *JUMPTABLE[] = 
     {&&CASE_NOP,  //0
     &&CASE_HALT,  //1
-
+    &&CASE_JP,    //2
+    &&CASE_JPNT,  //3
     };
   CASE_NOP:
    pc = pc + 1;
-  goto *JUMPTABLE[code[pc]];
+   goto *JUMPTABLE[code[pc]];
 
   CASE_HALT:
     return;
+
+  CASE_JP:
+   pc = code[pc+1];
+   goto *JUMPTABLE[code[pc]];
+
+  CASE_JPNT:
+   if(flag == 0)
+   {
+    pc = code[pc+1];
+    goto *JUMPTABLE[code[pc]];
+   }
+   else
+   {
+    pc = code[pc+1];
+    goto *JUMPTABLE[code[pc]];
+   }
 
 }
 
