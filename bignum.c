@@ -700,6 +700,7 @@ bigx_plus1 (int arg1, int arg2)
   if (c != 0)
     {
       CHECKBIG0 bigcell[big_pt0++] = c;
+      len++;
     }
   set_pointer (res, big_pt0 - 1);
   set_length (res, len);
@@ -1004,7 +1005,7 @@ bigx_div1 (int arg1, int arg2)
       shift = get_length (dividend) - get_length (arg2);
       pointerx = get_pointer (dividend);	// MSB
       msb1 = bigcell[pointerx];
-      if (msb1 >= msb2)
+      if (msb1 > msb2)
 	{
 	  q = msb1 / msb2;
 
@@ -1016,6 +1017,11 @@ bigx_div1 (int arg1, int arg2)
 	    (long long int) bigcell[pointerx - 1];
 	  q = (int) (lmsb1 / (long long int) msb2);
 	  shift--;
+    // exception if q >= 10^10 , q = q/BIGNUMBASE. q must be smaller than BIGNUM_BASE
+    if(q >= BIGNUM_BASE){
+        q = q / BIGNUM_BASE;
+        shift++;
+    }
 	}
 
 
@@ -1084,7 +1090,7 @@ bigx_remainder (int arg1, int arg2)
       shift = get_length (dividend) - get_length (arg2);
       pointerx = get_pointer (dividend);	// MSB
       msb1 = bigcell[pointerx];
-      if (msb1 >= msb2)
+      if (msb1 > msb2)
 	{
 	  q = msb1 / msb2;
 
