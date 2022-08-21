@@ -7,12 +7,14 @@ About Arity/prolog32  see  http://petergabel.info/ArityProlog32/ArityProlog32Pre
 license is modified BSD.
  
 ## OS
-I have confirmed the operation on the following OS.
+We have confirmed the operation on the following OS.
 
 - Ubuntu
 - Linux MINT
 - RaspberryPI Raspbian
 - macOS
+- OpenBSD
+- FreeBSD
 
 Please use WSL when using it on Windows. 
 

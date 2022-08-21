@@ -15,6 +15,9 @@ manual.txtにユーザーズマニュアルがあります。ご参照くださ�
 - Linux MINT
 - RaspberryPI Raspbian
 - macOS
+- OpenBSD
+- FreeBSD
+
 
 Windowsでお使いの場合にはWSLをお使いください。
 
