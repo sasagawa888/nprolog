@@ -56,3 +56,5 @@ print_answer(PushPattern) :-
     M is N mod 5,
     (M == 4 -> nl),
     fail.
+
+:- test.
