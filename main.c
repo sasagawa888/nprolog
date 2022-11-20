@@ -93,7 +93,6 @@ int syntax_flag = YES;		//syntaxerrors/2 YES=normal. NO=ignore syntax-errors
 int string_term_flag = 0;	//for string_term/2 0=normal, 1=readparse from string_term_buffer
 int ctrl_c_flag = 0;		//for ctrl_c  to stop prove
 int init_flag = 1;		//for halt
-int greeting_flag = 1;		//for greeting message
 
 //operator token
 char operator[OPERATOR_NUMBER][5] = {
@@ -225,7 +224,6 @@ main (int argc, char *argv[])
   if (!init_flag)
     goto repl;
 
-  init_flag = 0;
   home = getenv ("HOME");
   strcpy (str, home);
   strcat (str, "/nprolog/library/dcg.pl");
@@ -325,10 +323,10 @@ main (int argc, char *argv[])
 	}
     }
 
-  if (greeting_flag)
+  if (init_flag)
     {
       printf ("N-Prolog Ver %1.2f\n", VERSION);
-      greeting_flag = 0;
+      init_flag = 0;
     }
 
 repl:

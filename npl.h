@@ -372,6 +372,7 @@ extern int listing_flag;
 extern int prefix_flag;
 extern int syntax_flag;
 extern int string_term_flag;
+extern int init_flag;
 
 //------pointer----
 extern int hp; //heap pointer

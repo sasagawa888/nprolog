@@ -303,5 +303,11 @@ error (int errnum, char *fun, int arg)
       fclose (GET_PORT (input_stream));
     }
   ESCFORG;
-  longjmp (buf, 1);
+  if (init_flag)
+  {
+    init_flag = 0;
+    longjmp (buf, 2);
+  }
+  else
+    longjmp (buf, 1);
 }

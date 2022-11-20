@@ -997,6 +997,9 @@ skip:
 	{
 	  if (c == EOL)
 	    error (SYNTAX_ERR, "unexpected EOL in quoted atom ", NIL);
+	  
+	  if (c == EOF)
+	    error (SYNTAX_ERR, "unexpected EOF in quoted atom ", NIL);
 
 	  if (c == '\\')
 	    {
@@ -1078,6 +1081,8 @@ skip:
 	      else
 		error (SYNTAX_ERR, "double $ in string token ", NIL);
 	    }
+	  else if(c == EOF)
+	  	error (SYNTAX_ERR, "not exist right $ in file ", NIL);
 	  else
 	    {
 	      stok.buf[pos++] = c;
