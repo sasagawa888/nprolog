@@ -1,3 +1,5 @@
 *.o
 npl
 .vscode
+*.c~
+*.h~
