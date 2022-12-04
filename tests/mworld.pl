@@ -14,7 +14,8 @@ translate following predicate.
 deny(fly(w3,penguin)).
 
 [call]
-with(w1,with(w2,fly(penguin))).
+with(w1,with(w2,with(w3,fly(penguin))). -> no
+with(w1,with(w2,with(w3,fly(canary))). -> yes
 
 */
 
@@ -85,25 +86,15 @@ add_world_body((B1;B2),W,(C1;C2)) :-
 add_world_body(B,W,C) :-
     add_world(B,W,C).
 
-
-% call conjunction with world data
-% if 1st argument of X is memmber of world list, call X and rest Y
 call_with((X,Y),L) :-
-    arg(1,X,W),
-    member(W,L),
-    call(X),
+    call_with(X,L),
     call_with(Y,L).
 
-% call disjunction with world data. if X is true, true.
 call_with((X;Y),L) :-
-    arg(1,X,W),
-    member(W,L),
-    call(X),!.
-% call disjunction with world data if X is fail and Y is true, true.
+    call_with(X,L).
+
 call_with((X;Y),L) :-
-    arg(1,Y,W),
-    member(W,L),
-    call(Y).
+    call_with(Y,L).
 
 % if X is built_in predicate, call X.
 call_with(X,L) :-
@@ -120,13 +111,6 @@ call_with(X,L) :-
     member(W,L),!,
     fail.
 
-call_with(X,L) :-
-    predicate_property(X,dynamic),
-    arg(1,X,W),
-    member(W,L),
-    deny(X),!,
-    fail.
-
 % if X ls user_defined predicate and the 1st argument is member of world and X not has clause, call X.
 call_with(X,L) :-
     predicate_property(X,dynamic),
@@ -141,7 +125,7 @@ call_with(X,L) :-
     predicate_property(X,dynamic),
     X =.. [H,_|[A]],
     X1 =.. [H,W|[A]],
-    clause(X,Y),
+    clause(X1,Y),
     Y \= true,
     member(W,L),
     call_with(Y,L).
