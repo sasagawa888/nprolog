@@ -161,7 +161,7 @@ char extended[EXTENDED_NUMBER][30] = {
   {"pwm_set_clock"}, {"pwm_set_range"}, {"pin_mode"}, {"digital_write"},
   {"pwm_write"}, {"pull_up_dn_control"}, {"digital_read"}, {"delay"},
     {"delay_microseconds"},
-  {"compile_file"}, {"timer_microseconds"}
+  {"compile_file"}, {"timer_microseconds"},{"with"}
 };
 
 
@@ -236,6 +236,15 @@ main (int argc, char *argv[])
     }
   strcpy (str, home);
   strcat (str, "/nprolog/library/compiler.pl");
+  fp = fopen (str, "r");
+  if (fp != NULL)
+    {
+      fclose (fp);
+      b_consult (list1 (makeconst (str)), NIL);
+      predicates = NIL;
+    }
+  strcpy (str, home);
+  strcat (str, "/nprolog/library/multiplex.pl");
   fp = fopen (str, "r");
   if (fp != NULL)
     {
