@@ -99,7 +99,7 @@ mp_call_with((X;Y),L) :-
 % if X is built_in predicate, call X.
 mp_call_with(X,L) :-
     predicate_property(X,built_in),
-    mp_call(X).
+    call(X).
 
 % if X ls user_defined predicate and the 1st argument is member of world and deny, fail.
 mp_call_with(X,L) :-
