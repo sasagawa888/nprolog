@@ -4,6 +4,7 @@ LIBS = -lm -ldl
 LIBSRASPI = -lm -ldl -lwiringPi
 INCS =  
 CFLAGS = $(INCS) -Wall -O3 
+LDFLAGS :=
 DESTDIR :=
 PREFIX  := /usr
 BINDIR  := /bin
@@ -34,7 +35,7 @@ $(NPL): $(NPL_OBJS)
 else
 all: $(NPL_OBJS) $(NPL)
 $(NPL): $(NPL_OBJS)
-	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBS) 
+	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBS) $(LDFLAGS)
 endif
 
 
