@@ -75,15 +75,15 @@ add_world1([L|Ls],W,[L,W|Ls]).
 
 % add varialbe world to conjunction body
 add_world_body((B1,B2),W,(C1,C2)) :-
-    add_world(B1,_,C1),
+    add_world(B1,W,C1),
     add_world_body(B2,W,C2).
 % add variable world to disjunction body
 add_world_body((B1;B2),W,(C1;C2)) :-
-    add_world(B1,_,C1),
+    add_world(B1,W,C1),
     add_world_body(B2,W,C2).
 % base of body
 add_world_body(B,W,C) :-
-    add_world(B,_,C).
+    add_world(B,W,C).
 
 
 % call conjunction with world data
@@ -113,6 +113,15 @@ call_with(X,L) :-
 % if X ls user_defined predicate and the 1st argument is member of world and deny, fail.
 call_with(X,L) :-
     predicate_property(X,dynamic),
+    X =.. [H,_|[A]],
+    X1 =.. [H,W|[A]],
+    X2 =.. [deny,X1],
+    clause(X2,true),
+    member(W,L),!,
+    fail.
+
+call_with(X,L) :-
+    predicate_property(X,dynamic),
     arg(1,X,W),
     member(W,L),
     deny(X),!,
@@ -121,30 +130,21 @@ call_with(X,L) :-
 % if X ls user_defined predicate and the 1st argument is member of world and X not has clause, call X.
 call_with(X,L) :-
     predicate_property(X,dynamic),
-    arg(1,X,W),
-    member(W,L),
-    clause(X,true),
-    call(X).
+    X =.. [H,_|[A]],
+    X1 =.. [H,W|[A]],
+    clause(X1,true),
+    member(W,L).
 
 
 % if X ls user_defined predicate and the 1st argument is member of world and X is clause, call clause.
 call_with(X,L) :-
     predicate_property(X,dynamic),
-    arg(1,X,W),
-    member(W,L),
+    X =.. [H,_|[A]],
+    X1 =.. [H,W|[A]],
     clause(X,Y),
     Y \= true,
+    member(W,L),
     call_with(Y,L).
-
-call_with(X,L) :-
-    predicate_property(X,dynamic),
-    clause(X,true),
-    call(X),
-    arg(1,X,W),
-    member(W,L).
-    
-
-call_with(X,[]) :- fail.
 
 
 % dummy data to avoid existance error.
