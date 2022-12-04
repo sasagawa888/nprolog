@@ -4,8 +4,10 @@ LIBS = -lm -ldl
 LIBSRASPI = -lm -ldl -lwiringPi
 INCS =  
 CFLAGS = $(INCS) -Wall -O3 
-DEST = /usr/local/bin
-
+LDFLAGS :=
+DESTDIR :=
+PREFIX  := /usr
+BINDIR  := /bin
 
 NPL = npl
 
@@ -33,16 +35,17 @@ $(NPL): $(NPL_OBJS)
 else
 all: $(NPL_OBJS) $(NPL)
 $(NPL): $(NPL_OBJS)
-	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBS) 
+	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBS) $(LDFLAGS)
 endif
 
 
 
 install: $(NPL)
-	install -s  $(NPL) $(DEST)
+	mkdir -p $(DESTDIR)$(PREFIX)$(BINDIR)
+	install -s  $(NPL) $(DESTDIR)$(PREFIX)$(BINDIR)
 
 uninstall:
-	rm $(DEST)/npl
+	rm $(DESTDIR)$(PREFIX)$(BINDIR)/npl
 		
 %.o: %.c npl.h
 	$(CC) -c $< -o $@ $(CFLAGS)
