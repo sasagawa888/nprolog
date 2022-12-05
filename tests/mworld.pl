@@ -14,8 +14,8 @@ translate following predicate.
 deny(fly(w3,penguin)).
 
 [call]
-with(w1,with(w2,with(w3,fly(penguin))). -> no
-with(w1,with(w2,with(w3,fly(canary))). -> yes
+with(w1,with(w2,with(w3,fly(penguin)))). -> no
+with(w1,with(w2,with(w3,fly(canary)))). -> yes
 
 */
 
@@ -104,20 +104,22 @@ call_with(X,L) :-
 % if X ls user_defined predicate and the 1st argument is member of world and deny, fail.
 call_with(X,L) :-
     predicate_property(X,dynamic),
-    X =.. [H,_|[A]],
-    X1 =.. [H,W|[A]],
+    X =.. [H,W|[A]],
+    X1 =.. [H,W1|[A]],
     X2 =.. [deny,X1],
+    inner_world(W,L,L1),
     clause(X2,true),
-    member(W,L),!,
+    member(W1,L1),!,
     fail.
 
 % if X ls user_defined predicate and the 1st argument is member of world and X not has clause, call X.
 call_with(X,L) :-
     predicate_property(X,dynamic),
-    X =.. [H,_|[A]],
-    X1 =.. [H,W|[A]],
+    X =.. [H,W|[A]],
+    X1 =.. [H,W1|[A]],
+    inner_world(W,L,L1),
     clause(X1,true),
-    member(W,L).
+    member(W1,L1).
 
 
 % if X ls user_defined predicate and the 1st argument is member of world and X is clause, call clause.
@@ -130,6 +132,12 @@ call_with(X,L) :-
     member(W,L),
     call_with(Y,L).
 
+% make inner world w.g. inner_world(w2,[w3,w2,w1],X). X is [w2,w1]
+inner_world(W,[],[]).
+inner_world(W,[W|Ls],[W|Ls]).
+inner_world(W,[L|Ls],X) :-
+    inner_world(W,Ls,X).
+    
 
 % dummy data to avoid existance error.
 deny(dummy).

@@ -114,22 +114,30 @@ mp_call_with(X,L) :-
 % if X ls user_defined predicate and the 1st argument is member of world and X not has clause, call X.
 mp_call_with(X,L) :-
     predicate_property(X,dynamic),
-    X =.. [H,_|[A]],
-    X1 =.. [H,W|[A]],
+    X =.. [H,W|[A]],
+    X1 =.. [H,W1|[A]],
+    mp_inner_world(W,L,L1),
     clause(X1,true),
-    member(W,L).
+    member(W1,L1).
 
 
 % if X ls user_defined predicate and the 1st argument is member of world and X is clause, call clause.
 mp_call_with(X,L) :-
     predicate_property(X,dynamic),
-    X =.. [H,_|[A]],
-    X1 =.. [H,W|[A]],
+    X =.. [H,W|[A]],
+    X1 =.. [H,W1|[A]],
+    mp_inner_world(W,L,L1),
     clause(X1,Y),
     Y \= true,
-    member(W,L),
+    member(W1,L1),
     mp_call_with(Y,L).
 
+% make inner world w.g. inner_world(w2,[w3,w2,w1],X). X is [w2,w1]
+mp_inner_world(W,[],[]).
+mp_inner_world(W,[W|Ls],[W|Ls]).
+mp_inner_world(W,[L|Ls],X) :-
+    mp_inner_world(W,Ls,X).
+    
 
 % dummy data to avoid existance error.
 deny(dummy).
