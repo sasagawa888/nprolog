@@ -702,8 +702,8 @@ eval (int x)
     {
       if (eqp (x, makefunc ("pi")))
 	return (makeflt (3.14159265358979323846));
-      else if(eqp (x,makefunc ("random")))
-  return (f_random_real(NIL));
+      else if (eqp (x, makefunc ("random")))
+	return (f_random_real (NIL));
       else
 	error (EVALUATION_ERR, "eval ", x);
     }
@@ -1613,9 +1613,9 @@ f_random (int x)
 }
 
 int
-f_random_real(int x)
+f_random_real (int x)
 {
-double d;
+  double d;
 
   if (!nullp (x))
     error (WRONG_ARGS, "random-real", x);

@@ -98,7 +98,7 @@ int init_flag = 1;		//for halt
 char operator[OPERATOR_NUMBER][5] = {
   {":-"}, {"-->"}, {","}, {";"}, {"?-"}, {"."},
   {"+"}, {"-"}, {"*"}, {"/"}, {"//"}, {"<<"}, {">>"}, {"\\"}, {"/\\"},
-    {"\\/"},
+  {"\\/"},
   {"mod"}, {"rem"}, {"^"}, {"**"}, {"xor"}, {"iand"},
 };
 
@@ -106,7 +106,7 @@ char function[FUNCTION_NUMBER][12] = {
   {"abs"}, {"sin"}, {"cos"}, {"tan"}, {"asin"}, {"acos"}, {"atan"},
   {"exp"}, {"log"}, {"floor"}, {"ceiling"}, {"truncate"},
   {"sign"}, {"sqrt"}, {"round"}, {"gcd"}, {"lcm"}, {"max"}, {"min"},
-  {"random"},{"randi"},{"pi"}
+  {"random"}, {"randi"}, {"pi"}
 };
 
 
@@ -120,18 +120,18 @@ char builtin[BUILTIN_NUMBER][30] = {
   {"delete"}, {"rename"},
   {"op"}, {"!"}, {"assert"}, {"asserta"}, {"assertz"},
   {"abolish"}, {"read"}, {"write"}, {"put"}, {"get"}, {"get0"},
-    {"get0_noecho"}, {"nl"},
+  {"get0_noecho"}, {"nl"},
   {"read_line"}, {"reset_op"}, {"skip"}, {"predicate_property"},
   {"tab"}, {"fail"}, {"not"}, {"true"}, {"halt"}, {"abort"},
   {"listing"}, {"functor"}, {"arg"},
   {"writeq"}, {"display"}, {"ref"},
   {"atom_concat"}, {"atom_string"}, {"consult"}, {"reconsult"},
   {"see"}, {"seeing"}, {"seen"}, {"tell"}, {"telling"}, {"told"}, {"trace"},
-    {"notrace"}, {"spy"},
+  {"notrace"}, {"spy"},
   {"nospy"}, {"leash"}, {"atom"}, {"integer"}, {"real"}, {"float"},
-    {"number"},
+  {"number"},
   {"var"}, {"nonvar"}, {"atomic"}, {"list"}, {"gc"}, {"time"}, {"name"},
-    {"bounded"},
+  {"bounded"},
   {"flush"}, {"date"}, {"date_day"}, {"char_code"},
   {"string"}, {"string_chars"}, {"string_codes"}, {"ground"},
   {"concat"}, {"substring"}, {"string_term"}, {"float_text"},
@@ -160,8 +160,8 @@ char extended[EXTENDED_NUMBER][30] = {
   {"wiringpi_setup_gpio"}, {"wiringpi_spi_setup"}, {"pwm_set_mode"},
   {"pwm_set_clock"}, {"pwm_set_range"}, {"pin_mode"}, {"digital_write"},
   {"pwm_write"}, {"pull_up_dn_control"}, {"digital_read"}, {"delay"},
-    {"delay_microseconds"},
-  {"compile_file"}, {"timer_microseconds"},{"with"}
+  {"delay_microseconds"},
+  {"compile_file"}, {"timer_microseconds"}, {"with"}
 };
 
 
@@ -1524,7 +1524,7 @@ print_not_quoted (int addr)
 #if _WIN32
 	    MessageBeep (-1);
 #else
-      printf("\a");
+	    printf ("\a");
 #endif
 	  else if (c == 'b')
 	    fprintf (GET_PORT (output_stream), "%c", BS);

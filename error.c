@@ -304,10 +304,10 @@ error (int errnum, char *fun, int arg)
     }
   ESCFORG;
   if (init_flag)
-  {
-    init_flag = 0;
-    longjmp (buf, 2);
-  }
+    {
+      init_flag = 0;
+      longjmp (buf, 2);
+    }
   else
     longjmp (buf, 1);
 }
