@@ -33,35 +33,31 @@ int flag;			// if unify success 1 else 0
 int code[1024];
 
 //abstrct machine
-void
-sam ()
+void sam()
 {
-  static const void *JUMPTABLE[] = { &&CASE_NOP,	//0
-    &&CASE_HALT,		//1
-    &&CASE_JP,			//2
-    &&CASE_JPNT,		//3
-  };
-CASE_NOP:
-  pc = pc + 1;
-  goto *JUMPTABLE[code[pc]];
+    static const void *JUMPTABLE[] = { &&CASE_NOP,	//0
+	&&CASE_HALT,		//1
+	&&CASE_JP,		//2
+	&&CASE_JPNT,		//3
+    };
+  CASE_NOP:
+    pc = pc + 1;
+    goto *JUMPTABLE[code[pc]];
 
-CASE_HALT:
-  return;
+  CASE_HALT:
+    return;
 
-CASE_JP:
-  pc = code[pc + 1];
-  goto *JUMPTABLE[code[pc]];
+  CASE_JP:
+    pc = code[pc + 1];
+    goto *JUMPTABLE[code[pc]];
 
-CASE_JPNT:
-  if (flag == 0)
-    {
-      pc = code[pc + 1];
-      goto *JUMPTABLE[code[pc]];
-    }
-  else
-    {
-      pc = code[pc + 1];
-      goto *JUMPTABLE[code[pc]];
+  CASE_JPNT:
+    if (flag == 0) {
+	pc = code[pc + 1];
+	goto *JUMPTABLE[code[pc]];
+    } else {
+	pc = code[pc + 1];
+	goto *JUMPTABLE[code[pc]];
     }
 
 }
