@@ -8,6 +8,8 @@ DESTDIR :=
 PREFIX  := /usr/local
 BINDIR  := /bin
 DEST     = $(DESTDIR)$(PREFIX)$(BINDIR)
+CURSES_CFLAGS := $(shell ncursesw6-config --cflags)
+CURSES_LIBS := $(shell ncursesw6-config --libs)
 
 NPL = npl
 
@@ -23,9 +25,10 @@ NPL_OBJS = main.o \
 	error.o \
 	bignum.o \
 	compute.o \
-	edit.o 
+	edit.o \
+	syntax_highlight.o
 
-
+EDLIS = edlis
 
 
 ifeq  ($(shell uname -n),raspberrypi)
@@ -33,11 +36,16 @@ all: $(NPL_OBJS) $(NPL)
 $(NPL): $(NPL_OBJS)
 	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBSRASPI) 
 else
-all: $(NPL_OBJS) $(NPL)
+all: $(NPL_OBJS) $(NPL) edlis
 $(NPL): $(NPL_OBJS)
 	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBS) $(LDFLAGS)
 endif
 
+edlis: edlis.o syn_highlight.o 
+	$(CC) $(LDFLAGS) $^ -o $@ $(CURSES_LIBS)
+
+edlis.o: edlis.c edlis.h term.h
+	$(CC) $(CFLAGS) -c edlis.c
 
 
 install: $(NPL)
