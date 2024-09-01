@@ -12,6 +12,7 @@ CURSES_CFLAGS := $(shell ncursesw6-config --cflags)
 CURSES_LIBS := $(shell ncursesw6-config --libs)
 
 NPL = npl
+EDLIS = edlis
 
 NPL_OBJS = main.o \
 	parser.o \
@@ -28,40 +29,38 @@ NPL_OBJS = main.o \
 	edit.o \
 	syntax_highlight.o
 
-EDLIS = edlis
-
+EDLIS_OBJS = edlis.o syntax_highlight.o
 
 ifeq  ($(shell uname -n),raspberrypi)
 all: $(NPL_OBJS) $(NPL)
 $(NPL): $(NPL_OBJS)
-	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBSRASPI) 
+	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBSRASPI)
 else
-all: $(NPL_OBJS) $(NPL) edlis
+all: $(NPL_OBJS) $(NPL) $(EDLIS)
 $(NPL): $(NPL_OBJS)
 	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBS) $(LDFLAGS)
 endif
 
-edlis: edlis.o syn_highlight.o 
-	$(CC) $(LDFLAGS) $^ -o $@ $(CURSES_LIBS)
+#$(EDLIS): $(EDLIS_OBJS)
+#	$(CC) $(LDFLAGS) $^ -o $@ $(CURSES_LIBS)
 
-edlis.o: edlis.c edlis.h term.h
-	$(CC) $(CFLAGS) -c edlis.c
+#edlis.o: edlis.c edlis.h term.h
+#	$(CC) $(CFLAGS) -c edlis.c
 
-
-install: $(NPL)
+install: $(NPL) #$(EDLIS)
 	mkdir -p $(DEST)
-	install -s  $(NPL) $(DEST)
+	install -s $(NPL) $(DEST)
+#	install -s $(EDLIS) $(DEST)
 
 uninstall:
-	rm $(DEST)/npl
-		
+	rm -f $(DEST)/npl $(DEST)/edlis
+
 %.o: %.c npl.h
 	$(CC) -c $< -o $@ $(CFLAGS)
-	
 
 .PHONY: clean all
 
 clean: 
-	rm -f *.o
-	rm npl
-	
+	rm -f *.o $(NPL) $(EDLIS)
+
+
