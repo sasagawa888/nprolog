@@ -93,6 +93,7 @@ int syntax_flag = YES;		//syntaxerrors/2 YES=normal. NO=ignore syntax-errors
 int string_term_flag = 0;	//for string_term/2 0=normal, 1=readparse from string_term_buffer
 int ctrl_c_flag = 0;		//for ctrl_c  to stop prove
 int init_flag = 1;		//for halt
+int script_flag = 0;  // script mode, 0=not scriplt-mode, 1=script-mode.
 
 
 //stream
@@ -210,6 +211,7 @@ main (int argc, char *argv[])
 	      printf ("Not exist %s\n", argv[opt]);
 	      return (0);
 	    }
+    script_flag = 1;
 	  b_consult (list1 (makeconst (argv[opt])), NIL);
 	  return (0);
 	}

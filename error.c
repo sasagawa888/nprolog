@@ -20,7 +20,7 @@ errorcomp (int errnum, int name, int arg)
 void
 error (int errnum, char *fun, int arg)
 {
-
+  
   error_code = errnum;
   ESCFRED;
   switch (errnum)
@@ -303,6 +303,9 @@ error (int errnum, char *fun, int arg)
       fclose (GET_PORT (input_stream));
     }
   ESCFORG;
+  if(script_flag)
+     exit(EXIT_FAILURE);
+
   if (init_flag)
     {
       init_flag = 0;

@@ -373,7 +373,7 @@ extern int prefix_flag;
 extern int syntax_flag;
 extern int string_term_flag;
 extern int init_flag;
-
+extern int script_flag;
 //------pointer----
 extern int hp; //heap pointer
 extern int sp; //stack pointer
