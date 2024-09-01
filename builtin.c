@@ -2589,6 +2589,8 @@ b_asserta (int arglist, int rest)
 	{
 	  if (!callablep (caddr (arg1)))
 	    error (NOT_CALLABLE, "asserta ", arg1);
+    if (!callablep (cadr (arg1)))
+	    error (NOT_CALLABLE, "asserta ", arg1);
 	  if (operationp (cadr (arg1)))
 	    error (BUILTIN_EXIST, "asserta ", arg1);
 
