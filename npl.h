@@ -384,7 +384,7 @@ extern int up; //unify stack pointer
 
 //-----editor-----
 extern int repl_flag;
-extern int buffer[BUFSIZE][10];
+extern char buffer[BUFSIZE][10];
 extern int ed_row;
 extern int ed_col;
 extern int ed_start;

@@ -106,7 +106,7 @@ int error_stream;
 
 
 //-----editor-----
-int buffer[BUFSIZE][10];
+char buffer[BUFSIZE][10];
 int ed_tab = 4;
 int ed_indent = 0;
 int ed_lparen_row;

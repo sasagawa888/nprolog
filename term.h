@@ -12,15 +12,16 @@
 #ifndef TERM_H
 #define TERM_H
 
-#include "compat/curses_stubs.h"
+//#include "compat/curses_stubs.h"
 #ifndef FULLSCREEN
 #include "compat/term_stubs.h"
 #endif
+#define COLOR_CYAN 6
 
-struct position {
-    int row;
-    int col;
-};
+//struct position {
+//    int row;
+//    int col;
+//};
 
 // special charactor
 #define EOL '\n'

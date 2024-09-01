@@ -12,7 +12,7 @@ CURSES_CFLAGS := $(shell ncursesw6-config --cflags)
 CURSES_LIBS := $(shell ncursesw6-config --libs)
 
 NPL = npl
-EDLIS = edlis
+#EDLIS = edlis
 
 NPL_OBJS = main.o \
 	parser.o \
@@ -29,7 +29,7 @@ NPL_OBJS = main.o \
 	edit.o \
 	syntax_highlight.o
 
-EDLIS_OBJS = edlis.o syntax_highlight.o
+#EDLIS_OBJS = edlis.o syntax_highlight.o
 
 ifeq  ($(shell uname -n),raspberrypi)
 all: $(NPL_OBJS) $(NPL)
@@ -50,7 +50,7 @@ endif
 install: $(NPL) #$(EDLIS)
 	mkdir -p $(DEST)
 	install -s $(NPL) $(DEST)
-#	install -s $(EDLIS) $(DEST)
+#   install -s $(EDLIS) $(DEST)
 
 uninstall:
 	rm -f $(DEST)/npl $(DEST)/edlis

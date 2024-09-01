@@ -18,6 +18,13 @@ static const float VERSION = 5.30;
 #define LEFT_MARGIN 7
 #define TOP_MARGIN  2
 
+// edit 
+struct position{
+    int row;
+    int col;
+};
+
+
 static const int NIL = 0;
 static const char *functions_data[];
 

@@ -17,8 +17,11 @@
 #include <locale.h>
 #include <stdbool.h>
 #include <string.h>
+#include "term.h"
 #include "compat/cdefs.h"
 #include "edlis.h"
+//#include "npl.h"
+
 
 
 #ifndef CTRL
