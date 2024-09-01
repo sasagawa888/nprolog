@@ -63,7 +63,13 @@ int b_filename(int arglist, int rest)
 	strcpy(str1, GET_NAME(arg1));
 	len = strlen(GET_NAME(arg1));
 	for (pos = 0; pos < len; pos++)
-	    if (str1[pos] == '.') {
+		if(pos == 0 && str1[pos] == '.'){ // ./
+			pos = pos + 2;
+		}
+		else if(pos == 0 && str1[pos] == '.' && str1[pos+1] == '.'){ // ../
+			pos = pos + 3;
+		}
+	    else if (str1[pos] == '.') {
 		str1[pos] = NUL;
 		if (unify(arg2, makeconst(str1)) == YES)
 		    return (prove_all(rest, sp));
