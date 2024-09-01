@@ -1404,6 +1404,9 @@ int b_consult(int arglist, int rest)
 	    if (operationp(clause) && car(clause) == DEFINE
 		&& length(clause) == 2) {
 		clause = cadr(clause);
+    //if(!builtinp(clause) && !user_operation_p(clause)){
+    //  error(SYNTAX_ERR,"consult",clause);
+    //}
 		prove_all(clause, sp);
 		goto skip;
 	    }

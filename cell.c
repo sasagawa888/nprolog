@@ -43,8 +43,8 @@ void initcell(void)
     makeatom("?-", OPE);	//address = 22
     makeatom("_", ANOY);	//address = 24
     makeatom(":-", OPE);	//address = 26
-    makeatom("@", SYS);		//address = 28
-    makeatom(":", SYS);		//address = 30
+    makeatom("@", SIMP);		//address = 28
+    makeatom(":", SIMP);		//address = 30
     makeatom("true", SIMP);	//address = 32
     makeatom("false", SIMP);	//address = 34
     makeatom("{}", PRED);	//address = 36
