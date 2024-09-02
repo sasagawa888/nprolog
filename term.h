@@ -16,12 +16,7 @@
 #ifndef FULLSCREEN
 #include "compat/term_stubs.h"
 #endif
-#define COLOR_CYAN 6
-
-//struct position {
-//    int row;
-//    int col;
-//};
+#include <stdbool.h>
 
 // special charactor
 #define EOL '\n'
