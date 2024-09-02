@@ -18,6 +18,8 @@
 #endif
 #include <stdbool.h>
 
+#define COLOR_CYAN 6
+
 // special charactor
 #define EOL '\n'
 #define RET '\r'

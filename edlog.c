@@ -19,7 +19,7 @@
 #include <string.h>
 #include <term.h>
 #include "compat/cdefs.h"
-#include "edlis.h"
+#include "edlog.h"
 
 
 
@@ -2135,7 +2135,7 @@ void display_header(void)
     for (i = 0; i < COLS - 1; i++)
 	CHECK(addch, ' ');
     ESCHOME();
-    CHECK(printw, "Edlis %1.2f        File: %s   ", VERSION, fname);
+    CHECK(printw, "Edlog %1.2f        File: %s   ", VERSION, fname);
     ESCMOVE(1, COLS - 9);
     if (ed_ins == true) {
 	CHECK(addstr, "   insert");
