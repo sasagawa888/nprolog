@@ -1266,7 +1266,7 @@ void save_file()
     ESCREV();
     clear_status();
     ESCMOVE(ed_footer, 1);
-    CHECK(addstr, "saved");
+    CHECK(addstr, "saved ");
     CHECK(addstr, fname);
     ESCRST();
     restore_cursol();
@@ -2939,6 +2939,9 @@ void load_data(char *fname)
 
 	c = fgetc(port);
 	while (c != EOF) {
+		if(c == TAB){
+			c = SPACE;
+		}
 	    ed_data[ed_row][ed_col] = c;
 	    if (c == EOL) {
 		ed_row++;
