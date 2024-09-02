@@ -2343,7 +2343,10 @@ void display_line(int line)
 	    ESCRST();
 	    ESCFORG();
 	} else if (ed_data[line][col] == ' ' ||
-		   ed_data[line][col] == '(' || ed_data[line][col] == ')')
+		   ed_data[line][col] == '(' || 
+		   ed_data[line][col] == ')' ||
+		   ed_data[line][col] == ',' ||
+		   ed_data[line][col] == '.')
 	{
 	    CHECK(addch, ed_data[line][col]);
 	    col++;
@@ -2358,6 +2361,8 @@ void display_line(int line)
 		       && ed_data[line][col] != ' '
 		       && ed_data[line][col] != '('
 		       && ed_data[line][col] != ')'
+			   && ed_data[line][col] != ','
+			   && ed_data[line][col] != '.'
 		       && ed_data[line][col] != NUL
 		       && ed_data[line][col] != EOL) {
 		    CHECK(addch, ed_data[line][col]);
@@ -2375,6 +2380,8 @@ void display_line(int line)
 		       && ed_data[line][col] != ' '
 		       && ed_data[line][col] != '('
 		       && ed_data[line][col] != ')'
+			   && ed_data[line][col] != ','
+			   && ed_data[line][col] != '.'
 		       && ed_data[line][col] != NUL
 		       && ed_data[line][col] != EOL) {
 		    CHECK(addch, ed_data[line][col]);
@@ -2403,7 +2410,7 @@ void display_line(int line)
 		    col = col + increase_buffer(line, col);
 
 
-		    if (ed_data[line][col - 1] == '"' &&
+		    if (ed_data[line][col - 1] == '\'' &&
 			ed_data[line][col - 2] != '\\')
 			break;
 		}
@@ -2437,6 +2444,8 @@ void display_line(int line)
 		       && ed_data[line][col] != ' '
 		       && ed_data[line][col] != '('
 		       && ed_data[line][col] != ')'
+			   && ed_data[line][col] != ','
+			   && ed_data[line][col] != '.'
 		       && ed_data[line][col] != NUL
 		       && ed_data[line][col] != EOL) {
 		    CHECK(addch, ed_data[line][col]);
@@ -2472,6 +2481,8 @@ void display_line(int line)
 		       && ed_data[line][col] != ' '
 		       && ed_data[line][col] != '('
 		       && ed_data[line][col] != ')'
+			   && ed_data[line][col] != ','
+			   && ed_data[line][col] != '.'
 		       && ed_data[line][col] != NUL
 		       && ed_data[line][col] != EOL) {
 		    if (isUni1(ed_data[line][col])) {
@@ -3112,13 +3123,15 @@ enum HighlightToken check_token(int row, int col)
     int pos;
 
     pos = 0;
-    if (ed_data[row][col] == '"')
+    if (ed_data[row][col] == '\'')
 	return HIGHLIGHT_STRING;
-    else if (ed_data[row][col] == ';')
+    else if (ed_data[row][col] == '%')
 	return HIGHLIGHT_COMMENT;
     while (ed_data[row][col] != ' ' &&
 	   ed_data[row][col] != '(' &&
 	   ed_data[row][col] != ')' &&
+	   ed_data[row][col] != ',' &&
+	   ed_data[row][col] != '.' &&
 	   ed_data[row][col] != NUL && ed_data[row][col] != EOL) {
 	str[pos] = ed_data[row][col];
 	col++;

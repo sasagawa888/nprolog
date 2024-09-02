@@ -29,3 +29,4 @@ nodiag([N|L], B, D) :-
  D1 is D + 1,
  nodiag(L, B, D1).
 
+
