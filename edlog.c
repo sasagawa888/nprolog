@@ -56,6 +56,10 @@ int ed_lparen_row;
 int ed_lparen_col;
 int ed_rparen_row;
 int ed_rparen_col;
+int ed_lbracket_row;
+int ed_lbracket_col;
+int ed_rbracket_row;
+int ed_rbracket_col;
 int ed_clip_start;
 int ed_clip_end;
 int ed_copy_end;
@@ -383,17 +387,23 @@ void right()
 
     if (ed_col1 < turn && new_col1 >= turn) {
 	restore_paren();
+	restore_bracket();
 	ed_col = new_col;
 	ed_col1 = new_col1;
 	display_screen();
 	emphasis_lparen();
 	emphasis_rparen();
+	emphasis_lbracket();
+	emphasis_rbracket();
     } else {
 	restore_paren();
+	restore_bracket();
 	ed_col = new_col;
 	ed_col1 = new_col1;
 	emphasis_lparen();
 	emphasis_rparen();
+	emphasis_lbracket();
+	emphasis_rbracket();
     }
     restore_cursol();
 }
@@ -419,8 +429,11 @@ void left()
 	ed_col1 = new_col1;
     }
     restore_paren();
+	restore_bracket();
     emphasis_lparen();
     emphasis_rparen();
+	emphasis_lbracket();
+    emphasis_rbracket();
     restore_cursol();
 }
 
@@ -448,8 +461,11 @@ void up()
 	recalculate_col(ed_row, ed_col1);
 	display_screen();
 	restore_paren();
+	restore_bracket();
 	emphasis_lparen();
 	emphasis_rparen();
+	emphasis_lbracket();
+	emphasis_rbracket();
 	ESCMOVE(2, ed_col1 + LEFT_MARGIN);
     } else if (ed_clip_start != -1) {
 	if (ed_row == ed_clip_start)
@@ -460,8 +476,11 @@ void up()
 	recalculate_col(ed_row, ed_col1);
 	display_screen();
 	restore_paren();
+	restore_bracket();
 	emphasis_lparen();
 	emphasis_rparen();
+	emphasis_lbracket();
+	emphasis_rbracket();
 	restore_cursol();
     } else {
 	restore_paren();
@@ -474,6 +493,8 @@ void up()
 	}
 	emphasis_lparen();
 	emphasis_rparen();
+	emphasis_lbracket();
+	emphasis_rbracket();
 	restore_cursol();
     }
 }
@@ -501,8 +522,11 @@ void down()
 	    ed_row = ed_start = ed_end - ed_scroll;
 	display_screen();
 	restore_paren();
+	restore_bracket();
 	emphasis_lparen();
 	emphasis_rparen();
+	emphasis_lbracket();
+	emphasis_rbracket();
 	recalculate_col(ed_row, ed_col1);
 	ESCMOVE(ed_footer - 1, ed_col1 + LEFT_MARGIN);
     } else if (ed_clip_start != -1) {
@@ -514,8 +538,11 @@ void down()
 	recalculate_col(ed_row, ed_col1);
 	display_screen();
 	restore_paren();
+	restore_bracket();
 	emphasis_lparen();
 	emphasis_rparen();
+	emphasis_lbracket();
+	emphasis_rbracket();
 	recalculate_col(ed_row, ed_col1);
 	restore_cursol();
     } else {
@@ -529,6 +556,8 @@ void down()
 	}
 	emphasis_lparen();
 	emphasis_rparen();
+	emphasis_lbracket();
+	emphasis_rbracket();
 	restore_cursol();
     }
 }
@@ -1244,6 +1273,7 @@ bool quit_with_save(void)
 	}
 	while (c != 'y' && c != 'n');
     }
+	return false;
 }
 
 void save_file()
@@ -2098,6 +2128,8 @@ bool edit_loop(void)
 	display_line(ed_row);
 	emphasis_lparen();
 	emphasis_rparen();
+	emphasis_lbracket();
+	emphasis_rbracket();
 	ed_col++;
 	if (isUni1(c) && skip == 0) {
 	    ed_col1++;
@@ -2669,10 +2701,10 @@ struct position find_lparen(int bias)
 	else if (ed_data[row][col] == '('
 		 && !(col > 0 && ed_data[row][col - 1] == '\\'))
 	    nest--;
-	else if (ed_data[row][col] == '"') {
+	else if (ed_data[row][col] == '$') {
 	    col--;
 	    col1--;
-	    while (ed_data[row][col] != '"' && col > 0) {
+	    while (ed_data[row][col] != '$' && col > 0) {
 		col1 = col1 - decrease_terminal(row, col);
 		col = col - decrease_buffer(row, col);
 	    }
@@ -2724,10 +2756,10 @@ struct position find_rparen(int bias)
 	else if (ed_data[row][col] == ')'
 		 && !(col > 0 && ed_data[row][col - 1] == '\\'))
 	    nest--;
-	else if (ed_data[row][col] == '"') {
+	else if (ed_data[row][col] == '$') {
 	    col++;
 	    col1++;
-	    while (ed_data[row][col] != '"' && ed_data[row][col] != EOL
+	    while (ed_data[row][col] != '$' && ed_data[row][col] != EOL
 		   && ed_data[row][col] != 0) {
 		col1 = col1 + increase_terminal(row, col);
 		col = col + increase_buffer(row, col);
@@ -2753,11 +2785,131 @@ struct position find_rparen(int bias)
     return (pos);
 }
 
+
+struct position find_lbracket(int bias)
+{
+    int nest, row, col, col1, limit;	//col is position of buffer, col1 is position of display
+    struct position pos;
+
+    row = ed_row;
+    if (ed_col != 0) {
+	col = ed_col - bias;
+	col1 = ed_col1 - bias;
+    } else {
+	row--;
+	if (row < 0) {
+	    pos.col = 0;
+	}
+	col = find_eol(row);
+	col1 = find_eol1(row);
+    }
+
+    nest = 0;
+    limit = ed_row - ed_scroll;
+    if (limit < 0)
+	limit = 0;
+
+    while (row >= limit) {
+	if (ed_data[row][col] == '['
+	    && !(col > 0 && ed_data[row][col - 1] == '\\') && nest == 0)
+	    break;
+	else if (ed_data[row][col] == ']'
+		 && !(col > 0 && ed_data[row][col - 1] == '\\'))
+	    nest++;
+	else if (ed_data[row][col] == '['
+		 && !(col > 0 && ed_data[row][col - 1] == '\\'))
+	    nest--;
+	else if (ed_data[row][col] == '$') {
+	    col--;
+	    col1--;
+	    while (ed_data[row][col] != '$' && col > 0) {
+		col1 = col1 - decrease_terminal(row, col);
+		col = col - decrease_buffer(row, col);
+	    }
+	}
+
+
+	if (col == 0) {
+	    row--;
+	    if (row > 0) {
+		col = find_eol(row);
+		col1 = find_eol1(row);
+	    }
+
+	} else {
+	    col1 = col1 - decrease_terminal(row, col);
+	    col = col - decrease_buffer(row, col);
+	}
+    }
+    if (row >= limit) {
+	pos.row = row;
+	pos.col = col1;
+    } else {
+	pos.row = -1;
+	pos.col = 0;
+    }
+    return (pos);
+}
+
+struct position find_rbracket(int bias)
+{
+    int nest, row, col, col1, limit;	//col is position of buffer, col1 is position of display
+    struct position pos;
+
+    row = ed_row;
+    col = ed_col + bias;
+    col1 = ed_col1 + bias;
+    nest = 0;
+    limit = ed_row + ed_scroll;
+    if (limit > ed_end)
+	limit = ed_end;
+
+    while (row < limit) {
+	if (ed_data[row][col] == ']'
+	    && !(col > 0 && ed_data[row][col - 1] == '\\') && nest == 0)
+	    break;
+	else if (ed_data[row][col] == '['
+		 && !(col > 0 && ed_data[row][col - 1] == '\\'))
+	    nest++;
+	else if (ed_data[row][col] == ']'
+		 && !(col > 0 && ed_data[row][col - 1] == '\\'))
+	    nest--;
+	else if (ed_data[row][col] == '$') {
+	    col++;
+	    col1++;
+	    while (ed_data[row][col] != '$' && ed_data[row][col] != EOL
+		   && ed_data[row][col] != 0) {
+		col1 = col1 + increase_terminal(row, col);
+		col = col + increase_buffer(row, col);
+	    }
+	}
+
+
+	if (ed_data[row][col] == EOL) {
+	    row++;
+	    col = col1 = 0;
+	} else {
+	    col1 = col1 + increase_terminal(row, col);
+	    col = col + increase_buffer(row, col);
+	}
+    }
+    if (row < limit) {
+	pos.row = row;
+	pos.col = col1;
+    } else {
+	pos.row = -1;
+	pos.col = 0;
+    }
+    return (pos);
+}
+
+/*
 void reset_paren()
 {
     ed_lparen_row = -1;
     ed_rparen_row = -1;
 }
+*/
 
 void restore_paren()
 {
@@ -2786,6 +2938,43 @@ void restore_paren()
 	ed_rparen_row = -1;
     }
 }
+
+/*
+void reset_bracket()
+{
+    ed_lbracket_row = -1;
+    ed_rbracket_row = -1;
+}
+*/
+
+void restore_bracket()
+{
+    if (ed_lbracket_row != -1 && ed_lbracket_row >= ed_start
+	&& ed_lparen_row <= ed_start + ed_scroll) {
+	if (ed_lbracket_col <= COLS - 1 - LEFT_MARGIN)
+	    ESCMOVE(ed_lbracket_row + TOP_MARGIN - ed_start,
+		    ed_lbracket_col + LEFT_MARGIN);
+	else
+	    ESCMOVE(ed_lbracket_row + TOP_MARGIN - ed_start,
+		    ed_lbracket_col - COLS + LEFT_MARGIN);
+	ESCBORG();
+	CHECK(addch, '[');
+	ed_lbracket_row = -1;
+    }
+    if (ed_rbracket_row != -1 && ed_rbracket_row >= ed_start
+	&& ed_rbracket_row <= ed_start + ed_scroll) {
+	if (ed_rbracket_col <= COLS - 1 - LEFT_MARGIN)
+	    ESCMOVE(ed_rbracket_row + TOP_MARGIN - ed_start,
+		    ed_rbracket_col + LEFT_MARGIN);
+	else
+	    ESCMOVE(ed_rbracket_row + TOP_MARGIN - ed_start,
+		    ed_rbracket_col - COLS + LEFT_MARGIN);
+	ESCBORG();
+	CHECK(addch, ']');
+	ed_rbracket_row = -1;
+    }
+}
+
 
 void emphasis_lparen()
 {
@@ -2878,6 +3067,109 @@ void emphasis_rparen()
 			pos.col - COLS + LEFT_MARGIN);
 		ESCBCYAN();
 		CHECK(addch, ')');
+	    }
+	    ed_rparen_row = pos.row;
+	    ed_rparen_col = pos.col;
+	    ed_lparen_row = ed_row;
+	    ed_lparen_col = ed_col1;
+	    ESCBORG();
+	}
+	restore_cursol();
+    }
+}
+
+
+void emphasis_lbracket()
+{
+    struct position pos;
+
+    if (ed_data[ed_row][ed_col] != ']')
+	return;
+
+    pos = find_lbracket(1);
+    if (ed_col <= COLS - 1 - LEFT_MARGIN
+	&& pos.col <= COLS - 1 - LEFT_MARGIN) {
+	if (pos.row != -1) {
+	    ESCMOVE(ed_row + TOP_MARGIN - ed_start, ed_col1 + LEFT_MARGIN);
+	    ESCBCYAN();
+	    CHECK(addch, ']');
+	    ESCBORG();
+	    if (pos.row >= ed_start) {
+		ESCMOVE(pos.row + TOP_MARGIN - ed_start,
+			pos.col + LEFT_MARGIN);
+		ESCBCYAN();
+		CHECK(addch, '[');
+	    }
+	    ed_lparen_row = pos.row;
+	    ed_lparen_col = pos.col;
+	    ed_rparen_row = ed_row;
+	    ed_rparen_col = ed_col1;
+	    ESCBORG();
+	}
+	restore_cursol();
+    } else if (ed_col >= COLS && pos.col >= COLS) {
+	if (pos.row != -1) {
+	    ESCMOVE(ed_row + TOP_MARGIN - ed_start,
+		    ed_col1 - COLS + LEFT_MARGIN);
+	    ESCBCYAN();
+	    CHECK(addch, ']');
+	    ESCBORG();
+	    if (pos.row >= ed_start) {
+		ESCMOVE(pos.row + TOP_MARGIN - ed_start,
+			pos.col - COLS + LEFT_MARGIN);
+		ESCBCYAN();
+		CHECK(addch, '[');
+	    }
+	    ed_lparen_row = pos.row;
+	    ed_lparen_col = pos.col;
+	    ed_rparen_row = ed_row;
+	    ed_rparen_col = ed_col1;
+	    ESCBORG();
+	}
+	restore_cursol();
+    }
+}
+
+void emphasis_rbracket()
+{
+    struct position pos;
+
+    if (ed_data[ed_row][ed_col] != '[')
+	return;
+
+    pos = find_rbracket(1);
+    if (ed_col <= COLS - 1 - LEFT_MARGIN
+	&& pos.col <= COLS - 1 - LEFT_MARGIN) {
+	if (pos.row != -1) {
+	    ESCMOVE(ed_row + TOP_MARGIN - ed_start, ed_col1 + LEFT_MARGIN);
+	    ESCBCYAN();
+	    CHECK(addch, '[');
+	    ESCBORG();
+	    if (pos.row <= ed_start + ed_scroll) {
+		ESCMOVE(pos.row + TOP_MARGIN - ed_start,
+			pos.col + LEFT_MARGIN);
+		ESCBCYAN();
+		CHECK(addch, ']');
+	    }
+	    ed_rparen_row = pos.row;
+	    ed_rparen_col = pos.col;
+	    ed_lparen_row = ed_row;
+	    ed_lparen_col = ed_col1;
+	    ESCBORG();
+	}
+	restore_cursol();
+    } else if (ed_col >= COLS && pos.col >= COLS) {
+	if (pos.row != -1) {
+	    ESCMOVE(ed_row + TOP_MARGIN - ed_start,
+		    ed_col1 - COLS + LEFT_MARGIN);
+	    ESCBCYAN();
+	    CHECK(addch, '[');
+	    ESCBORG();
+	    if (pos.row <= ed_start + ed_scroll) {
+		ESCMOVE(pos.row + TOP_MARGIN - ed_start,
+			pos.col - COLS + LEFT_MARGIN);
+		ESCBCYAN();
+		CHECK(addch, ']');
 	    }
 	    ed_rparen_row = pos.row;
 	    ed_rparen_col = pos.col;
@@ -3032,23 +3324,17 @@ void remove_headspace(int row __unused)
 
 int calc_tabs()
 {
-    struct position pos;
+	int col;
 
-    if (ed_row == 0 && ed_col == 0)
-	return (0);
+	if(ed_row == 0)
+		return(0);
 
-    pos = find_lparen(0);
+	col = 0;
+	while(ed_data[ed_row-1][col] == ' '){
+		col++;
+	}
+	return(col);
 
-
-    if (pos.row == -1)
-	return (0);		// can't find left paren
-
-    if (is_special(pos.row, pos.col + 1))
-	return (pos.col + 4);
-    else
-	return (findnext(pos.row, pos.col + 1));
-
-    return (0);			// dummy
 }
 
 void copy_selection()

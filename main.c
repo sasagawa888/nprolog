@@ -221,15 +221,15 @@ int main(int argc, char *argv[])
 	} else if (strcmp(argv[opt], "-h") == 0) {
 	    printf("List of options:\n");
 	    printf
-		("-c fn -- NPL starts after reading the file.\n");
+		("-c filename -- NPL starts after reading the file.\n");
 	    printf
-		("-h    -- display help.\n");
+		("-h          -- display help.\n");
 	    printf
-		("-r    -- NPL does not use editable REPL.\n");
+		("-r          -- NPL does not use editable REPL.\n");
 	    printf
-		("-s fn -- NPL run file with script mode.\n");
+		("-s filename -- NPL run file with script mode.\n");
 	    printf
-		("-v    -- dislplay version number.\n");
+		("-v          -- dislplay version number.\n");
 	    return (0);
 	} else if (strcmp(argv[opt], "-v") == 0) {
 	    printf("N-Prolog Ver %1.2f\n", VERSION);
