@@ -1,5 +1,4 @@
 # N-Prolog User's manual
-under construction.
 
 ### □ [Filename]
 Read from a file into a database using a consult predicate.
@@ -38,8 +37,10 @@ The predicate ansi_scp saves the current cursor position and the character attri
 The predicate ansi_rcp restores the cursor position and attributes saved by ansi_scp. 
 
 ### □ ansi_ed
+The predicate ansi_ed erases the display.
 
 ### □ ansi_el
+The predicate ansi_el erases from the cursor position to end of line.
 
 ### □ ansi_sgr(G)
 The predicate ansi_sgr sets graphic attributes. G can be an integer or a list of integers.
