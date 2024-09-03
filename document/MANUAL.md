@@ -405,11 +405,11 @@ Write to standard output device.
 ### □ write(Handle,Term)
 Write the term in the specified file. 
 
-### □ writeeq(Term)
+### □ writeq(Term)
 Write to standard output device so that the term can be read as a Prolog term
 Enclose the atom and function in quotation marks. 
 
-### □ writeeq(Time,Term)
+### □ writeq(Time,Term)
 Write the term to the specified file so that the term can be read as a Prolog term
 Enclose the atom and function in quotation marks. 
 

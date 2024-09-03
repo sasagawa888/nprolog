@@ -3595,7 +3595,7 @@ static const char *functions_data[] = {
 	"syntaxerrors",
 	"syntaxerrors(Old,New)",
 	"Specify whether to output the syntax error message or check the current setting. An error message is output with yes, and no error message is output with no.",
-	"system,"
+	"system",
 	"system(P)",
 	"Check if P is an embedded predicate.",
 	"tab",
@@ -3622,8 +3622,8 @@ static const char *functions_data[] = {
 	"write",
 	"write(Term)/write(Handle,Term)",
 	"Write to standard output device.Write the term in the specified file.",
-	"writeeq",
-	"writeeq(Term)/writeeq(Time,Term)",
+	"writeq",
+	"writeq(Term)/writeeq(Time,Term)",
 	"Write to standard output device so that the term can be read as a Prolog term Enclose the atom and function in quotation marks.Write the term to the specified file so that the term can be read as a Prolog term Enclose the atom and function in quotation marks.",
 
 };
