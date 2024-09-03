@@ -180,8 +180,7 @@ int main(int argc, char *argv[])
 	predicates = NIL;
     }
     while (opt < argc) {
-	if (strcmp(argv[opt], "-c") == 0
-	    || strcmp(argv[opt], "--code") == 0) {
+	if (strcmp(argv[opt], "-c") == 0) {
 	    opt++;
 	    FILE *fp = fopen(argv[opt], "r");
 	    if (fp != NULL)
@@ -192,8 +191,7 @@ int main(int argc, char *argv[])
 	    }
 	    b_consult(list1(makeconst(argv[opt])), NIL);
 	    opt++;
-	} else if (strcmp(argv[opt], "-s") == 0
-		   || strcmp(argv[opt], "--script") == 0) {
+	} else if (strcmp(argv[opt], "-s") == 0) {
 	    opt++;
 	    FILE *fp = fopen(argv[opt], "r");
 	    if (fp != NULL)
@@ -205,8 +203,7 @@ int main(int argc, char *argv[])
 	    script_flag = 1;
 	    b_consult(list1(makeconst(argv[opt])), NIL);
 	    return (0);
-	} else if (strcmp(argv[opt], "-r") == 0
-		   || strcmp(argv[opt], "--repl") == 0) {
+	} else if (strcmp(argv[opt], "-r") == 0) {
 	    repl_flag = 0;
 	    opt++;
 	} else if (strcmp(argv[opt], "-rc") == 0) {
@@ -221,20 +218,20 @@ int main(int argc, char *argv[])
 	    b_consult(list1(makeconst(argv[opt])), NIL);
 	    repl_flag = 0;
 	    opt++;
-	} else if (strcmp(argv[opt], "-h") == 0
-		   || strcmp(argv[opt], "--help") == 0) {
+	} else if (strcmp(argv[opt], "-h") == 0) {
 	    printf("List of options:\n");
 	    printf
-		("-c(--code) filename   -- NPL starts after reading the file.\n");
-	    printf("-h(--help)            -- display help.\n");
+		("-c fn -- NPL starts after reading the file.\n");
 	    printf
-		("-r(--repl)            -- NPL does not use editable REPL.\n");
+		("-h    -- display help.\n");
 	    printf
-		("-s(--script) filename -- NPL run file with script mode.\n");
-	    printf("-v(--version)         -- dislplay version number.\n");
+		("-r    -- NPL does not use editable REPL.\n");
+	    printf
+		("-s fn -- NPL run file with script mode.\n");
+	    printf
+		("-v    -- dislplay version number.\n");
 	    return (0);
-	} else if (strcmp(argv[opt], "-v") == 0
-		   || strcmp(argv[opt], "--version") == 0) {
+	} else if (strcmp(argv[opt], "-v") == 0) {
 	    printf("N-Prolog Ver %1.2f\n", VERSION);
 	    return (0);
 	} else {

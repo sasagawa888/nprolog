@@ -54,11 +54,11 @@ npl -c init.pl
 ```
 $ npl -h
 List of options:
--c(--code) filename   -- NPL starts after reading the file.
--h(--help)            -- display help.
--r(--repl)            -- NPL does not use editable REPL.
--s(--script) filename -- NPL run file with script mode.
--v(--version)         -- dislplay version number.
+-c fn   -- NPL starts after reading the file.
+-h      -- display help.
+-r      -- NPL does not use editable REPL.
+-s fn   -- NPL run file with script mode.
+-v      -- dislplay version number.
 
 ```
 
