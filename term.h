@@ -211,7 +211,7 @@ static inline void ESCBOLD(void)
 
 enum HighlightToken { HIGHLIGHT_NONE, HIGHLIGHT_SYNTAX, HIGHLIGHT_BUILTIN,
     HIGHLIGHT_STRING, HIGHLIGHT_COMMENT, HIGHLIGHT_EXTENDED,
-    HIGHLIGHT_MULTILINE_COMMENT,
+    HIGHLIGHT_MULTILINE_COMMENT, HIGHLIGHT_QUOTE,
 };
 enum HighlightToken maybe_match(const char *str);
 bool in_special_table(const char *str);

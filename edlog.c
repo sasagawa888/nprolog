@@ -2423,7 +2423,7 @@ void display_line(int line)
 		ESCRST();
 		ESCFORG();
 		break;
-	    case HIGHLIGHT_STRING:
+		case HIGHLIGHT_QUOTE:
 		ESCBOLD();
 		set_color(ed_string_color);
 		CHECK(addch, ed_data[line][col]);
@@ -2443,6 +2443,32 @@ void display_line(int line)
 
 
 		    if (ed_data[line][col - 1] == '\'' &&
+			ed_data[line][col - 2] != '\\')
+			break;
+		}
+		ESCRST();
+		ESCFORG();
+		break;
+	    case HIGHLIGHT_STRING:
+		ESCBOLD();
+		set_color(ed_string_color);
+		CHECK(addch, ed_data[line][col]);
+		col++;
+		col1++;
+		while (((ed_col1 < turn && col1 < turn)
+			|| (ed_col1 >= turn && col < COL_SIZE))
+		       && ed_data[line][col] != NUL
+		       && ed_data[line][col] != EOL) {
+		    if (isUni1(ed_data[line][col])) {
+			CHECK(addch, ed_data[line][col]);
+		    } else {
+			display_unicode(line, col);
+		    }
+		    col1 = col1 + increase_terminal(line, col);
+		    col = col + increase_buffer(line, col);
+
+
+		    if (ed_data[line][col - 1] == '$' &&
 			ed_data[line][col - 2] != '\\')
 			break;
 		}
@@ -3410,6 +3436,8 @@ enum HighlightToken check_token(int row, int col)
 
     pos = 0;
     if (ed_data[row][col] == '\'')
+	return HIGHLIGHT_QUOTE;
+	else if (ed_data[row][col] == '$')
 	return HIGHLIGHT_STRING;
     else if (ed_data[row][col] == '%')
 	return HIGHLIGHT_COMMENT;
