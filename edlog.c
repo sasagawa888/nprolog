@@ -484,6 +484,7 @@ void up()
 	restore_cursol();
     } else {
 	restore_paren();
+	restore_bracket();
 	ed_row--;
 	oldcol1 = ed_col1;
 	recalculate_col(ed_row, ed_col1);
@@ -547,6 +548,7 @@ void down()
 	restore_cursol();
     } else {
 	restore_paren();
+	restore_bracket();
 	ed_row++;
 	oldcol1 = ed_col1;
 	recalculate_col(ed_row, ed_col1);
@@ -568,6 +570,7 @@ void return_key()
 
     if (ed_row == ed_start + ed_scroll) {
 	restore_paren();
+	restore_bracket();
 	insert_row();
 	ed_start++;
 	ed_row++;
@@ -577,6 +580,7 @@ void return_key()
 	ESCMOVE(ed_footer, LEFT_MARGIN);
     } else if (ed_col >= COLS) {
 	restore_paren();
+	restore_bracket();
 	insert_row();
 	ed_start++;
 	ed_row++;
@@ -586,6 +590,7 @@ void return_key()
 	ESCMOVE(ed_row + TOP_MARGIN - ed_start, 1);
     } else {
 	restore_paren();
+	restore_bracket();
 	insert_row();
 	ed_row++;
 	ed_end++;
@@ -629,6 +634,7 @@ void backspace_key(void)
 	return;
     else if (ed_col == 0) {
 	restore_paren();
+	restore_bracket();
 	delete_row();
 	if (ed_row < ed_start) {
 	    ed_start = ed_row;
@@ -638,6 +644,7 @@ void backspace_key(void)
 	backspace();
 	ESCCLSLA();
 	restore_paren();
+	restore_bracket();
 	ESCMOVE(ed_row + TOP_MARGIN - ed_start, 1);
 	display_line(ed_row);
     }
@@ -1144,6 +1151,7 @@ void cut_line()
     ed_row = ed_clip_start;
     ed_clip_start = ed_clip_end = -1;
     restore_paren();
+	restore_bracket();
     display_screen();
     restore_cursol();
     modify_flag = true;
@@ -1176,6 +1184,7 @@ void cut_selection()
     copy_selection();
     delete_selection();
     restore_paren();
+	restore_bracket();
     ed_start = ed_clip_start - ed_scroll / 2;
     if (ed_start < 0)
 	ed_start = 0;
@@ -1193,6 +1202,7 @@ void uncut_selection()
 {
     paste_selection();
     restore_paren();
+	restore_bracket();
     display_screen();
     restore_cursol();
     modify_flag = true;
@@ -1204,6 +1214,7 @@ void save_selection()
     ed_row = ed_clip_start;
     ed_clip_start = ed_clip_end = -1;
     restore_paren();
+	restore_bracket();
     display_screen();
     restore_cursol();
     modify_flag = true;
@@ -2121,6 +2132,7 @@ bool edit_loop(void)
 	    break;
 	ESCCLSLA();
 	restore_paren();
+	restore_bracket();
 	if (ed_ins)
 	    insert_col();
 	ed_data[ed_row][ed_col] = c;
@@ -2961,7 +2973,7 @@ void restore_paren()
 void restore_bracket()
 {
     if (ed_lbracket_row != -1 && ed_lbracket_row >= ed_start
-	&& ed_lparen_row <= ed_start + ed_scroll) {
+	&& ed_lbracket_row <= ed_start + ed_scroll) {
 	if (ed_lbracket_col <= COLS - 1 - LEFT_MARGIN)
 	    ESCMOVE(ed_lbracket_row + TOP_MARGIN - ed_start,
 		    ed_lbracket_col + LEFT_MARGIN);
@@ -3111,10 +3123,10 @@ void emphasis_lbracket()
 		ESCBCYAN();
 		CHECK(addch, '[');
 	    }
-	    ed_lparen_row = pos.row;
-	    ed_lparen_col = pos.col;
-	    ed_rparen_row = ed_row;
-	    ed_rparen_col = ed_col1;
+	    ed_lbracket_row = pos.row;
+	    ed_lbracket_col = pos.col;
+	    ed_rbracket_row = ed_row;
+	    ed_rbracket_col = ed_col1;
 	    ESCBORG();
 	}
 	restore_cursol();
@@ -3131,10 +3143,10 @@ void emphasis_lbracket()
 		ESCBCYAN();
 		CHECK(addch, '[');
 	    }
-	    ed_lparen_row = pos.row;
-	    ed_lparen_col = pos.col;
-	    ed_rparen_row = ed_row;
-	    ed_rparen_col = ed_col1;
+	    ed_lbracket_row = pos.row;
+	    ed_lbracket_col = pos.col;
+	    ed_rbracket_row = ed_row;
+	    ed_rbracket_col = ed_col1;
 	    ESCBORG();
 	}
 	restore_cursol();
@@ -3162,10 +3174,10 @@ void emphasis_rbracket()
 		ESCBCYAN();
 		CHECK(addch, ']');
 	    }
-	    ed_rparen_row = pos.row;
-	    ed_rparen_col = pos.col;
-	    ed_lparen_row = ed_row;
-	    ed_lparen_col = ed_col1;
+	    ed_rbracket_row = pos.row;
+	    ed_rbracket_col = pos.col;
+	    ed_lbracket_row = ed_row;
+	    ed_lbracket_col = ed_col1;
 	    ESCBORG();
 	}
 	restore_cursol();
@@ -3182,10 +3194,10 @@ void emphasis_rbracket()
 		ESCBCYAN();
 		CHECK(addch, ']');
 	    }
-	    ed_rparen_row = pos.row;
-	    ed_rparen_col = pos.col;
-	    ed_lparen_row = ed_row;
-	    ed_lparen_col = ed_col1;
+	    ed_rbracket_row = pos.row;
+	    ed_rbracket_col = pos.col;
+	    ed_lbracket_row = ed_row;
+	    ed_lbracket_col = ed_col1;
 	    ESCBORG();
 	}
 	restore_cursol();
