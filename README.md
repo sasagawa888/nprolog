@@ -5,6 +5,8 @@ N-Prolog is NOT ISO-Prolog.
 About Arity/prolog32  see  http://petergabel.info/ArityProlog32/ArityProlog32PredList/
 
 license is modified BSD.
+
+![npl](npl.png)
  
 ## OS
 We have confirmed the operation on the following OS.
