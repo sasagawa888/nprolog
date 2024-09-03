@@ -3153,13 +3153,20 @@ char *get_fragment()
     col = ed_col - 1;
     while (col >= 0 &&
 	   ed_data[ed_row][col] != ' ' &&
-	   ed_data[ed_row][col] != '(' && ed_data[ed_row][col] != ')') {
+	   ed_data[ed_row][col] != '(' &&
+	   ed_data[ed_row][col] != ')' &&
+	   ed_data[ed_row][col] != ',' &&
+	   ed_data[ed_row][col] != ';') {
 	col--;
     }
     col++;
     pos = 0;
     while (ed_data[ed_row][col] != ' ' &&
-	   ed_data[ed_row][col] != '(' && ed_data[ed_row][col] >= ' ') {
+	   ed_data[ed_row][col] != '(' &&
+	   ed_data[ed_row][col] != ',' &&
+	   ed_data[ed_row][col] != '.' &&
+	   ed_data[ed_row][col] != ';' &&
+	   ed_data[ed_row][col] >= ' ') {
 	str[pos] = ed_data[ed_row][col];
 	col++;
 	pos++;
@@ -3343,14 +3350,14 @@ static const char *functions_data[] = {
 	"Removes all clauses with the specified name arity from the data berth.",
 	"abort",
 	"abort",
-	"Stop the current program. Return to the interpreter after the program ends. If the program is compiled, abort restarts its goal."
-	"ansi-cuu",	
+	"Stop the current program. Return to the interpreter after the program ends. If the program is compiled, abort restarts its goal.",
+	"ansi_cuu",	
 	"ansi_cuu(N)",
 	"Move the cursor up N lines.",
-	"ansi-cud",
+	"ansi_cud",
 	"ansi_cud(N)",
 	"Move the cursor down N lines.",
-	"ansi-cuf",
+	"ansi_cuf",
 	"ansi_cuf(N)",
 	"Move the cursor forward N digits.",
 	"ansi_sub",
@@ -3367,10 +3374,10 @@ static const char *functions_data[] = {
 	"The predicate ansi_rcp restores the cursor position and attributes saved by ansi_scp.",
 	"ansi_ed",
 	"ansi_ed",
-	"",
+	"The predicate ansi_ed erase display.",
 	"ansi_el",
 	"ansi_el",
-	"",
+	"The predicate ansi_el erase from the cursor to end of line.",
 	"ansi_sgr",
 	"ansi_sgr(G)",
 	"The predicate ansi_sgr sets graphic attributes. G can be an integer or a list of integers. see user manual.",
@@ -3461,6 +3468,9 @@ static const char *functions_data[] = {
 	"expand_term",
 	"expand_term(Term,Newterm)",
 	"DCG: Converts a term in a limited clause grammar to an equivalent Prolog term.",
+	"fail",
+	"fail",
+	"Goals are always false.",
 	"float",
 	"float(X)",
 	"Check if X is a floating point number.",
@@ -3521,6 +3531,9 @@ static const char *functions_data[] = {
 	"name",
 	"name(Atom,List)",
 	"Convert a list to an atom, or convert an atom or an integer to a list.",
+	"nl",
+	"nl/nl(Handle)",
+	"write newline to stdout. write newline to file.",
 	"open",
 	"open(Handle,Filename,Access)",
 	"Open an existing file. Access is one of the following r read w write rw read and write a append ra read and append",
@@ -3545,6 +3558,7 @@ static const char *functions_data[] = {
 	"removeallh",
 	"removeallh(Table_name)",
 	"Delete the hash table.",
+	"removeh",
 	"removeh(Table_name,Sort_key,Term)",
 	"Remove a term from the hash table.",
 	"reset_op",
@@ -3561,7 +3575,7 @@ static const char *functions_data[] = {
 	"Rename the file.",
 	"rmdir",
 	"rmdir(Path)",
-	"Delete the directory."
+	"Delete the directory.",
 	"shell",
 	"shell(Command)",
 	"Execute the BASH command and succeed.",
