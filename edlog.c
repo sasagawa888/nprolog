@@ -2929,13 +2929,6 @@ struct position find_rbracket(int bias)
     return (pos);
 }
 
-/*
-void reset_paren()
-{
-    ed_lparen_row = -1;
-    ed_rparen_row = -1;
-}
-*/
 
 void restore_paren()
 {
@@ -2964,14 +2957,6 @@ void restore_paren()
 	ed_rparen_row = -1;
     }
 }
-
-/*
-void reset_bracket()
-{
-    ed_lbracket_row = -1;
-    ed_rbracket_row = -1;
-}
-*/
 
 void restore_bracket()
 {
