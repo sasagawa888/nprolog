@@ -1,9 +1,9 @@
 # N-Prolog
 
-N-Prolog(NPL)はArity/Prolog32互換のインタプリタ、コンパイラです。 
+N-Prolog(NPL)はARITY/PROLOG(MS-DOS)互換のインタプリタ、コンパイラです。 
 
 N-PrologはISO-Prolog互換ではありません.
-Arity/prolog32については右記をご参照ください。  http://petergabel.info/ArityProlog32/ArityProlog32PredList/
+ARITY/PROLOG(MS-DOS)
 
 manual.txtにユーザーズマニュアルがあります。ご参照ください。
 ライセンスは修正BSDに基づいています。無償でお使いいただけます。
@@ -54,11 +54,11 @@ npl -c init.pl
 ```
 $ npl -h
 List of options:
--c fn   -- NPL starts after reading the file.
--h      -- display help.
--r      -- NPL does not use editable REPL.
--s fn   -- NPL run file with script mode.
--v      -- dislplay version number.
+-c filename   -- NPL starts after reading the file.
+-h            -- display help.
+-r            -- NPL does not use editable REPL.
+-s filename   -- NPL run file with script mode.
+-v            -- dislplay version number.
 
 ```
 
