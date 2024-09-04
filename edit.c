@@ -715,6 +715,57 @@ int count_col_buffer(int x)
 }
 
 
+int check_balance_period(void)
+{
+	int col,paren,bracket,quote,string,period;
+
+	col = paren = bracket = quote = string = period = 0;
+
+	while(buffer[col][0] != 0){
+		if(buffer[col][0] == '(')
+			paren++;
+		else if(buffer[col][0] == ')')
+			paren--;
+		else if(buffer[col][0] == '[')
+			bracket++;
+		else if(buffer[col][0] == ']')
+			bracket--;
+		else if(col == 0 && buffer[col][0] == '\'')
+			quote++;
+		else if(col > 0 && buffer[col][0] == '\'' && buffer[col-1][0] != '\\')
+			quote++;
+		else if(col == 0 && buffer[col][0] == '$')
+			quote++;
+		else if(col > 0 && buffer[col][0] == '$' && buffer[col-1][0] != '\\')
+			quote++;
+		col++;
+	}
+
+	// check period at line end.
+	col = 0;
+	while(buffer[col][0] != 0){
+		col++;
+	}
+	col--;
+
+	while(col > 0){
+		if(buffer[col][0] == ' '){
+			col--;
+		}
+		else if(buffer[col][0] == '.'){
+			period = 1;
+			break;
+		}
+		else{
+			break;
+		}
+	}
+
+	if(paren == 0 && bracket == 0 && quote % 2 == 0 && string % 2 == 0 && period == 1)
+		return 1;
+
+	return 0;
+}
 
 
 
@@ -751,6 +802,17 @@ int read_line(int flag)
       loop:
 	switch (c) {
 	case EOL:
+		if(!check_balance_period()){
+			printf("\n() [] unbalance or lack of '.' --- enter any key ---");
+			getch();
+			ESCMVLEFT(1);
+		    ESCCLSL;
+		    ESCMVU;
+		    ESCMVLEFT(left_margin);
+		    display_buffer();
+		    ESCMVLEFT(j + left_margin);
+			break;
+		}
 	    for (j = 0; j < BUFSIZE; j++)
 		if (buffer[j][0] == 0)
 		    break;
