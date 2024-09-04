@@ -52,13 +52,13 @@ int ed_tab = 0;
 int ed_indent = 1;
 char ed_data[ROW_SIZE][COL_SIZE];
 char ed_copy[COPY_SIZE][COL_SIZE];
-int ed_lparen_row;
+int ed_lparen_row = -1;
 int ed_lparen_col;
-int ed_rparen_row;
+int ed_rparen_row = -1;
 int ed_rparen_col;
-int ed_lbracket_row;
+int ed_lbracket_row = -1;
 int ed_lbracket_col;
-int ed_rbracket_row;
+int ed_rbracket_row = -1;
 int ed_rbracket_col;
 int ed_clip_start;
 int ed_clip_end;
@@ -2607,6 +2607,7 @@ void backspace(void)
 	ed_lparen_row = -1;
 	ed_rparen_row = -1;
     }
+
     i = ed_col;
     size = decrease_buffer(ed_row, ed_col - 1);
     ed_col1 = ed_col1 - decrease_terminal(ed_row, ed_col - 1);
@@ -3278,6 +3279,8 @@ void load_data(char *fname)
     ed_end = 0;
     ed_lparen_row = -1;
     ed_rparen_row = -1;
+	ed_lbracket_row = -1;
+    ed_rbracket_row = -1;
     ed_clip_start = -1;
     ed_clip_end = -1;
     ed_data[0][0] = EOL;
