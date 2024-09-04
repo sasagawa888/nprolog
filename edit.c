@@ -130,7 +130,20 @@ void display_buffer()
 		}
 		ESCRST;
 		ESCFORG;
-	    } else if (type == 4) {	// coment %
+		} else if (type == 9) {	// $...$
+		ESCBOLD;
+		setcolor(ed_quote_color);
+		printf("%c", buffer[col][0]);
+		col++;
+		while (buffer[col][0] != NUL && buffer[col][0] != EOL) {
+		    printf("%c", buffer[col][0]);
+		    col++;
+		    if (buffer[col - 1][0] == '$')
+			break;
+		}
+		ESCRST;
+		ESCFORG;
+	    } else if (type == 4) {	// comment %
 		ESCBOLD;
 		setcolor(ed_comment_color);
 		while (buffer[col][0] != NUL && buffer[col][0] != EOL) {
@@ -215,7 +228,7 @@ rtok.type
   6 function token
   7 comment token
   8 number token
-  
+  9 string token
   10 normal token
 */
 void check_token_buffer(int col)
@@ -234,6 +247,10 @@ void check_token_buffer(int col)
 	rtok.type = 4;
 	rtok.length = -1;
 	return;			//comment token
+    } else if (buffer[col][0] == '$') {
+	rtok.type = 9;
+	rtok.length = -1;
+	return;			//string token
     } else if (isdigit(buffer[col][0])) {	//number
 	while (isdigit(buffer[col][0]) ||
 	       buffer[col][0] == 'e' ||
@@ -696,6 +713,10 @@ int count_col_buffer(int x)
     }
     return (logical_col);
 }
+
+
+
+
 
 int read_line(int flag)
 {
