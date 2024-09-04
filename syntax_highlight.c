@@ -144,7 +144,7 @@ bool in_function_table(const char *str)
 {
     int i;
 
-    for (i = 0; i < (int) NELEM(special); i++) {
+    for (i = 0; i < (int) NELEM(function); i++) {
 	if (strcmp(function[i], str) == 0) {
 	    return true;
 	}
