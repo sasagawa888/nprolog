@@ -111,7 +111,7 @@ static inline void ESCFORG(void)
 
 enum Color { RED_ON_DFL =
 	1, YELLOW_ON_DFL, BLUE_ON_DFL, MAGENTA_ON_DFL, CYAN_ON_DFL,
-    DFL_ON_CYAN,
+    DFL_ON_CYAN, GREEN_ON_DFL, 
 };
 static inline void ESCBCYAN(void)
 {
@@ -211,7 +211,7 @@ static inline void ESCBOLD(void)
 
 enum HighlightToken { HIGHLIGHT_NONE, HIGHLIGHT_SYNTAX, HIGHLIGHT_BUILTIN,
     HIGHLIGHT_STRING, HIGHLIGHT_COMMENT, HIGHLIGHT_EXTENDED,
-    HIGHLIGHT_MULTILINE_COMMENT, HIGHLIGHT_QUOTE,
+    HIGHLIGHT_MULTILINE_COMMENT, HIGHLIGHT_QUOTE, HIGHLIGHT_FUNCTION,
 };
 enum HighlightToken maybe_match(const char *str);
 bool in_special_table(const char *str);

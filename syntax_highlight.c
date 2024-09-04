@@ -140,6 +140,18 @@ bool in_special_table(const char *str)
     return false;
 }
 
+bool in_function_table(const char *str)
+{
+    int i;
+
+    for (i = 0; i < (int) NELEM(special); i++) {
+	if (strcmp(function[i], str) == 0) {
+	    return true;
+	}
+    }
+    return false;
+}
+
 enum HighlightToken maybe_match(const char *str)
 {
     if (in_syntax_table(str)) {
@@ -150,6 +162,9 @@ enum HighlightToken maybe_match(const char *str)
     }
     if (in_extended_table(str)) {
 	return HIGHLIGHT_EXTENDED;
+    }
+    if (in_function_table(str)) {
+	return HIGHLIGHT_FUNCTION;
     }
     return HIGHLIGHT_NONE;
 }

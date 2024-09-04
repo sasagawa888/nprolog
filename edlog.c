@@ -70,6 +70,7 @@ const enum Color ed_builtin_color = CYAN_ON_DFL;
 const enum Color ed_extended_color = MAGENTA_ON_DFL;
 const enum Color ed_string_color = YELLOW_ON_DFL;
 const enum Color ed_comment_color = BLUE_ON_DFL;
+const enum Color ed_function_color = GREEN_ON_DFL;
 int ed_incomment = -1;		// #|...|# comment
 bool modify_flag;
 
@@ -198,6 +199,7 @@ void init_ncurses()
 	CHECK(init_pair, MAGENTA_ON_DFL, COLOR_MAGENTA, -1);
 	CHECK(init_pair, CYAN_ON_DFL, COLOR_CYAN, -1);
 	CHECK(init_pair, DFL_ON_CYAN, -1, COLOR_CYAN);
+	CHECK(init_pair, GREEN_ON_DFL, COLOR_GREEN, -1);
     }
 }
 
@@ -2419,6 +2421,25 @@ void display_line(int line)
 	    case HIGHLIGHT_BUILTIN:
 		ESCBOLD();
 		set_color(ed_builtin_color);
+		while (((ed_col1 < turn && col1 < turn)
+			|| (ed_col1 >= turn && col < COL_SIZE))
+		       && ed_data[line][col] != ' '
+		       && ed_data[line][col] != '('
+		       && ed_data[line][col] != ')'
+			   && ed_data[line][col] != ','
+			   && ed_data[line][col] != '.'
+		       && ed_data[line][col] != NUL
+		       && ed_data[line][col] != EOL) {
+		    CHECK(addch, ed_data[line][col]);
+		    col++;
+		    col1++;
+		}
+		ESCRST();
+		ESCFORG();
+		break;
+		case HIGHLIGHT_FUNCTION:
+		ESCBOLD();
+		set_color(ed_function_color);
 		while (((ed_col1 < turn && col1 < turn)
 			|| (ed_col1 >= turn && col < COL_SIZE))
 		       && ed_data[line][col] != ' '
