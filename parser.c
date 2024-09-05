@@ -738,7 +738,6 @@ void gettoken(void)
 	stok.type = ATOMOBJ;
 	return;
     }
-
     //variable
     if (isupper(c)) {
 	pos = 0;

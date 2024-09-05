@@ -431,10 +431,10 @@ void left()
 	ed_col1 = new_col1;
     }
     restore_paren();
-	restore_bracket();
+    restore_bracket();
     emphasis_lparen();
     emphasis_rparen();
-	emphasis_lbracket();
+    emphasis_lbracket();
     emphasis_rbracket();
     restore_cursol();
 }
@@ -1153,7 +1153,7 @@ void cut_line()
     ed_row = ed_clip_start;
     ed_clip_start = ed_clip_end = -1;
     restore_paren();
-	restore_bracket();
+    restore_bracket();
     display_screen();
     restore_cursol();
     modify_flag = true;
@@ -1186,7 +1186,7 @@ void cut_selection()
     copy_selection();
     delete_selection();
     restore_paren();
-	restore_bracket();
+    restore_bracket();
     ed_start = ed_clip_start - ed_scroll / 2;
     if (ed_start < 0)
 	ed_start = 0;
@@ -1204,7 +1204,7 @@ void uncut_selection()
 {
     paste_selection();
     restore_paren();
-	restore_bracket();
+    restore_bracket();
     display_screen();
     restore_cursol();
     modify_flag = true;
@@ -1216,7 +1216,7 @@ void save_selection()
     ed_row = ed_clip_start;
     ed_clip_start = ed_clip_end = -1;
     restore_paren();
-	restore_bracket();
+    restore_bracket();
     display_screen();
     restore_cursol();
     modify_flag = true;
@@ -1286,7 +1286,7 @@ bool quit_with_save(void)
 	}
 	while (c != 'y' && c != 'n');
     }
-	return false;
+    return false;
 }
 
 void save_file()
@@ -2389,11 +2389,10 @@ void display_line(int line)
 	    ESCRST();
 	    ESCFORG();
 	} else if (ed_data[line][col] == ' ' ||
-		   ed_data[line][col] == '(' || 
+		   ed_data[line][col] == '(' ||
 		   ed_data[line][col] == ')' ||
 		   ed_data[line][col] == ',' ||
-		   ed_data[line][col] == '.')
-	{
+		   ed_data[line][col] == '.') {
 	    CHECK(addch, ed_data[line][col]);
 	    col++;
 	    col1++;
@@ -2407,8 +2406,8 @@ void display_line(int line)
 		       && ed_data[line][col] != ' '
 		       && ed_data[line][col] != '('
 		       && ed_data[line][col] != ')'
-			   && ed_data[line][col] != ','
-			   && ed_data[line][col] != '.'
+		       && ed_data[line][col] != ','
+		       && ed_data[line][col] != '.'
 		       && ed_data[line][col] != NUL
 		       && ed_data[line][col] != EOL) {
 		    CHECK(addch, ed_data[line][col]);
@@ -2426,8 +2425,8 @@ void display_line(int line)
 		       && ed_data[line][col] != ' '
 		       && ed_data[line][col] != '('
 		       && ed_data[line][col] != ')'
-			   && ed_data[line][col] != ','
-			   && ed_data[line][col] != '.'
+		       && ed_data[line][col] != ','
+		       && ed_data[line][col] != '.'
 		       && ed_data[line][col] != NUL
 		       && ed_data[line][col] != EOL) {
 		    CHECK(addch, ed_data[line][col]);
@@ -2437,7 +2436,7 @@ void display_line(int line)
 		ESCRST();
 		ESCFORG();
 		break;
-		case HIGHLIGHT_FUNCTION:
+	    case HIGHLIGHT_FUNCTION:
 		ESCBOLD();
 		set_color(ed_function_color);
 		while (((ed_col1 < turn && col1 < turn)
@@ -2445,8 +2444,8 @@ void display_line(int line)
 		       && ed_data[line][col] != ' '
 		       && ed_data[line][col] != '('
 		       && ed_data[line][col] != ')'
-			   && ed_data[line][col] != ','
-			   && ed_data[line][col] != '.'
+		       && ed_data[line][col] != ','
+		       && ed_data[line][col] != '.'
 		       && ed_data[line][col] != NUL
 		       && ed_data[line][col] != EOL) {
 		    CHECK(addch, ed_data[line][col]);
@@ -2456,7 +2455,7 @@ void display_line(int line)
 		ESCRST();
 		ESCFORG();
 		break;
-		case HIGHLIGHT_QUOTE:
+	    case HIGHLIGHT_QUOTE:
 		ESCBOLD();
 		set_color(ed_string_color);
 		CHECK(addch, ed_data[line][col]);
@@ -2535,8 +2534,8 @@ void display_line(int line)
 		       && ed_data[line][col] != ' '
 		       && ed_data[line][col] != '('
 		       && ed_data[line][col] != ')'
-			   && ed_data[line][col] != ','
-			   && ed_data[line][col] != '.'
+		       && ed_data[line][col] != ','
+		       && ed_data[line][col] != '.'
 		       && ed_data[line][col] != NUL
 		       && ed_data[line][col] != EOL) {
 		    CHECK(addch, ed_data[line][col]);
@@ -2572,8 +2571,8 @@ void display_line(int line)
 		       && ed_data[line][col] != ' '
 		       && ed_data[line][col] != '('
 		       && ed_data[line][col] != ')'
-			   && ed_data[line][col] != ','
-			   && ed_data[line][col] != '.'
+		       && ed_data[line][col] != ','
+		       && ed_data[line][col] != '.'
 		       && ed_data[line][col] != NUL
 		       && ed_data[line][col] != EOL) {
 		    if (isUni1(ed_data[line][col])) {
@@ -3279,7 +3278,7 @@ void load_data(char *fname)
     ed_end = 0;
     ed_lparen_row = -1;
     ed_rparen_row = -1;
-	ed_lbracket_row = -1;
+    ed_lbracket_row = -1;
     ed_rbracket_row = -1;
     ed_clip_start = -1;
     ed_clip_end = -1;
@@ -3289,9 +3288,9 @@ void load_data(char *fname)
 
 	c = fgetc(port);
 	while (c != EOF) {
-		if(c == TAB){
-			c = SPACE;
-		}
+	    if (c == TAB) {
+		c = SPACE;
+	    }
 	    ed_data[ed_row][ed_col] = c;
 	    if (c == EOL) {
 		ed_row++;
@@ -3371,16 +3370,16 @@ void remove_headspace(int row __unused)
 
 int calc_tabs()
 {
-	int col;
+    int col;
 
-	if(ed_row == 0)
-		return(0);
+    if (ed_row == 0)
+	return (0);
 
-	col = 0;
-	while(ed_data[ed_row-1][col] == ' '){
-		col++;
-	}
-	return(col);
+    col = 0;
+    while (ed_data[ed_row - 1][col] == ' ') {
+	col++;
+    }
+    return (col);
 
 }
 
@@ -3458,7 +3457,7 @@ enum HighlightToken check_token(int row, int col)
     pos = 0;
     if (ed_data[row][col] == '\'')
 	return HIGHLIGHT_QUOTE;
-	else if (ed_data[row][col] == '$')
+    else if (ed_data[row][col] == '$')
 	return HIGHLIGHT_STRING;
     else if (ed_data[row][col] == '%')
 	return HIGHLIGHT_COMMENT;
@@ -3490,8 +3489,7 @@ char *get_fragment()
 	   ed_data[ed_row][col] != ' ' &&
 	   ed_data[ed_row][col] != '(' &&
 	   ed_data[ed_row][col] != ')' &&
-	   ed_data[ed_row][col] != ',' &&
-	   ed_data[ed_row][col] != ';') {
+	   ed_data[ed_row][col] != ',' && ed_data[ed_row][col] != ';') {
 	col--;
     }
     col++;
@@ -3500,8 +3498,7 @@ char *get_fragment()
 	   ed_data[ed_row][col] != '(' &&
 	   ed_data[ed_row][col] != ',' &&
 	   ed_data[ed_row][col] != '.' &&
-	   ed_data[ed_row][col] != ';' &&
-	   ed_data[ed_row][col] >= ' ') {
+	   ed_data[ed_row][col] != ';' && ed_data[ed_row][col] >= ' ') {
 	str[pos] = ed_data[ed_row][col];
 	col++;
 	pos++;
@@ -3680,300 +3677,300 @@ void information(void)
 }
 
 static const char *functions_data[] = {
-	"abolish",
-	"abolish(name/Arity)",
-	"Removes all clauses with the specified name arity from the data berth.",
-	"abort",
-	"abort",
-	"Stop the current program. Return to the interpreter after the program ends. If the program is compiled, abort restarts its goal.",
-	"ansi_cuu",	
-	"ansi_cuu(N)",
-	"Move the cursor up N lines.",
-	"ansi_cud",
-	"ansi_cud(N)",
-	"Move the cursor down N lines.",
-	"ansi_cuf",
-	"ansi_cuf(N)",
-	"Move the cursor forward N digits.",
-	"ansi_sub",
-	"ansi_sub(N)",
-	"Move the cursor back N digits.",
-	"ansi_cpr",
-	"ansi_cpr(Row,Col)",
-	"The predicate ansi_cpr is used to know the current cursor position. If the arguments Row and Col are not assigned, the coordinates of the current cursor position are in rows and columns. Unify each argument. If it has been assigned, compare that number with the coordinates of the current position.",
-	"ansi_scp",
-	"ansi_scp",
-	"The predicate ansi_scp saves the current cursor position and the character attributes at that position.",
-	"ansi_rcp",
-	"ansi_rcp",
-	"The predicate ansi_rcp restores the cursor position and attributes saved by ansi_scp.",
-	"ansi_ed",
-	"ansi_ed",
-	"The predicate ansi_ed erase display.",
-	"ansi_el",
-	"ansi_el",
-	"The predicate ansi_el erase from the cursor to end of line.",
-	"ansi_sgr",
-	"ansi_sgr(G)",
-	"The predicate ansi_sgr sets graphic attributes. G can be an integer or a list of integers. see user manual.",
-	"arg",
-	"arg(N,Term,X)",
-	"Unify X to the Nth value of the term. (Arguments are numbered from 1 in the increasing direction.)",
-	"arg0",
-	"arg0(N,Term,X)",
-	"Unify X to the value of the N + 1th argument of the term. (Arguments are numbered from 0 in the increasing direction.)",
-	"assert",
-	"assert(Clause)",
-	"Add a clause to the end of the predicate.",
-	"asserta",
-	"asserta(Clause)",
-	"Add a clause to the top of the predicate.",
-	"assertz",
-	"assertz(Clause)",
-	"Add a clause to the end of the predicate.",
-	"atom",
-	"atom(X)",
-	"Check if X is an atom.",
-	"atom_string",
-	"atom_string(Atom,String)",
-	"Convert an atom to a string or convert a string to an atom.",
-	"atomic",
-	"atomic(X)",
-	"Check if X is an atom data type.",
-	"break",
-	"break",
-	"Suspend program execution and display an interpreter prompt. The program can be restarted by the following types: end_of_file",
-	"call",
-	"call(P)",
-	"Call the interpreted goal P.",
-	"chdir",
-	"chdir(Path)",
-	"Change or revert to the current directory.",
-	"clause",
-	"clause(Head,Body)",
-	"Unify Head and Body to the head and body of the node, respectively. Head must be assigned. example",
-	"close",
-	"close(Handle)",
-	"Closes the file specified by Handle.",
-	"ctr_dec",
-	"ctr_dec(Ctr,X)",
-	"Decreases the value of a counter and returns the previous value of that counter.",
-	"ctr_inc",	
-	"ctr_inc(Ctr,X)",
-	"Increases the value of a counter and returns the previous value of that counter.",
-	"ctr_is",
-	"ctr_is(Ctr,X)",
-	"Returns the current counter value.",
-	"ctr_set",
-	"ctr_set(Ctr,X)",
-	"Set the counter to the specified value.",
-	"current_op",
-	"current_op(Proc,Assoc,Op)",
-	"Returns the operator constants currently defined in the database while backtracking.",
-	"current_predicate",
-	"current_predicate(Predicate)",
-	"Returns the predicate currently defined in the database while backtracking.",
-	"date",
-	"date(date(Year,Month,Day))",
-	"Set the year, month, and day.",
-	"date_day",
-	"date_day(date(Year,Month,Day),WeekDay)",
-	"Returns the day of the week on a given date as a number between 0 (Sunday) and 6 (Saturday).",
-	"dec",	
-	"dec(N,X)",
-	"Subtract 1 from the number N and give it to the value X.",
-	"delete",
-	"delete(Filename)",
-	"Delete the specified file.",
-	"directory",
-	"directory(Path,Name,Mode,Time,Date,Size)",
-	"List the directory files specified by Path. see user manual",
-	"display",
-	"display(Term)",
-	"Write the term to standard output with prefix notation.",
-	"dup",
-	"dpu(Handlein,Handleout)",
-	"Allocate a second fundle to the open file.",
-	"edit",
-	"edit(Filename)",
-	"Switch from the interpreter to the editor for editing the file specified by Filename. Call nano as an editor. When you exit nano, the contents of the file will be read into the interpreter. If the environment variable EDITOR has a value, call that editor.",
-	"eq",
-	"eq(X,Y)",
-	"Check if X and Y are the same data object and are stored at the same address.",
-	"expand_term",
-	"expand_term(Term,Newterm)",
-	"DCG: Converts a term in a limited clause grammar to an equivalent Prolog term.",
-	"fail",
-	"fail",
-	"Goals are always false.",
-	"float",
-	"float(X)",
-	"Check if X is a floating point number.",
-	"float_text",
-	"float_text(Float,Text,Format)",
-	"Converts a floating point number to a string according to the Format specification, or converts a string to a floating point number. see user manual.",
-	"flush",
-	"flush",
-	"Remove all characters in the type-ahead buffer.",
-	"functor",
-	"functor(Struct,Name,Arity)",
-	"Returns the structure name and arity.",
-	"gc",
-	"gc(Amount)",
-	"Launch garbage collection. When the argument is full, the cells that are no longer needed in the heap area are collected.",
-	"get",
-	"get(Char)",
-	"Read the next character from a standard input device, skipping unprinted characters, Unify the ASCII value with Char.",
-	"get0",
-	"get0(Char)",
-	"Read the next character from a standard input device, skipping unprinted characters, Unify the ASCII value with Char. get0 does not skip non-printing characters.",
-	"get0_noecho",
-	"get0_noecho(Char)",
-	"Read the following characters from the standard input device and unify the ASCII value to Char. get0_noecho does not display the character on the standard output device.",
-	"halt",
-	"halt",
-	"Exits the interpreter.",
-	"instance",
-	"instance(Ref,Term)",
-	"Returns the term for that reference number.",
-	"integer",
-	"integer(X)",
-	"Check if X is an integer.",
-	"int_text",
-	"int_text(Integer,String)",
-	"Convert an integer to a string, or convert a string to an integer.",
-	"is",
-	"X is E",
-	"Evaluate E and unify its value to X.",
-	"keysort",
-	"keysort(L1,L2)",
-	"Sort the list L1 in standard order. List elements must be in the form Key_Value. The sorted list is returned to L2. Even if it is duplicated, it won't be united.",
-	"leash",
-	"leash(Mode)",
-	"Constrain the port to the specified Mode.",
-	"length",
-	"length(L,N)",
-	"Change the length of the list back to N.",
-	"listing",
-	"listing/listing(Name/Arith)/listing([Name/Arity,Name/Arity])",
-	"Write all clauses to the specified predicate or list of predicates in the current database to standard output.",
-	"list_text",
-	"list_text(List,AtomString)",
-	"Convert a character list to an atom (if the atom already exists) or a string, or convert an atom or string Convert to a character list.",
-	"mkdir",
-	"mkdir(Path)",
-	"Create a new directory.",
-	"name",
-	"name(Atom,List)",
-	"Convert a list to an atom, or convert an atom or an integer to a list.",
-	"nl",
-	"nl/nl(Handle)",
-	"write newline to stdout. write newline to file.",
-	"open",
-	"open(Handle,Filename,Access)",
-	"Open an existing file. Access is one of the following r read w write rw read and write a append ra read and append",
-	"read",
-	"read(Term)/read(Handle,Term)",
-	"Read terms from standard input devices. Read terms from a file.",
-	"read_line",
-	"read_line(Handle,X)",
-	"Read one line from the file specified by Handle.",
-	"recorda",
-	"recorda(Key,Term,Ref)",
-	"Predicates a term and returns a new reference number for that term.",
-	"recordz",
-	"recordz(Key,Term,Ref)",
-	"Adds a term at the end of the predicate and returns the reference number assigned to that term.",
-	"recordh",
- 	"recordh(Table_name,Sort_key,Term)",
-	"Record the term in the hash table.",
-	"ref",
-	"ref(X)",
-	"Check if X is a reference number.",
-	"removeallh",
-	"removeallh(Table_name)",
-	"Delete the hash table.",
-	"removeh",
-	"removeh(Table_name,Sort_key,Term)",
-	"Remove a term from the hash table.",
-	"reset_op",
-	"reset_op",
-	"Reset the operator definition to its default value.",
-	"retract",
-	"retract (Clause)",
-	"Remove a clause from the database.",
-	"retrieveh",
-	"retrieveh(Table_name,Sort_key,Term)",
-	"Returns a term from the hash table.",
-	"rename",
-	"rename(Filename,Newname)",
-	"Rename the file.",
-	"rmdir",
-	"rmdir(Path)",
-	"Delete the directory.",
-	"shell",
-	"shell(Command)",
-	"Execute the BASH command and succeed.",
-	"sort",
-	"sort(L1.L2)",
-	"Sort list L1 into standard order, eliminate duplication and return sorted list to L2.",
-	"spy",
-	"spy(Name/Arity)",
-	"Set a predicate as a debug spy point.",
-	"stdin",
-	"stdin(FileHandle,Goal)",
-	"Change standard input during that goal.",
-	"stdout",
-	"stdout(FileHandle.Goal)",
-	"Change standard input during that goal.",
-	"stdinout",
-	"stdinout(InFile,OutFile,goal)",
-	"During that goal, change standard input and standard output.",
-	"string",
-	"string(X)",
-	"Check if X is a string.",
-	"string_length",
-	"string_length(String,Length)",
-	"Returns the length of the string.",
-	"string_term",
-	"string_term(String,Term)",
-	"Change the string to a term.",
-	"substring",
-	"substring(InString,N,Length,OutString)",
-	"Extract substrings from strings. N is a natural number starting from the starting position 1. Length is the length of the character string to be extracted",
-	"syntaxerrors",
-	"syntaxerrors(Old,New)",
-	"Specify whether to output the syntax error message or check the current setting. An error message is output with yes, and no error message is output with no.",
-	"system",
-	"system(P)",
-	"Check if P is an embedded predicate.",
-	"tab",
-	"tab(N)/tab(Handle,N)",
-	"Write the specified number of space characters to the standard output device.Write the specified number of space characters in the file.",
-	"tell",
-	"tell(Filename)",
-	"Open a file for output and make it the current output file.",
-	"telling",
-	"telling(X)",
-	"Returns the name of the output file opened by tell.",
-	"time",
-	"time(Hours,Minutes,Seconds)",
-	"Returns hour, minute, and second. hour [0-23] minute [0-59] second [0-61]",
-	"trace",
-	"trace",
-	"Turn on the debugger.",
-	"true",
-	"true",
-	"Goals are always successful.",
-	"var",
-	"var(X)",
-	"Check if X is the assigned variable.",
-	"write",
-	"write(Term)/write(Handle,Term)",
-	"Write to standard output device.Write the term in the specified file.",
-	"writeq",
-	"writeq(Term)/writeeq(Time,Term)",
-	"Write to standard output device so that the term can be read as a Prolog term Enclose the atom and function in quotation marks.Write the term to the specified file so that the term can be read as a Prolog term Enclose the atom and function in quotation marks.",
+    "abolish",
+    "abolish(name/Arity)",
+    "Removes all clauses with the specified name arity from the data berth.",
+    "abort",
+    "abort",
+    "Stop the current program. Return to the interpreter after the program ends. If the program is compiled, abort restarts its goal.",
+    "ansi_cuu",
+    "ansi_cuu(N)",
+    "Move the cursor up N lines.",
+    "ansi_cud",
+    "ansi_cud(N)",
+    "Move the cursor down N lines.",
+    "ansi_cuf",
+    "ansi_cuf(N)",
+    "Move the cursor forward N digits.",
+    "ansi_sub",
+    "ansi_sub(N)",
+    "Move the cursor back N digits.",
+    "ansi_cpr",
+    "ansi_cpr(Row,Col)",
+    "The predicate ansi_cpr is used to know the current cursor position. If the arguments Row and Col are not assigned, the coordinates of the current cursor position are in rows and columns. Unify each argument. If it has been assigned, compare that number with the coordinates of the current position.",
+    "ansi_scp",
+    "ansi_scp",
+    "The predicate ansi_scp saves the current cursor position and the character attributes at that position.",
+    "ansi_rcp",
+    "ansi_rcp",
+    "The predicate ansi_rcp restores the cursor position and attributes saved by ansi_scp.",
+    "ansi_ed",
+    "ansi_ed",
+    "The predicate ansi_ed erase display.",
+    "ansi_el",
+    "ansi_el",
+    "The predicate ansi_el erase from the cursor to end of line.",
+    "ansi_sgr",
+    "ansi_sgr(G)",
+    "The predicate ansi_sgr sets graphic attributes. G can be an integer or a list of integers. see user manual.",
+    "arg",
+    "arg(N,Term,X)",
+    "Unify X to the Nth value of the term. (Arguments are numbered from 1 in the increasing direction.)",
+    "arg0",
+    "arg0(N,Term,X)",
+    "Unify X to the value of the N + 1th argument of the term. (Arguments are numbered from 0 in the increasing direction.)",
+    "assert",
+    "assert(Clause)",
+    "Add a clause to the end of the predicate.",
+    "asserta",
+    "asserta(Clause)",
+    "Add a clause to the top of the predicate.",
+    "assertz",
+    "assertz(Clause)",
+    "Add a clause to the end of the predicate.",
+    "atom",
+    "atom(X)",
+    "Check if X is an atom.",
+    "atom_string",
+    "atom_string(Atom,String)",
+    "Convert an atom to a string or convert a string to an atom.",
+    "atomic",
+    "atomic(X)",
+    "Check if X is an atom data type.",
+    "break",
+    "break",
+    "Suspend program execution and display an interpreter prompt. The program can be restarted by the following types: end_of_file",
+    "call",
+    "call(P)",
+    "Call the interpreted goal P.",
+    "chdir",
+    "chdir(Path)",
+    "Change or revert to the current directory.",
+    "clause",
+    "clause(Head,Body)",
+    "Unify Head and Body to the head and body of the node, respectively. Head must be assigned. example",
+    "close",
+    "close(Handle)",
+    "Closes the file specified by Handle.",
+    "ctr_dec",
+    "ctr_dec(Ctr,X)",
+    "Decreases the value of a counter and returns the previous value of that counter.",
+    "ctr_inc",
+    "ctr_inc(Ctr,X)",
+    "Increases the value of a counter and returns the previous value of that counter.",
+    "ctr_is",
+    "ctr_is(Ctr,X)",
+    "Returns the current counter value.",
+    "ctr_set",
+    "ctr_set(Ctr,X)",
+    "Set the counter to the specified value.",
+    "current_op",
+    "current_op(Proc,Assoc,Op)",
+    "Returns the operator constants currently defined in the database while backtracking.",
+    "current_predicate",
+    "current_predicate(Predicate)",
+    "Returns the predicate currently defined in the database while backtracking.",
+    "date",
+    "date(date(Year,Month,Day))",
+    "Set the year, month, and day.",
+    "date_day",
+    "date_day(date(Year,Month,Day),WeekDay)",
+    "Returns the day of the week on a given date as a number between 0 (Sunday) and 6 (Saturday).",
+    "dec",
+    "dec(N,X)",
+    "Subtract 1 from the number N and give it to the value X.",
+    "delete",
+    "delete(Filename)",
+    "Delete the specified file.",
+    "directory",
+    "directory(Path,Name,Mode,Time,Date,Size)",
+    "List the directory files specified by Path. see user manual",
+    "display",
+    "display(Term)",
+    "Write the term to standard output with prefix notation.",
+    "dup",
+    "dpu(Handlein,Handleout)",
+    "Allocate a second fundle to the open file.",
+    "edit",
+    "edit(Filename)",
+    "Switch from the interpreter to the editor for editing the file specified by Filename. Call nano as an editor. When you exit nano, the contents of the file will be read into the interpreter. If the environment variable EDITOR has a value, call that editor.",
+    "eq",
+    "eq(X,Y)",
+    "Check if X and Y are the same data object and are stored at the same address.",
+    "expand_term",
+    "expand_term(Term,Newterm)",
+    "DCG: Converts a term in a limited clause grammar to an equivalent Prolog term.",
+    "fail",
+    "fail",
+    "Goals are always false.",
+    "float",
+    "float(X)",
+    "Check if X is a floating point number.",
+    "float_text",
+    "float_text(Float,Text,Format)",
+    "Converts a floating point number to a string according to the Format specification, or converts a string to a floating point number. see user manual.",
+    "flush",
+    "flush",
+    "Remove all characters in the type-ahead buffer.",
+    "functor",
+    "functor(Struct,Name,Arity)",
+    "Returns the structure name and arity.",
+    "gc",
+    "gc(Amount)",
+    "Launch garbage collection. When the argument is full, the cells that are no longer needed in the heap area are collected.",
+    "get",
+    "get(Char)",
+    "Read the next character from a standard input device, skipping unprinted characters, Unify the ASCII value with Char.",
+    "get0",
+    "get0(Char)",
+    "Read the next character from a standard input device, skipping unprinted characters, Unify the ASCII value with Char. get0 does not skip non-printing characters.",
+    "get0_noecho",
+    "get0_noecho(Char)",
+    "Read the following characters from the standard input device and unify the ASCII value to Char. get0_noecho does not display the character on the standard output device.",
+    "halt",
+    "halt",
+    "Exits the interpreter.",
+    "instance",
+    "instance(Ref,Term)",
+    "Returns the term for that reference number.",
+    "integer",
+    "integer(X)",
+    "Check if X is an integer.",
+    "int_text",
+    "int_text(Integer,String)",
+    "Convert an integer to a string, or convert a string to an integer.",
+    "is",
+    "X is E",
+    "Evaluate E and unify its value to X.",
+    "keysort",
+    "keysort(L1,L2)",
+    "Sort the list L1 in standard order. List elements must be in the form Key_Value. The sorted list is returned to L2. Even if it is duplicated, it won't be united.",
+    "leash",
+    "leash(Mode)",
+    "Constrain the port to the specified Mode.",
+    "length",
+    "length(L,N)",
+    "Change the length of the list back to N.",
+    "listing",
+    "listing/listing(Name/Arith)/listing([Name/Arity,Name/Arity])",
+    "Write all clauses to the specified predicate or list of predicates in the current database to standard output.",
+    "list_text",
+    "list_text(List,AtomString)",
+    "Convert a character list to an atom (if the atom already exists) or a string, or convert an atom or string Convert to a character list.",
+    "mkdir",
+    "mkdir(Path)",
+    "Create a new directory.",
+    "name",
+    "name(Atom,List)",
+    "Convert a list to an atom, or convert an atom or an integer to a list.",
+    "nl",
+    "nl/nl(Handle)",
+    "write newline to stdout. write newline to file.",
+    "open",
+    "open(Handle,Filename,Access)",
+    "Open an existing file. Access is one of the following r read w write rw read and write a append ra read and append",
+    "read",
+    "read(Term)/read(Handle,Term)",
+    "Read terms from standard input devices. Read terms from a file.",
+    "read_line",
+    "read_line(Handle,X)",
+    "Read one line from the file specified by Handle.",
+    "recorda",
+    "recorda(Key,Term,Ref)",
+    "Predicates a term and returns a new reference number for that term.",
+    "recordz",
+    "recordz(Key,Term,Ref)",
+    "Adds a term at the end of the predicate and returns the reference number assigned to that term.",
+    "recordh",
+    "recordh(Table_name,Sort_key,Term)",
+    "Record the term in the hash table.",
+    "ref",
+    "ref(X)",
+    "Check if X is a reference number.",
+    "removeallh",
+    "removeallh(Table_name)",
+    "Delete the hash table.",
+    "removeh",
+    "removeh(Table_name,Sort_key,Term)",
+    "Remove a term from the hash table.",
+    "reset_op",
+    "reset_op",
+    "Reset the operator definition to its default value.",
+    "retract",
+    "retract (Clause)",
+    "Remove a clause from the database.",
+    "retrieveh",
+    "retrieveh(Table_name,Sort_key,Term)",
+    "Returns a term from the hash table.",
+    "rename",
+    "rename(Filename,Newname)",
+    "Rename the file.",
+    "rmdir",
+    "rmdir(Path)",
+    "Delete the directory.",
+    "shell",
+    "shell(Command)",
+    "Execute the BASH command and succeed.",
+    "sort",
+    "sort(L1.L2)",
+    "Sort list L1 into standard order, eliminate duplication and return sorted list to L2.",
+    "spy",
+    "spy(Name/Arity)",
+    "Set a predicate as a debug spy point.",
+    "stdin",
+    "stdin(FileHandle,Goal)",
+    "Change standard input during that goal.",
+    "stdout",
+    "stdout(FileHandle.Goal)",
+    "Change standard input during that goal.",
+    "stdinout",
+    "stdinout(InFile,OutFile,goal)",
+    "During that goal, change standard input and standard output.",
+    "string",
+    "string(X)",
+    "Check if X is a string.",
+    "string_length",
+    "string_length(String,Length)",
+    "Returns the length of the string.",
+    "string_term",
+    "string_term(String,Term)",
+    "Change the string to a term.",
+    "substring",
+    "substring(InString,N,Length,OutString)",
+    "Extract substrings from strings. N is a natural number starting from the starting position 1. Length is the length of the character string to be extracted",
+    "syntaxerrors",
+    "syntaxerrors(Old,New)",
+    "Specify whether to output the syntax error message or check the current setting. An error message is output with yes, and no error message is output with no.",
+    "system",
+    "system(P)",
+    "Check if P is an embedded predicate.",
+    "tab",
+    "tab(N)/tab(Handle,N)",
+    "Write the specified number of space characters to the standard output device.Write the specified number of space characters in the file.",
+    "tell",
+    "tell(Filename)",
+    "Open a file for output and make it the current output file.",
+    "telling",
+    "telling(X)",
+    "Returns the name of the output file opened by tell.",
+    "time",
+    "time(Hours,Minutes,Seconds)",
+    "Returns hour, minute, and second. hour [0-23] minute [0-59] second [0-61]",
+    "trace",
+    "trace",
+    "Turn on the debugger.",
+    "true",
+    "true",
+    "Goals are always successful.",
+    "var",
+    "var(X)",
+    "Check if X is the assigned variable.",
+    "write",
+    "write(Term)/write(Handle,Term)",
+    "Write to standard output device.Write the term in the specified file.",
+    "writeq",
+    "writeq(Term)/writeeq(Time,Term)",
+    "Write to standard output device so that the term can be read as a Prolog term Enclose the atom and function in quotation marks.Write the term to the specified file so that the term can be read as a Prolog term Enclose the atom and function in quotation marks.",
 
 };
 

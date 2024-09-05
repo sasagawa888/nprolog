@@ -7,30 +7,30 @@
 #define NELEM(X) (sizeof(X) / sizeof((X)[0]))
 
 // dummy
-char special[1][1] = {};
+char special[1][1] = { };
 
 //operator token
 char operator[OPERATOR_NUMBER][5] = {
     { ":-" }, { "-->" }, { "," }, { ";" }, { "?-" }, { "." },
     { "+" }, { "-" }, { "*" }, { "/" }, { "//" }, { "<<" }, { ">>" },
-	{ "\\" }, { "/\\" },
+    { "\\" }, { "/\\" },
     { "\\/" },
     { "mod" }, { "rem" }, { "^" }, { "**" }, { "xor" }, { "iand" },
 };
 
 char function[FUNCTION_NUMBER][12] = {
     { "abs" }, { "sin" }, { "cos" }, { "tan" }, { "asin" }, { "acos" },
-	{ "atan" },
+    { "atan" },
     { "exp" }, { "log" }, { "floor" }, { "ceiling" }, { "truncate" },
     { "sign" }, { "sqrt" }, { "round" }, { "gcd" }, { "lcm" }, { "max" },
-	{ "min" },
+    { "min" },
     { "random" }, { "randi" }, { "pi" }
 };
 
 
 //builtin token
 char builtin[BUILTIN_NUMBER][30] = {
-    { "->" }, { "=.." }, { "\\+" }, 
+    { "->" }, { "=.." }, { "\\+" },
     { "==" }, { "\\==" }, { "@<" }, { "@=<" }, { "@>" }, { "@>=" },
     { "=:=" }, { "=/=" }, { "=\\=" }, { "<" }, { "=<" }, { ">" },
     { ">=" }, { "\\=" }, { "=" }, { "reverse" },
@@ -38,7 +38,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "delete" }, { "rename" },
     { "op" }, { "!" }, { "assert" }, { "asserta" }, { "assertz" },
     { "abolish" }, { "read" }, { "write" }, { "put" }, { "get" },
-	{ "get0" },
+    { "get0" },
     { "get0_noecho" }, { "nl" },
     { "read_line" }, { "reset_op" }, { "skip" }, { "predicate_property" },
     { "tab" }, { "fail" }, { "not" }, { "true" }, { "halt" }, { "abort" },
@@ -46,13 +46,13 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "writeq" }, { "display" }, { "ref" },
     { "atom_concat" }, { "atom_string" }, { "consult" }, { "reconsult" },
     { "see" }, { "seeing" }, { "seen" }, { "tell" }, { "telling" },
-	{ "told" }, { "trace" },
+    { "told" }, { "trace" },
     { "notrace" }, { "spy" },
     { "nospy" }, { "leash" }, { "atom" }, { "integer" }, { "real" },
-	{ "float" },
+    { "float" },
     { "number" },
     { "var" }, { "nonvar" }, { "atomic" }, { "list" }, { "gc" },
-	{ "time" }, { "name" },
+    { "time" }, { "name" },
     { "bounded" },
     { "flush" }, { "date" }, { "date_day" }, { "char_code" },
     { "string" }, { "string_chars" }, { "string_codes" }, { "ground" },
@@ -60,12 +60,12 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "inc" }, { "dec" }, { "compare" }, { "in" }, { "out" },
     { "mkdir" }, { "rmdir" }, { "chdir" }, { "string_length" },
     { "sort" }, { "keysort" }, { "length" }, { "shell" }, { "measure" },
-	{ "syntaxerrors" },
+    { "syntaxerrors" },
     { "ansi_cuu" }, { "ansi_cud" }, { "ansi_cuf" }, { "ansi_cub" },
     { "ansi_cup" }, { "ansi_cpr" }, { "ansi_scp" }, { "ansi_rcp" },
     { "ansi_ed" }, { "ansi_el" }, { "errorcode" },
     { "recordh" }, { "recorda" }, { "recordz" }, { "instance" },
-	{ "removeallh" },
+    { "removeallh" },
     { "stdin" }, { "stdout" }, { "stdinout" },
     { "ctr_set" }, { "ctr_dec" }, { "ctr_inc" }, { "ctr_is" },
     { "heapd" }, { "list_text" },
@@ -82,11 +82,11 @@ char compiled[COMPILED_NUMBER][30] = {
 //extened predicate
 char extended[EXTENDED_NUMBER][30] = {
     { "wiringpi_setup_gpio" }, { "wiringpi_spi_setup" },
-	{ "pwm_set_mode" },
+    { "pwm_set_mode" },
     { "pwm_set_clock" }, { "pwm_set_range" }, { "pin_mode" },
-	{ "digital_write" },
+    { "digital_write" },
     { "pwm_write" }, { "pull_up_dn_control" }, { "digital_read" },
-	{ "delay" },
+    { "delay" },
     { "delay_microseconds" },
     { "compile_file" }, { "timer_microseconds" }, { "with" }
 };
