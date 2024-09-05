@@ -1,5 +1,56 @@
 # N-Prolog User's manual
 
+### □ ;
+Represents the separation between goals. Disjunction (OR).
+
+### □ ,
+Represents the separation between goals. Conjunction (AND).
+
+### □ E1 < E2
+Checks if the value of `E1` is less than the value of `E2`.
+
+### □ T1 = T2
+Attempts to unify `T1` and `T2`.
+
+### □ T1 \= T2
+Fails if `T1` unifies with `T2`.
+
+### □ Struct =.. List
+Known as "univ". Converts a structure to a list or a list to a structure.
+
+### □ E1 =< E2
+Checks if the value of `E1` is less than or equal to the value of `E2`.
+
+### □ E1 > E2
+Checks if the value of `E1` is greater than the value of `E2`.
+
+### □ E1 >= E2
+Checks if the value of `E1` is greater than or equal to the value of `E2`.
+
+### □ E1 =:= E2
+Checks if the value of `E1` is equal to the value of `E2`.
+
+### □ E1 =\= E2
+Checks if the value of `E1` is not equal to the value of `E2`.
+
+### □ T1 == T2
+Checks if `T1` and `T2` are identical (equivalent).
+
+### □ T1 \== T2
+Checks if `T1` and `T2` are not identical (not equivalent).
+
+### □ T1 @< T2
+Checks if `T1` precedes `T2`.
+
+### □ T1 @=< T2
+Checks if `T1` precedes `T2` or is equal to it.
+
+### □ T1 @> T2
+Checks if `T1` succeeds `T2`.
+
+### □ T1 @>= T2
+Checks if `T1` succeeds `T2` or is equal to it.
+
 ### □ [Filename]
 Read from a file into a database using a consult predicate.
 -When using Filename, the resoncult predicate is used.
@@ -412,6 +463,47 @@ Enclose the atom and function in quotation marks.
 ### □ writeq(Time,Term)
 Write the term to the specified file so that the term can be read as a Prolog term
 Enclose the atom and function in quotation marks. 
+
+
+## function
+
+- pi Constant representing the value of π (pi).
+- X + Y Addition.
+- X - Y Subtraction.
+- X * Y Multiplication.
+- X / Y Division resulting in a floating-point number.
+- X // Y Integer division resulting in an integer.
+- X ^ Y Exponentiation (power).
+- X ** Y Exponentiation (power).
+- X << Y Bitwise left shift of X by Y positions (integers only).
+- X >> Y Bitwise right shift of X by Y positions (integers only).
+- X mod Y Modulo operation, returning the remainder of X divided by Y (integers only).
+- X /\ Y Logical AND.
+- X \/ Y Logical OR.
+- \X Complement (bitwise NOT).
+- X xor Y Exclusive OR (XOR).
+- X iand Y Inclusive AND.
+- abs(X) Absolute value of X.
+- sin(X) Sine of X.
+- asin(X) Arcsine (inverse sine) of X.
+- cos(X) Cosine of X.
+- acos(X) Arccosine (inverse cosine) of X.
+- tan(X) Tangent of X.
+- atan(X) Arctangent (inverse tangent) of X.
+- exp(X) Exponential function of X.
+- log(X) Logarithm of X.
+- floor(X) Floor value of X.
+- ceiling(X) Ceiling value of X.
+- truncate(X) Truncated value of X.
+- float(X) Converts integer X to a floating-point number.
+- float_integer_part(X) Integer part of the floating-point number X.
+- float_fraction_part(X) Fractional part of the floating-point number X.
+- sign(X) Returns -1 if X is negative, 0 if X is zero, and 1 if X is positive.
+- min(X, Y) Returns the smaller of X and Y.
+- max(X, Y) Returns the larger of X and Y.
+- sqrt(X) Square root of X.
+- randi(n) Random integer between 0 and n (inclusive).
+- randome Random floating-point number between 0 and 1 (inclusive).
 
 ## Debugger command
 Start debugging by starting the program. Program reaches spy points
