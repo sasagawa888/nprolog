@@ -4019,6 +4019,7 @@ static const char *functions_data[] = {
 	"@>=",
 	"T1 @>= T2",
 	"Checks if `T1` succeeds `T2` or is equal to it.",
+	
 };
 
 #define NELEM(X) (sizeof(X) / sizeof((X)[0]))
