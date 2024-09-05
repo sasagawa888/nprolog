@@ -745,7 +745,7 @@ int check_balance_period(void)
 
     // check period at line end.
     col = 0;
-    while (buffer[col][0] != 0) {
+    while (buffer[col][0] != 0 && buffer[col][0] != EOL) {
 	col++;
     }
     col--;
