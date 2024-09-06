@@ -3898,7 +3898,9 @@ int b_univ(int arglist, int rest)
 	    if (car(arg2) == DOTOBJ) {
 		arg2 = operate(arg2);
 		SET_AUX(arg2, 0);
-	    } else if (GET_AUX(car(arg2)) != SYS &&
+	    } else if (numberp(car(arg2))){ 
+		return(NO);
+		} else if (GET_AUX(car(arg2)) != SYS &&
 		       GET_AUX(car(arg2)) != COMP &&
 		       GET_AUX(car(arg2)) != OPE) {
 		arg2 = list_to_structure(arg2);
