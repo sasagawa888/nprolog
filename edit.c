@@ -805,7 +805,7 @@ int read_line(int flag)
 	case EOL:
 	    if (!check_balance_period()) {
 		printf
-		    ("\n() [] unbalance or lack of '.' --- enter any key ---");
+		    ("\n() [] '' $$ unbalance or lack of '.' --- enter any key ---");
 		getch();
 		ESCMVLEFT(1);
 		ESCCLSL;
