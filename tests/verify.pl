@@ -297,4 +297,10 @@ test(dot) :-
     M = .(a,[b,c]),
     verify(M = [a,b,c]).
 
+test(between) :-
+    verify(between(1,10,3)),
+    verify(not(between(1,10,11))),
+    between(1,1,B),
+    verify(B = 1).
+
 :- alltest,write('All tests are done'),nl.

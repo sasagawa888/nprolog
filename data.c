@@ -1592,6 +1592,9 @@ int groundp(int addr)
     else if (atomp(addr))
 	return (1);
 
+    else if (numberp(addr))
+	return (1);
+
     else if (groundp(cadr(addr)) && groundp(caddr(addr)))
 	return (1);
 

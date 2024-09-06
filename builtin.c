@@ -4480,7 +4480,7 @@ int b_reverse(int arglist, int rest)
 
 int b_between(int arglist, int rest)
 {
-    int n, arg1, arg2, arg3, save1, save2, save3, low, high;
+    int n, arg1, arg2, arg3, save1, save2, save3, low, high, betweenval;
 
     n = length(arglist);
     if (n == 3) {
@@ -4503,6 +4503,16 @@ int b_between(int arglist, int rest)
 	save3 = ac;
 	low = get_int(arg1);
 	high = get_int(arg2);
+
+	if (groundp(arg3)) {
+ 	   betweenval = get_int(arg3);
+           if (betweenval >= low && betweenval <= high) {
+	    if (prove_all(rest, sp) == YES)
+		return (YES);
+	   }			   
+	   return (NO);
+    	}
+	
 	while (low <= high) {
 	    //printf("%d",low);
 	    unify(arg3, makeint(low));
