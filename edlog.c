@@ -2378,8 +2378,8 @@ void display_line(int line)
 		col1 = col1 + increase_terminal(line, col);
 		col = col + increase_buffer(line, col);
 
-		if (ed_data[line][col - 2] == '|' &&
-		    ed_data[line][col - 1] == '#') {
+		if (ed_data[line][col - 2] == '*' &&
+		    ed_data[line][col - 1] == '/') {
 		    ed_incomment = -1;
 		    ESCRST();
 		    ESCFORG();
@@ -2556,8 +2556,8 @@ void display_line(int line)
 		    CHECK(addch, ed_data[line][col]);
 		    col++;
 		    col1++;
-		    if (ed_data[line][col - 2] == '|' &&
-			ed_data[line][col - 1] == '#') {
+		    if (ed_data[line][col - 2] == '*' &&
+			ed_data[line][col - 1] == '/') {
 			ed_incomment = -1;
 			ESCRST();
 			ESCFORG();
@@ -3474,8 +3474,8 @@ enum HighlightToken check_token(int row, int col)
     str[pos] = NUL;
     if (pos == 0)
 	return HIGHLIGHT_NONE;
-    else if (str[0] == '#' && str[1] == '|')
-	return HIGHLIGHT_MULTILINE_COMMENT;	// #|...|#
+    else if (str[0] == '/' && str[1] == '*')
+	return HIGHLIGHT_MULTILINE_COMMENT;	// /*...*/
     return maybe_match(str);
 }
 
