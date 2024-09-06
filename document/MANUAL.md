@@ -464,6 +464,52 @@ Enclose the atom and function in quotation marks.
 Write the term to the specified file so that the term can be read as a Prolog term
 Enclose the atom and function in quotation marks. 
 
+## Extended Predicates
+
+- `atom_concat(E1, E2, X)`  
+  Unifies `X` with the atom that results from concatenating atoms `E1` and `E2`.
+
+- `append(L1, L2, X)`  
+  Unifies `X` with the list that results from concatenating lists `L1` and `L2`.
+
+- `bitween(start, end, Value)`  
+  Unifies `Value` with integers from `start` to `end`.
+
+- `char_code(E, X)`  
+  Unifies `X` with the internal code of character `E`.
+
+- `compile_file(fn)`  
+  Compiles the Prolog code from the file `fn` and generates an object file.
+
+- `compound(E)`  
+  Checks whether `E` is a compound term.
+
+- `ground(E)`  
+  Checks whether `E` contains no uninstantiated variables.
+
+- `heapd(start, end)`  
+  Displays the heap region addresses from `start` to `end`.
+
+- `member(E, L)`  
+  Checks whether atom `E` is a member of the list `L`.
+
+- `measure(E)`  
+  Measures and displays the execution time of the predicate `E`.
+
+- `predicate_property(E, X)`  
+  Unifies `X` with the properties of the predicate `E`.
+
+- `reverse(L, X)`  
+  Unifies `X` with the list that results from reversing the list `L`.
+
+- `bagof(X, Pred, Bag)`  
+  Collects all `X` that unify with the predicate `Pred` into the list `Bag`.
+
+- `setof(X, Pred, Bag)`  
+  Collects all `X` that unify with the predicate `Pred` into the list `Bag`, with duplicates removed.
+
+- `findall(X, Pred, Bag)`  
+  Collects all `X` that unify with the predicate `Pred` into the list `Bag`.
 
 ## function
 

@@ -468,6 +468,54 @@ Xが代入された変数かどうかを調べる。
 項を指定のファイルに書き、その項がProlog項として読み出しが可能なように、
 アトムと関数子を引用符で囲む。
 
+
+## 拡張述語
+- atom_concat(E1,E2,X)
+アトムE1とE2を結合したアトムをXにユニフィケーションします。
+
+- append(L1,L2,X)
+リストL1とL2を連結したリストをXにユニフィケーションします。
+
+- bitween(start,end,Value)
+整数startから整数endまでValueにユニフィケーションします。
+
+- char_code(E,X)
+キャラクタEの内部コードをXにユニフィケーションします。
+
+- compile_file(fn)
+ファイルネームfnのPrologコードをコンパイルしてオブジェクトファイルを生成します。
+
+- compound(E)
+Eが複合項であるかどうかを調べます。
+
+- ground(E)
+Eが具体化されていない変数を含まないかどうかを調べます。
+
+- heapd(start,end)
+整数startから整数endまでのheap領域のアドレスを表示します。
+
+- member(E,L)
+アトムEがリストLのメンバーであるかどうかを調べます。
+
+- measure(E)
+述語Eの実行時間を計測して表示します。
+
+- predicate_property(E,X)
+述語Eの属性をXにユニフィケーションします。
+
+- reverse(L,X)
+リストLを反転したリストをXにユニフィケーションします。
+
+- bagof(X,Pred,Bag)
+述語PredとユニフィケーションするXをすべてリストBagに収納する。
+
+- setof(X,Pred,Bag)
+述語PredとユニフィケーションするXをすべて重複なしにリストBagに収納する。
+
+- findall(X,Pred,Bag)
+述語PredとユニフィケーションするXをすべてリストBagに収納する。
+
+
 ## 関数
 
 - pi             定数　円周率

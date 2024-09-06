@@ -29,7 +29,7 @@ foo(c, c, g).
 /*
 ?- bagof(C, foo(A, B, C), Cs).
 A = a, B = b, C = G308, Cs = [c, d] ;
-A = b, B = c, C = G308, Cs = [e, f] ;length()
+A = b, B = c, C = G308, Cs = [e, f] ;
 A = c, B = c, C = G308, Cs = [g].
 
 ?- bagof(C, A^foo(A, B, C), Cs).
