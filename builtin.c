@@ -3577,7 +3577,7 @@ int b_list(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	if (listp(arg1))
+	if (listp(arg1) || nullp(arg1))
 	    return (prove_all(rest, sp));
 	else
 	    return (NO);

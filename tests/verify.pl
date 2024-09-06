@@ -303,4 +303,7 @@ test(between) :-
     between(1,1,B),
     verify(B = 1).
 
+test(list) :-
+    verify(list([])).
+
 :- alltest,write('All tests are done'),nl.
