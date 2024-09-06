@@ -255,7 +255,8 @@ test(append) :-
 test(reverse) :-
     reverse([a,b,c],X),
     verify(X=[c,b,a]),
-    verify(reverse([1,2,3],[3,2,1])).
+    verify(reverse([1,2,3],[3,2,1])),
+    verify(reverse([],[])).
 
 test(name) :-
     name(asdf,X),

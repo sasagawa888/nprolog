@@ -4455,9 +4455,9 @@ int b_reverse(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if (!wide_variable_p(arg1) && !listp(arg1))
+	if (!wide_variable_p(arg1) && !listp(arg1) && !nullp(arg1))
 	    error(NOT_LIST, "reverse ", arg1);
-	if (!wide_variable_p(arg2) && !listp(arg2))
+	if (!wide_variable_p(arg2) && !listp(arg2) && !nullp(arg2))
 	    error(NOT_LIST, "reverse ", arg2);
 
 	if (!variablep(arg1)) {
