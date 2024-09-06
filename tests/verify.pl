@@ -240,7 +240,9 @@ test(float_text) :-
 
 test(length) :-
     verify(length([1,2,3],3)),
-    verify(length([],0)).
+    verify(length([],0)),
+    verify(length([],X)),
+    verify(not(length([1|2],X))).
 
 test(member) :-
     verify(member(b,[a,b,c])),

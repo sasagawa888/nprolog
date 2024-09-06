@@ -230,7 +230,7 @@ int b_length(int arglist, int rest)
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    error(NOT_INT, "length ", arg2);
 
-	if (listp(arg1)) {
+	if ((listp(arg1) && length(arg1) != -1) || nullp(arg1)) {
 	    if (unify(arg2, makeint(length(arg1))) == YES)
 		return (prove_all(rest, sp));
 	} else if (integerp(arg2)) {
