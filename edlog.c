@@ -2218,7 +2218,7 @@ void help(void)
 {
     ESCMOVE(2, 1);
     ESCCLS1();
-    CHECK(addstr, "--- Edlis help(1) ---\n"
+    CHECK(addstr, "--- Edlog help(1) ---\n"
 	  "CTRL+F  move to right in character units     → key\n"
 	  "CTRL+B  move to left in character units      ← key\n"
 	  "CTRL+P  move to up in line                   ↑ key\n"
@@ -2245,7 +2245,7 @@ void help(void)
     CHECK(getch);
     ESCMOVE(2, 1);
     ESCCLS1();
-    CHECK(addstr, "--- Edlis help(2) ---\n"
+    CHECK(addstr, "--- Edlog help(2) ---\n"
 	  "Insert      Switch insert-mode and overwrite-mode\n"
 	  "TAB     insert spaces as lisp indent rule\n"
 	  "CTRL+X  CTRL+C quit from editor with save\n"
