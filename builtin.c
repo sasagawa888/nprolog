@@ -4264,7 +4264,7 @@ int b_edit(int arglist, int rest)
 
 	editor = getenv("EDITOR");
 	if (editor == NULL) {
-	    strcpy(str, "nano ");
+	    strcpy(str, "edlog ");
 	    strcat(str, GET_NAME(arg1));
 	} else {
 	    strcpy(str, editor);
