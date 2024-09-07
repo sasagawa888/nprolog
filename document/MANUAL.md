@@ -12,7 +12,7 @@ Checks if the value of `E1` is less than the value of `E2`.
 ### □ T1 = T2
 Attempts to unify `T1` and `T2`.
 
-### □ T1 \= T2
+### □ T1 \\= T2
 Fails if `T1` unifies with `T2`.
 
 ### □ Struct =.. List
@@ -30,13 +30,13 @@ Checks if the value of `E1` is greater than or equal to the value of `E2`.
 ### □ E1 =:= E2
 Checks if the value of `E1` is equal to the value of `E2`.
 
-### □ E1 =\= E2
+### □ E1 =\\= E2
 Checks if the value of `E1` is not equal to the value of `E2`.
 
 ### □ T1 == T2
 Checks if `T1` and `T2` are identical (equivalent).
 
-### □ T1 \== T2
+### □ T1 \\== T2
 Checks if `T1` and `T2` are not identical (not equivalent).
 
 ### □ T1 @< T2
