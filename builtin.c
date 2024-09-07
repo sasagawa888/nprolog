@@ -2289,8 +2289,6 @@ int b_assert(int arglist, int rest)
 			func = cons(makeatom(GET_NAME(car(func)),PRED),cdr(func));
 			arg1 = cons(car(arg1),cons(func,cddr(arg1)));
 		}
-	    if (!callablep(caddr(arg1)))
-		error(NOT_CALLABLE, "assertz ", arg1);
 	    if (!callablep(cadr(arg1)))
 		error(NOT_CALLABLE, "assertz ", arg1);
 	    if (operationp(cadr(arg1)))
@@ -2345,8 +2343,6 @@ int b_asserta(int arglist, int rest)
 			func = cons(makeatom(GET_NAME(car(func)),PRED),cdr(func));
 			arg1 = cons(car(arg1),cons(func,cddr(arg1)));
 		}
-	    if (!callablep(caddr(arg1)))
-		error(NOT_CALLABLE, "asserta ", arg1);
 	    if (!callablep(cadr(arg1)))
 		error(NOT_CALLABLE, "asserta ", arg1);
 	    if (operationp(cadr(arg1)))
