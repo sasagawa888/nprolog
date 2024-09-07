@@ -504,6 +504,7 @@ int b_write(int arglist, int rest)
     return (NO);
 }
 
+
 int b_write_canonical(int arglist, int rest)
 {
     int n, arg1, arg2, save;
@@ -519,9 +520,9 @@ int b_write_canonical(int arglist, int rest)
 	arg2 = cadr(arglist);
       write_canonical:
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "write_canonical ", arg1);
+	    error(INSTANTATION_ERR, "display ", arg1);
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "write_canonical ", arg1);
+	    error(NOT_STREAM, "display ", arg1);
 
 	save = output_stream;
 	if (aliasp(arg1))
@@ -536,9 +537,10 @@ int b_write_canonical(int arglist, int rest)
 	output_stream = save;
 	return (prove_all(rest, sp));
     }
-    error(ARITY_ERR, "write_canonical ", arglist);
+    error(ARITY_ERR, "display ", arglist);
     return (NO);
 }
+
 
 int b_writeq(int arglist, int rest)
 {
