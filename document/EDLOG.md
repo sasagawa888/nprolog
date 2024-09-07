@@ -110,27 +110,21 @@ CHECK(addch, '(');
  When the Enter key is pressed, tabs are automatically calculated, and spaces are inserted. The tab settings are handled by calc_tab(). By changing the constants here, you can adjust them to your preference.
 
  ```
- int calc_tabs()
+
+int calc_tabs()
 {
-    struct position pos;
+    int col;
 
-    if (ed_row == 0 && ed_col == 0)
+    if (ed_row == 0)
 	return (0);
 
-    pos = find_lparen(0);
+    col = 0;
+    while (ed_data[ed_row - 1][col] == ' ') {
+	col++;
+    }
+    return (col);
 
-    if (ed_data[ed_row][ed_col] == '(')
-	return (0);
-
-    if (pos.row == -1)
-	return (0);		// can't find left paren
-
-    if (is_special(pos.row, pos.col + 1))
-	return (pos.col + 4);
-    else
-	return (findnext(pos.row, pos.col + 1));
-
-    return (0);			// dummy
 }
+
 
  ```
