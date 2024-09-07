@@ -1277,8 +1277,8 @@ int readitem(void)
 	return (makeint(utf8_to_ucs4(stok.buf)));
     case BUILTIN:
 	temp = makeatom(stok.buf, SYS);
-	//if(GET_OPT(temp) != NIL && temp != makesys("is"))
-	//    return(temp);
+	if(temp == makesys("="))
+	    return(temp);
 	gettoken();
 	if (stok.type == LPAREN) {
 	    if (stok.space == SKIP) {
