@@ -237,7 +237,7 @@ E = 37544 .
 
 ### □ edit(Filename)
 Filenameで指定したファイルのエディトのため、インタープリタからエディタに切り換える。
-エディタとしてnanoを呼び出す。nanoを終了するとファイルの内容はインタプリタに読み込まれる。
+エディタとしてedlogを呼び出す。Edlogを終了するとファイルの内容はインタプリタに読み込まれる。
 環境変数EDITORに値が設定されている場合にはそのエディタを呼び出す。
 
 例
@@ -788,6 +788,13 @@ compile_file('tests/queens.pl').
 ## 多重世界機構
 中島秀之先生のProlog/KRに実装されていたものと同様な多重世界機構を拡張してあります。with/2述語を使います。
 testsフォルダのmpw.plファイルに例題があります。参照　第7章　https://www.jstage.jst.go.jp/article/jjsai/2/3/2_367/_pdf
+
+## Edlog エディタ
+EdlogはN-Prolog専用のエディタです。
+
+### 起動
+edlog  あるいは　edlog filename と端末から入力してください。
+詳細はctrl+hでヘルプを参照してください。
 
 ## Hello
 

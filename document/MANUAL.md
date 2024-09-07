@@ -235,7 +235,7 @@ Allocate a second fundle to the open file.
 
 ### □ edit(Filename)
 Switch from the interpreter to the editor for editing the file specified by Filename.
-Call nano as an editor. When you exit nano, the contents of the file will be read into the interpreter.
+Call Edlog as an editor. When you exit Edlog, the contents of the file will be read into the interpreter.
 If the environment variable EDITOR has a value, call that editor.
 
 example 
@@ -778,6 +778,14 @@ Partially processed tail recursive optimization. With queens, the execution spee
 The multiple world mechanism similar to that implemented in Dr. Hideyuki Nakajima's Prolog/KR is extended. Use the with/2 predicate.
 There is an example in the mpw.pl file in the tests folder.
 See Chapter 7 https://stacks.stanford.edu/file/druid:bv252vf8932/bv252vf8932.pdf
+
+## Edlog editor
+Edlog is editor for N-Prolog.
+
+### invoke
+`edlog`  or `edlog filename` onterminal.
+
+For more details, enter ctrl+h. see help. 
 
 ## Hello
 
