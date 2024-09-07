@@ -385,7 +385,7 @@ int b_ask(int arglist, int rest)
 	// ignore singleton e.g. X=X
 	x2 = NIL;
 	while (!nullp(x1)) {
-	    if (variablep(car(x1)) && !variablep(deref(car(x1))))
+	    if (variablep(car(x1)) && car(x1) != deref(car(x1)))
 		x2 = cons(car(x1), x2);
 	    x1 = cdr(x1);
 	}
