@@ -2267,6 +2267,9 @@ int b_assert(int arglist, int rest)
 	}
 	if (builtinp(arg1))
 	    error(BUILTIN_EXIST, "assertz ", arg1);
+	if (functionp(arg1)){
+		arg1 = cons(makeatom(GET_NAME(car(arg1)),PRED),cdr(arg1));
+	}
 
 
 	arg1 = variable_to_call(arg1);	//P -> call(P)
@@ -2280,12 +2283,20 @@ int b_assert(int arglist, int rest)
 	    checkgbc();
 	    return (prove_all(rest, sp));
 	} else if (clausep(arg1)) {
+		if (functionp(cadr(arg1))){
+			int func;
+			func = cadr(arg1);
+			func = cons(makeatom(GET_NAME(car(func)),PRED),cdr(func));
+			arg1 = cons(car(arg1),cons(func,cddr(arg1)));
+		}
 	    if (!callablep(caddr(arg1)))
 		error(NOT_CALLABLE, "assertz ", arg1);
 	    if (!callablep(cadr(arg1)))
 		error(NOT_CALLABLE, "assertz ", arg1);
 	    if (operationp(cadr(arg1)))
 		error(BUILTIN_EXIST, "assertz ", arg1);
+		
+		
 
 	    SET_VAR(arg1, unique(varslist(arg1)));
 	    operate(arg1);
@@ -2313,7 +2324,9 @@ int b_asserta(int arglist, int rest)
 	}
 	if (builtinp(arg1))
 	    error(BUILTIN_EXIST, "asserta ", arg1);
-
+	if (functionp(arg1)){
+		arg1 = cons(makeatom(GET_NAME(car(arg1)),PRED),cdr(arg1));
+	}
 
 	arg1 = variable_to_call(arg1);	//P -> call(P)
 	arg1 = copy_heap(arg1);	//copy arg1 to heap area
@@ -2326,6 +2339,12 @@ int b_asserta(int arglist, int rest)
 	    checkgbc();
 	    return (prove_all(rest, sp));
 	} else if (clausep(arg1)) {
+		if (functionp(cadr(arg1))){
+			int func;
+			func = cadr(arg1);
+			func = cons(makeatom(GET_NAME(car(func)),PRED),cdr(func));
+			arg1 = cons(car(arg1),cons(func,cddr(arg1)));
+		}
 	    if (!callablep(caddr(arg1)))
 		error(NOT_CALLABLE, "asserta ", arg1);
 	    if (!callablep(cadr(arg1)))
