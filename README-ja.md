@@ -2,8 +2,7 @@
 
 N-Prolog(NPL)はARITY/PROLOG(MS-DOS)互換のインタプリタ、コンパイラです。 
 
-N-PrologはISO-Prolog互換ではありません.
-ARITY/PROLOG(MS-DOS)
+N-PrologはISO-Prolog互換ではありません.ARITY/PROLOG(MS-DOS)互換です。
 
 manual.txtにユーザーズマニュアルがあります。ご参照ください。
 ライセンスは修正BSDに基づいています。無償でお使いいただけます。
