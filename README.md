@@ -50,11 +50,11 @@ other option
 ```
 $ npl -h
 List of options:
--c fn   -- NPL starts after reading the file.
--h      -- display help.
--r      -- NPL does not use editable REPL.
--s fn   -- NPL run file with script mode.
--v      -- dislplay version number.
+-c filename   -- NPL starts after reading the file.
+-h            -- display help.
+-r            -- NPL does not use editable REPL.
+-s filename   -- NPL run file with script mode.
+-v            -- dislplay version number.
 
 ```
 

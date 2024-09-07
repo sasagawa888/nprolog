@@ -9,6 +9,7 @@ written by kenichi sasagawa 2016/8~
 #include <stdio_ext.h>
 #endif
 #include <stdlib.h>
+#include <getopt.h>
 #include "npl.h"
 
 //global vers
@@ -130,12 +131,21 @@ int ed_hight;
 int ed_width;
 result rtok;			// token type and length for editable REPL
 
+void usage(){
+	printf("List of options:\n");
+	printf("-c filename -- NPL starts after reading the file.\n");
+	printf("-h          -- display help.\n");
+	printf("-r          -- NPL does not use editable REPL.\n");
+	printf("-s filename -- NPL run file with script mode.\n");
+	printf("-v          -- dislplay version number.\n");
+}
 
 int main(int argc, char *argv[])
 {
-    int opt;
+    int ch;
     char *home, str[STRSIZE];
     struct winsize w;
+	FILE *fp;
 
     signal(SIGINT, reset);
     initcell();
@@ -148,7 +158,6 @@ int main(int argc, char *argv[])
     input_stream = standard_input;
     output_stream = standard_output;
     error_stream = standard_error;
-    opt = 1;
     init_repl();
     int ret = setjmp(buf);
     if (!init_flag)
@@ -157,7 +166,7 @@ int main(int argc, char *argv[])
     home = getenv("HOME");
     strcpy(str, home);
     strcat(str, "/nprolog/library/dcg.pl");
-    FILE *fp = fopen(str, "r");
+    fp = fopen(str, "r");
     if (fp != NULL) {
 	fclose(fp);
 	b_consult(list1(makeconst(str)), NIL);
@@ -179,63 +188,46 @@ int main(int argc, char *argv[])
 	b_consult(list1(makeconst(str)), NIL);
 	predicates = NIL;
     }
-    while (opt < argc) {
-	if (strcmp(argv[opt], "-c") == 0) {
-	    opt++;
-	    FILE *fp = fopen(argv[opt], "r");
+
+	while ((ch = getopt(argc, argv, "c:s:rhv")) != -1) {
+	    switch (ch) {
+	    case 'c':
+		fp = fopen(optarg, "r");
 	    if (fp != NULL)
 		fclose(fp);
 	    else {
-		printf("Not exist %s\n", argv[opt]);
-		break;
+		printf("Not exist %s\n", optarg);
+		exit(EXIT_FAILURE);
 	    }
-	    b_consult(list1(makeconst(argv[opt])), NIL);
-	    opt++;
-	} else if (strcmp(argv[opt], "-s") == 0) {
-	    opt++;
-	    FILE *fp = fopen(argv[opt], "r");
+	    b_consult(list1(makeconst(optarg)), NIL);
+		break;
+	    case 's':
+	    fp = fopen(optarg, "r");
 	    if (fp != NULL)
 		fclose(fp);
 	    else {
-		printf("Not exist %s\n", argv[opt]);
-		return (0);
+		printf("Not exist %s\n", optarg);
+		exit(EXIT_FAILURE);
 	    }
 	    script_flag = 1;
-	    b_consult(list1(makeconst(argv[opt])), NIL);
-	    return (0);
-	} else if (strcmp(argv[opt], "-r") == 0) {
-	    repl_flag = 0;
-	    opt++;
-	} else if (strcmp(argv[opt], "-rc") == 0) {
-	    opt++;
-	    FILE *fp = fopen(argv[opt], "r");
-	    if (fp != NULL)
-		fclose(fp);
-	    else {
-		printf("Not exist %s\n", argv[opt]);
+	    b_consult(list1(makeconst(optarg)), NIL);
+	    exit(EXIT_SUCCESS);
+	    case 'r':
+		repl_flag = 0;
 		break;
+	    case 'v':
+		printf("N-Prolog Ver %1.2f\n", VERSION);
+	    exit(EXIT_SUCCESS);
+	    case 'h':
+		usage();
+		exit(EXIT_SUCCESS);
+	    default:
+		usage();
+		exit(EXIT_FAILURE);
 	    }
-	    b_consult(list1(makeconst(argv[opt])), NIL);
-	    repl_flag = 0;
-	    opt++;
-	} else if (strcmp(argv[opt], "-h") == 0) {
-	    printf("List of options:\n");
-	    printf("-c filename -- NPL starts after reading the file.\n");
-	    printf("-h          -- display help.\n");
-	    printf("-r          -- NPL does not use editable REPL.\n");
-	    printf("-s filename -- NPL run file with script mode.\n");
-	    printf("-v          -- dislplay version number.\n");
-	    return (0);
-	} else if (strcmp(argv[opt], "-v") == 0) {
-	    printf("N-Prolog Ver %1.2f\n", VERSION);
-	    return (0);
-	} else {
-	    printf("Wrong option %s\n", argv[opt]);
-	    printf("check npl- h\n");
-	    return (0);
 	}
-    }
 
+    
     if (init_flag) {
 	printf("N-Prolog Ver %1.2f\n", VERSION);
 	init_flag = 0;
