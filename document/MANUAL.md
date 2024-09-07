@@ -552,11 +552,8 @@ Enclose the atom and function in quotation marks.
 - randome Random floating-point number between 0 and 1 (inclusive).
 
 ## Debugger command
-Start debugging by starting the program. Program reaches spy points
-Will be executed. When that happens, the debugger stops the program and calls it.
-Show the port and the goal where the current program is located.
-For example, turn on the debugger, set the spy point to, my_appendn and predicate
-Start debugging my_append. 
+Start debugging by running the program. When the program reaches a spy point, it will be executed. At that point, the debugger will pause the program and display the port and goal at the current position. For example, enable the debugger, set a spy point on the predicate my_appendn, and then start debugging my_append.
+
 
 ```
 ?- ['tests/test.pl'].
@@ -582,96 +579,80 @@ yes
 ?- 
 ```
 
-Run notrace when debugging is complete. Failure to do this will slow down execution. 
+After finishing debugging, run the notrace command. If you forget to do this, it will slow down the execution of your program.
+
+prolog
 
 ```
 ?- notrace.
 ```
 
-The following display items are symbols that indicate how the debugger has reached its current goal. 
+The following symbols indicate how the debugger has reached the current goal:
 
-- ** Indicates that the goal is a spy point.
-- *> Indicates that the goal is a spy point and that the goal has been reached as a result of the skip command.
-- > The goal is not a spy point, but indicates that you have reached this goal as a result of the skip command.
-- -> x command result Indicates that the debugger is reversing the path to the previous selection point. 
+    **: Indicates that the goal is a spy point.
+    *>: Indicates that the goal is a spy point, and the goal was reached due to the skip command.
+    >: The goal is not a spy point, but it was reached due to the skip command.
+    -> x: Indicates that the debugger is backtracking to a previous choice point.
 
-There are the following four ports.
+There are four ports:
 
-- CALL is the port where the goal is called. The interpreter gives a number for each goal call.
-The numbers start at 0 when the debugger is called and end at 0 when debugging is finished.
+    CALL: The port where the goal is called. The interpreter assigns a number to each goal call. The numbering starts at 0 when the debugger is called and ends at 0 when debugging finishes.
+    EXIT: The port where the program exits when the goal succeeds.
+    REDO: The port where the program re-enters the goal through backtracking.
+    FAIL: The port where the program exits when the goal fails.
 
-- EXIT is a port through which the program exits when the goal is successful.
+- a
+Suspend and terminate the program. Turn off the debugger and return to the interpreter prompt.
 
-- REDO is a port where the program re-enters the goal with backtracking.
+- b
+The program being debugged does not exit but returns to the interpreter prompt. By typing end_of_file, you can exit the suspended state and continue debugging. Multiple interpreter prompts will be displayed for each valid interruption. For example, if there are three interruptions enabled, the interpreter prompt will display:
 
-- FAIL is a port through which the program exits when the goal fails. 
-
-
-### a
-Suspend and terminate the program. Turn off the debugger and prompt for the interpreter
-Display. 
-
-### b
-The program being debugged does not exit and prompts for an interpreter.
-By typing end_of_file, the suspended state will be released and you can continue debugging.
-can. As many interpreter prompts as there are valid interruptions? Is added.
-For example, when interruption is enabled three times, the interpreter prompts:
-Is displayed.
+prolog
 
 ```
 ???-
 ```
 
-### c
-Instructs the debugger to creep to the next port. using this method
-You can follow the execution step by step. Enter key is the same as entering c. 
+- c
+Instruct the debugger to creep to the next port, allowing you to step through the execution. Pressing the Enter key has the same effect as entering the c command.
 
-### d
-Shows the current goal. 
+- d
+Display the current goal.
 
-### e
-Exit the interpreter. This command returns you to the Linux prompt. 
+- e
+Exit the interpreter and return to the Linux prompt.
 
-### f
-Advance the debugger directly to the FAIL port. That the goal is already a failure
-This command is valid if you know it. 
+- f
+Directly advance the debugger to the FAIL port. This command is valid if you know that the goal will fail.
 
-### h
-Display the help screen. 
+- h
+Display the help screen.
 
-### l
-Leap from spy point to spy point.
-Don't go step-by-step at the current spypoint program execution
-You can skip to the next spy point. 
+- l
+Leap from one spy point to another. This allows you to skip the step-by-step execution and jump to the next spy point.
 
-### n
-Turn off the debugger. 
+- n
+Turn off the debugger.
 
-### q
-Skip to the goal's EXIT or FAIL port.
-However, if there is a set of spy points in that goal, execution will stop at that spy point. 
+- q
+Skip to the EXIT or FAIL port of the goal. However, if there is a spy point set within that goal, execution will stop at that spy point.
 
-### s
-Even if there are other spy points in the goal, skip to the exit port or FAIL port of that goal
-To do. This command is only available from the CALL or redo ports. 
+- s
+Skip to the EXIT or FAIL port of the goal, even if there are other spy points in the goal. This command can only be used from the CALL or REDO ports.
+<esc>
+This is the same as pressing the escape key or entering the s command.
 
-### <esc>
-It is the same as entering the escape key s. 
+- w
+Write the current goal to the output.
 
-### w
-Write down the current goal. 
+- X
+This command can be used at the FAIL or REDO port. It causes the debugger to continue failing until it reaches a CALL or EXIT port.
 
-### X
-It can be used on the FAIL port or the redo port.
-Causes the debugger to continue failing until it reaches the CALL or EXIT port. 
+- @
+Call a secondary goal and return to the debugger when that goal finishes.
 
-### @
-Calls a secondary goal and returns to the debugger as soon as the goal is finished. 
-
-### ;
-Used on the EXIT port, which causes the debugger to go to the redo port of the current goal. 
-
-
+- ;
+At the EXIT port, this command causes the debugger to proceed to the REDO port of the current goal.
 
 
 ## DCG
