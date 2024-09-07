@@ -428,10 +428,6 @@ int b_unify(int arglist, int rest)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-	if (operationp(arg1) && car(arg1) == DOTOBJ)
-	    arg1 = operate(arg1);
-	if (operationp(arg2) && car(arg2) == DOTOBJ)
-	    arg2 = operate(arg2);
 	res = unify(arg1, arg2);
 	if (res == YES)
 	    return (prove_all(rest, sp));
@@ -550,17 +546,11 @@ int b_writeq(int arglist, int rest)
     if (n == 1) {
 	arg1 = output_stream;
 	arg2 = car(arglist);
-	if (operationp(arg2) && car(arg2) == DOTOBJ)
-	    arg2 = operate(arg2);
-	arg2 = deref(arg2);
 	goto writeq;
 
     } else if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-	if (operationp(arg2) && car(arg2) == DOTOBJ)
-	    arg2 = operate(arg2);
-	arg2 = deref(arg2);
       writeq:
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "writeq ", arg1);

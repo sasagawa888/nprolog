@@ -1237,6 +1237,17 @@ int isatomch(char c)
 
 int readitem(void)
 {
+	int res;
+	res = readitem1();
+	// '.'(1,'.'(2,[])) -> [1,2]
+	if (operationp(res) && car(res) == DOTOBJ)
+	    res = operate(res);
+
+	return(res);
+}
+
+int readitem1(void)
+{
     int temp, temp1;
     char *e, str[ATOMSIZE];
 

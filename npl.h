@@ -1058,6 +1058,7 @@ int quoted_option_p(int x);
 int quotient(int x, int y);
 int readparse(void);
 int readitem(void);
+int readitem1(void);
 int readcurl(void);
 int readlist(void);
 int readparen(void);
