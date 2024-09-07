@@ -73,7 +73,7 @@ consult述語を用いてファイルからデータベースに読み込む。
 ### □ ansi_cuf(N)
 カーソルをN桁進める。
 
-### □ ansi_sub(N)
+### □ ansi_cub(N)
 カーソルをN桁戻す。
 
 ### □ ansi_cpr(Row,Col)

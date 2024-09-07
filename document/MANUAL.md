@@ -72,7 +72,7 @@ Move the cursor down N lines.
 ### □ ansi_cuf(N)
 Move the cursor forward N digits. 
 
-### □ ansi_sub(N)
+### □ ansi_cub(N)
 Move the cursor back N digits. 
 
 ### □ ansi_cpr(Row,Col)
@@ -203,7 +203,7 @@ Set the year, month, and day.
 Returns the day of the week on a given date as a number between 0 (Sunday) and 6 (Saturday). 
 
 ### □ dec(N,X)
-Subtract 1 from the number N and give it to the value X. 
+Unify X with the result of subtracting 1 from N.
 
 ### □ delete(Filename)
 Delete the specified file. 
@@ -266,7 +266,7 @@ format is one of the following:
 Remove all characters in the type-ahead buffer.
 
 ### □ functor(Struct,Name,Arity)
-Returns the structure name and arity. 
+Deconstruct the structure Struct into its name Name and arity Arity, or construct a structure Struct from the given Name and Arity.
 
 ### □ gc(Amount)
 Launch garbage collection.
@@ -297,7 +297,7 @@ Check if X is an integer.
 Convert an integer to a string, or convert a string to an integer. 
 
 ### □ X is E 
-Evaluate E and unify its value to X.
+Evaluate the arithmetic expression E and unify the result with X.
 
 ### □ keysort(L1,L2)
 Sort the list L1 in standard order. List elements must be in the form Key_Value.
@@ -382,7 +382,7 @@ Rename the file.
 Delete the directory. 
 
 ### □ shell(Command)
-Execute the BASH command and succeed. 
+Execute the shell command and succeed.
 
 ### □sort(L1.L2)
 Sort list L1 into standard order, eliminate duplication and return sorted list to L2. 
