@@ -1,5 +1,5 @@
 # Edlog
-Edlis is a simple editor for ISLisp. Edlis is subset Edwin.
+Edlog is a simple editor for N-Prolog. Edlog is subset Edwin.
 
 ![Edlog](screen1.png)
 
@@ -20,13 +20,13 @@ Edlis is a simple editor for ISLisp. Edlis is subset Edwin.
 | CTRL+X CTRL+L | Save region to file     |
 
 ## Editing
-The key bindings are a hybrid of Emacs and nano.
+The key bindings are Emacs like.
 
 | Key       | Binding                         |
 | --------- | ------------------------------- |
-| Enter     | Automatically indent for Lisp   |
+| Enter     | Automatically indent            |
 | Insert    | Switch between insert/overwrite |
-| Tab       | Insert tab for Lisp             |
+| Tab       | Insert tab                      |
 | BackSpace | Delete previous char            |
 | Delete    | Delete next char                |
 | CTRL+F    | Move right                      |
@@ -72,7 +72,6 @@ Edlog supports Unicode.
 # Tmux
 Using tmux is very convenient. Pressing CTRL+B followed by % will split the screen into two panes. You can start Edlog on the left side and N-Prolog on the right side. When you want to finish, detach by pressing CTRL+B followed by D in the terminal. To reattach, use tmux attach. The previous state will be restored.
 
-![tmux](screen7.png)
 
 To easily move between the two split screens, add the following setting to the ~/.tmux.conf file:
 `set -g mouse on`
