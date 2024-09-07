@@ -103,7 +103,7 @@ test_max :-
     max1(5, 2, 5),
     max1(7, 7, 7). 
 
-% 集合操作のテスト
+% set 
 parent(john, mary).
 parent(john, bob).
 parent(susan, mary).
@@ -117,3 +117,9 @@ parent(susan, bob).
 
 % findall:
 :- findall(Child, parent(_, Child), AllChildren), AllChildren = [mary, bob, mary, bob].
+
+
+/*
+multiline comment
+unicode こんにちは、私はN-Prologの作者の笹川です。
+*/
