@@ -1,3 +1,5 @@
+% parser test
+
 gcd(A=A*1+B*0).
 gcd(D=A*X+B*Y):-
   res_q(A=B*Q+R),
