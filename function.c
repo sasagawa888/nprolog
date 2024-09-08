@@ -544,14 +544,6 @@ int eval(int x)
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_float(arg1));
-    } else if (eqp(car(x), makeatom("float_integer_part", FUNC))) {
-	evalterm(x, result);
-	arg1 = result[1];
-	return (f_float_integer_part(arg1));
-    } else if (eqp(car(x), makeatom("float_fraction_part", FUNC))) {
-	evalterm(x, result);
-	arg1 = result[1];
-	return (f_float_fraction_part(arg1));
     } else if (eqp(car(x), makeatom("sign", FUNC))) {
 	evalterm(x, result);
 	arg1 = result[1];
@@ -1084,35 +1076,6 @@ int f_float(int x)
 
     return (makeflt(GET_FLT(exact_to_inexact(x))));
 }
-
-int f_float_integer_part(int x)
-{
-    double f;
-
-    if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "float_integer_part ", x);
-    if (!numberp(x))
-	error(NOT_NUM, "float_integer_part ", x);
-
-    f = GET_FLT(exact_to_inexact(x));
-    f = trunc(f);
-    return (makeflt(f));
-}
-
-int f_float_fraction_part(int x)
-{
-    double f;
-
-    if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "float_fraction_part ", x);
-    if (!numberp(x))
-	error(NOT_NUM, "float_fraction_part ", x);
-
-    f = GET_FLT(exact_to_inexact(x));
-    f = f - (int) f;
-    return (makeflt(f));
-}
-
 
 int f_sign(int x)
 {
