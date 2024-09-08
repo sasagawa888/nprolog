@@ -551,7 +551,7 @@ Enclose the atom and function in quotation marks.
 - gcd(X, Y) Greatest common divisor of X and Y
 - lcm(X, Y) Least common multiple of X and Y
 - randi(n) Random integer between 0 and n (inclusive).
-- randome Random floating-point number between 0 and 1 (inclusive).
+- random Random floating-point number between 0 and 1 (inclusive).
 
 ## Debugger command
 Start debugging by running the program. When the program reaches a spy point, it will be executed. At that point, the debugger will pause the program and display the port and goal at the current position. For example, enable the debugger, set a spy point on the predicate my_appendn, and then start debugging my_append.
