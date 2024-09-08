@@ -77,10 +77,7 @@ void dynamic_link(int x)
     init_f1(23, (tpred) f_atan);
     init_f1(24, (tpred) f_exp);
     init_f1(25, (tpred) f_log);
-    init_f1(26, (tpred) f_floor);
-    init_f1(27, (tpred) f_ceiling);
-    init_f1(28, (tpred) f_truncate);
-    init_f1(29, (tpred) f_sign);
+    init_f1(26, (tpred) f_ln);
     init_f1(30, (tpred) f_round);
     init_f1(31, (tpred) list1);
     init_f1(33, (tpred) f_random);

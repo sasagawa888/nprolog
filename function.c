@@ -528,30 +528,6 @@ int eval(int x)
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_log(arg1));
-    } else if (eqp(car(x), makeatom("floor", FUNC))) {
-	evalterm(x, result);
-	arg1 = result[1];
-	return (f_floor(arg1));
-    } else if (eqp(car(x), makeatom("ceiling", FUNC))) {
-	evalterm(x, result);
-	arg1 = result[1];
-	return (f_ceiling(arg1));
-    } else if (eqp(car(x), makeatom("truncate", FUNC))) {
-	evalterm(x, result);
-	arg1 = result[1];
-	return (f_truncate(arg1));
-    } else if (eqp(car(x), makeatom("integer", SYS))) {
-	evalterm(x, result);
-	arg1 = result[1];
-	return (f_truncate(arg1));
-    } else if (eqp(car(x), makeatom("float", SYS))) {
-	evalterm(x, result);
-	arg1 = result[1];
-	return (f_float(arg1));
-    } else if (eqp(car(x), makeatom("sign", FUNC))) {
-	evalterm(x, result);
-	arg1 = result[1];
-	return (f_sign(arg1));
     } else if (eqp(car(x), makeatom("sqrt", FUNC))) {
 	evalterm(x, result);
 	arg1 = result[1];
@@ -1054,62 +1030,6 @@ int f_log(int x)
     return (makeflt(log10(GET_FLT(exact_to_inexact(x)))));
 }
 
-int f_floor(int x)
-{
-    if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "floor ", x);
-    if (!numberp(x))
-	error(NOT_NUM, "floor ", x);
-
-    return (makeint((int) floor(GET_FLT(exact_to_inexact(x)))));
-}
-
-int f_ceiling(int x)
-{
-    if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "ceiling ", x);
-    if (!numberp(x))
-	error(NOT_NUM, "ceiling ", x);
-
-    return (makeint((int) ceil(GET_FLT(exact_to_inexact(x)))));
-}
-
-int f_truncate(int x)
-{
-    if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "truncate ", x);
-    if (!numberp(x))
-	error(NOT_NUM, "truncate ", x);
-
-    return (makeint((int) trunc(GET_FLT(exact_to_inexact(x)))));
-}
-
-int f_float(int x)
-{
-    if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "float ", x);
-    if (!numberp(x))
-	error(NOT_NUM, "float ", x);
-
-    return (makeflt(GET_FLT(exact_to_inexact(x))));
-}
-
-int f_sign(int x)
-{
-    if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "sign ", x);
-    if (!numberp(x))
-	error(NOT_NUM, "sign ", x);
-
-    if (positivep(x))
-	return (makeint(1));
-    else if (zerop(x))
-	return (makeint(0));
-    else if (negativep(x))
-	return (makeint(-1));
-    else
-	return (NIL);
-}
 
 int f_random(int x)
 {

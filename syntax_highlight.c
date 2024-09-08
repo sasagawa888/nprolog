@@ -20,8 +20,7 @@ char operator[OPERATOR_NUMBER][5] = {
 
 char function[FUNCTION_NUMBER][12] = {
     { "abs" }, { "sin" }, { "cos" }, { "tan" }, { "asin" }, { "acos" }, { "atan" },
-    { "exp" }, { "ln" }, { "log" }, { "floor" }, { "ceiling" }, { "truncate" },
-    { "sign" }, { "sqrt" }, { "round" }, 
+    { "exp" }, { "ln" }, { "log" }, { "sqrt" }, { "round" }, 
     { "random" }, { "randi" }, { "pi" }
 };
 
