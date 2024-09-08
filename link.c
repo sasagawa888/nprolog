@@ -108,8 +108,6 @@ void dynamic_link(int x)
     init_f2(12, (tpred) eqgreaterp);
     init_f2(13, (tpred) unify);
     init_f2(14, (tpred) f_mod);
-    init_f2(15, (tpred) gcd);
-    init_f2(16, (tpred) lcm);
     init_f2(17, (tpred) f_expt);
     init_f2(18, (tpred) f_sqrt);
     init_f2(19, (tpred) f_leftshift);

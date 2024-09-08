@@ -22,8 +22,7 @@ char function[FUNCTION_NUMBER][12] = {
     { "abs" }, { "sin" }, { "cos" }, { "tan" }, { "asin" }, { "acos" },
     { "atan" },
     { "exp" }, { "log" }, { "floor" }, { "ceiling" }, { "truncate" },
-    { "sign" }, { "sqrt" }, { "round" }, { "gcd" }, { "lcm" }, { "max" },
-    { "min" },
+    { "sign" }, { "sqrt" }, { "round" }, 
     { "random" }, { "randi" }, { "pi" }
 };
 

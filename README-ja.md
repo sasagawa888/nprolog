@@ -353,5 +353,5 @@ min(X,Y)
 max(X,Y)
 sqrt(X)
 randi(n)      n以下0以上の整数乱数
-randome　    １以下０以上の浮動小数点数乱数
+random　    １以下０以上の浮動小数点数乱数
 ```

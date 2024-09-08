@@ -545,11 +545,7 @@ Enclose the atom and function in quotation marks.
 - float_integer_part(X) Integer part of the floating-point number X.
 - float_fraction_part(X) Fractional part of the floating-point number X.
 - sign(X) Returns -1 if X is negative, 0 if X is zero, and 1 if X is positive.
-- min(X, Y) Returns the smaller of X and Y.
-- max(X, Y) Returns the larger of X and Y.
 - sqrt(X) Square root of X.
-- gcd(X, Y) Greatest common divisor of X and Y
-- lcm(X, Y) Least common multiple of X and Y
 - randi(n) Random integer between 0 and n (inclusive).
 - random Random floating-point number between 0 and 1 (inclusive).
 

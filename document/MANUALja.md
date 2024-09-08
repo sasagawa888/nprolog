@@ -550,11 +550,7 @@ Eが具体化されていない変数を含まないかどうかを調べます�
 - float_integer_part(X)  Xの浮動小数点数の整数部分
 - float_fraction_part(X)　Xの小数点数部分
 - sign(X)　　　負数なら-1　ゼロなら０　正数なら１
-- min(X,Y)　　　X,Yの小さい数
-- max(X,Y)  　　X,Yの大きい数
 - sqrt(X)       Xの平方根
-- gcd(X,Y)      XとYの最大公約数
-- lcm(X,Y)      XとYの最小公倍数 
 - randi(n)      n以下0以上の整数乱数
 - random 　    １以下０以上の浮動小数点数乱数
 

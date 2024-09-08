@@ -567,26 +567,6 @@ int eval(int x)
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_round(arg1));
-    } else if (eqp(car(x), makeatom("gcd", FUNC))) {
-	evalterm(x, result);
-	arg1 = result[1];
-	arg2 = result[2];
-	return (gcd(arg1, arg2));
-    } else if (eqp(car(x), makeatom("lcm", FUNC))) {
-	evalterm(x, result);
-	arg1 = result[1];
-	arg2 = result[2];
-	return (lcm(arg1, arg2));
-    } else if (eqp(car(x), makeatom("min", FUNC))) {
-	evalterm(x, result);
-	arg1 = result[1];
-	arg2 = result[2];
-	return (f_min(arg1, arg2));
-    } else if (eqp(car(x), makeatom("max", FUNC))) {
-	evalterm(x, result);
-	arg1 = result[1];
-	arg2 = result[2];
-	return (f_max(arg1, arg2));
     } else if (eqp(car(x), makeatom("randi", FUNC))) {
 	evalterm(x, result);
 	arg1 = result[1];
@@ -1210,55 +1190,6 @@ int f_sign(int x)
     else
 	return (NIL);
 }
-
-int f_min(int x, int y)
-{
-    if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "min ", x);
-    if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "min ", y);
-    if (!numberp(x))
-	error(NOT_NUM, "min ", x);
-    if (!numberp(y))
-	error(NOT_NUM, "min ", y);
-
-    if (smallerp(x, y)) {
-	if (!floatp(x) && floatp(y))
-	    return (exact_to_inexact(x));
-	else
-	    return (x);
-    } else {
-	if (!floatp(y) && floatp(x))
-	    return (exact_to_inexact(y));
-	else
-	    return (y);
-    }
-}
-
-int f_max(int x, int y)
-{
-    if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "max ", x);
-    if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "max ", y);
-    if (!numberp(x))
-	error(NOT_NUM, "max ", x);
-    if (!numberp(y))
-	error(NOT_NUM, "max ", y);
-
-    if (greaterp(x, y)) {
-	if (!floatp(x) && floatp(y))
-	    return (exact_to_inexact(x));
-	else
-	    return (x);
-    } else {
-	if (!floatp(y) && floatp(x))
-	    return (exact_to_inexact(y));
-	else
-	    return (y);
-    }
-}
-
 
 int f_random(int x)
 {
