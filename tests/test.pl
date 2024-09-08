@@ -95,13 +95,13 @@ test_sort :-
 
 
 
-max1(X, Y, X) :- X >= Y, !.
-max1(_, Y, Y).
+max(X, Y, X) :- X >= Y, !.
+max(_, Y, Y).
 
 test_max :-
-    max1(3, 4, 4),
-    max1(5, 2, 5),
-    max1(7, 7, 7). 
+    max(3, 4, 4),
+    max(5, 2, 5),
+    max(7, 7, 7). 
 
 % set 
 parent(john, mary).
