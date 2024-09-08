@@ -342,6 +342,7 @@ exp(X)　　     Xの指数関数
 ln(X)          Xの自然対数関数
 log(X)　　     Xの常用対数関数
 sqrt(X)
+round(X)       Xの整数部分
 randi(n)      n以下0以上の整数乱数
 random　    １以下０以上の浮動小数点数乱数
 ```

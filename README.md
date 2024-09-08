@@ -338,6 +338,7 @@ exp(X)
 ln(X)
 log(X)
 sqrt(X)
+round(X)
 randi(n)   generate random integer (n >= x >= 0) 
 random generate random float (1 >= x >= 0)
 ```
