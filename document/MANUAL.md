@@ -548,6 +548,8 @@ Enclose the atom and function in quotation marks.
 - min(X, Y) Returns the smaller of X and Y.
 - max(X, Y) Returns the larger of X and Y.
 - sqrt(X) Square root of X.
+- gcd(X, Y) Greatest common divisor of X and Y
+- lcm(X, Y) Least common multiple of X and Y
 - randi(n) Random integer between 0 and n (inclusive).
 - randome Random floating-point number between 0 and 1 (inclusive).
 
