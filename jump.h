@@ -11,11 +11,11 @@ typedef int (*fn4)(char*);
 typedef void (*tpred)(char*, int(*pred)(int , int));
 typedef void (*tuser)(char*, int(*user)(int , int), int weight, int spec);
 
-fn0 f0[50];
-fn1 f1[50];
-fn2 f2[50];
-fn3 f3[50];
-fn4 f4[50];
+fn0 f0[NUM_FN0S];
+fn1 f1[NUM_FN1S];
+fn2 f2[NUM_FN2S];
+fn3 f3[NUM_FN3S];
+fn4 f4[NUM_FN4S];
 tpred deftpred;
 tuser deftinfix;
 tpred deftsys;
