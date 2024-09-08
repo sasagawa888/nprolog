@@ -42,16 +42,16 @@ void dynamic_link(int x)
     init_declare = dlsym(hmod, "init_declare");
 
     //argument-0 type
-    init_f0(0, (tpred) checkgbc);
-    init_f0(1, (tpred) gbc);
-    init_f0(2, (tpred) freshcell);
-    init_f0(3, (tpred) makevariant);
-    init_f0(4, (tpred) get_sp);
-    init_f0(5, (tpred) get_wp);
-    init_f0(6, (tpred) debug);
-    init_f0(7, (tpred) inc_proof);
-    init_f0(8, (tpred) pop_ustack);
-    init_f0(9, (tpred) get_up);
+    init_f0(CHECKGBC_IDX, (tpred) checkgbc);
+    init_f0(GBC_IDX, (tpred) gbc);
+    init_f0(FRESHCELL_IDX, (tpred) freshcell);
+    init_f0(MAKEVARIANT_IDX, (tpred) makevariant);
+    init_f0(GET_SP_IDX, (tpred) get_sp);
+    init_f0(GET_WP_IDX, (tpred) get_wp);
+    init_f0(DEBUG_IDX, (tpred) debug);
+    init_f0(INC_PROOF_IDX, (tpred) inc_proof);
+    init_f0(POP_USTACK_IDX, (tpred) pop_ustack);
+    init_f0(GET_UP_IDX, (tpred) get_up);
 
     //argument-1 type
     init_f1(0, (tpred) car);

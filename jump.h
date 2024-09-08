@@ -1,7 +1,8 @@
 #include <setjmp.h>
 #include <stdio.h>
+#include "npl.h"
 
-
+/*
 #define NIL     0
 #define YES     2
 #define NO      4
@@ -25,6 +26,7 @@
 #define NUMVAR  40
 #define UNDERBAR    42
 #define DOTOBJ  44
+
 
 //operator
 #define FX  1   //0b0000001
@@ -114,7 +116,7 @@
 #define NOT_RECORD          71
 #define VARIANT_OVERF       72
 #define ARITY_ERR           73
-
+*/
 
 
 typedef int (*fn0)();
@@ -165,16 +167,16 @@ void init_deftinfix(tuser x){
 }
 
 
-#define Jcheckgbc()  (f0[0])()
-#define Jgbc()	     (f0[1])()
-#define Jfreshcell() (f0[2])()
-#define Jmakevariant() (f0[3])()
-#define Jget_sp()    (f0[4])()
-#define Jget_wp()    (f0[5])()
-#define Jdebug()     (f0[6])()
-#define Jinc_proof() (f0[7])()
-#define Jpop_ustack() (f0[8])()
-#define Jget_up()    (f0[9])()
+#define Jcheckgbc()  (f0[CHECKGBC_IDX])()
+#define Jgbc()	     (f0[GBC_IDX])()
+#define Jfreshcell() (f0[FRESHCELL_IDX])()
+#define Jmakevariant() (f0[MAKEVARIANT_IDX])()
+#define Jget_sp()    (f0[GET_SP_IDX])()
+#define Jget_wp()    (f0[GET_WP_IDX])()
+#define Jdebug()     (f0[DEBUG_IDX])()
+#define Jinc_proof() (f0[INC_PROOF_IDX])()
+#define Jpop_ustack() (f0[POP_USTACK_IDX])()
+#define Jget_up()    (f0[GET_UP_IDX])()
 
 #define Jcar(x)      (f1[0])(x)
 #define Jcdr(x)      (f1[1])(x)
