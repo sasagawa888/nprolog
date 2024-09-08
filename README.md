@@ -326,8 +326,6 @@ X >> Y rightshift
 X /\ Y logical and
 X \/ Y logical or
 \  complement
-X xor Y exclusive or
-X iand Y inclusive and
 X mod Y 
 abs(X) 
 sin(X)
@@ -337,14 +335,8 @@ acos(X)
 tan(X)
 atan(X)
 exp(X)
+ln(X)
 log(X)
-floor(X)
-ceiling(X)
-truncate(X)
-float(X)
-float_integer_part(X)
-float_fraction_part(X)
-sign(X)
 sqrt(X)
 randi(n)   generate random integer (n >= x >= 0) 
 random generate random float (1 >= x >= 0)

@@ -331,8 +331,6 @@ X mod Y        XをYで割った剰余（整数のみ）
 X /\ Y         論理積
 X \/ Y         論理和
 \X  complement
-X xor Y exclusive or
-X iand Y inclusive and
 abs(X)         Xの値の絶対値
 sin(X)　       Xの正弦関数
 asin(X)　      Xの逆正弦関数
@@ -341,16 +339,8 @@ acos(X)　      Xの逆余弦関数
 tan(X)　       Xの正接関数
 atan(X)　      Xの逆正接関数
 exp(X)　　     Xの指数関数
-log(X)　　     Xの対数関数
-floor(X)
-ceiling(X)
-truncate(X)
-float(X)
-float_integer_part(X)
-float_fraction_part(X)
-sign(X)
-min(X,Y)
-max(X,Y)
+ln(X)          Xの自然対数関数
+log(X)　　     Xの常用対数関数
 sqrt(X)
 randi(n)      n以下0以上の整数乱数
 random　    １以下０以上の浮動小数点数乱数
