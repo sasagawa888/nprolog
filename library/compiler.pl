@@ -802,12 +802,6 @@ jump_eval_form(X mod Y) :-
     write(','),
     jump_eval_form(Y),
     write(')').
-jump_eval_form(X rem Y) :-
-	write('Jrem('),
-    jump_eval_form(X),
-    write(','),
-    jump_eval_form(Y),
-    write(')').
 jump_eval_form(sin(X)) :-
 	write('Jsin('),
     jump_eval_form(X),
@@ -889,18 +883,6 @@ jump_eval_form(X \/ Y) :-
 jump_eval_form(\ X) :-
 	  write('Jcomplement('),
     jump_eval_form(X),
-    write(')').
-jump_eval_form(X xor Y) :-
-	  write('Jexclusiveor('),
-    jump_eval_form(X),
-    write(','),
-    jump_eval_form(Y),
-    write(')').
-jump_eval_form(X iand Y) :-
-	  write('Jinclusiveand('),
-    jump_eval_form(X),
-    write(','),
-    jump_eval_form(Y),
     write(')').
 jump_eval_form(random(X)) :-
 	  write('Jrandom('),

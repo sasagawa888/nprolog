@@ -520,6 +520,10 @@ int eval(int x)
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_exp(arg1));
+	} else if (eqp(car(x), makeatom("ln", FUNC))) {
+	evalterm(x, result);
+	arg1 = result[1];
+	return (f_ln(arg1));
     } else if (eqp(car(x), makeatom("log", FUNC))) {
 	evalterm(x, result);
 	arg1 = result[1];
@@ -1025,6 +1029,19 @@ int f_exp(int x)
     return (makeflt(exp(GET_FLT(exact_to_inexact(x)))));
 }
 
+int f_ln(int x)
+{
+    if (wide_variable_p(x))
+	error(INSTANTATION_ERR, "ln ", x);
+    if (!numberp(x))
+	error(NOT_NUM, "ln ", x);
+    if (zerop(x) || negativep(x))
+	error(EVALUATION_ERR, "ln ", x);
+
+    return (makeflt(log(GET_FLT(exact_to_inexact(x)))));
+}
+
+
 int f_log(int x)
 {
     if (wide_variable_p(x))
@@ -1034,7 +1051,7 @@ int f_log(int x)
     if (zerop(x) || negativep(x))
 	error(EVALUATION_ERR, "log ", x);
 
-    return (makeflt(log(GET_FLT(exact_to_inexact(x)))));
+    return (makeflt(log10(GET_FLT(exact_to_inexact(x)))));
 }
 
 int f_floor(int x)

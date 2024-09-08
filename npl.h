@@ -887,6 +887,7 @@ int f_ceiling(int x);
 int f_truncate(int x);
 int f_sign(int x);
 int f_exp(int x);
+int f_ln(int x);
 int f_log(int x);
 int f_float(int x);
 int f_random(int x);

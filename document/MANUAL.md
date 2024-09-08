@@ -535,7 +535,8 @@ Enclose the atom and function in quotation marks.
 - tan(X) Tangent of X.
 - atan(X) Arctangent (inverse tangent) of X.
 - exp(X) Exponential function of X.
-- log(X) Logarithm of X.
+- ln(X) Logarithm of X.
+- log(X) Base-10 logarithm of X.
 - floor(X) Floor value of X.
 - ceiling(X) Ceiling value of X.
 - truncate(X) Truncated value of X.

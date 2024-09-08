@@ -540,7 +540,8 @@ Eが具体化されていない変数を含まないかどうかを調べます�
 - tan(X)　       Xの正接関数
 - atan(X)　      Xの逆正接関数
 - exp(X)　　     Xの指数関数
-- log(X)　　     Xの対数関数
+- ln(X)          Xの自然対数関数
+- log(X)　　     Xの常用対数関数
 - floor(X)　　　 Xの床値
 - ceiling(X)　　 Xの天井値
 - truncate(X)　  Xの切り捨て値
