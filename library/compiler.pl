@@ -831,27 +831,11 @@ jump_eval_form(exp(X)) :-
     jump_eval_form(X),
     write(')').
 jump_eval_form(log(X)) :-
-	write('Jatan('),
+	write('Jlog('),
     jump_eval_form(X),
     write(')').
-jump_eval_form(floor(X)) :-
-	write('Jfloor('),
-    jump_eval_form(X),
-    write(')').
-jump_eval_form(ceiling(X)) :-
-	write('Jseiling('),
-    jump_eval_form(X),
-    write(')').
-jump_eval_form(truncate(X)) :-
-	write('Jtruncate('),
-    jump_eval_form(X),
-    write(')').
-jump_eval_form(sign(X)) :-
-	write('Jsign('),
-    jump_eval_form(X),
-    write(')').
-jump_eval_form(round(X)) :-
-	write('Jround('),
+jump_eval_form(ln(X)) :-
+	write('Jln('),
     jump_eval_form(X),
     write(')').
 
