@@ -532,8 +532,6 @@ Eが具体化されていない変数を含まないかどうかを調べます�
 - X /\ Y         論理積
 - X \/ Y         論理和
 - \X  complement
-- X xor Y exclusive or
-- X iand Y inclusive and
 - abs(X)         Xの値の絶対値
 - sin(X)　       Xの正弦関数
 - asin(X)　      Xの逆正弦関数

@@ -114,13 +114,10 @@ void dynamic_link(int x)
     init_f2(20, (tpred) f_rightshift);
     init_f2(21, (tpred) f_logicaland);
     init_f2(22, (tpred) f_logicalor);
-    init_f2(23, (tpred) f_exclusiveor);
-    init_f2(24, (tpred) f_inclusiveand);
     init_f2(25, (tpred) listcons);
     init_f2(26, (tpred) list2);
     init_f2(27, (tpred) set_car);
     init_f2(28, (tpred) set_cdr);
-    init_f2(29, (tpred) f_rem);
     init_f2(30, (tpred) f_complement);
     init_f2(31, (tpred) set_aux);
     init_f2(32, (tpred) not_numeqp);

@@ -527,8 +527,6 @@ Enclose the atom and function in quotation marks.
 - X /\ Y Logical AND.
 - X \/ Y Logical OR.
 - \X Complement (bitwise NOT).
-- X xor Y Exclusive OR (XOR).
-- X iand Y Inclusive AND.
 - abs(X) Absolute value of X.
 - sin(X) Sine of X.
 - asin(X) Arcsine (inverse sine) of X.

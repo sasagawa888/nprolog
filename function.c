@@ -453,14 +453,11 @@ void initoperator(void)
     defoperator("/", f_divide, 400, YFX, 0);
     defoperator("//", f_div, 400, YFX, 0);
     defoperator("mod", f_mod, 400, YFX, 0);
-    defoperator("rem", f_rem, 400, YFX, 0);
     defoperator("<<", f_leftshift, 400, YFX, 0);
     defoperator(">>", f_rightshift, 400, YFX, 0);
     defoperator("/\\", f_logicaland, 500, YFX, 0);
     defoperator("\\/", f_logicalor, 500, YFX, 0);
     defoperator("\\", f_complement, 200, FY, 0);
-    defoperator("xor", f_exclusiveor, 500, YFX, 0);
-    defoperator("iand", f_inclusiveand, 500, YFX, 0);
     return;
 }
 
@@ -706,28 +703,6 @@ int f_mod(int x, int y)
     else
 	res = s_remainder(x, y);
     return (res);
-}
-
-int f_rem(int x, int y)
-{
-    int q, r;
-
-    if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "rem ", x);
-    if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "rem ", y);
-    if (!numberp(x))
-	error(NOT_NUM, "rem ", x);
-    if (!numberp(y))
-	error(NOT_NUM, "rem ", y);
-    if (!wide_integer_p(x))
-	error(NOT_INT, "rem ", x);
-    if (!wide_integer_p(y))
-	error(NOT_INT, "rem ", y);
-
-    q = quotient(x, y);
-    r = minus(x, mult(y, q));
-    return (r);
 }
 
 int f_expt(int x, int y)
@@ -977,41 +952,6 @@ int f_complement(int x, int y)
     return (makeint(~x));
 }
 
-int f_exclusiveor(int x, int y)
-{
-
-    if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "xor ", x);
-    if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "xor ", y);
-    if (!integerp(x))
-	error(NOT_INT, "xor ", x);
-    if (!integerp(y))
-	error(NOT_INT, "xor ", y);
-
-
-    x = GET_INT(x);
-    y = GET_INT(y);
-    return (makeint(x ^ y));
-}
-
-int f_inclusiveand(int x, int y)
-{
-
-    if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "iand ", x);
-    if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "iand ", y);
-    if (!integerp(x))
-	error(NOT_INT, "iand ", x);
-    if (!integerp(y))
-	error(NOT_INT, "iand ", y);
-
-
-    x = GET_INT(x);
-    y = GET_INT(y);
-    return (makeint(~(x ^ y)));
-}
 
 int f_abs(int x)
 {

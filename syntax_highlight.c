@@ -15,7 +15,7 @@ char operator[OPERATOR_NUMBER][5] = {
     { "+" }, { "-" }, { "*" }, { "/" }, { "//" }, { "<<" }, { ">>" },
     { "\\" }, { "/\\" },
     { "\\/" },
-    { "mod" }, { "rem" }, { "^" }, { "**" }, { "xor" }, { "iand" },
+    { "mod" }, { "^" }, { "**" }, 
 };
 
 char function[FUNCTION_NUMBER][12] = {
