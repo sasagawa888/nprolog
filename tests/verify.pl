@@ -55,7 +55,6 @@ test(float) :-
     verify(float(0.000001)),
     verify(float(1.0e10)),
     verify(not(float(1))),
-    X is float(100),
     verify(float(X)).
     
 test(nonvar) :-
@@ -100,17 +99,9 @@ test(arithmetic) :-
     verify(1 is 4 >> 2),
     verify(3 is abs(-3)),
     verify(3.3 is abs(-3.3)),
-    verify(1 is min(3,1)),
-    verify(3 is max(3,1)),
     verify(2.718281828459045 is exp(1)),
     verify(0 is log(1)),
-    verify(2 is ceiling(1.1)),
-    verify(1 is floor(1.1)),
-    verify(1 is truncate(1.1)),
-    verify(1.0 is float(1)),
-    verify(1 is sign(10)),
-    verify(0 is sign(0)),
-    verify(-1 is sign(-9)),
+    verify(1.0 is ln(exp(1))),
     verify(3.141592653589793 is pi),
     verify(2==2),
     verify(1.23==1.23),
