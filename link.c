@@ -131,24 +131,24 @@ void dynamic_link(int x)
 
 
     //argument-3
-    init_f3(1, (tpred) list3);
-    init_f3(2, (tpred) callsubr);
-    init_f3(3, (tpred) wlist3);
-    init_f3(4, (tpred) errorcomp);
+    init_f3(LIST3_IDX, (tpred) list3);
+    init_f3(CALLSUBR_IDX, (tpred) callsubr);
+    init_f3(WLIST3_IDX, (tpred) wlist3);
+    init_f3(ERRORCOMP_IDX, (tpred) errorcomp);
 
     //argument-1 string type
-    init_f4(0, (tpred) makeconst);
-    init_f4(1, (tpred) makepred);
-    init_f4(2, (tpred) makevar);
-    init_f4(3, (tpred) makestrflt);
-    init_f4(4, (tpred) makecomp);
-    init_f4(5, (tpred) makesys);
-    init_f4(6, (tpred) makeope);
-    init_f4(7, (tpred) makeuser);
-    init_f4(8, (tpred) makestrlong);
-    init_f4(9, (tpred) makebigx);
-    init_f4(10, (tpred) makestr);
-    init_f4(11, (tpred) makefunc);
+    init_f4(MAKECONST_IDX, (tpred) makeconst);
+    init_f4(MAKEPRED_IDX, (tpred) makepred);
+    init_f4(MAKEVAR_IDX, (tpred) makevar);
+    init_f4(MAKESTRFLT_IDX, (tpred) makestrflt);
+    init_f4(MAKECOMP_IDX, (tpred) makecomp);
+    init_f4(MAKESYS_IDX, (tpred) makesys);
+    init_f4(MAKEOPE_IDX, (tpred) makeope);
+    init_f4(MAKEUSER_IDX, (tpred) makeuser);
+    init_f4(MAKESTRLONG_IDX, (tpred) makestrlong);
+    init_f4(MAKEBIGX_IDX, (tpred) makebigx);
+    init_f4(MAKESTR_IDX, (tpred) makestr);
+    init_f4(MAKEFUNC_IDX, (tpred) makefunc);
 
     init_deftpred((tpred) defcompiled);
     init_deftinfix((tuser) definfixcomp);
