@@ -1,6 +1,6 @@
 % test for association 
 
-:- existerrors(_,no).
+% require ?- existerrors(_,no). for fib1/2
 
 fib(0,0). 
 fib(1,1). 
