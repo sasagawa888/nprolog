@@ -720,6 +720,30 @@ int b_heapdump(int arglist, int rest)
     return (NO);
 }
 
+int b_existerrors(int arglist, int rest)
+{
+    int n, arg1, arg2, res;
+
+    n = length(arglist);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	if(arg1 != YES && arg1 != NO && wide_variable_p(arg1))
+	error(ILLEGAL_ARGS, "existerrors ", arg1);
+	if(arg2 != YES && arg2 != NO && wide_variable_p(arg2))
+	error(ILLEGAL_ARGS, "existerrors ", arg1);
+
+	res = unify(arg1, exist_flag);
+	exist_flag = arg2;
+	if (res == YES)
+	    return (prove_all(rest, sp));
+	else
+	    return (NO);
+    }
+    error(ARITY_ERR, "existerrors ", arglist);
+    return (NO);
+}
+
 
 //----------for Raspberry PI
 #ifdef __arm__

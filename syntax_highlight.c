@@ -85,7 +85,7 @@ char extended[EXTENDED_NUMBER][30] = {
     { "pwm_write" }, { "pull_up_dn_control" }, { "digital_read" },
     { "delay" },
     { "delay_microseconds" },
-    { "compile_file" }, { "timer_microseconds" }, { "with" }
+    { "compile_file" }, { "timer_microseconds" }, { "with" }, {"existerrors"},
 };
 
 

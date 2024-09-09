@@ -174,6 +174,7 @@ void initbuiltin(void)
     defbuiltin("retrieveh", b_retrieveh, 3);
     defbuiltin("removeh", b_removeh, 3);
     defbuiltin("directory", b_directory, 6);
+	defbuiltin("existerrors", b_existerrors, 2);
 
     //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_reconsult_predicate, -1);
@@ -4315,6 +4316,10 @@ int b_syntaxerrors(int arglist, int rest)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
+	if(arg1 != YES && arg1 != NO && wide_variable_p(arg1))
+	error(ILLEGAL_ARGS, "syntaxerrors ", arg1);
+	if(arg2 != YES && arg2 != NO && wide_variable_p(arg2))
+	error(ILLEGAL_ARGS, "syntaxerrors ", arg1);
 
 	res = unify(arg1, syntax_flag);
 	syntax_flag = arg2;
