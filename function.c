@@ -485,7 +485,7 @@ int eval(int x)
 	if (eqp(x, makefunc("pi")))
 	    return (makeflt(3.14159265358979323846));
 	else if (eqp(x, makefunc("random")))
-	    return (f_random_real(NIL));
+	    return (f_random(NIL));
 	else
 	    error(EVALUATION_ERR, "eval ", x);
     } else if (eqp(car(x), makeatom("abs", FUNC))) {
@@ -535,15 +535,12 @@ int eval(int x)
     } else if (eqp(car(x), makeatom("round", FUNC))) {
 	evalterm(x, result);
 	arg1 = result[1];
-	return (f_round(arg1));
+	arg2 = result[2];
+	return (f_round(arg1,arg2));
     } else if (eqp(car(x), makeatom("randi", FUNC))) {
 	evalterm(x, result);
 	arg1 = result[1];
-	return (f_random(arg1));
-    } else if (eqp(car(x), makeatom("random_real", FUNC))) {
-	evalterm(x, result);
-	arg1 = result[1];
-	return (f_random_real(arg1));
+	return (f_randi(arg1));
     } else if (structurep(x) && operatorp(car(x))) {
 	evalterm(x, result);
 	function = result[0];
@@ -818,27 +815,29 @@ int f_sqrt(int x)
 	return (makeflt(dx));
 }
 
-int f_round(int x)
+int f_round(int x, int y)
 {
-    double dx, df, dc;
+    double dx;
+	int n,i;
 
-    if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "round ", x);
-    if (!numberp(x))
-	error(NOT_NUM, "round ", x);
+    if (wide_variable_p(x)){
+	error(INSTANTATION_ERR, "round ", x);}
+    if (!numberp(x)){
+	error(NOT_NUM, "round ", x);}
+	if (!integerp(y)){
+	error(NOT_INT, "round ", y);}
 
     if (floatp(x)) {
 	dx = GET_FLT(x);
-	df = floor(dx);
-	dc = ceil(dx);
-	if (dx == (df + dc) / 2)
-	    if (fmod(df, 2.0) == 0.0)
-		dx = df;
-	    else
-		dx = dc;
-	else
-	    dx = round(dx);
+	n = GET_INT(y);
 
+	for(i=0;i<n;i++){
+		dx = dx * 10;
+	}
+	dx = floor(dx);
+	for (i=0;i<n;i++){
+		dx = dx / 10;
+	}
 	return (makeflt(dx));
     } else
 	return (x);
@@ -1031,23 +1030,23 @@ int f_log(int x)
 }
 
 
-int f_random(int x)
+int f_randi(int x)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "random ", x);
+	error(INSTANTATION_ERR, "randi ", x);
     if (!integerp(x))
-	error(NOT_INT, "random", x);
+	error(NOT_INT, "randi", x);
 
     x = GET_INT(x);
     return (makeint(rand() & x));
 }
 
-int f_random_real(int x)
+int f_random(int x)
 {
     double d;
 
     if (!nullp(x))
-	error(WRONG_ARGS, "random-real", x);
+	error(WRONG_ARGS, "random", x);
 
     d = (double) rand() / RAND_MAX;
     return (makeflt(d));

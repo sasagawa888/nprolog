@@ -147,7 +147,7 @@ enum { CHECKGBC_IDX, GBC_IDX, FRESHCELL_IDX, MAKEVARIANT_IDX, GET_SP_IDX, GET_WP
 enum { CAR_IDX, CDR_IDX, CADR_IDX, CADDR_IDX, CAAR_IDX, CADAR_IDX, PRINT_IDX, MAKEINT_IDX,
        UNBIND_IDX, LENGTH_IDX, SET_SP_IDX, DEREF_IDX, PUSH_USTACK_IDX, GET_INT_IDX,
        SIN_IDX, ASIN_IDX, COS_IDX, ACOS_IDX, TAN_IDX, ATAN_IDX, EXP_IDX, LOG_IDX,
-       LN_IDX, ROUND_IDX, LIST1_IDX, RANDOM_IDX, SET_WP_IDX, WLIST1_IDX, OPERATE_IDX,
+       LN_IDX, LIST1_IDX, RANDOM_IDX, RANDI_IDX, SET_WP_IDX, WLIST1_IDX, OPERATE_IDX,
        LISTP_IDX,  STRUCTUREP_IDX, SET_UP_IDX, VARIABLEP_IDX,
        NUM_FN1S
 };
@@ -159,7 +159,7 @@ enum { CONS_IDX, PLUS_IDX, MINUS_IDX, MULT_IDX, DIVIDE_IDX, REMAINDER_IDX,
        LIST2_IDX, SET_CAR_IDX, SET_CDR_IDX, COMPLEMENT_IDX, SET_AUX_IDX,
        NOT_NUMEQP_IDX, DIV_IDX, SET_VAR_IDX, WCONS_IDX, WLIST2_IDX, WLISTCONS_IDX,
        ADDTAIL_BODY_IDX, NTH_IDX, UNIFY_CONST_IDX, UNIFY_VAR_IDX, UNIFY_NIL_IDX,
-       PROVE_ALL_IDX,
+       PROVE_ALL_IDX, ROUND_IDX,
        NUM_FN2S
 };
 
@@ -909,7 +909,7 @@ int f_mod(int x, int y);
 int f_mult(int x, int y);
 int f_plus(int x, int y);
 int f_rightshift(int x, int y);
-int f_round(int x);
+int f_round(int x, int y);
 int f_sqrt(int x);
 int f_sin(int x);
 int f_asin(int x);
@@ -920,8 +920,8 @@ int f_atan(int x);
 int f_exp(int x);
 int f_ln(int x);
 int f_log(int x);
+int f_randi(int x);
 int f_random(int x);
-int f_random_real(int x);
 int findatom(int x, int property);
 int findvar(int sym);
 int floatp(int x);

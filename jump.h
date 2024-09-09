@@ -85,9 +85,9 @@ void init_deftinfix(tuser x){
 #define Jexp(x)      (f1[EXP_IDX])(x)
 #define Jlog(x)      (f1[LOG_IDX])(x)
 #define Jln(x)       (f1[LN_IDX])(x)
-#define Jround(x)    (f1[ROUND_IDX])(x)
 #define Jlist1(x)    (f1[LIST1_IDX])(x)
 #define Jrandom(x)   (f1[RANDOM_IDX])(x)
+#define Jrandi(x)    (f1[RANDI_IDX])(x)
 #define Jset_wp(x)   (f1[SET_UP_IDX])(x)
 #define Jwlist1(x)   (f1[WLIST1_IDX])(x)
 #define Jexecute(x)  (f1[EXECUTE_IDX])(x)
@@ -135,6 +135,7 @@ void init_deftinfix(tuser x){
 #define Junify_var(x,y)    (f2[UNIFY_VAR_IDX])(x,y)
 #define Junify_nil(x,y)    (f2[UNIFY_NIL_IDX])(x,y)
 #define Jprove_all(x,y)    (f2[PROVE_ALL_IDX])(x,y)
+#define Jround(x,y)        (f2[ROUND_IDX])(x,y)
 
 #define Jlist3(x,y,z)       (f3[LIST3_IDX])(x,y,z)
 #define Jcallsubr(x,y,z)    (f3[CALLSUBR_IDX])(x,y,z)

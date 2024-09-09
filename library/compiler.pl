@@ -719,6 +719,8 @@ jump_eval_form([X]) :-
     write('")').
 jump_eval_form(pi) :-
 	write('Jmakestrflt("3.14159265358979")').
+jump_eval_form(random) :-
+	write('Jrandom()').    
 jump_eval_form(X) :-
 	n_bignum(X),
     write('Jmakebig("'),
@@ -868,11 +870,15 @@ jump_eval_form(\ X) :-
 	  write('Jcomplement('),
     jump_eval_form(X),
     write(')').
-jump_eval_form(random(X)) :-
-	  write('Jrandom('),
+jump_eval_form(randi(X)) :-
+	  write('Jrandi('),
     jump_eval_form(X),
     write(')').
-
+jump_eval_form(round(X,Y)) :-
+	  write('Jround('),
+    jump_eval_form(X),
+    jump_eval_form(Y),
+    write(')').
 
 
 /*
