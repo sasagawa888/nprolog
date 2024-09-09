@@ -4316,9 +4316,9 @@ int b_syntaxerrors(int arglist, int rest)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-	if(arg1 != YES && arg1 != NO && wide_variable_p(arg1))
+	if(arg1 != YES && arg1 != NO && !wide_variable_p(arg1))
 	error(ILLEGAL_ARGS, "syntaxerrors ", arg1);
-	if(arg2 != YES && arg2 != NO && wide_variable_p(arg2))
+	if(arg2 != YES && arg2 != NO && !wide_variable_p(arg2))
 	error(ILLEGAL_ARGS, "syntaxerrors ", arg1);
 
 	res = unify(arg1, syntax_flag);

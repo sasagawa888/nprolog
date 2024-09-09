@@ -282,6 +282,7 @@ reverse/2
 bagof/3
 setof/3
 findall/3
+existerrors/2
 ```
 
 # wiringPi 
