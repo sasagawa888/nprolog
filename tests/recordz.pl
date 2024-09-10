@@ -17,4 +17,16 @@ gets(_,13,[]) :-!.
 gets(H,X,[X|L]) :-
     get0(H,Z),
     gets(H,Z,L).
+
+
+test1 :-
+    recordz(client,client(hones,life,00245),Refnum),
+    recordh(alphabet,jones,Rrfnum),
+    recordh(insurance,life,Refnum).
+
+test2 :-
+    retrieveh(alphabet,jones,Refnum),
+    instance(Refnum,X),
+    write(X).
+    
     

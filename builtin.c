@@ -5210,15 +5210,15 @@ int b_recordh(int arglist, int rest)
 	    error(INSTANTATION_ERR, "recordh ", arg2);
 	if (!wide_variable_p(arg2) && !atomp(arg2))
 	    error(NOT_ATOM, "recordh ", arg2);
-	if (wide_variable_p(arg3))
-	    error(INSTANTATION_ERR, "recordh ", arg3);
-	if (!termp(arg3) && !integerp(arg3))
-	    error(NOT_TERM, "record ", arg3);
-
+	//if (wide_variable_p(arg3))
+	//    error(INSTANTATION_ERR, "recordh ", arg3);
+	if (!wide_variable_p(arg3) && !integerp(arg3))
+	    error(NOT_INT, "record ", arg3);
+	
+	arg3 = deref(arg3);
 	if (integerp(arg3))
-	    arg3 = get_int(arg3);	//reffernce number -> term
-	else
-	    arg3 = copy_heap(arg3);	//copy arg1 to heap area
+	    arg3 = get_int(arg3);	//reffernce number
+
 
 	SET_ARITY(arg3, arg2);	//set sort key atom
 	if (record_pt >= RECORDMAX)
@@ -5291,11 +5291,12 @@ int b_instance(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "instance ", arg1);
-	if (!wide_variable_p(arg1) && !integerp(arg1))
-	    error(NOT_INT, "instance ", arg1);
+	//if (wide_variable_p(arg1))
+	//    error(INSTANTATION_ERR, "instance ", arg1);
+	//if (!wide_variable_p(arg1) && !integerp(arg1))
+	//    error(NOT_INT, "instance ", arg1);
 
+	arg1 = deref(arg1);
 	if (unify(arg2, get_int(arg1)) == YES)
 	    return (prove_all(rest, sp));
 	else
