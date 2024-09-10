@@ -113,6 +113,7 @@ typedef struct __packed{
     char    *name;
     unsigned char option;
     char    trace;
+    int     record;
 } cell;
 
 
@@ -194,7 +195,6 @@ extern int spy_list;
 extern int reconsult_list;
 extern int execute_list;
 extern int op_list;
-extern int record_list;
 extern int error_code;
 extern int bag_list;
 extern int nonfree_list;
@@ -284,6 +284,7 @@ extern int error_stream;
 #define GET_OPT(addr)       heap[addr].option
 #define GET_TR(addr)        heap[addr].trace
 #define GET_FLAG(addr)      heap[addr].flag
+#define GET_RECORD(addr)    heap[addr].record
 #define SET_TAG(addr,x)     heap[addr].tag = x
 #define SET_CAR(addr,x)     heap[addr].val.car.intnum = x
 #define SET_CDR(addr,x)     heap[addr].val.cdr.intnum = x
@@ -299,6 +300,7 @@ extern int error_stream;
 #define SET_TR(addr,x)      heap[addr].trace = x
 #define SET_CHAR(addr,x)    heap[addr].name[0] = x
 #define SET(addr,x)         heap[addr] = heap[x]
+#define SET_RECORD(addr,x)  heap[addr].record = x
 #define IS_INCELL(addr)     (addr >= 0 && addr < CELLSIZE)
 #define IS_OUTCELL(addr)    (addr < 0 || addr >= CELLSIZE)
 #define IS_ALPHA(addr)      (addr < VARIANTMAX && addr > CELLSIZE)
@@ -763,6 +765,7 @@ int b_read_line(int arglist, int rest);
 int b_real(int arglist, int rest);
 int b_recorda(int arglist, int rest);
 int b_recordz(int arglist, int rest);
+int b_recorded(int arglist, int rest);
 int b_recordh(int arglist, int rest);
 int b_reconsult(int arglist, int rest);
 int b_ref(int arglist, int rest);

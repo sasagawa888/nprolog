@@ -127,6 +127,7 @@ void initbuiltin(void)
     defbuiltin("real", b_real, 1);
     defbuiltin("recorda", b_recorda, 3);
     defbuiltin("recordz", b_recordz, 3);
+	defbuiltin("recorded", b_recorded, 3);
     defbuiltin("recordh", b_recordh, 4);
     defbuiltin("ref", b_ref, 1);
     defbuiltin("removeallh", b_removeallh, 2);
@@ -5327,14 +5328,11 @@ int b_recordz(int arglist, int rest)
 	    error(BUILTIN_EXIST, "recordz ", arg1);
 	if (wide_variable_p(arg2))
 	    error(INSTANTATION_ERR, "recordz ", arg2);
-	if (!termp(arg2))
-	    error(NOT_TERM, "recordz ", arg2);
 	if (!wide_variable_p(arg3))
 	    error(NOT_VAR, "recordz ", arg3);
 
-	arg2 = cons(car(arg2), cons(arg1, cdr(arg2)));	//insert key to term
 	arg2 = copy_heap(arg2);	//copy arg1 to heap area
-	temp = record_list;
+	temp = GET_RECORD(arg1);
 	if (temp == NIL)
 	    temp = cons(arg2, NIL);
 	else {
@@ -5368,14 +5366,11 @@ int b_recorda(int arglist, int rest)
 	    error(BUILTIN_EXIST, "recorda ", arg1);
 	if (wide_variable_p(arg2))
 	    error(INSTANTATION_ERR, "recorda ", arg2);
-	if (!termp(arg2))
-	    error(NOT_TERM, "recorda ", arg2);
 	if (!wide_variable_p(arg3))
 	    error(NOT_VAR, "recorda ", arg3);
 
-	arg2 = cons(car(arg2), cons(arg1, cdr(arg2)));	//insert key to term
 	arg2 = copy_heap(arg2);	//copy arg1 to heap area
-	record_list = cons(arg2, record_list);
+	SET_RECORD(arg1,cons(arg2, GET_RECORD(arg1)));
 	checkgbc();
 	if (unify(arg3, makeint(arg2)) == YES)
 	    return (prove_all(rest, sp));
@@ -5384,6 +5379,38 @@ int b_recorda(int arglist, int rest)
 
     }
     error(ARITY_ERR, "recorda ", arglist);
+    return (NO);
+}
+
+int b_recorded(int arglist, int rest)
+{
+	int n,arg1,arg2,arg3,record,term,save1,save2;
+
+	n = length(arglist);
+	if(n == 3){
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	arg3 = caddr(arglist);
+
+	record = GET_RECORD(arg1);
+	save1 = wp;
+	save2 = sp;
+	    while (!nullp(record)) {
+		term = car(record);
+		record = cdr(record);
+		if (unify(arg2, term) == YES){
+			unify(arg3,makeint(term));
+		    if (prove(NIL, sp, rest) == YES)
+			return (YES);
+		}
+		wp = save1;
+		unbind(save2);
+	    }
+	    wp = save1;
+	    unbind(save2);
+	    return (NO);
+	}
+    error(ARITY_ERR, "recorded ", arglist);
     return (NO);
 }
 

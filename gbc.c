@@ -62,6 +62,7 @@ void markcell(int addr)
 	markcell(car(addr));
 	markcell(cdr(addr));
 	markcell(GET_VAR(addr));
+    markcell(GET_RECORD(addr));
 	return;
     case BIGX:
 	return;
@@ -70,6 +71,7 @@ void markcell(int addr)
 	markcell(car(addr));
 	markcell(cdr(addr));
 	markcell(GET_VAR(addr));
+    markcell(GET_RECORD(addr));
 	return;
 
     }
@@ -117,10 +119,7 @@ void gbcmark(void)
 	    markcell(stack[i]);
     }
 
-    //mark record
-    markcell(record_list);
-
-
+    
 }
 
 void gbcsweep(void)
@@ -149,6 +148,7 @@ void clrcell(int addr)
     SET_CDR(addr, 0);
     SET_AUX(addr, 0);
     SET_OPT(addr, 0);
+    SET_RECORD(addr, 0);
 }
 
 //when fc is less FREESIZE invoke gbc()
