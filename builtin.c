@@ -3491,30 +3491,24 @@ int b_system(int arglist, int rest)
     if (n == 1) {
 	arg1 = car(arglist);
 
-	if (!variablep(arg1)) {
-	    if (memberp(arg1, builtins))
-		return (prove_all(rest, sp));
-	    else
-		return (NO);
-	} else {
-	    syslist = reverse(builtins);
-	    save1 = wp;
-	    save2 = sp;
-	    while (!nullp(syslist)) {
-		pred = car(syslist);
-		syslist = cdr(syslist);
-		if (unify(arg1, pred) == YES)
-		    if (prove(NIL, sp, rest) == YES)
+	syslist = reverse(builtins);
+	save1 = wp;
+	save2 = sp;
+	while (!nullp(syslist)) {
+	pred = car(syslist);
+	syslist = cdr(syslist);
+	if (unify(arg1, pred) == YES)
+		if (prove(NIL, sp, rest) == YES)
 			return (YES);
 
-		wp = save1;
-		unbind(save2);
-	    }
-	    wp = save1;
-	    unbind(save2);
-	    return (NO);
+	wp = save1;
+	unbind(save2);
 	}
-    }
+	wp = save1;
+	unbind(save2);
+	return (NO);
+	}
+
     error(ARITY_ERR, "system ", arglist);
     return (NO);
 }
