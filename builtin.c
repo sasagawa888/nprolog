@@ -31,6 +31,7 @@ void initbuiltin(void)
     definfix("=..", b_univ, 700, XFX);
     definfix("->", b_ifthen, 1050, XFY);
     definfix("\\+", b_not, 900, FY);
+	definfix("not", b_not, 900, FY);
 
     defbuiltin("!", b_cut, 0);
     defbuiltin("%ask", b_ask, -1);
@@ -112,7 +113,6 @@ void initbuiltin(void)
     defbuiltin("measure", b_measure, 1);
     defbuiltin("name", b_name, 2);
     defbuiltin("nl", b_nl, list2(0, 1));
-    defbuiltin("not", b_not, 1);
     defbuiltin("nonvar", b_nonvar, 1);
     defbuiltin("nospy", b_nospy, 1);
     defbuiltin("notrace", b_notrace, 0);
