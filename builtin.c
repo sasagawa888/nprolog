@@ -5175,21 +5175,23 @@ int b_errorcode(int arglist, int rest)
 }
 
 
-//-----------record data type-----------------------------
+//-----------record and hash-----------------------------
 /*
-                          CAR,CDR,...,ARITY
-atom of record name    foo[NIL,......,record_id,...]
+<record>
+key name. set record area top address of list.
+list [term1,term2,...]
+Refnum is address of each term.
 
-record_hash_table 
- ID0   ID1  ID2
-0[7272,1232,9992,...]
-1[3232,9231,2312,...]
-...
-HASHTBLSIZE[]
-
-cell_list
-e.g. hash == 1 ID==1 (ID starts from 1)
-addr 1232 -> [pred1,pred2,...] 
+<hash table>
+atom of hashtable name. set arity area hash_pt.
+record_hash_table [HASHTBSIZE][ID]
+ID=1... (ID starts from 1)
+record_hash_table
+ 0,  1,  2,
+[pt0,pt1,pt2,....]
+ |    |
+ |    |- list of hash==1
+ |- list of hash==0
 
 */
 
@@ -5286,11 +5288,6 @@ int b_instance(int arglist, int rest)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-
-	//if (wide_variable_p(arg1))
-	//    error(INSTANTATION_ERR, "instance ", arg1);
-	//if (!wide_variable_p(arg1) && !integerp(arg1))
-	//    error(NOT_INT, "instance ", arg1);
 
 	arg1 = deref(arg1);
 	if (unify(arg2, get_int(arg1)) == YES)
