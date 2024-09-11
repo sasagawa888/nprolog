@@ -5435,10 +5435,10 @@ int b_removeh(int arglist, int rest)
 	prev = NIL;
 	while (lis != NIL) {
 	    term = car(lis);
-	    if (GET_ARITY(term) != arg2)
+	    if (car(term) != arg2)
 		goto skip;
 
-	    if (unify(arg3, term)) {
+	    if (unify(arg3, cdr(term))) {
 		if (prev != NIL)
 		    SET_CDR(prev, cdr(lis));	// delete unified term
 		else
