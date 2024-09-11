@@ -1,5 +1,5 @@
 % parser test from iitaka book
-% ?- gcd(D=12+X+23*Y).
+% ?- gcd(D=12*X+23*Y).
 
 
 gcd(A=A*1+0*0).
