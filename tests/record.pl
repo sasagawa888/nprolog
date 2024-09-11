@@ -20,8 +20,8 @@ gets(H,X,[X|L]) :-
 
 
 test1 :-
-    recordz(client,client(hones,life,00245),Refnum),
-    recordh(alphabet,jones,Rrfnum),
+    recordz(client,client(jones,life,00245),Refnum),
+    recordh(alphabet,jones,Refnum),
     recordh(insurance,life,Refnum).
 
 test2 :-

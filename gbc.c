@@ -99,10 +99,11 @@ void gbcmark(void)
 	markcell(cell_hash_table[i]);
 
     //mark hash table of recordh term
-    for (i = 0; i < HASHTBSIZE; i++)
-	for (j = 0; j < record_pt; j++)
+    for (i = 0; i < HASHTBSIZE; i++){
+	for (j = 0; j < record_pt; j++){
 	    markcell(record_hash_table[i][j]);
-
+    }
+    }
     //mark stream
     markcell(standard_input);
     markcell(standard_output);

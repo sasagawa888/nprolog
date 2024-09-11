@@ -5195,13 +5195,13 @@ addr 1232 -> [pred1,pred2,...]
 
 int b_recordh(int arglist, int rest)
 {
-    int n, arg1, arg2, arg3, record_id, index;
+    int n, arg1, arg2, arg3, data, record_id, index;
 
     n = length(arglist);
     if (n == 3) {
 	arg1 = car(arglist);	//table_name
 	arg2 = cadr(arglist);	//sort_key
-	arg3 = caddr(arglist);	//term
+	arg3 = caddr(arglist);	//term instance address
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "recordh ", arg1);
 	if (!wide_variable_p(arg1) && !atomp(arg1))
@@ -5210,17 +5210,12 @@ int b_recordh(int arglist, int rest)
 	    error(INSTANTATION_ERR, "recordh ", arg2);
 	if (!wide_variable_p(arg2) && !atomp(arg2))
 	    error(NOT_ATOM, "recordh ", arg2);
-	//if (wide_variable_p(arg3))
-	//    error(INSTANTATION_ERR, "recordh ", arg3);
-	if (!wide_variable_p(arg3) && !integerp(arg3))
-	    error(NOT_INT, "record ", arg3);
+	
 	
 	arg3 = deref(arg3);
-	if (integerp(arg3))
-	    arg3 = get_int(arg3);	//reffernce number
+	if (!integerp(arg3))
+	    error(NOT_INT, "recordh ", arg3);
 
-
-	SET_ARITY(arg3, arg2);	//set sort key atom
 	if (record_pt >= RECORDMAX)
 	    error(RECORD_OVERF, "recordh ", NIL);
 	if (GET_ARITY(arg1) == NIL) {
@@ -5229,7 +5224,8 @@ int b_recordh(int arglist, int rest)
 	}
 	record_id = GET_ARITY(arg1) - 1;	//id starts from 1
 	index = hash(GET_NAME(arg2));
-	add_hash_pred(arg3, record_id, index);
+	data = cons(arg2,arg3);
+	add_hash_table(data, record_id, index);
 	checkgbc();
 	return (prove_all(rest, sp));
     }
@@ -5243,9 +5239,9 @@ int b_retrieveh(int arglist, int rest)
 
     n = length(arglist);
     if (n == 3) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
-	arg3 = caddr(arglist);
+	arg1 = car(arglist);   //table name
+	arg2 = cadr(arglist);  //sort key
+	arg3 = caddr(arglist); //term instance address
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "retrieveh ", arg1);
 	if (!wide_variable_p(arg1) && !atomp(arg1))
@@ -5264,10 +5260,10 @@ int b_retrieveh(int arglist, int rest)
 	lis = record_hash_table[index][record_id];
 	while (lis != NIL) {
 	    term = car(lis);
-	    if (GET_ARITY(term) != arg2)
+	    if (car(term) != arg2)
 		goto skip;
 
-	    unify(arg3, term);
+	    unify(arg3, cdr(term));
 	    if (prove_all(rest, sp) == YES)
 		return (YES);
 
@@ -5329,7 +5325,7 @@ int b_recordz(int arglist, int rest)
 	arg2 = copy_heap(arg2);	//copy arg1 to heap area
 	temp = GET_RECORD(arg1);
 	if (temp == NIL)
-	    temp = cons(arg2, NIL);
+	    SET_RECORD(arg1,cons(arg2, NIL));
 	else {
 	    while (cdr(temp) != NIL) {
 		temp = cdr(temp);

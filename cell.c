@@ -148,20 +148,12 @@ int addatom(char *name, int property, int index)
     return (res);
 }
 
-void add_hash_pred(int pred, int record_id, int index)
+void add_hash_table(int x, int record_id, int index)
 {
     int addr;
 
     addr = record_hash_table[index][record_id];
-    if (addr == NIL) {
-	addr = cons(pred, NIL);
-	record_hash_table[index][record_id] = addr;
-    } else {
-	while (cdr(addr) != NIL) {
-	    addr = cdr(addr);
-	}
-	SET_CDR(addr, cons(pred, NIL));
-    }
+	record_hash_table[index][record_id] = cons(x, addr);
 }
 
 

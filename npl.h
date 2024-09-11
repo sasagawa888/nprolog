@@ -12,7 +12,7 @@ address
 17,000,001 - 20,000,000  working area 
 20,000,001 - 40,000,000  variant area
 */
-#define VERSION     3.12
+#define VERSION     3.13
 #define CELLSIZE    20000000  // this is max on raspberryPI3B. If parsonal computer 30000000 is OK
 #define HEAPSIZE    17000000
 #define FREESIZE         500
@@ -1164,7 +1164,7 @@ int wlist8(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8);
 int wlist9(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8, int x9);
 int wlist10(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8, int x9, int x10);
 int zerop(int x);
-void add_hash_pred(int pred, int record_id, int index);
+void add_hash_table(int x, int record_id, int index);
 void add_data(int pred, int data);
 void addtail_body1(int x, int y);
 void apply_unify(int x);
