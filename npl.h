@@ -12,7 +12,7 @@ address
 17,000,001 - 20,000,000  working area 
 20,000,001 - 40,000,000  variant area
 */
-#define VERSION     3.13
+#define VERSION     3.14
 #define CELLSIZE    20000000  // this is max on raspberryPI3B. If parsonal computer 30000000 is OK
 #define HEAPSIZE    17000000
 #define FREESIZE         500
@@ -698,6 +698,8 @@ int b_eq(int arglist, int rest);
 int b_eqgreater(int arglist, int rest);
 int b_eqsmaller(int arglist, int rest);
 int b_equalp(int arglist, int rest);
+int b_erase(int arglist, int rest);
+int b_eraseall(int arglist, int rest);
 int b_errorcode(int arglist, int rest);
 int b_existerrors(int arglist, int rest);
 int b_fail(int arglist, int rest);

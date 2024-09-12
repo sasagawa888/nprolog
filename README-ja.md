@@ -201,6 +201,8 @@ display/1
 dup/2
 edit/1
 eq/2
+erase/1
+eraseall/1
 expand_term/2
 fail/0
 float/1

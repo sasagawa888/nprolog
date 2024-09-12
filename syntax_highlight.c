@@ -62,7 +62,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "ansi_cup" }, { "ansi_cpr" }, { "ansi_scp" }, { "ansi_rcp" },
     { "ansi_ed" }, { "ansi_el" }, { "errorcode" },
     { "recordh" }, { "recorda" }, { "recordz" }, { "recorded" } ,{ "instance" },
-    { "removeallh" },
+    { "removeallh" }, {"erase"}, {"eraseall"},
     { "stdin" }, { "stdout" }, { "stdinout" },
     { "ctr_set" }, { "ctr_dec" }, { "ctr_inc" }, { "ctr_is" },
     { "heapd" }, { "list_text" },

@@ -247,6 +247,12 @@ EDITOR=emacs
 ### □ eq(X,Y)
 Check if X and Y are the same data object and are stored at the same address. 
 
+### □ erase(Ref)
+Removes the entry stored under the specified reference number.
+
+### □ eraseall(Key)
+Removes all entries stored under the specified key.
+
 ### □ expand_term(Term,Newterm)
 DCG: Converts a term in a limited clause grammar to an equivalent Prolog term. 
 

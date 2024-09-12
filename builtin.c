@@ -82,6 +82,8 @@ void initbuiltin(void)
     defbuiltin("edit", b_edit, 1);
     defbuiltin("eq", b_eq, 2);
     defbuiltin("errorcode", b_errorcode, 1);
+	defbuiltin("erase" , b_erase, 1);
+	defbuiltin("eraseall", b_eraseall, 1);
     defbuiltin("fail", b_fail, 0);
     defbuiltin("findall", b_findall, 3);
     defbuiltin("flush", b_flush_output, 0);
@@ -5401,6 +5403,46 @@ int b_recorded(int arglist, int rest)
     error(ARITY_ERR, "recorded ", arglist);
     return (NO);
 }
+
+int b_erase(int arglist, int rest)
+{
+	int n, arg1,addr;
+
+	n=length(arglist);
+
+	if(n==1){
+		arg1 = car(arglist);
+		arg1 = deref(arg1);
+		if(!integerp(arg1))
+		error(NOT_INT, "erase ", arg1);
+
+		addr = get_int(arg1);
+		SET(addr,NIL);
+		return(YES);
+	}
+	error(ARITY_ERR, "erase ", arglist);
+    return (NO);
+}
+
+int b_eraseall(int arglist, int rest)
+{
+	int n, arg1;
+
+	n=length(arglist);
+
+	if(n==1){
+		arg1 = car(arglist);
+		arg1 = deref(arg1);
+		if(!atomp(arg1))
+		error(NOT_ATOM, "erase ", arg1);
+
+		SET_RECORD(arg1,NIL);
+		return(YES);
+	}
+	error(ARITY_ERR, "eraseall ", arglist);
+    return (NO);
+}
+
 
 
 int b_removeh(int arglist, int rest)
