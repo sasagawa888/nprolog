@@ -293,6 +293,18 @@ get0_noecho does not display the character on the standard output device.
 ### □ halt
 Exits the interpreter. 
 
+### □ ifthen(P, Q)
+Execute goal Q if goal P succeeds.
+
+### □ ifthenelse(P, Q, R)
+Execute goal Q if goal P succeeds; if P fails, execute R.
+
+### □ in(Port, Byte)
+Read one byte from the specified port.
+
+### □ inc(N, X)
+Add 1 to number N and assign the result to X.
+
 ### □ instance(Ref,Term)
 Returns the term for that reference number. 
 
