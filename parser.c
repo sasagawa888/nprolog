@@ -1237,13 +1237,13 @@ int isatomch(char c)
 
 int readitem(void)
 {
-	int res;
-	res = readitem1();
-	// '.'(1,'.'(2,[])) -> [1,2]
-	if (operationp(res) && car(res) == DOTOBJ)
-	    res = operate(res);
+    int res;
+    res = readitem1();
+    // '.'(1,'.'(2,[])) -> [1,2]
+    if (operationp(res) && car(res) == DOTOBJ)
+	res = operate(res);
 
-	return(res);
+    return (res);
 }
 
 int readitem1(void)
@@ -1288,8 +1288,8 @@ int readitem1(void)
 	return (makeint(utf8_to_ucs4(stok.buf)));
     case BUILTIN:
 	temp = makeatom(stok.buf, SYS);
-	if(temp == makesys("="))
-	    return(temp);
+	if (temp == makesys("="))
+	    return (temp);
 	gettoken();
 	if (stok.type == LPAREN) {
 	    if (stok.space == SKIP) {

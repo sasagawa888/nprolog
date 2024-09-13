@@ -31,7 +31,7 @@ void initbuiltin(void)
     definfix("=..", b_univ, 700, XFX);
     definfix("->", b_ifthen, 1050, XFY);
     definfix("\\+", b_not, 900, FY);
-	definfix("not", b_not, 900, FY);
+    definfix("not", b_not, 900, FY);
 
     defbuiltin("!", b_cut, 0);
     defbuiltin("%ask", b_ask, -1);
@@ -82,8 +82,8 @@ void initbuiltin(void)
     defbuiltin("edit", b_edit, 1);
     defbuiltin("eq", b_eq, 2);
     defbuiltin("errorcode", b_errorcode, 1);
-	defbuiltin("erase" , b_erase, 1);
-	defbuiltin("eraseall", b_eraseall, 1);
+    defbuiltin("erase", b_erase, 1);
+    defbuiltin("eraseall", b_eraseall, 1);
     defbuiltin("fail", b_fail, 0);
     defbuiltin("findall", b_findall, 3);
     defbuiltin("flush", b_flush_output, 0);
@@ -129,7 +129,7 @@ void initbuiltin(void)
     defbuiltin("real", b_real, 1);
     defbuiltin("recorda", b_recorda, 3);
     defbuiltin("recordz", b_recordz, 3);
-	defbuiltin("recorded", b_recorded, 3);
+    defbuiltin("recorded", b_recorded, 3);
     defbuiltin("recordh", b_recordh, 4);
     defbuiltin("ref", b_ref, 1);
     defbuiltin("removeallh", b_removeallh, 2);
@@ -177,7 +177,7 @@ void initbuiltin(void)
     defbuiltin("retrieveh", b_retrieveh, 3);
     defbuiltin("removeh", b_removeh, 3);
     defbuiltin("directory", b_directory, 6);
-	defbuiltin("existerrors", b_existerrors, 2);
+    defbuiltin("existerrors", b_existerrors, 2);
 
     //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_reconsult_predicate, -1);
@@ -222,18 +222,66 @@ void initbuiltin(void)
 
 int b_length(int arglist, int rest)
 {
-    int n, arg1, arg2, i, res;
+    int n, arg1, arg2, l, ls, x, x1, body, save1, save2, res;
+	
+    save2 = sp;
+    n = length(arglist);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	save1 = wp;
+	if (unify_nil(NIL, arg1) == YES
+	    && unify_const(makeint(0), arg2) == YES)
+	    if (prove_all(rest, sp) == YES)
+		return (YES);
+	unbind(save2);
+	wp = save1;
+	l = makevariant();
+	ls = makevariant();
+	x = makevariant();
+	x1 = makevariant();
+	save1 = wp;
+	if (unify(wlistcons(l, ls), arg1) == YES
+	    && unify_var(x, arg2) == YES) {
+	    body =
+		wlist3(makeope(","),
+		       wcons(makesys("length"), wcons(ls, wcons(x1, NIL))),
+		       wcons(makesys("is"),
+			     wcons(x,
+				   wcons(wcons
+					 (makeope("+"),
+					  wcons(x1,
+						wcons(makeint(1), NIL))),
+					 NIL))));
+	    if ((res = prove_all(addtail_body(rest, body), sp)) == YES)
+		return (YES);
+	}
+	unbind(save2);
+	wp = save1;
+	return (NO);
+    }
+    error(ARITY_ERR, "length", arglist);
+    return (NO);
+}
 
+/*
+int b_length(int arglist, int rest)
+{
+    int n, arg1, arg2, i, res, save1, save2;
+
+	save2 = sp;
     n = length(arglist);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
+	
 	if (integerp(eval(arg2)) && GET_INT(eval(arg2)) < 0)
 	    error(NOT_LESS_THAN_ZERO, "length ", arg2);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    error(NOT_INT, "length ", arg2);
 
+	save1 = wp;
 	if ((listp(arg1) && length(arg1) != -1) || nullp(arg1)) {
 	    if (unify(arg2, makeint(length(arg1))) == YES)
 		return (prove_all(rest, sp));
@@ -252,6 +300,7 @@ int b_length(int arglist, int rest)
     error(ARITY_ERR, "length ", arglist);
     return (NO);
 }
+*/
 
 
 //compiled predicate
@@ -2261,8 +2310,8 @@ int b_assert(int arglist, int rest)
 	}
 	if (builtinp(arg1))
 	    error(BUILTIN_EXIST, "assertz ", arg1);
-	if (functionp(arg1)){
-		arg1 = cons(makeatom(GET_NAME(car(arg1)),PRED),cdr(arg1));
+	if (functionp(arg1)) {
+	    arg1 = cons(makeatom(GET_NAME(car(arg1)), PRED), cdr(arg1));
 	}
 
 
@@ -2281,8 +2330,8 @@ int b_assert(int arglist, int rest)
 		error(NOT_CALLABLE, "assertz ", arg1);
 	    if (operationp(cadr(arg1)))
 		error(BUILTIN_EXIST, "assertz ", arg1);
-		
-		
+
+
 
 	    SET_VAR(arg1, unique(varslist(arg1)));
 	    operate(arg1);
@@ -2310,8 +2359,8 @@ int b_asserta(int arglist, int rest)
 	}
 	if (builtinp(arg1))
 	    error(BUILTIN_EXIST, "asserta ", arg1);
-	if (functionp(arg1)){
-		arg1 = cons(makeatom(GET_NAME(car(arg1)),PRED),cdr(arg1));
+	if (functionp(arg1)) {
+	    arg1 = cons(makeatom(GET_NAME(car(arg1)), PRED), cdr(arg1));
 	}
 
 	arg1 = variable_to_call(arg1);	//P -> call(P)
@@ -3497,19 +3546,19 @@ int b_system(int arglist, int rest)
 	save1 = wp;
 	save2 = sp;
 	while (!nullp(syslist)) {
-	pred = car(syslist);
-	syslist = cdr(syslist);
-	if (unify(arg1, pred) == YES)
+	    pred = car(syslist);
+	    syslist = cdr(syslist);
+	    if (unify(arg1, pred) == YES)
 		if (prove(NIL, sp, rest) == YES)
-			return (YES);
+		    return (YES);
 
-	wp = save1;
-	unbind(save2);
+	    wp = save1;
+	    unbind(save2);
 	}
 	wp = save1;
 	unbind(save2);
 	return (NO);
-	}
+    }
 
     error(ARITY_ERR, "system ", arglist);
     return (NO);
@@ -3897,9 +3946,9 @@ int b_univ(int arglist, int rest)
 	    if (car(arg2) == DOTOBJ) {
 		arg2 = operate(arg2);
 		SET_AUX(arg2, 0);
-	    } else if (numberp(car(arg2))){ 
-		return(NO);
-		} else if (GET_AUX(car(arg2)) != SYS &&
+	    } else if (numberp(car(arg2))) {
+		return (NO);
+	    } else if (GET_AUX(car(arg2)) != SYS &&
 		       GET_AUX(car(arg2)) != COMP &&
 		       GET_AUX(car(arg2)) != OPE) {
 		arg2 = list_to_structure(arg2);
@@ -4313,10 +4362,10 @@ int b_syntaxerrors(int arglist, int rest)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-	if(arg1 != YES && arg1 != NO && !wide_variable_p(arg1))
-	error(ILLEGAL_ARGS, "syntaxerrors ", arg1);
-	if(arg2 != YES && arg2 != NO && !wide_variable_p(arg2))
-	error(ILLEGAL_ARGS, "syntaxerrors ", arg1);
+	if (arg1 != YES && arg1 != NO && !wide_variable_p(arg1))
+	    error(ILLEGAL_ARGS, "syntaxerrors ", arg1);
+	if (arg2 != YES && arg2 != NO && !wide_variable_p(arg2))
+	    error(ILLEGAL_ARGS, "syntaxerrors ", arg1);
 
 	res = unify(arg1, syntax_flag);
 	syntax_flag = arg2;
@@ -4510,14 +4559,14 @@ int b_between(int arglist, int rest)
 	high = get_int(arg2);
 
 	if (groundp(arg3)) {
- 	   betweenval = get_int(arg3);
-           if (betweenval >= low && betweenval <= high) {
-	    if (prove_all(rest, sp) == YES)
-		return (YES);
-	   }			   
-	   return (NO);
-    	}
-	
+	    betweenval = get_int(arg3);
+	    if (betweenval >= low && betweenval <= high) {
+		if (prove_all(rest, sp) == YES)
+		    return (YES);
+	    }
+	    return (NO);
+	}
+
 	while (low <= high) {
 	    //printf("%d",low);
 	    unify(arg3, makeint(low));
@@ -5214,8 +5263,8 @@ int b_recordh(int arglist, int rest)
 	    error(INSTANTATION_ERR, "recordh ", arg2);
 	if (!wide_variable_p(arg2) && !atomp(arg2))
 	    error(NOT_ATOM, "recordh ", arg2);
-	
-	
+
+
 	arg3 = deref(arg3);
 	if (!integerp(arg3))
 	    error(NOT_INT, "recordh ", arg3);
@@ -5228,7 +5277,7 @@ int b_recordh(int arglist, int rest)
 	}
 	record_id = GET_ARITY(arg1) - 1;	//id starts from 1
 	index = hash(GET_NAME(arg2));
-	data = cons(arg2,arg3);
+	data = cons(arg2, arg3);
 	add_hash_table(data, record_id, index);
 	checkgbc();
 	return (prove_all(rest, sp));
@@ -5243,9 +5292,9 @@ int b_retrieveh(int arglist, int rest)
 
     n = length(arglist);
     if (n == 3) {
-	arg1 = car(arglist);   //table name
-	arg2 = cadr(arglist);  //sort key
-	arg3 = caddr(arglist); //term instance address
+	arg1 = car(arglist);	//table name
+	arg2 = cadr(arglist);	//sort key
+	arg3 = caddr(arglist);	//term instance address
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "retrieveh ", arg1);
 	if (!wide_variable_p(arg1) && !atomp(arg1))
@@ -5324,7 +5373,7 @@ int b_recordz(int arglist, int rest)
 	arg2 = copy_heap(arg2);	//copy arg1 to heap area
 	temp = GET_RECORD(arg1);
 	if (temp == NIL)
-	    SET_RECORD(arg1,cons(arg2, NIL));
+	    SET_RECORD(arg1, cons(arg2, NIL));
 	else {
 	    while (cdr(temp) != NIL) {
 		temp = cdr(temp);
@@ -5360,7 +5409,7 @@ int b_recorda(int arglist, int rest)
 	    error(NOT_VAR, "recorda ", arg3);
 
 	arg2 = copy_heap(arg2);	//copy arg1 to heap area
-	SET_RECORD(arg1,cons(arg2, GET_RECORD(arg1)));
+	SET_RECORD(arg1, cons(arg2, GET_RECORD(arg1)));
 	checkgbc();
 	if (unify(arg3, makeint(arg2)) == YES)
 	    return (prove_all(rest, sp));
@@ -5374,10 +5423,10 @@ int b_recorda(int arglist, int rest)
 
 int b_recorded(int arglist, int rest)
 {
-	int n,arg1,arg2,arg3,record,term,save1,save2;
+    int n, arg1, arg2, arg3, record, term, save1, save2;
 
-	n = length(arglist);
-	if(n == 3){
+    n = length(arglist);
+    if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
@@ -5385,61 +5434,61 @@ int b_recorded(int arglist, int rest)
 	record = GET_RECORD(arg1);
 	save1 = wp;
 	save2 = sp;
-	    while (!nullp(record)) {
-		term = car(record);
-		record = cdr(record);
-		if (unify(arg2, term) == YES){
-			unify(arg3,makeint(term));
-		    if (prove(NIL, sp, rest) == YES)
-			return (YES);
-		}
-		wp = save1;
-		unbind(save2);
+	while (!nullp(record)) {
+	    term = car(record);
+	    record = cdr(record);
+	    if (unify(arg2, term) == YES) {
+		unify(arg3, makeint(term));
+		if (prove(NIL, sp, rest) == YES)
+		    return (YES);
 	    }
 	    wp = save1;
 	    unbind(save2);
-	    return (NO);
 	}
+	wp = save1;
+	unbind(save2);
+	return (NO);
+    }
     error(ARITY_ERR, "recorded ", arglist);
     return (NO);
 }
 
 int b_erase(int arglist, int rest)
 {
-	int n, arg1,addr;
+    int n, arg1, addr;
 
-	n=length(arglist);
+    n = length(arglist);
 
-	if(n==1){
-		arg1 = car(arglist);
-		arg1 = deref(arg1);
-		if(!integerp(arg1))
-		error(NOT_INT, "erase ", arg1);
+    if (n == 1) {
+	arg1 = car(arglist);
+	arg1 = deref(arg1);
+	if (!integerp(arg1))
+	    error(NOT_INT, "erase ", arg1);
 
-		addr = get_int(arg1);
-		SET(addr,NIL);
-		return(YES);
-	}
-	error(ARITY_ERR, "erase ", arglist);
+	addr = get_int(arg1);
+	SET(addr, NIL);
+	return (YES);
+    }
+    error(ARITY_ERR, "erase ", arglist);
     return (NO);
 }
 
 int b_eraseall(int arglist, int rest)
 {
-	int n, arg1;
+    int n, arg1;
 
-	n=length(arglist);
+    n = length(arglist);
 
-	if(n==1){
-		arg1 = car(arglist);
-		arg1 = deref(arg1);
-		if(!atomp(arg1))
-		error(NOT_ATOM, "erase ", arg1);
+    if (n == 1) {
+	arg1 = car(arglist);
+	arg1 = deref(arg1);
+	if (!atomp(arg1))
+	    error(NOT_ATOM, "erase ", arg1);
 
-		SET_RECORD(arg1,NIL);
-		return(YES);
-	}
-	error(ARITY_ERR, "eraseall ", arglist);
+	SET_RECORD(arg1, NIL);
+	return (YES);
+    }
+    error(ARITY_ERR, "eraseall ", arglist);
     return (NO);
 }
 

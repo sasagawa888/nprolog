@@ -90,7 +90,7 @@ int listing_flag = 0;		//for print clause, 0=normal, 1=format print
 int colon_sets_calling_context_flag = 1;	//1=true, 0=false
 int prefix_flag = 0;		//for parser 0=not prefix, 1=prefix
 int syntax_flag = YES;		//syntaxerrors/2 YES=normal. NO=ignore syntax-errors
-int exist_flag = YES;        //existerrors/2 YES=normal, NO=ignore existance_errors
+int exist_flag = YES;		//existerrors/2 YES=normal, NO=ignore existance_errors
 int string_term_flag = 0;	//for string_term/2 0=normal, 1=readparse from string_term_buffer
 int ctrl_c_flag = 0;		//for ctrl_c  to stop prove
 int init_flag = 1;		//for halt
@@ -131,13 +131,14 @@ int ed_hight;
 int ed_width;
 result rtok;			// token type and length for editable REPL
 
-void usage(){
-	printf("List of options:\n");
-	printf("-c filename -- NPL starts after reading the file.\n");
-	printf("-h          -- display help.\n");
-	printf("-r          -- NPL does not use editable REPL.\n");
-	printf("-s filename -- NPL run file with script mode.\n");
-	printf("-v          -- dislplay version number.\n");
+void usage()
+{
+    printf("List of options:\n");
+    printf("-c filename -- NPL starts after reading the file.\n");
+    printf("-h          -- display help.\n");
+    printf("-r          -- NPL does not use editable REPL.\n");
+    printf("-s filename -- NPL run file with script mode.\n");
+    printf("-v          -- dislplay version number.\n");
 }
 
 int main(int argc, char *argv[])
@@ -145,7 +146,7 @@ int main(int argc, char *argv[])
     int ch;
     char *home, str[STRSIZE];
     struct winsize w;
-	FILE *fp;
+    FILE *fp;
 
     signal(SIGINT, reset);
     initcell();
@@ -189,10 +190,10 @@ int main(int argc, char *argv[])
 	predicates = NIL;
     }
 
-	while ((ch = getopt(argc, argv, "c:s:rhv")) != -1) {
-	    switch (ch) {
-	    case 'c':
-		fp = fopen(optarg, "r");
+    while ((ch = getopt(argc, argv, "c:s:rhv")) != -1) {
+	switch (ch) {
+	case 'c':
+	    fp = fopen(optarg, "r");
 	    if (fp != NULL)
 		fclose(fp);
 	    else {
@@ -200,8 +201,8 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	    }
 	    b_consult(list1(makeconst(optarg)), NIL);
-		break;
-	    case 's':
+	    break;
+	case 's':
 	    fp = fopen(optarg, "r");
 	    if (fp != NULL)
 		fclose(fp);
@@ -212,22 +213,22 @@ int main(int argc, char *argv[])
 	    script_flag = 1;
 	    b_consult(list1(makeconst(optarg)), NIL);
 	    exit(EXIT_SUCCESS);
-	    case 'r':
-		repl_flag = 0;
-		break;
-	    case 'v':
-		printf("N-Prolog Ver %1.2f\n", VERSION);
+	case 'r':
+	    repl_flag = 0;
+	    break;
+	case 'v':
+	    printf("N-Prolog Ver %1.2f\n", VERSION);
 	    exit(EXIT_SUCCESS);
-	    case 'h':
-		usage();
-		exit(EXIT_SUCCESS);
-	    default:
-		usage();
-		exit(EXIT_FAILURE);
-	    }
+	case 'h':
+	    usage();
+	    exit(EXIT_SUCCESS);
+	default:
+	    usage();
+	    exit(EXIT_FAILURE);
 	}
+    }
 
-    
+
     if (init_flag) {
 	printf("N-Prolog Ver %1.2f\n", VERSION);
 	init_flag = 0;
@@ -442,11 +443,11 @@ int prove(int goal, int bindings, int rest)
 	else
 	    clauses = GET_CAR(car(goal));
 
-	if (clauses == NIL){
+	if (clauses == NIL) {
 	    if (exist_flag == YES)
-			error(EXISTENCE_ERR, "", goal);
-		else if (exist_flag == NO)
-			return(NO);
+		error(EXISTENCE_ERR, "", goal);
+	    else if (exist_flag == NO)
+		return (NO);
 
 	}
 	while (!nullp(clauses)) {

@@ -153,7 +153,7 @@ void add_hash_table(int x, int record_id, int index)
     int addr;
 
     addr = record_hash_table[index][record_id];
-	record_hash_table[index][record_id] = cons(x, addr);
+    record_hash_table[index][record_id] = cons(x, addr);
 }
 
 

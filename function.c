@@ -520,7 +520,7 @@ int eval(int x)
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_exp(arg1));
-	} else if (eqp(car(x), makeatom("ln", FUNC))) {
+    } else if (eqp(car(x), makeatom("ln", FUNC))) {
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_ln(arg1));
@@ -536,7 +536,7 @@ int eval(int x)
 	evalterm(x, result);
 	arg1 = result[1];
 	arg2 = result[2];
-	return (f_round(arg1,arg2));
+	return (f_round(arg1, arg2));
     } else if (eqp(car(x), makeatom("randi", FUNC))) {
 	evalterm(x, result);
 	arg1 = result[1];
@@ -818,25 +818,28 @@ int f_sqrt(int x)
 int f_round(int x, int y)
 {
     double dx;
-	int n,i;
+    int n, i;
 
-    if (wide_variable_p(x)){
-	error(INSTANTATION_ERR, "round ", x);}
-    if (!numberp(x)){
-	error(NOT_NUM, "round ", x);}
-	if (!integerp(y)){
-	error(NOT_INT, "round ", y);}
+    if (wide_variable_p(x)) {
+	error(INSTANTATION_ERR, "round ", x);
+    }
+    if (!numberp(x)) {
+	error(NOT_NUM, "round ", x);
+    }
+    if (!integerp(y)) {
+	error(NOT_INT, "round ", y);
+    }
 
     if (floatp(x)) {
 	dx = GET_FLT(x);
 	n = GET_INT(y);
 
-	for(i=0;i<n;i++){
-		dx = dx * 10;
+	for (i = 0; i < n; i++) {
+	    dx = dx * 10;
 	}
 	dx = floor(dx);
-	for (i=0;i<n;i++){
-		dx = dx / 10;
+	for (i = 0; i < n; i++) {
+	    dx = dx / 10;
 	}
 	return (makeflt(dx));
     } else

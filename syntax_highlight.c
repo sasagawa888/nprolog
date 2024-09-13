@@ -15,12 +15,13 @@ char operator[OPERATOR_NUMBER][5] = {
     { "+" }, { "-" }, { "*" }, { "/" }, { "//" }, { "<<" }, { ">>" },
     { "\\" }, { "/\\" },
     { "\\/" },
-    { "mod" }, { "^" }, { "**" }, 
+    { "mod" }, { "^" }, { "**" },
 };
 
 char function[FUNCTION_NUMBER][12] = {
-    { "abs" }, { "sin" }, { "cos" }, { "tan" }, { "asin" }, { "acos" }, { "atan" },
-    { "exp" }, { "ln" }, { "log" }, { "sqrt" }, { "round" }, 
+    { "abs" }, { "sin" }, { "cos" }, { "tan" }, { "asin" }, { "acos" },
+	{ "atan" },
+    { "exp" }, { "ln" }, { "log" }, { "sqrt" }, { "round" },
     { "random" }, { "randi" }, { "pi" }
 };
 
@@ -61,8 +62,9 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "ansi_cuu" }, { "ansi_cud" }, { "ansi_cuf" }, { "ansi_cub" },
     { "ansi_cup" }, { "ansi_cpr" }, { "ansi_scp" }, { "ansi_rcp" },
     { "ansi_ed" }, { "ansi_el" }, { "errorcode" },
-    { "recordh" }, { "recorda" }, { "recordz" }, { "recorded" } ,{ "instance" },
-    { "removeallh" }, {"erase"}, {"eraseall"},
+    { "recordh" }, { "recorda" }, { "recordz" }, { "recorded" },
+	{ "instance" },
+    { "removeallh" }, { "erase" }, { "eraseall" },
     { "stdin" }, { "stdout" }, { "stdinout" },
     { "ctr_set" }, { "ctr_dec" }, { "ctr_inc" }, { "ctr_is" },
     { "heapd" }, { "list_text" },
@@ -85,7 +87,8 @@ char extended[EXTENDED_NUMBER][30] = {
     { "pwm_write" }, { "pull_up_dn_control" }, { "digital_read" },
     { "delay" },
     { "delay_microseconds" },
-    { "compile_file" }, { "timer_microseconds" }, { "with" }, {"existerrors"},
+    { "compile_file" }, { "timer_microseconds" }, { "with" },
+	{ "existerrors" },
 };
 
 

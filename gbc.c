@@ -62,7 +62,7 @@ void markcell(int addr)
 	markcell(car(addr));
 	markcell(cdr(addr));
 	markcell(GET_VAR(addr));
-    markcell(GET_RECORD(addr));
+	markcell(GET_RECORD(addr));
 	return;
     case BIGX:
 	return;
@@ -71,7 +71,7 @@ void markcell(int addr)
 	markcell(car(addr));
 	markcell(cdr(addr));
 	markcell(GET_VAR(addr));
-    markcell(GET_RECORD(addr));
+	markcell(GET_RECORD(addr));
 	return;
 
     }
@@ -99,10 +99,10 @@ void gbcmark(void)
 	markcell(cell_hash_table[i]);
 
     //mark hash table of recordh term
-    for (i = 0; i < HASHTBSIZE; i++){
-	for (j = 0; j < record_pt; j++){
+    for (i = 0; i < HASHTBSIZE; i++) {
+	for (j = 0; j < record_pt; j++) {
 	    markcell(record_hash_table[i][j]);
-    }
+	}
     }
     //mark stream
     markcell(standard_input);
@@ -120,7 +120,7 @@ void gbcmark(void)
 	    markcell(stack[i]);
     }
 
-    
+
 }
 
 void gbcsweep(void)
