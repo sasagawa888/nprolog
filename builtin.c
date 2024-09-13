@@ -223,7 +223,7 @@ void initbuiltin(void)
 
 /*
 length([],0).
-length([L|Ls],X) :- len(Ls,X1),X is X1 + 1.
+length([L|Ls],X) :- length(Ls,X1),X is X1 + 1.
 */
 int b_length(int arglist, int rest)
 {
@@ -274,43 +274,6 @@ int b_length(int arglist, int rest)
     return (NO);
 }
 
-/*
-int b_length(int arglist, int rest)
-{
-    int n, arg1, arg2, i, res, save1, save2;
-
-	save2 = sp;
-    n = length(arglist);
-    if (n == 2) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
-
-	
-	if (integerp(eval(arg2)) && GET_INT(eval(arg2)) < 0)
-	    error(NOT_LESS_THAN_ZERO, "length ", arg2);
-	if (!wide_variable_p(arg2) && !integerp(arg2))
-	    error(NOT_INT, "length ", arg2);
-
-	save1 = wp;
-	if ((listp(arg1) && length(arg1) != -1) || nullp(arg1)) {
-	    if (unify(arg2, makeint(length(arg1))) == YES)
-		return (prove_all(rest, sp));
-	} else if (integerp(arg2)) {
-	    i = GET_INT(arg2);
-	    res = NIL;
-	    while (i > 0) {
-		res = wlistcons(makevariant(), res);
-		i--;
-	    }
-	    if (unify(arg1, res) == YES)
-		return (prove_all(rest, sp));
-	}
-	return (NO);
-    }
-    error(ARITY_ERR, "length ", arglist);
-    return (NO);
-}
-*/
 
 
 //compiled predicate
