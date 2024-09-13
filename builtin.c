@@ -220,15 +220,25 @@ void initbuiltin(void)
     return;
 }
 
+
+/*
+length([],0).
+length([L|Ls],X) :- len(Ls,X1),X is X1 + 1.
+*/
 int b_length(int arglist, int rest)
 {
     int n, arg1, arg2, l, ls, x, x1, body, save1, save2, res;
-	
+
     save2 = sp;
     n = length(arglist);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
+	if (integerp(eval(arg2)) && GET_INT(eval(arg2)) < 0)
+	    error(NOT_LESS_THAN_ZERO, "length ", arg2);
+	if (!wide_variable_p(arg2) && !integerp(arg2))
+	    error(NOT_INT, "length ", arg2);
+
 	save1 = wp;
 	if (unify_nil(NIL, arg1) == YES
 	    && unify_const(makeint(0), arg2) == YES)
