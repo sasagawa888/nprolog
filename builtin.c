@@ -3830,7 +3830,7 @@ int b_listing(int arglist, int rest)
 		    print(temp);
 		    printf(".\n");
 		} else if (clausep(temp)
-			   && length(cdr(cadr(arg1))) ==
+			   && length(cdr(cadr(temp))) ==
 			   GET_INT(caddr(arg1))) {
 		    print(temp);
 		    printf(".\n");
