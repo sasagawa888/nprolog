@@ -220,60 +220,40 @@ void initbuiltin(void)
     return;
 }
 
-
-/*
-length([],0).
-length([L|Ls],X) :- length(Ls,X1),X is X1 + 1.
-*/
 int b_length(int arglist, int rest)
 {
-    int n, arg1, arg2, l, ls, x, x1, body, save1, save2, res;
-
-    save2 = sp;
+    int n, arg1, arg2, i, res, save1, save2;
+	save2 = sp;
     n = length(arglist);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
+	
 	if (integerp(eval(arg2)) && GET_INT(eval(arg2)) < 0)
 	    error(NOT_LESS_THAN_ZERO, "length ", arg2);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    error(NOT_INT, "length ", arg2);
-
 	save1 = wp;
-	if (unify_nil(NIL, arg1) == YES
-	    && unify_const(makeint(0), arg2) == YES)
-	    if (prove_all(rest, sp) == YES)
-		return (YES);
-	unbind(save2);
-	wp = save1;
-	l = makevariant();
-	ls = makevariant();
-	x = makevariant();
-	x1 = makevariant();
-	save1 = wp;
-	if (unify(wlistcons(l, ls), arg1) == YES
-	    && unify_var(x, arg2) == YES) {
-	    body =
-		wlist3(makeope(","),
-		       wcons(makesys("length"), wcons(ls, wcons(x1, NIL))),
-		       wcons(makesys("is"),
-			     wcons(x,
-				   wcons(wcons
-					 (makeope("+"),
-					  wcons(x1,
-						wcons(makeint(1), NIL))),
-					 NIL))));
-	    if ((res = prove_all(addtail_body(rest, body), sp)) == YES)
-		return (YES);
+	if ((listp(arg1) && length(arg1) != -1) || nullp(arg1)) {
+	    if (unify(arg2, makeint(length(arg1))) == YES)
+		return (prove_all(rest, sp));
+	} else if (integerp(arg2)) {
+	    i = GET_INT(arg2);
+	    res = NIL;
+	    while (i > 0) {
+		res = wlistcons(makevariant(), res);
+		i--;
+	    }
+	    if (unify(arg1, res) == YES)
+		return (prove_all(rest, sp));
 	}
-	unbind(save2);
 	wp = save1;
+	unbind(save2);
 	return (NO);
     }
-    error(ARITY_ERR, "length", arglist);
+    error(ARITY_ERR, "length ", arglist);
     return (NO);
 }
-
 
 
 //compiled predicate
