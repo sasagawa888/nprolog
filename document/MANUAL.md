@@ -369,6 +369,9 @@ Read one line from the file specified by Handle.
 ### □ recorda(Key,Term,Ref)
 Predicates a term and returns a new reference number for that term. 
 
+### □ recorded(Key, Term, Ref)
+Returns the term stored under the specified key and its reference number while backtracking.
+
 ### □ recordz(Key,Term,Ref)
 Adds a term at the end of the predicate and returns the reference number assigned to that term. 
 
