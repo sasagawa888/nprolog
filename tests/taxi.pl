@@ -8,9 +8,6 @@ Z = [[1,12],[9,10]]
 yes
 */
 
-len([],0).
-len([L|Ls],X) :- len(Ls,X1),X is X1 + 1.
-len(X,Y) :- fail.
 
 i(X,Y) :- length(L,Y),count(L,X).
 

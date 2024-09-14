@@ -222,7 +222,7 @@ void initbuiltin(void)
 
 int b_length(int arglist, int rest)
 {
-    int n, arg1, arg2, i, res, save1, save2;
+    int n, arg1, arg2, i, ls, res, save1, save2;
 	save2 = sp;
     n = length(arglist);
     if (n == 2) {
@@ -246,6 +246,19 @@ int b_length(int arglist, int rest)
 	    }
 	    if (unify(arg1, res) == YES)
 		return (prove_all(rest, sp));
+	} else if(wide_variable_p(arg1) && wide_variable_p(arg2)){
+		ls = NIL;
+		i = 0;
+		while(1){
+			unify(arg1,ls);
+			unify(arg2,makeint(i));
+			if(prove_all(rest, sp) == YES) 
+				return(YES);
+
+			unbind(save2);
+			i++;
+			ls = wlistcons(makevariant(), ls);
+		}
 	}
 	wp = save1;
 	unbind(save2);
