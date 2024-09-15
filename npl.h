@@ -8,13 +8,13 @@ written by kenichi sasagawa 2016/9~
 /*
 memory map
 address 
-0          - 17,000,000  heap area
-17,000,001 - 20,000,000  working area 
-20,000,001 - 40,000,000  variant area
+0          -  5,000,000  heap area
+ 5,000,001 - 30,000,000  working area 
+30,000,001 - 50,000,000  variant area
 */
-#define VERSION     3.15
-#define CELLSIZE    20000000  // this is max on raspberryPI3B. If parsonal computer 30000000 is OK
-#define HEAPSIZE    17000000
+#define VERSION     3.16
+#define CELLSIZE    30000000  // if raspberry PI set smaller size.
+#define HEAPSIZE     5000000
 #define FREESIZE         500
 #define STACKSIZE    1000000
 #define VARIANTSIZE 20000000
