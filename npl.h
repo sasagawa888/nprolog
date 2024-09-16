@@ -1247,6 +1247,7 @@ void trace(int port, int goal, int bindings, int rest);
 void ucs4_to_utf8(int n, char *p);
 void unbind(int x);
 void unreadc(char c);
+char *prolog_file_name(char *name);
 
 //JUMP project
 int b_system(int arglist, int n);

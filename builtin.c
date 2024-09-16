@@ -1384,6 +1384,7 @@ int b_consult(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
+	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)),SIMP);
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "consult ", arg1);
 	if (!atomp(arg1))
@@ -1456,6 +1457,7 @@ int b_reconsult(int arglist, int rest)
     arg2 = NIL;
     if (n == 1) {
 	arg1 = car(arglist);
+	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)),SIMP);
       reconsult:
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "reconsult ", arg1);
@@ -4265,6 +4267,22 @@ int b_rename(int arglist, int rest)
     return (NO);
 }
 
+char *prolog_file_name(char *name)
+{
+	int n,i;
+	static char str[STRSIZE];
+
+	strcpy(str,name);
+	n = strlen(name);
+
+	for(i=0;i<n;i++){
+		if(str[i] == '.')
+			return(name);
+	}
+
+	strcat(str,".pl");
+	return(str);
+}
 
 int b_edit(int arglist, int rest)
 {
@@ -4281,11 +4299,11 @@ int b_edit(int arglist, int rest)
 	editor = getenv("EDITOR");
 	if (editor == NULL) {
 	    strcpy(str, "edlog ");
-	    strcat(str, GET_NAME(arg1));
+	    strcat(str, prolog_file_name(GET_NAME(arg1)));
 	} else {
 	    strcpy(str, editor);
 	    strcat(str, " ");
-	    strcat(str, GET_NAME(arg1));
+	    strcat(str, prolog_file_name(GET_NAME(arg1)));
 	}
 	res = system(str);
 	if (res == -1)
