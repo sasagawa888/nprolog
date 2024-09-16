@@ -36,7 +36,6 @@ list50([27, 74, 17, 33, 94, 18, 46, 83, 65, 2, 32, 53, 28, 85, 99, 47, 28, 82, 6
 repeat_for(0) :- !, fail.
 repeat_for(N).
 repeat_for(N) :-
-    N > 0, !,
     M is N - 1,
     repeat_for(M).
 

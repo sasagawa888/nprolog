@@ -79,14 +79,16 @@ compile_file1(X) :-
     jump_pass2(X),
     jump_invoke_gcc_not_remove(X).
 
-% generate object from c code
-compile_file1(X) :-
-    jump_invoke_gcc(X).
 
 % genrate only c code 
 compile_file2(X) :-
     jump_pass1(X),
     jump_pass2(X).
+
+% generate object from c code
+compile_file3(X) :-
+    jump_invoke_gcc_not_remove(X).
+ 
 
 /*
 for tail recursive optimize code 
