@@ -119,6 +119,7 @@ void initbuiltin(void)
     defbuiltin("nospy", b_nospy, 1);
     defbuiltin("notrace", b_notrace, 0);
     defbuiltin("number", b_number, 1);
+	defbuiltin("nth_char", b_nth_char, 3);
     defbuiltin("op", b_op, 3);
     defbuiltin("open", b_open, 3);
     defbuiltin("predicate_property", b_predicate_property, 2);
@@ -2573,6 +2574,76 @@ int b_clause(int arglist, int rest)
 	return (NO);
     }
     error(ARITY_ERR, "clause ", arglist);
+    return (NO);
+}
+
+int b_nth_char(int arglist, int rest)
+{
+	int n, arg1, arg2, arg3, pos, code;
+    char str1[STRSIZE], str2[10];
+
+	n = length(arglist);
+	if(n==3){
+		arg1 = car(arglist);   // Nth
+		arg2 = cadr(arglist);  //string
+		arg3 = caddr(arglist); //Char
+		if(!integerp(arg1))
+		error(NOT_INT,"nth_char ", arg1);
+		if(!stringp(arg2))
+		error(NOT_STR,"nth_char ", arg2);
+		if(!wide_variable_p(arg3))
+		error(NOT_VAR,"nth_char ", arg3);
+
+		pos = GET_INT(arg1);
+		strcpy(str1,GET_NAME(arg2));
+
+		if (str1[pos] == '\\') {
+		    str2[0] = str1[pos++];
+		    str2[1] = str1[pos++];
+		} else if (isUni2(str1[pos])) {
+		    str2[0] = str1[pos++];
+		    str2[1] = str1[pos++];
+		    str2[2] = NUL;
+		} else if (isUni3(str1[pos])) {
+		    str2[0] = str1[pos++];
+		    str2[1] = str1[pos++];
+		    str2[2] = str1[pos++];
+		    str2[3] = NUL;
+		} else if (isUni4(str1[pos])) {
+		    str2[0] = str1[pos++];
+		    str2[1] = str1[pos++];
+		    str2[2] = str1[pos++];
+		    str2[3] = str1[pos++];
+		    str2[4] = NUL;
+		} else if (isUni5(str1[pos])) {
+		    str2[0] = str1[pos++];
+		    str2[1] = str1[pos++];
+		    str2[2] = str1[pos++];
+		    str2[3] = str1[pos++];
+		    str2[4] = str1[pos++];
+		    str2[5] = NUL;
+		} else if (isUni6(str1[pos])) {
+		    str2[0] = str1[pos++];
+		    str2[1] = str1[pos++];
+		    str2[2] = str1[pos++];
+		    str2[3] = str1[pos++];
+		    str2[4] = str1[pos++];
+		    str2[5] = str1[pos++];
+		    str2[6] = NUL;
+		} else {	//ascii code
+		    str2[0] = str1[pos++];
+		    str2[1] = NUL;
+		}
+
+		if (str2[0] == '\\')
+		    code = ctrl_to_number(str2[1]);
+		else		//unicode
+		    code = makeint(utf8_to_ucs4(str2));
+
+		unify(arg3,makeint(code));
+		return (prove_all(rest, sp));
+	}
+	error(ARITY_ERR, "nth_char ", arglist);
     return (NO);
 }
 

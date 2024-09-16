@@ -50,7 +50,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "float" },
     { "number" },
     { "var" }, { "nonvar" }, { "atomic" }, { "list" }, { "gc" },
-    { "time" }, { "name" },
+    { "time" }, { "name" }, { "nth_char" },
     { "bounded" },
     { "flush" }, { "date" }, { "date_day" }, { "char_code" },
     { "string" }, { "string_chars" }, { "string_codes" }, { "ground" },

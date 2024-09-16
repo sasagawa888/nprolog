@@ -753,6 +753,7 @@ int b_number_chars(int arglist, int rest);
 int b_number_codes(int arglist, int rest);
 int b_numbervars(int arglist, int rest);
 int b_numeq(int arglist, int rest);
+int b_nth_char(int arglist, int rest);
 int b_op(int arglist, int rest);
 int b_open(int arglist, int rest);
 int b_peek_byte(int arglist, int rest);
