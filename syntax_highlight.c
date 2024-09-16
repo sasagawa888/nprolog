@@ -43,7 +43,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "listing" }, { "functor" }, { "arg" },
     { "writeq" }, { "display" }, { "ref" },
     { "atom_concat" }, { "atom_string" }, { "consult" }, { "reconsult" },
-    { "see" }, { "seeing" }, { "seen" }, { "tell" }, { "telling" },
+    { "see" }, { "seeing" }, { "seen" }, { "tell" }, { "telling" }, { "save"},
     { "told" }, { "trace" },
     { "notrace" }, { "spy" },
     { "nospy" }, { "leash" }, { "atom" }, { "integer" }, { "real" },

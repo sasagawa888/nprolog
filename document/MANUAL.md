@@ -402,6 +402,12 @@ Rename the file.
 ### □ rmdir(Path)
 Delete the directory. 
 
+### □ save
+Save all changes made to the database since the last save.
+
+### □ save(Name)
+Save the internal database with the specified program name, Name.
+
 ### □ shell(Command)
 Execute the shell command and succeed.
 

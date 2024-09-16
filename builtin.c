@@ -137,6 +137,7 @@ void initbuiltin(void)
     defbuiltin("reset_op", b_reset_op, 0);
     defbuiltin("reverse", b_reverse, 2);
     defbuiltin("rmdir", b_rmdir, 1);
+	defbuiltin("save", b_save, list2(0,1));
     defbuiltin("see", b_see, 1);
     defbuiltin("seeing", b_seeing, 1);
     defbuiltin("seen", b_seen, 0);
@@ -1296,6 +1297,7 @@ int b_tell(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
+	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)),SIMP);
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "tell ", arg1);
 	if (!atomp(arg1))
@@ -1310,7 +1312,7 @@ int b_tell(int arglist, int rest)
 			   OPL_TEXT, NIL, arg1);
 
 	    if (GET_PORT(input_stream) == NULL)
-		error(CANT_OPEN, "tell", arg1);
+		error(CANT_OPEN, "tell ", arg1);
 	    return (prove_all(rest, sp));
 	}
     }
@@ -1568,6 +1570,44 @@ void memoize_arity(int clause, int atom)
 			   GET_ARITY(atom)));
 	}
     }
+}
+
+int b_save(int arglist, int rest){
+	int n,arg1;
+	static char str[STREAM];
+
+	n = length(arglist);
+
+	if(n==1){
+		arg1 = car(arglist);
+		arg1 = makeatom(prolog_file_name(GET_NAME(arg1)),SIMP);
+		strcpy(str,GET_NAME(arg1));
+		 output_stream =
+		makestream(fopen(GET_NAME(arg1), "w"), OPL_OUTPUT,
+			   OPL_TEXT, NIL, arg1);
+
+	    if (GET_PORT(output_stream) == NULL){
+		error(CANT_OPEN, "save ", arg1);}
+		b_listing(NIL,NIL);
+		fclose(GET_PORT(output_stream));
+	    output_stream = standard_output;
+	    return (prove_all(rest, sp));
+
+	}
+	else if(n==0){
+		if(str == NULL){
+		error(ILLEGAL_ARGS, "save ", NIL);}
+
+		output_stream =
+		makestream(fopen(str, "w"), OPL_OUTPUT,
+			   OPL_TEXT, NIL, makeatom(str,SIMP));
+		b_listing(NIL,NIL);
+		fclose(GET_PORT(output_stream));
+	    output_stream = standard_output;
+	    return (prove_all(rest, sp));
+	}
+	error(ARITY_ERR, "save ", arglist);
+    return (NO);
 }
 
 
@@ -3802,7 +3842,7 @@ int b_listing(int arglist, int rest)
 	    clauses = GET_CAR(pred);
 	    while (!nullp(clauses)) {
 		print(car(clauses));
-		printf(".\n");
+		fprintf(GET_PORT(output_stream),".\n");
 		clauses = cdr(clauses);
 	    }
 	}
@@ -3816,7 +3856,7 @@ int b_listing(int arglist, int rest)
 	    listing_flag = 1;
 	    while (!nullp(clauses)) {
 		print(car(clauses));
-		printf(".\n");
+		fprintf(GET_PORT(output_stream),".\n");
 		clauses = cdr(clauses);
 	    }
 	    listing_flag = 0;
@@ -3830,12 +3870,12 @@ int b_listing(int arglist, int rest)
 		if (predicatep(temp)
 		    && length(cdr(temp)) == GET_INT(caddr(arg1))) {
 		    print(temp);
-		    printf(".\n");
+		    fprintf(GET_PORT(output_stream),".\n");
 		} else if (clausep(temp)
 			   && length(cdr(cadr(temp))) ==
 			   GET_INT(caddr(arg1))) {
 		    print(temp);
-		    printf(".\n");
+		    fprintf(GET_PORT(output_stream),".\n");
 		}
 		clauses = cdr(clauses);
 	    }

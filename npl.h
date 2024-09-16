@@ -782,6 +782,7 @@ int b_reconsult_abolish(int arglist, int rest);
 int b_rmdir(int arglist, int rest);
 int b_removeh(int arglist, int rest);
 int b_removeallh(int arglist, int rest);
+int b_save(int arglist, int rest);
 int b_see(int arglist, int rest);
 int b_seeing(int arglist, int rest);
 int b_seen(int arglist, int rest);
