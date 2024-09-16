@@ -333,6 +333,9 @@ Eを評価し、その値をXにユニフィケーションする
 ### □ name(Atom,List)
 リストをアトムに変換するか、アトムまたは整数をリストに変換する。
 
+### □ nth_char(N,String,Char)
+ストリングの先頭からN個離れた文字のASCII（unicode）を戻す。
+
 ### □ open(Handle,Filename,Access)
 既存のファイルをオープンする。
 

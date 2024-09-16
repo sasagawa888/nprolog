@@ -344,6 +344,9 @@ Create a new directory.
 ### □ name(Atom,List)
 Convert a list to an atom, or convert an atom or an integer to a list. 
 
+### □ nth_char(N, String, Char)
+Return the ASCII (or Unicode) value of the character that is N positions from the start of the string.
+
 ### □ open(Handle,Filename,Access)
 Open an existing file. 
 
