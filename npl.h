@@ -765,6 +765,7 @@ int b_put_code(int arglist, int rest);
 int b_put_byte(int arglist, int rest);
 int b_read(int arglist, int rest);
 int b_read_line(int arglist, int rest);
+int b_read_string(int arglist, int rest);
 int b_real(int arglist, int rest);
 int b_recorda(int arglist, int rest);
 int b_recordz(int arglist, int rest);

@@ -127,6 +127,7 @@ void initbuiltin(void)
     defbuiltin("reconsult", b_reconsult, 1);
     defbuiltin("read", b_read, list2(1, 2));
     defbuiltin("read_line", b_read_line, list2(1, 2));
+	defbuiltin("read_string", b_read_string, list2(2, 3));
     defbuiltin("real", b_real, 1);
     defbuiltin("recorda", b_recorda, 3);
     defbuiltin("recordz", b_recordz, 3);
@@ -955,6 +956,57 @@ int b_read_line(int arglist, int rest)
     error(ARITY_ERR, "read_line ", arglist);
     return (NO);
 }
+
+
+int b_read_string(int arglist, int rest)
+{
+    int n, arg1, arg2, arg3, save1, save2, res, pos, maxlen;
+    char str[STRSIZE], c;
+
+    n = length(arglist);
+    if (n == 2) {
+	arg1 = input_stream;
+	arg2 = car(arglist);   // maxlen
+	arg3 = cadr(arglist);  // string
+	goto read_string;
+    } else if (n == 3) {
+	arg1 = car(arglist);   // stream
+	arg2 = cadr(arglist);  // maxlen
+	arg3 = caddr(arglist); // string
+      read_string:
+	if (wide_variable_p(arg1))
+	    error(INSTANTATION_ERR, "read_string ", arg1);
+	if (!streamp(arg1) && !aliasp(arg1))
+	    error(NOT_STREAM, "read_string ", arg1);
+	if (streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
+	    error(NOT_INPUT_STREAM, "read_string ", arg1);
+
+	save1 = input_stream;
+	save2 = repl_flag;
+	input_stream = arg1;
+	maxlen = GET_INT(arg2);
+	repl_flag = 0;
+
+	c = readc();
+	pos = 0;
+	while (c != EOL && c != EOF && pos < maxlen) {
+	    str[pos] = c;
+	    pos++;
+	    c = readc();
+	}
+	str[pos] = NUL;
+	res = unify(arg3, makestr(str));
+	input_stream = save1;
+	repl_flag = save2;
+	if (res == YES)
+	    return (prove_all(rest, sp));
+	else
+	    return (NO);
+    }
+    error(ARITY_ERR, "read_string ", arglist);
+    return (NO);
+}
+
 
 
 int b_skip(int arglist, int rest)

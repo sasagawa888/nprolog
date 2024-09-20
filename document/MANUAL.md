@@ -369,6 +369,12 @@ Read terms from a file.
 ### □ read_line(Handle,X)
 Read one line from the file specified by Handle.
 
+### □ read_string(MaxLength, X)
+Reads a string from the standard input device.
+
+### □ read_string(Handle, MaxLength, X)
+Reads a string from the specified file.
+
 ### □ recorda(Key,Term,Ref)
 Predicates a term and returns a new reference number for that term. 
 

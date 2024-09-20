@@ -358,6 +358,12 @@ ra read and append
 ### □ read_line(Handle,X)
 Handleで指定したファイルから1行読む。
 
+### □ read_string(MaxLength,X)
+標準入力装置からストリングを読む。
+
+### □ read_string(Handle,MaxLength,X)
+指定ファイルからストリングを読む。
+
 ### □ recorda(Key,Term,Ref)
 述語の先頭に項を加えて、その項の新しい参照番号を戻す。
 

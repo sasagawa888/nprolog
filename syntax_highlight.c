@@ -37,7 +37,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "op" }, { "!" }, { "assert" }, { "asserta" }, { "assertz" },
     { "abolish" }, { "read" }, { "write" }, { "put" }, { "get" },
     { "get0" }, { "ifthen" }, { "ifthenelse" },
-    { "get0_noecho" }, { "nl" },
+    { "get0_noecho" }, { "nl" }, {"read_string"},
     { "read_line" }, { "reset_op" }, { "skip" }, { "predicate_property" },
     { "tab" }, { "fail" }, { "not" }, { "true" }, { "halt" }, { "abort" },
     { "listing" }, { "functor" }, { "arg" },
