@@ -20,7 +20,7 @@ char operator[OPERATOR_NUMBER][5] = {
 
 char function[FUNCTION_NUMBER][12] = {
     { "abs" }, { "sin" }, { "cos" }, { "tan" }, { "asin" }, { "acos" },
-	{ "atan" },
+    { "atan" },
     { "exp" }, { "ln" }, { "log" }, { "sqrt" }, { "round" },
     { "random" }, { "randi" }, { "pi" }
 };
@@ -37,13 +37,14 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "op" }, { "!" }, { "assert" }, { "asserta" }, { "assertz" },
     { "abolish" }, { "read" }, { "write" }, { "put" }, { "get" },
     { "get0" }, { "ifthen" }, { "ifthenelse" },
-    { "get0_noecho" }, { "nl" }, {"read_string"},
+    { "get0_noecho" }, { "nl" }, { "read_string" },
     { "read_line" }, { "reset_op" }, { "skip" }, { "predicate_property" },
     { "tab" }, { "fail" }, { "not" }, { "true" }, { "halt" }, { "abort" },
     { "listing" }, { "functor" }, { "arg" },
     { "writeq" }, { "display" }, { "ref" },
     { "atom_concat" }, { "atom_string" }, { "consult" }, { "reconsult" },
-    { "see" }, { "seeing" }, { "seen" }, { "tell" }, { "telling" }, { "save"},
+    { "see" }, { "seeing" }, { "seen" }, { "tell" }, { "telling" },
+    { "save" },
     { "told" }, { "trace" },
     { "notrace" }, { "spy" },
     { "nospy" }, { "leash" }, { "atom" }, { "integer" }, { "real" },
@@ -63,7 +64,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "ansi_cup" }, { "ansi_cpr" }, { "ansi_scp" }, { "ansi_rcp" },
     { "ansi_ed" }, { "ansi_el" }, { "errorcode" },
     { "recordh" }, { "recorda" }, { "recordz" }, { "recorded" },
-	{ "instance" },
+    { "instance" },
     { "removeallh" }, { "erase" }, { "eraseall" },
     { "stdin" }, { "stdout" }, { "stdinout" },
     { "ctr_set" }, { "ctr_dec" }, { "ctr_inc" }, { "ctr_is" },
@@ -88,7 +89,7 @@ char extended[EXTENDED_NUMBER][30] = {
     { "delay" },
     { "delay_microseconds" },
     { "compile_file" }, { "timer_microseconds" }, { "with" },
-	{ "existerrors" },
+    { "existerrors" },
 };
 
 

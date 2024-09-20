@@ -119,7 +119,7 @@ void initbuiltin(void)
     defbuiltin("nospy", b_nospy, 1);
     defbuiltin("notrace", b_notrace, 0);
     defbuiltin("number", b_number, 1);
-	defbuiltin("nth_char", b_nth_char, 3);
+    defbuiltin("nth_char", b_nth_char, 3);
     defbuiltin("op", b_op, 3);
     defbuiltin("open", b_open, 3);
     defbuiltin("predicate_property", b_predicate_property, 2);
@@ -127,7 +127,7 @@ void initbuiltin(void)
     defbuiltin("reconsult", b_reconsult, 1);
     defbuiltin("read", b_read, list2(1, 2));
     defbuiltin("read_line", b_read_line, list2(1, 2));
-	defbuiltin("read_string", b_read_string, list2(2, 3));
+    defbuiltin("read_string", b_read_string, list2(2, 3));
     defbuiltin("real", b_real, 1);
     defbuiltin("recorda", b_recorda, 3);
     defbuiltin("recordz", b_recordz, 3);
@@ -139,7 +139,7 @@ void initbuiltin(void)
     defbuiltin("reset_op", b_reset_op, 0);
     defbuiltin("reverse", b_reverse, 2);
     defbuiltin("rmdir", b_rmdir, 1);
-	defbuiltin("save", b_save, list2(0,1));
+    defbuiltin("save", b_save, list2(0, 1));
     defbuiltin("see", b_see, 1);
     defbuiltin("seeing", b_seeing, 1);
     defbuiltin("seen", b_seen, 0);
@@ -226,12 +226,12 @@ void initbuiltin(void)
 int b_length(int arglist, int rest)
 {
     int n, arg1, arg2, i, ls, res, save1, save2;
-	save2 = sp;
+    save2 = sp;
     n = length(arglist);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-	
+
 	if (integerp(eval(arg2)) && GET_INT(eval(arg2)) < 0)
 	    error(NOT_LESS_THAN_ZERO, "length ", arg2);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
@@ -249,19 +249,19 @@ int b_length(int arglist, int rest)
 	    }
 	    if (unify(arg1, res) == YES)
 		return (prove_all(rest, sp));
-	} else if(wide_variable_p(arg1) && wide_variable_p(arg2)){
-		ls = NIL;
-		i = 0;
-		while(1){
-			unify(arg1,ls);
-			unify(arg2,makeint(i));
-			if(prove_all(rest, sp) == YES) 
-				return(YES);
+	} else if (wide_variable_p(arg1) && wide_variable_p(arg2)) {
+	    ls = NIL;
+	    i = 0;
+	    while (1) {
+		unify(arg1, ls);
+		unify(arg2, makeint(i));
+		if (prove_all(rest, sp) == YES)
+		    return (YES);
 
-			unbind(save2);
-			i++;
-			ls = wlistcons(makevariant(), ls);
-		}
+		unbind(save2);
+		i++;
+		ls = wlistcons(makevariant(), ls);
+	    }
 	}
 	wp = save1;
 	unbind(save2);
@@ -942,6 +942,8 @@ int b_read_line(int arglist, int rest)
 	while (c != EOL && c != EOF) {
 	    str[pos] = c;
 	    pos++;
+	    if (pos > STRSIZE - 1)
+		error(RESOURCE_ERR, "read_line ", NIL);
 	    c = readc();
 	}
 	str[pos] = NUL;
@@ -966,13 +968,13 @@ int b_read_string(int arglist, int rest)
     n = length(arglist);
     if (n == 2) {
 	arg1 = input_stream;
-	arg2 = car(arglist);   // maxlen
-	arg3 = cadr(arglist);  // string
+	arg2 = car(arglist);	// maxlen
+	arg3 = cadr(arglist);	// string
 	goto read_string;
     } else if (n == 3) {
-	arg1 = car(arglist);   // stream
-	arg2 = cadr(arglist);  // maxlen
-	arg3 = caddr(arglist); // string
+	arg1 = car(arglist);	// stream
+	arg2 = cadr(arglist);	// maxlen
+	arg3 = caddr(arglist);	// string
       read_string:
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "read_string ", arg1);
@@ -992,6 +994,8 @@ int b_read_string(int arglist, int rest)
 	while (c != EOL && c != EOF && pos < maxlen) {
 	    str[pos] = c;
 	    pos++;
+	    if (pos > STRSIZE - 1)
+		error(RESOURCE_ERR, "read_string ", NIL);
 	    c = readc();
 	}
 	str[pos] = NUL;
@@ -1350,7 +1354,7 @@ int b_tell(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)),SIMP);
+	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "tell ", arg1);
 	if (!atomp(arg1))
@@ -1439,7 +1443,7 @@ int b_consult(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)),SIMP);
+	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "consult ", arg1);
 	if (!atomp(arg1))
@@ -1512,7 +1516,7 @@ int b_reconsult(int arglist, int rest)
     arg2 = NIL;
     if (n == 1) {
 	arg1 = car(arglist);
-	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)),SIMP);
+	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
       reconsult:
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "reconsult ", arg1);
@@ -1625,41 +1629,43 @@ void memoize_arity(int clause, int atom)
     }
 }
 
-int b_save(int arglist, int rest){
-	int n,arg1;
-	static char str[STREAM];
+int b_save(int arglist, int rest)
+{
+    int n, arg1;
+    static char str[STREAM];
 
-	n = length(arglist);
+    n = length(arglist);
 
-	if(n==1){
-		arg1 = car(arglist);
-		arg1 = makeatom(prolog_file_name(GET_NAME(arg1)),SIMP);
-		strcpy(str,GET_NAME(arg1));
-		 output_stream =
-		makestream(fopen(GET_NAME(arg1), "w"), OPL_OUTPUT,
-			   OPL_TEXT, NIL, arg1);
+    if (n == 1) {
+	arg1 = car(arglist);
+	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
+	strcpy(str, GET_NAME(arg1));
+	output_stream =
+	    makestream(fopen(GET_NAME(arg1), "w"), OPL_OUTPUT,
+		       OPL_TEXT, NIL, arg1);
 
-	    if (GET_PORT(output_stream) == NULL){
-		error(CANT_OPEN, "save ", arg1);}
-		b_listing(NIL,NIL);
-		fclose(GET_PORT(output_stream));
-	    output_stream = standard_output;
-	    return (prove_all(rest, sp));
-
+	if (GET_PORT(output_stream) == NULL) {
+	    error(CANT_OPEN, "save ", arg1);
 	}
-	else if(n==0){
-		if(str == NULL){
-		error(ILLEGAL_ARGS, "save ", NIL);}
+	b_listing(NIL, NIL);
+	fclose(GET_PORT(output_stream));
+	output_stream = standard_output;
+	return (prove_all(rest, sp));
 
-		output_stream =
-		makestream(fopen(str, "w"), OPL_OUTPUT,
-			   OPL_TEXT, NIL, makeatom(str,SIMP));
-		b_listing(NIL,NIL);
-		fclose(GET_PORT(output_stream));
-	    output_stream = standard_output;
-	    return (prove_all(rest, sp));
+    } else if (n == 0) {
+	if (str == NULL) {
+	    error(ILLEGAL_ARGS, "save ", NIL);
 	}
-	error(ARITY_ERR, "save ", arglist);
+
+	output_stream =
+	    makestream(fopen(str, "w"), OPL_OUTPUT,
+		       OPL_TEXT, NIL, makeatom(str, SIMP));
+	b_listing(NIL, NIL);
+	fclose(GET_PORT(output_stream));
+	output_stream = standard_output;
+	return (prove_all(rest, sp));
+    }
+    error(ARITY_ERR, "save ", arglist);
     return (NO);
 }
 
@@ -2631,71 +2637,71 @@ int b_clause(int arglist, int rest)
 
 int b_nth_char(int arglist, int rest)
 {
-	int n, arg1, arg2, arg3, pos, code;
+    int n, arg1, arg2, arg3, pos, code;
     char str1[STRSIZE], str2[10];
 
-	n = length(arglist);
-	if(n==3){
-		arg1 = car(arglist);   // Nth
-		arg2 = cadr(arglist);  //string
-		arg3 = caddr(arglist); //Char
-		if(!integerp(arg1))
-		error(NOT_INT,"nth_char ", arg1);
-		if(!stringp(arg2))
-		error(NOT_STR,"nth_char ", arg2);
-		if(!wide_variable_p(arg3))
-		error(NOT_VAR,"nth_char ", arg3);
+    n = length(arglist);
+    if (n == 3) {
+	arg1 = car(arglist);	// Nth
+	arg2 = cadr(arglist);	//string
+	arg3 = caddr(arglist);	//Char
+	if (!integerp(arg1))
+	    error(NOT_INT, "nth_char ", arg1);
+	if (!stringp(arg2))
+	    error(NOT_STR, "nth_char ", arg2);
+	if (!wide_variable_p(arg3))
+	    error(NOT_VAR, "nth_char ", arg3);
 
-		pos = GET_INT(arg1);
-		strcpy(str1,GET_NAME(arg2));
+	pos = GET_INT(arg1);
+	strcpy(str1, GET_NAME(arg2));
 
-		if (str1[pos] == '\\') {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		} else if (isUni2(str1[pos])) {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		    str2[2] = NUL;
-		} else if (isUni3(str1[pos])) {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		    str2[2] = str1[pos++];
-		    str2[3] = NUL;
-		} else if (isUni4(str1[pos])) {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		    str2[2] = str1[pos++];
-		    str2[3] = str1[pos++];
-		    str2[4] = NUL;
-		} else if (isUni5(str1[pos])) {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		    str2[2] = str1[pos++];
-		    str2[3] = str1[pos++];
-		    str2[4] = str1[pos++];
-		    str2[5] = NUL;
-		} else if (isUni6(str1[pos])) {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		    str2[2] = str1[pos++];
-		    str2[3] = str1[pos++];
-		    str2[4] = str1[pos++];
-		    str2[5] = str1[pos++];
-		    str2[6] = NUL;
-		} else {	//ascii code
-		    str2[0] = str1[pos++];
-		    str2[1] = NUL;
-		}
-
-		if (str2[0] == '\\')
-		    code = ctrl_to_number(str2[1]);
-		else		//unicode
-		    code = makeint(utf8_to_ucs4(str2));
-
-		unify(arg3,makeint(code));
-		return (prove_all(rest, sp));
+	if (str1[pos] == '\\') {
+	    str2[0] = str1[pos++];
+	    str2[1] = str1[pos++];
+	} else if (isUni2(str1[pos])) {
+	    str2[0] = str1[pos++];
+	    str2[1] = str1[pos++];
+	    str2[2] = NUL;
+	} else if (isUni3(str1[pos])) {
+	    str2[0] = str1[pos++];
+	    str2[1] = str1[pos++];
+	    str2[2] = str1[pos++];
+	    str2[3] = NUL;
+	} else if (isUni4(str1[pos])) {
+	    str2[0] = str1[pos++];
+	    str2[1] = str1[pos++];
+	    str2[2] = str1[pos++];
+	    str2[3] = str1[pos++];
+	    str2[4] = NUL;
+	} else if (isUni5(str1[pos])) {
+	    str2[0] = str1[pos++];
+	    str2[1] = str1[pos++];
+	    str2[2] = str1[pos++];
+	    str2[3] = str1[pos++];
+	    str2[4] = str1[pos++];
+	    str2[5] = NUL;
+	} else if (isUni6(str1[pos])) {
+	    str2[0] = str1[pos++];
+	    str2[1] = str1[pos++];
+	    str2[2] = str1[pos++];
+	    str2[3] = str1[pos++];
+	    str2[4] = str1[pos++];
+	    str2[5] = str1[pos++];
+	    str2[6] = NUL;
+	} else {		//ascii code
+	    str2[0] = str1[pos++];
+	    str2[1] = NUL;
 	}
-	error(ARITY_ERR, "nth_char ", arglist);
+
+	if (str2[0] == '\\')
+	    code = ctrl_to_number(str2[1]);
+	else			//unicode
+	    code = makeint(utf8_to_ucs4(str2));
+
+	unify(arg3, makeint(code));
+	return (prove_all(rest, sp));
+    }
+    error(ARITY_ERR, "nth_char ", arglist);
     return (NO);
 }
 
@@ -2927,6 +2933,8 @@ int b_atom_concat(int arglist, int rest)
 	    error(NOT_ATOM, "atom_concat ", arg2);
 	if (!wide_variable_p(arg3))
 	    error(NOT_VAR, "atom_concat ", arg3);
+	if (strlen(GET_NAME(arg1)) + strlen(GET_NAME(arg2)) > STRSIZE)
+	    error(RESOURCE_ERR, "atom_concat ", arglist);
 
 	strcpy(str1, GET_NAME(arg1));
 	strcat(str1, GET_NAME(arg2));
@@ -3965,7 +3973,7 @@ int b_listing(int arglist, int rest)
 	    clauses = GET_CAR(pred);
 	    while (!nullp(clauses)) {
 		print(car(clauses));
-		fprintf(GET_PORT(output_stream),".\n");
+		fprintf(GET_PORT(output_stream), ".\n");
 		clauses = cdr(clauses);
 	    }
 	}
@@ -3979,7 +3987,7 @@ int b_listing(int arglist, int rest)
 	    listing_flag = 1;
 	    while (!nullp(clauses)) {
 		print(car(clauses));
-		fprintf(GET_PORT(output_stream),".\n");
+		fprintf(GET_PORT(output_stream), ".\n");
 		clauses = cdr(clauses);
 	    }
 	    listing_flag = 0;
@@ -3993,12 +4001,12 @@ int b_listing(int arglist, int rest)
 		if (predicatep(temp)
 		    && length(cdr(temp)) == GET_INT(caddr(arg1))) {
 		    print(temp);
-		    fprintf(GET_PORT(output_stream),".\n");
+		    fprintf(GET_PORT(output_stream), ".\n");
 		} else if (clausep(temp)
 			   && length(cdr(cadr(temp))) ==
 			   GET_INT(caddr(arg1))) {
 		    print(temp);
-		    fprintf(GET_PORT(output_stream),".\n");
+		    fprintf(GET_PORT(output_stream), ".\n");
 		}
 		clauses = cdr(clauses);
 	    }
@@ -4432,19 +4440,19 @@ int b_rename(int arglist, int rest)
 
 char *prolog_file_name(char *name)
 {
-	int n,i;
-	static char str[STRSIZE];
+    int n, i;
+    static char str[STRSIZE];
 
-	strcpy(str,name);
-	n = strlen(name);
+    strcpy(str, name);
+    n = strlen(name);
 
-	for(i=0;i<n;i++){
-		if(str[i] == '.')
-			return(name);
-	}
+    for (i = 0; i < n; i++) {
+	if (str[i] == '.')
+	    return (name);
+    }
 
-	strcat(str,".pl");
-	return(str);
+    strcat(str, ".pl");
+    return (str);
 }
 
 int b_edit(int arglist, int rest)

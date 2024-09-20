@@ -672,51 +672,51 @@ void gettoken(void)
 		unicodep(c)) && !isatomch(c)) {
 
 	    SETBUF(c)
-	    if (isUni2(c)) {
+		if (isUni2(c)) {
 		c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 	    } else if (isUni3(c)) {
 		c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 	    } else if (isUni4(c)) {
 		c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 	    } else if (isUni5(c)) {
 		c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 	    } else if (isUni6(c)) {
 		c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 	    } else
 		c = readc();
 	}
 	SETBUF(NUL)
-	stok.ch = c;
+	    stok.ch = c;
 	stok.ahead = c;
 	for (i = 0; i < OPERATOR_NUMBER; i++) {
 	    if (strcmp(operator[i], stok.buf) == 0) {
@@ -749,13 +749,13 @@ void gettoken(void)
     if (isupper(c)) {
 	pos = 0;
 	SETBUF(c)
-	c = readc();
+	    c = readc();
 	while (isalpha(c) || isdigit(c) || c == '_') {
 	    SETBUF(c)
-	    c = readc();
+		c = readc();
 	}
 	SETBUF(NUL)
-	stok.type = VARIABLE;
+	    stok.type = VARIABLE;
 	stok.ch = c;
 	stok.ahead = c;
 	return;
@@ -764,8 +764,8 @@ void gettoken(void)
     if (c == '!') {
 	pos = 0;
 	SETBUF(c)
-	SETBUF(NUL)
-	stok.type = BUILTIN;
+	    SETBUF(NUL)
+	    stok.type = BUILTIN;
 	stok.ch = NUL;
 	stok.ahead = NUL;
 	return;
@@ -774,54 +774,54 @@ void gettoken(void)
     if (c == '_') {
 	pos = 0;
 	SETBUF(c)
-	c = readc();
+	    c = readc();
 	while (isalpha(c) || isdigit(c) || c == '_' || unicodep(c)) {
 	    SETBUF(c)
-	    if (isUni2(c)) {
+		if (isUni2(c)) {
 		c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 	    } else if (isUni3(c)) {
 		c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 	    } else if (isUni4(c)) {
 		c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 	    } else if (isUni5(c)) {
 		c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 	    } else if (isUni6(c)) {
 		c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 	    } else
 		c = readc();
 	}
 	SETBUF(NUL)
-	if (pos == 1) {
+	    if (pos == 1) {
 	    stok.type = ANOYMOUS;
 	    stok.ch = c;
 	    stok.ahead = c;
@@ -862,17 +862,17 @@ void gettoken(void)
 	    }
 
 	    SETBUF(c)
-	    c = readc();
+		c = readc();
 	}
 	c = readc();
 	if (c == '\'') {	// case ex 'let''s' -> let's
 	    SETBUF(c)
-	    goto redo;
+		goto redo;
 	} else
 	    unreadc(c);
 
 	SETBUF(NUL)
-	stok.ch = NUL;
+	    stok.ch = NUL;
 	stok.ahead = c;
 	for (i = 0; i < FUNCTION_NUMBER; i++) {
 	    if (strcmp(function[i], stok.buf) == 0) {
@@ -903,22 +903,22 @@ void gettoken(void)
 	c1 = readc();
 	while (!(c == '$' && c1 != '$')) {
 	    if (c == '$') {
-		if (c1 == '$')
+		if (c1 == '$') {
 		    SETBUF(c)
-		else
+		} else
 		    error(SYNTAX_ERR, "double $ in string token ", NIL);
 	    } else if (c == EOF)
 		error(SYNTAX_ERR, "not exist right $ in file ", NIL);
 	    else {
 		SETBUF(c)
-		unreadc(c1);
+		    unreadc(c1);
 	    }
 	    c = readc();
 	    c1 = readc();
 	}
 	unreadc(c1);
 	SETBUF(NUL)
-	stok.type = STRING;
+	    stok.type = STRING;
 	stok.ch = NUL;
 	stok.ahead = c;
 	return;
@@ -938,10 +938,10 @@ void gettoken(void)
 	    c = readc();
 	    while (isoctch(c)) {
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 	    }
 	    SETBUF(NUL)
-	    stok.type = OCTNUM;
+		stok.type = OCTNUM;
 	    stok.ch = c;
 	    return;
 	} else if (c == 'b') {
@@ -949,10 +949,10 @@ void gettoken(void)
 	    c = readc();
 	    while (isbinch(c)) {
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 	    }
 	    SETBUF(NUL)
-	    stok.type = BINNUM;
+		stok.type = BINNUM;
 	    stok.ch = c;
 	    return;
 	} else if (c == 'x') {
@@ -960,10 +960,10 @@ void gettoken(void)
 	    c = readc();
 	    while (ishexch(c)) {
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 	    }
 	    SETBUF(NUL)
-	    stok.type = HEXNUM;
+		stok.type = HEXNUM;
 	    stok.ch = c;
 	    return;
 	} else if (c == '\'') {
@@ -1045,10 +1045,10 @@ void gettoken(void)
     if (isdigit(c)) {
 	pos = 0;
 	SETBUF(c)
-	c = readc();
+	    c = readc();
 	while (isdigit(c)) {
 	    SETBUF(c)
-	    c = readc();
+		c = readc();
 	}
 	if (c == '.')
 	    goto float1;
@@ -1056,7 +1056,7 @@ void gettoken(void)
 	    error(SYNTAX_ERR, "float number expected dot ", NIL);
 
 	SETBUF(NUL)
-	if (strlen(stok.buf) <= 9)
+	    if (strlen(stok.buf) <= 9)
 	    stok.type = INTEGER;
 	else
 	    stok.type = BIGNUM;
@@ -1065,11 +1065,11 @@ void gettoken(void)
 
       float1:
 	SETBUF(c)
-	c = readc();
+	    c = readc();
 	if (!isdigit(c)) {	//2. -> 2(integer) + .DOT
 	    pos--;
 	    SETBUF(NUL)
-	    if (strlen(stok.buf) <= 9)
+		if (strlen(stok.buf) <= 9)
 		stok.type = INTEGER;
 	    else
 		stok.type = BIGNUM;
@@ -1081,33 +1081,33 @@ void gettoken(void)
 
 	while (isdigit(c)) {
 	    SETBUF(c)
-	    c = readc();
+		c = readc();
 	}
 	if (c == 'E' || c == 'e')
 	    goto float2;
 
 	SETBUF(NUL)
-	stok.type = FLOATN;
+	    stok.type = FLOATN;
 	stok.ch = c;
 	stok.ahead = c;
 	return;
 
       float2:
 	SETBUF(c)
-	c = readc();
+	    c = readc();
 	if (c != '+' && c != '-' && !isdigit(c)) {
 	    SETBUF(c)
-	    SETBUF(NUL)
-	    error(SYNTAX_ERR, "illegal float token ", NIL);
+		SETBUF(NUL)
+		error(SYNTAX_ERR, "illegal float token ", NIL);
 	}
 	SETBUF(c)
-	c = readc();
+	    c = readc();
 	while (isdigit(c)) {
 	    SETBUF(c)
-	    c = readc();
+		c = readc();
 	}
 	SETBUF(NUL)
-	stok.type = FLOATN;
+	    stok.type = FLOATN;
 	stok.ch = c;
 	stok.ahead = c;
 	return;
@@ -1117,10 +1117,10 @@ void gettoken(void)
 	pos = 0;
 	while (isatomch(c)) {
 	    SETBUF(c)
-	    c = readc();
+		c = readc();
 	}
 	SETBUF(NUL)
-	stok.ch = c;
+	    stok.ch = c;
 	stok.ahead = c;
 
 	for (i = 0; i < OPERATOR_NUMBER; i++) {
