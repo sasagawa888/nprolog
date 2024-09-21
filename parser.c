@@ -497,6 +497,13 @@ void unreadc(char c)
 	stok.buf[pos++] = c;                   \
 }
 
+#define SETBUFEND(c) {                        \
+	if(pos >= BUFSIZE-1)                     \
+	error(RESOURCE_ERR, "gettoken ", NIL); \
+	stok.buf[pos] = c;                   \
+}
+
+
 
 void gettoken(void)
 {
@@ -715,7 +722,7 @@ void gettoken(void)
 	    } else
 		c = readc();
 	}
-	SETBUF(NUL)
+	SETBUFEND(NUL)
 	    stok.ch = c;
 	stok.ahead = c;
 	for (i = 0; i < OPERATOR_NUMBER; i++) {
@@ -754,7 +761,7 @@ void gettoken(void)
 	    SETBUF(c)
 		c = readc();
 	}
-	SETBUF(NUL)
+	SETBUFEND(NUL)
 	    stok.type = VARIABLE;
 	stok.ch = c;
 	stok.ahead = c;
@@ -764,7 +771,7 @@ void gettoken(void)
     if (c == '!') {
 	pos = 0;
 	SETBUF(c)
-	    SETBUF(NUL)
+	    SETBUFEND(NUL)
 	    stok.type = BUILTIN;
 	stok.ch = NUL;
 	stok.ahead = NUL;
@@ -820,7 +827,7 @@ void gettoken(void)
 	    } else
 		c = readc();
 	}
-	SETBUF(NUL)
+	SETBUFEND(NUL)
 	    if (pos == 1) {
 	    stok.type = ANOYMOUS;
 	    stok.ch = c;
@@ -871,7 +878,7 @@ void gettoken(void)
 	} else
 	    unreadc(c);
 
-	SETBUF(NUL)
+	SETBUFEND(NUL)
 	    stok.ch = NUL;
 	stok.ahead = c;
 	for (i = 0; i < FUNCTION_NUMBER; i++) {
@@ -917,7 +924,7 @@ void gettoken(void)
 	    c1 = readc();
 	}
 	unreadc(c1);
-	SETBUF(NUL)
+	SETBUFEND(NUL)
 	    stok.type = STRING;
 	stok.ch = NUL;
 	stok.ahead = c;
@@ -940,7 +947,7 @@ void gettoken(void)
 		SETBUF(c)
 		    c = readc();
 	    }
-	    SETBUF(NUL)
+	    SETBUFEND(NUL)
 		stok.type = OCTNUM;
 	    stok.ch = c;
 	    return;
@@ -951,7 +958,7 @@ void gettoken(void)
 		SETBUF(c)
 		    c = readc();
 	    }
-	    SETBUF(NUL)
+	    SETBUFEND(NUL)
 		stok.type = BINNUM;
 	    stok.ch = c;
 	    return;
@@ -962,7 +969,7 @@ void gettoken(void)
 		SETBUF(c)
 		    c = readc();
 	    }
-	    SETBUF(NUL)
+	    SETBUFEND(NUL)
 		stok.type = HEXNUM;
 	    stok.ch = c;
 	    return;
@@ -1055,7 +1062,7 @@ void gettoken(void)
 	if (c == 'E' || c == 'e')
 	    error(SYNTAX_ERR, "float number expected dot ", NIL);
 
-	SETBUF(NUL)
+	SETBUFEND(NUL)
 	    if (strlen(stok.buf) <= 9)
 	    stok.type = INTEGER;
 	else
@@ -1068,7 +1075,7 @@ void gettoken(void)
 	    c = readc();
 	if (!isdigit(c)) {	//2. -> 2(integer) + .DOT
 	    pos--;
-	    SETBUF(NUL)
+	    SETBUFEND(NUL)
 		if (strlen(stok.buf) <= 9)
 		stok.type = INTEGER;
 	    else
@@ -1086,7 +1093,7 @@ void gettoken(void)
 	if (c == 'E' || c == 'e')
 	    goto float2;
 
-	SETBUF(NUL)
+	SETBUFEND(NUL)
 	    stok.type = FLOATN;
 	stok.ch = c;
 	stok.ahead = c;
@@ -1097,7 +1104,7 @@ void gettoken(void)
 	    c = readc();
 	if (c != '+' && c != '-' && !isdigit(c)) {
 	    SETBUF(c)
-		SETBUF(NUL)
+		SETBUFEND(NUL)
 		error(SYNTAX_ERR, "illegal float token ", NIL);
 	}
 	SETBUF(c)
@@ -1106,7 +1113,7 @@ void gettoken(void)
 	    SETBUF(c)
 		c = readc();
 	}
-	SETBUF(NUL)
+	SETBUFEND(NUL)
 	    stok.type = FLOATN;
 	stok.ch = c;
 	stok.ahead = c;
@@ -1119,7 +1126,7 @@ void gettoken(void)
 	    SETBUF(c)
 		c = readc();
 	}
-	SETBUF(NUL)
+	SETBUFEND(NUL)
 	    stok.ch = c;
 	stok.ahead = c;
 
