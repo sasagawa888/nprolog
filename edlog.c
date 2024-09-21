@@ -3894,7 +3894,7 @@ static const char *functions_data[] = {
     "read(Term)/read(Handle,Term)",
     "Read terms from standard input devices. Read terms from a file.",
     "read_line",
-    "read_line(X)/read_line(Handle,X)",
+    "read_line(0,X)/read_line(Handle,X)",
     "Read one line from standard input. Read one line from the file specified by Handle.",
     "read_string",
     "read_string(MaxLength, X)/read_string(Handle, MaxLength, X)",

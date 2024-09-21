@@ -126,7 +126,7 @@ void initbuiltin(void)
     defbuiltin("put", b_put, 1);
     defbuiltin("reconsult", b_reconsult, 1);
     defbuiltin("read", b_read, list2(1, 2));
-    defbuiltin("read_line", b_read_line, list2(1, 2));
+    defbuiltin("read_line", b_read_line, 2);
     defbuiltin("read_string", b_read_string, list2(2, 3));
     defbuiltin("real", b_real, 1);
     defbuiltin("recorda", b_recorda, 3);
@@ -917,14 +917,13 @@ int b_read_line(int arglist, int rest)
     char str[STRSIZE], c;
 
     n = length(arglist);
-    if (n == 1) {
-	arg1 = input_stream;
-	arg2 = car(arglist);
-	goto read_line;
-    } else if (n == 2) {
+    if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-      read_line:
+    
+	if (arg1 == makeint(0))
+		arg1 = standard_input;
+
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "read_line ", arg1);
 	if (!streamp(arg1) && !aliasp(arg1))
@@ -947,7 +946,7 @@ int b_read_line(int arglist, int rest)
 	    c = readc();
 	}
 	str[pos] = NUL;
-	res = unify(arg2, makeconst(str));
+	res = unify(arg2, makestr(str));
 	input_stream = save1;
 	repl_flag = save2;
 	if (res == YES)
