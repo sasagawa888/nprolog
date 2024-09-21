@@ -6,6 +6,14 @@ N-Prolog is NOT ISO-Prolog.Compatible with ARITY/PROLOG(MS-DOS)
 license is modified BSD.
 
 ![npl](npl.png)
+
+# Vulnerability Notice
+
+Ver3.21 release addresses a critical vulnerability identified in the previous version of N-Prolog. We strongly recommend all users to upgrade to the latest version to ensure the security and stability of their applications.
+
+Please check the release notes for detailed information on the changes made and the importance of this update.
+
+Thank you for your understanding and support in keeping N-Prolog secure.
  
 ## OS
 We have confirmed the operation on the following OS.
