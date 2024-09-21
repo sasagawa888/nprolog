@@ -9,7 +9,7 @@ license is modified BSD.
 
 # Vulnerability Notice
 
-Ver3.21 release addresses a critical vulnerability identified in the previous version of N-Prolog. We strongly recommend all users to upgrade to the latest version to ensure the security and stability of their applications.
+Ver3.22 release addresses a critical vulnerability identified in the previous version of N-Prolog. We strongly recommend all users to upgrade to the latest version to ensure the security and stability of their applications.
 
 Please check the release notes for detailed information on the changes made and the importance of this update.
 
