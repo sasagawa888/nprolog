@@ -5524,8 +5524,7 @@ int b_instance(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	arg1 = deref(arg1);
-	if (unify(arg2, get_int(arg1)) == YES)
+	if (unify(arg2, car(get_int(arg1))) == YES)
 	    return (prove_all(rest, sp));
 	else
 	    return (NO);
@@ -5537,7 +5536,7 @@ int b_instance(int arglist, int rest)
 
 int b_recordz(int arglist, int rest)
 {
-    int n, arg1, arg2, arg3, temp;
+    int n, arg1, arg2, arg3, temp, pointer;
 
     n = length(arglist);
     if (n == 3) {
@@ -5565,7 +5564,13 @@ int b_recordz(int arglist, int rest)
 	    SET_CDR(temp, cons(arg2, NIL));
 	}
 	checkgbc();
-	if (unify(arg3, makeint(arg2)) == YES)
+	if(temp == NIL)
+		pointer = GET_RECORD(arg1);
+	else
+		pointer = cdr(temp);
+
+
+	if (unify(arg3, makeint(pointer)) == YES)
 	    return (prove_all(rest, sp));
 	else
 	    return (NO);
@@ -5595,7 +5600,7 @@ int b_recorda(int arglist, int rest)
 	arg2 = copy_heap(arg2);	//copy arg1 to heap area
 	SET_RECORD(arg1, cons(arg2, GET_RECORD(arg1)));
 	checkgbc();
-	if (unify(arg3, makeint(arg2)) == YES)
+	if (unify(arg3, makeint(GET_RECORD(arg1))) == YES)
 	    return (prove_all(rest, sp));
 	else
 	    return (NO);
@@ -5607,7 +5612,7 @@ int b_recorda(int arglist, int rest)
 
 int b_recorded(int arglist, int rest)
 {
-    int n, arg1, arg2, arg3, record, term, save1, save2;
+    int n, arg1, arg2, arg3, record, pointer, save1, save2;
 
     n = length(arglist);
     if (n == 3) {
@@ -5619,10 +5624,10 @@ int b_recorded(int arglist, int rest)
 	save1 = wp;
 	save2 = sp;
 	while (!nullp(record)) {
-	    term = car(record);
+	    pointer = record;
 	    record = cdr(record);
-	    if (unify(arg2, term) == YES) {
-		unify(arg3, makeint(term));
+	    if (unify(arg2, car(pointer)) == YES) {
+		unify(arg3, makeint(pointer));
 		if (prove(NIL, sp, rest) == YES)
 		    return (YES);
 	    }
@@ -5650,7 +5655,7 @@ int b_erase(int arglist, int rest)
 	    error(NOT_INT, "erase ", arg1);
 
 	addr = get_int(arg1);
-	SET(addr, NIL);
+	SET_CAR(addr, NIL);
 	return (YES);
     }
     error(ARITY_ERR, "erase ", arglist);

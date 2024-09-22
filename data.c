@@ -170,16 +170,7 @@ int bcons(int car, int cdr)
 
     int addr;
 
-
-    addr = wp;
-
-    wp++;
-
-    if (wp >= CELLSIZE) {
-
-	error(RESOURCE_ERR, "bcons ", NIL);
-
-    }
+	addr = freshcell();
 
     SET_TAG(addr, STRUCT);
 
