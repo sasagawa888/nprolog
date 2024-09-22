@@ -381,6 +381,9 @@ Reads a string from the standard input device.
 ### □ read_string(Handle, MaxLength, X)
 Reads a string from the specified file.
 
+### □ record_after(Ref, Term, Newref)
+Adds a term after Ref and returns the new reference number for that term.
+
 ### □ recorda(Key,Term,Ref)
 Predicates a term and returns a new reference number for that term. 
 

@@ -136,6 +136,7 @@ void initbuiltin(void)
     defbuiltin("read_line", b_read_line, 2);
     defbuiltin("read_string", b_read_string, list2(2, 3));
     defbuiltin("real", b_real, 1);
+    defbuiltin("record_after", b_record_after, 3);
     defbuiltin("recorda", b_recorda, 3);
     defbuiltin("recordz", b_recordz, 3);
     defbuiltin("recorded", b_recorded, 3);
@@ -5583,6 +5584,42 @@ int b_recordz(int arglist, int rest)
     return (NO);
 }
 
+int b_record_after(int arglist, int rest)
+{
+    int n, arg1, arg2, arg3, chain, chain1;
+
+    n = length(arglist);
+    if (n == 3) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	arg3 = caddr(arglist);
+
+	if (!integerp(arg1))
+	    error(NOT_INT, "record_after ", arg1);
+	if (wide_variable_p(arg2))
+	    error(INSTANTATION_ERR, "record_after ", arg2);
+	if (!wide_variable_p(arg3))
+	    error(NOT_VAR, "record_after ", arg3);
+
+	chain = get_int(arg1);
+	if (car(chain) == NIL)
+	    return (NO);
+
+	arg2 = copy_heap(arg2);
+	chain1 = bcons(arg2, cdr(chain));
+	SET_CDR(chain, chain1);	// make bidirectional list
+	SET_AUX(chain1, chain);	// 
+
+	if (unify(arg3, makeint(chain1)) == YES)
+	    return (prove_all(rest, sp));
+	else
+	    return (NO);
+    }
+    error(ARITY_ERR, "record_after ", arglist);
+    return (NO);
+}
+
+
 int b_recorda(int arglist, int rest)
 {
     int n, arg1, arg2, arg3;
@@ -5857,13 +5894,12 @@ int b_key(int arglist, int rest)
 	    chain = GET_RECORD(key);
 	    if (chain != NIL) {
 
-		if(structurep(car(chain)))
-			arity = length(car(chain)) - 1;
+		if (structurep(car(chain)))
+		    arity = length(car(chain)) - 1;
 		else
-			arity = 0;
+		    arity = 0;
 
-		keyarity =
-		    list3(SLASH, key, makeint(arity));
+		keyarity = list3(SLASH, key, makeint(arity));
 		if (unify(arg1, keyarity) == YES) {
 		    if (prove(NIL, sp, rest) == YES)
 			return (YES);
@@ -5878,8 +5914,8 @@ int b_key(int arglist, int rest)
     } else if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-	if(!atomp(arg1))
-	error(NOT_ATOM,"key ", arg1);
+	if (!atomp(arg1))
+	    error(NOT_ATOM, "key ", arg1);
 
 	save1 = wp;
 	save2 = sp;

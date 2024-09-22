@@ -370,6 +370,9 @@ Handleで指定したファイルから1行読む。
 ### □ read_string(Handle,MaxLength,X)
 指定ファイルからストリングを読む。
 
+### □ record_after(Ref,Term,Newref)
+Refの後に項を加えて、その項の新しい参照番号を返す。
+
 ### □ recorda(Key,Term,Ref)
 述語の先頭に項を加えて、その項の新しい参照番号を戻す。
 
