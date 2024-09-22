@@ -122,11 +122,13 @@ void initbuiltin(void)
     defbuiltin("nonvar", b_nonvar, 1);
     defbuiltin("nospy", b_nospy, 1);
     defbuiltin("notrace", b_notrace, 0);
+	defbuiltin("nref", b_nref, 2);
     defbuiltin("number", b_number, 1);
     defbuiltin("nth_char", b_nth_char, 3);
     defbuiltin("op", b_op, 3);
     defbuiltin("open", b_open, 3);
     defbuiltin("predicate_property", b_predicate_property, 2);
+	defbuiltin("pref", b_pref, 2);
     defbuiltin("put", b_put, 1);
     defbuiltin("reconsult", b_reconsult, 1);
     defbuiltin("read", b_read, list2(1, 2));
@@ -5556,12 +5558,12 @@ int b_recordz(int arglist, int rest)
 	arg2 = copy_heap(arg2);	//copy arg1 to heap area
 	temp = GET_RECORD(arg1);
 	if (temp == NIL)
-	    SET_RECORD(arg1, cons(arg2, NIL));
+	    SET_RECORD(arg1, bcons(arg2, NIL));
 	else {
 	    while (cdr(temp) != NIL) {
 		temp = cdr(temp);
 	    }
-	    SET_CDR(temp, cons(arg2, NIL));
+	    SET_CDR(temp, bcons(arg2, NIL));
 	}
 	checkgbc();
 	if(temp == NIL)
@@ -5598,7 +5600,7 @@ int b_recorda(int arglist, int rest)
 	    error(NOT_VAR, "recorda ", arg3);
 
 	arg2 = copy_heap(arg2);	//copy arg1 to heap area
-	SET_RECORD(arg1, cons(arg2, GET_RECORD(arg1)));
+	SET_RECORD(arg1, bcons(arg2, GET_RECORD(arg1)));
 	checkgbc();
 	if (unify(arg3, makeint(GET_RECORD(arg1))) == YES)
 	    return (prove_all(rest, sp));
@@ -5639,6 +5641,48 @@ int b_recorded(int arglist, int rest)
 	return (NO);
     }
     error(ARITY_ERR, "recorded ", arglist);
+    return (NO);
+}
+
+int b_nref(int arglist, int rest)
+{
+	int n,arg1,arg2,pointer;
+
+	n=length(arglist);
+
+	if(n==2){
+		arg1 = car(arglist);
+		arg2 = cadr(arglist);
+		pointer = cdr(get_int(arg1));
+		if(pointer == NIL)
+			return(NO);
+		if (unify(arg2, makeint(pointer)) == YES) {
+		if (prove(NIL, sp, rest) == YES)
+		    return (YES);
+	    }
+	}
+	error(ARITY_ERR, "nref ", arglist);
+    return (NO);
+}
+
+int b_pref(int arglist, int rest)
+{
+	int n,arg1,arg2,pointer;
+
+	n=length(arglist);
+
+	if(n==2){
+		arg1 = car(arglist);
+		arg2 = cadr(arglist);
+		pointer = GET_AUX(get_int(arg1));
+		if(pointer == NIL)
+			return(NO);
+		if (unify(arg2, makeint(pointer)) == YES) {
+		if (prove(NIL, sp, rest) == YES)
+		    return (YES);
+	    }
+	}
+	error(ARITY_ERR, "pref ", arglist);
     return (NO);
 }
 

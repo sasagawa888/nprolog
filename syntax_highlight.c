@@ -31,7 +31,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "->" }, { "=.." }, { "\\+" },
     { "==" }, { "\\==" }, { "@<" }, { "@=<" }, { "@>" }, { "@>=" },
     { "=:=" }, { "=/=" }, { "=\\=" }, { "<" }, { "=<" }, { ">" },
-    { ">=" }, { "\\=" }, { "=" }, { "reverse" },
+    { ">=" }, { "\\=" }, { "=" }, 
     { "is" }, { "edit" }, { "open" }, { "close" }, { "create" }, { "dup" },
     { "delete" }, { "rename" },
     { "op" }, { "!" }, { "assert" }, { "asserta" }, { "assertz" },
@@ -64,11 +64,11 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "ansi_cup" }, { "ansi_cpr" }, { "ansi_scp" }, { "ansi_rcp" },
     { "ansi_ed" }, { "ansi_el" }, { "errorcode" },
     { "recordh" }, { "recorda" }, { "recordz" }, { "recorded" },
-    { "instance" },
+    { "instance" }, { "reverse" },
     { "removeallh" }, { "erase" }, { "eraseall" },
     { "stdin" }, { "stdout" }, { "stdinout" },
     { "ctr_set" }, { "ctr_dec" }, { "ctr_inc" }, { "ctr_is" },
-    { "heapd" }, { "list_text" },
+    { "heapd" }, { "list_text" }, { "nref" }, { "pref"} ,
     { "member" }, { "append" }, { "repeat" }, { "system" },
     { "retract" }, { "clause" }, { "call" }, { "directory" },
     { "between" }, { "bagof" }, { "setof" }, { "findall" },
@@ -89,7 +89,7 @@ char extended[EXTENDED_NUMBER][30] = {
     { "delay" },
     { "delay_microseconds" },
     { "compile_file" }, { "timer_microseconds" }, { "with" },
-    { "existerrors" },
+    { "existerrors" }, 
 };
 
 
