@@ -31,7 +31,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "->" }, { "=.." }, { "\\+" },
     { "==" }, { "\\==" }, { "@<" }, { "@=<" }, { "@>" }, { "@>=" },
     { "=:=" }, { "=/=" }, { "=\\=" }, { "<" }, { "=<" }, { ">" },
-    { ">=" }, { "\\=" }, { "=" }, 
+    { ">=" }, { "\\=" }, { "=" },
     { "is" }, { "edit" }, { "open" }, { "close" }, { "create" }, { "dup" },
     { "delete" }, { "rename" },
     { "op" }, { "!" }, { "assert" }, { "asserta" }, { "assertz" },
@@ -41,7 +41,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "read_line" }, { "reset_op" }, { "skip" }, { "predicate_property" },
     { "tab" }, { "fail" }, { "not" }, { "true" }, { "halt" }, { "abort" },
     { "listing" }, { "functor" }, { "arg" },
-    { "writeq" }, { "display" }, { "ref" },
+    { "writeq" }, { "display" }, { "ref" }, { "key" },
     { "atom_concat" }, { "atom_string" }, { "consult" }, { "reconsult" },
     { "see" }, { "seeing" }, { "seen" }, { "tell" }, { "telling" },
     { "save" },
@@ -68,7 +68,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "removeallh" }, { "erase" }, { "eraseall" },
     { "stdin" }, { "stdout" }, { "stdinout" },
     { "ctr_set" }, { "ctr_dec" }, { "ctr_inc" }, { "ctr_is" },
-    { "heapd" }, { "list_text" }, { "nref" }, { "pref"} ,
+    { "heapd" }, { "list_text" }, { "nref" }, { "pref" },
     { "member" }, { "append" }, { "repeat" }, { "system" },
     { "retract" }, { "clause" }, { "call" }, { "directory" },
     { "between" }, { "bagof" }, { "setof" }, { "findall" },
@@ -89,7 +89,7 @@ char extended[EXTENDED_NUMBER][30] = {
     { "delay" },
     { "delay_microseconds" },
     { "compile_file" }, { "timer_microseconds" }, { "with" },
-    { "existerrors" }, 
+    { "existerrors" },
 };
 
 

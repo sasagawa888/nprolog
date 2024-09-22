@@ -63,7 +63,7 @@ void initbuiltin(void)
     defbuiltin("char_code", b_char_code, 2);
     defbuiltin("chdir", b_chdir, 1);
     defbuiltin("close", b_close, 1);
-	defbuiltin("clause", b_clause, 2);
+    defbuiltin("clause", b_clause, 2);
     defbuiltin("compare", b_compare, 2);
     defbuiltin("compound", b_compound, 1);
     defbuiltin("concat", b_concat, 3);
@@ -73,14 +73,14 @@ void initbuiltin(void)
     defbuiltin("ctr_dec", b_ctr_dec, 2);
     defbuiltin("ctr_inc", b_ctr_inc, 2);
     defbuiltin("ctr_is", b_ctr_is, 2);
-	defbuiltin("current_op", b_current_op, 3);
-	defbuiltin("current_predicate", b_current_predicate, 1);
+    defbuiltin("current_op", b_current_op, 3);
+    defbuiltin("current_predicate", b_current_predicate, 1);
     defbuiltin("date", b_date, 1);
     defbuiltin("date_day", b_date_day, 1);
     defbuiltin("dec", b_dec, 2);
     defbuiltin("delete", b_delete, 1);
     defbuiltin("display", b_write_canonical, 1);
-	defbuiltin("directory", b_directory, 6);
+    defbuiltin("directory", b_directory, 6);
     defbuiltin("debug", b_debug, 0);
     defbuiltin("dup", b_dup, 2);
     defbuiltin("edit", b_edit, 1);
@@ -109,6 +109,7 @@ void initbuiltin(void)
     defbuiltin("instance", b_instance, 2);
     defbuiltin("integer", b_integer, 1);
     defbuiltin("int_text", b_int_text, 3);
+    defbuiltin("key", b_key, list2(1, 2));
     defbuiltin("keysort", b_keysort, 2);
     defbuiltin("leash", b_leash, 1);
     defbuiltin("length", b_length, 1);
@@ -122,13 +123,13 @@ void initbuiltin(void)
     defbuiltin("nonvar", b_nonvar, 1);
     defbuiltin("nospy", b_nospy, 1);
     defbuiltin("notrace", b_notrace, 0);
-	defbuiltin("nref", b_nref, 2);
+    defbuiltin("nref", b_nref, 2);
     defbuiltin("number", b_number, 1);
     defbuiltin("nth_char", b_nth_char, 3);
     defbuiltin("op", b_op, 3);
     defbuiltin("open", b_open, 3);
     defbuiltin("predicate_property", b_predicate_property, 2);
-	defbuiltin("pref", b_pref, 2);
+    defbuiltin("pref", b_pref, 2);
     defbuiltin("put", b_put, 1);
     defbuiltin("reconsult", b_reconsult, 1);
     defbuiltin("read", b_read, list2(1, 2));
@@ -140,9 +141,9 @@ void initbuiltin(void)
     defbuiltin("recorded", b_recorded, 3);
     defbuiltin("recordh", b_recordh, 4);
     defbuiltin("ref", b_ref, 1);
-	defbuiltin("retract", b_retract, 1);
-	defbuiltin("retrieveh", b_retrieveh, 3);
-	defbuiltin("removeh", b_removeh, 3);
+    defbuiltin("retract", b_retract, 1);
+    defbuiltin("retrieveh", b_retrieveh, 3);
+    defbuiltin("removeh", b_removeh, 3);
     defbuiltin("removeallh", b_removeallh, 2);
     defbuiltin("rename", b_rename, 2);
     defbuiltin("reset_op", b_reset_op, 0);
@@ -165,7 +166,7 @@ void initbuiltin(void)
     defbuiltin("spy", b_spy, 1);
     defbuiltin("substring", b_substring, 3);
     defbuiltin("syntaxerrors", b_syntaxerrors, 2);
-	defbuiltin("system", b_system, 1);
+    defbuiltin("system", b_system, 1);
     defbuiltin("tab", b_tab, list2(1, 2));
     defbuiltin("tell", b_tell, 1);
     defbuiltin("telling", b_telling, 1);
@@ -5538,7 +5539,7 @@ int b_instance(int arglist, int rest)
 
 int b_recordz(int arglist, int rest)
 {
-    int n, arg1, arg2, arg3, temp, pointer;
+    int n, arg1, arg2, arg3, temp, chain;
 
     n = length(arglist);
     if (n == 3) {
@@ -5557,9 +5558,9 @@ int b_recordz(int arglist, int rest)
 
 	arg2 = copy_heap(arg2);	//copy arg1 to heap area
 	temp = GET_RECORD(arg1);
-	if (temp == NIL){
+	if (temp == NIL) {
 	    SET_RECORD(arg1, bcons(arg2, NIL));
-		key_list = cons(arg1,key_list);
+	    key_list = cons(arg1, key_list);
 	} else {
 	    while (cdr(temp) != NIL) {
 		temp = cdr(temp);
@@ -5567,13 +5568,13 @@ int b_recordz(int arglist, int rest)
 	    SET_CDR(temp, bcons(arg2, NIL));
 	}
 	checkgbc();
-	if(temp == NIL)
-		pointer = GET_RECORD(arg1);
+	if (temp == NIL)
+	    chain = GET_RECORD(arg1);
 	else
-		pointer = cdr(temp);
+	    chain = cdr(temp);
 
 
-	if (unify(arg3, makeint(pointer)) == YES)
+	if (unify(arg3, makeint(chain)) == YES)
 	    return (prove_all(rest, sp));
 	else
 	    return (NO);
@@ -5601,8 +5602,8 @@ int b_recorda(int arglist, int rest)
 	    error(NOT_VAR, "recorda ", arg3);
 
 	arg2 = copy_heap(arg2);	//copy arg1 to heap area
-	if(GET_RECORD(arg1) == NIL){
-		key_list = cons(arg1,key_list);
+	if (GET_RECORD(arg1) == NIL) {
+	    key_list = cons(arg1, key_list);
 	}
 	SET_RECORD(arg1, bcons(arg2, GET_RECORD(arg1)));
 	checkgbc();
@@ -5618,7 +5619,7 @@ int b_recorda(int arglist, int rest)
 
 int b_recorded(int arglist, int rest)
 {
-    int n, arg1, arg2, arg3, record, pointer, save1, save2;
+    int n, arg1, arg2, arg3, record, chain, save1, save2;
 
     n = length(arglist);
     if (n == 3) {
@@ -5630,10 +5631,10 @@ int b_recorded(int arglist, int rest)
 	save1 = wp;
 	save2 = sp;
 	while (!nullp(record)) {
-	    pointer = record;
+	    chain = record;
 	    record = cdr(record);
-	    if (unify(arg2, car(pointer)) == YES) {
-		unify(arg3, makeint(pointer));
+	    if (unify(arg2, car(chain)) == YES) {
+		unify(arg3, makeint(chain));
 		if (prove(NIL, sp, rest) == YES)
 		    return (YES);
 	    }
@@ -5650,43 +5651,43 @@ int b_recorded(int arglist, int rest)
 
 int b_nref(int arglist, int rest)
 {
-	int n,arg1,arg2,pointer;
+    int n, arg1, arg2, chain;
 
-	n=length(arglist);
+    n = length(arglist);
 
-	if(n==2){
-		arg1 = car(arglist);
-		arg2 = cadr(arglist);
-		pointer = cdr(get_int(arg1));
-		if(pointer == NIL)
-			return(NO);
-		if (unify(arg2, makeint(pointer)) == YES) {
-		if (prove(NIL, sp, rest) == YES)
-		    return (YES);
-	    }
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	chain = cdr(get_int(arg1));
+	if (chain == NIL)
+	    return (NO);
+	if (unify(arg2, makeint(chain)) == YES) {
+	    if (prove(NIL, sp, rest) == YES)
+		return (YES);
 	}
-	error(ARITY_ERR, "nref ", arglist);
+    }
+    error(ARITY_ERR, "nref ", arglist);
     return (NO);
 }
 
 int b_pref(int arglist, int rest)
 {
-	int n,arg1,arg2,pointer;
+    int n, arg1, arg2, chain;
 
-	n=length(arglist);
+    n = length(arglist);
 
-	if(n==2){
-		arg1 = car(arglist);
-		arg2 = cadr(arglist);
-		pointer = GET_AUX(get_int(arg1));
-		if(pointer == NIL)
-			return(NO);
-		if (unify(arg2, makeint(pointer)) == YES) {
-		if (prove(NIL, sp, rest) == YES)
-		    return (YES);
-	    }
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	chain = GET_AUX(get_int(arg1));
+	if (chain == NIL)
+	    return (NO);
+	if (unify(arg2, makeint(chain)) == YES) {
+	    if (prove(NIL, sp, rest) == YES)
+		return (YES);
 	}
-	error(ARITY_ERR, "pref ", arglist);
+    }
+    error(ARITY_ERR, "pref ", arglist);
     return (NO);
 }
 
@@ -5805,7 +5806,7 @@ int b_removeallh(int arglist, int rest)
 
 int b_ref(int arglist, int rest)
 {
-    int n, arg1,list,key,num,chain;
+    int n, arg1, list, key, num, chain;
 
     n = length(arglist);
     if (n == 1) {
@@ -5816,23 +5817,82 @@ int b_ref(int arglist, int rest)
 
 	num = get_int(arg1);
 	list = key_list;
-	while(!nullp(list)){
-		key = car(list);
-		list = cdr(list);
-		chain = GET_RECORD(key);
-		while(!nullp(chain)){
-			if(num == chain) goto find;
-			chain = cdr(chain);
-		}
+	while (!nullp(list)) {
+	    key = car(list);
+	    list = cdr(list);
+	    chain = GET_RECORD(key);
+	    while (!nullp(chain)) {
+		if (num == chain)
+		    goto find;
+		chain = cdr(chain);
+	    }
 	}
-	return(NO);  //not find
+	return (NO);		//not find
 
-	find:
-	if (prove_all(rest, sp) == YES){
-		return(YES);
+      find:
+	if (prove_all(rest, sp) == YES) {
+	    return (YES);
 	} else
 	    return (NO);
     }
     error(ARITY_ERR, "ref ", arglist);
+    return (NO);
+}
+
+
+int b_key(int arglist, int rest)
+{
+    int n, arg1, arg2, save1, save2, list, key, chain, arity, keyarity;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+
+	list = reverse(key_list);
+	save1 = wp;
+	save2 = sp;
+	while (!nullp(list)) {
+	    key = car(list);
+	    list = cdr(list);
+	    chain = GET_RECORD(key);
+	    if (chain != NIL) {
+
+		if(structurep(car(chain)))
+			arity = length(car(chain)) - 1;
+		else
+			arity = 0;
+
+		keyarity =
+		    list3(SLASH, key, makeint(arity));
+		if (unify(arg1, keyarity) == YES) {
+		    if (prove(NIL, sp, rest) == YES)
+			return (YES);
+		}
+		wp = save1;
+		unbind(save2);
+	    }
+	}
+	wp = save1;
+	unbind(save2);
+	return (NO);
+    } else if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	if(!atomp(arg1))
+	error(NOT_ATOM,"key ", arg1);
+
+	save1 = wp;
+	save2 = sp;
+	chain = GET_RECORD(arg1);
+	if (unify(arg2, makeint(chain)) == YES) {
+	    if (prove(NIL, sp, rest) == YES)
+		return (YES);
+	}
+	wp = save1;
+	unbind(save2);
+	return (NO);
+    }
+
+    error(ARITY_ERR, "key ", arglist);
     return (NO);
 }

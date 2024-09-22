@@ -731,6 +731,7 @@ int b_instance(int arglist, int rest);
 int b_integer(int arglist, int rest);
 int b_int_text(int arglist, int rest);
 int b_is(int arglist, int rest);
+int b_key(int arglist, int rest);
 int b_keysort(int arglist, int rest);
 int b_leash(int arglist, int rest);
 int b_length(int arglist, int rest);

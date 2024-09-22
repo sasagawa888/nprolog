@@ -317,6 +317,12 @@ Convert an integer to a string, or convert a string to an integer.
 ### □ X is E 
 Evaluate the arithmetic expression E and unify the result with X.
 
+### □ key(Key)
+Returns the name and arity of the key in the current database.
+
+### □ key(Key, Ref)
+Returns the reference number for the key.
+
 ### □ keysort(L1,L2)
 Sort the list L1 in standard order. List elements must be in the form Key_Value.
 The sorted list is returned to L2. Even if it is duplicated, it won't be united. 

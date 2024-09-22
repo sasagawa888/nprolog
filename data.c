@@ -170,7 +170,7 @@ int bcons(int car, int cdr)
 
     int addr;
 
-	addr = freshcell();
+    addr = freshcell();
 
     SET_TAG(addr, STRUCT);
 
@@ -180,7 +180,7 @@ int bcons(int car, int cdr)
 
     SET_AUX(addr, 0);
 
-	if(cdr != NIL)
+    if (cdr != NIL)
 	SET_AUX(cdr, addr);
 
     return (addr);
