@@ -73,6 +73,8 @@ void initbuiltin(void)
     defbuiltin("ctr_dec", b_ctr_dec, 2);
     defbuiltin("ctr_inc", b_ctr_inc, 2);
     defbuiltin("ctr_is", b_ctr_is, 2);
+	defbuiltin("current_op", b_current_op, 3);
+	defbuiltin("current_predicate", b_current_predicate, 1);
     defbuiltin("date", b_date, 1);
     defbuiltin("date_day", b_date_day, 1);
     defbuiltin("dec", b_dec, 2);
@@ -177,8 +179,6 @@ void initbuiltin(void)
     defbuiltin("repeat", b_repeat, 0);
     defbuiltin("append", b_append, 3);
     defbuiltin("member", b_member, 2);
-    defbuiltin("current_predicate", b_current_predicate, 1);
-    defbuiltin("current_op", b_current_op, 3);
     defbuiltin("between", b_between, 3);
     defbuiltin("existerrors", b_existerrors, 2);
 
