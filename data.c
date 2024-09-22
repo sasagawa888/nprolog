@@ -153,6 +153,48 @@ int wcons(int car, int cdr)
 
 }
 
+/*
+bidirectional cons  bcons(x,y)
+for record data base chain
+	         (record1)   (record2)
+               |          |
+key-record ->(car,cdr)->(car,cdr)->....->NIL
+	                  <- aux     <- aux 
+
+	aux(addr) is previous cons
+	cdr(addr) is next cons
+
+*/
+int bcons(int car, int cdr)
+{
+
+    int addr;
+
+
+    addr = wp;
+
+    wp++;
+
+    if (wp >= CELLSIZE) {
+
+	error(RESOURCE_ERR, "bcons ", NIL);
+
+    }
+
+    SET_TAG(addr, STRUCT);
+
+    SET_CAR(addr, car);
+
+    SET_CDR(addr, cdr);
+
+    SET_AUX(addr, 0);
+
+	if(cdr != NIL)
+	SET_AUX(cdr, addr);
+
+    return (addr);
+
+}
 
 
 int assq(int sym, int lis)

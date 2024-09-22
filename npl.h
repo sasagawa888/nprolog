@@ -619,6 +619,7 @@ int atomp(int addr);
 int atomicp(int addr);
 int atsmaller(int x, int y);
 int ateqsmaller(int x, int y);
+int bcons(int car, int cdr);
 int b_abolish(int arglist, int rest);
 int b_abort(int arglist, int rest);
 int b_ansi_cup(int arglist, int rest);
