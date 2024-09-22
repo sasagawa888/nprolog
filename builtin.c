@@ -63,6 +63,7 @@ void initbuiltin(void)
     defbuiltin("char_code", b_char_code, 2);
     defbuiltin("chdir", b_chdir, 1);
     defbuiltin("close", b_close, 1);
+	defbuiltin("clause", b_clause, 2);
     defbuiltin("compare", b_compare, 2);
     defbuiltin("compound", b_compound, 1);
     defbuiltin("concat", b_concat, 3);
@@ -77,6 +78,7 @@ void initbuiltin(void)
     defbuiltin("dec", b_dec, 2);
     defbuiltin("delete", b_delete, 1);
     defbuiltin("display", b_write_canonical, 1);
+	defbuiltin("directory", b_directory, 6);
     defbuiltin("debug", b_debug, 0);
     defbuiltin("dup", b_dup, 2);
     defbuiltin("edit", b_edit, 1);
@@ -134,6 +136,9 @@ void initbuiltin(void)
     defbuiltin("recorded", b_recorded, 3);
     defbuiltin("recordh", b_recordh, 4);
     defbuiltin("ref", b_ref, 1);
+	defbuiltin("retract", b_retract, 1);
+	defbuiltin("retrieveh", b_retrieveh, 3);
+	defbuiltin("removeh", b_removeh, 3);
     defbuiltin("removeallh", b_removeallh, 2);
     defbuiltin("rename", b_rename, 2);
     defbuiltin("reset_op", b_reset_op, 0);
@@ -156,6 +161,7 @@ void initbuiltin(void)
     defbuiltin("spy", b_spy, 1);
     defbuiltin("substring", b_substring, 3);
     defbuiltin("syntaxerrors", b_syntaxerrors, 2);
+	defbuiltin("system", b_system, 1);
     defbuiltin("tab", b_tab, list2(1, 2));
     defbuiltin("tell", b_tell, 1);
     defbuiltin("telling", b_telling, 1);
@@ -169,17 +175,11 @@ void initbuiltin(void)
 
     defbuiltin("call", b_call, 1);
     defbuiltin("repeat", b_repeat, 0);
-    defbuiltin("system", b_system, 1);
     defbuiltin("append", b_append, 3);
     defbuiltin("member", b_member, 2);
-    defbuiltin("retract", b_retract, 1);
-    defbuiltin("clause", b_clause, 2);
     defbuiltin("current_predicate", b_current_predicate, 1);
     defbuiltin("current_op", b_current_op, 3);
     defbuiltin("between", b_between, 3);
-    defbuiltin("retrieveh", b_retrieveh, 3);
-    defbuiltin("removeh", b_removeh, 3);
-    defbuiltin("directory", b_directory, 6);
     defbuiltin("existerrors", b_existerrors, 2);
 
     //-----JUMP project---------
@@ -920,9 +920,9 @@ int b_read_line(int arglist, int rest)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-    
+
 	if (arg1 == makeint(0))
-		arg1 = standard_input;
+	    arg1 = standard_input;
 
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "read_line ", arg1);
@@ -3052,7 +3052,35 @@ int b_concat(int arglist, int rest)
     char str1[STRSIZE];
 
     n = length(arglist);
-    if (n == 3) {
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+	if (!listp(arg1))
+	    error(NOT_LIST, "concat ", arg1);
+	if (!wide_variable_p(arg2))
+	    error(NOT_VAR, "concat ", arg2);
+	if (!stringp(car(arg1)))
+	    error(NOT_STR, "concat ", car(arg1));
+
+	strcpy(str1, GET_NAME(car(arg1)));
+	arg1 = cdr(arg1);
+	while (!nullp(arg1)) {
+	    if (!stringp(car(arg1)) && !atomp(car(arg1)))
+		error(NOT_STR, "concat ", car(arg1));
+	    if (strlen(str1) + strlen(GET_NAME(car(arg1))) > STRSIZE)
+		error(RESOURCE_ERR, "concat ", car(arg1));
+
+	    strcat(str1, GET_NAME(car(arg1)));
+	    arg1 = cdr(arg1);
+	}
+	str = makestr(str1);
+
+	if (unify(arg2, str) == YES)
+	    return (prove_all(rest, sp));
+	else
+	    return (NO);
+    } else if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
@@ -3063,6 +3091,8 @@ int b_concat(int arglist, int rest)
 	    error(NOT_STR, "concat ", arg2);
 	if (!wide_variable_p(arg3))
 	    error(NOT_VAR, "concat ", arg3);
+	if (strlen(GET_NAME(arg1)) + strlen(GET_NAME(arg2)) > STRSIZE)
+	    error(RESOURCE_ERR, "concat", arglist);
 
 	strcpy(str1, GET_NAME(arg1));
 	strcat(str1, GET_NAME(arg2));
