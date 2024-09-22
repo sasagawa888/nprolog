@@ -195,6 +195,7 @@ extern int spy_list;
 extern int reconsult_list;
 extern int execute_list;
 extern int op_list;
+extern int key_list;
 extern int error_code;
 extern int bag_list;
 extern int nonfree_list;

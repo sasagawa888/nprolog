@@ -5557,9 +5557,10 @@ int b_recordz(int arglist, int rest)
 
 	arg2 = copy_heap(arg2);	//copy arg1 to heap area
 	temp = GET_RECORD(arg1);
-	if (temp == NIL)
+	if (temp == NIL){
 	    SET_RECORD(arg1, bcons(arg2, NIL));
-	else {
+		key_list = cons(arg1,key_list);
+	} else {
 	    while (cdr(temp) != NIL) {
 		temp = cdr(temp);
 	    }
@@ -5600,6 +5601,9 @@ int b_recorda(int arglist, int rest)
 	    error(NOT_VAR, "recorda ", arg3);
 
 	arg2 = copy_heap(arg2);	//copy arg1 to heap area
+	if(GET_RECORD(arg1) == NIL){
+		key_list = cons(arg1,key_list);
+	}
 	SET_RECORD(arg1, bcons(arg2, GET_RECORD(arg1)));
 	checkgbc();
 	if (unify(arg3, makeint(GET_RECORD(arg1))) == YES)
@@ -5801,7 +5805,7 @@ int b_removeallh(int arglist, int rest)
 
 int b_ref(int arglist, int rest)
 {
-    int n, arg1;
+    int n, arg1,list,key,num,chain;
 
     n = length(arglist);
     if (n == 1) {
@@ -5810,9 +5814,23 @@ int b_ref(int arglist, int rest)
 	if (!integerp(arg1))
 	    error(NOT_INT, "ref ", arg1);
 
-	if (predicatep(GET_INT(arg1)))
-	    return (prove_all(rest, sp));
-	else
+	num = get_int(arg1);
+	list = key_list;
+	while(!nullp(list)){
+		key = car(list);
+		list = cdr(list);
+		chain = GET_RECORD(key);
+		while(!nullp(chain)){
+			if(num == chain) goto find;
+			chain = cdr(chain);
+		}
+	}
+	return(NO);  //not find
+
+	find:
+	if (prove_all(rest, sp) == YES){
+		return(YES);
+	} else
 	    return (NO);
     }
     error(ARITY_ERR, "ref ", arglist);
