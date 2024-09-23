@@ -5542,7 +5542,7 @@ int b_instance(int arglist, int rest)
 
 int b_recordz(int arglist, int rest)
 {
-    int n, arg1, arg2, arg3, temp, chain;
+    int n, arg1, arg2, arg3, temp, chain, next;
 
     n = length(arglist);
     if (n == 3) {
@@ -5569,7 +5569,9 @@ int b_recordz(int arglist, int rest)
 	    while (cdr(temp) != NIL) {
 		temp = cdr(temp);
 	    }
-	    SET_CDR(temp, bcons(arg2, NIL));
+		next = bcons(arg2, NIL);
+	    SET_CDR(temp, next);
+		SET_AUX(next,temp);  // bidirectional data
 	}
 	checkgbc();
 	if (temp == NIL)
@@ -5704,8 +5706,10 @@ int b_nref(int arglist, int rest)
 	if (chain == NIL)
 	    return (NO);
 	if (unify(arg2, makeint(chain)) == YES) {
-	    if (prove(NIL, sp, rest) == YES)
+	    if (prove_all(rest, sp) == YES)
 		return (YES);
+		else 
+		return (NO);
 	}
     }
     error(ARITY_ERR, "nref ", arglist);
@@ -5725,8 +5729,10 @@ int b_pref(int arglist, int rest)
 	if (chain == NIL)
 	    return (NO);
 	if (unify(arg2, makeint(chain)) == YES) {
-	    if (prove(NIL, sp, rest) == YES)
+	    if (prove_all(rest, sp) == YES)
 		return (YES);
+		else 
+		return(NO);
 	}
     }
     error(ARITY_ERR, "pref ", arglist);
