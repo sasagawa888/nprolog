@@ -98,6 +98,9 @@ void gbcmark(void)
     for (i = 0; i < HASHTBSIZE; i++)
 	markcell(cell_hash_table[i]);
 
+    //mard ley-list for key/1
+    markcell(key_list);
+
     //mark hash table of recordh term
     for (i = 0; i < HASHTBSIZE; i++) {
 	for (j = 0; j < record_pt; j++) {

@@ -5558,9 +5558,10 @@ int b_recordz(int arglist, int rest)
 	    error(INSTANTATION_ERR, "recordz ", arg2);
 	if (!wide_variable_p(arg3))
 	    error(NOT_VAR, "recordz ", arg3);
-
-	arg2 = copy_heap(arg2);	//copy arg1 to heap area
+	
+	arg1 = makeatom(GET_NAME(arg1),SIMP);
 	temp = GET_RECORD(arg1);
+	arg2 = copy_heap(arg2);	//copy arg2 to heap area
 	if (temp == NIL) {
 	    SET_RECORD(arg1, bcons(arg2, NIL));
 	    key_list = cons(arg1, key_list);
@@ -5624,7 +5625,7 @@ int b_record_after(int arglist, int rest)
 
 int b_recorda(int arglist, int rest)
 {
-    int n, arg1, arg2, arg3;
+    int n, arg1, arg2, arg3, chain;
 
     n = length(arglist);
     if (n == 3) {
@@ -5640,11 +5641,14 @@ int b_recorda(int arglist, int rest)
 	if (!wide_variable_p(arg3))
 	    error(NOT_VAR, "recorda ", arg3);
 
+	arg1 = makeatom(GET_NAME(arg1),SIMP);
+	chain = GET_RECORD(arg1);
 	arg2 = copy_heap(arg2);	//copy arg1 to heap area
-	if (GET_RECORD(arg1) == NIL) {
+	if (chain == NIL) {
 	    key_list = cons(arg1, key_list);
 	}
-	SET_RECORD(arg1, bcons(arg2, GET_RECORD(arg1)));
+
+	SET_RECORD(arg1, bcons(arg2, chain));
 	checkgbc();
 	if (unify(arg3, makeint(GET_RECORD(arg1))) == YES)
 	    return (prove_all(rest, sp));
@@ -5658,7 +5662,7 @@ int b_recorda(int arglist, int rest)
 
 int b_recorded(int arglist, int rest)
 {
-    int n, arg1, arg2, arg3, record, chain, save1, save2;
+    int n, arg1, arg2, arg3, chain, save1, save2;
 
     n = length(arglist);
     if (n == 3) {
@@ -5666,17 +5670,16 @@ int b_recorded(int arglist, int rest)
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
-	record = GET_RECORD(arg1);
+	arg1 = makeatom(GET_NAME(arg1),SIMP);
+	chain = GET_RECORD(arg1);
 	save1 = wp;
 	save2 = sp;
-	while (!nullp(record)) {
-	    chain = record;
-	    record = cdr(record);
-	    if (unify(arg2, car(chain)) == YES) {
-		unify(arg3, makeint(chain));
-		if (prove(NIL, sp, rest) == YES)
+	while (!nullp(chain)) {
+	    if (unify(arg2, car(chain)) == YES && unify(arg3, makeint(chain)) == YES) {	
+		if (prove_all(rest, sp) == YES)
 		    return (YES);
 	    }
+		chain = cdr(chain);
 	    wp = save1;
 	    unbind(save2);
 	}
