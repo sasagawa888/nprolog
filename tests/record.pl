@@ -28,5 +28,24 @@ test2 :-
     retrieveh(alphabet,jones,Refnum),
     instance(Refnum,X),
     write(X).
+
+test3 :-
+    recordz(foo,foo(a,1),_),
+    recordz(foo,foo(b,2),_),
+    recorda(foo,foo(c,3),_),
+    recorda(foo,foo(d,4),_),
+    recordz(foo,foo(e,5),_).
+
+test4 :-
+    key(foo,Ref),
+    nref(Ref,Ref1),
+    nref(Ref1,Ref2),
+    nref(Ref2,Ref3),
+    nref(Ref3,Ref4),
+    not nref(Ref4,Ref5),
+    pref(Ref4,Ref3),
+    pref(Ref3,Ref2),
+    pref(Ref2,Ref1),
+    pref(Ref1,Ref).
     
     

@@ -5835,6 +5835,7 @@ int b_eraseall(int arglist, int rest)
 	if (!atomp(arg1))
 	    error(NOT_ATOM, "erase ", arg1);
 
+	arg1 = makeatom(GET_NAME(arg1),SIMP);
 	SET_RECORD(arg1, NIL);
 	return (YES);
     }
@@ -5994,6 +5995,7 @@ int b_key(int arglist, int rest)
 
 	save1 = wp;
 	save2 = sp;
+	arg1 = makeatom(GET_NAME(arg1),SIMP);
 	chain = GET_RECORD(arg1);
 	if (unify(arg2, makeint(chain)) == YES) {
 	    if (prove(NIL, sp, rest) == YES)
