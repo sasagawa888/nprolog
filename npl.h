@@ -12,7 +12,7 @@ address
  5,000,001 - 30,000,000  working area 
 30,000,001 - 50,000,000  variant area
 */
-#define VERSION     3.23
+#define VERSION     3.25
 #define CELLSIZE    30000000  // if raspberry PI set smaller size.
 #define HEAPSIZE     5000000
 #define FREESIZE         500
