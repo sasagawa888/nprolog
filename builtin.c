@@ -124,6 +124,7 @@ void initbuiltin(void)
     defbuiltin("nospy", b_nospy, 1);
     defbuiltin("notrace", b_notrace, 0);
     defbuiltin("nref", b_nref, 2);
+	defbuiltin("nth_ref", b_nth_ref, 3);
     defbuiltin("number", b_number, 1);
     defbuiltin("nth_char", b_nth_char, 3);
     defbuiltin("op", b_op, 3);
@@ -147,6 +148,7 @@ void initbuiltin(void)
     defbuiltin("removeh", b_removeh, 3);
     defbuiltin("removeallh", b_removeallh, 2);
     defbuiltin("rename", b_rename, 2);
+	defbuiltin("replace", b_replace, 2);
     defbuiltin("reset_op", b_reset_op, 0);
     defbuiltin("reverse", b_reverse, 2);
     defbuiltin("rmdir", b_rmdir, 1);
@@ -5727,6 +5729,70 @@ int b_pref(int arglist, int rest)
     error(ARITY_ERR, "pref ", arglist);
     return (NO);
 }
+
+int b_nth_ref(int arglist, int rest)
+{
+    int n, arg1, arg2, arg3, chain, i;
+
+    n = length(arglist);
+
+    if (n == 3) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	arg3 = caddr(arglist);
+	if(!atomp(arg1))
+	error(NOT_ATOM,"nth_ref ", arg1);
+	if(!integerp(arg2))
+	error(NOT_INT,"nth_ref ", arg2);
+	if(!wide_variable_p(arg3))
+	error(NOT_VAR,"nth_ref ", arg3);
+
+	chain = GET_RECORD(arg1);
+	i = get_int(arg2);
+	if (chain == NIL)
+	    return (NO);
+
+	while(!nullp(chain)){
+		if(i == 1) goto find;
+		chain = cdr(chain);
+	}
+	return(NO);
+
+	find:
+	if (unify(arg2, makeint(chain)) == YES) {
+	    if (prove(NIL, sp, rest) == YES)
+		return (YES);
+	}
+    }
+    error(ARITY_ERR, "nth_ref ", arglist);
+    return (NO);
+}
+
+int b_replace(int arglist, int rest)
+{
+	int n,arg1,arg2,chain;
+
+	n = length(arglist);
+	if(n==2){
+		arg1 = car(arglist);
+		arg2 = cadr(arglist);
+		if(!integerp(arg1))
+		error(NOT_INT,"replace ", arg1);
+		if(wide_variable_p(arg2))
+		error(INSTANTATION_ERR,"replace ", arg2);
+		
+		chain = get_int(arg1);
+		arg2 = copy_heap(arg2);
+		SET_CAR(chain,arg2);
+		if (prove(NIL, sp, rest) == YES)
+		return (YES);
+		else 
+		return (NO);
+	}
+	error(ARITY_ERR, "replace ", arglist);
+    return (NO);
+}
+
 
 int b_erase(int arglist, int rest)
 {

@@ -342,6 +342,9 @@ Eを評価し、その値をXにユニフィケーションする
 ### □ nth_char(N,String,Char)
 ストリングの先頭からN個離れた文字のASCII（unicode）を戻す。
 
+### □ nth_ref(Key,N,Ref)
+項のチェイニングの先頭からN番目の参照番号を戻す。
+
 ### □ open(Handle,Filename,Access)
 既存のファイルをオープンする。
 
@@ -390,6 +393,9 @@ Xが参照番号かどうかを調べる。
 
 ### □ removeallh(Table_name)
 ハッシュテーブルを削除する。
+
+### □ replace(Ref,Term)
+指定の参照番号の項をTermで与えた項で置き換える。
 
 ### □ removeh(Table_name,Sort_key,Term)
 ハッシュテーブルから項を削除する。

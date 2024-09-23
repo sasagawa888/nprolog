@@ -353,6 +353,9 @@ Convert a list to an atom, or convert an atom or an integer to a list.
 ### □ nth_char(N, String, Char)
 Return the ASCII (or Unicode) value of the character that is N positions from the start of the string.
 
+### □ nth_ref(Key, N, Ref)
+Returns the reference number of the Nth item from the start of the chain of items.
+
 ### □ open(Handle,Filename,Access)
 Open an existing file. 
 
@@ -404,6 +407,9 @@ Delete the hash table.
 
 ### □ removeh(Table_name,Sort_key,Term)
 Remove a term from the hash table.
+
+### □ replace(Ref, Term)
+Replaces the item with the specified reference number with the item provided in Term.
 
 ### □ reset_op
 Returns the operator definition to its default value.
