@@ -30,6 +30,7 @@ test2 :-
     write(X).
 
 test3 :-
+    eraseall(foo),
     recordz(foo,foo(a,1),_),
     recordz(foo,foo(b,2),_),
     recorda(foo,foo(c,3),_),

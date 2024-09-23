@@ -5837,7 +5837,10 @@ int b_eraseall(int arglist, int rest)
 
 	arg1 = makeatom(GET_NAME(arg1),SIMP);
 	SET_RECORD(arg1, NIL);
+	if(prove_all(rest,sp) == YES)
 	return (YES);
+	else 
+	return (NO);
     }
     error(ARITY_ERR, "eraseall ", arglist);
     return (NO);
