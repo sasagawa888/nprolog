@@ -33,11 +33,12 @@ test3 :-
     eraseall(foo),
     recordz(foo,foo(a,1),_),
     recordz(foo,foo(b,2),_),
-    recorda(foo,foo(c,3),_),
+    recorda(foo,foo(c,3),Ref),
     recorda(foo,foo(d,4),_),
-    recordz(foo,foo(e,5),_).
+    record_after(Ref,foo(e,5),_).
 
 test4 :-
+    key(foo/2),
     key(foo,Ref),
     nref(Ref,Ref1),
     nref(Ref1,Ref2),
@@ -48,5 +49,9 @@ test4 :-
     pref(Ref3,Ref2),
     pref(Ref2,Ref1),
     pref(Ref1,Ref).
+
+test5 :-
+    recorded(foo,foo(c,3),R1),
+    replace(R1,foo(f,6)).
     
     
