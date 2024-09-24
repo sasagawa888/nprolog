@@ -85,7 +85,7 @@ void initbuiltin(void)
     defbuiltin("dup", b_dup, 2);
     defbuiltin("edit", b_edit, 1);
     defbuiltin("eq", b_eq, 2);
-    defbuiltin("errorcode", b_errorcode, 1);
+    defbuiltin("errcode", b_errcode, 1);
     defbuiltin("erase", b_erase, 1);
     defbuiltin("eraseall", b_eraseall, 1);
     defbuiltin("fail", b_fail, 0);
@@ -5399,7 +5399,7 @@ int b_time(int arglist, int rest)
     return (NO);
 }
 
-int b_errorcode(int arglist, int rest)
+int b_errcode(int arglist, int rest)
 {
     int n, arg1;
 

@@ -702,7 +702,7 @@ int b_eqsmaller(int arglist, int rest);
 int b_equalp(int arglist, int rest);
 int b_erase(int arglist, int rest);
 int b_eraseall(int arglist, int rest);
-int b_errorcode(int arglist, int rest);
+int b_errcode(int arglist, int rest);
 int b_existerrors(int arglist, int rest);
 int b_fail(int arglist, int rest);
 int b_findall(int arglist, int rest);

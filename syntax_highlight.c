@@ -62,7 +62,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "syntaxerrors" },
     { "ansi_cuu" }, { "ansi_cud" }, { "ansi_cuf" }, { "ansi_cub" },
     { "ansi_cup" }, { "ansi_cpr" }, { "ansi_scp" }, { "ansi_rcp" },
-    { "ansi_ed" }, { "ansi_el" }, { "errorcode" },
+    { "ansi_ed" }, { "ansi_el" }, { "errcode" },
     { "recordh" }, { "recorda" }, { "recordz" }, { "recorded" },
 	{ "record_after" },
     { "instance" }, { "reverse" },

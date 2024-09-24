@@ -253,6 +253,9 @@ Removes the entry stored under the specified reference number.
 ### □ eraseall(Key)
 Removes all entries stored under the specified key.
 
+### □ errcode(Code)
+Returns the code of the most recent error message.
+
 ### □ expand_term(Term,Newterm)
 DCG: Converts a term in a limited clause grammar to an equivalent Prolog term. 
 
