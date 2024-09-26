@@ -126,13 +126,19 @@ void error(int errnum, char *fun, int arg)
 	break;
 
     case CANT_OPEN:
+	if (fileerr_flag == YES) {
 	printf("Can't open file %s ", fun);
+	if(arg != NIL)
 	print(arg);
+	}
 	break;
 
     case FILE_EXIST:
+	if (fileerr_flag == YES) {
 	printf("File not exist %s ", fun);
+	if(arg != NIL)
 	print(arg);
+	}
 	break;
 
     case STACK_OVERF:

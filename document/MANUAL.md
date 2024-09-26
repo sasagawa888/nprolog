@@ -259,6 +259,9 @@ Returns the code of the most recent error message.
 ### □ expand_term(Term,Newterm)
 DCG: Converts a term in a limited clause grammar to an equivalent Prolog term. 
 
+### □ fileerrors(Old, New)
+Specifies whether or not to output Linux I/O error messages, or checks the status of this setting.
+
 ### □ float(X)
 Check if X is a floating point number.
 

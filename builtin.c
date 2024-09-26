@@ -89,6 +89,7 @@ void initbuiltin(void)
     defbuiltin("erase", b_erase, 1);
     defbuiltin("eraseall", b_eraseall, 1);
     defbuiltin("fail", b_fail, 0);
+	defbuiltin("fileerrors", b_fileerrors, 2);
     defbuiltin("findall", b_findall, 3);
     defbuiltin("flush", b_flush_output, 0);
     defbuiltin("float", b_real, 1);
@@ -4567,6 +4568,31 @@ int b_syntaxerrors(int arglist, int rest)
     error(ARITY_ERR, "syntaxerrors ", arglist);
     return (NO);
 }
+
+int b_fileerrors(int arglist, int rest)
+{
+    int n, arg1, arg2, res;
+
+    n = length(arglist);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	if (arg1 != YES && arg1 != NO && !wide_variable_p(arg1))
+	    error(ILLEGAL_ARGS, "fileerrors ", arg1);
+	if (arg2 != YES && arg2 != NO && !wide_variable_p(arg2))
+	    error(ILLEGAL_ARGS, "fileerrors ", arg1);
+
+	res = unify(arg1, syntax_flag);
+	fileerr_flag = arg2;
+	if (res == YES)
+	    return (prove_all(rest, sp));
+	else
+	    return (NO);
+    }
+    error(ARITY_ERR, "fileerrors ", arglist);
+    return (NO);
+}
+
 
 
 int b_sort(int arglist, int rest)
