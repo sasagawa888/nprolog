@@ -4645,6 +4645,11 @@ int b_sort(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
+	if(!listp(arg1) && !nullp(arg1))
+	error(NOT_LIST,"sort ", arg1);
+	if(!wide_variable_p(arg2) && !listp(arg2) && !nullp(arg2))
+	error(NOT_VAR,"sort ",arg2);
+
 	if (unify(arg2, sort(arg1)) == YES)
 	    return (prove_all(rest, sp));
 	else
@@ -4662,6 +4667,11 @@ int b_keysort(int arglist, int rest)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
+
+	if(!listp(arg1) && !nullp(arg1))
+	error(NOT_LIST,"key_sort ", arg1);
+	if(!wide_variable_p(arg2) && !listp(arg2) && !nullp(arg2))
+	error(NOT_VAR,"key_sort ",arg2);
 
 	if (unify(arg2, keysort(arg1)) == YES)
 	    return (prove_all(rest, sp));
@@ -4780,8 +4790,12 @@ int b_reverse(int arglist, int rest)
 
 	if (!wide_variable_p(arg1) && !listp(arg1) && !nullp(arg1))
 	    error(NOT_LIST, "reverse ", arg1);
+	if (listp(arg1) && length(arg1) == -1)
+		error(WRONG_ARGS, "reverse ", arg1);
 	if (!wide_variable_p(arg2) && !listp(arg2) && !nullp(arg2))
 	    error(NOT_LIST, "reverse ", arg2);
+	if (listp(arg2) && length(arg2) == -1)
+		error(WRONG_ARGS, "reverse ", arg2);
 
 	if (!variablep(arg1)) {
 	    if (unify(listreverse(arg1), arg2) == YES)

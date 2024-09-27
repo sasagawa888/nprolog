@@ -101,6 +101,42 @@
 :- n_error(read_string(1025,X),7).
 :- n_error(read_string(10,a),40).
 
+%sort 
+:- n_error(sort(a,X),10).
+:- n_error(sort([1,3,2],a),40).
+:- n_error(sort([1,3,2],1),40).
+:- n_error(sort([1,2,3],X,Z),67).
+
+%keysort
+:- n_error(keysort(a,X),10).
+:- n_error(keysort([a-3,b-2],a),40).
+:- n_error(keysort([a-3,b-2],X,Y),67).
+
+%compare
+:- n_error(compare([1],a,b),11).
+:- n_error(compare(==,a,b),62).
+:- n_error(compare(=,a,b,X),67).
+
+%classify
+:- n_error(atom(a,2),67).
+:- n_error(list(a,2),67).
+:- n_error(float(a,2),67).
+:- n_error(integer(a,2),67).
+:- n_error(number(a,2),67).
+:- n_error(string(a,2),67).
+:- n_error(ref(a,2),67).
+:- n_error(atomic(a,2),67).
+:- n_error(var(a,2),67).
+:- n_error(nonvar(a,2),67).
+
+%reverse
+:- n_error(reverse([1|2],X),7).
+:- n_error(reverse(X,[3|4]),7).
+:- n_error(reverse([1,2,3],X,Y),67).
+:- n_error(reverse(1,X),10).
+:- n_error(reverse(X,2),10).
+:- n_error(reverse([1,2],X,Y),67).
+
 %functions
 :- n_error(A is sin(a),54).
 :- n_error(A is sin(3,1),67).
@@ -112,3 +148,6 @@
 :- n_error(A is 1//0, 27).
 :- n_error(A is 1.2 mod 3,19).
 :- n_error(A is 1 mod 3.2,19).
+:- n_error(A is sin(X),36).
+:- n_error(A is X << 2,36).
+:- n_error(A is 1 >> Y,36).
