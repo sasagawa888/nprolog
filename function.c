@@ -489,7 +489,7 @@ int eval(int x)
 	else
 	    error(EVALUATION_ERR, "eval ", x);
     } else if (eqp(car(x), makeatom("abs", FUNC))) {
-	if(length(x) != 1)
+	if(length(x) != 2)
 	error(ARITY_ERR, "abs ", x);
 	evalterm(x, result);
 	arg1 = result[1];
