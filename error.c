@@ -20,9 +20,9 @@ void error(int errnum, char *fun, int arg)
 {
 
     error_code = errnum;
-	if(check_flag){
-		longjmp(buf1,1);
-	}
+    if (check_flag) {
+	longjmp(buf1, 1);
+    }
 
     ESCFRED;
     switch (errnum) {
@@ -131,17 +131,17 @@ void error(int errnum, char *fun, int arg)
 
     case CANT_OPEN:
 	if (fileerr_flag == YES) {
-	printf("Can't open file %s ", fun);
-	if(arg != NIL)
-	print(arg);
+	    printf("Can't open file %s ", fun);
+	    if (arg != NIL)
+		print(arg);
 	}
 	break;
 
     case FILE_EXIST:
 	if (fileerr_flag == YES) {
-	printf("File not exist %s ", fun);
-	if(arg != NIL)
-	print(arg);
+	    printf("File not exist %s ", fun);
+	    if (arg != NIL)
+		print(arg);
 	}
 	break;
 

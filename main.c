@@ -27,8 +27,8 @@ int counter[31];		// counter str_set,str_dec ...
 int string_term_buffer[STRSIZE];	// for string_term/2
 token stok = { GO, OTHER };
 
-jmp_buf buf;   // for REPL halt and error handling.
-jmp_buf buf1;  // for n_error/2 error check.
+jmp_buf buf;			// for REPL halt and error handling.
+jmp_buf buf1;			// for n_error/2 error check.
 int variables = NIL;
 int predicates = NIL;
 int builtins = NIL;
@@ -92,13 +92,13 @@ int listing_flag = 0;		//for print clause, 0=normal, 1=format print
 int colon_sets_calling_context_flag = 1;	//1=true, 0=false
 int prefix_flag = 0;		//for parser 0=not prefix, 1=prefix
 int syntax_flag = YES;		//syntaxerrors/2 YES=normal. NO=ignore syntax-errors
-int fileerr_flag = YES;     //fileerrors/2 YES=normal. NO=ignore file-errors
+int fileerr_flag = YES;		//fileerrors/2 YES=normal. NO=ignore file-errors
 int exist_flag = YES;		//existerrors/2 YES=normal, NO=ignore existance_errors
 int string_term_flag = 0;	//for string_term/2 0=normal, 1=readparse from string_term_buffer
 int ctrl_c_flag = 0;		//for ctrl_c  to stop prove
 int init_flag = 1;		//for halt
 int script_flag = 0;		// script mode, 0=not scriplt-mode, 1=script-mode.
-int check_flag = 0;         // for n_error/2 error check
+int check_flag = 0;		// for n_error/2 error check
 
 
 //stream

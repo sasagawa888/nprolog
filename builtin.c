@@ -89,7 +89,7 @@ void initbuiltin(void)
     defbuiltin("erase", b_erase, 1);
     defbuiltin("eraseall", b_eraseall, 1);
     defbuiltin("fail", b_fail, 0);
-	defbuiltin("fileerrors", b_fileerrors, 2);
+    defbuiltin("fileerrors", b_fileerrors, 2);
     defbuiltin("findall", b_findall, 3);
     defbuiltin("flush", b_flush_output, 0);
     defbuiltin("float", b_real, 1);
@@ -125,7 +125,7 @@ void initbuiltin(void)
     defbuiltin("nospy", b_nospy, 1);
     defbuiltin("notrace", b_notrace, 0);
     defbuiltin("nref", b_nref, 2);
-	defbuiltin("nth_ref", b_nth_ref, 3);
+    defbuiltin("nth_ref", b_nth_ref, 3);
     defbuiltin("number", b_number, 1);
     defbuiltin("nth_char", b_nth_char, 3);
     defbuiltin("op", b_op, 3);
@@ -149,7 +149,7 @@ void initbuiltin(void)
     defbuiltin("removeh", b_removeh, 3);
     defbuiltin("removeallh", b_removeallh, 2);
     defbuiltin("rename", b_rename, 2);
-	defbuiltin("replace", b_replace, 2);
+    defbuiltin("replace", b_replace, 2);
     defbuiltin("reset_op", b_reset_op, 0);
     defbuiltin("reverse", b_reverse, 2);
     defbuiltin("rmdir", b_rmdir, 1);
@@ -208,7 +208,7 @@ void initbuiltin(void)
     defbuiltin("n_defined_predicate", b_defined_predicate, -1);
     defbuiltin("n_defined_userop", b_defined_userop, -1);
     defbuiltin("n_get_execute", b_get_execute, -1);
-	defbuiltin("n_error", b_error, -1);
+    defbuiltin("n_error", b_error, -1);
 
 #ifdef __arm__
     defbuiltin("wiringpi_setup_gpio", b_wiringpi_setup_gpio, 2);
@@ -241,8 +241,8 @@ int b_length(int arglist, int rest)
 	arg2 = cadr(arglist);
 
 	if (!listp(arg1) && !nullp(arg1) && !wide_variable_p(arg1))
-		error(NOT_LIST, "length ", arglist);
-	if (integerp(eval(arg2)) && GET_INT(eval(arg2)) < 0)
+	    error(NOT_LIST, "length ", arglist);
+	if (integerp(arg2) && GET_INT(arg2) < 0)
 	    error(NOT_LESS_THAN_ZERO, "length ", arg2);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    error(NOT_INT, "length ", arg2);
@@ -5587,8 +5587,8 @@ int b_recordz(int arglist, int rest)
 	    error(INSTANTATION_ERR, "recordz ", arg2);
 	if (!wide_variable_p(arg3))
 	    error(NOT_VAR, "recordz ", arg3);
-	
-	arg1 = makeatom(GET_NAME(arg1),SIMP);
+
+	arg1 = makeatom(GET_NAME(arg1), SIMP);
 	temp = GET_RECORD(arg1);
 	arg2 = copy_heap(arg2);	//copy arg2 to heap area
 	if (temp == NIL) {
@@ -5598,9 +5598,9 @@ int b_recordz(int arglist, int rest)
 	    while (cdr(temp) != NIL) {
 		temp = cdr(temp);
 	    }
-		next = bcons(arg2, NIL);
+	    next = bcons(arg2, NIL);
 	    SET_CDR(temp, next);
-		SET_AUX(next,temp);  // bidirectional data
+	    SET_AUX(next, temp);	// bidirectional data
 	}
 	checkgbc();
 	if (temp == NIL)
@@ -5672,7 +5672,7 @@ int b_recorda(int arglist, int rest)
 	if (!wide_variable_p(arg3))
 	    error(NOT_VAR, "recorda ", arg3);
 
-	arg1 = makeatom(GET_NAME(arg1),SIMP);
+	arg1 = makeatom(GET_NAME(arg1), SIMP);
 	chain = GET_RECORD(arg1);
 	arg2 = copy_heap(arg2);	//copy arg1 to heap area
 	if (chain == NIL) {
@@ -5701,16 +5701,17 @@ int b_recorded(int arglist, int rest)
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
-	arg1 = makeatom(GET_NAME(arg1),SIMP);
+	arg1 = makeatom(GET_NAME(arg1), SIMP);
 	chain = GET_RECORD(arg1);
 	save1 = wp;
 	save2 = sp;
 	while (!nullp(chain)) {
-	    if (unify(arg2, car(chain)) == YES && unify(arg3, makeint(chain)) == YES) {	
+	    if (unify(arg2, car(chain)) == YES
+		&& unify(arg3, makeint(chain)) == YES) {
 		if (prove_all(rest, sp) == YES)
 		    return (YES);
 	    }
-		chain = cdr(chain);
+	    chain = cdr(chain);
 	    wp = save1;
 	    unbind(save2);
 	}
@@ -5737,7 +5738,7 @@ int b_nref(int arglist, int rest)
 	if (unify(arg2, makeint(chain)) == YES) {
 	    if (prove_all(rest, sp) == YES)
 		return (YES);
-		else 
+	    else
 		return (NO);
 	}
     }
@@ -5760,8 +5761,8 @@ int b_pref(int arglist, int rest)
 	if (unify(arg2, makeint(chain)) == YES) {
 	    if (prove_all(rest, sp) == YES)
 		return (YES);
-		else 
-		return(NO);
+	    else
+		return (NO);
 	}
     }
     error(ARITY_ERR, "pref ", arglist);
@@ -5778,25 +5779,26 @@ int b_nth_ref(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
-	if(!atomp(arg1))
-	error(NOT_ATOM,"nth_ref ", arg1);
-	if(!integerp(arg2))
-	error(NOT_INT,"nth_ref ", arg2);
-	if(!wide_variable_p(arg3))
-	error(NOT_VAR,"nth_ref ", arg3);
+	if (!atomp(arg1))
+	    error(NOT_ATOM, "nth_ref ", arg1);
+	if (!integerp(arg2))
+	    error(NOT_INT, "nth_ref ", arg2);
+	if (!wide_variable_p(arg3))
+	    error(NOT_VAR, "nth_ref ", arg3);
 
 	chain = GET_RECORD(arg1);
 	i = get_int(arg2);
 	if (chain == NIL)
 	    return (NO);
 
-	while(!nullp(chain)){
-		if(i == 1) goto find;
-		chain = cdr(chain);
+	while (!nullp(chain)) {
+	    if (i == 1)
+		goto find;
+	    chain = cdr(chain);
 	}
-	return(NO);
+	return (NO);
 
-	find:
+      find:
 	if (unify(arg2, makeint(chain)) == YES) {
 	    if (prove(NIL, sp, rest) == YES)
 		return (YES);
@@ -5808,26 +5810,26 @@ int b_nth_ref(int arglist, int rest)
 
 int b_replace(int arglist, int rest)
 {
-	int n,arg1,arg2,chain;
+    int n, arg1, arg2, chain;
 
-	n = length(arglist);
-	if(n==2){
-		arg1 = car(arglist);
-		arg2 = cadr(arglist);
-		if(!integerp(arg1))
-		error(NOT_INT,"replace ", arg1);
-		if(wide_variable_p(arg2))
-		error(INSTANTATION_ERR,"replace ", arg2);
-		
-		chain = get_int(arg1);
-		arg2 = copy_heap(arg2);
-		SET_CAR(chain,arg2);
-		if (prove(NIL, sp, rest) == YES)
-		return (YES);
-		else 
-		return (NO);
-	}
-	error(ARITY_ERR, "replace ", arglist);
+    n = length(arglist);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	if (!integerp(arg1))
+	    error(NOT_INT, "replace ", arg1);
+	if (wide_variable_p(arg2))
+	    error(INSTANTATION_ERR, "replace ", arg2);
+
+	chain = get_int(arg1);
+	arg2 = copy_heap(arg2);
+	SET_CAR(chain, arg2);
+	if (prove(NIL, sp, rest) == YES)
+	    return (YES);
+	else
+	    return (NO);
+    }
+    error(ARITY_ERR, "replace ", arglist);
     return (NO);
 }
 
@@ -5864,12 +5866,12 @@ int b_eraseall(int arglist, int rest)
 	if (!atomp(arg1))
 	    error(NOT_ATOM, "erase ", arg1);
 
-	arg1 = makeatom(GET_NAME(arg1),SIMP);
+	arg1 = makeatom(GET_NAME(arg1), SIMP);
 	SET_RECORD(arg1, NIL);
-	if(prove_all(rest,sp) == YES)
-	return (YES);
-	else 
-	return (NO);
+	if (prove_all(rest, sp) == YES)
+	    return (YES);
+	else
+	    return (NO);
     }
     error(ARITY_ERR, "eraseall ", arglist);
     return (NO);
@@ -6027,7 +6029,7 @@ int b_key(int arglist, int rest)
 
 	save1 = wp;
 	save2 = sp;
-	arg1 = makeatom(GET_NAME(arg1),SIMP);
+	arg1 = makeatom(GET_NAME(arg1), SIMP);
 	chain = GET_RECORD(arg1);
 	if (unify(arg2, makeint(chain)) == YES) {
 	    if (prove(NIL, sp, rest) == YES)
