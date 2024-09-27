@@ -76,6 +76,9 @@
 :- n_error(length([a|b],N),7).
 :- n_error(length([],-1),49).
 
+%member
+:- n_error(member(a,b),10).
+
 %functions
 :- n_error(A is sin(a),54).
 :- n_error(A is sin(3,1),67).
@@ -85,3 +88,5 @@
 :- n_error(A is tan(a),54).
 :- n_error(A is 1/0, 27).
 :- n_error(A is 1//0, 27).
+:- n_error(A is 1.2 mod 3,19).
+:- n_error(A is 1 mod 3.2,19).

@@ -4675,6 +4675,11 @@ int b_member(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
+	if(!listp(arg2) && !nullp(arg2))
+	error(NOT_LIST, "member ", arg2);
+
+	if(nullp(arg2))
+		return(NO);
 
 	save1 = wp;
 	x = makevariant();
