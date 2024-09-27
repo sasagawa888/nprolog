@@ -20,6 +20,10 @@ void error(int errnum, char *fun, int arg)
 {
 
     error_code = errnum;
+	if(check_flag){
+		longjmp(buf1,1);
+	}
+
     ESCFRED;
     switch (errnum) {
     case SYNTAX_ERR:

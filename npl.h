@@ -183,6 +183,7 @@ extern int stack[STACKSIZE];
 extern int ustack[STACKSIZE];
 extern token stok;
 extern jmp_buf buf;
+extern jmp_buf buf1;
 extern int cell_hash_table[HASHTBSIZE];
 extern int record_hash_table[HASHTBSIZE][RECORDMAX]; 
 extern int record_pt;       
@@ -414,6 +415,9 @@ extern int exist_flag;
 extern int string_term_flag;
 extern int init_flag;
 extern int script_flag;
+extern int check_flag;
+
+
 //------pointer----
 extern int hp; //heap pointer
 extern int sp; //stack pointer
@@ -519,70 +523,70 @@ static const int BIGNUM_PARMA = BIGSIZE * 9 / 10; //from 90% to 100% of bigcell 
 #define SYNTAX_ERR      1
 #define BUILTIN_EXIST   2
 #define CANT_READ       3
-#define NOT_COMPUTABLE  9
-#define OUT_OF_RANGE    10
-#define MALLOC_OVERF    11
-#define WRONG_ARGS      12
-#define NOT_NUM         13
-#define NOT_STR         14
-#define NOT_LIST        15
-#define NOT_ATOM         16
-#define ILLEGAL_OPL_INPUT   17
-#define UNCAUGHT_EXCEPTION       19
-#define CANT_OPEN       20
-#define FILE_EXIST      21
-#define ILLEGAL_ARGS    22
-#define NOT_CONS        23
-#define CANT_MODIFY     24
-#define NOT_INT         25
-#define NOT_STREAM      26
-#define NOT_OUT_STREAM  27
-#define NOT_IN_STREAM   28
-#define NOT_CHAR        29
-#define NOT_FLT         30
-#define CTRL_OVERF      31
-#define END_STREAM      32
-#define DIV_ZERO        33
-#define CANT_PARSE      34
-#define NOT_ARITHMETIC  35
-#define FLT_OVERF       36
-#define FLT_UNDERF      37
-#define STACK_OVERF     38
-#define SYSTEM_ERROR    39
-#define UNDEF_PRED		40
-#define EOF_ERROR       41
-#define INSTANTATION_ERR    42
-#define EXPONENT_ERR    43
-#define OPE_SPEC_ERR    44
-#define NOT_CALLABLE    45
-#define NOT_VAR         46
-#define EXISTENCE_ERR   47
-#define NOT_SOURCE      48
-#define ALIAS_EXIST     49
-#define NOT_IO_MODE     50
-#define NOT_CLOSE_OPTION    51   
-#define NOT_STREAM_OPTION   52
-#define NOT_OUTPUT_STREAM   53
-#define NOT_ATOMIC          54
-#define NOT_LESS_THAN_ZERO  55
-#define NOT_COMPOUND        56
-#define NON_EMPTY_LIST      57
-#define NOT_INPUT_STREAM    58
-#define PAST_EOF_INPUT      59
-#define EVALUATION_ERR      60
-#define STATIC_PROCEDURE    61
-#define PRED_INDICATOR      62
-#define NOT_OPEN_OPTION     63
-#define OPE_PRIORITY_ERR    64
-#define MODIFY_OPE_ERR      65
-#define NOT_CHAR_CODE       66
-#define RESOURCE_ERR        67
-#define NOT_ORDER           68
-#define NOT_TERM            69
-#define RECORD_OVERF        70
-#define NOT_RECORD          71
-#define VARIANT_OVERF       72
-#define ARITY_ERR           73
+#define NOT_COMPUTABLE  4
+#define OUT_OF_RANGE    5
+#define MALLOC_OVERF    6
+#define WRONG_ARGS      7
+#define NOT_NUM         8
+#define NOT_STR         9
+#define NOT_LIST        10
+#define NOT_ATOM         11
+#define ILLEGAL_OPL_INPUT   12
+#define UNCAUGHT_EXCEPTION       13
+#define CANT_OPEN       14
+#define FILE_EXIST      15
+#define ILLEGAL_ARGS    16
+#define NOT_CONS        17
+#define CANT_MODIFY     18
+#define NOT_INT         19
+#define NOT_STREAM      20
+#define NOT_OUT_STREAM  21
+#define NOT_IN_STREAM   22
+#define NOT_CHAR        23
+#define NOT_FLT         24
+#define CTRL_OVERF      25
+#define END_STREAM      26
+#define DIV_ZERO        27
+#define CANT_PARSE      28
+#define NOT_ARITHMETIC  29
+#define FLT_OVERF       30
+#define FLT_UNDERF      31
+#define STACK_OVERF     32
+#define SYSTEM_ERROR    33
+#define UNDEF_PRED		34
+#define EOF_ERROR       35
+#define INSTANTATION_ERR    36
+#define EXPONENT_ERR    37
+#define OPE_SPEC_ERR    38
+#define NOT_CALLABLE    39
+#define NOT_VAR         40
+#define EXISTENCE_ERR   41
+#define NOT_SOURCE      42
+#define ALIAS_EXIST     43
+#define NOT_IO_MODE     44
+#define NOT_CLOSE_OPTION    45   
+#define NOT_STREAM_OPTION   46
+#define NOT_OUTPUT_STREAM   47
+#define NOT_ATOMIC          48
+#define NOT_LESS_THAN_ZERO  49
+#define NOT_COMPOUND        50
+#define NON_EMPTY_LIST      51
+#define NOT_INPUT_STREAM    52
+#define PAST_EOF_INPUT      53
+#define EVALUATION_ERR      54
+#define STATIC_PROCEDURE    55
+#define PRED_INDICATOR      56
+#define NOT_OPEN_OPTION     57
+#define OPE_PRIORITY_ERR    58
+#define MODIFY_OPE_ERR      59
+#define NOT_CHAR_CODE       60
+#define RESOURCE_ERR        61
+#define NOT_ORDER           62
+#define NOT_TERM            63
+#define RECORD_OVERF        64
+#define NOT_RECORD          65
+#define VARIANT_OVERF       66
+#define ARITY_ERR           67
 
 
 double getETime(void);
@@ -704,6 +708,7 @@ int b_equalp(int arglist, int rest);
 int b_erase(int arglist, int rest);
 int b_eraseall(int arglist, int rest);
 int b_errcode(int arglist, int rest);
+int b_error(int arglist, int rest);
 int b_existerrors(int arglist, int rest);
 int b_fail(int arglist, int rest);
 int b_findall(int arglist, int rest);

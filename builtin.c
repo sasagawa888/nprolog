@@ -208,6 +208,7 @@ void initbuiltin(void)
     defbuiltin("n_defined_predicate", b_defined_predicate, -1);
     defbuiltin("n_defined_userop", b_defined_userop, -1);
     defbuiltin("n_get_execute", b_get_execute, -1);
+	defbuiltin("n_error", b_error, -1);
 
 #ifdef __arm__
     defbuiltin("wiringpi_setup_gpio", b_wiringpi_setup_gpio, 2);
@@ -239,6 +240,8 @@ int b_length(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
+	if (!listp(arg1) && !nullp(arg1) && !wide_variable_p(arg1))
+		error(NOT_LIST, "length ", arglist);
 	if (integerp(eval(arg2)) && GET_INT(eval(arg2)) < 0)
 	    error(NOT_LESS_THAN_ZERO, "length ", arg2);
 	if (!wide_variable_p(arg2) && !integerp(arg2))

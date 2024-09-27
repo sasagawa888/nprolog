@@ -27,7 +27,8 @@ int counter[31];		// counter str_set,str_dec ...
 int string_term_buffer[STRSIZE];	// for string_term/2
 token stok = { GO, OTHER };
 
-jmp_buf buf;
+jmp_buf buf;   // for REPL halt and error handling.
+jmp_buf buf1;  // for n_error/2 error check.
 int variables = NIL;
 int predicates = NIL;
 int builtins = NIL;
@@ -97,6 +98,7 @@ int string_term_flag = 0;	//for string_term/2 0=normal, 1=readparse from string_
 int ctrl_c_flag = 0;		//for ctrl_c  to stop prove
 int init_flag = 1;		//for halt
 int script_flag = 0;		// script mode, 0=not scriplt-mode, 1=script-mode.
+int check_flag = 0;         // for n_error/2 error check
 
 
 //stream

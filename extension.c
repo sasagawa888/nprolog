@@ -500,6 +500,40 @@ int b_clause_with_arity(int arglist, int rest)
     return (NO);
 }
 
+int b_error(int arglist, int rest)
+{
+	int n,arg1,arg2;
+
+	n = length(arglist);
+	if (n == 2){
+		arg1 = car(arglist);
+		arg2 = cadr(arglist);
+
+		int ret1 = setjmp(buf1);
+		
+		
+		if (ret1 == 0){
+			check_flag = 1;
+			prove_all(arg1, sp);
+			check_flag = 0;
+			return(NO);
+		} else if(ret1 == 1){
+			ret1 = 0;
+			check_flag = 0;
+			if(unify(arg2,makeint(error_code)) == YES){
+				if (prove_all(rest,sp) == YES)
+					return(YES);
+				else 
+					return(NO);
+			}
+			else{
+				return(NO);
+			}
+		}
+	}
+	error(ARITY_ERR,"n_error ", arglist);
+}
+
 int b_property(int arglist, int rest)
 {
     int n, arg1, arg2;
@@ -743,6 +777,8 @@ int b_existerrors(int arglist, int rest)
     error(ARITY_ERR, "existerrors ", arglist);
     return (NO);
 }
+
+
 
 
 //----------for Raspberry PI
