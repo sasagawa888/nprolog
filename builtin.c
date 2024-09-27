@@ -943,6 +943,8 @@ int b_read_line(int arglist, int rest)
 	    error(NOT_STREAM, "read_line ", arg1);
 	if (streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
 	    error(NOT_INPUT_STREAM, "read_line ", arg1);
+	if (!wide_variable_p(arg2) && !stringp(arg2))
+		error(NOT_VAR,"read_line ", arg2);
 
 	save1 = input_stream;
 	save2 = repl_flag;
@@ -994,6 +996,12 @@ int b_read_string(int arglist, int rest)
 	    error(NOT_STREAM, "read_string ", arg1);
 	if (streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
 	    error(NOT_INPUT_STREAM, "read_string ", arg1);
+	if (!integerp(arg2))
+		error(NOT_INT, "read_string ", arg2);
+	if (get_int(arg2) < 0 || get_int(arg2) > STRSIZE) 
+		error(WRONG_ARGS, "read_string ", arg2);
+	if (!wide_variable_p(arg3) && !stringp(arg3))
+		error(NOT_VAR,"read_string ",arg3);
 
 	save1 = input_stream;
 	save2 = repl_flag;
@@ -4724,6 +4732,13 @@ int b_append(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
+
+	if(!listp(arg1) && !nullp(arg1) && !wide_variable_p(arg1))
+	error(NOT_LIST,"append ", arg1);
+	if(!listp(arg2) && !nullp(arg2) && !wide_variable_p(arg2))
+	error(NOT_LIST,"append ", arg2);
+	if(!listp(arg3) && !nullp(arg3) && !wide_variable_p(arg3))
+	error(NOT_LIST,"append ", arg3);
 
 	save1 = wp;
 	if (unify(arg1, NIL) == YES && unify(arg2, arg3) == YES) {

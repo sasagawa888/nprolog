@@ -81,6 +81,26 @@
 :- n_error(member(a,$abc$),10).
 :- n_error(member(a,[],s),67).
 
+%append
+:- n_error(append(a,[1,2,3],X),10).
+:- n_error(append([1,2,3],b,X),10).
+:- n_error(append([1,2,3],[],a),10).
+:- n_error(append([1,2,3],[],X,Y),67).
+
+%halt
+:- n_error(halt(1),67).
+:- n_error(halt(1,2),67).
+
+%read_line
+:- n_error(read_line(a,X),20).
+:- n_error(read_line(1,X),20).
+:- n_error(read_line(0,a),40).
+
+%read_string
+:- n_error(read_string(-1,X),7).
+:- n_error(read_string(1025,X),7).
+:- n_error(read_string(10,a),40).
+
 %functions
 :- n_error(A is sin(a),54).
 :- n_error(A is sin(3,1),67).
