@@ -237,10 +237,13 @@ test(length) :-
 test(member) :-
     verify(member(b,[a,b,c])),
     verify(member(1,[3,2,1])),
+    verify(member(a,[a|b])),
     verify(not(member(a,[3,2,1]))),
     verify(not(member(a,[]))).
 
 test(append) :-
+    verify(append([],[a,b,c],[a,b,c])),
+    verify(append([a,b,c],[],[a,b,c])),
     verify(append([a,b,c],[d,e,f],[a,b,c,d,e,f])).
 
 test(reverse) :-
