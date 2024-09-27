@@ -528,7 +528,7 @@ int b_error(int arglist, int rest)
 		else	
 		    return (NO);
 	    } else {
-		printf("Wrong error code: ");
+		printf("Wrong error code: %d ", error_code);
 		print(arg1);
 		return (NO);
 	    }

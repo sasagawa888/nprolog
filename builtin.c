@@ -161,6 +161,7 @@ void initbuiltin(void)
     defbuiltin("shell", b_shell, 1);
     defbuiltin("skip", b_skip, 1);
     defbuiltin("sort", b_sort, 2);
+	defbuiltin("statistics", b_statistics,2);
     defbuiltin("stdin", b_stdin, 2);
     defbuiltin("stdinout", b_stdinout, 3);
     defbuiltin("stdout", b_stdout, 2);
@@ -242,6 +243,8 @@ int b_length(int arglist, int rest)
 
 	if (!listp(arg1) && !nullp(arg1) && !wide_variable_p(arg1))
 	    error(NOT_LIST, "length ", arglist);
+	if (listp(arg1) && length(arg1) == -1)
+		error(WRONG_ARGS, "length ", arglist);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
 	    error(NOT_LESS_THAN_ZERO, "length ", arg2);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
@@ -4593,6 +4596,33 @@ int b_fileerrors(int arglist, int rest)
 	    return (NO);
     }
     error(ARITY_ERR, "fileerrors ", arglist);
+    return (NO);
+}
+
+int b_statistics(int arglist, int rest)
+{
+	int n,arg1,arg2;
+
+	n = length(arglist);
+	if(n == 2){
+		arg1 = car(arglist);
+		arg2 = cadr(arglist);
+
+		if(arg1 == makeatom("free",SIMP)){
+			if(unify(arg2,makeint(fc)) == YES);
+			return(prove_all(rest,sp));
+		} else if(arg1 == makeatom("wp",SIMP)){
+			if(unify(arg2,makeint(wp)) == YES);
+			return(prove_all(rest,sp));
+		} else if(arg1 == makeatom("sp",SIMP)){
+			if(unify(arg2,makeint(sp)) == YES);
+			return(prove_all(rest,sp));
+		} else{
+			return(NO);
+		}
+
+	}
+	error(ARITY_ERR, "statistics ", arglist);
     return (NO);
 }
 

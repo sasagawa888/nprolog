@@ -73,7 +73,8 @@
 :- n_error(length(1,1),10).
 :- n_error(length([],a),19).
 :- n_error(length([],0,2),67).
-
+:- n_error(length([a|b],N),7).
+:- n_error(length([],-1),49).
 
 %functions
 :- n_error(A is sin(a),54).

@@ -811,6 +811,7 @@ int b_skip(int arglist, int rest);
 int b_smaller(int arglist, int rest);
 int b_sort(int arglist, int rest);
 int b_spy(int arglist, int rest);
+int b_statistics(int arglist, int rest);
 int b_stdin(int arglist, int rest);
 int b_stdout(int arglist, int rest);
 int b_stdinout(int arglist, int rest);
