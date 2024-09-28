@@ -116,6 +116,23 @@ ARITY_ERR           67
 :- n_error(instance(0,a),40).
 :- n_error(instance(0,X,3),67).
 
+%timer
+:- n_error(ctr_set(-1,0),7).
+:- n_error(ctr_set(31,0),7).
+:- n_error(ctr_set(0,a),19).
+:- n_error(ctr_set(0,1,a),67).
+:- n_error(ctr_inc(-1,0),7).
+:- n_error(ctr_inc(31,0),7).
+:- n_error(ctr_inc(0,a),40).
+:- n_error(ctr_inc(0,1,a),67).
+:- n_error(ctr_dec(-1,0),7).
+:- n_error(ctr_dec(31,0),7).
+:- n_error(ctr_dec(0,a),40).
+:- n_error(ctr_dec(0,1,a),67).
+:- n_error(ctr_is(-1,0),7).
+:- n_error(ctr_is(0,a),40).
+:- n_error(ctr_is(0,1,a),67).
+
 %consult reconsult
 :- n_error(consult(1),11).
 :- n_error(reconsult(1),11).

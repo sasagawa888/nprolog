@@ -2268,8 +2268,8 @@ int b_ctr_set(int arglist, int rest)
 
 	if (!integerp(arg1))
 	    error(NOT_INT, "ctr_set ", arg1);
-	if (GET_INT(arg1) > 30)
-	    error(ILLEGAL_ARGS, "str_set ", arg1);
+	if (GET_INT(arg1) > 30 || GET_INT(arg1) < 0)
+	    error(WRONG_ARGS, "ctr_set ", arg1);
 	if (!integerp(arg2))
 	    error(NOT_INT, "ctr_set ", arg2);
 
@@ -2292,8 +2292,8 @@ int b_ctr_dec(int arglist, int rest)
 
 	if (!integerp(arg1))
 	    error(NOT_INT, "ctr_dec ", arg1);
-	if (GET_INT(arg1) > 30)
-	    error(ILLEGAL_ARGS, "str_dec ", arg1);
+	if (GET_INT(arg1) > 30 || GET_INT(arg1) < 0)
+	    error(WRONG_ARGS, "ctr_dec ", arg1);
 	if (!wide_variable_p(arg2))
 	    error(NOT_VAR, "ctr_dec ", arg2);
 
@@ -2318,8 +2318,8 @@ int b_ctr_inc(int arglist, int rest)
 
 	if (!integerp(arg1))
 	    error(NOT_INT, "ctr_inc ", arg1);
-	if (GET_INT(arg1) > 30)
-	    error(ILLEGAL_ARGS, "str_inc ", arg1);
+	if (GET_INT(arg1) > 30 || GET_INT(arg1) < 0)
+	    error(WRONG_ARGS, "ctr_inc ", arg1);
 	if (!wide_variable_p(arg2))
 	    error(NOT_VAR, "ctr_inc ", arg2);
 
@@ -2329,7 +2329,7 @@ int b_ctr_inc(int arglist, int rest)
 	    return (prove_all(rest, sp));
 
     }
-    error(ARITY_ERR, "ctr_dec ", arglist);
+    error(ARITY_ERR, "ctr_inc ", arglist);
     return (NO);
 }
 
@@ -2344,8 +2344,8 @@ int b_ctr_is(int arglist, int rest)
 
 	if (!integerp(arg1))
 	    error(NOT_INT, "ctr_is ", arg1);
-	if (GET_INT(arg1) > 30)
-	    error(ILLEGAL_ARGS, "str_is ", arg1);
+	if (GET_INT(arg1) > 30 || GET_INT(arg1) < 0)
+	    error(WRONG_ARGS, "str_is ", arg1);
 	if (!wide_variable_p(arg2))
 	    error(NOT_VAR, "ctr_is ", arg2);
 
