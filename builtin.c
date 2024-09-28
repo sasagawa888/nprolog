@@ -4257,6 +4257,14 @@ int b_current_op(int arglist, int rest)
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
+	if (!wide_variable_p(arg1) && !integerp(arg1))
+	error(NOT_INT,"current_op ", arg1);
+	if (!wide_variable_p(arg2) && !atomp(arg2))
+	error(NOT_ATOM, "current_op ", arg2);
+	if (!wide_variable_p(arg3) && !atomp(arg3))
+	error(NOT_ATOM, "current_op ", arg3);
+
+
 	/*
 	   e.g. ',' ':-'  aux of operator is SIMP
 	   beclause of parsing. so change to OPE from SIMP

@@ -99,6 +99,14 @@ ARITY_ERR           67
 :- n_error(read_string(1025,X),7).
 :- n_error(read_string(10,a),40).
 
+%write writeq display
+:- n_error(write(1,2),20).
+:- n_error(write(user_output,a,b),67).
+:- n_error(writeq(1,2),20).
+:- n_error(writeq(user_output,a,b),67).
+:- n_error(display(2,1),20).
+:- n_error(display(user_output,a,b),67).
+
 %inc dec 
 :- n_error(inc(1,a),19).
 :- n_error(inc(a,2),19).
@@ -213,6 +221,21 @@ ARITY_ERR           67
 :- n_error(shell,67).
 :- n_error(shell(1,2),67).
 
+%op 
+:- n_error(op(a,fx,b),19).
+:- n_error(op(-1,fx,b),58).
+:- n_error(op(1201,fx,b),58).
+:- n_error(op(500,a,b),38).
+:- n_error(op(500,xfx,[1]),11).
+:- n_error(op(500,xfx,a,b),67).
+
+%current_op
+:- n_error(current_op(a,yfx,b),19).
+:- n_error(current_op(1201,yfx,b),19).
+:- n_error(current_op(100,[1],b),11).
+:- n_error(current_op(100,ff,X),1).
+:- n_error(current_op(100,xfx,[1]),11).
+:- n_error(current_op(100,xfx,b,a),67).
 
 
 %functions
