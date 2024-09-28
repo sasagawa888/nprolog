@@ -1509,12 +1509,12 @@ int b_consult(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "consult ", arg1);
 	if (!atomp(arg1))
 	    error(NOT_ATOM, "consult ", arg1);
 
+	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	save = input_stream;
 	input_stream =
 	    makestream(fopen(GET_NAME(arg1), "r"), OPL_INPUT, OPL_TEXT,
@@ -1582,13 +1582,14 @@ int b_reconsult(int arglist, int rest)
     arg2 = NIL;
     if (n == 1) {
 	arg1 = car(arglist);
-	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
+	
       reconsult:
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "reconsult ", arg1);
 	if (!atomp(arg1))
 	    error(NOT_ATOM, "reconsult ", arg1);
 
+	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	save = input_stream;
 	input_stream =
 	    makestream(fopen(GET_NAME(arg1), "r"), OPL_INPUT, OPL_TEXT,

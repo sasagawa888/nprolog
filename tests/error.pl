@@ -99,6 +99,24 @@ ARITY_ERR           67
 :- n_error(read_string(1025,X),7).
 :- n_error(read_string(10,a),40).
 
+%inc dec 
+:- n_error(inc(1,a),19).
+:- n_error(inc(a,2),19).
+:- n_error(inc(1,2,3),67).
+:- n_error(dec(1,a),19).
+:- n_error(dec(a,2),19).
+:- n_error(dec(1,2,3),67).
+
+%eraseall
+:- n_error(eraseall(1),11).
+:- n_error(eraseall(a,b),67).
+
+%consult reconsult
+:- n_error(consult(1),11).
+:- n_error(reconsult(1),11).
+:- n_error(consult(1,2),67).
+:- n_error(reconsult(1,2),67).
+
 %sort 
 :- n_error(sort(a,X),10).
 :- n_error(sort([1,3,2],a),40).
