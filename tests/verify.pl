@@ -54,8 +54,7 @@ test(float) :-
     verify(float(1.0)),
     verify(float(0.000001)),
     verify(float(1.0e10)),
-    verify(not(float(1))),
-    verify(float(X)).
+    verify(not(float(1))).
     
 test(nonvar) :-
     X = a,
