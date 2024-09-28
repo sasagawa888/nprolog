@@ -619,7 +619,7 @@ int b_nl(int arglist, int rest)
 	return (prove_all(rest, sp));
     } else if (n == 1) {
 	arg1 = car(arglist);
-	if (!streamp(arg1))
+	if (!streamp(arg1) && !aliasp(arg1))
 	error(NOT_STREAM,"nl ",arg1);
 
 	save = output_stream;
@@ -4704,8 +4704,8 @@ int b_member(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if(!listp(arg2) && !nullp(arg2))
-	error(NOT_LIST, "member ", arg2);
+	//if(!listp(arg2) && !nullp(arg2))
+	//error(NOT_LIST, "member ", arg2);
 
 	if(nullp(arg2))
 		return(NO);
