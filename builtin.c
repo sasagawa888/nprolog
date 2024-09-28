@@ -654,17 +654,32 @@ int b_put(int arglist, int rest)
 
 int b_get0(int arglist, int rest)
 {
-    int n, c, arg1, i, res;
+    int n, c, arg1, arg2, i, res;
 
     n = length(arglist);
     if (n == 1) {
-	arg1 = deref(car(arglist));
-	c = getchar();
+	arg1 = standard_input;
+	arg2 = car(arglist);
+	goto get0;
+	} else if(n == 2){
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+	
+	get0:
+	if(!streamp(arg1) && !aliasp(arg1))
+	error(NOT_STREAM,"get0 ", arg1);
+	if (!wide_variable_p(arg2) && !integerp(arg2))
+	error(NOT_VAR,"get0 ",arg2);
+
+	if (aliasp(arg1))
+	    arg1 = GET_CAR(arg1);
+	c = getc(GET_PORT(arg1));
 	if (c == EOL) {
-	    c = getchar();
+	    c = getc(GET_PORT(arg1));
 	}
 	i = makeint((int) c);
-	res = unify(arg1, i);
+	res = unify(arg2, i);
 	if (res == YES)
 	    return (prove_all(rest, sp));
 	else
@@ -676,16 +691,29 @@ int b_get0(int arglist, int rest)
 
 int b_get(int arglist, int rest)
 {
-    int n, c, arg1, i, res;
+    int n, c, arg1, arg2, i, res;
 
     n = length(arglist);
     if (n == 1) {
-	arg1 = car(arglist);
+	arg1 = standard_input;
+	arg2 = car(arglist);
 
+	goto get;
+	} else if(n == 2){
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+	get:
+	if(!streamp(arg1) && !aliasp(arg1))
+	error(NOT_STREAM,"get ", arg1);
+	if (!wide_variable_p(arg2) && !integerp(arg2))
+	error(NOT_VAR,"get ",arg2);
+	if (aliasp(arg1))
+	    arg1 = GET_CAR(arg1);
       loop:
-	c = getchar();
+	c = getc(GET_PORT(arg1));
 	if (c == EOL)
-	    c = getchar();
+	    c = getc(GET_PORT(arg1));
 	i = (int) c;
 	if (c == EOL)
 	    goto exit;
@@ -693,7 +721,7 @@ int b_get(int arglist, int rest)
 	    goto loop;
 
       exit:
-	res = unify(arg1, makeint(i));
+	res = unify(arg2, makeint(i));
 	if (res == YES)
 	    return (prove_all(rest, sp));
 	else
