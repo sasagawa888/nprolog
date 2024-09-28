@@ -873,7 +873,7 @@ int b_tab(int arglist, int rest)
 
     n = length(arglist);
     if (n == 1) {
-	arg1 = standard_input;
+	arg1 = standard_output;
 	arg2 = car(arglist);
 	goto tab;
     } else if (n == 2) {
@@ -888,9 +888,11 @@ int b_tab(int arglist, int rest)
 	if (!integerp(arg2))
 	    error(NOT_INT, "tab", arg2);
 
-	count = GET_INT(arg1);
+	if (aliasp(arg1))
+	arg1 = GET_CAR(arg1);
+	count = GET_INT(arg2);
 	while (count > 0) {
-	    fprintf(GET_PORT(output_stream), " ");
+	    fprintf(GET_PORT(arg1), " ");
 	    count--;
 	}
 	return (prove_all(rest, sp));
