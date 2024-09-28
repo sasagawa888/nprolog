@@ -948,6 +948,8 @@ int b_read(int arglist, int rest)
 	save1 = input_stream;
 	save2 = repl_flag;
 	input_stream = arg1;
+	if (aliasp(arg1))
+	input_stream = GET_CAR(arg1);
 	repl_flag = 0;
 
 	temp = variable_to_call(readparse());
@@ -988,6 +990,9 @@ int b_read_line(int arglist, int rest)
 	save1 = input_stream;
 	save2 = repl_flag;
 	input_stream = arg1;
+	if (aliasp(arg1))
+	input_stream = GET_CAR(arg1);
+
 	repl_flag = 0;
 
 	c = readc();
@@ -1045,6 +1050,8 @@ int b_read_string(int arglist, int rest)
 	save1 = input_stream;
 	save2 = repl_flag;
 	input_stream = arg1;
+	if (aliasp(arg1))
+	input_stream = GET_CAR(arg1);
 	maxlen = GET_INT(arg2);
 	repl_flag = 0;
 
