@@ -5667,6 +5667,11 @@ int b_instance(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
+	if(!integerp(arg1))
+	error(NOT_INT,"instance ",arg1);
+	if(!wide_variable_p(arg2))
+	error(NOT_VAR,"instance ",arg2);
+
 	if (unify(arg2, car(get_int(arg1))) == YES)
 	    return (prove_all(rest, sp));
 	else
@@ -6134,6 +6139,8 @@ int b_key(int arglist, int rest)
 	arg2 = cadr(arglist);
 	if (!atomp(arg1))
 	    error(NOT_ATOM, "key ", arg1);
+	if (!wide_variable_p(arg2))
+		error(NOT_VAR, "key ", arg2);
 
 	save1 = wp;
 	save2 = sp;

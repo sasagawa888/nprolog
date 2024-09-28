@@ -107,9 +107,14 @@ ARITY_ERR           67
 :- n_error(dec(a,2),19).
 :- n_error(dec(1,2,3),67).
 
-%eraseall
+%record
 :- n_error(eraseall(1),11).
 :- n_error(eraseall(a,b),67).
+:- n_error(key(1,X),11).
+:- n_error(key(a,b),40).
+:- n_error(instance(a,X),19).
+:- n_error(instance(0,a),40).
+:- n_error(instance(0,X,3),67).
 
 %consult reconsult
 :- n_error(consult(1),11).
