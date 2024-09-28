@@ -853,7 +853,7 @@ int b_tab(int arglist, int rest)
 	arg2 = cadr(arglist);
 
 	tab:
-	if (!streamp(arg1))
+	if (!streamp(arg1) && !aliasp(arg1))
 		error(NOT_STREAM, "tab ", arg1);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
 	    error(LESS_THAN_ZERO, "tab", arg2);
@@ -1092,7 +1092,7 @@ int b_stdin(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if (!streamp(arg1))
+	if (!streamp(arg1) && !aliasp(arg1))
 	    error(NOT_STREAM, "stdin ", arg1);
 	if (!callablep(arg2))
 	    error(NOT_CALLABLE, "stdin ", arg2);
@@ -1120,7 +1120,7 @@ int b_stdout(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if (!streamp(arg1))
+	if (!streamp(arg1) && !aliasp(arg1))
 	    error(NOT_STREAM, "stdout ", arg1);
 	if (!callablep(arg2))
 	    error(NOT_CALLABLE, "stdout ", arg2);
@@ -1149,9 +1149,9 @@ int b_stdinout(int arglist, int rest)
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
-	if (!streamp(arg1))
+	if (!streamp(arg1) && !aliasp(arg1))
 	    error(NOT_STREAM, "stdinout ", arg1);
-	if (!streamp(arg1))
+	if (!streamp(arg1) && !aliasp(arg2))
 	    error(NOT_STREAM, "stdinout ", arg2);
 	if (!callablep(arg3))
 	    error(NOT_CALLABLE, "stdinout ", arg3);
