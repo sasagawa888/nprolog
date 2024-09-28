@@ -1390,7 +1390,11 @@ int b_seeing(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	return (unify(arg1, GET_CDR(input_stream)));
+	if(!wide_variable_p(arg1))
+	error(NOT_VAR,"seeing ", arg1);
+	if(unify(arg1, GET_CDR(input_stream)) == YES){
+		return(prove_all(rest,sp));
+	}
     }
     error(ARITY_ERR, "seeing ", arglist);
     return (NO);
@@ -1583,7 +1587,6 @@ int b_reconsult(int arglist, int rest)
     if (n == 1) {
 	arg1 = car(arglist);
 	
-      reconsult:
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "reconsult ", arg1);
 	if (!atomp(arg1))
@@ -1660,11 +1663,7 @@ int b_reconsult(int arglist, int rest)
 
       exit:
 	return (prove_all(rest, sp));
-    } else if (n == 2) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
-	goto reconsult;
-    }
+    } 
     error(ARITY_ERR, "reconsult ", arglist);
     return (NO);
 }

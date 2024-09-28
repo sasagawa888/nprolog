@@ -117,6 +117,12 @@ ARITY_ERR           67
 :- n_error(consult(1,2),67).
 :- n_error(reconsult(1,2),67).
 
+%file
+:- n_error(told(1),67).
+:- n_error(telling(1,2),67).
+:- n_error(seeing(a),40).
+:- n_error(see('###.##',1),67).
+
 %sort 
 :- n_error(sort(a,X),10).
 :- n_error(sort([1,3,2],a),40).
@@ -176,8 +182,7 @@ ARITY_ERR           67
 :- n_error(shell,67).
 :- n_error(shell(1,2),67).
 
-%see 
-:- n_error(see('###.##',1),67).
+
 
 %functions
 :- n_error(A is sin(a),54).
