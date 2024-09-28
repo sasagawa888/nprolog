@@ -99,7 +99,7 @@ jump_pass1(X) :-
     nl(user_output),
     abolish(jump_pred_data/2),
     assert(jump_pred_data(jump_dummy,-1)),
-    reconsult(X,true),
+    reconsult(X),
     jump_pass1_analize.
 
 jump_pass1_analize :-
