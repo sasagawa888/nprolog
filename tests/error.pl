@@ -147,6 +147,22 @@ ARITY_ERR           67
 :- n_error(nl(a),20).
 :- n_error(nl(a,3,2),67).
 
+%stdin
+:- n_error(stdin(a,get(C)),20).
+:- n_error(stdin(a,b,c),67).
+
+%stdout
+:- n_error(stdout(a,write(1)),20).
+:- n_error(stdout(a,b,c),67).
+
+%shell
+:- n_error(shell(1),11).
+:- n_error(shell,67).
+:- n_error(shell(1,2),67).
+
+%see 
+:- n_error(see('###.##',1),67).
+
 %functions
 :- n_error(A is sin(a),54).
 :- n_error(A is sin(3,1),67).

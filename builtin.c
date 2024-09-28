@@ -659,9 +659,9 @@ int b_get0(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = deref(car(arglist));
-	c = getc(GET_PORT(input_stream));
+	c = getchar();
 	if (c == EOL) {
-	    c = getc(GET_PORT(input_stream));
+	    c = getchar();
 	}
 	i = makeint((int) c);
 	res = unify(arg1, i);
@@ -683,9 +683,9 @@ int b_get(int arglist, int rest)
 	arg1 = car(arglist);
 
       loop:
-	c = getc(GET_PORT(input_stream));
+	c = getchar();
 	if (c == EOL)
-	    c = getc(GET_PORT(input_stream));
+	    c = getchar();
 	i = (int) c;
 	if (c == EOL)
 	    goto exit;
@@ -710,8 +710,8 @@ int b_get0_noecho(int arglist, int rest)
 
     n = length(arglist);
     if (n == 1) {
-	arg1 = deref(car(arglist));
-	c = getchar();
+	arg1 = car(arglist);
+	c = getch();
 	i = makeint((int) c);
 	res = unify(arg1, i);
 	if (res == YES)
