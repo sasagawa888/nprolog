@@ -184,6 +184,7 @@ extern int ustack[STACKSIZE];
 extern token stok;
 extern jmp_buf buf;
 extern jmp_buf buf1;
+extern jmp_buf buf2;
 extern int cell_hash_table[HASHTBSIZE];
 extern int record_hash_table[HASHTBSIZE][RECORDMAX]; 
 extern int record_pt;       
@@ -416,7 +417,7 @@ extern int string_term_flag;
 extern int init_flag;
 extern int script_flag;
 extern int check_flag;
-
+extern int break_flag;
 
 //------pointer----
 extern int hp; //heap pointer
@@ -702,6 +703,7 @@ int b_directory(int arglist, int rest);
 int b_display(int arglist, int rest);
 int b_dup(int arglist, int rest);
 int b_edit(int arglist, int rest);
+int b_end_of_file(int arglist, int rest);
 int b_eq(int arglist, int rest);
 int b_eqgreater(int arglist, int rest);
 int b_eqsmaller(int arglist, int rest);

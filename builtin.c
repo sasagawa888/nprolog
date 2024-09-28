@@ -84,6 +84,7 @@ void initbuiltin(void)
     defbuiltin("debug", b_debug, 0);
     defbuiltin("dup", b_dup, 2);
     defbuiltin("edit", b_edit, 1);
+	defbuiltin("end_of_file", b_end_of_file,0);
     defbuiltin("eq", b_eq, 2);
     defbuiltin("errcode", b_errcode, 1);
     defbuiltin("erase", b_erase, 1);
@@ -2481,7 +2482,7 @@ int b_assert(int arglist, int rest)
 	    checkgbc();
 	    return (prove_all(rest, sp));
 	}
-	error(SYNTAX_ERR, "assertz ", arg1);
+	error(NOT_CALLABLE, "assertz ", arg1);
     }
     error(ARITY_ERR, "assertz ", arglist);
     return (NO);
@@ -2528,7 +2529,7 @@ int b_asserta(int arglist, int rest)
 	    checkgbc();
 	    return (prove_all(rest, sp));
 	}
-	error(SYNTAX_ERR, "asserta ", arg1);
+	error(NOT_CALLABLE, "asserta ", arg1);
     }
     error(ARITY_ERR, "asserta ", arglist);
     return (NO);
@@ -3637,20 +3638,45 @@ int b_debug(int arglist, int rest)
 
 int b_break(int arglist, int rest)
 {
-    int n, input;
+    int n,ret,save1,save2;
 
     n = length(arglist);
     if (n == 0) {
+	break_flag = 1;
+	save1 = wp;
+	save2 = sp;
+	ret = setjmp(buf2);
+	if (ret == 0){
 	while (1) {
-	    printf("?- ");
-	    input = readitem();
-	    if (input == FEND)
-		return (prove_all(rest, sp));
-
-	}
+	    printf("?= ");
+	    fflush(stdout);
+	    query(variable_to_call(readparse()));
+	    fflush(stdout);
+    }} else if (ret == 1) {
+	ret = 0;
+	wp = save1;
+	sp = save2;
+	return(YES);
+    } 
     }
     error(ARITY_ERR, "break ", arglist);
     return (NO);
+}
+
+int b_end_of_file(int arglist, int rest)
+{
+	int n;
+	
+	n = length(arglist);
+	if( n== 0){
+		if(break_flag){
+		break_flag = 0;
+		longjmp(buf2,1);
+		}else
+		return(YES);
+	}
+	error(ARITY_ERR,"end_of_file ",arglist);
+	return(NO);
 }
 
 int b_halt(int arglist, int rest)

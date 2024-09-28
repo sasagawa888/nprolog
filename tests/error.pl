@@ -69,6 +69,22 @@ ARITY_ERR           67
 
 */
 
+%assert asserta assertz
+:- n_error(assert(1),39).
+:- n_error(asserta(1),39).
+:- n_error(assertz(1),39).
+:- n_error(assert(write),2).
+:- n_error(asserta(write),2).
+:- n_error(assertz(display),2).
+
+%call 
+:- n_error(call(1),39).
+%:- n_error(call(a),41).
+
+%break end_of_file
+:- n_error(break(1),67).
+:- n_error(end_of_file(1),67).
+
 %length
 :- n_error(length(1,1),10).
 :- n_error(length([],a),19).
