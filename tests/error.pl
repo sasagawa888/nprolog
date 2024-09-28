@@ -194,10 +194,19 @@ ARITY_ERR           67
 %stdin
 :- n_error(stdin(a,get(C)),20).
 :- n_error(stdin(a,b,c),67).
+:- n_error(stdin(user_input,1),39).
 
 %stdout
 :- n_error(stdout(a,write(1)),20).
 :- n_error(stdout(a,b,c),67).
+:- n_error(stdout(user_output,1),39).
+
+%stdinout
+:- n_error(stdinout(a,user_output,write(1)),20).
+:- n_error(stdinout(user_input,b,write(1)),20).
+:- n_error(stdinout(a,b,c,d),67).
+:- n_error(stdinout(user_input,user_output,1),39).
+
 
 %shell
 :- n_error(shell(1),11).
