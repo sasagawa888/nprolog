@@ -638,14 +638,22 @@ int b_nl(int arglist, int rest)
 
 int b_put(int arglist, int rest)
 {
-    int n, arg1;
+    int n, arg1, arg2;
 
     n = length(arglist);
     if (n == 1) {
-	arg1 = deref(car(arglist));
-	if (!integerp(arg1))
-	    error(NOT_INT, "put", arg1);
-	fprintf(GET_PORT(output_stream), "%c", (char) GET_INT(arg1));
+	arg1 = output_stream;
+	arg2 = car(arglist);
+	goto put;
+	} else if(n==2){
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+	put:
+	if (!integerp(arg2))
+	    error(NOT_INT, "put ", arg1);
+
+	fprintf(GET_PORT(arg1), "%c", (char) GET_INT(arg2));
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "put ", arglist);
@@ -658,7 +666,7 @@ int b_get0(int arglist, int rest)
 
     n = length(arglist);
     if (n == 1) {
-	arg1 = standard_input;
+	arg1 = input_stream;
 	arg2 = car(arglist);
 	goto get0;
     } else if (n == 2) {
@@ -695,7 +703,7 @@ int b_get(int arglist, int rest)
 
     n = length(arglist);
     if (n == 1) {
-	arg1 = standard_input;
+	arg1 = input_stream;
 	arg2 = car(arglist);
 
 	goto get;
@@ -4249,6 +4257,27 @@ int b_current_predicate(int arglist, int rest)
     return (NO);
 }
 
+
+int specp(int x)
+{
+	if (x == makeatom("xfx",SIMP))
+		return(1);
+	else if (x == makeatom("yfx", SIMP))
+		return(1);
+	else if (x == makeatom("xfy",SIMP))
+		return(1);
+	else if (x == makeatom("fx",SIMP))
+		return(1);
+	else if (x == makeatom("fy",SIMP))
+		return(1);
+	else if (x == makeatom("xf",SIMP))
+		return(1);
+	else if (x == makeatom("yf",SIMP))
+		return(1);
+	else
+		return(0);
+}
+
 int b_current_op(int arglist, int rest)
 {
     int n, arg1, arg2, arg3, save1, save2, lis, weight, spec, op, w, s, o;
@@ -4261,8 +4290,10 @@ int b_current_op(int arglist, int rest)
 
 	if (!wide_variable_p(arg1) && !integerp(arg1))
 	error(NOT_INT,"current_op ", arg1);
-	if (!wide_variable_p(arg2) && !atomp(arg2))
-	error(NOT_ATOM, "current_op ", arg2);
+	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 1200)
+	error(OPE_PRIORITY_ERR, "current_op ", arg1);
+	if (!wide_variable_p(arg2) && !specp(arg2))
+	error(OPE_SPEC_ERR, "current_op ", arg2);
 	if (!wide_variable_p(arg3) && !atomp(arg3))
 	error(NOT_ATOM, "current_op ", arg3);
 
