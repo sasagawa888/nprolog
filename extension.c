@@ -516,8 +516,8 @@ int b_error(int arglist, int rest)
 	    check_flag = 1;
 	    prove_all(arg1, sp);
 	    check_flag = 0;
-		printf("Not error: ");
-		print(arg1);
+	    printf("Not error: ");
+	    print(arg1);
 	    return (NO);
 	} else if (ret1 == 1) {
 	    ret1 = 0;
@@ -525,7 +525,7 @@ int b_error(int arglist, int rest)
 	    if (unify(arg2, makeint(error_code)) == YES) {
 		if (prove_all(rest, sp) == YES)
 		    return (YES);
-		else	
+		else
 		    return (NO);
 	    } else {
 		printf("Wrong error code: %d ", error_code);

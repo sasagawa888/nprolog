@@ -70,7 +70,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "stdin" }, { "stdout" }, { "stdinout" },
     { "ctr_set" }, { "ctr_dec" }, { "ctr_inc" }, { "ctr_is" },
     { "heapd" }, { "list_text" }, { "nref" }, { "pref" }, { "nth_ref" },
-	{ "replace" },
+    { "replace" },
     { "member" }, { "append" }, { "repeat" }, { "system" },
     { "retract" }, { "clause" }, { "call" }, { "directory" },
     { "between" }, { "bagof" }, { "setof" }, { "findall" },

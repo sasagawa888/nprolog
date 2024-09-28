@@ -489,81 +489,81 @@ int eval(int x)
 	else
 	    error(EVALUATION_ERR, "eval ", x);
     } else if (eqp(car(x), makeatom("abs", FUNC))) {
-	if(length(x) != 2)
-	error(ARITY_ERR, "abs ", x);
+	if (length(x) != 2)
+	    error(ARITY_ERR, "abs ", x);
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_abs(arg1));
     } else if (eqp(car(x), makeatom("sin", FUNC))) {
-	if(length(x) != 2)
-	error(ARITY_ERR, "sin ", x);
+	if (length(x) != 2)
+	    error(ARITY_ERR, "sin ", x);
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_sin(arg1));
     } else if (eqp(car(x), makeatom("asin", FUNC))) {
-	if(length(x) != 2)
-	error(ARITY_ERR, "asin ", x);
+	if (length(x) != 2)
+	    error(ARITY_ERR, "asin ", x);
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_asin(arg1));
     } else if (eqp(car(x), makeatom("cos", FUNC))) {
-	if(length(x) != 2)
-	error(ARITY_ERR, "cos ", x);
+	if (length(x) != 2)
+	    error(ARITY_ERR, "cos ", x);
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_cos(arg1));
     } else if (eqp(car(x), makeatom("acos", FUNC))) {
-	if(length(x) != 2)
-	error(ARITY_ERR, "acos ", x);
+	if (length(x) != 2)
+	    error(ARITY_ERR, "acos ", x);
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_acos(arg1));
     } else if (eqp(car(x), makeatom("tan", FUNC))) {
-	if(length(x) != 2)
-	error(ARITY_ERR, "tan ", x);
+	if (length(x) != 2)
+	    error(ARITY_ERR, "tan ", x);
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_tan(arg1));
     } else if (eqp(car(x), makeatom("atan", FUNC))) {
-	if(length(x) != 2)
-	error(ARITY_ERR, "atan ", x);
+	if (length(x) != 2)
+	    error(ARITY_ERR, "atan ", x);
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_atan(arg1));
     } else if (eqp(car(x), makeatom("exp", FUNC))) {
-	if(length(x) != 2)
-	error(ARITY_ERR, "exp ", x);
+	if (length(x) != 2)
+	    error(ARITY_ERR, "exp ", x);
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_exp(arg1));
     } else if (eqp(car(x), makeatom("ln", FUNC))) {
-	if(length(x) != 2)
-	error(ARITY_ERR, "ln ", x);
+	if (length(x) != 2)
+	    error(ARITY_ERR, "ln ", x);
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_ln(arg1));
     } else if (eqp(car(x), makeatom("log", FUNC))) {
-	if(length(x) != 2)
-	error(ARITY_ERR, "log ", x);
+	if (length(x) != 2)
+	    error(ARITY_ERR, "log ", x);
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_log(arg1));
     } else if (eqp(car(x), makeatom("sqrt", FUNC))) {
-	if(length(x) != 2)
-	error(ARITY_ERR, "sqrt ", x);
+	if (length(x) != 2)
+	    error(ARITY_ERR, "sqrt ", x);
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_sqrt(arg1));
     } else if (eqp(car(x), makeatom("round", FUNC))) {
-	if(length(x) != 3)
-	error(ARITY_ERR, "round ", x);
+	if (length(x) != 3)
+	    error(ARITY_ERR, "round ", x);
 	evalterm(x, result);
 	arg1 = result[1];
 	arg2 = result[2];
 	return (f_round(arg1, arg2));
     } else if (eqp(car(x), makeatom("randi", FUNC))) {
-	if(length(x) != 2)
-	error(ARITY_ERR, "randi ", x);
+	if (length(x) != 2)
+	    error(ARITY_ERR, "randi ", x);
 	evalterm(x, result);
 	arg1 = result[1];
 	return (f_randi(arg1));

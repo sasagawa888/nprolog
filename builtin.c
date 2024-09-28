@@ -161,7 +161,7 @@ void initbuiltin(void)
     defbuiltin("shell", b_shell, 1);
     defbuiltin("skip", b_skip, 1);
     defbuiltin("sort", b_sort, 2);
-	defbuiltin("statistics", b_statistics,2);
+    defbuiltin("statistics", b_statistics, 2);
     defbuiltin("stdin", b_stdin, 2);
     defbuiltin("stdinout", b_stdinout, 3);
     defbuiltin("stdout", b_stdout, 2);
@@ -244,7 +244,7 @@ int b_length(int arglist, int rest)
 	if (!listp(arg1) && !nullp(arg1) && !wide_variable_p(arg1))
 	    error(NOT_LIST, "length ", arglist);
 	if (listp(arg1) && length(arg1) == -1)
-		error(WRONG_ARGS, "length ", arglist);
+	    error(WRONG_ARGS, "length ", arglist);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
 	    error(LESS_THAN_ZERO, "length ", arg2);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
@@ -620,7 +620,7 @@ int b_nl(int arglist, int rest)
     } else if (n == 1) {
 	arg1 = car(arglist);
 	if (!streamp(arg1) && !aliasp(arg1))
-	error(NOT_STREAM,"nl ",arg1);
+	    error(NOT_STREAM, "nl ", arg1);
 
 	save = output_stream;
 	if (aliasp(arg1))
@@ -661,16 +661,16 @@ int b_get0(int arglist, int rest)
 	arg1 = standard_input;
 	arg2 = car(arglist);
 	goto get0;
-	} else if(n == 2){
+    } else if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	
-	get0:
-	if(!streamp(arg1) && !aliasp(arg1))
-	error(NOT_STREAM,"get0 ", arg1);
+
+      get0:
+	if (!streamp(arg1) && !aliasp(arg1))
+	    error(NOT_STREAM, "get0 ", arg1);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
-	error(NOT_VAR,"get0 ",arg2);
+	    error(NOT_VAR, "get0 ", arg2);
 
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
@@ -699,15 +699,15 @@ int b_get(int arglist, int rest)
 	arg2 = car(arglist);
 
 	goto get;
-	} else if(n == 2){
+    } else if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	get:
-	if(!streamp(arg1) && !aliasp(arg1))
-	error(NOT_STREAM,"get ", arg1);
+      get:
+	if (!streamp(arg1) && !aliasp(arg1))
+	    error(NOT_STREAM, "get ", arg1);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
-	error(NOT_VAR,"get ",arg2);
+	    error(NOT_VAR, "get ", arg2);
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
       loop:
@@ -876,13 +876,13 @@ int b_tab(int arglist, int rest)
 	arg1 = standard_input;
 	arg2 = car(arglist);
 	goto tab;
-	} else if(n == 2){
+    } else if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	tab:
+      tab:
 	if (!streamp(arg1) && !aliasp(arg1))
-		error(NOT_STREAM, "tab ", arg1);
+	    error(NOT_STREAM, "tab ", arg1);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
 	    error(LESS_THAN_ZERO, "tab", arg2);
 	if (!integerp(arg2))
@@ -949,7 +949,7 @@ int b_read(int arglist, int rest)
 	save2 = repl_flag;
 	input_stream = arg1;
 	if (aliasp(arg1))
-	input_stream = GET_CAR(arg1);
+	    input_stream = GET_CAR(arg1);
 	repl_flag = 0;
 
 	temp = variable_to_call(readparse());
@@ -985,13 +985,13 @@ int b_read_line(int arglist, int rest)
 	if (streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
 	    error(NOT_INPUT_STREAM, "read_line ", arg1);
 	if (!wide_variable_p(arg2) && !stringp(arg2))
-		error(NOT_VAR,"read_line ", arg2);
+	    error(NOT_VAR, "read_line ", arg2);
 
 	save1 = input_stream;
 	save2 = repl_flag;
 	input_stream = arg1;
 	if (aliasp(arg1))
-	input_stream = GET_CAR(arg1);
+	    input_stream = GET_CAR(arg1);
 
 	repl_flag = 0;
 
@@ -1041,17 +1041,17 @@ int b_read_string(int arglist, int rest)
 	if (streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
 	    error(NOT_INPUT_STREAM, "read_string ", arg1);
 	if (!integerp(arg2))
-		error(NOT_INT, "read_string ", arg2);
-	if (get_int(arg2) < 0 || get_int(arg2) > STRSIZE) 
-		error(WRONG_ARGS, "read_string ", arg2);
+	    error(NOT_INT, "read_string ", arg2);
+	if (get_int(arg2) < 0 || get_int(arg2) > STRSIZE)
+	    error(WRONG_ARGS, "read_string ", arg2);
 	if (!wide_variable_p(arg3) && !stringp(arg3))
-		error(NOT_VAR,"read_string ",arg3);
+	    error(NOT_VAR, "read_string ", arg3);
 
 	save1 = input_stream;
 	save2 = repl_flag;
 	input_stream = arg1;
 	if (aliasp(arg1))
-	input_stream = GET_CAR(arg1);
+	    input_stream = GET_CAR(arg1);
 	maxlen = GET_INT(arg2);
 	repl_flag = 0;
 
@@ -1390,10 +1390,10 @@ int b_seeing(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	if(!wide_variable_p(arg1))
-	error(NOT_VAR,"seeing ", arg1);
-	if(unify(arg1, GET_CDR(input_stream)) == YES){
-		return(prove_all(rest,sp));
+	if (!wide_variable_p(arg1))
+	    error(NOT_VAR, "seeing ", arg1);
+	if (unify(arg1, GET_CDR(input_stream)) == YES) {
+	    return (prove_all(rest, sp));
 	}
     }
     error(ARITY_ERR, "seeing ", arglist);
@@ -1586,7 +1586,7 @@ int b_reconsult(int arglist, int rest)
     arg2 = NIL;
     if (n == 1) {
 	arg1 = car(arglist);
-	
+
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "reconsult ", arg1);
 	if (!atomp(arg1))
@@ -1663,7 +1663,7 @@ int b_reconsult(int arglist, int rest)
 
       exit:
 	return (prove_all(rest, sp));
-    } 
+    }
     error(ARITY_ERR, "reconsult ", arglist);
     return (NO);
 }
@@ -4655,28 +4655,28 @@ int b_fileerrors(int arglist, int rest)
 
 int b_statistics(int arglist, int rest)
 {
-	int n,arg1,arg2;
+    int n, arg1, arg2;
 
-	n = length(arglist);
-	if(n == 2){
-		arg1 = car(arglist);
-		arg2 = cadr(arglist);
+    n = length(arglist);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
 
-		if(arg1 == makeatom("free",SIMP)){
-			if(unify(arg2,makeint(fc)) == YES);
-			return(prove_all(rest,sp));
-		} else if(arg1 == makeatom("wp",SIMP)){
-			if(unify(arg2,makeint(wp)) == YES);
-			return(prove_all(rest,sp));
-		} else if(arg1 == makeatom("sp",SIMP)){
-			if(unify(arg2,makeint(sp)) == YES);
-			return(prove_all(rest,sp));
-		} else{
-			return(NO);
-		}
-
+	if (arg1 == makeatom("free", SIMP)) {
+	    if (unify(arg2, makeint(fc)) == YES);
+	    return (prove_all(rest, sp));
+	} else if (arg1 == makeatom("wp", SIMP)) {
+	    if (unify(arg2, makeint(wp)) == YES);
+	    return (prove_all(rest, sp));
+	} else if (arg1 == makeatom("sp", SIMP)) {
+	    if (unify(arg2, makeint(sp)) == YES);
+	    return (prove_all(rest, sp));
+	} else {
+	    return (NO);
 	}
-	error(ARITY_ERR, "statistics ", arglist);
+
+    }
+    error(ARITY_ERR, "statistics ", arglist);
     return (NO);
 }
 
@@ -4691,10 +4691,10 @@ int b_sort(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if(!listp(arg1) && !nullp(arg1))
-	error(NOT_LIST,"sort ", arg1);
-	if(!wide_variable_p(arg2) && !listp(arg2) && !nullp(arg2))
-	error(NOT_VAR,"sort ",arg2);
+	if (!listp(arg1) && !nullp(arg1))
+	    error(NOT_LIST, "sort ", arg1);
+	if (!wide_variable_p(arg2) && !listp(arg2) && !nullp(arg2))
+	    error(NOT_VAR, "sort ", arg2);
 
 	if (unify(arg2, sort(arg1)) == YES)
 	    return (prove_all(rest, sp));
@@ -4714,10 +4714,10 @@ int b_keysort(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if(!listp(arg1) && !nullp(arg1))
-	error(NOT_LIST,"key_sort ", arg1);
-	if(!wide_variable_p(arg2) && !listp(arg2) && !nullp(arg2))
-	error(NOT_VAR,"key_sort ",arg2);
+	if (!listp(arg1) && !nullp(arg1))
+	    error(NOT_LIST, "key_sort ", arg1);
+	if (!wide_variable_p(arg2) && !listp(arg2) && !nullp(arg2))
+	    error(NOT_VAR, "key_sort ", arg2);
 
 	if (unify(arg2, keysort(arg1)) == YES)
 	    return (prove_all(rest, sp));
@@ -4740,8 +4740,8 @@ int b_member(int arglist, int rest)
 	arg2 = cadr(arglist);
 
 
-	if(nullp(arg2))
-		return(NO);
+	if (nullp(arg2))
+	    return (NO);
 
 	save1 = wp;
 	x = makevariant();
@@ -4787,12 +4787,12 @@ int b_append(int arglist, int rest)
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
-	if(!listp(arg1) && !nullp(arg1) && !wide_variable_p(arg1))
-	error(NOT_LIST,"append ", arg1);
-	if(!listp(arg2) && !nullp(arg2) && !wide_variable_p(arg2))
-	error(NOT_LIST,"append ", arg2);
-	if(!listp(arg3) && !nullp(arg3) && !wide_variable_p(arg3))
-	error(NOT_LIST,"append ", arg3);
+	if (!listp(arg1) && !nullp(arg1) && !wide_variable_p(arg1))
+	    error(NOT_LIST, "append ", arg1);
+	if (!listp(arg2) && !nullp(arg2) && !wide_variable_p(arg2))
+	    error(NOT_LIST, "append ", arg2);
+	if (!listp(arg3) && !nullp(arg3) && !wide_variable_p(arg3))
+	    error(NOT_LIST, "append ", arg3);
 
 	save1 = wp;
 	if (unify(arg1, NIL) == YES && unify(arg2, arg3) == YES) {
@@ -4835,11 +4835,11 @@ int b_reverse(int arglist, int rest)
 	if (!wide_variable_p(arg1) && !listp(arg1) && !nullp(arg1))
 	    error(NOT_LIST, "reverse ", arg1);
 	if (listp(arg1) && length(arg1) == -1)
-		error(WRONG_ARGS, "reverse ", arg1);
+	    error(WRONG_ARGS, "reverse ", arg1);
 	if (!wide_variable_p(arg2) && !listp(arg2) && !nullp(arg2))
 	    error(NOT_LIST, "reverse ", arg2);
 	if (listp(arg2) && length(arg2) == -1)
-		error(WRONG_ARGS, "reverse ", arg2);
+	    error(WRONG_ARGS, "reverse ", arg2);
 
 	if (!variablep(arg1)) {
 	    if (unify(listreverse(arg1), arg2) == YES)
@@ -5667,10 +5667,10 @@ int b_instance(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if(!integerp(arg1))
-	error(NOT_INT,"instance ",arg1);
-	if(!wide_variable_p(arg2))
-	error(NOT_VAR,"instance ",arg2);
+	if (!integerp(arg1))
+	    error(NOT_INT, "instance ", arg1);
+	if (!wide_variable_p(arg2))
+	    error(NOT_VAR, "instance ", arg2);
 
 	if (unify(arg2, car(get_int(arg1))) == YES)
 	    return (prove_all(rest, sp));
@@ -6140,7 +6140,7 @@ int b_key(int arglist, int rest)
 	if (!atomp(arg1))
 	    error(NOT_ATOM, "key ", arg1);
 	if (!wide_variable_p(arg2))
-		error(NOT_VAR, "key ", arg2);
+	    error(NOT_VAR, "key ", arg2);
 
 	save1 = wp;
 	save2 = sp;
