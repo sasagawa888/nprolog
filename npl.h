@@ -568,7 +568,7 @@ static const int BIGNUM_PARMA = BIGSIZE * 9 / 10; //from 90% to 100% of bigcell 
 #define NOT_STREAM_OPTION   46
 #define NOT_OUTPUT_STREAM   47
 #define NOT_ATOMIC          48
-#define NOT_LESS_THAN_ZERO  49
+#define LESS_THAN_ZERO      49
 #define NOT_COMPOUND        50
 #define NON_EMPTY_LIST      51
 #define NOT_INPUT_STREAM    52

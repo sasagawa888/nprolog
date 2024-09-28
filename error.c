@@ -216,8 +216,8 @@ void error(int errnum, char *fun, int arg)
 	printf("Not I/O mode %s ", fun);
 	print(arg);
 	break;
-    case NOT_LESS_THAN_ZERO:
-	printf("Not less than zero %s ", fun);
+    case LESS_THAN_ZERO:
+	printf("Less than zero %s ", fun);
 	print(arg);
 	break;
 

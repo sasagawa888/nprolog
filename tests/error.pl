@@ -1,71 +1,71 @@
 /*
-#define SYNTAX_ERR      1
-#define BUILTIN_EXIST   2
-#define CANT_READ       3
-#define NOT_COMPUTABLE  4
-#define OUT_OF_RANGE    5
-#define MALLOC_OVERF    6
-#define WRONG_ARGS      7
-#define NOT_NUM         8
-#define NOT_STR         9
-#define NOT_LIST        10
-#define NOT_ATOM         11
-#define ILLEGAL_OPL_INPUT   12
-#define UNCAUGHT_EXCEPTION       13
-#define CANT_OPEN       14
-#define FILE_EXIST      15
-#define ILLEGAL_ARGS    16
-#define NOT_CONS        17
-#define CANT_MODIFY     18
-#define NOT_INT         19
-#define NOT_STREAM      20
-#define NOT_OUT_STREAM  21
-#define NOT_IN_STREAM   22
-#define NOT_CHAR        23
-#define NOT_FLT         24
-#define CTRL_OVERF      25
-#define END_STREAM      26
-#define DIV_ZERO        27
-#define CANT_PARSE      28
-#define NOT_ARITHMETIC  29
-#define FLT_OVERF       30
-#define FLT_UNDERF      31
-#define STACK_OVERF     32
-#define SYSTEM_ERROR    33
-#define UNDEF_PRED		34
-#define EOF_ERROR       35
-#define INSTANTATION_ERR    36
-#define EXPONENT_ERR    37
-#define OPE_SPEC_ERR    38
-#define NOT_CALLABLE    39
-#define NOT_VAR         40
-#define EXISTENCE_ERR   41
-#define NOT_SOURCE      42
-#define ALIAS_EXIST     43
-#define NOT_IO_MODE     44
-#define NOT_CLOSE_OPTION    45   
-#define NOT_STREAM_OPTION   46
-#define NOT_OUTPUT_STREAM   47
-#define NOT_ATOMIC          48
-#define NOT_LESS_THAN_ZERO  49
-#define NOT_COMPOUND        50
-#define NON_EMPTY_LIST      51
-#define NOT_INPUT_STREAM    52
-#define PAST_EOF_INPUT      53
-#define EVALUATION_ERR      54
-#define STATIC_PROCEDURE    55
-#define PRED_INDICATOR      56
-#define NOT_OPEN_OPTION     57
-#define OPE_PRIORITY_ERR    58
-#define MODIFY_OPE_ERR      59
-#define NOT_CHAR_CODE       60
-#define RESOURCE_ERR        61
-#define NOT_ORDER           62
-#define NOT_TERM            63
-#define RECORD_OVERF        64
-#define NOT_RECORD          65
-#define VARIANT_OVERF       66
-#define ARITY_ERR           67
+SYNTAX_ERR      1
+BUILTIN_EXIST   2
+CANT_READ       3
+NOT_COMPUTABLE  4
+OUT_OF_RANGE    5
+MALLOC_OVERF    6
+WRONG_ARGS      7
+NOT_NUM         8
+NOT_STR         9
+NOT_LIST        10
+NOT_ATOM         11
+ILLEGAL_OPL_INPUT   12
+UNCAUGHT_EXCEPTION       13
+CANT_OPEN       14
+FILE_EXIST      15
+ILLEGAL_ARGS    16
+NOT_CONS        17
+CANT_MODIFY     18
+NOT_INT         19
+NOT_STREAM      20
+NOT_OUT_STREAM  21
+NOT_IN_STREAM   22
+NOT_CHAR        23
+NOT_FLT         24
+CTRL_OVERF      25
+END_STREAM      26
+DIV_ZERO        27
+CANT_PARSE      28
+NOT_ARITHMETIC  29
+FLT_OVERF       30
+FLT_UNDERF      31
+STACK_OVERF     32
+SYSTEM_ERROR    33
+UNDEF_PRED		34
+EOF_ERROR       35
+INSTANTATION_ERR    36
+EXPONENT_ERR    37
+OPE_SPEC_ERR    38
+NOT_CALLABLE    39
+NOT_VAR         40
+EXISTENCE_ERR   41
+NOT_SOURCE      42
+ALIAS_EXIST     43
+NOT_IO_MODE     44
+NOT_CLOSE_OPTION    45   
+NOT_STREAM_OPTION   46
+NOT_OUTPUT_STREAM   47
+NOT_ATOMIC          48
+LESS_THAN_ZERO      49
+NOT_COMPOUND        50
+NON_EMPTY_LIST      51
+NOT_INPUT_STREAM    52
+PAST_EOF_INPUT      53
+EVALUATION_ERR      54
+STATIC_PROCEDURE    55
+PRED_INDICATOR      56
+NOT_OPEN_OPTION     57
+OPE_PRIORITY_ERR    58
+MODIFY_OPE_ERR      59
+NOT_CHAR_CODE       60
+RESOURCE_ERR        61
+NOT_ORDER           62
+NOT_TERM            63
+RECORD_OVERF        64
+NOT_RECORD          65
+VARIANT_OVERF       66
+ARITY_ERR           67
 
 */
 
@@ -136,6 +136,16 @@
 :- n_error(reverse(1,X),10).
 :- n_error(reverse(X,2),10).
 :- n_error(reverse([1,2],X,Y),67).
+
+%tab
+:- n_error(tab(a),19).
+:- n_error(tab(-1),49).
+:- n_error(tab(1,3),20).
+:- n_error(tab(a,b,c),67).
+
+%nl 
+:- n_error(nl(a),20).
+:- n_error(nl(a,3,2),67).
 
 %functions
 :- n_error(A is sin(a),54).

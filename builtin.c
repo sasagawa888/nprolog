@@ -246,7 +246,7 @@ int b_length(int arglist, int rest)
 	if (listp(arg1) && length(arg1) == -1)
 		error(WRONG_ARGS, "length ", arglist);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
-	    error(NOT_LESS_THAN_ZERO, "length ", arg2);
+	    error(LESS_THAN_ZERO, "length ", arg2);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    error(NOT_INT, "length ", arg2);
 	save1 = wp;
@@ -619,6 +619,8 @@ int b_nl(int arglist, int rest)
 	return (prove_all(rest, sp));
     } else if (n == 1) {
 	arg1 = car(arglist);
+	if (!streamp(arg1))
+	error(NOT_STREAM,"nl ",arg1);
 
 	save = output_stream;
 	if (aliasp(arg1))
@@ -839,15 +841,24 @@ int b_get_byte(int arglist, int rest)
 
 int b_tab(int arglist, int rest)
 {
-    int n, arg1, count;
+    int n, arg1, arg2, count;
 
     n = length(arglist);
     if (n == 1) {
+	arg1 = standard_input;
+	arg2 = car(arglist);
+	goto tab;
+	} else if(n == 2){
 	arg1 = car(arglist);
-	if (integerp(eval(arg1)) && GET_INT(eval(arg1)) < 0)
-	    error(NOT_LESS_THAN_ZERO, "tab", arg1);
-	if (!integerp(arg1))
-	    error(NOT_INT, "tab", arg1);
+	arg2 = cadr(arglist);
+
+	tab:
+	if (!streamp(arg1))
+		error(NOT_STREAM, "tab ", arg1);
+	if (integerp(arg2) && GET_INT(arg2) < 0)
+	    error(LESS_THAN_ZERO, "tab", arg2);
+	if (!integerp(arg2))
+	    error(NOT_INT, "tab", arg2);
 
 	count = GET_INT(arg1);
 	while (count > 0) {
@@ -2570,7 +2581,7 @@ int b_abolish(int arglist, int rest)
 	if (!atomp(cadr(arg1)))
 	    error(NOT_ATOM, "abolish ", arg1);
 	if (integerp(eval(caddr(arg1))) && GET_INT(eval(caddr(arg1))) < 0)
-	    error(NOT_LESS_THAN_ZERO, "abolish ", arg1);
+	    error(LESS_THAN_ZERO, "abolish ", arg1);
 	if (!integerp(caddr(arg1)))
 	    error(NOT_INT, "abolish ", arg1);
 
@@ -3142,7 +3153,7 @@ int b_string_length(int arglist, int rest)
 	if (!stringp(arg1))
 	    error(NOT_STR, "string_length ", arg1);
 	if (integerp(eval(arg2)) && GET_INT(eval(arg2)) < 0)
-	    error(NOT_LESS_THAN_ZERO, "string_length ", arg2);
+	    error(LESS_THAN_ZERO, "string_length ", arg2);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    error(NOT_INT, "string_length ", arg2);
 
@@ -3227,9 +3238,9 @@ int b_substring(int arglist, int rest)
 	if (!wide_variable_p(arg4) && !stringp(arg4))
 	    error(NOT_STR, "substring ", arg4);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
-	    error(NOT_LESS_THAN_ZERO, "substring ", arg2);
+	    error(LESS_THAN_ZERO, "substring ", arg2);
 	if (integerp(arg3) && GET_INT(arg3) < 0)
-	    error(NOT_LESS_THAN_ZERO, "substring ", arg3);
+	    error(LESS_THAN_ZERO, "substring ", arg3);
 	if (!wide_variable_p(arg2) && !wide_integer_p(arg2))
 	    error(NOT_INT, "substring ", arg2);
 	if (!wide_variable_p(arg3) && !wide_integer_p(arg3))
@@ -3866,7 +3877,7 @@ int b_functor(int arglist, int rest)
 	}
 	if (wide_variable_p(arg1) && integerp(eval(arg3))
 	    && GET_INT(eval(arg3)) < 0)
-	    error(NOT_LESS_THAN_ZERO, "functor ", arg3);
+	    error(LESS_THAN_ZERO, "functor ", arg3);
 	if (wide_variable_p(arg1) && !integerp(arg3))
 	    error(NOT_INT, "functor ", arg3);
 	if (wide_variable_p(arg1) && atomicp(arg2) &&
@@ -3954,7 +3965,7 @@ int b_arg(int arglist, int rest)
 	if (!compoundp(arg2))
 	    error(NOT_COMPOUND, "arg ", arg2);
 	if (integerp(eval(arg1)) && GET_INT(eval(arg1)) < 0)
-	    error(NOT_LESS_THAN_ZERO, "arg ", arg1);
+	    error(LESS_THAN_ZERO, "arg ", arg1);
 
 	if (integerp(arg1) && structurep(arg2)) {
 	    i = GET_INT(arg1);
@@ -3990,7 +4001,7 @@ int b_arg0(int arglist, int rest)
 	if (!compoundp(arg2))
 	    error(NOT_COMPOUND, "arg0 ", arg2);
 	if (integerp(eval(arg1)) && GET_INT(eval(arg1)) < 0)
-	    error(NOT_LESS_THAN_ZERO, "arg0 ", arg1);
+	    error(LESS_THAN_ZERO, "arg0 ", arg1);
 
 	if (integerp(arg1) && structurep(arg2)) {
 	    i = GET_INT(arg1) + 1;
@@ -5108,9 +5119,9 @@ int b_inc(int arglist, int rest)
 	if (!wide_variable_p(arg2) && !wide_integer_p(arg2))
 	    error(NOT_INT, "inc ", arg2);
 	if (wide_integer_p(arg1) && negativep(arg1))
-	    error(NOT_LESS_THAN_ZERO, "inc ", arg1);
+	    error(LESS_THAN_ZERO, "inc ", arg1);
 	if (wide_integer_p(arg2) && negativep(arg2))
-	    error(NOT_LESS_THAN_ZERO, "inc ", arg2);
+	    error(LESS_THAN_ZERO, "inc ", arg2);
 
 	if (wide_variable_p(arg1)) {
 	    if (unify(arg1, minus(arg2, makeint(1))) == YES)
@@ -5154,9 +5165,9 @@ int b_dec(int arglist, int rest)
 	if (!wide_variable_p(arg2) && !wide_integer_p(arg2))
 	    error(NOT_INT, "dec ", arg2);
 	if (wide_integer_p(arg1) && negativep(arg1))
-	    error(NOT_LESS_THAN_ZERO, "dec ", arg1);
+	    error(LESS_THAN_ZERO, "dec ", arg1);
 	if (wide_integer_p(arg2) && negativep(arg2))
-	    error(NOT_LESS_THAN_ZERO, "dec ", arg2);
+	    error(LESS_THAN_ZERO, "dec ", arg2);
 
 	if (wide_variable_p(arg1)) {
 	    if (unify(arg1, plus(arg2, makeint(1))) == YES)
@@ -5194,13 +5205,13 @@ int b_ansi_cup(int arglist, int rest)
 	if (!wide_variable_p(arg1) && !wide_integer_p(arg1))
 	    error(NOT_INT, "ansi_cup ", arg1);
 	if (wide_integer_p(arg1) && negativep(arg1))
-	    error(NOT_LESS_THAN_ZERO, "ansi_cup ", arg1);
+	    error(LESS_THAN_ZERO, "ansi_cup ", arg1);
 	if (wide_variable_p(arg2))
 	    error(INSTANTATION_ERR, "ansi_cup ", arg2);
 	if (!wide_variable_p(arg2) && !wide_integer_p(arg2))
 	    error(NOT_INT, "ansi_cup ", arg2);
 	if (wide_integer_p(arg2) && negativep(arg2))
-	    error(NOT_LESS_THAN_ZERO, "ansi_cup ", arg2);
+	    error(LESS_THAN_ZERO, "ansi_cup ", arg2);
 
 	r = get_int(arg1);
 	c = get_int(arg2);
@@ -5306,7 +5317,7 @@ int b_ansi_cuu(int arglist, int rest)
 	if (!wide_variable_p(arg1) && !wide_integer_p(arg1))
 	    error(NOT_INT, "ansi_cuu ", arg1);
 	if (wide_integer_p(arg1) && negativep(arg1))
-	    error(NOT_LESS_THAN_ZERO, "ansi_cuu ", arg1);
+	    error(LESS_THAN_ZERO, "ansi_cuu ", arg1);
 	m = get_int(arg1);
 	while (m > 0) {
 	    ESCMVU;
@@ -5331,7 +5342,7 @@ int b_ansi_cud(int arglist, int rest)
 	if (!wide_variable_p(arg1) && !wide_integer_p(arg1))
 	    error(NOT_INT, "and_cud ", arg1);
 	if (wide_integer_p(arg1) && negativep(arg1))
-	    error(NOT_LESS_THAN_ZERO, "ansi_cud ", arg1);
+	    error(LESS_THAN_ZERO, "ansi_cud ", arg1);
 	m = get_int(arg1);
 	while (m > 0) {
 	    ESCMVD;
@@ -5356,7 +5367,7 @@ int b_ansi_cuf(int arglist, int rest)
 	if (!wide_variable_p(arg1) && !wide_integer_p(arg1))
 	    error(NOT_INT, "and_cuf ", arg1);
 	if (wide_integer_p(arg1) && negativep(arg1))
-	    error(NOT_LESS_THAN_ZERO, "ansi_cuf ", arg1);
+	    error(LESS_THAN_ZERO, "ansi_cuf ", arg1);
 	m = get_int(arg1);
 	while (m > 0) {
 	    ESCMVR;
@@ -5381,7 +5392,7 @@ int b_ansi_cub(int arglist, int rest)
 	if (!wide_variable_p(arg1) && !wide_integer_p(arg1))
 	    error(NOT_INT, "and_cub ", arg1);
 	if (wide_integer_p(arg1) && negativep(arg1))
-	    error(NOT_LESS_THAN_ZERO, "ansi_cub ", arg1);
+	    error(LESS_THAN_ZERO, "ansi_cub ", arg1);
 	m = get_int(arg1);
 	while (m > 0) {
 	    ESCMVL;
@@ -5406,7 +5417,7 @@ int b_ansi_sgr(int arglist, int rest)
 	if (!wide_variable_p(arg1) && !wide_integer_p(arg1))
 	    error(NOT_INT, "and_sgr ", arg1);
 	if (wide_integer_p(arg1) && negativep(arg1))
-	    error(NOT_LESS_THAN_ZERO, "ansi_sgr ", arg1);
+	    error(LESS_THAN_ZERO, "ansi_sgr ", arg1);
 	m = get_int(arg1);
 	ESCCOLOR(m);
 	cursor_prop = m;
