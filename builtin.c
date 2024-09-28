@@ -79,7 +79,7 @@ void initbuiltin(void)
     defbuiltin("date_day", b_date_day, 1);
     defbuiltin("dec", b_dec, 2);
     defbuiltin("delete", b_delete, 1);
-    defbuiltin("display", b_write_canonical, 1);
+    defbuiltin("display", b_display, 1);
     defbuiltin("directory", b_directory, 6);
     defbuiltin("debug", b_debug, 0);
     defbuiltin("dup", b_dup, 2);
@@ -536,7 +536,7 @@ int b_write(int arglist, int rest)
 }
 
 
-int b_write_canonical(int arglist, int rest)
+int b_display(int arglist, int rest)
 {
     int n, arg1, arg2, save;
 
@@ -544,12 +544,12 @@ int b_write_canonical(int arglist, int rest)
     if (n == 1) {
 	arg1 = output_stream;
 	arg2 = car(arglist);
-	goto write_canonical;
+	goto display;
 
     } else if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-      write_canonical:
+      display:
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "display ", arg1);
 	if (!streamp(arg1) && !aliasp(arg1))
