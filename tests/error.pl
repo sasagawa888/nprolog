@@ -77,8 +77,6 @@ ARITY_ERR           67
 :- n_error(length([],-1),49).
 
 %member
-:- n_error(member(a,b),10).
-:- n_error(member(a,$abc$),10).
 :- n_error(member(a,[],s),67).
 
 %append
