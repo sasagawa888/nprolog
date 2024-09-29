@@ -2398,6 +2398,9 @@ int b_call(int arglist, int rest)
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "call ", arg1);
 
+	if(atom_constant_p(arg1))
+	arg1 = makeatom(GET_NAME(arg1),PRED);
+
 	return (prove_all(addtail_body(rest, arg1), sp));
     }
     error(ARITY_ERR, "call ", arglist);

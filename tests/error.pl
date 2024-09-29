@@ -79,7 +79,7 @@ ARITY_ERR           67
 
 %call 
 :- n_error(call(1),39).
-%:- n_error(call(a),41).
+:- n_error(call(a),41).
 
 %break end_of_file
 :- n_error(break(1),67).
