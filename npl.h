@@ -426,6 +426,7 @@ extern int fc; //free counter
 extern int ac; //alpha conversion variable counter
 extern int wp; //working pointer
 extern int up; //unify stack pointer
+extern int gc; //invokded GC count
 
 //-----editor-----
 extern int repl_flag;

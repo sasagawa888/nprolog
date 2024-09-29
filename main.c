@@ -66,6 +66,7 @@ int fc;				//free counter
 int ac;				//alpha conversion variable count
 int wp;				//working pointer
 int up;				//unify stack pointer
+int gc;             //invoked GC count
 
 // bignum pointer
 int big_pt0 = 0;		// pointer of temporaly bignum

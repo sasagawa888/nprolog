@@ -315,3 +315,7 @@ ARITY_ERR           67
 :- n_error(listing(1),7).
 :- n_error(listing(a-3),7).
 :- n_error(listing(a,2),67).
+
+%gc
+:- n_error(gc(t),7).
+:- n_error(gc(full,1),67).

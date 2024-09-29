@@ -447,6 +447,15 @@ Sort list L1 into standard order, eliminate duplication and return sorted list t
 ### □ spy(Name/Arity)
 Set a predicate as a debug spy point. 
 
+### □ statistics(Atom/Val)
+Returns information about the usage of the Prolog system.
+
+Atom -> Val
+free -> The number of free cells in the heap area
+wp -> The value of the working pointer
+sp -> The value of the stack pointer
+gc -> The number of times the garbage collector (GC) has been triggered
+
 ### □ stdin(FileHandle,Goal)
 Change standard input during that goal.
 

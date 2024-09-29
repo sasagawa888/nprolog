@@ -15,6 +15,7 @@ void gbc(void)
 	printf("enter GBC free=%d\n", fc);
 	fflush(stdout);
     }
+    gc++;
 
     gbcmark();
     gbcsweep();

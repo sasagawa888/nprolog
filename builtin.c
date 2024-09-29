@@ -4489,10 +4489,14 @@ int b_gbc(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	if (arg1 == makeconst("full"))
+	if (arg1 == makeconst("full")){
 	    gbc();
-	return (prove_all(rest, sp));
+		return (prove_all(rest, sp));
     }
+	else{
+		error(WRONG_ARGS,"gc ", arglist);
+	}
+	}
     error(ARITY_ERR, "gc ", arglist);
     return (NO);
 }
@@ -4748,6 +4752,9 @@ int b_statistics(int arglist, int rest)
 	    return (prove_all(rest, sp));
 	} else if (arg1 == makeatom("sp", SIMP)) {
 	    if (unify(arg2, makeint(sp)) == YES);
+	    return (prove_all(rest, sp));
+	} else if (arg1 == makeatom("gc", SYS)) {
+	    if (unify(arg2, makeint(gc)) == YES);
 	    return (prove_all(rest, sp));
 	} else {
 	    return (NO);
