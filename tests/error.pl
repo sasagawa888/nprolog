@@ -271,3 +271,29 @@ ARITY_ERR           67
 :- n_error(A is sin(X),36).
 :- n_error(A is X << 2,36).
 :- n_error(A is 1 >> Y,36).
+
+
+%cursol
+:- n_error(ansi_cup(a,1),19).
+:- n_error(ansi_cup(2,a),19).
+:- n_error(ansi_cup(A,1),36).
+:- n_error(ansi_cup(2,B),36).
+:- n_error(ansi_cup(2,3,4),67).
+:- n_error(ansi_cuu(a),19).
+:- n_error(ansi_cuu(1,2),67).
+:- n_error(ansi_cud(a),19).
+:- n_error(ansi_cud(1,2),67).
+:- n_error(ansi_cuf(a),19).
+:- n_error(ansi_cuf(1,2),67).
+:- n_error(ansi_cub(a),19).
+:- n_error(ansi_cub(1,2),67).
+:- n_error(ansi_scp(1),67).
+:- n_error(ansi_rcp(1),67).
+:- n_error(ansi_ed(1),67).
+:- n_error(ansi_el(1),67).
+
+%arg 
+:- n_error(arg(a,foo(1,2),X),19).
+:- n_error(arg(-1,foo(1,2),X),49).
+:- n_error(arg(1,X,Y),36).
+:- n_error(arg(1,write(1),X,Y),67).
