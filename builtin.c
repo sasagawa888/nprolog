@@ -5787,6 +5787,8 @@ int b_recordz(int arglist, int rest)
 
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "recordz ", arg1);
+	if (!atomp(arg1))
+		error(NOT_ATOM, "recordz ",arg1);
 	if (builtinp(arg1))
 	    error(BUILTIN_EXIST, "recordz ", arg1);
 	if (wide_variable_p(arg2))
@@ -5871,6 +5873,8 @@ int b_recorda(int arglist, int rest)
 	arg3 = caddr(arglist);
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "recorda ", arg1);
+	if (!atomp(arg1))
+		error(NOT_ATOM, "recorda ",arg1);
 	if (builtinp(arg1))
 	    error(BUILTIN_EXIST, "recorda ", arg1);
 	if (wide_variable_p(arg2))

@@ -144,6 +144,12 @@ ARITY_ERR           67
 :- n_error(instance(0,X,3),67).
 :- n_error(nref(a,X),19).
 :- n_error(pref(a,X),19).
+:- n_error(recorda(1,a,Y),11).
+:- n_error(recorda(assert,a,Y),2).
+:- n_error(recorda(foo,a,_,y),67).
+:- n_error(recordz(1,a,Y),11).
+:- n_error(recordz(assert,a,Y),2).
+:- n_error(recordz(foo,a,_,y),67).
 
 %timer
 :- n_error(ctr_set(-1,0),7).
