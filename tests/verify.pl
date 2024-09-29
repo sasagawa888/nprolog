@@ -302,4 +302,104 @@ test(between) :-
 test(list) :-
     verify(list([])).
 
+test(timer) :-
+    C = 0,
+    ctr_set(C, 5),
+    ctr_is(C, X1),
+    ctr_inc(C, X2),
+    ctr_is(C, X3),
+    ctr_dec(C, X4),
+    ctr_is(C, X5),
+    X5 = 5.
+
+% set 
+parent(john, mary).
+parent(john, bob).
+parent(susan, mary).
+parent(susan, bob).
+
+test(bagof) :- 
+       bagof(Child, parent(john, Child), Children), Children = [mary, bob].
+
+test(setof) :- 
+       setof(Child, parent(_, Child), UniqueChildren), UniqueChildren = [bob, mary].
+
+test(findall) :-
+      findall(Child, parent(_, Child), AllChildren), AllChildren = [mary, bob, mary, bob].
+
+max(X, Y, X) :- X >= Y, !.
+max(_, Y, Y).
+
+test(max) :-
+    max(3, 4, 4),
+    max(5, 2, 5),
+    max(7, 7, 7). 
+
+/* sort */
+quick_sort([], []).
+quick_sort([H|T], Sorted) :-
+    partition(H, T, Left, Right),
+    quick_sort(Left, SortedLeft),
+    quick_sort(Right, SortedRight),
+    append(SortedLeft, [H|SortedRight], Sorted).
+
+partition(_, [], [], []).
+partition(Pivot, [H|T], [H|Left], Right) :-
+    H =< Pivot,
+    partition(Pivot, T, Left, Right).
+partition(Pivot, [H|T], Left, [H|Right]) :-
+    H > Pivot,
+    partition(Pivot, T, Left, Right).
+
+test(sort) :- 
+    quick_sort([3,1,4,1,5,9,2,6,5], Sorted), Sorted = [1,1,2,3,4,5,5,6,9].
+
+
+test(conditional) :-
+    (X = 1 -> Y = 2 ; Y = 3),
+    Y == 2.
+
+
+test(backtracking) :-
+    (X = 1 ; X = 2),
+    X == 1.
+
+
+test(unification) :-
+    X = 1,
+    X = 1,
+    X == 1.
+
+test(unification_failure) :-
+    \+ (X = 1, X = 2).
+
+test(cut) :-
+    (true -> X = 1 ; X = 2),
+    X == 1.
+
+test(cut_failure) :-
+    (false -> X = 1 ; X = 2),
+    X == 2.
+
+fib(0, 0).
+fib(1, 1).
+fib(N, F) :-
+    N > 1,
+    N1 is N - 1,
+    N2 is N - 2,
+    fib(N1, F1),
+    fib(N2, F2),
+    F is F1 + F2.
+
+
+test(fib) :-
+    fib(5, F),
+    F == 5.
+
+test(list) :-
+    [H|T] = [1, 2, 3],
+    H == 1,
+    T == [2, 3].
+
+
 :- alltest,write('All tests are done'),nl.
