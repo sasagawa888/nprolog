@@ -319,3 +319,14 @@ ARITY_ERR           67
 %gc
 :- n_error(gc(t),7).
 :- n_error(gc(full,1),67).
+
+%eq
+:- n_error(eq(1,2,3),67).
+
+%concat
+:- n_error(concat(1,$asdf$,X),9).
+:- n_error(concat($123$,2,Y),9).
+:- n_error(concat($123$,$asdf$,1),40).
+:- n_error(concat([1,2],X),9).
+:- n_error(concat([$as$,$df$],a),40).
+:- n_error(concat($asdf$,$asdf$,X,y),67).

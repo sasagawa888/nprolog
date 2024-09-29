@@ -3170,7 +3170,7 @@ int b_concat(int arglist, int rest)
 	    error(NOT_STR, "concat ", arg1);
 	if (!wide_variable_p(arg2) && !(atomp(arg2) || stringp(arg2)))
 	    error(NOT_STR, "concat ", arg2);
-	if (!wide_variable_p(arg3))
+	if (!wide_variable_p(arg3) && !stringp(arg3))
 	    error(NOT_VAR, "concat ", arg3);
 	if (strlen(GET_NAME(arg1)) + strlen(GET_NAME(arg2)) > STRSIZE)
 	    error(RESOURCE_ERR, "concat", arglist);
