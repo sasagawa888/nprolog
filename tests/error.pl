@@ -330,3 +330,7 @@ ARITY_ERR           67
 :- n_error(concat([1,2],X),9).
 :- n_error(concat([$as$,$df$],a),40).
 :- n_error(concat($asdf$,$asdf$,X,y),67).
+
+%current_predicate
+:- n_error(current_predicate(1),7).
+:- n_error(current_predicate(foo,2),67).
