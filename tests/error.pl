@@ -334,3 +334,9 @@ ARITY_ERR           67
 %current_predicate
 :- n_error(current_predicate(1),7).
 :- n_error(current_predicate(foo,2),67).
+
+%date date_day
+:- n_error(date(1),40).
+:- n_error(date(X,Y),67).
+:- n_error(date_day(1,Y),7).
+:- n_error(date_day(1,2,3),67).

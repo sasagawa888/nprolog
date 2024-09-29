@@ -84,7 +84,7 @@ void initbuiltin(void)
     defbuiltin("debug", b_debug, 0);
     defbuiltin("dup", b_dup, 2);
     defbuiltin("edit", b_edit, 1);
-	defbuiltin("end_of_file", b_end_of_file,0);
+    defbuiltin("end_of_file", b_end_of_file, 0);
     defbuiltin("eq", b_eq, 2);
     defbuiltin("errcode", b_errcode, 1);
     defbuiltin("erase", b_erase, 1);
@@ -646,11 +646,11 @@ int b_put(int arglist, int rest)
 	arg1 = output_stream;
 	arg2 = car(arglist);
 	goto put;
-	} else if(n==2){
+    } else if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	put:
+      put:
 	if (!integerp(arg2))
 	    error(NOT_INT, "put ", arg1);
 
@@ -898,7 +898,7 @@ int b_tab(int arglist, int rest)
 	    error(NOT_INT, "tab", arg2);
 
 	if (aliasp(arg1))
-	arg1 = GET_CAR(arg1);
+	    arg1 = GET_CAR(arg1);
 	count = GET_INT(arg2);
 	while (count > 0) {
 	    fprintf(GET_PORT(arg1), " ");
@@ -2398,8 +2398,8 @@ int b_call(int arglist, int rest)
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "call ", arg1);
 
-	if(atom_constant_p(arg1))
-	arg1 = makeatom(GET_NAME(arg1),PRED);
+	if (atom_constant_p(arg1))
+	    arg1 = makeatom(GET_NAME(arg1), PRED);
 
 	return (prove_all(addtail_body(rest, arg1), sp));
     }
@@ -3641,7 +3641,7 @@ int b_debug(int arglist, int rest)
 
 int b_break(int arglist, int rest)
 {
-    int n,ret,save1,save2;
+    int n, ret, save1, save2;
 
     n = length(arglist);
     if (n == 0) {
@@ -3649,18 +3649,19 @@ int b_break(int arglist, int rest)
 	save1 = wp;
 	save2 = sp;
 	ret = setjmp(buf2);
-	if (ret == 0){
-	while (1) {
-	    printf("?= ");
-	    fflush(stdout);
-	    query(variable_to_call(readparse()));
-	    fflush(stdout);
-    }} else if (ret == 1) {
-	ret = 0;
-	wp = save1;
-	sp = save2;
-	return(YES);
-    } 
+	if (ret == 0) {
+	    while (1) {
+		printf("?= ");
+		fflush(stdout);
+		query(variable_to_call(readparse()));
+		fflush(stdout);
+	    }
+	} else if (ret == 1) {
+	    ret = 0;
+	    wp = save1;
+	    sp = save2;
+	    return (YES);
+	}
     }
     error(ARITY_ERR, "break ", arglist);
     return (NO);
@@ -3668,18 +3669,18 @@ int b_break(int arglist, int rest)
 
 int b_end_of_file(int arglist, int rest)
 {
-	int n;
-	
-	n = length(arglist);
-	if( n== 0){
-		if(break_flag){
-		break_flag = 0;
-		longjmp(buf2,1);
-		}else
-		return(YES);
-	}
-	error(ARITY_ERR,"end_of_file ",arglist);
-	return(NO);
+    int n;
+
+    n = length(arglist);
+    if (n == 0) {
+	if (break_flag) {
+	    break_flag = 0;
+	    longjmp(buf2, 1);
+	} else
+	    return (YES);
+    }
+    error(ARITY_ERR, "end_of_file ", arglist);
+    return (NO);
 }
 
 int b_halt(int arglist, int rest)
@@ -3816,8 +3817,8 @@ int b_system(int arglist, int rest)
     if (n == 1) {
 	arg1 = car(arglist);
 
-	if(!wide_variable_p(arg1) && !structurep(arg1))
-	error(WRONG_ARGS,"system",arg1);
+	if (!wide_variable_p(arg1) && !structurep(arg1))
+	    error(WRONG_ARGS, "system", arg1);
 
 	syslist = reverse(builtins);
 	save1 = wp;
@@ -4120,8 +4121,8 @@ int b_listing(int arglist, int rest)
     }
     if (n == 1) {
 	arg1 = car(arglist);
-	if(!atomp(arg1) && !structurep(arg1))
-	error(WRONG_ARGS,"listing ",arglist);
+	if (!atomp(arg1) && !structurep(arg1))
+	    error(WRONG_ARGS, "listing ", arglist);
 	if (atomp(arg1)) {
 	    clauses = GET_CAR(arg1);
 	    listing_flag = 1;
@@ -4152,9 +4153,8 @@ int b_listing(int arglist, int rest)
 	    }
 	    listing_flag = 0;
 	    return (prove_all(rest, sp));
-	}
-	else {
-		error(WRONG_ARGS,"listing ", arglist);
+	} else {
+	    error(WRONG_ARGS, "listing ", arglist);
 	}
     }
     error(ARITY_ERR, "listing ", arglist);
@@ -4267,8 +4267,8 @@ int b_current_predicate(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	if(!atomp(arg1) && !wide_variable_p(arg1))
-	error(WRONG_ARGS,"current_predicate ",arg1);
+	if (!atomp(arg1) && !wide_variable_p(arg1))
+	    error(WRONG_ARGS, "current_predicate ", arg1);
 
 	predlist = reverse(predicates);
 	save1 = wp;
@@ -4300,22 +4300,22 @@ int b_current_predicate(int arglist, int rest)
 
 int specp(int x)
 {
-	if (x == makeatom("xfx",SIMP))
-		return(1);
-	else if (x == makeatom("yfx", SIMP))
-		return(1);
-	else if (x == makeatom("xfy",SIMP))
-		return(1);
-	else if (x == makeatom("fx",SIMP))
-		return(1);
-	else if (x == makeatom("fy",SIMP))
-		return(1);
-	else if (x == makeatom("xf",SIMP))
-		return(1);
-	else if (x == makeatom("yf",SIMP))
-		return(1);
-	else
-		return(0);
+    if (x == makeatom("xfx", SIMP))
+	return (1);
+    else if (x == makeatom("yfx", SIMP))
+	return (1);
+    else if (x == makeatom("xfy", SIMP))
+	return (1);
+    else if (x == makeatom("fx", SIMP))
+	return (1);
+    else if (x == makeatom("fy", SIMP))
+	return (1);
+    else if (x == makeatom("xf", SIMP))
+	return (1);
+    else if (x == makeatom("yf", SIMP))
+	return (1);
+    else
+	return (0);
 }
 
 int b_current_op(int arglist, int rest)
@@ -4329,13 +4329,13 @@ int b_current_op(int arglist, int rest)
 	arg3 = caddr(arglist);
 
 	if (!wide_variable_p(arg1) && !integerp(arg1))
-	error(NOT_INT,"current_op ", arg1);
+	    error(NOT_INT, "current_op ", arg1);
 	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 1200)
-	error(OPE_PRIORITY_ERR, "current_op ", arg1);
+	    error(OPE_PRIORITY_ERR, "current_op ", arg1);
 	if (!wide_variable_p(arg2) && !specp(arg2))
-	error(OPE_SPEC_ERR, "current_op ", arg2);
+	    error(OPE_SPEC_ERR, "current_op ", arg2);
 	if (!wide_variable_p(arg3) && !atomp(arg3))
-	error(NOT_ATOM, "current_op ", arg3);
+	    error(NOT_ATOM, "current_op ", arg3);
 
 
 	/*
@@ -4492,14 +4492,13 @@ int b_gbc(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	if (arg1 == makeconst("full")){
+	if (arg1 == makeconst("full")) {
 	    gbc();
-		return (prove_all(rest, sp));
+	    return (prove_all(rest, sp));
+	} else {
+	    error(WRONG_ARGS, "gc ", arglist);
+	}
     }
-	else{
-		error(WRONG_ARGS,"gc ", arglist);
-	}
-	}
     error(ARITY_ERR, "gc ", arglist);
     return (NO);
 }
@@ -5559,6 +5558,8 @@ int b_date(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
+	if (!wide_variable_p(arg1))
+	    error(NOT_VAR, "date ", arg1);
 
 	t = time(NULL);
 	jst = localtime(&t);
@@ -5582,6 +5583,10 @@ int b_date_day(int arglist, int rest)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
+	if (!(structurep(arg1) && length(arg1) == 4))
+	    error(WRONG_ARGS, "date_day ", arg1);
+	if (!wide_variable_p(arg2) && !integerp(arg2))
+	    error(NOT_VAR, "date_day", arg2);
 
 	y = get_int(cadr(arg1));
 	m = get_int(caddr(arg1));

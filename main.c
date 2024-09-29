@@ -29,7 +29,7 @@ token stok = { GO, OTHER };
 
 jmp_buf buf;			// for REPL halt and error handling.
 jmp_buf buf1;			// for n_error/2 error check.
-jmp_buf buf2;           // for break/0 end_of_file/0 exit break
+jmp_buf buf2;			// for break/0 end_of_file/0 exit break
 int variables = NIL;
 int predicates = NIL;
 int builtins = NIL;
@@ -66,7 +66,7 @@ int fc;				//free counter
 int ac;				//alpha conversion variable count
 int wp;				//working pointer
 int up;				//unify stack pointer
-int gc;             //invoked GC count
+int gc;				//invoked GC count
 
 // bignum pointer
 int big_pt0 = 0;		// pointer of temporaly bignum
@@ -101,7 +101,7 @@ int ctrl_c_flag = 0;		//for ctrl_c  to stop prove
 int init_flag = 1;		//for halt
 int script_flag = 0;		// script mode, 0=not scriplt-mode, 1=script-mode.
 int check_flag = 0;		// for n_error/2 error check
-int break_flag = 0;     // for break/0 0=normal,1=break.
+int break_flag = 0;		// for break/0 0=normal,1=break.
 
 //stream
 int standard_input;
