@@ -3816,6 +3816,9 @@ int b_system(int arglist, int rest)
     if (n == 1) {
 	arg1 = car(arglist);
 
+	if(!wide_variable_p(arg1) && !structurep(arg1))
+	error(WRONG_ARGS,"system",arg1);
+
 	syslist = reverse(builtins);
 	save1 = wp;
 	save2 = sp;
@@ -4117,6 +4120,8 @@ int b_listing(int arglist, int rest)
     }
     if (n == 1) {
 	arg1 = car(arglist);
+	if(!atomp(arg1) && !structurep(arg1))
+	error(WRONG_ARGS,"listing ",arglist);
 	if (atomp(arg1)) {
 	    clauses = GET_CAR(arg1);
 	    listing_flag = 1;
@@ -4147,6 +4152,9 @@ int b_listing(int arglist, int rest)
 	    }
 	    listing_flag = 0;
 	    return (prove_all(rest, sp));
+	}
+	else {
+		error(WRONG_ARGS,"listing ", arglist);
 	}
     }
     error(ARITY_ERR, "listing ", arglist);

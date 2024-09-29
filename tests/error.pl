@@ -302,3 +302,16 @@ ARITY_ERR           67
 :- n_error(string_length(1,X),9).
 :- n_error(string_length($sdf$,a),19).
 :- n_error(string_length($asdf$,X,y),67).
+
+%system 
+:- n_error(system(1),7).
+
+%name
+:- n_error(name(1,X),11).
+:- n_error(name($asdf$,2),11).
+:- n_error(name($asdf$,[1],d),67).
+
+%listing 
+:- n_error(listing(1),7).
+:- n_error(listing(a-3),7).
+:- n_error(listing(a,2),67).
