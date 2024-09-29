@@ -3201,7 +3201,7 @@ int b_string_length(int arglist, int rest)
 	    error(INSTANTATION_ERR, "string_length ", arg1);
 	if (!stringp(arg1))
 	    error(NOT_STR, "string_length ", arg1);
-	if (integerp(eval(arg2)) && GET_INT(eval(arg2)) < 0)
+	if (integerp(arg2) && GET_INT(arg2) < 0)
 	    error(LESS_THAN_ZERO, "string_length ", arg2);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    error(NOT_INT, "string_length ", arg2);

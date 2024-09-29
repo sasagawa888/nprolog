@@ -297,3 +297,8 @@ ARITY_ERR           67
 :- n_error(arg(-1,foo(1,2),X),49).
 :- n_error(arg(1,X,Y),36).
 :- n_error(arg(1,write(1),X,Y),67).
+
+%string_length
+:- n_error(string_length(1,X),9).
+:- n_error(string_length($sdf$,a),19).
+:- n_error(string_length($asdf$,X,y),67).
