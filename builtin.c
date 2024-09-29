@@ -5938,6 +5938,11 @@ int b_nref(int arglist, int rest)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
+	if(!integerp(arg1))
+	error(NOT_INT,"nref ",arg1);
+	if(!wide_variable_p(arg1) && !integerp(arg1))
+	error(NOT_VAR,"nref ", arg2);
+
 	chain = cdr(get_int(arg1));
 	if (chain == NIL)
 	    return (NO);
@@ -5961,6 +5966,10 @@ int b_pref(int arglist, int rest)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
+	error(NOT_INT,"pref ",arg1);
+	if(!wide_variable_p(arg1) && !integerp(arg1))
+	error(NOT_VAR,"pref ", arg2);
+
 	chain = GET_AUX(get_int(arg1));
 	if (chain == NIL)
 	    return (NO);
