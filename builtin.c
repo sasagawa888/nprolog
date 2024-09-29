@@ -4267,7 +4267,7 @@ int b_current_predicate(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	if (!atomp(arg1) && !wide_variable_p(arg1))
+	if (!atomp(arg1) && !wide_variable_p(arg1) && !structurep(arg1))
 	    error(WRONG_ARGS, "current_predicate ", arg1);
 
 	predlist = reverse(predicates);
