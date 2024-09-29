@@ -5788,7 +5788,7 @@ int b_recordz(int arglist, int rest)
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "recordz ", arg1);
 	if (!atomp(arg1))
-		error(NOT_ATOM, "recordz ",arg1);
+	    error(NOT_ATOM, "recordz ", arg1);
 	if (builtinp(arg1))
 	    error(BUILTIN_EXIST, "recordz ", arg1);
 	if (wide_variable_p(arg2))
@@ -5874,7 +5874,7 @@ int b_recorda(int arglist, int rest)
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "recorda ", arg1);
 	if (!atomp(arg1))
-		error(NOT_ATOM, "recorda ",arg1);
+	    error(NOT_ATOM, "recorda ", arg1);
 	if (builtinp(arg1))
 	    error(BUILTIN_EXIST, "recorda ", arg1);
 	if (wide_variable_p(arg2))
@@ -5942,10 +5942,10 @@ int b_nref(int arglist, int rest)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-	if(!integerp(arg1))
-	error(NOT_INT,"nref ",arg1);
-	if(!wide_variable_p(arg1) && !integerp(arg1))
-	error(NOT_VAR,"nref ", arg2);
+	if (!integerp(arg1))
+	    error(NOT_INT, "nref ", arg1);
+	if (!wide_variable_p(arg1) && !integerp(arg1))
+	    error(NOT_VAR, "nref ", arg2);
 
 	chain = cdr(get_int(arg1));
 	if (chain == NIL)
@@ -5970,9 +5970,9 @@ int b_pref(int arglist, int rest)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-	error(NOT_INT,"pref ",arg1);
-	if(!wide_variable_p(arg1) && !integerp(arg1))
-	error(NOT_VAR,"pref ", arg2);
+	error(NOT_INT, "pref ", arg1);
+	if (!wide_variable_p(arg1) && !integerp(arg1))
+	    error(NOT_VAR, "pref ", arg2);
 
 	chain = GET_AUX(get_int(arg1));
 	if (chain == NIL)
