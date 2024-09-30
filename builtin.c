@@ -3988,7 +3988,7 @@ int b_functor(int arglist, int rest)
 		return (prove_all(rest, sp));
 	    else
 		return (NO);
-	} else if (variablep(arg1) && atomicp(arg2) && integerp(arg3)) {
+	} else if (variablep(arg1) && constantp(arg2) && integerp(arg3)) {
 	    i = GET_INT(arg3);
 	    if (i == 0) {
 		if (unify(arg1, arg2) == YES)
