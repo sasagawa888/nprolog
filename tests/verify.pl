@@ -196,6 +196,8 @@ test(univ) :-
 
 test(functor) :-
     verify(functor(book(pooh,miline,aa),book,3)),
+    verify(functor(foo,foo,0)),
+    verify(not(functor(foo(1,2),foo,3))),
     verify(functor([1,2,3],'.',2)).
 
 
@@ -400,6 +402,9 @@ test(list) :-
     [H|T] = [1, 2, 3],
     H == 1,
     T == [2, 3].
+
+test(date) :-
+    date(X),date_day(X,Y).
 
 
 :- alltest,write('All tests are done'),nl.

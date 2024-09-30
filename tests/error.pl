@@ -348,3 +348,7 @@ ARITY_ERR           67
 :- n_error(date(X,Y),67).
 :- n_error(date_day(1,Y),7).
 :- n_error(date_day(1,2,3),67).
+
+%functor
+:- n_error(functor(X,$asdf$,3),48).
+:- n_error(functor(X,foo,a),19).

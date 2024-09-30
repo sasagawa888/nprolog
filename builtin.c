@@ -3953,8 +3953,8 @@ int b_functor(int arglist, int rest)
 	if (wide_variable_p(arg1) && !atomicp(arg2)) {
 	    error(NOT_ATOMIC, "functor ", arg2);
 	}
-	if (wide_variable_p(arg1) && integerp(eval(arg3))
-	    && GET_INT(eval(arg3)) < 0)
+	if (wide_variable_p(arg1) && integerp(arg3)
+	    && GET_INT(arg3) < 0)
 	    error(LESS_THAN_ZERO, "functor ", arg3);
 	if (wide_variable_p(arg1) && !integerp(arg3))
 	    error(NOT_INT, "functor ", arg3);
@@ -3988,7 +3988,7 @@ int b_functor(int arglist, int rest)
 		return (prove_all(rest, sp));
 	    else
 		return (NO);
-	} else if (variablep(arg1) && constantp(arg2) && integerp(arg3)) {
+	} else if (variablep(arg1) && atomicp(arg2) && integerp(arg3)) {
 	    i = GET_INT(arg3);
 	    if (i == 0) {
 		if (unify(arg1, arg2) == YES)
