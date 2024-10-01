@@ -193,6 +193,7 @@ test(univ) :-
     cos(2) =.. Y,
     verify(X == sin(3)),
     verify(Y == [cos,2]),
+    verify(a =.. [a]),
     verify(f(a, b, c) =.. [f, a, b, c]),
     verify(g(h(a), i(b, c)) =.. [g, h(a), i(b, c)]).
 
