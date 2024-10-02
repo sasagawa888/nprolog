@@ -140,6 +140,13 @@ typedef struct result {
     int length;
 } result;
 
+// for ansi_*
+typedef struct cursor {
+    int row;
+    int col;
+} cursor;
+
+
 enum { CHECKGBC_IDX, GBC_IDX, FRESHCELL_IDX, MAKEVARIANT_IDX, GET_SP_IDX, GET_WP_IDX,
        DEBUG_IDX, INC_PROOF_IDX, POP_USTACK_IDX, GET_UP_IDX,
        NUM_FN0S
@@ -209,12 +216,12 @@ extern int leap_point;
 extern int port;
 extern int line;
 extern int column;
-extern int cursor_row;
-extern int cursor_col;
-extern int cursor_prop;
+extern int cursor_color;
+extern int cursor_style;
 extern int cursor_row_store;
 extern int cursor_col_store;
-extern int cursor_prop_store;
+extern int cursor_color_store;
+extern int cursor_style_store;
 extern int unread;
 extern int paren_nest;
 extern char operator[OPERATOR_NUMBER][5];
@@ -468,6 +475,7 @@ static const int BIGNUM_PARMA = BIGSIZE * 9 / 10; //from 90% to 100% of bigcell 
 #define ESCCLS  printf("\33[2J")          //clear screen
 #define ESCCLS1 printf("\33[0J")
 #define ESCCLSL printf("\33[0K")
+#define ESCCLSL1 printf("\033[K")         //clear line from cursor
 #define ESCMVLEFT(x) printf("\33[%dG", x)
 #define ESCMVR  printf("\33[1C")
 #define ESCMVL  printf("\33[1D")

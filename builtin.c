@@ -3,6 +3,7 @@
 #endif
 #include <stdlib.h>
 #include <unistd.h>
+#include <termios.h>
 #include <string.h>
 #include <time.h>
 #include <sys/time.h>
@@ -5336,25 +5337,84 @@ int b_ansi_cup(int arglist, int rest)
 	r = get_int(arg1);
 	c = get_int(arg2);
 	ESCMOVE(r, c);
-	cursor_row = r;
-	cursor_col = c;
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "ansi_cup ", arglist);
     return (NO);
 }
 
+// set stdin non canonical mode
+void set_input_mode(struct termios *original) {
+    struct termios new_mode;
+    tcgetattr(STDIN_FILENO, original);  // save original setting
+    new_mode = *original;
+    new_mode.c_lflag &= ~(ICANON | ECHO);  // set non canonical and echooff 
+    tcsetattr(STDIN_FILENO, TCSANOW, &new_mode);  // apply new setting
+}
+
+// restore original setting.
+void reset_input_mode(struct termios *original) {
+    tcsetattr(STDIN_FILENO, TCSANOW, original);  
+}
+
+// get cursor position on terminal
+cursor get_cursor(void)
+{
+	char buf[32];
+	int row, col;
+    int i = 0;
+    struct termios original;
+
+	set_input_mode(&original);
+
+    printf("\033[6n");
+    fflush(stdout);
+
+    // read from stdin to buffer (e.g. \033[12;40R)
+    while (i < sizeof(buf) - 1) {
+        if (read(STDIN_FILENO, buf + i, 1) != 1) {
+            break;
+        }
+        if (buf[i] == 'R') {
+            break;
+        }
+        i++;
+    }
+    buf[i] = '\0';  
+
+    if (sscanf(buf, "\033[%d;%dR", &row, &col) != 2) {
+        error(SYSTEM_ERROR ,"ansi_cpr ", NIL);
+    }
+
+    // restore original setting
+    reset_input_mode(&original);
+
+	cursor position;
+    position.row = row;
+    position.col = col;
+
+    return position;
+}
+
+
 int b_ansi_cpr(int arglist, int rest)
 {
     int n, arg1, arg2, r, c, res1, res2;
-
+	cursor position;
+	
     n = length(arglist);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	r = makeint(cursor_row);
-	c = makeint(cursor_col);
+	if (!wide_variable_p(arg1))
+	error(NOT_VAR,"ansi_cpr ",arg1);
+	if (!wide_variable_p(arg2))
+	error(NOT_VAR,"ansi_cpr ",arg2);
+
+	position = get_cursor();
+	r = makeint(position.row);
+	c = makeint(position.col);
 	res1 = unify(arg1, r);
 	res2 = unify(arg2, c);
 	if (res1 == YES && res2 == YES)
@@ -5369,12 +5429,16 @@ int b_ansi_cpr(int arglist, int rest)
 int b_ansi_scp(int arglist, int rest)
 {
     int n;
+	cursor position;
 
     n = length(arglist);
     if (n == 0) {
-	cursor_row_store = cursor_row;
-	cursor_col_store = cursor_col;
-	cursor_prop_store = cursor_prop;
+	position = get_cursor();
+	
+	cursor_row_store = position.row;
+	cursor_col_store = position.col;
+	cursor_color_store = cursor_color;
+	cursor_style_store = cursor_style;
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "ansi_scp ", arglist);
@@ -5387,9 +5451,9 @@ int b_ansi_rcp(int arglist, int rest)
 
     n = length(arglist);
     if (n == 0) {
-	cursor_row = cursor_row_store;
-	cursor_col = cursor_col_store;
-	cursor_prop = cursor_prop_store;
+	ESCMOVE(cursor_row_store, cursor_col_store);
+	ESCCOLOR(cursor_color_store);
+	ESCCOLOR(cursor_style_store);
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "ansi_rcp ", arglist);
@@ -5416,8 +5480,7 @@ int b_ansi_el(int arglist, int rest)
 
     n = length(arglist);
     if (n == 0) {
-	ESCCLSL;
-	ESCMVLEFT(0);
+	ESCCLSL1;
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "ansi_el ", arglist);
@@ -5441,7 +5504,6 @@ int b_ansi_cuu(int arglist, int rest)
 	m = get_int(arg1);
 	while (m > 0) {
 	    ESCMVU;
-	    cursor_row--;
 	    m--;
 	}
 	return (prove_all(rest, sp));
@@ -5466,7 +5528,6 @@ int b_ansi_cud(int arglist, int rest)
 	m = get_int(arg1);
 	while (m > 0) {
 	    ESCMVD;
-	    cursor_row++;
 	    m--;
 	}
 	return (prove_all(rest, sp));
@@ -5491,7 +5552,6 @@ int b_ansi_cuf(int arglist, int rest)
 	m = get_int(arg1);
 	while (m > 0) {
 	    ESCMVR;
-	    cursor_col--;
 	    m--;
 	}
 	return (prove_all(rest, sp));
@@ -5516,7 +5576,6 @@ int b_ansi_cub(int arglist, int rest)
 	m = get_int(arg1);
 	while (m > 0) {
 	    ESCMVL;
-	    cursor_col++;
 	    m--;
 	}
 	return (prove_all(rest, sp));
@@ -5540,7 +5599,10 @@ int b_ansi_sgr(int arglist, int rest)
 	    error(LESS_THAN_ZERO, "ansi_sgr ", arg1);
 	m = get_int(arg1);
 	ESCCOLOR(m);
-	cursor_prop = m;
+	if(m < 10)
+	cursor_style = m;
+	else 
+	cursor_color = m;
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "ansi_sgr ", arglist);
