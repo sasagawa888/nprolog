@@ -38,3 +38,19 @@ run_tests :-
     test_ansi_clear_line.
 
 
+% game
+show_cursor_position :-
+    ansi_cpr(Row, Col),
+    write('current position:'),
+    write([Row, Col]),
+    nl.
+
+game :-
+    write('simple cursor game\n'),
+    write('input command（e.g.: ansi_cud(3), ansi_cuf(5), ansi_ed, halt）:\n'),
+    repeat,
+    write('> '),
+    read(Command),
+    call(Command), 
+    show_cursor_position,
+    fail.
