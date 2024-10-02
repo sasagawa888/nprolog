@@ -5497,9 +5497,9 @@ int b_ansi_cuu(int arglist, int rest)
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "ansi_cuu ", arg1);
-	if (!wide_variable_p(arg1) && !wide_integer_p(arg1))
+	if (!integerp(arg1))
 	    error(NOT_INT, "ansi_cuu ", arg1);
-	if (wide_integer_p(arg1) && negativep(arg1))
+	if (negativep(arg1))
 	    error(LESS_THAN_ZERO, "ansi_cuu ", arg1);
 	m = get_int(arg1);
 	while (m > 0) {
@@ -5521,9 +5521,9 @@ int b_ansi_cud(int arglist, int rest)
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "ansi_cud ", arg1);
-	if (!wide_variable_p(arg1) && !wide_integer_p(arg1))
+	if (!integerp(arg1))
 	    error(NOT_INT, "and_cud ", arg1);
-	if (wide_integer_p(arg1) && negativep(arg1))
+	if (negativep(arg1))
 	    error(LESS_THAN_ZERO, "ansi_cud ", arg1);
 	m = get_int(arg1);
 	while (m > 0) {
@@ -5545,9 +5545,9 @@ int b_ansi_cuf(int arglist, int rest)
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "ansi_cuf ", arg1);
-	if (!wide_variable_p(arg1) && !wide_integer_p(arg1))
+	if (!integerp(arg1))
 	    error(NOT_INT, "and_cuf ", arg1);
-	if (wide_integer_p(arg1) && negativep(arg1))
+	if (negativep(arg1))
 	    error(LESS_THAN_ZERO, "ansi_cuf ", arg1);
 	m = get_int(arg1);
 	while (m > 0) {
@@ -5569,9 +5569,9 @@ int b_ansi_cub(int arglist, int rest)
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "ansi_cub ", arg1);
-	if (!wide_variable_p(arg1) && !wide_integer_p(arg1))
+	if (!integerp(arg1))
 	    error(NOT_INT, "and_cub ", arg1);
-	if (wide_integer_p(arg1) && negativep(arg1))
+	if (negativep(arg1))
 	    error(LESS_THAN_ZERO, "ansi_cub ", arg1);
 	m = get_int(arg1);
 	while (m > 0) {
@@ -5593,10 +5593,13 @@ int b_ansi_sgr(int arglist, int rest)
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "ansi_sgr ", arg1);
-	if (!wide_variable_p(arg1) && !wide_integer_p(arg1))
+	if (!integerp(arg1))
 	    error(NOT_INT, "and_sgr ", arg1);
-	if (wide_integer_p(arg1) && negativep(arg1))
+	if (negativep(arg1))
 	    error(LESS_THAN_ZERO, "ansi_sgr ", arg1);
+	if (get_int(arg1) > 47)
+	    error(WRONG_ARGS, "ansi_sgr ", arg1);
+
 	m = get_int(arg1);
 	ESCCOLOR(m);
 	if(m < 10)
