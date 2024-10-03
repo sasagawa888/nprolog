@@ -789,6 +789,7 @@ int read_line(int flag)
 	    buffer[i][0] = 0;
 
 	pos = 0;
+	limit--;
 	return (-2);
     }
 
