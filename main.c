@@ -50,11 +50,11 @@ int port;			//for debugger
 int line;			//for error, display line of error point
 int column;			//for error, display column of error point
 int cursor_color;		//for ansi_sgr
-int cursor_style;       //for ansi_sgr
+int cursor_style;		//for ansi_sgr
 int cursor_row_store = -1;	//for ansi_sgr -1=undefined,0~=defined
 int cursor_col_store = -1;	//for ansi_sgr
 int cursor_color_store = -1;	//for ansi_sgr
-int cursor_style_store = -1; //for ansi_sgr
+int cursor_style_store = -1;	//for ansi_sgr
 double timer;			// for timer_microseconds/1
 
 

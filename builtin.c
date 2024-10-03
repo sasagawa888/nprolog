@@ -5344,52 +5344,53 @@ int b_ansi_cup(int arglist, int rest)
 }
 
 // set stdin non canonical mode
-void set_input_mode(struct termios *original) {
+void set_input_mode(struct termios *original)
+{
     struct termios new_mode;
-    tcgetattr(STDIN_FILENO, original);  // save original setting
+    tcgetattr(STDIN_FILENO, original);	// save original setting
     new_mode = *original;
-    new_mode.c_lflag &= ~(ICANON | ECHO);  // set non canonical and echooff 
-    tcsetattr(STDIN_FILENO, TCSANOW, &new_mode);  // apply new setting
+    new_mode.c_lflag &= ~(ICANON | ECHO);	// set non canonical and echooff 
+    tcsetattr(STDIN_FILENO, TCSANOW, &new_mode);	// apply new setting
 }
 
 // restore original setting.
-void reset_input_mode(struct termios *original) {
-    tcsetattr(STDIN_FILENO, TCSANOW, original);  
+void reset_input_mode(struct termios *original)
+{
+    tcsetattr(STDIN_FILENO, TCSANOW, original);
 }
 
 // get cursor position on terminal
 cursor get_cursor(void)
 {
-	char buf[32];
-	int row, col;
+    char buf[32];
+    int row, col;
     int i = 0;
     struct termios original;
 
-	set_input_mode(&original);
+    set_input_mode(&original);
 
     printf("\033[6n");
     fflush(stdout);
 
     // read from stdin to buffer (e.g. \033[12;40R)
     while (i < sizeof(buf) - 1) {
-        if (read(STDIN_FILENO, buf + i, 1) != 1) {
-            break;
-        }
-        if (buf[i] == 'R') {
-            break;
-        }
-        i++;
+	if (read(STDIN_FILENO, buf + i, 1) != 1) {
+	    break;
+	}
+	if (buf[i] == 'R') {
+	    break;
+	}
+	i++;
     }
-    buf[i] = '\0';  
+    buf[i] = '\0';
 
     if (sscanf(buf, "\033[%d;%dR", &row, &col) != 2) {
-        error(SYSTEM_ERROR ,"ansi_cpr ", NIL);
+	error(SYSTEM_ERROR, "ansi_cpr ", NIL);
     }
-
     // restore original setting
     reset_input_mode(&original);
 
-	cursor position;
+    cursor position;
     position.row = row;
     position.col = col;
 
@@ -5400,17 +5401,17 @@ cursor get_cursor(void)
 int b_ansi_cpr(int arglist, int rest)
 {
     int n, arg1, arg2, r, c, res1, res2;
-	cursor position;
-	
+    cursor position;
+
     n = length(arglist);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (!wide_variable_p(arg1))
-	error(NOT_VAR,"ansi_cpr ",arg1);
+	    error(NOT_VAR, "ansi_cpr ", arg1);
 	if (!wide_variable_p(arg2))
-	error(NOT_VAR,"ansi_cpr ",arg2);
+	    error(NOT_VAR, "ansi_cpr ", arg2);
 
 	position = get_cursor();
 	r = makeint(position.row);
@@ -5429,12 +5430,12 @@ int b_ansi_cpr(int arglist, int rest)
 int b_ansi_scp(int arglist, int rest)
 {
     int n;
-	cursor position;
+    cursor position;
 
     n = length(arglist);
     if (n == 0) {
 	position = get_cursor();
-	
+
 	cursor_row_store = position.row;
 	cursor_col_store = position.col;
 	cursor_color_store = cursor_color;
@@ -5602,10 +5603,10 @@ int b_ansi_sgr(int arglist, int rest)
 
 	m = get_int(arg1);
 	ESCCOLOR(m);
-	if(m < 10)
-	cursor_style = m;
-	else 
-	cursor_color = m;
+	if (m < 10)
+	    cursor_style = m;
+	else
+	    cursor_color = m;
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "ansi_sgr ", arglist);

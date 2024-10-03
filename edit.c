@@ -769,15 +769,27 @@ int check_balance_period(void)
 }
 
 
-
+/* flag = -1, backward
+ * flag = -2, clear_buffer
+*/
 int read_line(int flag)
 {
     int c, i, j, k, line;
     static int pos = 0, limit = 0;
 
+    /* backward */
     if (flag == -1) {
 	pos--;
 	return (-1);
+    }
+
+    /* clear buffer */
+    if (flag == -2) {
+	for (i = 0; i < BUFSIZE; i++)
+	    buffer[i][0] = 0;
+
+	pos = 0;
+	return (-2);
     }
 
 

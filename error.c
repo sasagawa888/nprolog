@@ -308,8 +308,11 @@ void error(int errnum, char *fun, int arg)
 	fclose(GET_PORT(input_stream));
     }
     ESCFORG;
-    if (script_flag)
+    if (script_flag) {
 	exit(EXIT_FAILURE);
+    }
+
+    read_line(-2);		// clear buffer
 
     if (init_flag) {
 	init_flag = 0;
