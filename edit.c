@@ -785,11 +785,8 @@ int read_line(int flag)
 
     /* clear buffer */
     if (flag == -2) {
-	for (i = 0; i < BUFSIZE; i++)
-	    buffer[i][0] = 0;
-
-	pos = 0;
-	limit--;
+	buffer[BUFSIZE-1][0] = 0;
+	pos = BUFSIZE-1;
 	return (-2);
     }
 
