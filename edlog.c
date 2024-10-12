@@ -72,6 +72,7 @@ const enum Color ed_string_color = YELLOW_ON_DFL;
 const enum Color ed_comment_color = BLUE_ON_DFL;
 const enum Color ed_function_color = GREEN_ON_DFL;
 int ed_incomment = -1;		// #|...|# comment
+int token_length;
 bool modify_flag;
 
 /*  buffer data structure   text is "abc" at first row
@@ -2396,6 +2397,12 @@ void display_line(int line)
 	    CHECK(addch, ed_data[line][col]);
 	    col++;
 	    col1++;
+	} else if(isdigit(ed_data[line][col])){
+		while(isdigit(ed_data[line][col])){
+			CHECK(addch, ed_data[line][col]);
+	    	col++;
+	    	col1++;
+		}
 	} else {
 	    switch (check_token(line, col)) {
 	    case HIGHLIGHT_SYNTAX:
@@ -2403,16 +2410,11 @@ void display_line(int line)
 		set_color(ed_syntax_color);
 		while (((ed_col1 < turn && col1 < turn)
 			|| (ed_col1 >= turn && col < COL_SIZE))
-		       && ed_data[line][col] != ' '
-		       && ed_data[line][col] != '('
-		       && ed_data[line][col] != ')'
-		       && ed_data[line][col] != ','
-		       && ed_data[line][col] != '.'
-		       && ed_data[line][col] != NUL
-		       && ed_data[line][col] != EOL) {
+		       && token_length > 0) {
 		    CHECK(addch, ed_data[line][col]);
 		    col++;
 		    col1++;
+			token_length--;
 		}
 		ESCRST();
 		ESCFORG();
@@ -2422,16 +2424,11 @@ void display_line(int line)
 		set_color(ed_builtin_color);
 		while (((ed_col1 < turn && col1 < turn)
 			|| (ed_col1 >= turn && col < COL_SIZE))
-		       && ed_data[line][col] != ' '
-		       && ed_data[line][col] != '('
-		       && ed_data[line][col] != ')'
-		       && ed_data[line][col] != ','
-		       && ed_data[line][col] != '.'
-		       && ed_data[line][col] != NUL
-		       && ed_data[line][col] != EOL) {
+		       && token_length > 0) {
 		    CHECK(addch, ed_data[line][col]);
 		    col++;
 		    col1++;
+			token_length--;
 		}
 		ESCRST();
 		ESCFORG();
@@ -2441,16 +2438,11 @@ void display_line(int line)
 		set_color(ed_function_color);
 		while (((ed_col1 < turn && col1 < turn)
 			|| (ed_col1 >= turn && col < COL_SIZE))
-		       && ed_data[line][col] != ' '
-		       && ed_data[line][col] != '('
-		       && ed_data[line][col] != ')'
-		       && ed_data[line][col] != ','
-		       && ed_data[line][col] != '.'
-		       && ed_data[line][col] != NUL
-		       && ed_data[line][col] != EOL) {
+		       && token_length > 0) {
 		    CHECK(addch, ed_data[line][col]);
 		    col++;
 		    col1++;
+			token_length--;
 		}
 		ESCRST();
 		ESCFORG();
@@ -2531,16 +2523,11 @@ void display_line(int line)
 		set_color(ed_extended_color);
 		while (((ed_col1 < turn && col1 < turn)
 			|| (ed_col1 >= turn && col < COL_SIZE))
-		       && ed_data[line][col] != ' '
-		       && ed_data[line][col] != '('
-		       && ed_data[line][col] != ')'
-		       && ed_data[line][col] != ','
-		       && ed_data[line][col] != '.'
-		       && ed_data[line][col] != NUL
-		       && ed_data[line][col] != EOL) {
+		       && token_length > 0) {
 		    CHECK(addch, ed_data[line][col]);
 		    col++;
 		    col1++;
+			token_length--;
 		}
 		ESCRST();
 		ESCFORG();
@@ -2565,6 +2552,15 @@ void display_line(int line)
 		    }
 		}
 		break;
+		case HIGHLIGHT_NONE:
+		while (((ed_col1 < turn && col1 < turn)
+			|| (ed_col1 >= turn && col < COL_SIZE))
+		       && token_length > 0) {
+		    CHECK(addch, ed_data[line][col]);
+		    col++;
+		    col1++;
+			token_length--;
+		}
 	    default:
 		while (((ed_col1 < turn && col1 < turn)
 			|| (ed_col1 >= turn && col < COL_SIZE))
@@ -3449,6 +3445,27 @@ void delete_selection()
     ed_data[ed_end][0] = EOL;
 }
 
+int isatomch(char c)
+{
+    switch (c) {
+    case '#':
+    case '$':
+    case '&':
+    case '*':
+    case '+':
+    case '-':
+    case '/':
+    case ':':
+    case '.':
+    case '<':
+    case '=':
+    case '>':
+	return (1);
+    default:
+	return (0);
+    }
+}
+
 enum HighlightToken check_token(int row, int col)
 {
     char str[COL_SIZE];
@@ -3459,23 +3476,32 @@ enum HighlightToken check_token(int row, int col)
 	return HIGHLIGHT_QUOTE;
     else if (ed_data[row][col] == '$')
 	return HIGHLIGHT_STRING;
-    else if (ed_data[row][col] == '%')
-	return HIGHLIGHT_COMMENT;
-    while (ed_data[row][col] != ' ' &&
-	   ed_data[row][col] != '(' &&
-	   ed_data[row][col] != ')' &&
-	   ed_data[row][col] != ',' &&
-	   ed_data[row][col] != '.' &&
-	   ed_data[row][col] != NUL && ed_data[row][col] != EOL) {
-	str[pos] = ed_data[row][col];
-	col++;
-	pos++;
-    }
+    else if (ed_data[row][col] == '%'){
+	return HIGHLIGHT_COMMENT;}
+
+	if(isatomch(ed_data[row][col])){
+		while(isatomch(ed_data[row][col])){
+			str[pos] = ed_data[row][col];
+			col++;
+			pos++;
+		}
+	} else if(isalpha(ed_data[row][col])){
+		while(isalpha(ed_data[row][col])){
+			str[pos] = ed_data[row][col];
+			col++;
+			pos++;
+		}
+	}
+    
+
     str[pos] = NUL;
+	token_length = strlen(str);
     if (pos == 0)
 	return HIGHLIGHT_NONE;
     else if (str[0] == '/' && str[1] == '*')
 	return HIGHLIGHT_MULTILINE_COMMENT;	// /*...*/
+	
+
     return maybe_match(str);
 }
 
