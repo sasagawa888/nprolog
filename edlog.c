@@ -2392,13 +2392,21 @@ void display_line(int line)
 	} else if (ed_data[line][col] == ' ' ||
 		   ed_data[line][col] == '(' ||
 		   ed_data[line][col] == ')' ||
+		   ed_data[line][col] == '[' ||
+		   ed_data[line][col] == ']' ||
 		   ed_data[line][col] == ',' ||
 		   ed_data[line][col] == '.') {
 	    CHECK(addch, ed_data[line][col]);
 	    col++;
 	    col1++;
 	} else if(isdigit(ed_data[line][col])){
-		while(isdigit(ed_data[line][col])){
+		while(isdigit(ed_data[line][col]) ||
+		      ed_data[line][col] == 'e' ||
+			  ed_data[line][col] == 'E' ||
+			  ed_data[line][col] == '.' ||
+			  ed_data[line][col] == 'x' ||
+			  ed_data[line][col] == 'o' ||
+			  ed_data[line][col] == 'b'){
 			CHECK(addch, ed_data[line][col]);
 	    	col++;
 	    	col1++;
@@ -2568,6 +2576,8 @@ void display_line(int line)
 		       && ed_data[line][col] != ' '
 		       && ed_data[line][col] != '('
 		       && ed_data[line][col] != ')'
+			    && ed_data[line][col] != '['
+		       && ed_data[line][col] != ']'
 		       && ed_data[line][col] != ','
 		       && ed_data[line][col] != '.'
 		       && ed_data[line][col] != NUL
