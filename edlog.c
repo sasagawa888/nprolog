@@ -2561,6 +2561,7 @@ void display_line(int line)
 		    col1++;
 			token_length--;
 		}
+		break;
 	    default:
 		while (((ed_col1 < turn && col1 < turn)
 			|| (ed_col1 >= turn && col < COL_SIZE))
