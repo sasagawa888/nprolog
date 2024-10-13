@@ -1434,6 +1434,9 @@ int readitem1(void)
 	if(!break_flag){
 	SET_CAR(temp, UNBIND);	//value
 	SET_CDR(temp, UNBIND);	//alpha variable
+	} else if(break_flag && !memberp(temp,variables)){
+		SET_CAR(temp, UNBIND);	//value
+		SET_CDR(temp, UNBIND);	//alpha variable
 	}
 	SET_VAR(temp, NIL);
 	return (temp);
