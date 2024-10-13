@@ -334,6 +334,37 @@ void query(int x)
     return;
 }
 
+void query_break(int x)
+{
+    int res;
+
+    // DCG syntax e.g. a-->b.
+    if (dcgp(x)) {
+	operate(x);
+	return;
+    }
+    //[file1,file2] -> consult(file1),consult(file2).
+    if (listp(x))
+	x = list_to_ope(x);
+
+    if (atomp(x) && !builtinp(x) && !compiledp(x))
+	x = makepred(GET_NAME(x));
+
+    if (wide_variable_p(x))
+	error(INSTANTATION_ERR, "?= ", x);
+
+    if (!callablep(x))
+	error(NOT_CALLABLE, "?= ", x);
+
+    variables = listreverse(unique(varslist(x)));
+    res = prove_all(addask(x), sp);
+    ESCRST;
+    print(res);
+    printf("\n");
+    return;
+}
+
+
 int list_to_ope(int x)
 {
     if (nullp(x))

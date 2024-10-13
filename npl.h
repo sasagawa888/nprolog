@@ -1268,6 +1268,7 @@ void push_stack(int x);
 void push_ustack(int x);
 void putinbag(int key, int data);
 void query(int x);
+void query_break(int x);
 void recall_variant(int x);
 void release_variant(int x);
 void reset(int i);

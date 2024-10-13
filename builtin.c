@@ -3654,7 +3654,7 @@ int b_break(int arglist, int rest)
 	    while (1) {
 		printf("?= ");
 		fflush(stdout);
-		query(variable_to_call(readparse()));
+		query_break(variable_to_call(readparse()));
 		fflush(stdout);
 	    }
 	} else if (ret == 1) {
