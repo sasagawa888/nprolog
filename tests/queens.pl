@@ -16,7 +16,6 @@ queen_2([H|T], History, [Q|M]) :-
     queen_2(L1, [Q|History], M).
 
 
-
 qdelete(A, A, L, L).
 qdelete(X, A, [H|T], [A|R]) :-
     qdelete(X, H, T, R).
@@ -28,6 +27,5 @@ nodiag([N|L], B, D) :-
     D =\= B - N,
     D1 is D + 1,
     nodiag(L, B, D1).
-
 
 

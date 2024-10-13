@@ -65,7 +65,7 @@ int ed_clip_end;
 int ed_copy_end;
 const char *ed_candidate[COMPLETION_CANDIDATES_MAX];
 int ed_candidate_pt;
-const enum Color ed_syntax_color = RED_ON_DFL;
+const enum Color ed_operator_color = RED_ON_DFL;
 const enum Color ed_builtin_color = CYAN_ON_DFL;
 const enum Color ed_extended_color = MAGENTA_ON_DFL;
 const enum Color ed_string_color = YELLOW_ON_DFL;
@@ -2415,9 +2415,9 @@ void display_line(int line)
 		}
 	} else {
 	    switch (check_token(line, col)) {
-	    case HIGHLIGHT_SYNTAX:
+	    case HIGHLIGHT_OPERATOR:
 		ESCBOLD();
-		set_color(ed_syntax_color);
+		set_color(ed_operator_color);
 		while (((ed_col1 < turn && col1 < turn)
 			|| (ed_col1 >= turn && col < COL_SIZE))
 		       && token_length > 0) {

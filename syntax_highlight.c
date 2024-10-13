@@ -95,7 +95,7 @@ char extended[EXTENDED_NUMBER][30] = {
 };
 
 
-static bool in_syntax_table(const char *str)
+static bool in_operator_table(const char *str)
 {
     int i;
 
@@ -157,8 +157,8 @@ bool in_function_table(const char *str)
 
 enum HighlightToken maybe_match(const char *str)
 {
-    if (in_syntax_table(str)) {
-	return HIGHLIGHT_SYNTAX;
+    if (in_operator_table(str)) {
+	return HIGHLIGHT_OPERATOR;
     }
     if (in_builtin_table(str)) {
 	return HIGHLIGHT_BUILTIN;
