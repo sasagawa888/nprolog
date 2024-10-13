@@ -26,7 +26,7 @@ struct position{
 
 
 static const int NIL = 0;
-static const char *functions_data[];
+static const char *predicates_data[];
 
 bool edit_loop(void);
 bool is_special(int row, int col);
@@ -37,6 +37,7 @@ int findnext(int row, int col);
 int find_eol(int row);
 int find_eol1(int row);
 int find_function_data(const char *str);
+int find_predicate_data(const char *str);
 int getch1(void);
 char *get_fragment(void);
 char *getname(void);

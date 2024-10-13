@@ -3541,7 +3541,6 @@ char *get_fragment()
     while (ed_data[ed_row][col] != ' ' &&
 	   ed_data[ed_row][col] != '(' &&
 	   ed_data[ed_row][col] != ',' &&
-	   ed_data[ed_row][col] != '.' &&
 	   ed_data[ed_row][col] != ';' && ed_data[ed_row][col] >= ' ') {
 	str[pos] = ed_data[ed_row][col];
 	col++;
@@ -3695,32 +3694,8 @@ void replace_word(const char *str1, const char *str2)
 
 //-------------------help information----------------------------------
 
-void information(void)
-{
-    int i;
 
-    i = find_function_data(get_fragment());
-    ESCMOVE(ed_footer, 1);
-    ESCREV();
-    clear_status();
-    if (i != -1) {
-	CHECK(addstr, functions_data[i + 1]);
-	CHECK(addstr, "\n");
-	ESCRST();
-	CHECK(addstr, functions_data[i + 2]);
-	CHECK(addstr, " --- enter any key to exit ---");
-	CHECK(refresh);
-	CHECK(getch);
-	display_header();
-	display_screen();
-    } else {
-	CHECK(addstr, "Can't fild");
-	ESCRST();
-    }
-    ESCMOVE(ed_row + TOP_MARGIN - ed_start, ed_col1 + LEFT_MARGIN);
-}
-
-static const char *functions_data[] = {
+static const char *predicates_data[] = {
     "abolish",
     "abolish(name/Arity)",
     "Removes all clauses with the specified name arity from the data berth.",
@@ -4164,6 +4139,106 @@ static const char *functions_data[] = {
 
 #define NELEM(X) (sizeof(X) / sizeof((X)[0]))
 
+int find_predicate_data(const char *str)
+{
+    int i;
+
+    for (i = 0; i < (int) NELEM(predicates_data); i = i + 3) {
+	if (strcmp(predicates_data[i], str) == 0) {
+	    return i;
+	}
+    }
+    return -1;
+}
+
+
+static const char *functions_data[] = {
+	"pi",
+	"pi",
+	"Constant representing the value of π (pi).",
+	"+",
+	"X + Y",
+	"Addition.",
+	"-",
+	"X - Y",
+	"Subtraction.",
+	"*",
+	"X * Y",
+	"Multiplication.",
+	"/",
+	"X / Y", 
+	"Division resulting in a floating-point number.",
+	"//",
+	"X // Y",
+	"Integer division resulting in an integer.",
+	"^",
+	"X ^ Y",
+	"Exponentiation (power).",
+	"**",
+	"X ** Y",
+	"Exponentiation (power).",
+	"<<",
+	"X << Y",
+	"Bitwise left shift of X by Y positions (integers only).",
+	">>",
+	"X >> Y",
+	"Bitwise right shift of X by Y positions (integers only).",
+	"mod",
+	"X mod Y",
+	"Modulo operation, returning the remainder of X divided by Y (integers only).",
+	"/\\",
+	"X /\\ Y",
+	"Logical AND.",
+	"\\/",
+	"X \\/ Y", 
+	"Logical OR.",
+	"\\",
+	"\\X", 
+	"Complement (bitwise NOT).",
+	"abs",
+	"abs(X)",
+	"Absolute value of X.",
+	"sin",
+	"sin(X)",
+	"Sine of X.",
+	"asin",
+	"asin(X)",
+	"Arcsine (inverse sine) of X.",
+	"cos",
+	"cos(X)",
+	"Cosine of X.",
+	"acos",
+	"acos(X)",
+	"Arccosine (inverse cosine) of X.",
+	"tan",
+	"tan(X)",
+	"Tangent of X.",
+	"atan",
+	"atan(X)",
+	"Arctangent (inverse tangent) of X.",
+	"exp",
+	"exp(X)",
+	"Exponential function of X.",
+	"ln",
+	"ln(X)",
+	"Logarithm of X.",
+	"log",
+	"log(X)",
+	"Base-10 logarithm of X.",
+	"sqrt",
+	"sqrt(X)",
+	"Square root of X.",
+	"round",
+	"round(X,Y)",
+	"Round X to N decimal places. N is an integer between 0 and 15.",
+	"randi",
+	"randi(n)",
+	"Random integer between 0 and n (inclusive).",
+	"random",	
+	"random",
+	"Random floating-point number between 0 and 1 (inclusive).",
+};
+
 int find_function_data(const char *str)
 {
     int i;
@@ -4174,4 +4249,40 @@ int find_function_data(const char *str)
 	}
     }
     return -1;
+}
+
+void information(void)
+{
+    int i;
+
+    i = find_predicate_data(get_fragment());
+    ESCMOVE(ed_footer, 1);
+    ESCREV();
+    clear_status();
+    if (i != -1) {
+	CHECK(addstr, predicates_data[i + 1]);
+	CHECK(addstr, "\n");
+	ESCRST();
+	CHECK(addstr, predicates_data[i + 2]);
+	CHECK(addstr, " --- enter any key to exit ---");
+	CHECK(refresh);
+	CHECK(getch);
+	display_header();
+	display_screen();
+    } else if(i == -1){
+		i = find_function_data(get_fragment());
+		CHECK(addstr, functions_data[i + 1]);
+		CHECK(addstr, "\n");
+		ESCRST();
+		CHECK(addstr, functions_data[i + 2]);
+		CHECK(addstr, " --- enter any key to exit ---");
+		CHECK(refresh);
+		CHECK(getch);
+		display_header();
+		display_screen();
+	} else {
+	CHECK(addstr, "Can't fild");
+	ESCRST();
+    }
+    ESCMOVE(ed_row + TOP_MARGIN - ed_start, ed_col1 + LEFT_MARGIN);
 }
