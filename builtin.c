@@ -3649,6 +3649,7 @@ int b_break(int arglist, int rest)
 	break_flag = 1;
 	save1 = wp;
 	save2 = sp;
+	repl:
 	ret = setjmp(buf2);
 	if (ret == 0) {
 	    while (1) {
@@ -3662,6 +3663,8 @@ int b_break(int arglist, int rest)
 	    wp = save1;
 	    sp = save2;
 	    return (YES);
+	} else{
+		goto repl;
 	}
     }
     error(ARITY_ERR, "break ", arglist);

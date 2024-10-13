@@ -356,7 +356,6 @@ void query_break(int x)
     if (!callablep(x))
 	error(NOT_CALLABLE, "?= ", x);
 
-    variables = listreverse(unique(varslist(x)));
     res = prove_all(addask(x), sp);
     ESCRST;
     print(res);
