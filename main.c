@@ -336,7 +336,7 @@ void query(int x)
 
 void query_break(int x)
 {
-    int res;
+    int res,save;
 
     // DCG syntax e.g. a-->b.
     if (dcgp(x)) {
@@ -353,10 +353,13 @@ void query_break(int x)
     if (wide_variable_p(x))
 	error(INSTANTATION_ERR, "?= ", x);
 
-    if (!callablep(x))
-	error(NOT_CALLABLE, "?= ", x);
+    if (!callablep(x)){
+	error(NOT_CALLABLE, "?= ", x);}
 
+	save = variables;
+	variables = listreverse(unique(varslist(x)));
     res = prove_all(addask(x), sp);
+	variables = save;
     ESCRST;
     print(res);
     printf("\n");
