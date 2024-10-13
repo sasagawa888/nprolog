@@ -2395,6 +2395,8 @@ void display_line(int line)
 		   ed_data[line][col] == '[' ||
 		   ed_data[line][col] == ']' ||
 		   ed_data[line][col] == ',' ||
+		   ed_data[line][col] == '_' ||
+		   ed_data[line][col] == '|' ||
 		   ed_data[line][col] == '.') {
 	    CHECK(addch, ed_data[line][col]);
 	    col++;
@@ -2576,8 +2578,10 @@ void display_line(int line)
 		       && ed_data[line][col] != ' '
 		       && ed_data[line][col] != '('
 		       && ed_data[line][col] != ')'
-			    && ed_data[line][col] != '['
+			   && ed_data[line][col] != '['
 		       && ed_data[line][col] != ']'
+			   && ed_data[line][col] != '_'
+		       && ed_data[line][col] != '|'
 		       && ed_data[line][col] != ','
 		       && ed_data[line][col] != '.'
 		       && ed_data[line][col] != NUL
@@ -3471,6 +3475,7 @@ int isatomch(char c)
     case '<':
     case '=':
     case '>':
+	case '\\':
 	return (1);
     default:
 	return (0);
@@ -3497,7 +3502,9 @@ enum HighlightToken check_token(int row, int col)
 			pos++;
 		}
 	} else if(isalpha(ed_data[row][col])){
-		while(isalpha(ed_data[row][col])){
+		while(isalpha(ed_data[row][col]) ||
+		      ed_data[row][col] == '_' ||
+			  isdigit(ed_data[row][col])){
 			str[pos] = ed_data[row][col];
 			col++;
 			pos++;
