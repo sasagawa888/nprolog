@@ -2085,7 +2085,13 @@ bool edit_loop(void)
 		ESCRST();
 		return false;
 		default:
+		if(isUni2(c) || isUni3(c) || isUni4(c)){
+		ESCMOVE(ed_footer, 1);
+		ESCREV();
+		clear_status();
+		ESCRST();
 		goto insert;
+		}
 	    }
 	}
 	break;
@@ -4317,20 +4323,23 @@ void information(void)
 	CHECK(getch);
 	display_header();
 	display_screen();
-    } else if(i == -1){
-		i = find_function_data(get_fragment());
-		CHECK(addstr, functions_data[i + 1]);
-		CHECK(addstr, "\n");
-		ESCRST();
-		CHECK(addstr, functions_data[i + 2]);
-		CHECK(addstr, " --- enter any key to exit ---");
-		CHECK(refresh);
-		CHECK(getch);
-		display_header();
-		display_screen();
-	} else {
+	goto exit;
+	}
+	i = find_function_data(get_fragment());
+	if(i != -1){
+	CHECK(addstr, functions_data[i + 1]);
+	CHECK(addstr, "\n");
+	ESCRST();
+	CHECK(addstr, functions_data[i + 2]);
+	CHECK(addstr, " --- enter any key to exit ---");
+	CHECK(refresh);
+	CHECK(getch);
+	display_header();
+	display_screen();
+	goto exit;
+	}
 	CHECK(addstr, "Can't fild");
 	ESCRST();
-    }
+    exit:
     ESCMOVE(ed_row + TOP_MARGIN - ed_start, ed_col1 + LEFT_MARGIN);
 }
