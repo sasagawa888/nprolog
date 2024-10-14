@@ -3649,7 +3649,6 @@ int b_break(int arglist, int rest)
 	break_flag = 1;
 	save1 = wp;
 	save2 = sp;
-	end_of_file_rest = rest;
 	repl:
 	ret = setjmp(buf2);
 	if (ret == 0) {
@@ -3663,7 +3662,7 @@ int b_break(int arglist, int rest)
 	    ret = 0;
 	    wp = save1;
 	    sp = save2;
-	    return (end_of_file_answer);
+	    return (prove_all(rest,sp));
 	} else{
 		goto repl;
 	}
@@ -3681,7 +3680,6 @@ int b_end_of_file(int arglist, int rest)
 	if (break_flag) {
 		variables = variables_save;
 	    break_flag = 0;
-		end_of_file_answer = prove_all(end_of_file_rest,NIL);
 	    longjmp(buf2, 1);
 	} else
 	    return (YES);

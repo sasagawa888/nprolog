@@ -125,9 +125,6 @@ void gbcmark(void)
 	    markcell(stack[i]);
     }
 
-    /* mark rest of break/0 */
-    markcell(end_of_file_rest);
-
 }
 
 void gbcsweep(void)
