@@ -2402,6 +2402,7 @@ void display_line(int line)
 		   ed_data[line][col] == ',' ||
 		   ed_data[line][col] == '_' ||
 		   ed_data[line][col] == '|' ||
+		   ed_data[line][col] == '!' ||
 		   ed_data[line][col] == '.') {
 	    CHECK(addch, ed_data[line][col]);
 	    col++;
