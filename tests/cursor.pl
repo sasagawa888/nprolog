@@ -54,3 +54,4 @@ game :-
     call(Command), 
     show_cursor_position,
     fail.
+    

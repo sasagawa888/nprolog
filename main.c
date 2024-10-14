@@ -31,6 +31,9 @@ jmp_buf buf;			// for REPL halt and error handling.
 jmp_buf buf1;			// for n_error/2 error check.
 jmp_buf buf2;			// for break/0 end_of_file/0 exit break
 int variables = NIL;
+int variables_save = NIL;
+int end_of_file_answer = NIL;
+int end_of_file_rest = NIL;
 int predicates = NIL;
 int builtins = NIL;
 int spy_list = NIL;
@@ -336,7 +339,7 @@ void query(int x)
 
 void query_break(int x)
 {
-    int res,save;
+    int res;
 
     // DCG syntax e.g. a-->b.
     if (dcgp(x)) {
@@ -356,10 +359,10 @@ void query_break(int x)
     if (!callablep(x)){
 	error(NOT_CALLABLE, "?= ", x);}
 
-	save = variables;
+	variables_save = variables;
 	variables = listreverse(unique(varslist(x)));
     res = prove_all(addask(x), sp);
-	variables = save;
+	variables = variables_save;
     ESCRST;
     print(res);
     printf("\n");

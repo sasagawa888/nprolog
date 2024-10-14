@@ -1,33 +1,59 @@
-/*
-The Hardy–Ramanujan number 
-Originaly written by 犬童, modified by K.Sasagawa
-?- r(X,Y,Z).
-X = 1729
-Y = 12
-Z = [[1,12],[9,10]]
-yes
-*/
+% Cursor test code
+
+% Clear the screen and get the current cursor position
+test_ansi_cursor :-
+    ansi_ed,        % Clear the screen
+    ansi_scp,       % Save the current cursor position
+    ansi_cuu(2),    % Move the cursor up by 2 lines
+    ansi_cud(1),    % Move the cursor down by 1 line
+    ansi_cuf(5),    % Move the cursor forward by 5 columns
+    ansi_cub(3),    % Move the cursor back by 3 columns
+    ansi_cpr(Row, Col),  % Get the current cursor position
+    write('Current Cursor Position: '), 
+    write(Row), write(','), write(Col), nl,
+    ansi_rcp.       % Restore the saved cursor position
 
 
-%i(X,Y) :- length(L,Y),count(L,X).
+% Test for setting text attributes
+test_ansi_sgr :-
+    ansi_sgr(1),
+    ansi_sgr(31),  % Set bold and red text
+    write('This is bold and red text'), nl,
+    ansi_sgr(0),   % Reset to default attributes
+    write('This is normal text'), nl.
 
-%count(L,N) :-
-%  length(L,N).
-%count([L|Ls],N) :-
-%  count(Ls,N).
+% Test for clearing the line
+test_ansi_clear_line :-
+    write('This line will be partially erased...'),
+    ansi_cub(10),  % Move the cursor back by 10 columns
+    ansi_el,       % Erase from the cursor to the end of the line
+    write('End of test for line clear'), nl.
+
+% Main predicate to run the tests
+run_tests :-
+    nl, write('Testing Cursor Movement...'), nl,
+    test_ansi_cursor,
+    nl, write('Testing SGR...'), nl,
+    test_ansi_sgr,
+    nl, write('Testing Line Clear...'), nl,
+    test_ansi_clear_line.
 
 
-%c(X, Z, Y):- i(Z, Y), X is Z ^ 3.  
+% game
+show_cursor_position :-
+    ansi_cpr(Row, Col),
+    write('current position:'),
+    write([Row, Col]),
+    nl.
 
-%d( X, Y, [Z, W]):- 
-%     c( P, Z, Y),
-%     c( Q, W, Y),
-%     P < Q,
-%     X is P + Q.  
+game :-
+    write('simple cursor game\n'),
+%    write('input command（e.g.: ansi_cud(3), ansi_cuf(5), ansi_ed, halt）:\n'),
+    repeat,
+    write('> '),
+    read(Command),
+    call(Command), 
+    show_cursor_position,
+    fail.
 
-
-%r(X, Y, [Z, W]):-
-%     d(X, Y, Z),
-%     d(X, Y, W),
-%     Z @< W .
 

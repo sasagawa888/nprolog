@@ -91,6 +91,7 @@ void gbcmark(void)
 
     //mark variable-list
     markcell(variables);
+    markcell(variables_save);
 
     //mark listing-list
     markcell(predicates);
