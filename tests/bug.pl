@@ -1,56 +1,33 @@
-
-% codes from Dr. iidaka's book
-
-
-%sum1(0,0) :- !.
-%sum1(J,S1) :- I is J-1,sum1(I,S),S1 is S + J.
-
-%sum2(0,0).
-%sum2(J,S1) :- J>0,I is J-1,sum2(I,S),S1 is S + J.
-
-%sigma(A - B,Sum) :- 
-%    C is B - A,
-%    sigma_aux([A,C,Sum],0,A).
-
-%sigma_aux([A,C,Sum],C,Sum).
-%sigma_aux(Const,N,Sum) :-
-%    Const = [A|_],
-%    N1 is N+1,
-%    Sum1 is Sum + N1 + A,
-%    sigma_aux(Const,N1,Sum1).
-
-%not0(P) :- P,!,fail.
-%not0(P).
-
-%for(I =< I,I) :- !.
-%for(I =< J,I).
-%for(I =< J,K) :- I1 is I+1,for(I1 =< J,K).
-
-%f99 :- for( 1 =< 9,X),for(1 =< 9,Y),
-%        Z is X*Y, write((Z = X * Y)),nl,fail.
+/*
+The Hardy–Ramanujan number 
+Originaly written by 犬童, modified by K.Sasagawa
+?- r(X,Y,Z).
+X = 1729
+Y = 12
+Z = [[1,12],[9,10]]
+yes
+*/
 
 
-%test :- 
-%    X = [1,2,3,4,5],
-%    member(A,X),
-%    write(A),
-%    tab(1),
-%    fail.
+%i(X,Y) :- length(L,Y),count(L,X).
 
-%positive(L) :- member(X,L),ifthenelse(X>0,fail,(!,fail)).
-%positive(L).
+%count(L,N) :-
+%  length(L,N).
+%count([L|Ls],N) :-
+%  count(Ls,N).
 
 
-%member2(A,B,[A|Y]) :- member(B,Y).
-%member2(A,B,[_|Y]) :- member2(A,B,Y).
+%c(X, Z, Y):- i(Z, Y), X is Z ^ 3.  
 
-%set(L==M) :-
-%    sort(L,L0),
-%    sort(M,M0),
-%    L0 == M0.
+%d( X, Y, [Z, W]):- 
+%     c( P, Z, Y),
+%     c( Q, W, Y),
+%     P < Q,
+%     X is P + Q.  
 
-%:- op(700,xfx,isl).
 
-%Y isl [] + Y :- !.
-%Z isl [A|X] + Y :- member(A,Y),!,Z isl X + Y.
-%[A|Z] isl [A|X] + Y :- Z isl X + Y.
+%r(X, Y, [Z, W]):-
+%     d(X, Y, Z),
+%     d(X, Y, W),
+%     Z @< W .
+

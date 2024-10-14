@@ -2400,6 +2400,7 @@ void display_line(int line)
 		   ed_data[line][col] == '{' ||
 		   ed_data[line][col] == '}' ||
 		   ed_data[line][col] == ',' ||
+		   ed_data[line][col] == ';' ||
 		   ed_data[line][col] == '_' ||
 		   ed_data[line][col] == '|' ||
 		   ed_data[line][col] == '!' ||
@@ -2408,13 +2409,15 @@ void display_line(int line)
 	    col++;
 	    col1++;
 	} else if(isdigit(ed_data[line][col])){
-		while(isdigit(ed_data[line][col]) ||
+		while(((ed_col1 < turn && col1 < turn)
+		       || (ed_col1 >= turn && col < COL_SIZE)) &&
+			  (isdigit(ed_data[line][col]) ||
 		      ed_data[line][col] == 'e' ||
 			  ed_data[line][col] == 'E' ||
 			  ed_data[line][col] == '.' ||
 			  ed_data[line][col] == 'x' ||
 			  ed_data[line][col] == 'o' ||
-			  ed_data[line][col] == 'b'){
+			  ed_data[line][col] == 'b')){
 			CHECK(addch, ed_data[line][col]);
 	    	col++;
 	    	col1++;
@@ -2515,6 +2518,32 @@ void display_line(int line)
 
 
 		    if (ed_data[line][col - 1] == '$' &&
+			ed_data[line][col - 2] != '\\')
+			break;
+		}
+		ESCRST();
+		ESCFORG();
+		break;
+		case HIGHLIGHT_DOUBLEQUOTE:
+		ESCBOLD();
+		set_color(ed_string_color);
+		CHECK(addch, ed_data[line][col]);
+		col++;
+		col1++;
+		while (((ed_col1 < turn && col1 < turn)
+			|| (ed_col1 >= turn && col < COL_SIZE))
+		       && ed_data[line][col] != NUL
+		       && ed_data[line][col] != EOL) {
+		    if (isUni1(ed_data[line][col])) {
+			CHECK(addch, ed_data[line][col]);
+		    } else {
+			display_unicode(line, col);
+		    }
+		    col1 = col1 + increase_terminal(line, col);
+		    col = col + increase_buffer(line, col);
+
+
+		    if (ed_data[line][col - 1] == '"' &&
 			ed_data[line][col - 2] != '\\')
 			break;
 		}
@@ -3487,12 +3516,17 @@ int isatomch(char c)
     case '<':
     case '=':
     case '>':
-	case '\\':
+    case '?':
+    case '@':
+    case '^':
+    case '~':
+    case '\\':
 	return (1);
     default:
 	return (0);
     }
 }
+
 
 enum HighlightToken check_token(int row, int col)
 {
@@ -3504,6 +3538,8 @@ enum HighlightToken check_token(int row, int col)
 	return HIGHLIGHT_QUOTE;
     else if (ed_data[row][col] == '$')
 	return HIGHLIGHT_STRING;
+	else if (ed_data[row][col] == '"')
+	return HIGHLIGHT_DOUBLEQUOTE;
     else if (ed_data[row][col] == '%'){
 	return HIGHLIGHT_COMMENT;}
 
