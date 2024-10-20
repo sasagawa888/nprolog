@@ -1074,10 +1074,9 @@ int f_integer(int x)
 {
     if (wide_variable_p(x))
 	error(INSTANTATION_ERR, "integer ", x);
-    if (!numberp(x))
-	error(NOT_NUM, "integer ", x);
-    if (zerop(x) || negativep(x)){
-	error(EVALUATION_ERR, "integer ", x);}
+    if (!numberp(x)){
+	error(NOT_NUM, "integer ", x);}
+
 
 	if(floatp(x))
 		return(makeint((int)GET_FLT(x)));
@@ -1089,10 +1088,8 @@ int f_float(int x)
 {
     if (wide_variable_p(x))
 	error(INSTANTATION_ERR, "float ", x);
-    if (!numberp(x))
-	error(NOT_NUM, "float ", x);
-    if (zerop(x) || negativep(x)){
-	error(EVALUATION_ERR, "float ", x);}
+    if (!numberp(x)){
+		error(NOT_NUM, "float ", x);}
 
 	if(integerp(x))
 		return(makeflt((double)GET_INT(x)));
