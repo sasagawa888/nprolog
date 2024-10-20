@@ -1070,17 +1070,6 @@ int f_log(int x)
     return (makeflt(log10(GET_FLT(exact_to_inexact(x)))));
 }
 
-int twopow(int x)
-{	
-	int res;
-	res = 2;
-	while(x > 0)
-	{
-		res = 2*res;
-		x--;
-	}
-	return(res);
-}
 
 int f_integer(int x)
 {
