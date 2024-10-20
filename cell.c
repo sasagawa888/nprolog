@@ -28,7 +28,7 @@ void initcell(void)
 
 
     //initialize symbol
-    //address of each symbol is defined C macro at opl.h
+    //address of each symbol is defined C macro at npl.h
     makeatom("nil", SIMP);	//address = 0
     makeatom("yes", SIMP);	//address = 2
     makeatom("no", SIMP);	//address = 4
@@ -56,6 +56,7 @@ void initcell(void)
     makeatom("on", SIMP);	//address = 48
     makeatom("off", SIMP);	//address = 50
     makeatom("/", OPE);		//address = 52
+    makeatom("err", SIMP);  //address = 54
 }
 
 int freshcell(void)

@@ -306,7 +306,7 @@ int plus(int arg1, int arg2)
 		y1 = GET_FLT(arg2);
 		result = x1 + y1;
 		if(isinf(result))
-			return(makeatom("err",SIMP));
+			return(ERROBJ);
 		return (makeflt(result));
 	    }
 	case LONGN:
@@ -348,7 +348,7 @@ int plus(int arg1, int arg2)
 		x2 = (double) s;
 		result = x1 + x2;
 		if(isinf(result))
-			return(makeatom("err",SIMP));	
+			return(ERROBJ);	
 		return (makeflt(result));
 	    }
 	case FLTN:
@@ -357,7 +357,7 @@ int plus(int arg1, int arg2)
 		x2 = GET_FLT(arg2);
 		result = x1 + x2;
 		if(isinf(result))
-			return(makeatom("err",SIMP));	
+			return(ERROBJ);	
 		return (makeflt(result));
 	    }
 	case LONGN:
@@ -554,10 +554,10 @@ int mult(int arg1, int arg2)
 		x2 = GET_FLT(arg2);
 		y1 = x1 * x2;
 		if (y1 > DBL_MAX || y1 < -DBL_MAX)
-		    error(FLT_OVERF, "*", list2(arg1, arg2));
+		    return(ERROBJ);
 		if (x1 != 0.0 && x2 != 0.0 && y1 > -DBL_MIN
 		    && y1 < DBL_MIN)
-		    error(FLT_UNDERF, "*", list2(arg1, arg2));
+		    return(ERROBJ);
 		return (makeflt(y1));
 	    }
 	case LONGN:

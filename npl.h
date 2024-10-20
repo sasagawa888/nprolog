@@ -57,6 +57,7 @@ address
 #define TIMERON     48
 #define TIMEROFF    50
 #define SLASH       52
+#define ERROBJ      54
 #define HASHTBSIZE 107
 #define BIGNUM_BASE 1000000000
 #define SMALL_INT_MAX       1000000000
