@@ -282,7 +282,7 @@ int negative_zerop(int x)
 int plus(int arg1, int arg2)
 {
     int n, s, tag1, tag2;
-    double x1, y1, x2;
+    double x1, y1, x2, result;
     long long int l;
 
     tag1 = GET_TAG(arg1);
@@ -304,7 +304,10 @@ int plus(int arg1, int arg2)
 		n = GET_INT(arg1);
 		x1 = (double) n;
 		y1 = GET_FLT(arg2);
-		return (makeflt(x1 + y1));
+		result = x1 + y1;
+		if(isinf(result))
+			return(makeatom("err",SIMP));
+		return (makeflt(result));
 	    }
 	case LONGN:
 	    return (bigx_plus
@@ -343,13 +346,19 @@ int plus(int arg1, int arg2)
 		x1 = GET_FLT(arg1);
 		s = GET_INT(arg2);
 		x2 = (double) s;
-		return (makeflt(x1 + x2));
+		result = x1 + x2;
+		if(isinf(result))
+			return(makeatom("err",SIMP));	
+		return (makeflt(result));
 	    }
 	case FLTN:
 	    {
 		x1 = GET_FLT(arg1);
 		x2 = GET_FLT(arg2);
-		return (makeflt(x1 + x2));
+		result = x1 + x2;
+		if(isinf(result))
+			return(makeatom("err",SIMP));	
+		return (makeflt(result));
 	    }
 	case LONGN:
 	    return (plus(arg1, exact_to_inexact(arg2)));
