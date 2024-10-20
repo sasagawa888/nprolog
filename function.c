@@ -1070,18 +1070,40 @@ int f_log(int x)
     return (makeflt(log10(GET_FLT(exact_to_inexact(x)))));
 }
 
+int twopow(int x)
+{	
+	int res;
+	res = 2;
+	while(x > 0)
+	{
+		res = 2*res;
+		x--;
+	}
+	return(res);
+}
+
 int f_integer(int x)
 {
+	double flt;
+
     if (wide_variable_p(x))
 	error(INSTANTATION_ERR, "integer ", x);
     if (!numberp(x)){
 	error(NOT_NUM, "integer ", x);}
 
 
-	if(floatp(x))
-		return(makeint((int)GET_FLT(x)));
-	else 
-    	return (x);
+	if(floatp(x)){
+		flt = GET_FLT(x);
+		if(flt < 999999999 && flt > -999999999)
+			return(makeint((int)flt));
+		else if(flt < 999999999999999999 && flt > -999999999999999999)
+			return(makelong((long)flt));
+		else {
+			return(ERROBJ);
+		}
+	}
+	
+    return (x);
 }
 
 int f_float(int x)
