@@ -2084,14 +2084,6 @@ bool edit_loop(void)
 		clear_status();
 		ESCRST();
 		return false;
-		default:
-		if(isUni2(c) || isUni3(c) || isUni4(c)){
-		ESCMOVE(ed_footer, 1);
-		ESCREV();
-		clear_status();
-		ESCRST();
-		goto insert;
-		}
 	    }
 	}
 	break;
@@ -2138,7 +2130,6 @@ bool edit_loop(void)
     case TAB:
 	tab_key();
 	break;
-	insert:
     default:
 	if (ed_col >= COL_SIZE)
 	    break;
