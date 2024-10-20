@@ -10,6 +10,7 @@ written by kenichi sasagawa 2016/8~
 #endif
 #include <stdlib.h>
 #include <getopt.h>
+#include <float.h>
 #include "npl.h"
 
 //global vers
@@ -1086,8 +1087,8 @@ void print(int addr)
 	break;
     case FLTN:
 	x = GET_FLT(addr);
-	if (x - trunc(x) != 0.0)
-	    fprintf(GET_PORT(output_stream), "%0.16g", x);
+	if (x - (int)x != 0.0)
+	    fprintf(GET_PORT(output_stream), "%g", x);
 	else
 	    fprintf(GET_PORT(output_stream), "%0.1f", x);
 	break;
