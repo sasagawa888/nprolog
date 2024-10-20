@@ -1221,6 +1221,10 @@ void print_quoted(int addr)
 		fprintf(GET_PORT(output_stream), "%c", c);
 		pos++;
 	    }
+	} else if (c == '\''){
+		fprintf(GET_PORT(output_stream), "%c", '\'');
+		fprintf(GET_PORT(output_stream), "%c", c);
+		pos++;
 	} else if (c <= 31) {
 	    fprintf(GET_PORT(output_stream), "%c", '\\');
 	    fprintf(GET_PORT(output_stream), "%o", c);

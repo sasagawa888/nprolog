@@ -684,7 +684,12 @@ int b_get0(int arglist, int rest)
 
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
-	c = getc(GET_PORT(arg1));
+
+	if(n == 1)
+		c = getch();
+	else
+		c = getc(GET_PORT(arg1));
+	
 	if (c == EOL) {
 	    c = getc(GET_PORT(arg1));
 	}
@@ -721,13 +726,17 @@ int b_get(int arglist, int rest)
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
       loop:
-	c = getc(GET_PORT(arg1));
+	if(n == 1)
+		c = getch();
+	else
+		c = getc(GET_PORT(arg1));
+
 	if (c == EOL)
 	    c = getc(GET_PORT(arg1));
 	i = (int) c;
 	if (c == EOL)
 	    goto exit;
-	if (i < 32)
+	if (i < 33)
 	    goto loop;
 
       exit:

@@ -888,6 +888,9 @@ int atom_quote_p(int addr)
 	if (str[0] == '_' && GET_AUX(addr) == SIMP)
 	    return (1);
 
+	if (str[0] == '\'')
+		return (1);
+
 	pos = 0;
 
 	while (str[pos] != NUL) {
