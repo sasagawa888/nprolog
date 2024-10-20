@@ -940,6 +940,8 @@ int f_abs(int x);
 int f_div(int x, int y);
 int f_divide(int x, int y);
 int f_expt(int x, int y);
+int f_float(int x);
+int f_integer(int x);
 int f_leftshift(int x, int y);
 int f_logicaland(int x, int y);
 int f_logicalor(int x, int y);

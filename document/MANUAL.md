@@ -609,6 +609,8 @@ An error message is output with yes, and no error message is output with no.
 - log(X) Base-10 logarithm of X.
 - sqrt(X) Square root of X.
 - round(X,Y) Round X to N decimal places. N is an integer between 0 and 15.
+- integer(X) Transform X to integer.
+- float(X) Transform X to float. 
 - randi(n) Random integer between 0 and n (inclusive).
 - random Random floating-point number between 0 and 1 (inclusive).
 
