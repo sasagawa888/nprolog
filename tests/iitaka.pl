@@ -84,4 +84,7 @@ permutation([A|X1],Y) :-
 delete0(X = [A|X]-A).
 delete0([B|Y] = [B|X] - A) :- 
              delete0(Y = X - A).
-             
+
+
+%p41
+% quantum-number q(A,B,C,D)
