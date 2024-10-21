@@ -479,7 +479,7 @@ int prove(int goal, int bindings, int rest)
     } else if (predicatep(goal) || user_operation_p(goal)) {
 	//trace
 	if (debug_flag == ON)
-	    trace(DBCALL, goal, bindings, rest);
+	    prove_trace(DBCALL, goal, bindings, rest);
 
 	if (atomp(goal))
 	    clauses = GET_CAR(goal);
@@ -509,13 +509,13 @@ int prove(int goal, int bindings, int rest)
 		    if (prove_all(rest, sp) == YES) {
 			//trace
 			if (debug_flag == ON)
-			    trace(DBEXIT, goal, bindings, rest);
+			    prove_trace(DBEXIT, goal, bindings, rest);
 
 			return (YES);
 		    } else {
 			//trace
 			if (debug_flag == ON)
-			    trace(DBFAIL, goal, bindings, rest);
+			    prove_trace(DBFAIL, goal, bindings, rest);
 		    }
 		}
 	    }
@@ -528,7 +528,7 @@ int prove(int goal, int bindings, int rest)
 			nest--;
 			//trace
 			if (debug_flag == ON)
-			    trace(DBEXIT, goal, bindings, rest);
+			    prove_trace(DBEXIT, goal, bindings, rest);
 
 			return (YES);
 		    } else {
@@ -536,7 +536,7 @@ int prove(int goal, int bindings, int rest)
 			if (res == NPLFALSE) {	// when after cut occurs NO
 			    //trace
 			    if (debug_flag == ON)
-				trace(DBCUTFAIL, goal, bindings, rest);
+				prove_trace(DBCUTFAIL, goal, bindings, rest);
 			    wp = save1;
 			    ac = save2;
 			    unbind(bindings);
@@ -547,7 +547,7 @@ int prove(int goal, int bindings, int rest)
 	    }
 	    //trace
 	    if (debug_flag == ON && !nullp(clauses))
-		trace(DBREDO, goal, bindings, rest);
+		prove_trace(DBREDO, goal, bindings, rest);
 
 	    wp = save1;
 	    ac = save2;
@@ -555,7 +555,7 @@ int prove(int goal, int bindings, int rest)
 	}
 	//trace
 	if (debug_flag == ON)
-	    trace(DBFAIL, goal, bindings, rest);
+	    prove_trace(DBFAIL, goal, bindings, rest);
 
     } else if (disjunctionp(goal)) {
 	if (ifthenp(cadr(goal))) {
@@ -622,7 +622,7 @@ int after_cut(int x)
 
 }
 
-void trace(int port, int goal, int bindings, int rest)
+void prove_trace(int port, int goal, int bindings, int rest)
 {
     int spy, leap;
 

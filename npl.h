@@ -1280,7 +1280,7 @@ void release_variant(int x);
 void reset(int i);
 void set_sign(int x, int y);
 void sprint(int addr);
-void trace(int port, int goal, int bindings, int rest);
+void prove_trace(int port, int goal, int bindings, int rest);
 void ucs4_to_utf8(int n, char *p);
 void unbind(int x);
 void unreadc(char c);
