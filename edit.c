@@ -42,7 +42,7 @@ void setcolor(int n)
 }
 
 
-int getch()
+int n_getch()
 {
     struct termios oldt, newt;
     int ch;
@@ -809,14 +809,14 @@ int read_line(int flag)
 	ed_lbracket_col = -1;
 	ed_rbracket_col = -1;
 	j = 0;
-	c = getch();
+	c = n_getch();
       loop:
 	switch (c) {
 	case EOL:
 	    if (!check_balance_period()) {
 		printf
 		    ("\n() [] '' $$ unbalance or lack of '.' --- enter any key ---");
-		getch();
+		n_getch();
 		ESCMVLEFT(1);
 		ESCCLSL;
 		ESCMVU;
@@ -884,7 +884,7 @@ int read_line(int flag)
 	    display_buffer();
 	    break;
 	case ESC:
-	    c = getch();
+	    c = n_getch();
 	    switch (c) {
 	    case TAB:
 		find_candidate_buffer(j);	//completion
@@ -909,7 +909,7 @@ int read_line(int flag)
 			printf("6:more");
 		    ESCRST;
 		  retry:
-		    c = getch();
+		    c = n_getch();
 		    if (c == ESC)
 			goto escape;
 		    i = c - '1';
@@ -932,10 +932,10 @@ int read_line(int flag)
 		    display_buffer();
 		    ESCMVLEFT(j + left_margin);
 		}
-		c = getch();
+		c = n_getch();
 		goto loop;
 	    }
-	    c = getch();
+	    c = n_getch();
 	    switch (c) {
 	    case UP:
 		goto up_history;
@@ -973,7 +973,7 @@ int read_line(int flag)
 	default:
 	    //limit terminal width
 	    if (buffer[ed_width - 6][0] != 0) {
-		c = getch();
+		c = n_getch();
 		goto loop;
 	    }
 
@@ -981,7 +981,7 @@ int read_line(int flag)
 		for (k = BUFSIZE - 1; k > j; k--)
 		    buffer[k][0] = buffer[k - 2][0];
 		buffer[j++][0] = c;
-		c = getch();
+		c = n_getch();
 		buffer[j++][0] = c;
 		display_buffer();
 		reset_paren_bracket_buffer();
@@ -997,9 +997,9 @@ int read_line(int flag)
 		for (k = BUFSIZE - 1; k > j; k--)
 		    buffer[k][0] = buffer[k - 3][0];
 		buffer[j++][0] = c;
-		c = getch();
+		c = n_getch();
 		buffer[j++][0] = c;
-		c = getch();
+		c = n_getch();
 		buffer[j++][0] = c;
 		display_buffer();
 		reset_paren_bracket_buffer();
@@ -1015,11 +1015,11 @@ int read_line(int flag)
 		for (k = BUFSIZE - 1; k > j; k--)
 		    buffer[k][0] = buffer[k - 4][0];
 		buffer[j++][0] = c;
-		c = getch();
+		c = n_getch();
 		buffer[j++][0] = c;
-		c = getch();
+		c = n_getch();
 		buffer[j++][0] = c;
-		c = getch();
+		c = n_getch();
 		buffer[j++][0] = c;
 		display_buffer();
 		reset_paren_bracket_buffer();
@@ -1035,13 +1035,13 @@ int read_line(int flag)
 		for (k = BUFSIZE - 1; k > j; k--)
 		    buffer[k][0] = buffer[k - 5][0];
 		buffer[j++][0] = c;
-		c = getch();
+		c = n_getch();
 		buffer[j++][0] = c;
-		c = getch();
+		c = n_getch();
 		buffer[j++][0] = c;
-		c = getch();
+		c = n_getch();
 		buffer[j++][0] = c;
-		c = getch();
+		c = n_getch();
 		buffer[j++][0] = c;
 		display_buffer();
 		reset_paren_bracket_buffer();
@@ -1057,15 +1057,15 @@ int read_line(int flag)
 		for (k = BUFSIZE - 1; k > j; k--)
 		    buffer[k][0] = buffer[k - 6][0];
 		buffer[j++][0] = c;
-		c = getch();
+		c = n_getch();
 		buffer[j++][0] = c;
-		c = getch();
+		c = n_getch();
 		buffer[j++][0] = c;
-		c = getch();
+		c = n_getch();
 		buffer[j++][0] = c;
-		c = getch();
+		c = n_getch();
 		buffer[j++][0] = c;
-		c = getch();
+		c = n_getch();
 		buffer[j++][0] = c;
 		display_buffer();
 		reset_paren_bracket_buffer();
@@ -1102,7 +1102,7 @@ int read_line(int flag)
 	    ESCMVLEFT(count_col_buffer(j) + left_margin);
 
 	}
-	c = getch();
+	c = n_getch();
 	goto loop;
 	pos = 0;
     }

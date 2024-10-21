@@ -442,7 +442,7 @@ int b_ask(int arglist, int rest)
 	fflush(stdin);
 
       loop:
-	c = getch();
+	c = n_getch();
 
 	if (c == '.' || c == EOL) {
 	    fputs(".\n", stdout);
@@ -686,7 +686,7 @@ int b_get0(int arglist, int rest)
 	    arg1 = GET_CAR(arg1);
 
 	if(n == 1)
-		c = getch();
+		c = n_getch();
 	else
 		c = getc(GET_PORT(arg1));
 	
@@ -727,7 +727,7 @@ int b_get(int arglist, int rest)
 	    arg1 = GET_CAR(arg1);
       loop:
 	if(n == 1)
-		c = getch();
+		c = n_getch();
 	else
 		c = getc(GET_PORT(arg1));
 
@@ -758,7 +758,7 @@ int b_get0_noecho(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	c = getch();
+	c = n_getch();
 	i = makeint((int) c);
 	res = unify(arg1, i);
 	if (res == YES)

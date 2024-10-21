@@ -1336,7 +1336,7 @@ void setcolor(int n);
 void backspace();
 void insertcol();
 void insertrow();
-int getch();
+int n_getch();
 void deleterow();
 int findeol(int row);
 struct position findlparen(int bias);
