@@ -99,3 +99,15 @@ newton1(X,X1,A) :-
 newton1(X,X1,A) :-
         X3 is X1-(X1^2)/(X1/2),
         newton1(X3,X2,A).
+
+%p126
+factor(P,I*Q) :-
+        Q is integer(P/I + 0.001),
+        R is P - I*Q,
+        (R==0 ; Q < I).
+
+factor(P/2):- factor(P,2*Q),!.
+factor(P/I):- for(I =< P,J),
+              J1 is 2*J+1,
+              factor(P,J1*Q),
+              ifthenelse(Q<J1,I=P,I=J1),!.
