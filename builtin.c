@@ -4364,7 +4364,7 @@ int b_current_op(int arglist, int rest)
 
 	if (!wide_variable_p(arg1) && !integerp(arg1))
 	    error(NOT_INT, "current_op ", arg1);
-	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 1200)
+	if (integerp(arg1) && (GET_INT(arg1) < 0 || GET_INT(arg1) > 1200))
 	    error(OPE_PRIORITY_ERR, "current_op ", arg1);
 	if (!wide_variable_p(arg2) && !specp(arg2))
 	    error(OPE_SPEC_ERR, "current_op ", arg2);

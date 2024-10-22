@@ -87,4 +87,15 @@ delete0([B|Y] = [B|X] - A) :-
 
 
 %p41
-% quantum-number q(A,B,C,D)
+% quarternion q(A,B,C,D) see quarternion.pl
+
+
+%53 ???
+newton(X,A) :-
+        newton1(X,1.0,A).
+newton1(X,X1,A) :-
+        abs(X1-X2) < 0.01,
+        A is X2.
+newton1(X,X1,A) :-
+        X3 is X1-(X1^2)/(X1/2),
+        newton1(X3,X2,A).
