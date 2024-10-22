@@ -442,7 +442,7 @@ int b_ask(int arglist, int rest)
 	fflush(stdin);
 
       loop:
-	if(!ask_flag)
+	if(!repl_flag && !ask_flag)
 		clear_input_buffer();
 	c = n_getch();
 
@@ -696,7 +696,8 @@ int b_get0(int arglist, int rest)
 	    arg1 = GET_CAR(arg1);
 
 	if(n == 1){
-		clear_input_buffer();
+		if(!repl_flag)
+			clear_input_buffer();
 		ask_flag = 1;
 		c = n_getch();
 	} else
@@ -740,7 +741,8 @@ int b_get(int arglist, int rest)
 	    arg1 = GET_CAR(arg1);
       loop:
 	if(n == 1){
-		clear_input_buffer();
+		if(!repl_flag)
+			clear_input_buffer();
 		ask_flag = 1;
 		c = n_getch();
 	} else
@@ -773,7 +775,8 @@ int b_get0_noecho(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	clear_input_buffer();
+	if(!repl_flag)
+		clear_input_buffer();
 	ask_flag = 1;
 	c = n_getch();
 	i = makeint((int) c);
