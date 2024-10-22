@@ -774,7 +774,7 @@ int b_get0_noecho(int arglist, int rest)
     if (n == 1) {
 	arg1 = car(arglist);
 	clear_input_buffer();
-	ask_flag = 0;
+	ask_flag = 1;
 	c = n_getch();
 	i = makeint((int) c);
 	res = unify(arg1, i);
