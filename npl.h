@@ -429,7 +429,6 @@ extern int init_flag;
 extern int script_flag;
 extern int check_flag;
 extern int break_flag;
-extern int ask_flag;
 
 //------pointer----
 extern int hp; //heap pointer

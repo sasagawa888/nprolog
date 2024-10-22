@@ -106,7 +106,6 @@ int init_flag = 1;		//for halt
 int script_flag = 0;		// script mode, 0=not scriplt-mode, 1=script-mode.
 int check_flag = 0;		// for n_error/2 error check
 int break_flag = 0;		// for break/0 0=normal,1=break.
-int ask_flag = 0;       // for b_ask/0 0=normal,1=already execute b_ask/0
 
 //stream
 int standard_input;
@@ -154,7 +153,7 @@ void usage()
 
 int main(int argc, char *argv[])
 {
-    int ch;
+    int ch, input;
     char *home, str[STRSIZE];
     struct winsize w;
     FILE *fp;
@@ -254,7 +253,10 @@ int main(int argc, char *argv[])
 	    init_repl();
 	    printf("?- ");
 	    fflush(stdout);
-	    query(variable_to_call(readparse()));
+		input = variable_to_call(readparse());
+		if(!repl_flag)
+			clear_input_buffer();
+	    query(input);
 	    //sexp_flag = 1;print(variable_to_call(parser(NIL,NIL,NIL,NIL,0,0)));
 	    //printf("proof = %d\n", proof);
 	    fflush(stdout);
@@ -263,6 +265,11 @@ int main(int argc, char *argv[])
 	goto repl;
     } else
 	return 0;
+}
+
+void clear_input_buffer() {
+    int c;
+    while ((c = getchar()) != '\n' && c != EOF) {}
 }
 
 void reset(int i)
@@ -286,7 +293,6 @@ void init_repl(void)
     fskip_flag = OFF;
     sskip_flag = OFF;
     xskip_flag = OFF;
-	ask_flag = 0;
     semiskip_flag = OFF;
     leap_point = NIL;
     left_margin = 4;

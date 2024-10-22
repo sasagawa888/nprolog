@@ -442,15 +442,12 @@ int b_ask(int arglist, int rest)
 	fflush(stdin);
 
       loop:
-	if(!repl_flag && !ask_flag)
-		clear_input_buffer();
 	c = n_getch();
 
 	if (c == '.' || c == EOL) {
 	    fputs(".\n", stdout);
 	    return (prove_all(rest, sp));
 	} else if (c == ';' || c == ' ') {
-		ask_flag = 1;
 	    fputs(";\n", stdout);
 	    return (NO);
 	} else
@@ -665,12 +662,6 @@ int b_put(int arglist, int rest)
     return (NO);
 }
 
-void clear_input_buffer() {
-    int c;
-    while ((c = getchar()) != '\n' && c != EOF) {}
-}
-
-
 
 int b_get0(int arglist, int rest)
 {
@@ -695,12 +686,9 @@ int b_get0(int arglist, int rest)
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
 
-	if(n == 1){
-		if(!repl_flag)
-			clear_input_buffer();
-		ask_flag = 1;
+	if(n == 1)
 		c = n_getch();
-	} else
+	else
 		c = getc(GET_PORT(arg1));
 	
 	if (c == EOL) {
@@ -740,12 +728,9 @@ int b_get(int arglist, int rest)
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
       loop:
-	if(n == 1){
-		if(!repl_flag)
-			clear_input_buffer();
-		ask_flag = 1;
+	if(n == 1)
 		c = n_getch();
-	} else
+	else
 		c = getc(GET_PORT(arg1));
 
 	if (c == EOL)
@@ -775,9 +760,6 @@ int b_get0_noecho(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	if(!repl_flag)
-		clear_input_buffer();
-	ask_flag = 1;
 	c = n_getch();
 	i = makeint((int) c);
 	res = unify(arg1, i);
