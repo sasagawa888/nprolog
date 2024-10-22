@@ -429,6 +429,7 @@ extern int init_flag;
 extern int script_flag;
 extern int check_flag;
 extern int break_flag;
+extern int ask_flag;
 
 //------pointer----
 extern int hp; //heap pointer
@@ -1214,6 +1215,7 @@ void bindsym(int x, int val);
 void cellprint(int addr);
 void checkarg(int test, char *fun, int arg);
 void checkgbc(void);
+void clear_input_buffer(void);
 void clrcell(int addr);
 void clrtrace(int goal);
 void cut_zero(int x);
