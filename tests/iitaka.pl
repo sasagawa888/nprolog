@@ -94,10 +94,10 @@ delete0([B|Y] = [B|X] - A) :-
 newton(X,A) :-
         newton1(1.0,X,X,A).
 newton1(X1,X2,X,A) :-
-        abs(X1-X2) < 0.01,
+        abs(X1-X2) < 0.00001,
         A is X2.
 newton1(X1,X2,X,A) :-
-        Y is X1^2 - X,
+        Y is (X1+X2)/2,
         Y1 is X / Y,
         newton1(Y1,X1,X,A).
 

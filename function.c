@@ -727,7 +727,7 @@ int f_expt(int x, int y)
 	error(NOT_NUM, "^ ", y);
     if (floatp(x) && GET_FLT(x) >= DBL_MAX)
 	error(EVALUATION_ERR, "^ ", x);
-    if (floatp(x) && (GET_FLT(x) <= DBL_MIN && GET_FLT(x) != 0))
+    if (floatp(x) && (fabs(GET_FLT(x)) <= DBL_MIN && GET_FLT(x) != 0))
 	error(EVALUATION_ERR, "^ ", x);
     if (bignump(x) && (longnump(y) || bignump(y)))
 	error(EXPONENT_ERR, "^ ", y);
