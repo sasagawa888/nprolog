@@ -331,7 +331,6 @@ X * Y
 X / Y
 X // Y
 X ^ Y  expt
-X ** Y expt
 X << Y leftshift
 X >> Y rightshift
 X /\ Y logical and
