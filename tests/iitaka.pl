@@ -90,7 +90,7 @@ delete0([B|Y] = [B|X] - A) :-
 % quarternion q(A,B,C,D) see quarternion.pl
 
 
-%53 ???
+%53 
 newton(X,A) :-
         newton1(1.0,X,X,A).
 newton1(X1,X2,X,A) :-
