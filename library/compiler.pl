@@ -788,12 +788,6 @@ jump_eval_form(X//Y) :-
     write(','),
     jump_eval_form(Y),
     write(')').
-jump_eval_form(X ** Y) :-
-	write('Jexpt('),
-    jump_eval_form(X),
-    write(','),
-    jump_eval_form(Y),
-    write(')').
 jump_eval_form(X ^ Y) :-
 	write('Jexpt('),
     jump_eval_form(X),

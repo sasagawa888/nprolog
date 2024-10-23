@@ -90,7 +90,7 @@ test(arithmetic) :-
     verify(2.3 is 3.4-1.1),
     verify(0.36 is 0.6*0.6),
     verify(8 is 2^3),
-    verify(16 is 2**4),
+    verify(16 is 2^4),
     verify(-1.0 is cos(acos(-1))),
     verify(4 is 1 << 2),
     verify(8 is 1 << 3),

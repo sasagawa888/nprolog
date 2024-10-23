@@ -448,7 +448,6 @@ void initoperator(void)
     defoperator("-", f_minus, 500, YFX, 0);
     defoperator("-", f_minus, 200, FY, 0);
     defoperator("*", f_mult, 400, YFX, 0);
-    defoperator("**", f_expt, 200, XFY, 0);
     defoperator("^", f_expt, 200, XFY, 0);
     defoperator("/", f_divide, 400, YFX, 0);
     defoperator("//", f_div, 400, YFX, 0);
@@ -717,21 +716,21 @@ int f_expt(int x, int y)
     double dx, dy, dz;
 
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "** ", x);
+	error(INSTANTATION_ERR, "^ ", x);
     if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "** ", y);
+	error(INSTANTATION_ERR, "^ ", y);
     if (negativep(x) && !wide_integer_p(y))
-	error(EVALUATION_ERR, "** ", y);
+	error(EVALUATION_ERR, "^ ", y);
     if (!numberp(x))
-	error(NOT_NUM, "** ", x);
+	error(NOT_NUM, "^ ", x);
     if (!numberp(y))
-	error(NOT_NUM, "** ", y);
+	error(NOT_NUM, "^ ", y);
     if (floatp(x) && GET_FLT(x) >= DBL_MAX)
-	error(EVALUATION_ERR, "** ", x);
+	error(EVALUATION_ERR, "^ ", x);
     if (floatp(x) && (GET_FLT(x) <= DBL_MIN && GET_FLT(x) != 0))
-	error(EVALUATION_ERR, "** ", x);
+	error(EVALUATION_ERR, "^ ", x);
     if (bignump(x) && (longnump(y) || bignump(y)))
-	error(EXPONENT_ERR, "** ", y);
+	error(EXPONENT_ERR, "^ ", y);
 
     if ((integerp(x) || longnump(x) || bignump(x)) && integerp(y)
 	&& GET_INT(y) == 0)

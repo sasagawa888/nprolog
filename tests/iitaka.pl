@@ -92,13 +92,14 @@ delete0([B|Y] = [B|X] - A) :-
 
 %53 ???
 newton(X,A) :-
-        newton1(X,1.0,A).
-newton1(X,X1,A) :-
+        newton1(1.0,X,X,A).
+newton1(X1,X2,X,A) :-
         abs(X1-X2) < 0.01,
         A is X2.
-newton1(X,X1,A) :-
-        X3 is X1-(X1^2)/(X1/2),
-        newton1(X3,X2,A).
+newton1(X1,X2,X,A) :-
+        Y is X1^2 - X,
+        Y1 is X / Y,
+        newton1(Y1,X1,X,A).
 
 %p126
 factor(P,I*Q) :-
