@@ -244,6 +244,10 @@ example
 EDITOR=emacs
 ```
 
+### □ edit(Filename, Option)
+Option is an atom, either `r` or `c`. If it's `r`, the file is loaded using `reconsult`. If it's `c`, the file is loaded using `consult`.
+
+
 ### □ eq(X,Y)
 Check if X and Y are the same data object and are stored at the same address. 
 

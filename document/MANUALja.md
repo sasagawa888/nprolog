@@ -245,6 +245,9 @@ Filenameで指定したファイルのエディトのため、インタープリ
 ```
 EDITOR=emacs
 ```
+### □ edit(Filename,Option)
+Optionはatomのrまたはcです。rの場合にはreconsultでファイルを読み込みます。
+cの場合にはconsultでファイルを読み込みます。
 
 ### □ eq(X,Y)
 XとYが同じデータオブジェクトであり、かつ同じアドレスにストアされているかを調べる。

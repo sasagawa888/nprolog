@@ -4653,15 +4653,23 @@ char *prolog_file_name(char *name)
 
 int b_edit(int arglist, int rest)
 {
-    int n, arg1, res;
+    int n, arg1, arg2, res;
     char str[STRSIZE];
     char *editor;
 
     n = length(arglist);
-    if (n == 1) {
-	arg1 = deref(car(arglist));
+	if (n==1){
+		arg1 = car(arglist);
+		arg2 = makeatom("r",SIMP);
+		goto edit;
+	} else if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+	edit:
 	if (!singlep(arg1))
 	    error(NOT_ATOM, "edit ", arg1);
+
 
 	editor = getenv("EDITOR");
 	if (editor == NULL) {
@@ -4675,7 +4683,11 @@ int b_edit(int arglist, int rest)
 	res = system(str);
 	if (res == -1)
 	    error(SYSTEM_ERROR, "edit ", arg1);
-	b_reconsult(list1(arg1), NIL);
+
+	if (arg2 == makeatom("r",SIMP))
+		b_reconsult(list1(arg1), NIL);
+	else if (arg2 == makeatom("c",SIMP))
+		b_consult(list1(arg1), NIL);
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "edit ", arglist);
