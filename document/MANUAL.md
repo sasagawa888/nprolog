@@ -438,6 +438,7 @@ Delete the directory.
 
 ### □ save
 Save all changes made to the database since the last save.
+Load the saved file when starting N-Prolog.
 
 ### □ save(Name)
 Save the internal database with the specified program name, Name.

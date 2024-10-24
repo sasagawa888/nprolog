@@ -199,6 +199,13 @@ int main(int argc, char *argv[])
 	b_consult(list1(makeconst(str)), NIL);
 	predicates = NIL;
     }
+	strcpy(str, home);
+    strcat(str, "/nprolog/library/startup.pl");
+    fp = fopen(str, "r");
+    if (fp != NULL) {
+	fclose(fp);
+	b_consult(list1(makeconst(str)), NIL);
+    }
 
     while ((ch = getopt(argc, argv, "c:s:rhv")) != -1) {
 	switch (ch) {

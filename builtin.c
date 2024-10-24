@@ -1722,10 +1722,19 @@ int b_save(int arglist, int rest)
 {
     int n, arg1;
     static char str[STREAM];
+	char *home, str1[STRSIZE];
 
     n = length(arglist);
-
-    if (n == 1) {
+	if (n == 0){
+		arg1 = NIL;
+		home = getenv("HOME");
+		strcpy(str1, home);
+    	strcat(str1, "/nprolog/library/startup.pl");
+		output_stream =
+	    makestream(fopen(str1, "w"), OPL_OUTPUT,
+		       OPL_TEXT, NIL, arg1);
+		goto save;
+	} else if (n == 1) {
 	arg1 = car(arglist);
 	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	strcpy(str, GET_NAME(arg1));
@@ -1733,6 +1742,7 @@ int b_save(int arglist, int rest)
 	    makestream(fopen(GET_NAME(arg1), "w"), OPL_OUTPUT,
 		       OPL_TEXT, NIL, arg1);
 
+	save:
 	if (GET_PORT(output_stream) == NULL) {
 	    error(CANT_OPEN, "save ", arg1);
 	}
