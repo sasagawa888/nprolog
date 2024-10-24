@@ -694,6 +694,9 @@ int b_get0(int arglist, int rest)
 	if (c == EOL) {
 	    c = getc(GET_PORT(arg1));
 	}
+	if(c==EOF)
+		return(NO);
+
 	i = makeint((int) c);
 	res = unify(arg2, i);
 	if (res == YES)
@@ -735,6 +738,10 @@ int b_get(int arglist, int rest)
 
 	if (c == EOL)
 	    c = getc(GET_PORT(arg1));
+
+	if(c==EOF)
+		return(NO);
+	
 	i = (int) c;
 	if (c == EOL)
 	    goto exit;

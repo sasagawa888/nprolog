@@ -125,3 +125,14 @@ ju(A/B) :- res_q(A=B*Q+R),
            ju(A1/B).
            
 
+%p101
+while_do(P,Q):- P,!,Q,fail.
+while_do(P,Q).
+
+%105
+read_file(File_nameX):-
+           open(H,File_nameX,r),
+           repeat,
+           while_do(get0(H,C),put(C)),
+           close(H),!.
+           
