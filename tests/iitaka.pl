@@ -112,3 +112,16 @@ factor(P/I):- for(I =< P,J),
               J1 is 2*J+1,
               factor(P,J1*Q),
               ifthenelse(Q<J1,I=P,I=J1),!.
+
+
+
+%p65
+res_q(A=B*Q + R) :-
+        Q is integer(A/B),R is A - B*Q.
+
+ju(A/B) :- res_q(A=B*Q+R),
+           write(Q),tab(1),
+           A1 is R*10,
+           ju(A1/B).
+           
+
