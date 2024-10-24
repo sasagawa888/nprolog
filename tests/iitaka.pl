@@ -135,4 +135,11 @@ read_file(File_nameX):-
            repeat,
            while_do(get0(H,C),put(C)),
            close(H),!.
+
+copy_file(File_nameX,File_nameY):-
+           open(H1,File_nameX,r),
+           create(H2,File_nameY),
+           repeat,
+           while_do(get0(H1,C),put(H2,C)),
+           close(H1),close(H2),!.
            
