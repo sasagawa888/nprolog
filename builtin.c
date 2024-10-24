@@ -4698,6 +4698,9 @@ int b_edit(int arglist, int rest)
 		b_reconsult(list1(arg1), NIL);
 	else if (arg2 == makeatom("c",SIMP))
 		b_consult(list1(arg1), NIL);
+	else
+		error(WRONG_ARGS,"edit ",arg2);
+	
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "edit ", arglist);
