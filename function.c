@@ -560,19 +560,19 @@ int eval(int x)
 	arg1 = result[1];
 	arg2 = result[2];
 	return (f_round(arg1, arg2));
-    } else if (eqp(car(x), makeatom("integer", SYS))){
+    } else if (eqp(car(x), makeatom("integer", SYS))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "integer ", x);
 	evalterm(x, result);
 	arg1 = result[1];
-	return (f_integer(arg1));	
-	} else if (eqp(car(x), makeatom("float", SYS))){
+	return (f_integer(arg1));
+    } else if (eqp(car(x), makeatom("float", SYS))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "float ", x);
 	evalterm(x, result);
 	arg1 = result[1];
-	return (f_float(arg1));	
-	} else if (eqp(car(x), makeatom("randi", FUNC))) {
+	return (f_float(arg1));
+    } else if (eqp(car(x), makeatom("randi", FUNC))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "randi ", x);
 	evalterm(x, result);
@@ -1072,25 +1072,26 @@ int f_log(int x)
 
 int f_integer(int x)
 {
-	double flt;
+    double flt;
 
     if (wide_variable_p(x))
 	error(INSTANTATION_ERR, "integer ", x);
-    if (!numberp(x)){
-	error(NOT_NUM, "integer ", x);}
+    if (!numberp(x)) {
+	error(NOT_NUM, "integer ", x);
+    }
 
 
-	if(floatp(x)){
-		flt = GET_FLT(x);
-		if(flt < 999999999 && flt > -999999999)
-			return(makeint((int)flt));
-		else if(flt < 999999999999999999 && flt > -999999999999999999)
-			return(makelong((long)flt));
-		else {
-			return(ERROBJ);
-		}
+    if (floatp(x)) {
+	flt = GET_FLT(x);
+	if (flt < 999999999 && flt > -999999999)
+	    return (makeint((int) flt));
+	else if (flt < 999999999999999999 && flt > -999999999999999999)
+	    return (makelong((long) flt));
+	else {
+	    return (ERROBJ);
 	}
-	
+    }
+
     return (x);
 }
 
@@ -1098,13 +1099,14 @@ int f_float(int x)
 {
     if (wide_variable_p(x))
 	error(INSTANTATION_ERR, "float ", x);
-    if (!numberp(x)){
-		error(NOT_NUM, "float ", x);}
+    if (!numberp(x)) {
+	error(NOT_NUM, "float ", x);
+    }
 
-	if(integerp(x))
-		return(makeflt((double)GET_INT(x)));
-	else 
-    	return (x);
+    if (integerp(x))
+	return (makeflt((double) GET_INT(x)));
+    else
+	return (x);
 }
 
 

@@ -305,8 +305,8 @@ int plus(int arg1, int arg2)
 		x1 = (double) n;
 		y1 = GET_FLT(arg2);
 		result = x1 + y1;
-		if(isinf(result))
-			return(ERROBJ);
+		if (isinf(result))
+		    return (ERROBJ);
 		return (makeflt(result));
 	    }
 	case LONGN:
@@ -347,8 +347,8 @@ int plus(int arg1, int arg2)
 		s = GET_INT(arg2);
 		x2 = (double) s;
 		result = x1 + x2;
-		if(isinf(result))
-			return(ERROBJ);	
+		if (isinf(result))
+		    return (ERROBJ);
 		return (makeflt(result));
 	    }
 	case FLTN:
@@ -356,8 +356,8 @@ int plus(int arg1, int arg2)
 		x1 = GET_FLT(arg1);
 		x2 = GET_FLT(arg2);
 		result = x1 + x2;
-		if(isinf(result))
-			return(ERROBJ);	
+		if (isinf(result))
+		    return (ERROBJ);
 		return (makeflt(result));
 	    }
 	case LONGN:
@@ -554,10 +554,10 @@ int mult(int arg1, int arg2)
 		x2 = GET_FLT(arg2);
 		y1 = x1 * x2;
 		if (y1 > DBL_MAX || y1 < -DBL_MAX)
-		    return(ERROBJ);
+		    return (ERROBJ);
 		if (x1 != 0.0 && x2 != 0.0 && y1 > -DBL_MIN
 		    && y1 < DBL_MIN)
-		    return(ERROBJ);
+		    return (ERROBJ);
 		return (makeflt(y1));
 	    }
 	case LONGN:

@@ -199,7 +199,7 @@ int main(int argc, char *argv[])
 	b_consult(list1(makeconst(str)), NIL);
 	predicates = NIL;
     }
-	strcpy(str, home);
+    strcpy(str, home);
     strcat(str, "/nprolog/library/startup.pl");
     fp = fopen(str, "r");
     if (fp != NULL) {
@@ -260,9 +260,9 @@ int main(int argc, char *argv[])
 	    init_repl();
 	    printf("?- ");
 	    fflush(stdout);
-		input = variable_to_call(readparse());
-		if(!repl_flag)
-			clear_input_buffer();
+	    input = variable_to_call(readparse());
+	    if (!repl_flag)
+		clear_input_buffer();
 	    query(input);
 	    //sexp_flag = 1;print(variable_to_call(parser(NIL,NIL,NIL,NIL,0,0)));
 	    //printf("proof = %d\n", proof);
@@ -274,9 +274,11 @@ int main(int argc, char *argv[])
 	return 0;
 }
 
-void clear_input_buffer() {
+void clear_input_buffer()
+{
     int c;
-    while ((c = getchar()) != '\n' && c != EOF) {}
+    while ((c = getchar()) != '\n' && c != EOF) {
+    }
 }
 
 void reset(int i)
@@ -372,13 +374,14 @@ void query_break(int x)
     if (wide_variable_p(x))
 	error(INSTANTATION_ERR, "?= ", x);
 
-    if (!callablep(x)){
-	error(NOT_CALLABLE, "?= ", x);}
+    if (!callablep(x)) {
+	error(NOT_CALLABLE, "?= ", x);
+    }
 
-	variables_save = variables;
-	variables = listreverse(unique(varslist(x)));
+    variables_save = variables;
+    variables = listreverse(unique(varslist(x)));
     res = prove_all(addask(x), sp);
-	variables = variables_save;
+    variables = variables_save;
     ESCRST;
     print(res);
     printf("\n");
@@ -551,7 +554,8 @@ int prove(int goal, int bindings, int rest)
 			if (res == NPLFALSE) {	// when after cut occurs NO
 			    //trace
 			    if (debug_flag == ON)
-				prove_trace(DBCUTFAIL, goal, bindings, rest);
+				prove_trace(DBCUTFAIL, goal, bindings,
+					    rest);
 			    wp = save1;
 			    ac = save2;
 			    unbind(bindings);
@@ -1102,7 +1106,7 @@ void print(int addr)
 	break;
     case FLTN:
 	x = GET_FLT(addr);
-	if (x - (int)x != 0.0)
+	if (x - (int) x != 0.0)
 	    fprintf(GET_PORT(output_stream), "%g", x);
 	else
 	    fprintf(GET_PORT(output_stream), "%0.1f", x);
@@ -1237,10 +1241,10 @@ void print_quoted(int addr)
 		fprintf(GET_PORT(output_stream), "%c", c);
 		pos++;
 	    }
-	} else if (c == '\''){
-		fprintf(GET_PORT(output_stream), "%c", '\'');
-		fprintf(GET_PORT(output_stream), "%c", c);
-		pos++;
+	} else if (c == '\'') {
+	    fprintf(GET_PORT(output_stream), "%c", '\'');
+	    fprintf(GET_PORT(output_stream), "%c", c);
+	    pos++;
 	} else if (c <= 31) {
 	    fprintf(GET_PORT(output_stream), "%c", '\\');
 	    fprintf(GET_PORT(output_stream), "%o", c);

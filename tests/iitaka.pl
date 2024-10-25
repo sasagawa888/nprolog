@@ -143,3 +143,8 @@ copy_file(File_nameX,File_nameY):-
            while_do(get0(H1,C),put(H2,C)),
            close(H1),close(H2),!.
            
+%p78
+cont_frc(A/B):- cont_frc_aux(A/B).
+cont_frc_aux(A/B):-
+     res_q(A=B*Q+R),write(Q),tab(1),
+     cont_frc_aux(B/R).

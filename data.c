@@ -889,7 +889,7 @@ int atom_quote_p(int addr)
 	    return (1);
 
 	if (str[0] == '\'')
-		return (1);
+	    return (1);
 
 	pos = 0;
 

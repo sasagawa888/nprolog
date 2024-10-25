@@ -1431,16 +1431,16 @@ int readitem1(void)
 	}
     case VARIABLE:
 	temp = makeatom(stok.buf, VAR);
-	if(!break_flag){
-	SET_CAR(temp, UNBIND);	//value
-	SET_CDR(temp, UNBIND);	//alpha variable
-	} else if(break_flag && !memberp(temp,variables)){
-		/* In the execution of break/0, 
-		 * the unification of the variables up to that point must be maintained. 
-		 * However, the values of the new variables generated in break/0 should not be retained.
-		*/
-		SET_CAR(temp, UNBIND);	//value
-		SET_CDR(temp, UNBIND);	//alpha variable
+	if (!break_flag) {
+	    SET_CAR(temp, UNBIND);	//value
+	    SET_CDR(temp, UNBIND);	//alpha variable
+	} else if (break_flag && !memberp(temp, variables)) {
+	    /* In the execution of break/0, 
+	     * the unification of the variables up to that point must be maintained. 
+	     * However, the values of the new variables generated in break/0 should not be retained.
+	     */
+	    SET_CAR(temp, UNBIND);	//value
+	    SET_CDR(temp, UNBIND);	//alpha variable
 	}
 	SET_VAR(temp, NIL);
 	return (temp);

@@ -686,13 +686,13 @@ int b_get0(int arglist, int rest)
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
 
-	if(n == 1)
-		c = n_getch();
+	if (n == 1)
+	    c = n_getch();
 	else
-		c = getc(GET_PORT(arg1));
-	
-	if(c==EOF)
-		return(NO);
+	    c = getc(GET_PORT(arg1));
+
+	if (c == EOF)
+	    return (NO);
 
 	i = makeint((int) c);
 	res = unify(arg2, i);
@@ -728,14 +728,14 @@ int b_get(int arglist, int rest)
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
       loop:
-	if(n == 1)
-		c = n_getch();
+	if (n == 1)
+	    c = n_getch();
 	else
-		c = getc(GET_PORT(arg1));
+	    c = getc(GET_PORT(arg1));
 
 
-	if(c==EOF)
-		return(NO);
+	if (c == EOF)
+	    return (NO);
 
 	i = (int) c;
 	if (c == EOL)
@@ -1724,19 +1724,18 @@ int b_save(int arglist, int rest)
 {
     int n, arg1;
     static char str[STREAM];
-	char *home, str1[STRSIZE];
+    char *home, str1[STRSIZE];
 
     n = length(arglist);
-	if (n == 0){
-		arg1 = NIL;
-		home = getenv("HOME");
-		strcpy(str1, home);
-    	strcat(str1, "/nprolog/library/startup.pl");
-		output_stream =
-	    makestream(fopen(str1, "w"), OPL_OUTPUT,
-		       OPL_TEXT, NIL, arg1);
-		goto save;
-	} else if (n == 1) {
+    if (n == 0) {
+	arg1 = NIL;
+	home = getenv("HOME");
+	strcpy(str1, home);
+	strcat(str1, "/nprolog/library/startup.pl");
+	output_stream =
+	    makestream(fopen(str1, "w"), OPL_OUTPUT, OPL_TEXT, NIL, arg1);
+	goto save;
+    } else if (n == 1) {
 	arg1 = car(arglist);
 	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	strcpy(str, GET_NAME(arg1));
@@ -1744,7 +1743,7 @@ int b_save(int arglist, int rest)
 	    makestream(fopen(GET_NAME(arg1), "w"), OPL_OUTPUT,
 		       OPL_TEXT, NIL, arg1);
 
-	save:
+      save:
 	if (GET_PORT(output_stream) == NULL) {
 	    error(CANT_OPEN, "save ", arg1);
 	}
@@ -3672,7 +3671,7 @@ int b_break(int arglist, int rest)
 	break_flag = 1;
 	save1 = wp;
 	save2 = sp;
-	repl:
+      repl:
 	ret = setjmp(buf2);
 	if (ret == 0) {
 	    while (1) {
@@ -3685,9 +3684,9 @@ int b_break(int arglist, int rest)
 	    ret = 0;
 	    wp = save1;
 	    sp = save2;
-	    return (prove_all(rest,sp));
-	} else{
-		goto repl;
+	    return (prove_all(rest, sp));
+	} else {
+	    goto repl;
 	}
     }
     error(ARITY_ERR, "break ", arglist);
@@ -3701,7 +3700,7 @@ int b_end_of_file(int arglist, int rest)
     n = length(arglist);
     if (n == 0) {
 	if (break_flag) {
-		variables = variables_save;
+	    variables = variables_save;
 	    break_flag = 0;
 	    longjmp(buf2, 1);
 	} else
@@ -4670,19 +4669,19 @@ int b_edit(int arglist, int rest)
     char *editor;
 
     n = length(arglist);
-	if (n==1){
-		arg1 = car(arglist);
-		arg2 = makeatom("r",SIMP);
-		goto edit;
-	} else if (n == 2) {
+    if (n == 1) {
+	arg1 = car(arglist);
+	arg2 = makeatom("r", SIMP);
+	goto edit;
+    } else if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	edit:
+      edit:
 	if (!singlep(arg1))
 	    error(NOT_ATOM, "edit ", arg1);
-	if(arg2 != makeatom("r",SIMP) && arg2 != makeatom("c",SIMP))
-		error(WRONG_ARGS, "edit ", arg2);
+	if (arg2 != makeatom("r", SIMP) && arg2 != makeatom("c", SIMP))
+	    error(WRONG_ARGS, "edit ", arg2);
 
 
 	editor = getenv("EDITOR");
@@ -4698,11 +4697,11 @@ int b_edit(int arglist, int rest)
 	if (res == -1)
 	    error(SYSTEM_ERROR, "edit ", arg1);
 
-	if (arg2 == makeatom("r",SIMP))
-		b_reconsult(list1(arg1), NIL);
-	else if (arg2 == makeatom("c",SIMP))
-		b_consult(list1(arg1), NIL);
-	
+	if (arg2 == makeatom("r", SIMP))
+	    b_reconsult(list1(arg1), NIL);
+	else if (arg2 == makeatom("c", SIMP))
+	    b_consult(list1(arg1), NIL);
+
 
 	return (prove_all(rest, sp));
     }

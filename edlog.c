@@ -2405,26 +2405,26 @@ void display_line(int line)
 	    CHECK(addch, ed_data[line][col]);
 	    col++;
 	    col1++;
-	} else if(isdigit(ed_data[line][col])){
-		while(((ed_col1 < turn && col1 < turn)
-		       || (ed_col1 >= turn && col < COL_SIZE)) &&
-			  (isdigit(ed_data[line][col]) ||
-		      ed_data[line][col] == 'e' ||
-			  ed_data[line][col] == 'E' ||
-			  ed_data[line][col] == '.' ||
-			  ed_data[line][col] == 'x' ||
-			  ed_data[line][col] == 'o' ||
-			  ed_data[line][col] == 'b')){
-			CHECK(addch, ed_data[line][col]);
-	    	col++;
-	    	col1++;
-		}
-	} else if(isUni2(ed_data[line][col]) ||
-			  isUni3(ed_data[line][col]) ||
-			  isUni4(ed_data[line][col])){
-		display_unicode(line, col);
-		col1 = col1 + increase_terminal(line, col);
-		col = col + increase_buffer(line, col);
+	} else if (isdigit(ed_data[line][col])) {
+	    while (((ed_col1 < turn && col1 < turn)
+		    || (ed_col1 >= turn && col < COL_SIZE)) &&
+		   (isdigit(ed_data[line][col]) ||
+		    ed_data[line][col] == 'e' ||
+		    ed_data[line][col] == 'E' ||
+		    ed_data[line][col] == '.' ||
+		    ed_data[line][col] == 'x' ||
+		    ed_data[line][col] == 'o' ||
+		    ed_data[line][col] == 'b')) {
+		CHECK(addch, ed_data[line][col]);
+		col++;
+		col1++;
+	    }
+	} else if (isUni2(ed_data[line][col]) ||
+		   isUni3(ed_data[line][col]) ||
+		   isUni4(ed_data[line][col])) {
+	    display_unicode(line, col);
+	    col1 = col1 + increase_terminal(line, col);
+	    col = col + increase_buffer(line, col);
 	} else {
 	    switch (check_token(line, col)) {
 	    case HIGHLIGHT_OPERATOR:
@@ -2436,7 +2436,7 @@ void display_line(int line)
 		    CHECK(addch, ed_data[line][col]);
 		    col++;
 		    col1++;
-			token_length--;
+		    token_length--;
 		}
 		ESCRST();
 		ESCFORG();
@@ -2450,7 +2450,7 @@ void display_line(int line)
 		    CHECK(addch, ed_data[line][col]);
 		    col++;
 		    col1++;
-			token_length--;
+		    token_length--;
 		}
 		ESCRST();
 		ESCFORG();
@@ -2464,7 +2464,7 @@ void display_line(int line)
 		    CHECK(addch, ed_data[line][col]);
 		    col++;
 		    col1++;
-			token_length--;
+		    token_length--;
 		}
 		ESCRST();
 		ESCFORG();
@@ -2521,7 +2521,7 @@ void display_line(int line)
 		ESCRST();
 		ESCFORG();
 		break;
-		case HIGHLIGHT_DOUBLEQUOTE:
+	    case HIGHLIGHT_DOUBLEQUOTE:
 		ESCBOLD();
 		set_color(ed_string_color);
 		CHECK(addch, ed_data[line][col]);
@@ -2575,7 +2575,7 @@ void display_line(int line)
 		    CHECK(addch, ed_data[line][col]);
 		    col++;
 		    col1++;
-			token_length--;
+		    token_length--;
 		}
 		ESCRST();
 		ESCFORG();
@@ -2600,14 +2600,14 @@ void display_line(int line)
 		    }
 		}
 		break;
-		case HIGHLIGHT_NONE:
+	    case HIGHLIGHT_NONE:
 		while (((ed_col1 < turn && col1 < turn)
 			|| (ed_col1 >= turn && col < COL_SIZE))
 		       && token_length > 0) {
 		    CHECK(addch, ed_data[line][col]);
 		    col++;
 		    col1++;
-			token_length--;
+		    token_length--;
 		}
 		break;
 	    default:
@@ -2616,9 +2616,9 @@ void display_line(int line)
 		       && ed_data[line][col] != ' '
 		       && ed_data[line][col] != '('
 		       && ed_data[line][col] != ')'
-			   && ed_data[line][col] != '['
+		       && ed_data[line][col] != '['
 		       && ed_data[line][col] != ']'
-			   && ed_data[line][col] != '_'
+		       && ed_data[line][col] != '_'
 		       && ed_data[line][col] != '|'
 		       && ed_data[line][col] != ','
 		       && ed_data[line][col] != '.'
@@ -2779,19 +2779,19 @@ int find_eol1(int row)
 /* if end of line has no EOL, add EOL*/
 void add_eol(void)
 {
-	int col;
-	
-	if(ed_data[ed_end][0] == 0)
-		return;
+    int col;
 
-	for(col=0;col<COL_SIZE;col++){
-		if(ed_data[ed_end][col] == EOL)
-			return;
-		else if (ed_data[ed_end][col] == 0){
-			ed_data[ed_end][col] = EOL;
-			return;
-		}
+    if (ed_data[ed_end][0] == 0)
+	return;
+
+    for (col = 0; col < COL_SIZE; col++) {
+	if (ed_data[ed_end][col] == EOL)
+	    return;
+	else if (ed_data[ed_end][col] == 0) {
+	    ed_data[ed_end][col] = EOL;
+	    return;
 	}
+    }
 }
 
 struct position find_lparen(int bias)
@@ -3546,35 +3546,35 @@ enum HighlightToken check_token(int row, int col)
 	return HIGHLIGHT_QUOTE;
     else if (ed_data[row][col] == '$')
 	return HIGHLIGHT_STRING;
-	else if (ed_data[row][col] == '"')
+    else if (ed_data[row][col] == '"')
 	return HIGHLIGHT_DOUBLEQUOTE;
-    else if (ed_data[row][col] == '%'){
-	return HIGHLIGHT_COMMENT;}
+    else if (ed_data[row][col] == '%') {
+	return HIGHLIGHT_COMMENT;
+    }
 
-	if(isatomch(ed_data[row][col])){
-		while(isatomch(ed_data[row][col])){
-			str[pos] = ed_data[row][col];
-			col++;
-			pos++;
-		}
-	} else if(isalpha(ed_data[row][col])){
-		while(isalpha(ed_data[row][col]) ||
-		      ed_data[row][col] == '_' ||
-			  isdigit(ed_data[row][col])){
-			str[pos] = ed_data[row][col];
-			col++;
-			pos++;
-		}
+    if (isatomch(ed_data[row][col])) {
+	while (isatomch(ed_data[row][col])) {
+	    str[pos] = ed_data[row][col];
+	    col++;
+	    pos++;
 	}
-    
+    } else if (isalpha(ed_data[row][col])) {
+	while (isalpha(ed_data[row][col]) ||
+	       ed_data[row][col] == '_' || isdigit(ed_data[row][col])) {
+	    str[pos] = ed_data[row][col];
+	    col++;
+	    pos++;
+	}
+    }
+
 
     str[pos] = NUL;
-	token_length = strlen(str);
+    token_length = strlen(str);
     if (pos == 0)
 	return HIGHLIGHT_NONE;
     else if (str[0] == '/' && str[1] == '*')
 	return HIGHLIGHT_MULTILINE_COMMENT;	// /*...*/
-	
+
 
     return maybe_match(str);
 }
@@ -4209,90 +4209,90 @@ int find_predicate_data(const char *str)
 
 
 static const char *functions_data[] = {
-	"pi",
-	"pi",
-	"Constant representing the value of π (pi).",
-	"+",
-	"X + Y",
-	"Addition.",
-	"-",
-	"X - Y",
-	"Subtraction.",
-	"*",
-	"X * Y",
-	"Multiplication.",
-	"/",
-	"X / Y", 
-	"Division resulting in a floating-point number.",
-	"//",
-	"X // Y",
-	"Integer division resulting in an integer.",
-	"^",
-	"X ^ Y",
-	"Exponentiation (power).",
-	"**",
-	"X ** Y",
-	"Exponentiation (power).",
-	"<<",
-	"X << Y",
-	"Bitwise left shift of X by Y positions (integers only).",
-	">>",
-	"X >> Y",
-	"Bitwise right shift of X by Y positions (integers only).",
-	"mod",
-	"X mod Y",
-	"Modulo operation, returning the remainder of X divided by Y (integers only).",
-	"/\\",
-	"X /\\ Y",
-	"Logical AND.",
-	"\\/",
-	"X \\/ Y", 
-	"Logical OR.",
-	"\\",
-	"\\X", 
-	"Complement (bitwise NOT).",
-	"abs",
-	"abs(X)",
-	"Absolute value of X.",
-	"sin",
-	"sin(X)",
-	"Sine of X.",
-	"asin",
-	"asin(X)",
-	"Arcsine (inverse sine) of X.",
-	"cos",
-	"cos(X)",
-	"Cosine of X.",
-	"acos",
-	"acos(X)",
-	"Arccosine (inverse cosine) of X.",
-	"tan",
-	"tan(X)",
-	"Tangent of X.",
-	"atan",
-	"atan(X)",
-	"Arctangent (inverse tangent) of X.",
-	"exp",
-	"exp(X)",
-	"Exponential function of X.",
-	"ln",
-	"ln(X)",
-	"Logarithm of X.",
-	"log",
-	"log(X)",
-	"Base-10 logarithm of X.",
-	"sqrt",
-	"sqrt(X)",
-	"Square root of X.",
-	"round",
-	"round(X,Y)",
-	"Round X to N decimal places. N is an integer between 0 and 15.",
-	"randi",
-	"randi(n)",
-	"Random integer between 0 and n (inclusive).",
-	"random",	
-	"random",
-	"Random floating-point number between 0 and 1 (inclusive).",
+    "pi",
+    "pi",
+    "Constant representing the value of π (pi).",
+    "+",
+    "X + Y",
+    "Addition.",
+    "-",
+    "X - Y",
+    "Subtraction.",
+    "*",
+    "X * Y",
+    "Multiplication.",
+    "/",
+    "X / Y",
+    "Division resulting in a floating-point number.",
+    "//",
+    "X // Y",
+    "Integer division resulting in an integer.",
+    "^",
+    "X ^ Y",
+    "Exponentiation (power).",
+    "**",
+    "X ** Y",
+    "Exponentiation (power).",
+    "<<",
+    "X << Y",
+    "Bitwise left shift of X by Y positions (integers only).",
+    ">>",
+    "X >> Y",
+    "Bitwise right shift of X by Y positions (integers only).",
+    "mod",
+    "X mod Y",
+    "Modulo operation, returning the remainder of X divided by Y (integers only).",
+    "/\\",
+    "X /\\ Y",
+    "Logical AND.",
+    "\\/",
+    "X \\/ Y",
+    "Logical OR.",
+    "\\",
+    "\\X",
+    "Complement (bitwise NOT).",
+    "abs",
+    "abs(X)",
+    "Absolute value of X.",
+    "sin",
+    "sin(X)",
+    "Sine of X.",
+    "asin",
+    "asin(X)",
+    "Arcsine (inverse sine) of X.",
+    "cos",
+    "cos(X)",
+    "Cosine of X.",
+    "acos",
+    "acos(X)",
+    "Arccosine (inverse cosine) of X.",
+    "tan",
+    "tan(X)",
+    "Tangent of X.",
+    "atan",
+    "atan(X)",
+    "Arctangent (inverse tangent) of X.",
+    "exp",
+    "exp(X)",
+    "Exponential function of X.",
+    "ln",
+    "ln(X)",
+    "Logarithm of X.",
+    "log",
+    "log(X)",
+    "Base-10 logarithm of X.",
+    "sqrt",
+    "sqrt(X)",
+    "Square root of X.",
+    "round",
+    "round(X,Y)",
+    "Round X to N decimal places. N is an integer between 0 and 15.",
+    "randi",
+    "randi(n)",
+    "Random integer between 0 and n (inclusive).",
+    "random",
+    "random",
+    "Random floating-point number between 0 and 1 (inclusive).",
 };
 
 int find_function_data(const char *str)
@@ -4326,9 +4326,9 @@ void information(void)
 	display_header();
 	display_screen();
 	goto exit;
-	}
-	i = find_function_data(get_fragment());
-	if(i != -1){
+    }
+    i = find_function_data(get_fragment());
+    if (i != -1) {
 	CHECK(addstr, functions_data[i + 1]);
 	CHECK(addstr, "\n");
 	ESCRST();
@@ -4339,9 +4339,9 @@ void information(void)
 	display_header();
 	display_screen();
 	goto exit;
-	}
-	CHECK(addstr, "Can't fild");
-	ESCRST();
-    exit:
+    }
+    CHECK(addstr, "Can't fild");
+    ESCRST();
+  exit:
     ESCMOVE(ed_row + TOP_MARGIN - ed_start, ed_col1 + LEFT_MARGIN);
 }

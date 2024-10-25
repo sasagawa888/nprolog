@@ -56,7 +56,7 @@ void initcell(void)
     makeatom("on", SIMP);	//address = 48
     makeatom("off", SIMP);	//address = 50
     makeatom("/", OPE);		//address = 52
-    makeatom("err", SIMP);  //address = 54
+    makeatom("err", SIMP);	//address = 54
 }
 
 int freshcell(void)
