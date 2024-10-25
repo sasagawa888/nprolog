@@ -115,9 +115,9 @@ factor(P/I):- for(I =< P,J),
 
 
 
-%p65
+%p64
 res_q(A=B*Q + R) :-
-        Q is integer(A/B),R is A - B*Q.
+        B=\=0.0,Q is integer(A/B),R is A - B*Q.
 
 ju(A/B) :- res_q(A=B*Q+R),
            write(Q),tab(1),
