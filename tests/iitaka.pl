@@ -90,16 +90,16 @@ delete0([B|Y] = [B|X] - A) :-
 % quarternion q(A,B,C,D) see quarternion.pl
 
 
-%53 
-newton(X,A) :-
-        newton1(1.0,X,X,A).
-newton1(X1,X2,X,A) :-
-        abs(X1-X2) < 0.00001,
-        A is X2.
-newton1(X1,X2,X,A) :-
-        Y is (X1+X2)/2,
-        Y1 is X / Y,
-        newton1(Y1,X1,X,A).
+%63 
+newton(X, A) :-
+        newton1(1.0, A, A, X).
+
+newton1(X1, X2, A, X) :-
+        abs(X1 - X2) < 0.00001,
+        X is X2.
+newton1(X1, X2, A, X) :-
+        Y is X1 / 2 + A / (2 * X1),
+        newton1(Y, X1, A, X).
 
 %p126
 factor(P,I*Q) :-

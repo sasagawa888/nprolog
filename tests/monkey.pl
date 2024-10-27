@@ -24,3 +24,40 @@ canget(State1) :-
     
 
 %canget(state(atdoor,onfloor,atwindow,hasnot)).
+
+display_room :-
+     ansi_ed(),
+     write('Window                          _________________'),nl,
+     write('__________                       |         |  '),nl,
+     write('|                                | Banana  |  '),nl,
+     write('|                                |_________|  '),nl,
+     write('|                                    ||       '),nl,
+     write('|                                    ||       '),nl,
+     write('|                                   (==)      '),nl,
+     write('|                                             '),nl,
+     write('                                              '),nl,
+     write('                                    '),nl,
+     write(' Door                 Window        '),nl,
+     write('________             ________       '),nl,                    
+     write('|                    |              '),nl,
+     write('|                    |              '),nl,
+     write('|                    |              '),nl,
+     write('|                    |              '),nl,
+     write('|          _______   |              '),nl,
+     write('            Floor                   '),nl.
+
+display_monkey(X,Y) :-
+     ansi_cup(X,Y),
+     write(' Monkey'),nl,          
+     write(' (o o)'),nl,         
+     write(' (   )'),nl,         
+     write(' /|__|'),nl,      
+     write('//    ').
+
+display_box(X,Y) :-
+     ansi_cup(X,Y),
+     write('|-------|'),nl,
+     write(' |     | '),nl,
+     write(' | Box | '),nl,
+     write(' |     | '),nl,
+     write(' |_____| ').
