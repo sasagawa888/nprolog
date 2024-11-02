@@ -179,6 +179,9 @@ jump_gen_pred1(P) :-
     jump_pred_data(P,type1),
     jump_gen_tail_pred(P),!.
 jump_gen_pred1(P) :-
+    jump_pred_data(P,type2),
+    jump_gen_tail_pred(P),!.    
+jump_gen_pred1(P) :-
     not(jump_pred_data(P,type1)),
     jump_gen_a_pred(P),!.
 
@@ -1454,7 +1457,6 @@ jump_deterministic(P,C) :-
 jump_deterministic(P,C) :-
     jump_type2_deterministic(C),
     jump_optimize(on),
-    write(user_output,type2),
     assert(jump_pred_data(P,type2)).
 
 
@@ -1477,8 +1479,12 @@ jump_type2_deterministic([(Head :- !)|Cs]) :-
     jump_type2_deterministic(Cs).
 jump_type2_deterministic([(Head :- Body)|Cs]) :-
     jump_tail_recursive(Head,Body),
+    jump_all_cut_body(Body),
     jump_type2_deterministic(Cs).
 
+jump_all_cut_body((_,!)).
+jump_all_cut_body((_,!,Body)) :-
+    jump_all_cut_body(Body).
 
 jump_tail_recursive(Head,Body) :-
     jump_last_body(Body,Last),
@@ -1491,6 +1497,7 @@ jump_tail_recursive(Head,Body) :-
 
 jump_last_body((_,Body),Last) :-
     jump_last_body(Body,Last).
+jump_last_body((Body,!),Body).
 jump_last_body(Body,Body).
 
 
