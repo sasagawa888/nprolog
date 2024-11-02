@@ -1,6 +1,3 @@
-myappend([],L,L) :- !.
-myappend([A|L],B, [A|C]):-
-	myappend(L,B,C).
 
 % Quicksort
 qsort([X|L], R, R0) :-

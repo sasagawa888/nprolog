@@ -282,7 +282,7 @@ jump_gen_var_declare(P) :-
     jump_gen_var_declare1(1,E),
     n_generate_all_variable(P,V),
     jump_gen_all_var(V),
-    write('n,body,save1,save2,save3,tree,res;'),nl,!.
+    write('n,body,save1,save2,save3,res;'),nl,!.
 
 jump_max_list([N],N).
 jump_max_list([X|Xs],X) :-
