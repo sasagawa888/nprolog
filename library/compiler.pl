@@ -1086,11 +1086,7 @@ deterministic e.g.
 bar(0).
 bar(N) :- N1 is N-1,bar(N1).
 
-% type2 base has cut and clause is tail recursive
-append([],L,L) :- !.
-append([A|L],B, [A|C]):-
-	append(L,B,C).
- 
+% type2,3... if find new optimization, use this typeN
 
 optimizable <=> deterministic
 
@@ -1457,12 +1453,6 @@ jump_deterministic(P,C) :-
     jump_optimize(on),
     assert(jump_pred_data(P,type1)).
 
-jump_deterministic(P,C) :-
-    jump_type2_deterministic(C),
-    jump_optimize(on),
-    assert(jump_pred_data(P,type2)).
-
-
 
 % type1 if clause has tail recursive and body is unidirectory
 jump_type1_deterministic([],1).
@@ -1476,20 +1466,6 @@ jump_type1_deterministic([C|Cs],Flag) :-
     jump_self_independence(C),
     jump_type1_deterministic(Cs,Flag).
 
-% type2 if base has cut and other clause is tail recursive.
-jump_type2_deterministic([]).
-jump_type2_deterministic([(Head :- !)|Cs]) :-
-    jump_type2_deterministic(Cs).
-jump_type2_deterministic([(Head :- Body)|Cs]) :-
-    jump_tail_recursive(Head,Body),
-    jump_all_cut_body(Body),
-    fail,
-    jump_type2_deterministic(Cs).
-
-
-jump_all_cut_body((_,!,Body)) :-
-    jump_all_cut_body(Body).
-jump_all_cut_body(Body).
 
 jump_tail_recursive(Head,Body) :-
     jump_last_body(Body,Last),
