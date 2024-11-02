@@ -1454,6 +1454,7 @@ jump_deterministic(P,C) :-
 jump_deterministic(P,C) :-
     jump_type2_deterministic(C),
     jump_optimize(on),
+    write(user_output,type2),
     assert(jump_pred_data(P,type2)).
 
 
@@ -1471,8 +1472,9 @@ jump_type1_deterministic([C|Cs],Flag) :-
     jump_type1_deterministic(Cs,Flag).
 
 % type2 if base has cut and other clause is tail recursive.
-jump_type2_deterministic(X).
-jump_type2_deterministic([(Head :- !)]).
+jump_type2_deterministic([]).
+jump_type2_deterministic([(Head :- !)|Cs]) :-
+    jump_type2_deterministic(Cs).
 jump_type2_deterministic([(Head :- Body)|Cs]) :-
     jump_tail_recursive(Head,Body),
     jump_type2_deterministic(Cs).
@@ -1483,9 +1485,9 @@ jump_tail_recursive(Head,Body) :-
     functor(Head,Pred1,Arity1),
     functor(Last,Pred2,Arity2),
     Pred1 == Pred2,
-    Arity1 == Arity2,
-    jump_independence(Head,Last),
-    jump_self_independence(Head).
+    Arity1 == Arity2.
+    jump_independence(Head,Last).
+    %jump_self_independence(Head).
 
 jump_last_body((_,Body),Last) :-
     jump_last_body(Body,Last).
