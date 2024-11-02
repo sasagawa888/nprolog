@@ -1483,11 +1483,13 @@ jump_type2_deterministic([(Head :- !)|Cs]) :-
 jump_type2_deterministic([(Head :- Body)|Cs]) :-
     jump_tail_recursive(Head,Body),
     jump_all_cut_body(Body),
+    fail,
     jump_type2_deterministic(Cs).
 
-jump_all_cut_body((_,!)).
+
 jump_all_cut_body((_,!,Body)) :-
     jump_all_cut_body(Body).
+jump_all_cut_body(Body).
 
 jump_tail_recursive(Head,Body) :-
     jump_last_body(Body,Last),
@@ -1500,7 +1502,6 @@ jump_tail_recursive(Head,Body) :-
 
 jump_last_body((_,Body),Last) :-
     jump_last_body(Body,Last).
-jump_last_body((Body,!),Body).
 jump_last_body(Body,Body).
 
 
