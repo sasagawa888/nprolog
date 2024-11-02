@@ -1494,9 +1494,9 @@ jump_tail_recursive(Head,Body) :-
     functor(Head,Pred1,Arity1),
     functor(Last,Pred2,Arity2),
     Pred1 == Pred2,
-    Arity1 == Arity2.
-    jump_independence(Head,Last).
-    %jump_self_independence(Head).
+    Arity1 == Arity2,
+    jump_independence(Head,Last),
+    jump_self_independence(Head).
 
 jump_last_body((_,Body),Last) :-
     jump_last_body(Body,Last).
