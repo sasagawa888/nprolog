@@ -16,7 +16,6 @@ varA = Jcar(Jcar(Jcdr(Jcdr(arglist))));
 varC = Jcdr(Jcar(Jcdr(Jcdr(arglist))));
 {arglist = Jwcons(varL,Jwcons(varB,Jwcons(varC,NIL)));
 goto loop;
-Jcallsubr(Jmakesys("!"),NIL,NIL);
 }}return(NO);
 }
 void init_tpredicate(void){(deftpred)("myappend",b_myappend);

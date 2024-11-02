@@ -1352,9 +1352,12 @@ jump_all_var1([X|Xs]) :-
     jump_all_var1(Xs).
 
 %generate body that has tail call
+jump_gen_tail_body(!,Head).
 jump_gen_tail_body((X,Xs),Head) :-
     jump_gen_tail_a_body(X,Head),
     jump_gen_tail_body(Xs,Head).
+jump_gen_tail_body((!,Xs),Head) :-
+    jump_gen_tail_body(Xs,Head).  
 jump_gen_tail_body(X,Head) :-
     jump_gen_tail_a_body(X,Head).
 

@@ -55,6 +55,6 @@ run(reverse, N) :-
 run(_,_).
 
 % Testing and benchmarking
-test(f, N) :-
+test(F, N) :-
     measure(run(F, N)).
     
