@@ -1471,9 +1471,8 @@ jump_type1_deterministic([C|Cs],Flag) :-
     jump_type1_deterministic(Cs,Flag).
 
 % type2 if base has cut and other clause is tail recursive.
-jump_type2_deterministic([]).
-jump_type2_deterministic([(Head :- !)|Cs]) :-
-    jump_type2_deterministic(Cs).
+jump_type2_deterministic(X).
+jump_type2_deterministic([(Head :- !)]).
 jump_type2_deterministic([(Head :- Body)|Cs]) :-
     jump_tail_recursive(Head,Body),
     jump_type2_deterministic(Cs).

@@ -1556,6 +1556,7 @@ int readlist(void)
 	car = parser(NIL, NIL, 1201, NIL, 0, 0);
       next:
 	gettoken();		//discard ')'
+	paren_nest--;
 	gettoken();		//read-ahead
 	if (stok.type == COMMA || stok.type == RBRACKET ||
 	    stok.type == VERTICAL) {
