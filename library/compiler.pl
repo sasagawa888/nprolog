@@ -58,6 +58,9 @@ Junify_const(head,arg)  for constant term
 Junify_var(head,arg)    for variable term
 Junify_nil(head,arg)    for [] check.
 */
+% CPS flag
+%cps(on).
+cps(off).
 
 % optimize flag
 jump_optimize(on).
@@ -282,7 +285,7 @@ jump_gen_var_declare(P) :-
     jump_gen_var_declare1(1,E),
     n_generate_all_variable(P,V),
     jump_gen_all_var(V),
-    write('n,body,save1,save2,save3,cont,res;'),nl,!.
+    write('n,body,save1,save2,save3,goal,cont,res;'),nl,!.
 
 jump_max_list([N],N).
 jump_max_list([X|Xs],X) :-
@@ -378,11 +381,22 @@ jump_gen_var_assign(S,E) :-
 % generate each clause
 jump_gen_a_pred4([]).
 jump_gen_a_pred4([C|Cs]) :-
+    cps(off),
 	n_variable_convert(C,X),
     n_generate_variable(X,V),
     jump_gen_var(V),
     jump_gen_a_pred5(X),
     jump_gen_a_pred4(Cs).
+% generate each clause in CPS
+jump_gen_a_pred4([]).
+jump_gen_a_pred4([C|Cs]) :-
+    cps(on),
+	n_variable_convert(C,X),
+    n_generate_variable(X,V),
+    jump_gen_var(V),
+    jump_gen_a_cps_pred5(X),
+    jump_gen_a_pred4(Cs).
+
 
 /*
 save1 = Jget_wp();
@@ -515,15 +529,29 @@ jump_gen_a_cps_pred5(P) :-
     write('Jset_wp(save1);'),nl.
 
 jump_gen_cps_body(X) :-
-    write('{cont = '),
+    write('{goal = '),
+    jump_gen_cps_goal(X),
+    write(';'),nl,
+    write('cont = '),
     jump_gen_cps_cont(X),
     write(';'),nl,
-    write('if((res=Jprove_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
+    write('if(Jcps(goal,cont) == YES)'),nl,
     write('return(YES);}'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl,
     write('if(res == NPLFALSE) return(NO); '),nl,
     !.
+
+jump_gen_cps_goal((X,_)) :-
+    jump_gen_body1(X).
+jump_gen_cps_goal(X) :-
+    jump_gen_body1(X).
+
+jump_gen_cps_cont((_,X)) :-
+    jump_gen_body1(X).
+jump_gen_cps_cont(_) :-
+    write('NIL'),nl.
+
 
 %-----------------------------------------------------------------------
 
@@ -696,6 +724,7 @@ jump_gen_head(X) :-
 
 jump_gen_head1([],_) :-
     write(1).
+
 jump_gen_head1([[]|Xs],N) :-
     write('Junify_nil('),
     jump_gen_a_argument(X),
@@ -704,10 +733,12 @@ jump_gen_head1([[]|Xs],N) :-
     write(') == YES && '),
     N1 is N + 1,
     jump_gen_head1(Xs,N1).
+
 jump_gen_head1([X|Xs],N) :-
     n_compiler_anoymous(X),
     N1 is N + 1,
     jump_gen_head1(Xs,N1).  
+
 jump_gen_head1([X|Xs],N) :-
     n_compiler_variable(X),
     write('Junify_var('),
@@ -716,7 +747,8 @@ jump_gen_head1([X|Xs],N) :-
     write(N),
     write(') == YES && '),
     N1 is N + 1,
-    jump_gen_head1(Xs,N1).    
+    jump_gen_head1(Xs,N1). 
+
 jump_gen_head1([X|Xs],N) :-
     atomic(X),
     write('Junify_const('),
@@ -724,23 +756,6 @@ jump_gen_head1([X|Xs],N) :-
     write(',arg'),
     write(N),
     write(') == YES && '),
-    N1 is N + 1,
-    jump_gen_head1(Xs,N1). 
-%testting list term compile
-jump_gen_head1([X|Xs],N) :-
-    jump_typed_optimize(on),
-    list(X),
-    write('( (({tree = arg'),
-    write(N),
-    write(';YES;}) == YES && '),
-    jump_gen_head_list(X),
-    write(') || (Jvariablep(Jderef(arg'),
-    write(N),
-    write(')) && Junify_var(arg'),
-    write(N),
-    write(','),
-    jump_gen_a_argument(X),
-    write(')==YES) ) && '),
     N1 is N + 1,
     jump_gen_head1(Xs,N1). 
 

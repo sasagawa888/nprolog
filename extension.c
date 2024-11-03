@@ -845,7 +845,7 @@ int call(int goal)
 	    else
 		return (NO);
 	} else {
-	    if ((GET_SUBR(car(goal))) (cdr(goal), NIL) == YES)
+	    if ((GET_SUBR(car(goal))) (deref(cdr(goal)), NIL) == YES)
 		return (YES);
 	    else
 		return (NO);
@@ -857,7 +857,7 @@ int call(int goal)
 	    else
 		return (NO);
 	} else {
-	    if ((GET_SUBR(car(goal))) (cdr(goal), NIL) == YES)
+	    if ((GET_SUBR(car(goal))) (deref(cdr(goal)), NIL) == YES)
 		return (YES);
 
 	    return (NO);
