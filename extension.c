@@ -794,7 +794,7 @@ int b_has_cut(int arglist, int rest)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "n-has-cut ", arglist);
+    error(ARITY_ERR, "n_has_cut ", arglist);
     return (NO);
 }
 
@@ -869,8 +869,14 @@ int call(int goal)
 /* cont is conjunction ,(p1 ,(p2 ...))*/
 int cps(int p, int cont)
 {
-    if (call(p) == YES)
-	return (cps(cadr(cont), caddr(cont)));
+    if (call(p) == YES){
+	if(nullp(cont))
+		return(YES);
+	else if(conjunctionp(cont))
+		return (cps(cadr(cont), caddr(cont)));
+	else
+		return(cps(cont,NIL));
+	}
     else
 	return (NO);
 }
