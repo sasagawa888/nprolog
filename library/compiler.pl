@@ -427,6 +427,46 @@ jump_gen_a_pred5(P) :-
     write('Jset_wp(save1);'),nl.
 
 %----------- Continuation Passing Style -------------------------
+/*
+   save1 = Jget_wp();
+   save2 = jget_sp();
+   save3 = Jget_up();
+   pred = ...;
+   cont = ...;
+   if(Jcps(pred,cont)==YES)
+        return(YES);
+    else{
+        Jset_up(save3);
+        Junbind(save2);
+        Jset_wp(save1);
+        return(NO);
+    }
+
+    continuation passing style
+
+    foo(X) :- p1(X),p2(X),p3(X).
+    if(cps(p1(X),(p2(X),p3(X)))==YES)
+        return(YES);
+    else
+        return(NO);
+
+    bar(X) :- p1(X),p2(X);p3(X),p4(X).
+    if(cps(p1(X),(p2(X))))==YES)
+        return(YES);
+    else if(cps(p3(X),(p4(X)))==YES)
+        return(YES);
+    else
+        return(NO);
+
+    boo(X) :- p1(X),p2(X),!,p3(X),p4(X).
+    if(cps(p1(X),(p2(X)))==YES){
+        if(cps(p3(X),(p4(X)))==YES)
+            return(YES);
+        else
+            return(NO);
+    }else return(NO);
+
+*/
 % CPS clause
 jump_gen_a_cps_pred5((Head :- Body)) :-
     write('save1 = Jget_wp();'),nl,
@@ -462,8 +502,8 @@ jump_gen_a_cps_pred5(P) :-
     write('Jset_wp(save1);'),nl.
 
 jump_gen_cps_body(X) :-
-    write('{body = '),
-    jump_gen_cps_body1(X),
+    write('{cont = '),
+    jump_gen_cps_cont(X),
     write(';'),nl,
     write('if((res=Jprove_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
     write('return(YES);}'),nl,

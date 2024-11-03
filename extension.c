@@ -535,6 +535,7 @@ int b_error(int arglist, int rest)
 	}
     }
     error(ARITY_ERR, "n_error ", arglist);
+	return(NO);
 }
 
 int b_property(int arglist, int rest)
@@ -812,11 +813,11 @@ int call(int goal)
     return (NO);
 }
 
-
+/* cont is conjunction ,(p1 ,(p2 ...))*/
 int cps(int p, int cont)
 {
     if (call(p) == YES)
-	return (cps(car(cont), cdr(cont)));
+	return (cps(cadr(cont), caddr(cont)));
     else
 	return (NO);
 }
