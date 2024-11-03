@@ -396,7 +396,7 @@ if( )... head
 jump_gen_a_pred5((Head :- Body)) :-
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(Head),
-    jump_gen_body(Body).
+    jump_gen_cps_body(Body).
 
 % generate predicate with no arity
 jump_gen_a_pred5(P) :-
@@ -404,7 +404,7 @@ jump_gen_a_pred5(P) :-
     functor(P,_,0),
     write('return(YES);'),nl.
 
-% CPS predicate
+% predicate
 jump_gen_a_pred5(P) :-
 	n_property(P,predicate),
     write('save1 = Jget_wp();'),nl,
@@ -415,6 +415,7 @@ jump_gen_a_pred5(P) :-
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
+% user ope
 jump_gen_a_pred5(P) :-
 	n_property(P,userop),
     write('save1 = Jget_wp();'),nl,
@@ -425,6 +426,52 @@ jump_gen_a_pred5(P) :-
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
+%----------- Continuation Passing Style -------------------------
+% CPS clause
+jump_gen_a_cps_pred5((Head :- Body)) :-
+    write('save1 = Jget_wp();'),nl,
+	jump_gen_head(Head),
+    jump_gen_cps_body(Body).
+
+% CPS predicate with no arity
+jump_gen_a_cps_pred5(P) :-
+	n_property(P,predicate),
+    functor(P,_,0),
+    write('return(YES);'),nl.
+
+% CPS predicate
+jump_gen_a_cps_pred5(P) :-
+	n_property(P,predicate),
+    write('save1 = Jget_wp();'),nl,
+	jump_gen_head(P),
+    write('if(Jprove_all(rest,Jget_sp()) == YES)'),nl,
+    write('return(YES);'),nl,
+    write('Jset_up(save3);'),nl,
+    write('Junbind(save2);'),nl,
+    write('Jset_wp(save1);'),nl.
+
+% CPS user ope
+jump_gen_a_cps_pred5(P) :-
+	n_property(P,userop),
+    write('save1 = Jget_wp();'),nl,
+	jump_gen_head(P),
+    write('if(Jprove_all(rest,Jget_sp()) == YES)'),nl,
+    write('return(YES);'),nl,
+    write('Jset_up(save3);'),nl,
+    write('Junbind(save2);'),nl,
+    write('Jset_wp(save1);'),nl.
+
+jump_gen_cps_body(X) :-
+    write('{body = '),
+    jump_gen_body1(X),
+    write(';'),nl,
+    write('if((res=Jprove_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
+    write('return(YES);}'),nl,
+    write('Junbind(save2);'),nl,
+    write('Jset_wp(save1);'),nl,
+    write('if(res == NPLFALSE) return(NO); '),nl,
+    !.
+%-----------------------------------------------------------------------
 
 % varA,varB,...
 jump_gen_all_var([]).

@@ -168,7 +168,7 @@ enum { CONS_IDX, PLUS_IDX, MINUS_IDX, MULT_IDX, DIVIDE_IDX, REMAINDER_IDX,
        LIST2_IDX, SET_CAR_IDX, SET_CDR_IDX, COMPLEMENT_IDX, SET_AUX_IDX,
        NOT_NUMEQP_IDX, DIV_IDX, SET_VAR_IDX, WCONS_IDX, WLIST2_IDX, WLISTCONS_IDX,
        ADDTAIL_BODY_IDX, NTH_IDX, UNIFY_CONST_IDX, UNIFY_VAR_IDX, UNIFY_NIL_IDX,
-       PROVE_ALL_IDX, ROUND_IDX,
+       PROVE_ALL_IDX, ROUND_IDX, CPS_IDX,
        NUM_FN2S
 };
 
@@ -917,6 +917,7 @@ int constantp(int addr);
 int copy_heap(int x);
 int copy_term(int x);
 int copy_variable(int x);
+int cps(int p, int cont);
 int ctrl_to_number(char c);
 int c_lang_p(int x);
 int dcgp(int x);

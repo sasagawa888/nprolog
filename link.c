@@ -129,6 +129,7 @@ void dynamic_link(int x)
     init_f2(UNIFY_NIL_IDX, (tpred) unify_nil);
     init_f2(PROVE_ALL_IDX, (tpred) prove_all);
     init_f2(ROUND_IDX, (tpred) f_round);
+    init_f2(CPS_IDX, (tpred) cps);
 
 
     //argument-3
