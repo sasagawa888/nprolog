@@ -524,6 +524,7 @@ jump_gen_cps_body(X) :-
     write('Jset_wp(save1);'),nl,
     write('if(res == NPLFALSE) return(NO); '),nl,
     !.
+
 %-----------------------------------------------------------------------
 
 % varA,varB,...

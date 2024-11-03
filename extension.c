@@ -782,6 +782,61 @@ int b_existerrors(int arglist, int rest)
     return (NO);
 }
 
+int b_has_cut(int arglist, int rest)
+{
+	int n,arg1;
+
+	n=length(arglist);
+	if(n==1){
+		arg1 = car(arglist);
+		if(has_cut_p(arg1))
+			return (prove_all(rest, sp));
+		else
+			return(NO);
+	}
+	error(ARITY_ERR, "n-has-cut ", arglist);
+    return (NO);
+}
+
+int b_before_cut(int arglist, int rest)
+{
+	int n,arg1,arg2;
+
+	n=length(arglist);
+	if(n==2){
+		arg1 = car(arglist);
+		arg2 = cadr(arglist);
+		if(has_cut_p(arg1)){
+			unify(arg2,before_cut(arg1));
+			return (prove_all(rest, sp));
+		}
+		else 
+			return(NO);
+	}
+	error(ARITY_ERR, "n_before_cut ", arglist);
+    return (NO);
+}
+
+int b_after_cut(int arglist, int rest)
+{
+	int n,arg1,arg2;
+
+	n=length(arglist);
+	if(n==2){
+		arg1 = car(arglist);
+		arg2 = cadr(arglist);
+		if(has_cut_p(arg1)){
+			unify(arg2,after_cut(arg1));
+			return (prove_all(rest, sp));
+		}
+		else 
+			return(NO);
+	}
+	error(ARITY_ERR, "n_after_cut ", arglist);
+    return (NO);
+}
+
+
 
 int call(int goal)
 {
