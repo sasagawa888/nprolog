@@ -59,8 +59,8 @@ Junify_var(head,arg)    for variable term
 Junify_nil(head,arg)    for [] check.
 */
 % CPS flag
-%cps(on).
-cps(off).
+cps(on).
+%cps(off).
 
 % optimize flag
 jump_optimize(on).
