@@ -466,6 +466,19 @@ jump_gen_a_pred5(P) :-
             return(NO);
     }else return(NO);
 
+    woo(X) :- p1(X),!,p2(X);p3(X),!,p4(X).
+    if(cps(p1(X),())==YES){
+        if(cps(p2(X),())==YES)
+             return(YES);
+        else
+             return(NO);
+    }else if(cps(p3(X),())==YES){
+        if(cps(p4(X),())==YES)
+             return(YES);
+        else
+            return(NO);
+    }
+
 */
 % CPS clause
 jump_gen_a_cps_pred5((Head :- Body)) :-
