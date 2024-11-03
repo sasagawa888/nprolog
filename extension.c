@@ -782,6 +782,44 @@ int b_existerrors(int arglist, int rest)
 }
 
 
+int call(int goal)
+{
+    if (builtinp(goal)) {
+	if (atomp(goal)) {
+	    if ((GET_SUBR(goal)) (NIL, NIL) == YES)
+		return (YES);
+	    else
+		return (NO);
+	} else {
+	    if ((GET_SUBR(car(goal))) (cdr(goal), NIL) == YES)
+		return (YES);
+	    else
+		return (NO);
+	}
+    } else if (compiledp(goal)) {
+	if (atomp(goal)) {
+	    if ((GET_SUBR(goal)) (NIL, NIL) == YES)
+		return (YES);
+	    else
+		return (NO);
+	} else {
+	    if ((GET_SUBR(car(goal))) (cdr(goal), NIL) == YES)
+		return (YES);
+
+	    return (NO);
+	}
+    }
+    return (NO);
+}
+
+
+int cps(int p, int cont)
+{
+    if (call(p) == YES)
+	return (cps(car(cont), cdr(cont)));
+    else
+	return (NO);
+}
 
 
 //----------for Raspberry PI
