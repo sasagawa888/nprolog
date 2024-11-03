@@ -282,7 +282,7 @@ jump_gen_var_declare(P) :-
     jump_gen_var_declare1(1,E),
     n_generate_all_variable(P,V),
     jump_gen_all_var(V),
-    write('n,body,save1,save2,save3,res;'),nl,!.
+    write('n,body,save1,save2,save3,cont,res;'),nl,!.
 
 jump_max_list([N],N).
 jump_max_list([X|Xs],X) :-
@@ -396,7 +396,7 @@ if( )... head
 jump_gen_a_pred5((Head :- Body)) :-
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(Head),
-    jump_gen_cps_body(Body).
+    jump_gen_body(Body).
 
 % generate predicate with no arity
 jump_gen_a_pred5(P) :-
@@ -463,7 +463,7 @@ jump_gen_a_cps_pred5(P) :-
 
 jump_gen_cps_body(X) :-
     write('{body = '),
-    jump_gen_body1(X),
+    jump_gen_cps_body1(X),
     write(';'),nl,
     write('if((res=Jprove_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
     write('return(YES);}'),nl,
