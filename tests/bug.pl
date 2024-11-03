@@ -1,4 +1,4 @@
 
-foo(X) :- Y is X+1,write(Y).
+foo(X) :- bar(X,Y),write(Y).
 
 bar(X,Y) :- Y is X+1.
