@@ -869,7 +869,9 @@ int call(int goal)
 /* cont is conjunction ,(p1 ,(p2 ...))*/
 int cps(int p, int cont)
 {
-    if (call(p) == YES){
+	if (nullp(p)){
+		return(YES);
+	}else if (call(p) == YES){
 	if(nullp(cont))
 		return(YES);
 	else if(conjunctionp(cont))
