@@ -517,6 +517,20 @@ jump_gen_a_cps_pred5(P) :-
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
+jump_gen_cps_body((X;Y)) :-
+     write('{goal = '),
+    jump_gen_cps_goal(X),
+    write(';'),nl,
+    write('cont = '),
+    jump_gen_cps_cont(X),
+    write(';'),nl,
+    write('if(Jcps(goal,cont) == YES){'),nl,
+    write('if(rest != NIL) Jprove_all(rest,Jget_sp());'),nl,
+    write('return(YES);}}'),nl,
+    write('Junbind(save2);'),nl,
+    write('Jset_wp(save1);'),nl,
+    jump_gen_cps_body(Y).
+
 jump_gen_cps_body(X) :-
     write('{goal = '),
     jump_gen_cps_goal(X),
@@ -540,7 +554,7 @@ jump_gen_cps_goal(X) :-
 jump_gen_cps_cont((_,X)) :-
     jump_gen_body1(X).
 jump_gen_cps_cont(_) :-
-    write('NIL'),nl.
+    write('NIL').
 
 
 %-----------------------------------------------------------------------
