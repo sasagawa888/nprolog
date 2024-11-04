@@ -421,16 +421,6 @@ int set_wp(int x)
     return (0);
 }
 
-int get_up(void)
-{
-    return (up);
-}
-
-int set_up(int x)
-{
-    up = x;
-    return (0);
-}
 
 int inc_proof(void)
 {

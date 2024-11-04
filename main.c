@@ -69,7 +69,6 @@ int sp;				//stack pointer
 int fc;				//free counter
 int ac;				//alpha conversion variable count
 int wp;				//working pointer
-int up;				//unify stack pointer
 int gc;				//invoked GC count
 
 // bignum pointer
@@ -297,7 +296,6 @@ void init_repl(void)
     wp = HEAPSIZE + 1;
     unbind(0);
     sp = 0;
-    up = 0;
     ctrl_c_flag = 0;
     fskip_flag = OFF;
     sskip_flag = OFF;

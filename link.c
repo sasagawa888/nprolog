@@ -50,7 +50,7 @@ void dynamic_link(int x)
     init_f0(GET_WP_IDX, (tpred) get_wp);
     init_f0(DEBUG_IDX, (tpred) debug);
     init_f0(INC_PROOF_IDX, (tpred) inc_proof);
-    init_f0(GET_UP_IDX, (tpred) get_up);
+
 
     //argument-1 type
     init_f1(CAR_IDX, (tpred) car);
@@ -83,7 +83,6 @@ void dynamic_link(int x)
     init_f1(OPERATE_IDX, (tpred) operate);
     init_f1(LISTP_IDX, (tpred) listp);
     init_f1(STRUCTUREP_IDX, (tpred) structurep);
-    init_f1(SET_UP_IDX, (tpred) set_up);
     init_f1(VARIABLEP_IDX, (tpred) variablep);
 
     //argument-2 type
