@@ -56,8 +56,8 @@ Junify_var(head,arg)    for variable term
 Junify_nil(head,arg)    for [] check.
 */
 % CPS flag
-cps(on).
-%cps(off).
+%cps(on).
+cps(off).
 
 % optimize flag
 jump_optimize(on).
@@ -758,65 +758,6 @@ jump_gen_head1([X|Xs],N) :-
     N1 is N + 1,
     jump_gen_head1(Xs,N1).
 
-
-jump_gen_head_list(L) :-
-    write('({int res;'),
-    write('Jpush_ustack(tree);'),
-    write('res = Jlistp(Jderef(tree));'),
-    write('res;}) && '),
-    jump_gen_head_list1(L).
-
-jump_gen_head_list1([]) :-
-    write('({int res;'),
-    write('res = Junify_nil(NIL,tree);'),
-    write('tree = Jpop_ustack();'),
-    write('res;})==YES ').
-
-jump_gen_head_list1(L) :-
-    n_compiler_variable(L),
-    write('({int res;'),
-    write('res = Junify_var('),
-    jump_gen_a_argument(L),
-    write(',tree);'),
-    write('tree = Jpop_ustack();'),
-    write('res;})==YES ').
-
-jump_gen_head_list1(L) :-
-    atomic(L),
-    write('({int res;'),
-    write('res = Junify_const('),
-    jump_gen_a_argument(L),
-    write(',tree);'),
-    write('tree = Jpop_ustack();'),
-    write('res;})==YES ').
-
-jump_gen_head_list1([L|Ls]) :-
-    n_compiler_variable(L),
-    write('({int res;'),
-    write('res = Junify_var('),
-    jump_gen_a_argument(L),
-    write(',Jcar(tree));'),
-    write('tree = Jcdr(tree);'),
-    write('res;})==YES && '),
-    jump_gen_head_list1(Ls).
-
-jump_gen_head_list1([L|Ls]) :-
-    atomic(L),
-    write('({int res;'),
-    write('res = Junify_const('),
-    jump_gen_a_argument(L),
-    write(','),
-    write('Jcar(tree));'),
-    write('tree = Jcdr(tree);'),
-    write('res;})==YES && '),
-    jump_gen_head_list1(Ls).
-
-jump_gen_head_list1([L|Ls]) :-
-    list(L),
-    write('('),
-    jump_gen_head_list(L),
-    write(')'),
-    jump_gen_head_list1(Ls,N,I1,Pos).
 
 /*
 generate evauation code

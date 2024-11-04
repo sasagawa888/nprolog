@@ -86,7 +86,7 @@ void init_deftinfix(tuser x){
 #define Jlist1(x)    (f1[LIST1_IDX])(x)
 #define Jrandom(x)   (f1[RANDOM_IDX])(x)
 #define Jrandi(x)    (f1[RANDI_IDX])(x)
-#define Jset_wp(x)   (f1[SET_UP_IDX])(x)
+#define Jset_wp(x)   (f1[SET_WP_IDX])(x)
 #define Jwlist1(x)   (f1[WLIST1_IDX])(x)
 #define Jexecute(x)  (f1[EXECUTE_IDX])(x)
 #define Jlistp(x)    (f1[LISTP_IDX])(x)
