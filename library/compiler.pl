@@ -502,8 +502,8 @@ jump_gen_a_cps_pred5(P) :-
 	n_property(P,predicate),
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(P),
-    write('if(Jprove_all(rest,Jget_sp()) == YES)'),nl,
-    write('return(YES);'),nl,
+    write('{if(rest == NIL) return(YES);'),nl,
+    write('if(Jprove_all(rest,Jget_sp()) == YES) return(YES);}'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
@@ -512,8 +512,8 @@ jump_gen_a_cps_pred5(P) :-
 	n_property(P,userop),
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(P),
-    write('if(Jprove_all(rest,Jget_sp()) == YES)'),nl,
-    write('return(YES);'),nl,
+    write('{if(rest == NIL) return(YES);'),nl,
+    write('if(Jprove_all(rest,Jget_sp()) == YES) return(YES);}'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
