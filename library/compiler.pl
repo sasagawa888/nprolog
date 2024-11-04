@@ -56,8 +56,8 @@ Junify_var(head,arg)    for variable term
 Junify_nil(head,arg)    for [] check.
 */
 % CPS flag
-cps(on).
-%cps(off).
+%cps(on).
+cps(off).
 
 % optimize flag
 jump_optimize(on).
@@ -351,7 +351,7 @@ jump_gen_a_pred2(P,N) :-
     write(N),
     write('){\n'),
     jump_gen_a_pred3(P,N),
-    write('return(NO);}'),!.
+    write('return(NPLFALSE);}'),!.
 
 % select all clauses that arity is N
 jump_gen_a_pred3(P,N) :-
@@ -441,11 +441,13 @@ jump_gen_a_pred5(P) :-
    cont = ...;
    if(Jcps(pred,cont)==YES)
         return(YES);
-    else{
-        Junbind(save2);
-        Jset_wp(save1);
-        return(NO);
-    }
+    
+    Junbind(save2);
+    Jset_wp(save1);
+    ...repeat...
+
+    return(NPFALSE);  //perfect fail.
+    
 
     continuation passing style
 
@@ -531,9 +533,8 @@ jump_gen_cps_body(X) :-
     write('if(Jcps(goal,cont) == YES){'),nl,
     n_after_cut(X,X2),
     jump_gen_cps_body(X2),
-    write('return(NO);}}'),nl,
-    write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl.
+    write('return(NPLFALSE);}}'),nl.
+
 
 % disjunction
 jump_gen_cps_body((X;Y)) :-
