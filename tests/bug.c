@@ -56,6 +56,34 @@ if(res == NPLFALSE) return(NO);
 return(NO);}
 Jerrorcomp(Jmakeint(ARITY_ERR),Jmakecomp("bar"),arglist);
 return(NO);}
+int b_boo(int arglist, int rest);
+int b_boo(int arglist, int rest){
+int arg1,varY,varX,n,body,save1,save2,goal,cont,res;
+save2 = Jget_sp();
+n = Jlength(arglist);
+if(n == 1){
+arg1 = Jnth(arglist,1);
+varY = Jmakevariant();
+varX = Jmakevariant();
+save1 = Jget_wp();
+if(Junify_var(varX,arg1) == YES && 1)
+{goal = Jwcons(1197,Jwcons(varX,NIL));
+cont = NIL;
+if(Jcps(goal,cont) == YES){
+{goal = Jwcons(1197,Jwcons(varY,NIL));
+cont = NIL;
+if(Jcps(goal,cont) == YES){
+if(rest != NIL) Jprove_all(rest,Jget_sp());
+return(YES);}}
+Junbind(save2);
+Jset_wp(save1);
+if(res == NPLFALSE) return(NO); 
+return(YES);}}
+Junbind(save2);
+Jset_wp(save1);
+return(NO);}
+Jerrorcomp(Jmakeint(ARITY_ERR),Jmakecomp("boo"),arglist);
+return(NO);}
 int b_fact(int arglist, int rest);
 int b_fact(int arglist, int rest){
 int arg1,arg2,varN1,varX1,varN,varX,n,body,save1,save2,goal,cont,res;
@@ -89,6 +117,7 @@ Jerrorcomp(Jmakeint(ARITY_ERR),Jmakecomp("fact"),arglist);
 return(NO);}
 void init_tpredicate(void){(deftpred)("foo",b_foo);
 (deftpred)("bar",b_bar);
+(deftpred)("boo",b_boo);
 (deftpred)("fact",b_fact);
 }
 void init_declare(void){int body;

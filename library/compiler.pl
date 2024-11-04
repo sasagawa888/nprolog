@@ -517,6 +517,46 @@ jump_gen_a_cps_pred5(P) :-
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
+
+% has cut
+jump_gen_cps_body(X) :-
+    n_has_cut(X),
+    n_before_cut(X,X1),
+    write('{goal = '),
+    jump_gen_cps_goal(X1),
+    write(';'),nl,
+    write('cont = '),
+    jump_gen_cps_cont(X1),
+    write(';'),nl,
+    write('if(Jcps(goal,cont) == YES){'),nl,
+    n_after_cut(X,X2),
+    jump_gen_cps_body(X2),
+    write('return(YES);}}'),nl,
+    write('Junbind(save2);'),nl,
+    write('Jset_wp(save1);'),nl.
+/*
+jump_gen_cps_body(X) :-
+    write(user_output,X),
+    n_has_cut(X),
+    n_before_cut(X,X1),
+    write(user_output,X1),
+    write('{goal = '),
+    jump_gen_cps_goal(X1),
+    write(';'),nl,
+    write('cont = '),
+    jump_gen_cps_cont(X1),
+    write(';'),nl,
+    write('if(Jcps(goal,cont) == YES){'),nl,
+    n_after_cut(X,X2),
+    write(user_output,X2),
+    jump_gen_cps_body(X2),
+    write('if(rest != NIL) Jprove_all(rest,Jget_sp());'),nl,
+    write('return(YES);}}}'),nl,
+    write('Junbind(save2);'),nl,
+    write('Jset_wp(save1);'),nl.
+*/
+
+% disjunction
 jump_gen_cps_body((X;Y)) :-
      write('{goal = '),
     jump_gen_cps_goal(X),
@@ -531,6 +571,7 @@ jump_gen_cps_body((X;Y)) :-
     write('Jset_wp(save1);'),nl,
     jump_gen_cps_body(Y).
 
+% conjunction 
 jump_gen_cps_body(X) :-
     write('{goal = '),
     jump_gen_cps_goal(X),
