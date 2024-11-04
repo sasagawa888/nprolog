@@ -3,9 +3,8 @@
 #include "jump.h"
 int b_<name>(int arglist, int rest);
 int b_<name>(int arglist, int rest){
-int arg1,arg2,arg4,varX,varY,varZ,...,save1,save2,save3,tree,body;
+int arg1,arg2,arg4,varX,varY,varZ,...,save1,save2,goal,cont;
 save2 = Jget_sp();
-save3 = Jget_up();
 if(n == 2){
     arg1 = Jnth(arglist,1);
     arg2 = Jnth(arglist,2);
@@ -20,7 +19,6 @@ if(n == 2){
         if(Jpove_all(Jaddtail_body(rest,body),save2,0) == YES)
             return(YES);
     }
-    Jset_up(save3);
     Junbind(save2);
     Jset_wp(save1);}
 
@@ -35,7 +33,6 @@ if(n == 2){
         if(Jprove_all(Jaddtail_body(rest,body),save2) == YES)
             return(YES);
     }
-    Jset_up(save3);
     Junbind(save2);
     Jset_wp(save1);
 
@@ -285,7 +282,7 @@ jump_gen_var_declare(P) :-
     jump_gen_var_declare1(1,E),
     n_generate_all_variable(P,V),
     jump_gen_all_var(V),
-    write('n,body,save1,save2,save3,goal,cont,res;'),nl,!.
+    write('n,body,save1,save2,goal,cont,res;'),nl,!.
 
 jump_max_list([N],N).
 jump_max_list([X|Xs],X) :-
@@ -329,8 +326,6 @@ jump_gen_a_pred(P) :-
     nl,
     jump_gen_var_declare(P),
     write('save2 = Jget_sp();'),
-    nl,
-    write('save3 = Jget_up();'),
     nl,
     write('n = Jlength(arglist);'),
     nl,
@@ -425,7 +420,6 @@ jump_gen_a_pred5(P) :-
 	jump_gen_head(P),
     write('if(Jprove_all(rest,Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Jset_up(save3);'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
@@ -436,7 +430,6 @@ jump_gen_a_pred5(P) :-
 	jump_gen_head(P),
     write('if(Jprove_all(rest,Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Jset_up(save3);'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
@@ -444,13 +437,11 @@ jump_gen_a_pred5(P) :-
 /*
    save1 = Jget_wp();
    save2 = jget_sp();
-   save3 = Jget_up();
    pred = ...;
    cont = ...;
    if(Jcps(pred,cont)==YES)
         return(YES);
     else{
-        Jset_up(save3);
         Junbind(save2);
         Jset_wp(save1);
         return(NO);
@@ -513,7 +504,6 @@ jump_gen_a_cps_pred5(P) :-
 	jump_gen_head(P),
     write('if(Jprove_all(rest,Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Jset_up(save3);'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
@@ -524,7 +514,6 @@ jump_gen_a_cps_pred5(P) :-
 	jump_gen_head(P),
     write('if(Jprove_all(rest,Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Jset_up(save3);'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 

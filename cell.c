@@ -391,17 +391,6 @@ int pop_stack(void)
     return (stack[--sp]);
 }
 
-void push_ustack(int x)
-{
-    ustack[up++] = x;
-    if (up >= STACKSIZE)
-	error(STACK_OVERF, NIL, NIL);
-}
-
-int pop_ustack(void)
-{
-    return (ustack[--up]);
-}
 
 
 //------for JUMP compiler-----

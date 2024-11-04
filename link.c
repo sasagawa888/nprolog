@@ -50,7 +50,6 @@ void dynamic_link(int x)
     init_f0(GET_WP_IDX, (tpred) get_wp);
     init_f0(DEBUG_IDX, (tpred) debug);
     init_f0(INC_PROOF_IDX, (tpred) inc_proof);
-    init_f0(POP_USTACK_IDX, (tpred) pop_ustack);
     init_f0(GET_UP_IDX, (tpred) get_up);
 
     //argument-1 type
@@ -66,7 +65,6 @@ void dynamic_link(int x)
     init_f1(LENGTH_IDX, (tpred) length);
     init_f1(SET_SP_IDX, (tpred) set_sp);
     init_f1(DEREF_IDX, (tpred) deref);
-    init_f1(PUSH_USTACK_IDX, (tpred) push_ustack);
     init_f1(GET_INT_IDX, (tpred) get_int);
     init_f1(SIN_IDX, (tpred) f_sin);
     init_f1(ASIN_IDX, (tpred) f_asin);

@@ -59,7 +59,6 @@ void init_deftinfix(tuser x){
 #define Jget_wp()    (f0[GET_WP_IDX])()
 #define Jdebug()     (f0[DEBUG_IDX])()
 #define Jinc_proof() (f0[INC_PROOF_IDX])()
-#define Jpop_ustack() (f0[POP_USTACK_IDX])()
 #define Jget_up()    (f0[GET_UP_IDX])()
 
 #define Jcar(x)      (f1[CAR_IDX])(x)
@@ -74,7 +73,6 @@ void init_deftinfix(tuser x){
 #define Jlength(x)   (f1[LENGTH_IDX])(x)
 #define Jset_sp(x)   (f1[SET_UP_IDX])(x)
 #define Jderef(x)    (f1[DEREF_IDX])(x)
-#define Jpush_ustack(x) (f1[PUSH_USTACK_IDX])(x)
 #define Jget_int(x)  (f1[GET_INT_IDX])(x)
 #define Jsin(x)      (f1[SIN_IDX])(x)
 #define Jasin(x)     (f1[ASIN_IDX])(x)
