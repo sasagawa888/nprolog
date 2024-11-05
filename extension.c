@@ -873,7 +873,6 @@ int cps(int p, int cont)
 	if (nullp(p))
 		return(YES);
 
-	loop:
 	res = call(p);
 	if (res == YES){
 	if(nullp(cont))
@@ -882,8 +881,6 @@ int cps(int p, int cont)
 		return (cps(cadr(cont), caddr(cont)));
 	else
 		return(cps(cont,NIL));
-	} else if(res == NO){
-		goto loop;
 	} else if (res == FALSE){
 		return (NO);
 	}
