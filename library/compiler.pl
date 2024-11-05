@@ -351,7 +351,7 @@ jump_gen_a_pred2(P,N) :-
     write(N),
     write('){\n'),
     jump_gen_a_pred3(P,N),
-    write('return(NPLFALSE);}'),!.
+    write('return(FALSE);}'),!.
 
 % select all clauses that arity is N
 jump_gen_a_pred3(P,N) :-
@@ -446,7 +446,7 @@ jump_gen_a_pred5(P) :-
     Jset_wp(save1);
     ...repeat...
 
-    return(NPFALSE);  //perfect fail.
+    return(FALSE);  //perfect fail.
     
 
     continuation passing style
@@ -533,7 +533,7 @@ jump_gen_cps_body(X) :-
     write('if(Jcps(goal,cont) == YES){'),nl,
     n_after_cut(X,X2),
     jump_gen_cps_body(X2),
-    write('return(NPLFALSE);}}'),nl.
+    write('return(FALSE);}}'),nl.
 
 
 % disjunction
@@ -619,7 +619,7 @@ jump_gen_body(X) :-
     write('return(YES);}'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl,
-    write('if(res == NPLFALSE) return(NO); '),nl,
+    write('if(res == FALSE) return(NO); '),nl,
     !.
 
 

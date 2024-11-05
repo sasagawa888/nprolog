@@ -868,18 +868,26 @@ int call(int goal)
 
 /* cont is conjunction ,(p1 ,(p2 ...))*/
 int cps(int p, int cont)
-{
-	if (nullp(p)){
+{	int res;
+
+	if (nullp(p))
 		return(YES);
-	}else if (call(p) == YES){
+
+	loop:
+	res = call(p);
+	if (res == YES){
 	if(nullp(cont))
 		return(YES);
 	else if(conjunctionp(cont))
 		return (cps(cadr(cont), caddr(cont)));
 	else
 		return(cps(cont,NIL));
+	} else if(res == NO){
+		goto loop;
+	} else if (res == FALSE){
+		return (NO);
 	}
-    else
+    
 	return (NO);
 }
 
