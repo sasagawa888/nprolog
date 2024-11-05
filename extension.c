@@ -834,59 +834,57 @@ int b_after_cut(int arglist, int rest)
     return (NO);
 }
 
-
-
-int call(int goal)
+int exec_all(int goals, int bindings)
 {
-    if (builtinp(goal)) {
+
+    if (nullp(goals))
+	return (YES);
+    else if (car(goals) != AND)
+	return (exec(goals, bindings, NIL));
+    else {
+	    return (exec(cadr(goals), bindings, caddr(goals)));
+    }
+
+    return (NO);
+}
+
+int exec(int goal, int bindings, int rest)
+{
+    int res;
+
+    proof++;
+    goal = deref(goal);
+
+    if (nullp(goal)) {
+	return (exec_all(rest, bindings));
+    } else if (builtinp(goal)) {
 	if (atomp(goal)) {
-	    if ((GET_SUBR(goal)) (NIL, NIL) == YES)
+	    if ((res = (GET_SUBR(goal)) (NIL, rest)) == YES)
 		return (YES);
-	    else
-		return (NO);
+
+	    return (res);
 	} else {
-	    if ((GET_SUBR(car(goal))) (deref(cdr(goal)), NIL) == YES)
+	    if ((res = (GET_SUBR(car(goal))) (cdr(goal), rest)) == YES)
 		return (YES);
-	    else
-		return (NO);
+
+	    return (res);
 	}
     } else if (compiledp(goal)) {
 	if (atomp(goal)) {
-	    if ((GET_SUBR(goal)) (NIL, NIL) == YES)
+	    if ((GET_SUBR(goal)) (NIL, rest) == YES)
 		return (YES);
-	    else
-		return (NO);
+
+	    return (NO);
 	} else {
-	    if ((GET_SUBR(car(goal))) (deref(cdr(goal)), NIL) == YES)
+	    if ((GET_SUBR(car(goal))) (cdr(goal), rest) == YES)
 		return (YES);
 
 	    return (NO);
 	}
-    }
+	}
     return (NO);
 }
 
-/* cont is conjunction ,(p1 ,(p2 ...))*/
-int cps(int p, int cont)
-{	int res;
-
-	if (nullp(p))
-		return(YES);
-
-	res = call(p);
-	if (res == YES){
-	if(nullp(cont))
-		return(YES);
-	else if(conjunctionp(cont))
-		return (cps(cadr(cont), caddr(cont)));
-	else
-		return(cps(cont,NIL));
-	} else if (res == FALSE){
-		return (NO);
-	}
-    
-	return (NO);
-}
 
 
 //----------for Raspberry PI

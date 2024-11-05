@@ -168,12 +168,12 @@ enum { CONS_IDX, PLUS_IDX, MINUS_IDX, MULT_IDX, DIVIDE_IDX, REMAINDER_IDX,
        LIST2_IDX, SET_CAR_IDX, SET_CDR_IDX, COMPLEMENT_IDX, SET_AUX_IDX,
        NOT_NUMEQP_IDX, DIV_IDX, SET_VAR_IDX, WCONS_IDX, WLIST2_IDX, WLISTCONS_IDX,
        ADDTAIL_BODY_IDX, NTH_IDX, UNIFY_CONST_IDX, UNIFY_VAR_IDX, UNIFY_NIL_IDX,
-       PROVE_ALL_IDX, ROUND_IDX, CPS_IDX,
+       PROVE_ALL_IDX, ROUND_IDX,
        NUM_FN2S
 };
 
-enum { LIST3_IDX, CALLSUBR_IDX, WLIST3_IDX, ERRORCOMP_IDX,
-       NUM_FN3S
+enum { LIST3_IDX, CALLSUBR_IDX, WLIST3_IDX, ERRORCOMP_IDX, EXEC_ALL_IDX,
+       NUM_FN3S,
 };
 
 enum { MAKECONST_IDX, MAKEPRED_IDX, MAKEVAR_IDX, MAKESTRFLT_IDX, MAKECOMP_IDX,
@@ -920,7 +920,6 @@ int constantp(int addr);
 int copy_heap(int x);
 int copy_term(int x);
 int copy_variable(int x);
-int cps(int p, int cont);
 int ctrl_to_number(char c);
 int c_lang_p(int x);
 int dcgp(int x);
@@ -936,6 +935,8 @@ int eqp(int addr1, int addr2);
 int eqsmallerp(int x1, int x2);
 int equalp(int addr1, int addr2);
 int eval(int x);
+int exec(int goal, int bindings, int rest);
+int exec_all(int goals, int bindings);
 void evalterm(int x, int [3]);
 int exact_to_inexact(int x);
 int exist_unbind_var_p(int x);
