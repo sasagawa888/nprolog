@@ -126,6 +126,7 @@ void dynamic_link(int x)
     init_f2(UNIFY_NIL_IDX, (tpred) unify_nil);
     init_f2(PROVE_ALL_IDX, (tpred) prove_all);
     init_f2(ROUND_IDX, (tpred) f_round);
+    init_f2(EXEC_ALL_IDX, (tpred) exec_all);
 
 
     //argument-3
@@ -133,7 +134,7 @@ void dynamic_link(int x)
     init_f3(CALLSUBR_IDX, (tpred) callsubr);
     init_f3(WLIST3_IDX, (tpred) wlist3);
     init_f3(ERRORCOMP_IDX, (tpred) errorcomp);
-    init_f3(EXEC_ALL_IDX, (tpred) exec_all);
+    
 
     //argument-1 string type
     init_f4(MAKECONST_IDX, (tpred) makeconst);

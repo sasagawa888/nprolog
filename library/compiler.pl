@@ -56,8 +56,8 @@ Junify_var(head,arg)    for variable term
 Junify_nil(head,arg)    for [] check.
 */
 % CPS flag
-%cps(on).
-cps(off).
+cps(on).
+%cps(off).
 
 % optimize flag
 jump_optimize(on).
@@ -435,57 +435,7 @@ jump_gen_a_pred5(P) :-
 
 %----------- Continuation Passing Style -------------------------
 /*
-   save1 = Jget_wp();
-   save2 = jget_sp();
-   pred = ...;
-   cont = ...;
-   if(Jcps(pred,cont)==YES)
-        return(YES);
-    
-    Junbind(save2);
-    Jset_wp(save1);
-    ...repeat...
-
-    return(FALSE);  //perfect fail.
-    
-
-    continuation passing style
-
-    foo(X) :- p1(X),p2(X),p3(X).
-    if(cps(p1(X),(p2(X),p3(X)))==YES)
-        return(YES);
-    else
-        return(NO);
-
-    bar(X) :- p1(X),p2(X);p3(X),p4(X).
-    if(cps(p1(X),(p2(X))))==YES)
-        return(YES);
-    else if(cps(p3(X),(p4(X)))==YES)
-        return(YES);
-    else
-        return(NO);
-
-    boo(X) :- p1(X),p2(X),!,p3(X),p4(X).
-    if(cps(p1(X),(p2(X)))==YES){
-        if(cps(p3(X),(p4(X)))==YES)
-            return(YES);
-        else
-            return(NO);
-    }else return(NO);
-
-    woo(X) :- p1(X),!,p2(X);p3(X),!,p4(X).
-    if(cps(p1(X),())==YES){
-        if(cps(p2(X),())==YES)
-             return(YES);
-        else
-             return(NO);
-    }else if(cps(p3(X),())==YES){
-        if(cps(p4(X),())==YES)
-             return(YES);
-        else
-            return(NO);
-    }
-
+   
 */
 % CPS clause
 jump_gen_a_cps_pred5((Head :- Body)) :-
@@ -520,62 +470,17 @@ jump_gen_a_cps_pred5(P) :-
     write('Jset_wp(save1);'),nl.
 
 
-% has cut
-jump_gen_cps_body(X) :-
-    n_has_cut(X),
-    n_before_cut(X,X1),
-    write('{goal = '),
-    jump_gen_cps_goal(X1),
-    write(';'),nl,
-    write('cont = '),
-    jump_gen_cps_cont(X1),
-    write(';'),nl,
-    write('if(Jcps(goal,cont) == YES){'),nl,
-    n_after_cut(X,X2),
-    jump_gen_cps_body(X2),
-    write('return(FALSE);}}'),nl.
-
-
-% disjunction
-jump_gen_cps_body((X;Y)) :-
-     write('{goal = '),
-    jump_gen_cps_goal(X),
-    write(';'),nl,
-    write('cont = '),
-    jump_gen_cps_cont(X),
-    write(';'),nl,
-    write('if(Jcps(goal,cont) == YES){'),nl,
-    write('if(rest == NIL) return(YES);'),nl,
-    write('if(Jprove_all(rest,Jget_sp())==YES)'),nl,
-    write('return(YES);}}'),nl,
-    write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl,
-    jump_gen_cps_body(Y).
-
 % conjunction 
 jump_gen_cps_body(X) :-
-    write('{goal = '),
-    jump_gen_cps_goal(X),
+    write('{body = '),
+    jump_gen_body1(X),
     write(';'),nl,
-    write('cont = '),
-    jump_gen_cps_cont(X),
-    write(';'),nl,
-    write('if(Jcps(goal,cont) == YES){'),nl,
-    write('if(rest==NIL) return(YES);'),nl,
-    write('if(Jprove_all(rest,Jget_sp())==YES)'),nl,
-    write('return(YES);}}'),nl,
+    write('if((res=Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
+    write('return(YES);}'),nl,
     write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl.
-
-jump_gen_cps_goal((X,_)) :-
-    jump_gen_body1(X).
-jump_gen_cps_goal(X) :-
-    jump_gen_body1(X).
-
-jump_gen_cps_cont((_,X)) :-
-    jump_gen_body1(X).
-jump_gen_cps_cont(_) :-
-    write('NIL').
+    write('Jset_wp(save1);'),nl,
+    write('if(res == FALSE) return(NO); '),nl,
+    !.
 
 
 %-----------------------------------------------------------------------

@@ -134,7 +134,7 @@ void init_deftinfix(tuser x){
 #define Junify_nil(x,y)    (f2[UNIFY_NIL_IDX])(x,y)
 #define Jprove_all(x,y)    (f2[PROVE_ALL_IDX])(x,y)
 #define Jround(x,y)        (f2[ROUND_IDX])(x,y)
-#define Jcps(x,y)          (f2[CPS_IDX])(x,y)
+#define Jexec_all(x,y)     (f2[EXEC_ALL_IDX])(x,y)
 
 #define Jlist3(x,y,z)       (f3[LIST3_IDX])(x,y,z)
 #define Jcallsubr(x,y,z)    (f3[CALLSUBR_IDX])(x,y,z)
