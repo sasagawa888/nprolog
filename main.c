@@ -443,7 +443,7 @@ int prove_all(int goals, int bindings)
 		if (res == YES)
 		    return (YES);
 		else if (res == NO)
-		    return (NPLFALSE);
+		    return (FALSE);
 	    } else
 		return (NO);
 	}
@@ -549,7 +549,7 @@ int prove(int goal, int bindings, int rest)
 			return (YES);
 		    } else {
 			nest--;
-			if (res == NPLFALSE) {	// when after cut occurs NO
+			if (res == FALSE) {	// when after cut occurs NO
 			    //trace
 			    if (debug_flag == ON)
 				prove_trace(DBCUTFAIL, goal, bindings,
@@ -588,7 +588,7 @@ int prove(int goal, int bindings, int rest)
 		== YES)
 	    return (YES);
 	else {
-	    if (res == NPLFALSE) {
+	    if (res == FALSE) {
 		unbind(bindings);
 		return (NO);
 	    }

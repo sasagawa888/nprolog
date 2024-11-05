@@ -46,8 +46,8 @@ address
 #define DEFINE      26
 #define ATMARK      28
 #define COLON       30
-#define NPLTRUE     32
-#define NPLFALSE    34
+#define TRUE        32
+#define FALSE       34
 #define CURL        36
 #define IFTHEN      38
 #define IFTHENELSE  40
