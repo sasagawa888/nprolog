@@ -482,10 +482,10 @@ jump_gen_cps_body(X) :-
     jump_gen_body1(X1),
     write(';'),nl,
     write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
-    write('return(YES);}'),nl,
+    write('return(YES);'),nl,
     write('else{Junbind(save2);Jset_wp(save1);return(FALSE);}}'),nl,
     write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl.
+    write('Jset_wp(save1);}'),nl.
     
 
 
