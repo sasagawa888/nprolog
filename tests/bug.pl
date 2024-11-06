@@ -1,6 +1,10 @@
 
 foo(X) :- write(X),!,write(X).
 
+bar :- fail;true.
+
+boo :- fail;fail;true.
+
 max(X,Y,X) :- X>=Y,!.
 max(X,Y,Y).
 

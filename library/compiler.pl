@@ -469,6 +469,22 @@ jump_gen_a_cps_pred5(P) :-
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
+
+% disjunction
+jump_gen_cps_body((X;Y)) :-
+    write('{body = '),nl,
+    jump_gen_body1(X),
+    write(';'),nl,
+    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
+    write('return(YES);'),nl,
+    write('Junbind(save2);'),nl,
+    write('Jset_wp(save1);'),nl,
+    jump_gen_cps_body(Y),
+    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
+    write('return(YES);'),nl,
+    write('Junbind(save2);'),nl,
+    write('Jset_wp(save1);}'),nl.
+
 % has cut
 jump_gen_cps_body(X) :-
     n_has_cut(X),
