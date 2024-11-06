@@ -1,4 +1,11 @@
+% Partition list for quicksort
+partition([X|L], Y, [X|L1], L2) :-
+    X < Y, !, partition(L, Y, L1, L2).
+partition([X|L], Y, L1, [X|L2]) :-
+    !,partition(L, Y, L1, L2).
+partition([], _ , [], []) :- !.
 
+/*
 foo(X) :- write(X),!,write(X).
 
 bar :- fail;true.
@@ -17,4 +24,4 @@ fact(X,Y) :-
 qdelete(A, A, L, L).
 qdelete(X, A, [H|T], [A|R]) :-
     qdelete(X, H, T, R).
-
+*/
