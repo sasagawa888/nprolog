@@ -454,8 +454,7 @@ jump_gen_a_cps_pred5(P) :-
 	n_property(P,predicate),
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(P),
-    write('{if(rest == NIL) return(YES);'),nl,
-    write('if(Jexec_all(rest,Jget_sp()) == YES) return(YES);}'),nl,
+    write('if(Jexec_all(rest,Jget_sp()) == YES) return(YES);'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
@@ -464,8 +463,7 @@ jump_gen_a_cps_pred5(P) :-
 	n_property(P,userop),
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(P),
-    write('{if(rest == NIL) return(YES);'),nl,
-    write('if(Jexec_all(rest,Jget_sp()) == YES) return(YES);}'),nl,
+    write('if(Jexec_all(rest,Jget_sp()) == YES) return(YES);'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
@@ -527,11 +525,10 @@ jump_gen_cps_after_body(X) :-
     write('{body = '),
     jump_gen_body1(X),
     write(';'),nl,
-    write('if((res=Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
+    write('if((Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
     write('return(YES);'),nl,
     write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl,
-    write('return(NO);}'),nl.
+    write('Jset_wp(save1);}'),nl.
 
 %-----------------------------------------------------------------------
 
