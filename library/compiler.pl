@@ -492,16 +492,10 @@ jump_gen_cps_body(X) :-
     write('{body = '),
     jump_gen_body1(X1),
     write(';'),nl,
-    write('if(Jexec_all(body,Jget_sp()) == YES){'),nl,
+    write('if(Jexec_all(body,Jget_sp()) == YES)'),nl,
     n_after_cut(X,X2),
-    write('body = '),
-    jump_gen_body1(X1),
-    write(';'),nl,
-    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
-    write('return(YES);'),nl,
-    write('else{Junbind(save2);Jset_wp(save1);return(FALSE);}}'),nl,
-    write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);}'),nl.
+    jump_gen_cps_body(X2),
+    write('}'),nl.
     
 
 
@@ -511,10 +505,9 @@ jump_gen_cps_body(X) :-
     jump_gen_body1(X),
     write(';'),nl,
     write('if((res=Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
-    write('return(YES);}'),nl,
+    write('return(YES);'),nl,
     write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl,
-    write('if(res == FALSE) return(NO); '),nl.
+    write('Jset_wp(save1);}'),nl.
     
 
 
