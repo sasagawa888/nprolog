@@ -30,7 +30,7 @@ if(n == 2){
     save1 = Jget_wp();
     if(Junify(term1,arg1) == YES && Junify_const(term1,arg2) == YES){
         body = Jwlist3(Jmakeope(","),Jwcons(173,Jwc ....)));
-        if(Jprove_all(Jaddtail_body(rest,body),save2) == YES)
+        if(Jexec_all(Jaddtail_body(rest,body),save2) == YES)
             return(YES);
     }
     Junbind(save2);
@@ -389,39 +389,6 @@ if( )... head
 ...
 */
 
-/*
-% generate clause
-jump_gen_a_pred5((Head :- Body)) :-
-    write('save1 = Jget_wp();'),nl,
-	jump_gen_head(Head),
-    jump_gen_body(Body).
-
-% generate predicate with no arity
-jump_gen_a_pred5(P) :-
-	n_property(P,predicate),
-    functor(P,_,0),
-    write('return(YES);'),nl.
-
-% predicate
-jump_gen_a_pred5(P) :-
-	n_property(P,predicate),
-    write('save1 = Jget_wp();'),nl,
-	jump_gen_head(P),
-    write('if(Jprove_all(rest,Jget_sp()) == YES)'),nl,
-    write('return(YES);'),nl,
-    write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl.
-
-% user ope
-jump_gen_a_pred5(P) :-
-	n_property(P,userop),
-    write('save1 = Jget_wp();'),nl,
-	jump_gen_head(P),
-    write('if(Jprove_all(rest,Jget_sp()) == YES)'),nl,
-    write('return(YES);'),nl,
-    write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl.
-*/
 
 %----------- Continuation Passing Style -------------------------
 /*
@@ -550,7 +517,7 @@ foo(X),bar(X),boo(X).
 
 if(unify(....)){
     body = ...;
-    if(Jprove_all(body,Jget_sp()) == YES)
+    if(Jexec_all(body,Jget_sp()) == YES)
         return(YES)};
 
 Junbind(save2);
@@ -562,7 +529,7 @@ jump_gen_body(X) :-
     write('{body = '),
     jump_gen_body1(X),
     write(';'),nl,
-    write('if((res=Jprove_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
+    write('if((res=Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
     write('return(YES);}'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl,
@@ -1102,7 +1069,7 @@ jump_gen_exec2(X) :-
     write('body = '),
     jump_gen_body1(X),
     write(';'),nl,
-    write('Jprove_all(body,Jget_sp());'),!.
+    write('Jexec_all(body,Jget_sp());'),!.
 
 /*
 optimizer for deterministic predicate
@@ -1133,7 +1100,7 @@ if(n == 3){
     loop:
     head = Jwlist3(NIL,makeconst("_"),makeconst("_"));
     if(Jcar(arglist) == NIL){if(Junify(arglist,head)==YES) 
-                                  return(Jprove_all(rest,Jget_sp()));
+                                  return(Jexec_all(rest,Jget_sp()));
                              else 
                                   return(NO);}
 
@@ -1302,7 +1269,7 @@ jump_gen_tail_head_unify1([X|Xs]) :-
 jump_gen_tail_head_unify2(X) :-
     write('if('),
     jump_gen_tail_head2(X,[]),
-    write('){if(Junify(arglist,head)==YES) return(Jprove_all(rest,Jget_sp())); else return(NO);}'),
+    write('){if(Junify(arglist,head)==YES) return(Jexec_all(rest,Jget_sp())); else return(NO);}'),
     nl.
     
 % unify head

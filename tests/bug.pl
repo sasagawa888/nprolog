@@ -5,7 +5,7 @@ repeat_for(N) :-
     M is N - 1,
     repeat_for(M).
 
-/*
+
 max(X,Y,X) :- X>=Y,!.
 max(X,Y,Y).
 
@@ -35,4 +35,3 @@ qdelete(A, A, L, L).
 qdelete(X, A, [H|T], [A|R]) :-
     qdelete(X, H, T, R).
 
-*/
