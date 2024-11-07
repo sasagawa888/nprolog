@@ -494,7 +494,9 @@ jump_gen_cps_body(X) :-
     write(';'),nl,
     write('if(Jexec_all(body,Jget_sp()) == YES)'),nl,
     jump_gen_cps_after_body(X2),
-    write('}'),nl.
+    write('}'),nl,
+    write('Junbind(save2);'),nl,
+    write('Jset_wp(save1);'),nl.
 
 % nested has cut
 jump_gen_cps_body(X) :-
@@ -507,7 +509,10 @@ jump_gen_cps_body(X) :-
     write(';'),nl,
     write('if(Jexec_all(body,Jget_sp()) == YES)'),nl,
     jump_gen_cps_body(X2),
-    write('}'),nl.
+    write('}'),nl,
+    write('Junbind(save2);'),nl,
+    write('Jset_wp(save1);'),nl.
+    
     
 
 
