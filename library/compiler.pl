@@ -319,13 +319,10 @@ jump_gen_a_pred(P) :-
 	write('int b_'),
     n_atom_convert(P,P1),
     write(P1),
-    write('(int arglist, int rest){'),
-    nl,
+    write('(int arglist, int rest){'),nl,
     jump_gen_var_declare(P),
-    write('save2 = Jget_sp();'),
-    nl,
-    write('n = Jlength(arglist);'),
-    nl,
+    write('save2 = Jget_sp();'),nl,
+    write('n = Jlength(arglist);'),nl,
     n_arity_count(P,L),
     jump_gen_a_pred1(P,L),
     write('}'),nl.
@@ -390,23 +387,22 @@ if( )... head
 */
 
 
-%----------- Continuation Passing Style -------------------------
 /*
    
 */
-% CPS clause
+% clause
 jump_gen_a_pred5((Head :- Body)) :-
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(Head),
     jump_gen_body(Body).
 
-% CPS predicate with no arity
+% predicate with no arity
 jump_gen_a_pred5(P) :-
 	n_property(P,predicate),
     functor(P,_,0),
     write('return(YES);'),nl.
 
-% CPS predicate
+% predicate
 jump_gen_a_pred5(P) :-
 	n_property(P,predicate),
     write('save1 = Jget_wp();'),nl,
@@ -415,7 +411,7 @@ jump_gen_a_pred5(P) :-
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
-% CPS user ope
+% user ope
 jump_gen_a_pred5(P) :-
 	n_property(P,userop),
     write('save1 = Jget_wp();'),nl,
@@ -471,8 +467,6 @@ jump_gen_body(X) :-
     write('Jset_wp(save1);'),nl.
     
     
-
-
 % conjunction 
 jump_gen_body(X) :-
     write('{body = '),
@@ -491,7 +485,6 @@ jump_gen_after_body(X) :-
     write('return(YES);'),nl,
     write('else return(NO);}'),nl.
 
-%-----------------------------------------------------------------------
 
 % varA,varB,...
 jump_gen_all_var([]).
