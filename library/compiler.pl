@@ -55,9 +55,6 @@ Junify_const(head,arg)  for constant term
 Junify_var(head,arg)    for variable term
 Junify_nil(head,arg)    for [] check.
 */
-% CPS flag
-cps(on).
-%cps(off).
 
 % optimize flag
 jump_optimize(on).
@@ -373,23 +370,14 @@ jump_gen_var_assign(S,E) :-
     S1 is S+1,
     jump_gen_var_assign(S1,E).
 
-% generate each clause
+
+% generate each clause in CPS
 jump_gen_a_pred4([]).
 jump_gen_a_pred4([C|Cs]) :-
-    cps(off),
 	n_variable_convert(C,X),
     n_generate_variable(X,V),
     jump_gen_var(V),
     jump_gen_a_pred5(X),
-    jump_gen_a_pred4(Cs).
-% generate each clause in CPS
-jump_gen_a_pred4([]).
-jump_gen_a_pred4([C|Cs]) :-
-    cps(on),
-	n_variable_convert(C,X),
-    n_generate_variable(X,V),
-    jump_gen_var(V),
-    jump_gen_a_cps_pred5(X),
     jump_gen_a_pred4(Cs).
 
 
@@ -401,6 +389,7 @@ if( )... head
 ...
 */
 
+/*
 % generate clause
 jump_gen_a_pred5((Head :- Body)) :-
     write('save1 = Jget_wp();'),nl,
@@ -432,25 +421,26 @@ jump_gen_a_pred5(P) :-
     write('return(YES);'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
+*/
 
 %----------- Continuation Passing Style -------------------------
 /*
    
 */
 % CPS clause
-jump_gen_a_cps_pred5((Head :- Body)) :-
+jump_gen_a_pred5((Head :- Body)) :-
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(Head),
-    jump_gen_cps_body(Body).
+    jump_gen_body(Body).
 
 % CPS predicate with no arity
-jump_gen_a_cps_pred5(P) :-
+jump_gen_a_pred5(P) :-
 	n_property(P,predicate),
     functor(P,_,0),
     write('return(YES);'),nl.
 
 % CPS predicate
-jump_gen_a_cps_pred5(P) :-
+jump_gen_a_pred5(P) :-
 	n_property(P,predicate),
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(P),
@@ -459,7 +449,7 @@ jump_gen_a_cps_pred5(P) :-
     write('Jset_wp(save1);'),nl.
 
 % CPS user ope
-jump_gen_a_cps_pred5(P) :-
+jump_gen_a_pred5(P) :-
 	n_property(P,userop),
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(P),
@@ -469,7 +459,7 @@ jump_gen_a_cps_pred5(P) :-
 
 
 % disjunction
-jump_gen_cps_body((X;Y)) :-
+jump_gen_body((X;Y)) :-
     write('{body = '),nl,
     jump_gen_body1(X),
     write(';'),nl,
@@ -477,14 +467,14 @@ jump_gen_cps_body((X;Y)) :-
     write('return(YES);'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl,
-    jump_gen_cps_body(Y),
+    jump_gen_body(Y),
     write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);}'),nl.
 
 % has cut
-jump_gen_cps_body(X) :-
+jump_gen_body(X) :-
     n_has_cut(X),
     n_before_cut(X,X1),
     n_after_cut(X,X2),
@@ -493,13 +483,13 @@ jump_gen_cps_body(X) :-
     jump_gen_body1(X1),
     write(';'),nl,
     write('if((res=Jexec_all(body,Jget_sp())) == YES)'),nl,
-    jump_gen_cps_after_body(X2),
+    jump_gen_after_body(X2),
     write('}'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
 
 % nested has cut
-jump_gen_cps_body(X) :-
+jump_gen_body(X) :-
     n_has_cut(X),
     n_before_cut(X,X1),
     n_after_cut(X,X2),
@@ -508,7 +498,7 @@ jump_gen_cps_body(X) :-
     jump_gen_body1(X1),
     write(';'),nl,
     write('if(Jexec_all(body,Jget_sp()) == YES)'),nl,
-    jump_gen_cps_body(X2),
+    jump_gen_body(X2),
     write('}'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
@@ -517,7 +507,7 @@ jump_gen_cps_body(X) :-
 
 
 % conjunction 
-jump_gen_cps_body(X) :-
+jump_gen_body(X) :-
     write('{body = '),
     jump_gen_body1(X),
     write(';'),nl,
@@ -526,7 +516,7 @@ jump_gen_cps_body(X) :-
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);}'),nl.
     
-jump_gen_cps_after_body(X) :-
+jump_gen_after_body(X) :-
     write('{body = '),
     jump_gen_body1(X),
     write(';'),nl,
