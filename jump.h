@@ -388,7 +388,55 @@ static inline int Jerrorcomp(int x, int y, int z) {
 }
 
 
+static inline int Jmakeconst(char* x) {
+    return f4[MAKECONST_IDX](x);
+}
 
+static inline int Jmakepred(char* x) {
+    return f4[MAKEPRED_IDX](x);
+}
+
+static inline int Jmakevar(char* x) {
+    return f4[MAKEVAR_IDX](x);
+}
+
+static inline int Jmakestrflt(char* x) {
+    return f4[MAKESTRFLT_IDX](x);
+}
+
+static inline int Jmakecomp(char* x) {
+    return f4[MAKECOMP_IDX](x);
+}
+
+static inline int Jmakesys(char* x) {
+    return f4[MAKESYS_IDX](x);
+}
+
+static inline int Jmakeope(char* x) {
+    return f4[MAKEOPE_IDX](x);
+}
+
+static inline int Jmakeuser(char* x) {
+    return f4[MAKEUSER_IDX](x);
+}
+
+static inline int Jmakestrlong(char* x) {
+    return f4[MAKESTRLONG_IDX](x);
+}
+
+static inline int Jmakebig(char* x) {
+    return f4[MAKEBIGX_IDX](x);
+}
+
+static inline int Jmakestr(char* x) {
+    return f4[MAKESTR_IDX](x);
+}
+
+static inline int Jmakefun(char* x) {
+    return f4[MAKEFUNC_IDX](x);
+}
+
+/*
 #define Jmakeconst(x)  (f4[MAKECONST_IDX])(x)
 #define Jmakepred(x)   (f4[MAKEPRED_IDX])(x)
 #define Jmakevar(x)    (f4[MAKEVAR_IDX])(x)
@@ -401,4 +449,4 @@ static inline int Jerrorcomp(int x, int y, int z) {
 #define Jmakebig(x)    (f4[MAKEBIGX_IDX])(x)
 #define Jmakestr(x)    (f4[MAKESTR_IDX](x))
 #define Jmakefun(x)   (f4[MAKEFUNC_IDX](x))
-
+*/
