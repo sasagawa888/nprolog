@@ -11,11 +11,11 @@ typedef int (*fn4)(char*);
 typedef void (*tpred)(char*, int(*pred)(int , int));
 typedef void (*tuser)(char*, int(*user)(int , int), int weight, int spec);
 
-fn0 f0[NUM_FN0S];
-fn1 f1[NUM_FN1S];
-fn2 f2[NUM_FN2S];
-fn3 f3[NUM_FN3S];
-fn4 f4[NUM_FN4S];
+static fn0 f0[NUM_FN0S];
+static fn1 f1[NUM_FN1S];
+static fn2 f2[NUM_FN2S];
+static fn3 f3[NUM_FN3S];
+static fn4 f4[NUM_FN4S];
 tpred deftpred;
 tuser deftinfix;
 tpred deftsys;
@@ -51,15 +51,42 @@ void init_deftinfix(tuser x){
 }
 
 
-#define Jcheckgbc()  (f0[CHECKGBC_IDX])()
-#define Jgbc()	     (f0[GBC_IDX])()
-#define Jfreshcell() (f0[FRESHCELL_IDX])()
-#define Jmakevariant() (f0[MAKEVARIANT_IDX])()
-#define Jget_sp()    (f0[GET_SP_IDX])()
-#define Jget_wp()    (f0[GET_WP_IDX])()
-#define Jdebug()     (f0[DEBUG_IDX])()
-#define Jinc_proof() (f0[INC_PROOF_IDX])()
-#define Jget_up()    (f0[GET_UP_IDX])()
+static inline int Jcheckgbc(void)
+{
+    return f0[CHECKGBC_IDX]();
+}
+
+static inline int Jgbc(void)
+{
+    return f0[GBC_IDX]();
+}
+
+static inline int Jfreshcell(void)
+{
+    return f0[FRESHCELL_IDX]();
+}
+
+static inline int Jmakevariant(void) {
+    return f0[MAKEVARIANT_IDX]();
+}
+
+static inline int Jget_sp(void) {
+    return f0[GET_SP_IDX]();
+}
+
+static inline int Jget_wp(void) {
+    return f0[GET_WP_IDX]();
+}
+
+static inline int Jdebug(void) {
+    return f0[DEBUG_IDX]();
+}
+
+static inline int Jinc_proof(void) {
+    return f0[INC_PROOF_IDX]();
+}
+
+
 
 #define Jcar(x)      (f1[CAR_IDX])(x)
 #define Jcdr(x)      (f1[CDR_IDX])(x)
