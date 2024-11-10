@@ -423,20 +423,20 @@ jump_gen_a_pred5(P) :-
 
 % disjunction
 jump_gen_body((X;Y)) :-
-    write('{body = '),nl,
+    write('{int save3; save3=Jget_sp();'),nl,
+    write('body = '),nl,
     jump_gen_body1(X),
     write(';'),nl,
     write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl,
+    write('Junbind(save3);'),nl,
     write('body = '),nl,
     jump_gen_body1(Y),
     write(';'),nl,
     write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);}'),nl.
+    write('Junbind(save3);}'),nl.
+
 
 % has cut
 jump_gen_body(X) :-
