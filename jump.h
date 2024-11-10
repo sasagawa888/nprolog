@@ -207,47 +207,169 @@ static inline int Jvariablep(int x) {
 }
 
 
-#define Jcons(x,y)   (f2[CONS_IDX])(x,y)
-#define Jplus(x,y)   (f2[PLUS_IDX])(x,y)
-#define Jminus(x,y)  (f2[MINUS_IDX])(x,y)
-#define Jmult(x,y)   (f2[MULT_IDX])(x,y)
-#define Jdivide(x,y) (f2[DIVIDE_IDX])(x,y)
-#define Jremainder(x,y) (f2[REMAINDER_IDX])(x,y)
-#define Jquotient(x,y) (f2[QUOTIENT_IDX])(x,y)
-#define Jeqp(x,y)    (f2[EQP_IDX])(x,y)
-#define Jnumeqp(x,y) (f2[NUMEQP_IDX])(x,y)
-#define Jsmallerp(x,y) (f2[SMALLERP_IDX])(x,y)
-#define Jeqsmallerp(x,y) (f2[EQSMALLERP_IDX])(x,y)
-#define Jgreaterp(x,y) (f2[GREATERP_IDX])(x,y)
-#define Jeqgreaterp(x,y) (f2[EQGREATERP_IDX])(x,y)
-#define Junify(x,y)      (f2[UNIFY_IDX])(x,y)
-#define Jmod(x,y)		 (f2[MOD_IDX])(x,y)
-#define Jexpt(x,y)       (f2[EXPT_IDX])(x,y)
-#define Jsqrt(x,y)       (f2[SQRT_IDX])(x,y)
-#define Jleftshift(x,y)  (f2[LEFTSHIFT_IDX])(x,y)
-#define Jrightshift(x,y) (f2[RIGHTSHIFT_IDX])(x,y)
-#define Jlogicaland(x,y) (f2[LOGICALAND_IDX])(x,y)
-#define Jlogicalor(x,y)  (f2[LOGICALOR_IDX])(x,y)
-#define Jlistcons(x,y)   (f2[LISTCONS_IDX])(x,y)
-#define Jlist2(x,y)      (f2[LIST2_IDX])(x,y)
-#define Jset_car(x,y)    (f2[SET_CAR_IDX])(x,y)
-#define Jset_cdr(x,y)    (f2[SET_CDR_IDX])(x,y)
-#define Jcomplement(x)   (f2[COMPLEMENT_IDX])(x,y)
-#define Jset_aux(x,y)    (f2[SET_AUX_IDX])(x,y)
-#define Jnot_numeqp(x,y) (f2[NOT_NUMEQP_IDX])(x,y)
-#define Jdiv(x,y)        (f2[DIV_IDX])(x,y)
-#define Jset_var(x,y)    (f2[SET_VAR_IDX])(x,y)
-#define Jwcons(x,y)        (f2[WCONS_IDX])(x,y)
-#define Jwlist2(x,y)       (f2[WLIST2_IDX])(x,y)
-#define Jwlistcons(x,y)    (f2[WLISTCONS_IDX])(x,y)
-#define Jaddtail_body(x,y)      (f2[ADDTAIL_BODY_IDX])(x,y)
-#define Jnth(x,y)          (f2[NTH_IDX])(x,y)
-#define Junify_const(x,y)  (f2[UNIFY_CONST_IDX])(x,y)
-#define Junify_var(x,y)    (f2[UNIFY_VAR_IDX])(x,y)
-#define Junify_nil(x,y)    (f2[UNIFY_NIL_IDX])(x,y)
-#define Jprove_all(x,y)    (f2[PROVE_ALL_IDX])(x,y)
-#define Jround(x,y)        (f2[ROUND_IDX])(x,y)
-#define Jexec_all(x,y)     (f2[EXEC_ALL_IDX])(x,y)
+static inline int Jcons(int x, int y) {
+    return f2[CONS_IDX](x, y);
+}
+
+static inline int Jplus(int x, int y) {
+    return f2[PLUS_IDX](x, y);
+}
+
+static inline int Jminus(int x, int y) {
+    return f2[MINUS_IDX](x, y);
+}
+
+static inline int Jmult(int x, int y) {
+    return f2[MULT_IDX](x, y);
+}
+
+static inline int Jdivide(int x, int y) {
+    return f2[DIVIDE_IDX](x, y);
+}
+
+static inline int Jremainder(int x, int y) {
+    return f2[REMAINDER_IDX](x, y);
+}
+
+static inline int Jquotient(int x, int y) {
+    return f2[QUOTIENT_IDX](x, y);
+}
+
+static inline int Jeqp(int x, int y) {
+    return f2[EQP_IDX](x, y);
+}
+
+static inline int Jnumeqp(int x, int y) {
+    return f2[NUMEQP_IDX](x, y);
+}
+
+static inline int Jsmallerp(int x, int y) {
+    return f2[SMALLERP_IDX](x, y);
+}
+
+static inline int Jeqsmallerp(int x, int y) {
+    return f2[EQSMALLERP_IDX](x, y);
+}
+
+static inline int Jgreaterp(int x, int y) {
+    return f2[GREATERP_IDX](x, y);
+}
+
+static inline int Jeqgreaterp(int x, int y) {
+    return f2[EQGREATERP_IDX](x, y);
+}
+
+static inline int Junify(int x, int y) {
+    return f2[UNIFY_IDX](x, y);
+}
+
+static inline int Jmod(int x, int y) {
+    return f2[MOD_IDX](x, y);
+}
+
+static inline int Jexpt(int x, int y) {
+    return f2[EXPT_IDX](x, y);
+}
+
+static inline int Jsqrt(int x, int y) {
+    return f2[SQRT_IDX](x, y);
+}
+
+static inline int Jleftshift(int x, int y) {
+    return f2[LEFTSHIFT_IDX](x, y);
+}
+
+static inline int Jrightshift(int x, int y) {
+    return f2[RIGHTSHIFT_IDX](x, y);
+}
+
+static inline int Jlogicaland(int x, int y) {
+    return f2[LOGICALAND_IDX](x, y);
+}
+
+static inline int Jlogicalor(int x, int y) {
+    return f2[LOGICALOR_IDX](x, y);
+}
+
+static inline int Jlistcons(int x, int y) {
+    return f2[LISTCONS_IDX](x, y);
+}
+
+static inline int Jlist2(int x, int y) {
+    return f2[LIST2_IDX](x, y);
+}
+
+static inline int Jset_car(int x, int y) {
+    return f2[SET_CAR_IDX](x, y);
+}
+
+static inline int Jset_cdr(int x, int y) {
+    return f2[SET_CDR_IDX](x, y);
+}
+
+static inline int Jcomplement(int x, int y) {
+    return f2[COMPLEMENT_IDX](x, y);
+}
+
+static inline int Jset_aux(int x, int y) {
+    return f2[SET_AUX_IDX](x, y);
+}
+
+static inline int Jnot_numeqp(int x, int y) {
+    return f2[NOT_NUMEQP_IDX](x, y);
+}
+
+static inline int Jdiv(int x, int y) {
+    return f2[DIV_IDX](x, y);
+}
+
+static inline int Jset_var(int x, int y) {
+    return f2[SET_VAR_IDX](x, y);
+}
+
+static inline int Jwcons(int x, int y) {
+    return f2[WCONS_IDX](x, y);
+}
+
+static inline int Jwlist2(int x, int y) {
+    return f2[WLIST2_IDX](x, y);
+}
+
+static inline int Jwlistcons(int x, int y) {
+    return f2[WLISTCONS_IDX](x, y);
+}
+
+static inline int Jaddtail_body(int x, int y) {
+    return f2[ADDTAIL_BODY_IDX](x, y);
+}
+
+static inline int Jnth(int x, int y) {
+    return f2[NTH_IDX](x, y);
+}
+
+static inline int Junify_const(int x, int y) {
+    return f2[UNIFY_CONST_IDX](x, y);
+}
+
+static inline int Junify_var(int x, int y) {
+    return f2[UNIFY_VAR_IDX](x, y);
+}
+
+static inline int Junify_nil(int x, int y) {
+    return f2[UNIFY_NIL_IDX](x, y);
+}
+
+static inline int Jprove_all(int x, int y) {
+    return f2[PROVE_ALL_IDX](x, y);
+}
+
+static inline int Jround(int x, int y) {
+    return f2[ROUND_IDX](x, y);
+}
+
+static inline int Jexec_all(int x, int y) {
+    return f2[EXEC_ALL_IDX](x, y);
+}
 
 #define Jlist3(x,y,z)       (f3[LIST3_IDX])(x,y,z)
 #define Jcallsubr(x,y,z)    (f3[CALLSUBR_IDX])(x,y,z)
