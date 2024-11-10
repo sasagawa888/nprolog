@@ -87,39 +87,125 @@ static inline int Jinc_proof(void) {
 }
 
 
+static inline int Jcar(x){
+    return f1[CAR_IDX](x);
+}
 
-#define Jcar(x)      (f1[CAR_IDX])(x)
-#define Jcdr(x)      (f1[CDR_IDX])(x)
-#define Jcadr(x)     (f1[CADR_IDX])(x)
-#define Jcaddr(x)    (f1[CADDR_IDX])(x)
-#define Jcaar(x)     (f1[CAAR_IDX])(x)
-#define Jcadar(x)    (f1[CADAR_IDX])(x)
-#define Jprint(x)    (f1[PRINT_IDX])(x)
-#define Jmakeint(x)  (f1[MAKEINT_IDX])(x)
-#define Junbind(x)   (f1[UNBIND_IDX])(x)
-#define Jlength(x)   (f1[LENGTH_IDX])(x)
-#define Jset_sp(x)   (f1[SET_UP_IDX])(x)
-#define Jderef(x)    (f1[DEREF_IDX])(x)
-#define Jget_int(x)  (f1[GET_INT_IDX])(x)
-#define Jsin(x)      (f1[SIN_IDX])(x)
-#define Jasin(x)     (f1[ASIN_IDX])(x)
-#define Jcos(x)      (f1[COS_IDX])(x)
-#define Jacos(x)     (f1[ACOS_IDX])(x)
-#define Jtan(x)      (f1[TAN_IDX])(x)
-#define Jatan(x)     (f1[ATAN_IDX])(x)
-#define Jexp(x)      (f1[EXP_IDX])(x)
-#define Jlog(x)      (f1[LOG_IDX])(x)
-#define Jln(x)       (f1[LN_IDX])(x)
-#define Jlist1(x)    (f1[LIST1_IDX])(x)
-#define Jrandom(x)   (f1[RANDOM_IDX])(x)
-#define Jrandi(x)    (f1[RANDI_IDX])(x)
-#define Jset_wp(x)   (f1[SET_WP_IDX])(x)
-#define Jwlist1(x)   (f1[WLIST1_IDX])(x)
-#define Jexecute(x)  (f1[EXECUTE_IDX])(x)
-#define Jlistp(x)    (f1[LISTP_IDX])(x)
-#define Jstructurep(x) (f1[STRUCTUREP_IDX])(x)
-#define Jset_up(x)   (f1[SET_UP_IDX])(x)
-#define Jvariablep(x) (f1[VARIABLEP_IDX])(x)
+static inline int Jcdr(int x) {
+    return f1[CDR_IDX](x);
+}
+
+static inline int Jcadr(int x) {
+    return f1[CADR_IDX](x);
+}
+
+static inline int Jcaddr(int x) {
+    return f1[CADDR_IDX](x);
+}
+
+static inline int Jcaar(int x) {
+    return f1[CAAR_IDX](x);
+}
+
+static inline int Jcadar(int x) {
+    return f1[CADAR_IDX](x);
+}
+
+static inline int Jprint(int x) {
+    return f1[PRINT_IDX](x);
+}
+
+static inline int Jmakeint(int x) {
+    return f1[MAKEINT_IDX](x);
+}
+
+static inline int Junbind(int x) {
+    return f1[UNBIND_IDX](x);
+}
+
+static inline int Jlength(int x) {
+    return f1[LENGTH_IDX](x);
+}
+
+
+static inline int Jderef(int x) {
+    return f1[DEREF_IDX](x);
+}
+
+static inline int Jget_int(int x) {
+    return f1[GET_INT_IDX](x);
+}
+
+static inline int Jsin(int x) {
+    return f1[SIN_IDX](x);
+}
+
+static inline int Jasin(int x) {
+    return f1[ASIN_IDX](x);
+}
+
+static inline int Jcos(int x) {
+    return f1[COS_IDX](x);
+}
+
+static inline int Jacos(int x) {
+    return f1[ACOS_IDX](x);
+}
+
+static inline int Jtan(int x) {
+    return f1[TAN_IDX](x);
+}
+
+static inline int Jatan(int x) {
+    return f1[ATAN_IDX](x);
+}
+
+static inline int Jexp(int x) {
+    return f1[EXP_IDX](x);
+}
+
+static inline int Jlog(int x) {
+    return f1[LOG_IDX](x);
+}
+
+static inline int Jln(int x) {
+    return f1[LN_IDX](x);
+}
+
+static inline int Jlist1(int x) {
+    return f1[LIST1_IDX](x);
+}
+
+static inline int Jrandom(int x) {
+    return f1[RANDOM_IDX](x);
+}
+
+static inline int Jrandi(int x) {
+    return f1[RANDI_IDX](x);
+}
+
+static inline int Jset_wp(int x) {
+    return f1[SET_WP_IDX](x);
+}
+
+static inline int Jwlist1(int x) {
+    return f1[WLIST1_IDX](x);
+}
+
+
+static inline int Jlistp(int x) {
+    return f1[LISTP_IDX](x);
+}
+
+static inline int Jstructurep(int x) {
+    return f1[STRUCTUREP_IDX](x);
+}
+
+
+static inline int Jvariablep(int x) {
+    return f1[VARIABLEP_IDX](x);
+}
+
 
 #define Jcons(x,y)   (f2[CONS_IDX])(x,y)
 #define Jplus(x,y)   (f2[PLUS_IDX])(x,y)
