@@ -359,9 +359,6 @@ static inline int Junify_nil(int x, int y) {
     return f2[UNIFY_NIL_IDX](x, y);
 }
 
-static inline int Jprove_all(int x, int y) {
-    return f2[PROVE_ALL_IDX](x, y);
-}
 
 static inline int Jround(int x, int y) {
     return f2[ROUND_IDX](x, y);

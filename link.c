@@ -124,7 +124,6 @@ void dynamic_link(int x)
     init_f2(UNIFY_CONST_IDX, (tpred) unify_const);
     init_f2(UNIFY_VAR_IDX, (tpred) unify_var);
     init_f2(UNIFY_NIL_IDX, (tpred) unify_nil);
-    init_f2(PROVE_ALL_IDX, (tpred) prove_all);
     init_f2(ROUND_IDX, (tpred) f_round);
     init_f2(EXEC_ALL_IDX, (tpred) exec_all);
 
