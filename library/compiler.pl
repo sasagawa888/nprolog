@@ -16,7 +16,7 @@ if(n == 2){
     save1 = Jget_wp();
     if(Junify(term1,arg1) == YES && Junify_var(term2,arg2) == YES){
         body =Jwcons(119,Jwcons(varX,Jwcons(varY,NIL)));
-        if(Jpove_all(Jaddtail_body(rest,body),save2,0) == YES)
+        if(Jexec_all(Jaddtail_body(rest,body),save2,0) == YES)
             return(YES);
     }
     Junbind(save2);
