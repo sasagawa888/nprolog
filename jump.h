@@ -371,10 +371,23 @@ static inline int Jexec_all(int x, int y) {
     return f2[EXEC_ALL_IDX](x, y);
 }
 
-#define Jlist3(x,y,z)       (f3[LIST3_IDX])(x,y,z)
-#define Jcallsubr(x,y,z)    (f3[CALLSUBR_IDX])(x,y,z)
-#define Jwlist3(x,y,z)      (f3[WLIST3_IDX])(x,y,z)
-#define Jerrorcomp(x,y,z)   (f3[ERRORCOMP_IDX])(x,y,z)
+static inline int Jlist3(int x, int y, int z) {
+    return f3[LIST3_IDX](x, y, z);
+}
+
+static inline int Jcallsubr(int x, int y, int z) {
+    return f3[CALLSUBR_IDX](x, y, z);
+}
+
+static inline int Jwlist3(int x, int y, int z) {
+    return f3[WLIST3_IDX](x, y, z);
+}
+
+static inline int Jerrorcomp(int x, int y, int z) {
+    return f3[ERRORCOMP_IDX](x, y, z);
+}
+
+
 
 #define Jmakeconst(x)  (f4[MAKECONST_IDX])(x)
 #define Jmakepred(x)   (f4[MAKEPRED_IDX])(x)
