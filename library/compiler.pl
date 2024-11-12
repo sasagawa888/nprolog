@@ -550,7 +550,7 @@ jump_gen_body(X,N) :-
     write('if((res=Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
     write('return(YES);'),nl,
     write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);body;}'),nl.
+    write('Jset_wp(save1);}'),nl.
     
 jump_gen_after_body(X,N) :-
     write('{body = '),
@@ -558,16 +558,9 @@ jump_gen_after_body(X,N) :-
     write(';'),nl,
     write('if((Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
     write('return(YES);'),nl,
-    write('else return(NO);}'),nl.
-
-jump_gen_after_body(X,N) :-
-    write('{body = '),
-    jump_gen_body1(X,N),
-    write(';'),nl,
-    write('if((Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
-    write('return(YES);'),nl,
-    write('else return(NO);}'),nl.
-
+    write('Junbind(save2);'),nl,
+    write('Jset_wp(save1);'),nl,
+    write('return(NO);}'),nl.
 
 
 jump_gen_body1([],N) :-
