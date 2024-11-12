@@ -504,13 +504,7 @@ jump_gen_body(X,N) :-
     write('Jset_wp(save1);'),nl.
     
     
-% conjunction 
-jump_gen_body(X,N) :-
-    write('{body = '),
-    jump_gen_body1(X,N),
-    write(';'),nl,
-    write('if((res=Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
-    write('return(YES);'),nl,
+
 % disjunction
 jump_gen_body((X;Y),N) :-
     write('{int save3; save3=Jget_sp();'),nl,
