@@ -6,7 +6,7 @@ test(X) :-
     X = 2.   % Second choice
 
 % Test case 1: Check that 1 and 2 can be obtained
-test_case_1 :-
+test1 :-
     test(X),
     write(X), nl,  % Write the value of X to the output
     fail.  % Force backtracking to try all choices
