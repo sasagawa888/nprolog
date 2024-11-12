@@ -840,7 +840,7 @@ int exec_all(int goals, int bindings)
     if (nullp(goals))
 	return (YES);
     /* ,(;(D1;D2),Xs)*/
-	else if (car(cadr(goals)) == OR){
+	else if (listp(goals) && car(cadr(goals)) == OR){
 		if(exec_all(cadr(cadr(goals)),bindings)==YES) return(exec_all(caddr(goals),bindings));
 		else if (exec_all(caddr(cadr(goals)),bindings) == YES) return(exec_all(caddr(goals),bindings));
 		else return(NO);
