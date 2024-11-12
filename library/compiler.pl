@@ -457,6 +457,32 @@ Jset_wp(save1);
 
 
 % disjunction
+jump_gen_body(((X1;X2);Y),N) :-
+    write('{dp['),write(N),write(']=Jget_sp();'),nl,
+    N1 is N+1,
+    jump_gen_body(X,N1),
+    write('Junbind(dp['),write(N),write(']);'),nl,
+    write('body = '),nl,
+    jump_gen_body1(Y,N),
+    write(';'),nl,
+    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
+    write('return(YES);'),nl,
+    write('Junbind(dp['),write(N),write(']);body;}'),nl.
+
+
+jump_gen_body((X;(Y1;Y2)),N) :-
+    write('{dp['),write(N),write(']=Jget_sp();'),nl,
+    write('body = '),nl,
+    jump_gen_body1(X,N),
+    write(';'),nl,
+    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
+    write('return(YES);'),nl,
+    write('Junbind(dp['),write(N),write(']);'),nl,
+    N1 is N+1,
+    jump_gen_body((Y1;Y2),N1),
+    write('Junbind(dp['),write(N),write(']);}'),nl.
+
+
 jump_gen_body((X;Y),N) :-
     write('{dp['),write(N),write(']=Jget_sp();'),nl,
     write('body = '),nl,
