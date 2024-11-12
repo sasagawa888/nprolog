@@ -421,6 +421,41 @@ jump_gen_a_pred5(P) :-
     write('Jset_wp(save1);'),nl.
 
 
+
+% varA,varB,...
+jump_gen_all_var([]).
+jump_gen_all_var([L|Ls]) :-
+    n_atom_convert(L,L1),
+	write(L1),
+    write(','),
+    jump_gen_all_var(Ls).
+
+% varA = Jmakevariant(), varB = Jmakevariant();
+jump_gen_var([]).
+jump_gen_var([L|Ls]) :-
+    n_atom_convert(L,L1),
+    write(L1),
+    write(' = Jmakevariant();'),nl,
+    jump_gen_var(Ls).
+
+
+
+/*
+body for compiler
+foo(X),bar(X),boo(X).
+
+if(unify(....)){
+    body = ...;
+    if(Jexec_all(body,Jget_sp()) == YES)
+        return(YES)};
+
+Junbind(save2);
+Jset_wp(save1);
+
+
+*/
+
+
 % disjunction
 jump_gen_body((X;Y),N) :-
     write('{int save3; save3=Jget_sp();'),nl,
@@ -488,39 +523,7 @@ jump_gen_after_body(X) :-
     write('else return(NO);}'),nl.
 
 
-% varA,varB,...
-jump_gen_all_var([]).
-jump_gen_all_var([L|Ls]) :-
-    n_atom_convert(L,L1),
-	write(L1),
-    write(','),
-    jump_gen_all_var(Ls).
-
-% varA = Jmakevariant(), varB = Jmakevariant();
-jump_gen_var([]).
-jump_gen_var([L|Ls]) :-
-    n_atom_convert(L,L1),
-    write(L1),
-    write(' = Jmakevariant();'),nl,
-    jump_gen_var(Ls).
-
-
-
-/*
-body for compiler
-foo(X),bar(X),boo(X).
-
-if(unify(....)){
-    body = ...;
-    if(Jexec_all(body,Jget_sp()) == YES)
-        return(YES)};
-
-Junbind(save2);
-Jset_wp(save1);
-
-
-*/
-jump_gen_body(X) :-
+jump_gen_body(X,N) :-
     write('{body = '),
     jump_gen_body1(X),
     write(';'),nl,
