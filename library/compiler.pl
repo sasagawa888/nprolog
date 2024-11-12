@@ -504,55 +504,6 @@ jump_gen_body(X,N) :-
     write('Jset_wp(save1);'),nl.
     
     
-
-% disjunction
-jump_gen_body((X;Y),N) :-
-    write('{int save3; save3=Jget_sp();'),nl,
-    write('body = '),nl,
-    jump_gen_body1(X,N),
-    write(';'),nl,
-    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
-    write('return(YES);'),nl,
-    write('Junbind(save3);'),nl,
-    write('body = '),nl,
-    jump_gen_body1(Y,N),
-    write(';'),nl,
-    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
-    write('return(YES);'),nl,
-    write('Junbind(save3);}'),nl.
-
-
-% has cut
-jump_gen_body(X,N) :-
-    n_has_cut(X),
-    n_before_cut(X,X1),
-    n_after_cut(X,X2),
-    not(n_has_cut(X2)),
-    write('{body = '),
-    jump_gen_body1(X1,N),
-    write(';'),nl,
-    write('if((res=Jexec_all(body,Jget_sp())) == YES)'),nl,
-    jump_gen_after_body(X2,N),
-    write('}'),nl,
-    write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl.
-
-% nested has cut
-jump_gen_body(X,N) :-
-    n_has_cut(X),
-    n_before_cut(X,X1),
-    n_after_cut(X,X2),
-    n_has_cut(X2),
-    write('{body = '),
-    jump_gen_body1(X1,N),
-    write(';'),nl,
-    write('if(Jexec_all(body,Jget_sp()) == YES)'),nl,
-    jump_gen_body(X2,N),
-    write('}'),nl,
-    write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl.
-    
-    
 % conjunction 
 jump_gen_body(X,N) :-
     write('{body = '),
@@ -579,17 +530,6 @@ jump_gen_after_body(X,N) :-
     write('return(YES);'),nl,
     write('else return(NO);}'),nl.
 
-
-jump_gen_body(X,N) :-
-    write('{body = '),
-    jump_gen_body1(X),
-    write(';'),nl,
-    write('if((res=Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
-    write('return(YES);}'),nl,
-    write('Junbind(save2);'),nl,
-    write('Jset_wp(save1);'),nl,
-    write('if(res == FALSE) return(NO); '),nl,
-    !.
 
 
 jump_gen_body1([],N) :-
