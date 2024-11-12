@@ -1,34 +1,27 @@
-% Testing the disjunction (choice) behavior in Prolog
-
-% A rule with two choices
 test(X) :-
-    X = 1;   % First choice
-    X = 2.   % Second choice
+    X = 1;
+    X = 2.
 
-% Test case 1: Check that 1 and 2 can be obtained
 test1 :-
     test(X),
-    write(X), nl,  % Write the value of X to the output
-    fail.  % Force backtracking to try all choices
+    write(X), nl,
+    fail.
 
-% A rule with three choices
-test_3_choices(X) :-
-    X = a;    % First choice
-    X = b;    % Second choice
-    X = c.    % Third choice
+test2(X) :-
+    X = a;
+    X = b;
+    X = c.
 
-% Test case 2: Check that 'a', 'b', and 'c' are returned sequentially
-test_case_2 :-
-    test_3_choices(X),
-    write(X), nl,  % Write the value of X to the output
-    fail.  % Force backtracking to try all choices
+test3(X) :-
+    X = 1, !;
+    X = 2.
 
-% Conditional disjunction
-test_conditional(X) :-
-    X = 1, !; % First choice with cut (!), prevents backtracking
-    X = 2.    % Second choice
+test4 :-
+    test3(X),
+    write(X), nl.
 
-% Test case 3: Check that only 1 is returned (no backtracking due to the cut)
-test_case_3 :-
-    test_conditional(X),
-    write(X), nl.  % Write the value of X to the output
+test5 :-
+    true,true,(fail;true),true.
+
+test6 :-
+    true,true,(fail;fail),true.

@@ -484,6 +484,18 @@ jump_gen_body((X;(Y1;Y2)),N) :-
 
 
 jump_gen_body((X;Y),N) :-
+    n_has_cut(X),
+    write('{dp['),write(N),write(']=Jget_sp();'),nl,
+    jump_gen_body(X,N),
+    write('Junbind(dp['),write(N),write(']);'),nl,
+    write('body = '),nl,
+    jump_gen_body1(Y,N),
+    write(';'),nl,
+    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
+    write('return(YES);'),nl,
+    write('Junbind(dp['),write(N),write(']);body;}'),nl.
+
+jump_gen_body((X;Y),N) :-
     write('{dp['),write(N),write(']=Jget_sp();'),nl,
     write('body = '),nl,
     jump_gen_body1(X,N),
@@ -560,18 +572,23 @@ jump_gen_after_body(X,N) :-
 
 jump_gen_body1([],N) :-
     write('NIL').
+jump_gen_body1(((D1;D2),Xs),N) :-
+    write('Jwlist3(Jmakeope(","),'),
+	write('Jwlist3(Jmakeope(";"),'),
+	jump_gen_body1(D1,N),
+    write(','),
+    jump_gen_body1(D2,N),
+    write('),'),
+    jump_gen_body1(Xs,N),
+    write(')').
+    
 jump_gen_body1((X,Xs),N) :-
 	write('Jwlist3(Jmakeope(","),'),
 	jump_gen_a_body(X),
     write(','),
     jump_gen_body1(Xs,N),
     write(')').
-jump_gen_body1((X;Xs),N) :-
-	write('Jwlist3(Jmakeope(";"),'),
-	jump_gen_body1(X,N),
-    write(','),
-    jump_gen_body1(Xs,N),
-    write(')').
+
 jump_gen_body1(X,N) :-
 	jump_gen_a_body(X).
 
