@@ -458,19 +458,19 @@ Jset_wp(save1);
 
 % disjunction
 jump_gen_body((X;Y),N) :-
-    write('{int save3; save3=Jget_sp();'),nl,
+    write('{dp['),write(N),write(']=Jget_sp();'),nl,
     write('body = '),nl,
     jump_gen_body1(X,N),
     write(';'),nl,
     write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(save3);'),nl,
+    write('Junbind(dp['),write(N),write(']);'),nl,
     write('body = '),nl,
     jump_gen_body1(Y,N),
     write(';'),nl,
     write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(save3);}'),nl.
+    write('Junbind(dp['),write(N),write(']);}'),nl.
 
 
 % has cut
