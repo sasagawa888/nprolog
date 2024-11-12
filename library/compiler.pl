@@ -394,7 +394,7 @@ if( )... head
 jump_gen_a_pred5((Head :- Body)) :-
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(Head),
-    jump_gen_body(Body).
+    jump_gen_body(Body,0).
 
 % predicate with no arity
 jump_gen_a_pred5(P) :-
@@ -422,7 +422,7 @@ jump_gen_a_pred5(P) :-
 
 
 % disjunction
-jump_gen_body((X;Y)) :-
+jump_gen_body((X;Y),N) :-
     write('{int save3; save3=Jget_sp();'),nl,
     write('body = '),nl,
     jump_gen_body1(X),
@@ -439,7 +439,7 @@ jump_gen_body((X;Y)) :-
 
 
 % has cut
-jump_gen_body(X) :-
+jump_gen_body(X,N) :-
     n_has_cut(X),
     n_before_cut(X,X1),
     n_after_cut(X,X2),
@@ -454,7 +454,7 @@ jump_gen_body(X) :-
     write('Jset_wp(save1);'),nl.
 
 % nested has cut
-jump_gen_body(X) :-
+jump_gen_body(X,N) :-
     n_has_cut(X),
     n_before_cut(X,X1),
     n_after_cut(X,X2),
@@ -470,7 +470,7 @@ jump_gen_body(X) :-
     
     
 % conjunction 
-jump_gen_body(X) :-
+jump_gen_body(X,N) :-
     write('{body = '),
     jump_gen_body1(X),
     write(';'),nl,
