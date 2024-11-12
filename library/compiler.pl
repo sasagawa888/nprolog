@@ -460,13 +460,13 @@ Jset_wp(save1);
 jump_gen_body((X;Y),N) :-
     write('{int save3; save3=Jget_sp();'),nl,
     write('body = '),nl,
-    jump_gen_body1(X),
+    jump_gen_body1(X,N),
     write(';'),nl,
     write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
     write('Junbind(save3);'),nl,
     write('body = '),nl,
-    jump_gen_body1(Y),
+    jump_gen_body1(Y,N),
     write(';'),nl,
     write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
@@ -480,10 +480,10 @@ jump_gen_body(X,N) :-
     n_after_cut(X,X2),
     not(n_has_cut(X2)),
     write('{body = '),
-    jump_gen_body1(X1),
+    jump_gen_body1(X1,N),
     write(';'),nl,
     write('if((res=Jexec_all(body,Jget_sp())) == YES)'),nl,
-    jump_gen_after_body(X2),
+    jump_gen_after_body(X2,N),
     write('}'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
@@ -495,10 +495,10 @@ jump_gen_body(X,N) :-
     n_after_cut(X,X2),
     n_has_cut(X2),
     write('{body = '),
-    jump_gen_body1(X1),
+    jump_gen_body1(X1,N),
     write(';'),nl,
     write('if(Jexec_all(body,Jget_sp()) == YES)'),nl,
-    jump_gen_body(X2),
+    jump_gen_body(X2,N),
     write('}'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);'),nl.
@@ -507,16 +507,79 @@ jump_gen_body(X,N) :-
 % conjunction 
 jump_gen_body(X,N) :-
     write('{body = '),
-    jump_gen_body1(X),
+    jump_gen_body1(X,N),
+    write(';'),nl,
+    write('if((res=Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
+    write('return(YES);'),nl,
+% disjunction
+jump_gen_body((X;Y),N) :-
+    write('{int save3; save3=Jget_sp();'),nl,
+    write('body = '),nl,
+    jump_gen_body1(X,N),
+    write(';'),nl,
+    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
+    write('return(YES);'),nl,
+    write('Junbind(save3);'),nl,
+    write('body = '),nl,
+    jump_gen_body1(Y,N),
+    write(';'),nl,
+    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
+    write('return(YES);'),nl,
+    write('Junbind(save3);}'),nl.
+
+
+% has cut
+jump_gen_body(X,N) :-
+    n_has_cut(X),
+    n_before_cut(X,X1),
+    n_after_cut(X,X2),
+    not(n_has_cut(X2)),
+    write('{body = '),
+    jump_gen_body1(X1,N),
+    write(';'),nl,
+    write('if((res=Jexec_all(body,Jget_sp())) == YES)'),nl,
+    jump_gen_after_body(X2,N),
+    write('}'),nl,
+    write('Junbind(save2);'),nl,
+    write('Jset_wp(save1);'),nl.
+
+% nested has cut
+jump_gen_body(X,N) :-
+    n_has_cut(X),
+    n_before_cut(X,X1),
+    n_after_cut(X,X2),
+    n_has_cut(X2),
+    write('{body = '),
+    jump_gen_body1(X1,N),
+    write(';'),nl,
+    write('if(Jexec_all(body,Jget_sp()) == YES)'),nl,
+    jump_gen_body(X2,N),
+    write('}'),nl,
+    write('Junbind(save2);'),nl,
+    write('Jset_wp(save1);'),nl.
+    
+    
+% conjunction 
+jump_gen_body(X,N) :-
+    write('{body = '),
+    jump_gen_body1(X,N),
     write(';'),nl,
     write('if((res=Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
     write('return(YES);'),nl,
     write('Junbind(save2);'),nl,
     write('Jset_wp(save1);}'),nl.
     
-jump_gen_after_body(X) :-
+jump_gen_after_body(X,N) :-
     write('{body = '),
-    jump_gen_body1(X),
+    jump_gen_body1(X,N),
+    write(';'),nl,
+    write('if((Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
+    write('return(YES);'),nl,
+    write('else return(NO);}'),nl.
+
+jump_gen_after_body(X,N) :-
+    write('{body = '),
+    jump_gen_body1(X,N),
     write(';'),nl,
     write('if((Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
     write('return(YES);'),nl,
@@ -535,21 +598,21 @@ jump_gen_body(X,N) :-
     !.
 
 
-jump_gen_body1([]) :-
+jump_gen_body1([],N) :-
     write('NIL').
-jump_gen_body1((X,Xs)) :-
+jump_gen_body1((X,Xs),N) :-
 	write('Jwlist3(Jmakeope(","),'),
 	jump_gen_a_body(X),
     write(','),
-    jump_gen_body1(Xs),
+    jump_gen_body1(Xs,N),
     write(')').
-jump_gen_body1((X;Xs)) :-
+jump_gen_body1((X;Xs),N) :-
 	write('Jwlist3(Jmakeope(";"),'),
-	jump_gen_body1(X),
+	jump_gen_body1(X,N),
     write(','),
-    jump_gen_body1(Xs),
+    jump_gen_body1(Xs,N),
     write(')').
-jump_gen_body1(X) :-
+jump_gen_body1(X,N) :-
 	jump_gen_a_body(X).
 
 /*
