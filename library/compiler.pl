@@ -565,12 +565,7 @@ jump_gen_after_body(X,N) :-
 
 jump_gen_body1([],N) :-
     write('NIL').
-jump_gen_body1(X,N) :-
-    n_property(X,builtin),
-	jump_gen_a_body(X).
-jump_gen_body1(X,N) :-
-    n_property(X,predicate),
-	jump_gen_a_body(X).
+
 jump_gen_body1((D1;D2),N) :-
 	write('Jwlist3(Jmakeope(";"),'),
 	jump_gen_body1(D1,N),
@@ -594,7 +589,8 @@ jump_gen_body1((X,Xs),N) :-
     jump_gen_body1(Xs,N),
     write(')').
 
-
+jump_gen_body1(X,N) :-
+	jump_gen_a_body(X).
 
 /*
 generate one operation,user,builtin or compiled predicate.
