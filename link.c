@@ -4,8 +4,8 @@
 #include "npl.h"
 
 
-typedef void (*tpred)(char *, int (*pred)(int, int));
-typedef void (*tuser)(char *, int (*user)(int, int), int weight, int spec);
+typedef void (*tpred)(char *, int(*pred)(int, int));
+typedef void (*tuser)(char *, int(*user)(int, int), int weight, int spec);
 
 void dynamic_link(int x)
 {
@@ -133,7 +133,7 @@ void dynamic_link(int x)
     init_f3(CALLSUBR_IDX, (tpred) callsubr);
     init_f3(WLIST3_IDX, (tpred) wlist3);
     init_f3(ERRORCOMP_IDX, (tpred) errorcomp);
-    
+
 
     //argument-1 string type
     init_f4(MAKECONST_IDX, (tpred) makeconst);

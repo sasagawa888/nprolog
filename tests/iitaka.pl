@@ -148,3 +148,32 @@ cont_frc(A/B):- cont_frc_aux(A/B).
 cont_frc_aux(A/B):-
      res_q(A=B*Q+R),write(Q),tab(1),
      cont_frc_aux(B/R).
+
+%P141
+set(L==M) :- sort(L,L0),sort(M,M0),L==M0.
+
+%p100
+memberd(X,L) :- member(X,L),!.
+
+%p143
+:- op(700,xfx,isl).
+Y isl [] + Y :-!.
+Z isl [A|X] + Y :-
+memberd(A,Y),!,Z isl X + Y.
+[A|Z] isl [A|X] + Y :- Z isl X + Y.
+
+%p144
+[] isl [] * Y :-!.
+[A|Z] isl [A|Z] * Y :-
+memberd(A, X),!,Z isl X * Y.
+Z isl [A|X] * Y :- Z isl X * Y.
+
+%p147
+[] isl [] - A :- !.
+Z isl [A|LA] - X :- memberd(A,X),!,Z isl LA -X.
+[A|Z] isl [A|LA] - X :- Z isl LA - X.
+
+%p147
+[] isl [] / A.
+X isl [A|X] / A :- !.
+[C|X] isl [C|CL] / A :- X isl LC / A.

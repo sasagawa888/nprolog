@@ -615,7 +615,7 @@ int before_cut(int x)
 	return (NIL);
     else if (!conjunctionp(x))
 	return (x);
-	else if (conjunctionp(x) && caddr(x) == CUT)
+    else if (conjunctionp(x) && caddr(x) == CUT)
 	return (cadr(x));
     else if (cadr(x) == CUT)
 	return (NIL);

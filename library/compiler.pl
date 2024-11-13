@@ -565,6 +565,12 @@ jump_gen_after_body(X,N) :-
 
 jump_gen_body1([],N) :-
     write('NIL').
+jump_gen_body1((D1;D2),N) :-
+	write('Jwlist3(Jmakeope(";"),'),
+	jump_gen_body1(D1,N),
+    write(','),
+    jump_gen_body1(D2,N),
+    write(')').
 jump_gen_body1(((D1;D2),Xs),N) :-
     write('Jwlist3(Jmakeope(","),'),
 	write('Jwlist3(Jmakeope(";"),'),

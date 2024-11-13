@@ -839,16 +839,18 @@ int exec_all(int goals, int bindings)
 
     if (nullp(goals))
 	return (YES);
-    /* ,(;(D1;D2),Xs)*/
-	else if (listp(goals) && car(cadr(goals)) == OR){
-		if(exec_all(cadr(cadr(goals)),bindings)==YES) return(exec_all(caddr(goals),bindings));
-		else if (exec_all(caddr(cadr(goals)),bindings) == YES) return(exec_all(caddr(goals),bindings));
-		else return(NO);
-	}
-    else if (car(goals) != AND)
+    /* ,(;(D1;D2),Xs) */
+    else if (listp(goals) && car(cadr(goals)) == OR) {
+	if (exec_all(cadr(cadr(goals)), bindings) == YES)
+	    return (exec_all(caddr(goals), bindings));
+	else if (exec_all(caddr(cadr(goals)), bindings) == YES)
+	    return (exec_all(caddr(goals), bindings));
+	else
+	    return (NO);
+    } else if (car(goals) != AND)
 	return (exec(goals, bindings, NIL));
     else {
-	    return (exec(cadr(goals), bindings, caddr(goals)));
+	return (exec(cadr(goals), bindings, caddr(goals)));
     }
 
     return (NO);
@@ -887,7 +889,7 @@ int exec(int goal, int bindings, int rest)
 
 	    return (NO);
 	}
-	}
+    }
     return (NO);
 }
 
