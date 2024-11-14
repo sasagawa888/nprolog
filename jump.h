@@ -456,7 +456,7 @@ static inline int Jtakeout(int x, int y){
 
 static inline int Jmatch(int x, int y)
 {
-    if(Jvariablep(x)){
+    if(x == UNDEF){
         x = y;
         return(x);
     } else if(Jequalp(x,y))

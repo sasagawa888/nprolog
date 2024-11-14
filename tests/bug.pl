@@ -1,3 +1,4 @@
 
 
-:- op(700,xfx,isq).
+foo(X,Y) :- Y is 2*X.
+ 
