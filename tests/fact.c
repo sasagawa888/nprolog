@@ -16,10 +16,10 @@ if(Jmatch(Jmakeint(0),arg1) != NO && Jmatch(Jmakeint(1),arg2) != NO && 1){
 varX1 = Jmakevariant();
 varY1 = Jmakevariant();
 save1 = Jget_wp();
-if((varX=Jtakein(varX,arg1)) != NO && (varY=Jtakein(varY,arg2)) != YES && 1)
+if((varX=Jtakein(varX,arg1)) != NO && (varY=Jtakein(varY,arg2)) != NO && 1)
 body = Jwlist3(Jmakeope(","),Jwcons(168,Jwcons(varX1,Jwcons(Jwcons(1395,Jwcons(varX,Jwcons(Jmakeint(1),NIL))),NIL))),NIL);
 Jexec_all(body,Jget_sp());
-res = fact(varX,varY);
+res = b_fact(Jwlist2(varX,varY),NIL);
 Jtakeout(arg1,Jnth(res,0));
 Jtakeout(arg2,Jnth(res,1));
 return(Jexec_all(rest,Jget_sp()));}
