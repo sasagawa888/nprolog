@@ -440,27 +440,3 @@ static inline int Jmakefun(char* x) {
     return f4[MAKEFUNC_IDX](x);
 }
 
-
-/* for predicate like function */
-static inline int Jtakein(int x){
-    if(Jvariablep(x))
-        return UNDEF;
-    else
-        return(x);
-}
-
-static inline int Jtakeout(int x, int y){
-    if(Jvariablep(x))
-        Junify(x,y);
-}
-
-static inline int Jmatch(int x, int y)
-{
-    if(x == UNDEF){
-        x = y;
-        return(x);
-    } else if(Jequalp(x,y))
-        return(x);
-    else
-        return(NO);
-}
