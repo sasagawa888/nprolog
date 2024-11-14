@@ -442,13 +442,11 @@ static inline int Jmakefun(char* x) {
 
 
 /* for predicate like function */
-static inline int Jtakein(int x, int y){
-    if(Jvariablep(y))
-        x = UNDEF;
+static inline int Jtakein(int x){
+    if(Jvariablep(x))
+        return UNDEF;
     else
-        x = y;
-
-    return(x);
+        return(x);
 }
 
 static inline int Jtakeout(int x, int y){
