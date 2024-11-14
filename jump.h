@@ -447,6 +447,8 @@ static inline int Jtakein(int x, int y){
         x = UNDEF;
     else
         x = y;
+
+    return(x);
 }
 
 static inline int Jtakeout(int x, int y){
@@ -458,9 +460,9 @@ static inline int Jmatch(int x, int y)
 {
     if(Jvariablep(x)){
         x = y;
-        return(YES);
+        return(x);
     } else if(Jequalp(x,y))
-        return(YES);
+        return(x);
     else
         return(NO);
 }
