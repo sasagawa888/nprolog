@@ -94,6 +94,7 @@ void dynamic_link(int x)
     init_f2(REMAINDER_IDX, (tpred) s_remainder);
     init_f2(QUOTIENT_IDX, (tpred) quotient);
     init_f2(EQP_IDX, (tpred) eqp);
+    init_f2(EQUALP_IDX, (tpred) equalp);
     init_f2(NUMEQP_IDX, (tpred) numeqp);
     init_f2(SMALLERP_IDX, (tpred) smallerp);
     init_f2(EQSMALLERP_IDX, (tpred) eqsmallerp);

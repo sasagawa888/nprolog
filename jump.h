@@ -241,6 +241,11 @@ static inline int Jeqp(int x, int y) {
     return f2[EQP_IDX](x, y);
 }
 
+static inline int Jequalp(int x, int y) {
+    return f2[EQUALP_IDX](x, y);
+}
+
+
 static inline int Jnumeqp(int x, int y) {
     return f2[NUMEQP_IDX](x, y);
 }
@@ -435,17 +440,27 @@ static inline int Jmakefun(char* x) {
     return f4[MAKEFUNC_IDX](x);
 }
 
-/*
-#define Jmakeconst(x)  (f4[MAKECONST_IDX])(x)
-#define Jmakepred(x)   (f4[MAKEPRED_IDX])(x)
-#define Jmakevar(x)    (f4[MAKEVAR_IDX])(x)
-#define Jmakestrflt(x) (f4[MAKESTRFLT_IDX])(x)
-#define Jmakecomp(x)   (f4[MAKECOMP_IDX])(x)
-#define Jmakesys(x)    (f4[MAKESYS_IDX])(x)
-#define Jmakeope(x)    (f4[MAKEOPE_IDX])(x)
-#define Jmakeuser(x)   (f4[MAKEUSER_IDX])(x)
-#define Jmakestrlong(x) (f4[MAKESTRLONG_IDX])(x)
-#define Jmakebig(x)    (f4[MAKEBIGX_IDX])(x)
-#define Jmakestr(x)    (f4[MAKESTR_IDX](x))
-#define Jmakefun(x)   (f4[MAKEFUNC_IDX](x))
-*/
+
+/* for predicate like function */
+static inline int Jtakein(int x, int y){
+    if(Jvariablep(y))
+        x = UNDEF;
+    else
+        x = y;
+}
+
+static inline int Jtakeout(int x, int y){
+    if(Jvariablep(x))
+        unify(x,y);
+}
+
+static inline int Jmatch(int x, int y)
+{
+    if(Jvariablep(x)){
+        x = y;
+        return(YES);
+    } else if(Jequalp(x,y))
+        return(YES);
+    else
+        return(NO);
+}
