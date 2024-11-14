@@ -453,7 +453,7 @@ static inline int Jtakein(int x, int y){
 
 static inline int Jtakeout(int x, int y){
     if(Jvariablep(x))
-        unify(x,y);
+        Junify(x,y);
 }
 
 static inline int Jmatch(int x, int y)
