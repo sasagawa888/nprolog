@@ -275,6 +275,14 @@ extern int error_stream;
 #define OFF     0
 #define ON      1
     
+/* distributed parallel */
+#define PORT 5000 
+extern int sockfd[PARASIZE];
+extern socklen_t parent_len;
+extern struct sockaddr_in parent_addr, child_addr[PARASIZE];
+extern int child_num;
+extern pthread_t receiver_thread;
+extern int child_result[PARASIZE];
 
 #ifdef __APPLE__
 #define FLUSH               fpurge(stdin);
