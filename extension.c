@@ -1176,13 +1176,12 @@ int b_timer_microseconds(int arglist, int rest)
 /* distributed parallel */
 void init_parent(void)
 {
-	
+
     // create socket
     sockfd[0] = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd[0] < 0) {
 	error(SYSTEM_ERROR, "init parent", NIL);
     }
-	
     // initialize parent_addr
     memset((char *) &parent_addr, 0, sizeof(parent_addr));
     parent_addr.sin_family = AF_INET;
@@ -1195,18 +1194,17 @@ void init_parent(void)
 	 sizeof(parent_addr)) < 0) {
 	error(SYSTEM_ERROR, "init parent", NIL);
     }
-	
+
 }
 
 void init_child(int n, int x)
-{	
+{
 
     // create socket
     sockfd[n] = socket(AF_INET, SOCK_STREAM, 0);
     if (sockfd[n] < 0) {
 	error(SYSTEM_ERROR, "dp_create", makeint(n));
     }
-
     // initialize child_addr
     memset((char *) &child_addr[n], 0, sizeof(child_addr[n]));
     child_addr[n].sin_family = AF_INET;
@@ -1221,7 +1219,7 @@ void init_child(int n, int x)
 	 sizeof(child_addr[n])) < 0) {
 	error(SYSTEM_ERROR, "dp_create", makeint(n));
     }
-	
+
 }
 
 void close_socket(void)
@@ -1233,13 +1231,13 @@ void close_socket(void)
 	for (i = 0; i < child_num; i++)
 	    close(sockfd[i]);
     } else if (network_flag) {
-	puts("EISL exit network mode.\n");
+	printf("N-Prolog exit network mode.\n");
 	close(sockfd[0]);
 	close(sockfd[1]);
     }
 
     receiver_exit_flag = 1;
-	
+
 }
 
 
@@ -1261,7 +1259,6 @@ int receive_from_parent(void)
 	    error(SYSTEM_ERROR, "receive from parent", NIL);
 	}
     }
-
     // read message from parent
     memset(buffer2, 0, sizeof(buffer2));
     n = read(sockfd[1], buffer2, sizeof(buffer2) - 1);
@@ -1382,7 +1379,7 @@ int receive_from_child_part1(int n, int opt)
     int m, i;
 
     // receive from child
-	m = 0;
+    m = 0;
   retry:
     memset(buffer2, 0, sizeof(buffer2));
     for (i = 0; i < n; i++) {
@@ -1506,8 +1503,8 @@ void *receiver(void *arg)
 void init_receiver(void)
 {
     // create child receiver thread 
-	pthread_create(&receiver_thread, NULL, receiver, NULL);
-	
+    pthread_create(&receiver_thread, NULL, receiver, NULL);
+
 }
 
 /*
