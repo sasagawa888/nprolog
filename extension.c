@@ -1218,10 +1218,534 @@ void init_child(int n, int x)
 	
 }
 
+void close_socket(void)
+{
+	/*
+    int i;
+
+    if (child_num > 0) {
+	for (i = 0; i < child_num; i++)
+	    close(sockfd[i]);
+    } else if (network_flag) {
+	puts("EISL exit network mode.\n");
+	close(sockfd[0]);
+	close(sockfd[1]);
+    }
+
+    receiver_exit_flag = true;
+	*/
+}
+
+/*
+int receive_from_parent(void)
+{
+    int n;
+
+    if (!connect_flag) {
+	//wait conneting
+	listen(sockfd[0], 5);
+	parent_len = sizeof(parent_addr);
+	connect_flag = true;
+
+	// connection from parent
+	sockfd[1] =
+	    accept(sockfd[0], (struct sockaddr *) &parent_addr,
+		   &parent_len);
+	if (sockfd[1] < 0) {
+	    error(SYSTEM_ERR, "receive from parent", NIL, 0);
+	}
+    }
+
+    // read message from parent
+    memset(buffer3, 0, sizeof(buffer3));
+    n = read(sockfd[1], buffer3, sizeof(buffer3) - 1);
+    if (n < 0) {
+	error(SYSTEM_ERR, "receive from parent", NIL, 0);
+    }
+
+
+    return (make_str(buffer3));
+
+}
+
+void send_to_parent(int x)
+{
+    int n;
+
+    // send message to parent
+    memset(buffer3, 0, sizeof(buffer3));
+    strcpy(buffer3, GET_NAME(x));
+    n = write(sockfd[1], buffer3, strlen(buffer3));
+    if (n < 0) {
+	error(SYSTEM_ERR, "send to parent", x, 0);
+    }
+
+}
+
+int send_to_child(int n, int x)
+{
+    int m;
+
+    // send message to child
+    memset(buffer3, 0, sizeof(buffer3));
+    strcpy(buffer3, GET_NAME(x));
+    strcat(buffer3, "\n");
+    m = write(sockfd[n], buffer3, strlen(buffer3));
+    if (m < 0) {
+	error(SYSTEM_ERR, "send to child", NIL, 0);
+    }
+    return (0);
+}
+
+int receive_from_child(int n)
+{
+    int m, i, j;
+    char sub_buffer[256];
+
+    // receive from child
+  reread:
+    memset(buffer3, 0, sizeof(buffer3));
+    m = read(sockfd[n], buffer3, sizeof(buffer3) - 1);
+    if (m < 0) {
+	error(SYSTEM_ERR, "receive from child", make_int(n), 0);
+    }
+
+  retry:
+    if (buffer3[0] == '\x02') {
+	i = 0;
+	while (buffer3[i + 1] != '\x03') {
+	    sub_buffer[i] = buffer3[i + 1];
+	    i++;
+	}
+	sub_buffer[i] = 0;
+	printf("%s", sub_buffer);
+	j = 0;
+	i = i + 2;
+	while (buffer3[j + i] != 0) {
+	    buffer3[j] = buffer3[j + i];
+	    j++;
+	}
+	buffer3[j] = 0;
+	if (buffer3[0] == 0)
+	    goto reread;
+	else
+	    goto retry;
+    } else if (buffer3[0] == '\x15') {
+	error(SYSTEM_ERR, "in child", make_int(n), 0);
+    } else {
+	return (make_str(buffer3));
+    }
+
+    return (0);
+}
+
+// opt == 0 find NIL, opt == 1 find non NIL 
+int receive_from_child_part(int n, int opt)
+{
+    int i, m, res;
+
+    //initialize -1 (not received)
+    for (i = 0; i < n; i++) {
+	child_result[i] = -1;
+    }
+    res = receive_from_child_part1(n, opt);
+
+    // kill not received child
+    for (i = 0; i < n; i++) {
+	if (child_result[i] == -1) {
+	    // send child stop signal
+	    memset(buffer3, 0, sizeof(buffer3));
+	    buffer3[0] = '\x11';
+	    m = write(sockfd[i], buffer3, strlen(buffer3));
+	    if (m < 0) {
+		error(SYSTEM_ERR, "receive from child", NIL, 0);
+	    }
+	    // receive result and ignore
+	    while ((m =
+		    read(sockfd[i], buffer3, sizeof(buffer3) - 1)) == 0) {
+	    }
+	}
+    }
+
+    return (res);
+}
+
+
+int receive_from_child_part1(int n, int opt)
+{
+    int m, i;
+
+    // receive from child
+  retry:
+    memset(buffer3, 0, sizeof(buffer3));
+    for (i = 0; i < n; i++) {
+	if (child_result[i] == -1) {
+	    m = read(sockfd[i], buffer3, sizeof(buffer3));
+	}
+	if (m < 0) {
+	    error(SYSTEM_ERR, "receive from child", make_int(i), 0);
+	} else if (m > 0) {
+	    child_result[i] = receive_from_child_part2(i);
+	}
+    }
+
+    //if find non nil, return it, else retry reading.
+    for (i = 0; i < n; i++) {
+	if (opt == 1 && child_result[i] > NIL)
+	    return (child_result[i]);
+	else if (opt == 0 && child_result[i] == NIL)
+	    return (child_result[i]);
+    }
+
+
+    //if exist not received result, goto retry
+    for (i = 0; i < n; i++) {
+	if (child_result[i] == -1)
+	    goto retry;
+    }
+
+    //if opt==1 and all results are nil, return nil
+    //if opt==0 and all returls are non nil,return T
+    if (opt == 1)
+	return (NIL);
+    else if (opt == 0)
+	return (T);
+
+    return (0);
+}
+
+int receive_from_child_part2(int n)
+{
+    char sub_buffer[256];
+    int i, j;
+
+  retry:
+    if (buffer3[0] == '\x02') {
+	i = 0;
+	while (buffer3[i + 1] != '\x03') {
+	    sub_buffer[i] = buffer3[i + 1];
+	    i++;
+	}
+	sub_buffer[i] = 0;
+	printf("%s", sub_buffer);
+	j = 0;
+	i = i + 2;
+	while (buffer3[j + i] != 0) {
+	    buffer3[j] = buffer3[j + i];
+	    j++;
+	}
+	buffer3[j] = 0;
+	if (buffer3[0] == 0)
+	    return (-1);
+	else
+	    goto retry;
+
+    } else if (buffer3[0] == '\x15') {
+	error(SYSTEM_ERR, "in child", make_int(n), 0);
+    } else {
+	return (str_to_sexp(make_str(buffer3)));
+    }
+
+    return (0);
+}
+
+
+
+// Thread for child lisp receiver
+void *receiver(void *arg __unused)
+{
+    int res;
+
+    while (1) {
+	if (receiver_exit_flag)
+	    goto exit;
+
+	if (child_busy_flag) {
+	    res = receive_from_parent();
+	    memset(buffer3, 0, sizeof(buffer3));
+	    strcpy(buffer3, GET_NAME(res));
+	  retry:
+	    if (buffer3[0] == '\x11') {
+		// child stop 
+		exit_flag = 1;
+	    } else if (buffer3[0] == '\x12') {
+		// child pause 
+
+	    } else if (buffer3[0] == '\x13') {
+		// chidl resume 
+
+	    }
+
+	    if (buffer3[1] != 0) {
+		int i;
+		i = 0;
+		while (buffer3[i + 1] != 0) {
+		    buffer3[i] = buffer3[i + 1];
+		    i++;
+		}
+		buffer3[i] = 0;
+		goto retry;
+	    }
+
+	}
+
+    }
+
+  exit:
+    pthread_exit(NULL);
+}
+
+*/
 void init_receiver(void)
 {
-    /* create child receiver thread */
-	/*
+    // create child receiver thread 
+    /*
 	pthread_create(&receiver_thread, NULL, receiver, NULL);
 	*/
 }
+/*
+int f_dp_eval(int arglist, int th __unused)
+{
+    int arg1, arg2, res;
+
+    arg1 = car(arglist);
+    arg2 = cadr(arglist);
+    if (GET_INT(arg1) >= child_num || GET_INT(arg1) < 0)
+	error(WRONG_ARGS, "dp-eval", arg1, 0);
+
+    send_to_child(GET_INT(arg1), sexp_to_str(arg2));
+    res = str_to_sexp(receive_from_child(GET_INT(arg1)));
+    return (res);
+}
+
+// parent lisp 
+int f_dp_transfer(int arglist, int th)
+{
+    int arg1, exp, i, m;
+    FILE *file;
+
+    arg1 = car(arglist);
+    if (!stringp(arg1))
+	error(NOT_STR, "dp-transfer", arg1, th);
+
+    file = fopen(GET_NAME(arg1), "r");
+    if (!file) {
+	error(CANT_OPEN, "dp-transfer", arg1, th);
+    }
+
+    exp = list2(make_sym("dp-receive"), arg1);
+
+    for (i = 0; i < child_num; i++) {
+	send_to_child(i, sexp_to_str(exp));
+
+	int bytes_read;
+	while ((bytes_read =
+		fread(buffer3, sizeof(char), sizeof(buffer3), file)) > 0) {
+	    m = write(sockfd[i], buffer3, bytes_read);
+	    if (m < 0) {
+		error(SYSTEM_ERR, "dp-transfer", NIL, 0);
+	    }
+	}
+	memset(buffer3, 0, sizeof(buffer3));
+	buffer3[0] = EOF;
+	m = write(sockfd[i], buffer3, 1);
+	if (m < 0) {
+	    error(SYSTEM_ERR, "dp-transfer", NIL, 0);
+	}
+	receive_from_child(i);
+	fseek(file, 0, SEEK_SET);
+    }
+
+    fclose(file);
+
+    return (T);
+}
+
+// child lisp 
+int f_dp_receive(int arglist, int th)
+{
+    int arg1;
+    FILE *file;
+
+    child_busy_flag = false;
+    arg1 = car(arglist);
+
+    file = fopen(GET_NAME(arg1), "w");
+    if (!file) {
+	error(CANT_OPEN, "dp-receive", arg1, th);
+    }
+
+    int bytes_received;
+    while ((bytes_received =
+	    read(sockfd[1], buffer3, sizeof(buffer3))) > 0) {
+	if (buffer3[bytes_received - 1] == EOF) {
+	    buffer3[bytes_received - 1] = 0;
+	    fwrite(buffer3, sizeof(char), bytes_received - 1, file);
+	    break;
+	}
+	fwrite(buffer3, sizeof(char), bytes_received, file);
+    }
+    fclose(file);
+
+    return (T);
+}
+
+
+int f_dp_load(int arglist, int th)
+{
+    int arg1, exp, i;
+
+    arg1 = car(arglist);
+    if (!stringp(arg1))
+	error(NOT_STR, "dp-load", arg1, th);
+
+    exp = list2(make_sym("LOAD"), arg1);
+
+    for (i = 0; i < child_num; i++) {
+	send_to_child(i, sexp_to_str(exp));
+	receive_from_child(i);
+    }
+
+    eval(exp, 0);
+
+    return (T);
+}
+
+
+int f_dp_compile(int arglist, int th)
+{
+    int arg1, exp, i;
+
+    arg1 = car(arglist);
+    if (!stringp(arg1))
+	error(NOT_STR, "dp-compile", arg1, th);
+
+    exp = list2(make_sym("COMPILE-FILE"), arg1);
+
+    for (i = 0; i < child_num; i++) {
+	send_to_child(i, sexp_to_str(exp));
+	receive_from_child(i);
+    }
+
+    eval(exp, 0);
+
+    return (T);
+}
+
+// fsubr (dp-call fun arg1 arg2 ... argn)
+int f_dp_call(int arglist, int th)
+{
+    int arg1, arg2, temp, res, n, i, args, exp;
+
+    arg1 = car(arglist);	//fun
+    arg2 = cdr(arglist);	//args
+    n = length(arg2);
+    if (n > child_num)
+	error(ILLEGAL_ARGS, "dp-call", arg2, th);
+    temp = arglist;
+    while (!nullp(temp)) {
+	if (!listp(car(temp)))
+	    error(WRONG_ARGS, "dp-call", arglist, th);
+	temp = cdr(temp);
+    }
+
+    i = 0;
+    while (!nullp(arg2)) {
+	exp = eval_args(car(arg2));
+	send_to_child(i, sexp_to_str(exp));
+	arg2 = cdr(arg2);
+	i++;
+    }
+
+    args = NIL;
+    for (i = 0; i < n; i++) {
+	args = cons(str_to_sexp(receive_from_child(i)), args);
+    }
+    args = reverse(args);
+
+    res = apply(eval(arg1, th), args, th);
+    return (res);
+}
+
+
+int f_dp_exec(int arglist, int th)
+{
+    int temp, res, n, i, exp;
+
+    n = length(arglist);
+    if (n > child_num)
+	error(ILLEGAL_ARGS, "dp-exec", arglist, th);
+    temp = arglist;
+    while (!nullp(temp)) {
+	if (!listp(car(temp)))
+	    error(WRONG_ARGS, "dp-exec", arglist, th);
+	temp = cdr(temp);
+    }
+
+    i = 0;
+    temp = arglist;
+    while (!nullp(temp)) {
+	exp = eval_args(car(temp));
+	send_to_child(i, sexp_to_str(exp));
+	temp = cdr(temp);
+	i++;
+    }
+
+    for (i = 0; i < n; i++) {
+	res = str_to_sexp(receive_from_child(i));
+    }
+
+    return (res);
+
+}
+
+int f_dp_report(int arglist, int th __unused)
+{
+    int arg1;
+    char sub_buffer[STRSIZE];
+
+    arg1 = car(arglist);
+    if (!stringp(arg1))
+	error(NOT_STR, "dp-report", arg1, 0);
+
+    memset(sub_buffer, 0, sizeof(sub_buffer));
+    sprintf(sub_buffer, "\x02%s\x03", GET_NAME(arg1));
+    send_to_parent(make_str(sub_buffer));
+    return (T);
+}
+
+
+int f_dp_part(int arglist, int th)
+{
+    int temp, res, n, i, exp, opt;
+
+    opt = car(arglist);
+    n = length(cdr(arglist));
+    if (opt != T && opt != NIL)
+	error(ILLEGAL_ARGS, "dp-part", opt, th);
+    if (n > child_num)
+	error(ILLEGAL_ARGS, "dp-part", cdr(arglist), th);
+    temp = cdr(arglist);
+    while (!nullp(temp)) {
+	if (!listp(car(temp)))
+	    error(WRONG_ARGS, "dp-part", arglist, th);
+	temp = cdr(temp);
+    }
+    i = 0;
+    temp = cdr(arglist);
+    while (!nullp(temp)) {
+	exp = eval_args(car(temp));
+	send_to_child(i, sexp_to_str(exp));
+	temp = cdr(temp);
+	i++;
+    }
+    if (opt == NIL) {
+	res = str_to_sexp(receive_from_child_part(n, 0));
+    } else if (opt == T) {
+	res = str_to_sexp(receive_from_child_part(n, 1));
+    }
+    return (res);
+
+}
+
+*/
