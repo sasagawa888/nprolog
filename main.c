@@ -109,7 +109,15 @@ int init_flag = 1;		//for halt
 int script_flag = 0;		// script mode, 0=not scriplt-mode, 1=script-mode.
 int check_flag = 0;		// for n_error/2 error check
 int break_flag = 0;		// for break/0 0=normal,1=break.
-int network_flag=0;     // for distributed-parallel
+int parallel_flag = 0;	/* while executing parallel */
+int parallel_exit_flag = 0;	/* To exit parallel threads */
+int process_flag = 0;	/* when invoke as child process, flag is true */
+int thread_flag = 0;	/* when invoke as multi thread, flag is true */
+int network_flag = 0;	/* when invoke as network child, flag is true */
+int connect_flag = 0;	/* when child listen, connect_flag is true */
+int receiver_exit_flag = 0;	/* TO exit child TCP/IP receiver */
+int child_busy_flag = 0;	/* while evalating in child, child_buzy_flag is true */
+int exit_flag;
 
 //stream
 int standard_input;
@@ -126,7 +134,7 @@ struct sockaddr_in parent_addr, child_addr[PARASIZE];
 int child_num;
 pthread_t receiver_thread;
 int child_result[PARASIZE];
-
+char buffer2[BUFSIZE];
 
 //-----editor-----
 char buffer[BUFSIZE][10];

@@ -443,6 +443,16 @@ extern int script_flag;
 extern int check_flag;
 extern int break_flag;
 extern int network_mode;
+extern int parallel_flag;
+extern int parallel_exit_flag;
+extern int process_flag;
+extern int thread_flag;
+extern int network_flag;
+extern int connect_flag;
+extern int receiver_exit_flag;
+extern int child_busy_flag;
+extern int exit_flag;
+extern char buffer2[BUFSIZE];
 
 //------pointer----
 extern int hp; //heap pointer
@@ -1150,6 +1160,8 @@ int readlist(void);
 int readparen(void);
 int readdouble(void);
 int read_string_term(int flag);
+int receive_from_child_part1(int n, int opt);
+int receive_from_child_part2(int n);
 int remove_cut(int x);
 int remove_duplicate(int x);
 int replace(int x, int lis);

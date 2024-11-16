@@ -3,6 +3,12 @@
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 #endif
+#include <pthread.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
+#include <unistd.h>
 #include "npl.h"
 
 //-----------JUMP project(builtin for compiler)------------
@@ -1220,7 +1226,7 @@ void init_child(int n, int x)
 
 void close_socket(void)
 {
-	/*
+
     int i;
 
     if (child_num > 0) {
@@ -1232,11 +1238,11 @@ void close_socket(void)
 	close(sockfd[1]);
     }
 
-    receiver_exit_flag = true;
-	*/
+    receiver_exit_flag = 1;
+	
 }
 
-/*
+
 int receive_from_parent(void)
 {
     int n;
@@ -1245,26 +1251,26 @@ int receive_from_parent(void)
 	//wait conneting
 	listen(sockfd[0], 5);
 	parent_len = sizeof(parent_addr);
-	connect_flag = true;
+	connect_flag = 1;
 
 	// connection from parent
 	sockfd[1] =
 	    accept(sockfd[0], (struct sockaddr *) &parent_addr,
 		   &parent_len);
 	if (sockfd[1] < 0) {
-	    error(SYSTEM_ERR, "receive from parent", NIL, 0);
+	    error(SYSTEM_ERROR, "receive from parent", NIL);
 	}
     }
 
     // read message from parent
-    memset(buffer3, 0, sizeof(buffer3));
-    n = read(sockfd[1], buffer3, sizeof(buffer3) - 1);
+    memset(buffer2, 0, sizeof(buffer2));
+    n = read(sockfd[1], buffer2, sizeof(buffer2) - 1);
     if (n < 0) {
-	error(SYSTEM_ERR, "receive from parent", NIL, 0);
+	error(SYSTEM_ERROR, "receive from parent", NIL);
     }
 
 
-    return (make_str(buffer3));
+    return (makestr(buffer2));
 
 }
 
@@ -1273,11 +1279,11 @@ void send_to_parent(int x)
     int n;
 
     // send message to parent
-    memset(buffer3, 0, sizeof(buffer3));
-    strcpy(buffer3, GET_NAME(x));
-    n = write(sockfd[1], buffer3, strlen(buffer3));
+    memset(buffer2, 0, sizeof(buffer2));
+    strcpy(buffer2, GET_NAME(x));
+    n = write(sockfd[1], buffer2, strlen(buffer2));
     if (n < 0) {
-	error(SYSTEM_ERR, "send to parent", x, 0);
+	error(SYSTEM_ERROR, "send to parent", x);
     }
 
 }
@@ -1287,12 +1293,12 @@ int send_to_child(int n, int x)
     int m;
 
     // send message to child
-    memset(buffer3, 0, sizeof(buffer3));
-    strcpy(buffer3, GET_NAME(x));
-    strcat(buffer3, "\n");
-    m = write(sockfd[n], buffer3, strlen(buffer3));
+    memset(buffer2, 0, sizeof(buffer2));
+    strcpy(buffer2, GET_NAME(x));
+    strcat(buffer2, "\n");
+    m = write(sockfd[n], buffer2, strlen(buffer2));
     if (m < 0) {
-	error(SYSTEM_ERR, "send to child", NIL, 0);
+	error(SYSTEM_ERROR, "send to child", NIL);
     }
     return (0);
 }
@@ -1304,36 +1310,36 @@ int receive_from_child(int n)
 
     // receive from child
   reread:
-    memset(buffer3, 0, sizeof(buffer3));
-    m = read(sockfd[n], buffer3, sizeof(buffer3) - 1);
+    memset(buffer2, 0, sizeof(buffer2));
+    m = read(sockfd[n], buffer2, sizeof(buffer2) - 1);
     if (m < 0) {
-	error(SYSTEM_ERR, "receive from child", make_int(n), 0);
+	error(SYSTEM_ERROR, "receive from child", makeint(n));
     }
 
   retry:
-    if (buffer3[0] == '\x02') {
+    if (buffer2[0] == '\x02') {
 	i = 0;
-	while (buffer3[i + 1] != '\x03') {
-	    sub_buffer[i] = buffer3[i + 1];
+	while (buffer2[i + 1] != '\x03') {
+	    sub_buffer[i] = buffer2[i + 1];
 	    i++;
 	}
 	sub_buffer[i] = 0;
 	printf("%s", sub_buffer);
 	j = 0;
 	i = i + 2;
-	while (buffer3[j + i] != 0) {
-	    buffer3[j] = buffer3[j + i];
+	while (buffer2[j + i] != 0) {
+	    buffer2[j] = buffer2[j + i];
 	    j++;
 	}
-	buffer3[j] = 0;
-	if (buffer3[0] == 0)
+	buffer2[j] = 0;
+	if (buffer2[0] == 0)
 	    goto reread;
 	else
 	    goto retry;
-    } else if (buffer3[0] == '\x15') {
-	error(SYSTEM_ERR, "in child", make_int(n), 0);
+    } else if (buffer2[0] == '\x15') {
+	error(SYSTEM_ERROR, "in child", makeint(n));
     } else {
-	return (make_str(buffer3));
+	return (makestr(buffer2));
     }
 
     return (0);
@@ -1354,15 +1360,15 @@ int receive_from_child_part(int n, int opt)
     for (i = 0; i < n; i++) {
 	if (child_result[i] == -1) {
 	    // send child stop signal
-	    memset(buffer3, 0, sizeof(buffer3));
-	    buffer3[0] = '\x11';
-	    m = write(sockfd[i], buffer3, strlen(buffer3));
+	    memset(buffer2, 0, sizeof(buffer2));
+	    buffer2[0] = '\x11';
+	    m = write(sockfd[i], buffer2, strlen(buffer2));
 	    if (m < 0) {
-		error(SYSTEM_ERR, "receive from child", NIL, 0);
+		error(SYSTEM_ERROR, "receive from child", NIL);
 	    }
 	    // receive result and ignore
 	    while ((m =
-		    read(sockfd[i], buffer3, sizeof(buffer3) - 1)) == 0) {
+		    read(sockfd[i], buffer2, sizeof(buffer2) - 1)) == 0) {
 	    }
 	}
     }
@@ -1377,13 +1383,13 @@ int receive_from_child_part1(int n, int opt)
 
     // receive from child
   retry:
-    memset(buffer3, 0, sizeof(buffer3));
+    memset(buffer2, 0, sizeof(buffer2));
     for (i = 0; i < n; i++) {
 	if (child_result[i] == -1) {
-	    m = read(sockfd[i], buffer3, sizeof(buffer3));
+	    m = read(sockfd[i], buffer2, sizeof(buffer2));
 	}
 	if (m < 0) {
-	    error(SYSTEM_ERR, "receive from child", make_int(i), 0);
+	    error(SYSTEM_ERROR, "receive from child", makeint(i));
 	} else if (m > 0) {
 	    child_result[i] = receive_from_child_part2(i);
 	}
@@ -1409,7 +1415,7 @@ int receive_from_child_part1(int n, int opt)
     if (opt == 1)
 	return (NIL);
     else if (opt == 0)
-	return (T);
+	return (TRUE);
 
     return (0);
 }
@@ -1420,30 +1426,30 @@ int receive_from_child_part2(int n)
     int i, j;
 
   retry:
-    if (buffer3[0] == '\x02') {
+    if (buffer2[0] == '\x02') {
 	i = 0;
-	while (buffer3[i + 1] != '\x03') {
-	    sub_buffer[i] = buffer3[i + 1];
+	while (buffer2[i + 1] != '\x03') {
+	    sub_buffer[i] = buffer2[i + 1];
 	    i++;
 	}
 	sub_buffer[i] = 0;
 	printf("%s", sub_buffer);
 	j = 0;
 	i = i + 2;
-	while (buffer3[j + i] != 0) {
-	    buffer3[j] = buffer3[j + i];
+	while (buffer2[j + i] != 0) {
+	    buffer2[j] = buffer2[j + i];
 	    j++;
 	}
-	buffer3[j] = 0;
-	if (buffer3[0] == 0)
+	buffer2[j] = 0;
+	if (buffer2[0] == 0)
 	    return (-1);
 	else
 	    goto retry;
 
-    } else if (buffer3[0] == '\x15') {
-	error(SYSTEM_ERR, "in child", make_int(n), 0);
+    } else if (buffer2[0] == '\x15') {
+	error(SYSTEM_ERROR, "in child", makeint(n));
     } else {
-	return (str_to_sexp(make_str(buffer3)));
+	//return (str_to_sexp(makestr(buffer2)));
     }
 
     return (0);
@@ -1452,7 +1458,7 @@ int receive_from_child_part2(int n)
 
 
 // Thread for child lisp receiver
-void *receiver(void *arg __unused)
+void *receiver(void *arg)
 {
     int res;
 
@@ -1462,28 +1468,28 @@ void *receiver(void *arg __unused)
 
 	if (child_busy_flag) {
 	    res = receive_from_parent();
-	    memset(buffer3, 0, sizeof(buffer3));
-	    strcpy(buffer3, GET_NAME(res));
+	    memset(buffer2, 0, sizeof(buffer2));
+	    strcpy(buffer2, GET_NAME(res));
 	  retry:
-	    if (buffer3[0] == '\x11') {
+	    if (buffer2[0] == '\x11') {
 		// child stop 
 		exit_flag = 1;
-	    } else if (buffer3[0] == '\x12') {
+	    } else if (buffer2[0] == '\x12') {
 		// child pause 
 
-	    } else if (buffer3[0] == '\x13') {
+	    } else if (buffer2[0] == '\x13') {
 		// chidl resume 
 
 	    }
 
-	    if (buffer3[1] != 0) {
+	    if (buffer2[1] != 0) {
 		int i;
 		i = 0;
-		while (buffer3[i + 1] != 0) {
-		    buffer3[i] = buffer3[i + 1];
+		while (buffer2[i + 1] != 0) {
+		    buffer2[i] = buffer2[i + 1];
 		    i++;
 		}
-		buffer3[i] = 0;
+		buffer2[i] = 0;
 		goto retry;
 	    }
 
@@ -1495,14 +1501,14 @@ void *receiver(void *arg __unused)
     pthread_exit(NULL);
 }
 
-*/
+
 void init_receiver(void)
 {
     // create child receiver thread 
-    /*
 	pthread_create(&receiver_thread, NULL, receiver, NULL);
-	*/
+	
 }
+
 /*
 int f_dp_eval(int arglist, int th __unused)
 {
