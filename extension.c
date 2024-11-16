@@ -1165,3 +1165,63 @@ int b_timer_microseconds(int arglist, int rest)
 
 
 #endif
+
+
+/* distributed parallel */
+void init_parent(void)
+{
+	/*
+    // create socket
+    sockfd[0] = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd[0] < 0) {
+	error(SYSTEM_ERR, "init parent", NIL, 0);
+    }
+
+    // initialize parent_addr
+    memset((char *) &parent_addr, 0, sizeof(parent_addr));
+    parent_addr.sin_family = AF_INET;
+    parent_addr.sin_addr.s_addr = INADDR_ANY;
+    parent_addr.sin_port = htons(PORT);
+
+    // bind socket
+    if (bind
+	(sockfd[0], (struct sockaddr *) &parent_addr,
+	 sizeof(parent_addr)) < 0) {
+	error(SYSTEM_ERR, "init parent", NIL, 0);
+    }
+	*/
+}
+
+void init_child(int n, int x)
+{	
+	/*
+    // create socket
+    sockfd[n] = socket(AF_INET, SOCK_STREAM, 0);
+    if (sockfd[n] < 0) {
+	error(SYSTEM_ERR, "dp-create", make_int(n), 0);
+    }
+
+    // initialize child_addr
+    memset((char *) &child_addr[n], 0, sizeof(child_addr[n]));
+    child_addr[n].sin_family = AF_INET;
+    child_addr[n].sin_port = htons(PORT);
+
+    if (inet_pton(AF_INET, GET_NAME(x), &child_addr[n].sin_addr) < 0)
+	error(SYSTEM_ERR, "dp-create", x, 0);
+
+
+    if (connect
+	(sockfd[n], (struct sockaddr *) &child_addr[n],
+	 sizeof(child_addr[n])) < 0) {
+	error(SYSTEM_ERR, "dp-create", make_int(n), 0);
+    }
+	*/
+}
+
+void init_receiver(void)
+{
+    /* create child receiver thread */
+    /*
+	pthread_create(&receiver_thread, NULL, receiver, NULL);
+	*/
+}

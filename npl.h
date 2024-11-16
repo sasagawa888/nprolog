@@ -429,6 +429,7 @@ extern int init_flag;
 extern int script_flag;
 extern int check_flag;
 extern int break_flag;
+extern int network_mode;
 
 //------pointer----
 extern int hp; //heap pointer
@@ -1243,6 +1244,8 @@ void gbcsweep(void);
 void gettoken(void);
 void heapdump(int start, int end);
 void inctrace(int goal);
+void init_parent(void);
+void init_receiver(void);
 void init_repl(void);
 void initbuiltin(void);
 void initcell(void);

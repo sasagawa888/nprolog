@@ -105,6 +105,7 @@ int init_flag = 1;		//for halt
 int script_flag = 0;		// script mode, 0=not scriplt-mode, 1=script-mode.
 int check_flag = 0;		// for n_error/2 error check
 int break_flag = 0;		// for break/0 0=normal,1=break.
+int network_flag=0;     // for distributed-parallel
 
 //stream
 int standard_input;
@@ -206,7 +207,7 @@ int main(int argc, char *argv[])
 	b_consult(list1(makeconst(str)), NIL);
     }
 
-    while ((ch = getopt(argc, argv, "c:s:rhv")) != -1) {
+    while ((ch = getopt(argc, argv, "c:s:rhvn")) != -1) {
 	switch (ch) {
 	case 'c':
 	    fp = fopen(optarg, "r");
@@ -238,6 +239,12 @@ int main(int argc, char *argv[])
 	case 'h':
 	    usage();
 	    exit(EXIT_SUCCESS);
+	 case 'n':
+		printf("N-Prolog runs with network mode.");
+		network_flag = 1;
+		init_parent();
+		init_receiver();
+		break;
 	default:
 	    usage();
 	    exit(EXIT_FAILURE);
