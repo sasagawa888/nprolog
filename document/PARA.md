@@ -1,4 +1,4 @@
-Distributed Parallel functions
+# Distributed Parallel
 ![DP](para.png)
 
 # Invoke
