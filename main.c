@@ -11,6 +11,10 @@ written by kenichi sasagawa 2016/8~
 #include <stdlib.h>
 #include <getopt.h>
 #include <float.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
 #include "npl.h"
 
 //global vers
@@ -114,6 +118,14 @@ int standard_error;
 int input_stream;
 int output_stream;
 int error_stream;
+
+/* -----distributed parallel & TCPIP------*/
+int sockfd[PARASIZE];
+socklen_t parent_len;
+struct sockaddr_in parent_addr, child_addr[PARASIZE];
+int child_num;
+pthread_t receiver_thread;
+int child_result[PARASIZE];
 
 
 //-----editor-----

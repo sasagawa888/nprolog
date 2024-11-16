@@ -4,6 +4,10 @@ written by kenichi sasagawa 2016/9~
 #include <setjmp.h>
 #include <stdio.h>
 #include <sys/ioctl.h>
+#include <arpa/inet.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <netdb.h>
 
 /*
 memory map
@@ -25,6 +29,7 @@ address
 #define ATOMSIZE 1024
 #define BUFSIZE 1024
 #define STRSIZE 1024
+#define PARASIZE 20
 #define OPERATOR_NUMBER 24
 #define FUNCTION_NUMBER 22
 #define BUILTIN_NUMBER 200
