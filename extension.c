@@ -1382,6 +1382,7 @@ int receive_from_child_part1(int n, int opt)
     int m, i;
 
     // receive from child
+	m = 0;
   retry:
     memset(buffer2, 0, sizeof(buffer2));
     for (i = 0; i < n; i++) {
