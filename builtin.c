@@ -192,6 +192,17 @@ void initbuiltin(void)
     defbuiltin("between", b_between, 3);
     defbuiltin("existerrors", b_existerrors, 2);
 
+	//-----Distributed parallel
+	defbuiltin("dp_create", b_dp_create,1);
+	defbuiltin("dp_close", b_dp_close,0);
+	defbuiltin("dp_prove", b_dp_prove,1);
+	defbuiltin("dp_and", b_dp_and,1);
+	defbuiltin("dp_or", b_dp_or,1);
+	defbuiltin("dp_transfer", b_dp_transfer,1);
+	defbuiltin("dp_receive", b_dp_receive,1);
+	defbuiltin("dp_compile", b_dp_compile,1);
+	defbuiltin("dp_report", b_dp_report,1);
+
     //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_reconsult_predicate, -1);
     defbuiltin("n_reconsult_abolish", b_reconsult_abolish, -1);

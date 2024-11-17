@@ -66,3 +66,4 @@ In N-Prolog, the predicate ask/0, which is used internally, is appended at the e
 
 The child process can receive instructions from the parent process via a thread during the proof process. The commands are as follows: 0x11 for stop, 0x12 for pause, and 0x13 for resume. When the child process starts in network mode, it initializes this thread in advance.
 
+The parent process sends the string "999" to each child process to terminate the network mode.
