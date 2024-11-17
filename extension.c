@@ -9,6 +9,7 @@
 #include <netinet/in.h>
 #include <netdb.h>
 #include <unistd.h>
+#include <stdlib.h>
 #include "npl.h"
 
 //-----------JUMP project(builtin for compiler)------------
@@ -1174,6 +1175,43 @@ int b_timer_microseconds(int arglist, int rest)
 
 
 /* distributed parallel */
+int pred_to_str(int x)
+{
+    int save, res;
+    char *str;
+
+	res = makestream(NIL, OPL_OUTSTR, OPL_TEXT, NIL, NIL);
+    str = (char *) malloc(STRSIZE);
+    if (str == NULL)
+	error(MALLOC_OVERF, "pred_to_str", NIL);
+    heap[res].name = str;
+    heap[res].name[0] = '\0';
+
+    save = output_stream;
+    output_stream = res;
+    print(x);
+    res = output_stream;
+    output_stream = save;
+    return (res);
+}
+
+int str_to_pred(int x)
+{
+    int stm, save, res;
+
+    stm = makestream(NIL, OPL_INSTR, OPL_TEXT, NIL, NIL);
+    heap[stm].name = strdup(GET_NAME(x));
+    
+    save = input_stream;
+    input_stream = stm;
+    res = variable_to_call(readparse());
+    input_stream = save;
+    return (res);
+}
+
+
+
+
 void init_parent(void)
 {
 

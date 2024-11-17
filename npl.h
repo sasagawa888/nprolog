@@ -258,6 +258,8 @@ extern int error_stream;
 #define OPL_OUTPUT  23
 #define OPL_TEXT    24
 #define OPL_BINARY  25
+#define OPL_INSTR   26
+#define OPL_OUTSTR  27
 
 //trace mode
 #define OFF     0
@@ -1146,6 +1148,7 @@ int positive_zerop(int x);
 int positivep(int x);
 int postfixp(int addr);
 int predicatep(int addr);
+int pred_to_str(int x);
 int prefixp(int addr);
 int prev(int x);
 int prove(int goal, int bindings, int rest);
@@ -1191,6 +1194,7 @@ int stringp(int addr);
 int string_length(int addr);
 int singlep(int addr);
 int streqp(int x, int y);
+int str_to_pred(int x);
 int symboltoken(char buf[]);
 int takeoutbug(int key);
 int termp(int addr);
