@@ -1545,7 +1545,8 @@ void *receiver(void *arg)
 void init_receiver(void)
 {
     // create child receiver thread 
-    pthread_create(&receiver_thread, NULL, receiver, NULL);
+	// error in WSL2
+    //pthread_create(&receiver_thread, NULL, receiver, NULL);
 
 }
 
