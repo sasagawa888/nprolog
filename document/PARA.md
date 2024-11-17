@@ -25,8 +25,8 @@ N-Prolog on parent machine terminal. and dp_create/1 to establish TCP/IP between
 
     dp_consult(Fn): Loads file Fn on both parent and child machines.
 
-    dp_eval(Nth,Pred): Prove Predicate on the Nth child Prolog for testing.
+    dp_prove(Nth,Pred): Prove Predicate on the Nth child Prolog for testing.
 
-    dp_report(Str): Display string on parent terminal.
+    dp_report(Str): Display String on parent terminal.
 
     dp_close: Sends termination command to child machines and closes communication.
