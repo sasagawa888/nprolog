@@ -67,3 +67,8 @@ In N-Prolog, the predicate ask/0, which is used internally, is appended at the e
 The child process can receive instructions from the parent process via a thread during the proof process. The commands are as follows: 0x11 for stop, 0x12 for pause, and 0x13 for resume. When the child process starts in network mode, it initializes this thread in advance.
 
 The parent process sends the string "999" to each child process to terminate the network mode.
+
+# Internal Implementation
+String streams are used for converting predicates to strings and strings back to predicates. Although N-Prolog does not include string streams in its language specification, they are essential for conversions in distributed parallel processing. Internally, the implementation adds string stream functionality to its stream system. The stream types OPL_INSTR and OPL_OUTSTR are defined as internal stream types for this purpose.
+
+The execution of compiled code should also allow interruption via Ctrl+C. This is because the child process may need to halt its computation based on instructions from the parent process. This feature is implemented to handle such cases.
