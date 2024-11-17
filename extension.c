@@ -1180,7 +1180,7 @@ int pred_to_str(int x)
     int save, res;
     char *str;
 
-	res = makestream(NIL, OPL_OUTSTR, OPL_TEXT, NIL, NIL);
+    res = makestream(NIL, OPL_OUTSTR, OPL_TEXT, NIL, NIL);
     str = (char *) malloc(STRSIZE);
     if (str == NULL)
 	error(MALLOC_OVERF, "pred_to_str", NIL);
@@ -1201,7 +1201,7 @@ int str_to_pred(int x)
 
     stm = makestream(NIL, OPL_INSTR, OPL_TEXT, NIL, NIL);
     heap[stm].name = strdup(GET_NAME(x));
-    
+
     save = input_stream;
     input_stream = stm;
     res = variable_to_call(readparse());
@@ -1485,7 +1485,7 @@ int receive_from_child_part2(int n)
     } else if (buffer2[0] == '\x15') {
 	error(SYSTEM_ERROR, "in child", makeint(n));
     } else {
-	//return (str_to_sexp(makestr(buffer2)));
+	return (str_to_pred(makestr(buffer2)));
     }
 
     return (0);
@@ -1545,249 +1545,226 @@ void init_receiver(void)
 
 }
 
-/*
-int f_dp_eval(int arglist, int th __unused)
+int f_dp_prove(int arglist, int rest)
 {
-    int arg1, arg2, res;
-
-    arg1 = car(arglist);
-    arg2 = cadr(arglist);
-    if (GET_INT(arg1) >= child_num || GET_INT(arg1) < 0)
-	error(WRONG_ARGS, "dp-eval", arg1, 0);
-
-    send_to_child(GET_INT(arg1), sexp_to_str(arg2));
-    res = str_to_sexp(receive_from_child(GET_INT(arg1)));
-    return (res);
-}
-
-// parent lisp 
-int f_dp_transfer(int arglist, int th)
-{
-    int arg1, exp, i, m;
-    FILE *file;
-
-    arg1 = car(arglist);
-    if (!stringp(arg1))
-	error(NOT_STR, "dp-transfer", arg1, th);
-
-    file = fopen(GET_NAME(arg1), "r");
-    if (!file) {
-	error(CANT_OPEN, "dp-transfer", arg1, th);
-    }
-
-    exp = list2(make_sym("dp-receive"), arg1);
-
-    for (i = 0; i < child_num; i++) {
-	send_to_child(i, sexp_to_str(exp));
-
-	int bytes_read;
-	while ((bytes_read =
-		fread(buffer3, sizeof(char), sizeof(buffer3), file)) > 0) {
-	    m = write(sockfd[i], buffer3, bytes_read);
-	    if (m < 0) {
-		error(SYSTEM_ERR, "dp-transfer", NIL, 0);
-	    }
-	}
-	memset(buffer3, 0, sizeof(buffer3));
-	buffer3[0] = EOF;
-	m = write(sockfd[i], buffer3, 1);
-	if (m < 0) {
-	    error(SYSTEM_ERR, "dp-transfer", NIL, 0);
-	}
-	receive_from_child(i);
-	fseek(file, 0, SEEK_SET);
-    }
-
-    fclose(file);
-
-    return (T);
-}
-
-// child lisp 
-int f_dp_receive(int arglist, int th)
-{
-    int arg1;
-    FILE *file;
-
-    child_busy_flag = false;
-    arg1 = car(arglist);
-
-    file = fopen(GET_NAME(arg1), "w");
-    if (!file) {
-	error(CANT_OPEN, "dp-receive", arg1, th);
-    }
-
-    int bytes_received;
-    while ((bytes_received =
-	    read(sockfd[1], buffer3, sizeof(buffer3))) > 0) {
-	if (buffer3[bytes_received - 1] == EOF) {
-	    buffer3[bytes_received - 1] = 0;
-	    fwrite(buffer3, sizeof(char), bytes_received - 1, file);
-	    break;
-	}
-	fwrite(buffer3, sizeof(char), bytes_received, file);
-    }
-    fclose(file);
-
-    return (T);
-}
-
-
-int f_dp_load(int arglist, int th)
-{
-    int arg1, exp, i;
-
-    arg1 = car(arglist);
-    if (!stringp(arg1))
-	error(NOT_STR, "dp-load", arg1, th);
-
-    exp = list2(make_sym("LOAD"), arg1);
-
-    for (i = 0; i < child_num; i++) {
-	send_to_child(i, sexp_to_str(exp));
-	receive_from_child(i);
-    }
-
-    eval(exp, 0);
-
-    return (T);
-}
-
-
-int f_dp_compile(int arglist, int th)
-{
-    int arg1, exp, i;
-
-    arg1 = car(arglist);
-    if (!stringp(arg1))
-	error(NOT_STR, "dp-compile", arg1, th);
-
-    exp = list2(make_sym("COMPILE-FILE"), arg1);
-
-    for (i = 0; i < child_num; i++) {
-	send_to_child(i, sexp_to_str(exp));
-	receive_from_child(i);
-    }
-
-    eval(exp, 0);
-
-    return (T);
-}
-
-// fsubr (dp-call fun arg1 arg2 ... argn)
-int f_dp_call(int arglist, int th)
-{
-    int arg1, arg2, temp, res, n, i, args, exp;
-
-    arg1 = car(arglist);	//fun
-    arg2 = cdr(arglist);	//args
-    n = length(arg2);
-    if (n > child_num)
-	error(ILLEGAL_ARGS, "dp-call", arg2, th);
-    temp = arglist;
-    while (!nullp(temp)) {
-	if (!listp(car(temp)))
-	    error(WRONG_ARGS, "dp-call", arglist, th);
-	temp = cdr(temp);
-    }
-
-    i = 0;
-    while (!nullp(arg2)) {
-	exp = eval_args(car(arg2));
-	send_to_child(i, sexp_to_str(exp));
-	arg2 = cdr(arg2);
-	i++;
-    }
-
-    args = NIL;
-    for (i = 0; i < n; i++) {
-	args = cons(str_to_sexp(receive_from_child(i)), args);
-    }
-    args = reverse(args);
-
-    res = apply(eval(arg1, th), args, th);
-    return (res);
-}
-
-
-int f_dp_exec(int arglist, int th)
-{
-    int temp, res, n, i, exp;
+    int n, arg1, arg2;
 
     n = length(arglist);
-    if (n > child_num)
-	error(ILLEGAL_ARGS, "dp-exec", arglist, th);
-    temp = arglist;
-    while (!nullp(temp)) {
-	if (!listp(car(temp)))
-	    error(WRONG_ARGS, "dp-exec", arglist, th);
-	temp = cdr(temp);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	if (GET_INT(arg1) >= child_num || GET_INT(arg1) < 0)
+	    error(WRONG_ARGS, "dp_prove", arg1);
+
+	send_to_child(GET_INT(arg1), pred_to_str(arg2));
+	str_to_pred(receive_from_child(GET_INT(arg1)));
+	return (prove_all(rest, sp));
     }
-
-    i = 0;
-    temp = arglist;
-    while (!nullp(temp)) {
-	exp = eval_args(car(temp));
-	send_to_child(i, sexp_to_str(exp));
-	temp = cdr(temp);
-	i++;
-    }
-
-    for (i = 0; i < n; i++) {
-	res = str_to_sexp(receive_from_child(i));
-    }
-
-    return (res);
-
+    error(ARITY_ERR, "dp_prove ", arglist);
+    return (NO);
 }
 
-int f_dp_report(int arglist, int th __unused)
+// parent Prolog
+int f_dp_transfer(int arglist, int rest)
 {
-    int arg1;
-    char sub_buffer[STRSIZE];
+    int n, arg1, exp, i, m;
+    FILE *file;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if (!stringp(arg1))
+	    error(NOT_STR, "dp_transfer", arg1);
+
+	file = fopen(GET_NAME(arg1), "r");
+	if (!file) {
+	    error(CANT_OPEN, "dp_transfer", arg1);
+	}
+
+	exp = list2(makeatom("dp_receive", SYS), arg1);
+
+	for (i = 0; i < child_num; i++) {
+	    send_to_child(i, pred_to_str(exp));
+
+	    int bytes_read;
+	    while ((bytes_read =
+		    fread(buffer2, sizeof(char), sizeof(buffer2),
+			  file)) > 0) {
+		m = write(sockfd[i], buffer2, bytes_read);
+		if (m < 0) {
+		    error(SYSTEM_ERROR, "dp_transfer", NIL);
+		}
+	    }
+	    memset(buffer2, 0, sizeof(buffer2));
+	    buffer2[0] = EOF;
+	    m = write(sockfd[i], buffer2, 1);
+	    if (m < 0) {
+		error(SYSTEM_ERROR, "dp_transfer", NIL);
+	    }
+	    receive_from_child(i);
+	    fseek(file, 0, SEEK_SET);
+	}
+
+	fclose(file);
+	return (prove_all(rest, sp));
+    }
+    error(ARITY_ERR, "dp_receive ", arglist);
+    return (NO);
+}
+
+// child Prolog
+int f_dp_receive(int arglist, int rest)
+{
+    int n, arg1;
+    FILE *file;
+
+    n = length(arglist);
+    if (n == 1) {
+	child_busy_flag = 0;
+	arg1 = car(arglist);
+
+	file = fopen(GET_NAME(arg1), "w");
+	if (!file) {
+	    error(CANT_OPEN, "dp_receive", arg1);
+	}
+
+	int bytes_received;
+	while ((bytes_received =
+		read(sockfd[1], buffer2, sizeof(buffer2))) > 0) {
+	    if (buffer2[bytes_received - 1] == EOF) {
+		buffer2[bytes_received - 1] = 0;
+		fwrite(buffer2, sizeof(char), bytes_received - 1, file);
+		break;
+	    }
+	    fwrite(buffer2, sizeof(char), bytes_received, file);
+	}
+	fclose(file);
+	return (prove_all(rest, sp));
+    }
+    error(ARITY_ERR, "dp_receive ", arglist);
+    return (NO);
+}
+
+int f_dp_consult(int arglist, int rest)
+{
+    int arg1, pred, i;
 
     arg1 = car(arglist);
     if (!stringp(arg1))
-	error(NOT_STR, "dp-report", arg1, 0);
+	error(NOT_STR, "dp_consult", arg1);
 
-    memset(sub_buffer, 0, sizeof(sub_buffer));
-    sprintf(sub_buffer, "\x02%s\x03", GET_NAME(arg1));
-    send_to_parent(make_str(sub_buffer));
-    return (T);
+    pred = list2(makeatom("consult", SYS), arg1);
+
+    for (i = 0; i < child_num; i++) {
+	send_to_child(i, pred_to_str(pred));
+	receive_from_child(i);
+
+	return (prove_all(rest, sp));
+    }
+    error(ARITY_ERR, "dp_consult ", arglist);
+    return (NO);
 }
 
-
-int f_dp_part(int arglist, int th)
+int b_dp_compile(int arglist, int rest)
 {
-    int temp, res, n, i, exp, opt;
+    int n, arg1, pred, i;
 
-    opt = car(arglist);
-    n = length(cdr(arglist));
-    if (opt != T && opt != NIL)
-	error(ILLEGAL_ARGS, "dp-part", opt, th);
-    if (n > child_num)
-	error(ILLEGAL_ARGS, "dp-part", cdr(arglist), th);
-    temp = cdr(arglist);
-    while (!nullp(temp)) {
-	if (!listp(car(temp)))
-	    error(WRONG_ARGS, "dp-part", arglist, th);
-	temp = cdr(temp);
-    }
-    i = 0;
-    temp = cdr(arglist);
-    while (!nullp(temp)) {
-	exp = eval_args(car(temp));
-	send_to_child(i, sexp_to_str(exp));
-	temp = cdr(temp);
-	i++;
-    }
-    if (opt == NIL) {
-	res = str_to_sexp(receive_from_child_part(n, 0));
-    } else if (opt == T) {
-	res = str_to_sexp(receive_from_child_part(n, 1));
-    }
-    return (res);
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if (!stringp(arg1))
+	    error(NOT_STR, "dp_compile", arg1);
 
+	pred = list2(makeatom("compile_file", SYS), arg1);
+
+	for (i = 0; i < child_num; i++) {
+	    send_to_child(i, pred_to_str(pred));
+	    receive_from_child(i);
+	}
+
+	return (prove_all(rest, sp));
+    }
+    error(ARITY_ERR, "dp_report ", arglist);
+    return (NO);
 }
 
-*/
+int b_dp_and(int arglist, int rest)
+{
+    int n, arg1, m, i, args, pred;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+	m = length(arg1);
+	if (m > child_num)
+	    error(ILLEGAL_ARGS, "dp_and ", arg1);
+
+	i = 0;
+	while (!nullp(arg1)) {
+	    pred = deref(car(arg1));
+	    send_to_child(i, pred_to_str(pred));
+	    arg1 = cdr(arg1);
+	    i++;
+	}
+
+	args = NIL;
+	for (i = 0; i < n; i++) {
+	    args = cons(str_to_pred(receive_from_child(i)), args);
+	}
+	args = reverse(args);
+	return (prove_all(rest, sp));
+    }
+    error(ARITY_ERR, "dp_report ", arglist);
+    return (NO);
+}
+
+
+int b_dp_report(int arglist, int rest)
+{
+    int n, arg1;
+    char sub_buffer[STRSIZE];
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if (!stringp(arg1))
+	    error(NOT_STR, "dp_report", arg1);
+
+	memset(sub_buffer, 0, sizeof(sub_buffer));
+	sprintf(sub_buffer, "\x02%s\x03", GET_NAME(arg1));
+	send_to_parent(makestr(sub_buffer));
+	return (prove_all(rest, sp));
+    }
+    error(ARITY_ERR, "dp_report ", arglist);
+    return (NO);
+}
+
+
+int b_dp_or(int arglist, int rest)
+{
+    int n, arg1, temp, m, i, pred;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+	m = length(arg1);
+	temp = cdr(arglist);
+	while (!nullp(temp)) {
+	    if (!listp(car(temp)))
+		error(WRONG_ARGS, "dp_or", arglist);
+	    temp = cdr(temp);
+	}
+	i = 0;
+	temp = cdr(arglist);
+	while (!nullp(temp)) {
+	    pred = deref(car(temp));
+	    send_to_child(i, pred_to_str(pred));
+	    temp = cdr(temp);
+	    i++;
+	}
+	str_to_pred(receive_from_child_part(m, 0));
+	return (prove_all(rest, sp));
+    }
+    error(ARITY_ERR, "dp_or ", arglist);
+    return (NO);
+}

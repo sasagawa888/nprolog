@@ -85,14 +85,16 @@ char compiled[COMPILED_NUMBER][30] = {
 //extened predicate
 char extended[EXTENDED_NUMBER][30] = {
     { "wiringpi_setup_gpio" }, { "wiringpi_spi_setup" },
-    { "pwm_set_mode" },
+	{ "pwm_set_mode" },
     { "pwm_set_clock" }, { "pwm_set_range" }, { "pin_mode" },
-    { "digital_write" },
+	{ "digital_write" },
     { "pwm_write" }, { "pull_up_dn_control" }, { "digital_read" },
-    { "delay" },
-    { "delay_microseconds" },
+    { "delay" }, { "delay_microseconds" },
     { "compile_file" }, { "timer_microseconds" }, { "with" },
-    { "existerrors" },
+	{ "existerrors" },
+    { "dp_create" }, { "dp_consult" }, { "dp_transfer" }, { "dp_and" },
+	{ "dp_or" },
+    { "dp_compile" }, { "dp_prove" }, { "dp_close" },
 };
 
 
