@@ -15,6 +15,7 @@ written by kenichi sasagawa 2016/8~
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <pthread.h>
 #include "npl.h"
 
 //global vers
