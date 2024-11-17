@@ -1,7 +1,7 @@
 # Distributed Parallel
 under construction
 
-![DP](para.png)
+![DP](para1.png)
 
 # Invoke
 
@@ -56,3 +56,13 @@ The aforementioned qsort example is intended to illustrate the mechanism, not as
 The use case for dp_or/1 is when not all computations are necessarily required. For example, it can be used in determining whether a large number is prime or a pseudoprime. If a single prime factor is found, it is immediately clear that the number is composite, and the remaining computations are unnecessary. This is the kind of situation where dp_or/1 is useful.
 
 The parallel functionality provided by N-Prolog is simple and clear. By isolating and executing large, parallelizable computations within the scope of Prolog's syntax, it aims to dramatically increase the computational capacity of Prolog.
+
+# Protocol
+The parent process converts predicates into strings and sends them via TCP/IP communication to the child process. The child process converts the strings back into predicates and attempts to prove them. During this process, variable names are renamed. In the parent process, intermediate calculation variables are represented as v_1, for example. By interpreting these as uppercase V1, they can be handled as standard variables in Prolog.
+
+At the end of the proof, the child process returns the result as a conjunction or predicate. In the case of success, it returns the unification information of the variables along with the final result true as a conjunction. For example, V1=2,true. is returned. In the case of failure, it returns fail. These results are sent back to the parent process as strings. The parent process converts these strings back into predicates and transforms the variable V1 into v_1 or the original intermediate variable. By processing this as a proof sequence, the parent process performs unification for the intermediate variables.
+
+In N-Prolog, the predicate ask/0, which is used internally, is appended at the end of the proof sequence. When the child process is operating in network mode, it modifies the behavior of ask/0. Specifically, it converts the unification information of variables and the proof result into a conjunction. For example, it generates V1=2,true.. The child process then further converts this into a string and sends it to the parent process via TCP/IP.
+
+The child process can receive instructions from the parent process via a thread during the proof process. The commands are as follows: 0x11 for stop, 0x12 for pause, and 0x13 for resume. When the child process starts in network mode, it initializes this thread in advance.
+
