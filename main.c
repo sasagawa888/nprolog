@@ -30,7 +30,7 @@ int ustack[STACKSIZE];
 int record_hash_table[HASHTBSIZE][RECORDMAX];	// for hash record database 
 int record_pt = 1;		// current index of record database
 int counter[31];		// counter str_set,str_dec ... 
-int string_term_buffer[STRSIZE];	// for string_term/2
+char string_term_buffer[STRSIZE];	// for string_term/2
 token stok = { GO, OTHER };
 
 jmp_buf buf;			// for REPL halt and error handling.
@@ -1119,22 +1119,11 @@ void printanswer(int addr)
 	print(addr);
 }
 
-//output to output_stream
-void output(char* str, int x)
-{	
-	char str1[256];
-
-	if(!string_term_flag)
-	fprintf(GET_PORT(output_stream),str,x);
-	else{
-	sprintf(str1,str,x);
-	strcat((char*)string_term_buffer,str1);
-	}
-}
 
 void print(int addr)
 {
     double x;
+	char str1[256];
 
     if (IS_ALPHA(addr)) {
 	fprintf(GET_PORT(output_stream), "v_%d", addr - CELLSIZE);
@@ -1142,7 +1131,12 @@ void print(int addr)
     }
     switch (GET_TAG(addr)) {
     case INTN:
-	output("%d", GET_INT(addr));
+	if(!string_term_flag)
+	fprintf(GET_PORT(output_stream),"%d", GET_INT(addr));
+	else{
+		sprintf(str1,"%d", GET_INT(addr));
+		strcat(string_term_buffer,str1);
+	}
 	break;
     case FLTN:
 	x = GET_FLT(addr);
