@@ -1120,6 +1120,18 @@ void printanswer(int addr)
 }
 
 //output to output_stream
+void output(char* str, int x)
+{	
+	char str1[256];
+
+	if(!string_term_flag)
+	fprintf(GET_PORT(output_stream),str,x);
+	else{
+	sprintf(str1,str,x);
+	strcat((char*)string_term_buffer,str1);
+	}
+}
+
 void print(int addr)
 {
     double x;
@@ -1130,7 +1142,7 @@ void print(int addr)
     }
     switch (GET_TAG(addr)) {
     case INTN:
-	fprintf(GET_PORT(output_stream), "%d", GET_INT(addr));
+	output("%d", GET_INT(addr));
 	break;
     case FLTN:
 	x = GET_FLT(addr);

@@ -1177,35 +1177,23 @@ int b_timer_microseconds(int arglist, int rest)
 /* distributed parallel */
 int pred_to_str(int x)
 {
-    int save, res;
-    char *str;
+    int res;
 
-    res = makestream(NIL, OPL_OUTSTR, OPL_TEXT, NIL, NIL);
-    str = (char *) malloc(STRSIZE);
-    if (str == NULL)
-	error(MALLOC_OVERF, "pred_to_str", NIL);
-    heap[res].name = str;
-    heap[res].name[0] = '\0';
-
-    save = output_stream;
-    output_stream = res;
+	memset(string_term_buffer,'\0', sizeof(string_term_buffer));
+	string_term_flag = 1;
     print(x);
-    res = output_stream;
-    output_stream = save;
+    string_term_flag = 0;
+    res = makestr((char*)string_term_buffer);
     return (res);
 }
 
 int str_to_pred(int x)
 {
-    int stm, save, res;
+	int res;
 
-    stm = makestream(NIL, OPL_INSTR, OPL_TEXT, NIL, NIL);
-    heap[stm].name = strdup(GET_NAME(x));
-
-    save = input_stream;
-    input_stream = stm;
+	string_term_flag = 1;
     res = variable_to_call(readparse());
-    input_stream = save;
+    string_term_flag = 0;
     return (res);
 }
 

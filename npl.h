@@ -258,8 +258,6 @@ extern int error_stream;
 #define OPL_OUTPUT  23
 #define OPL_TEXT    24
 #define OPL_BINARY  25
-#define OPL_INSTR   26
-#define OPL_OUTSTR  27
 
 //trace mode
 #define OFF     0
