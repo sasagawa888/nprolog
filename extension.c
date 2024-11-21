@@ -1179,19 +1179,19 @@ int pred_to_str(int x)
 {
     int res;
 
-	memset(bridge,'\0', sizeof(bridge));
-	bridge_flag = 1;
+    memset(bridge, '\0', sizeof(bridge));
+    bridge_flag = 1;
     print(x);
     bridge_flag = 0;
-    res = makestr((char*)bridge);
+    res = makestr((char *) bridge);
     return (res);
 }
 
 int str_to_pred(int x)
 {
-	int res;
+    int res;
 
-	bridge_flag = 1;
+    bridge_flag = 1;
     res = variable_to_call(readparse());
     bridge_flag = 0;
     return (res);
@@ -1200,7 +1200,7 @@ int str_to_pred(int x)
 // under construction V1 -> v_1
 int convert_to_variant(int x)
 {
-	return(x);
+    return (x);
 }
 
 
@@ -1540,21 +1540,21 @@ void init_receiver(void)
 
 int b_dp_create(int arglist, int rest)
 {
-	int n,arg1;
+    int n, arg1;
 
-	n=length(arglist);
+    n = length(arglist);
 
-	if(n==1){
-    child_num = 0;
+    if (n == 1) {
+	child_num = 0;
 	arg1 = arglist;
-    while (!nullp(arg1)) {
-	if (!atomp(car(arg1)))
-	    error(NOT_ATOM, "dp_create", arg1);
+	while (!nullp(arg1)) {
+	    if (!atomp(car(arg1)))
+		error(NOT_ATOM, "dp_create", arg1);
 
-	init_child(child_num, car(arg1));
-	arg1 = cdr(arg1);
-	child_num++;
-    }
+	    init_child(child_num, car(arg1));
+	    arg1 = cdr(arg1);
+	    child_num++;
+	}
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "dp_create ", arglist);
@@ -1564,19 +1564,19 @@ int b_dp_create(int arglist, int rest)
 // close all distributed child 
 int b_dp_close(int arglist, int rest)
 {
-    int n,i, exp;
+    int n, i, exp;
 
-	n = length(arglist);
-	if(n==0){
+    n = length(arglist);
+    if (n == 0) {
 
-    exp = makestr("999");
-    for (i = 0; i < child_num; i++) {
-	send_to_child(i, exp);
-    }
+	exp = makestr("999");
+	for (i = 0; i < child_num; i++) {
+	    send_to_child(i, exp);
+	}
 
-    close_socket();
-    child_num = 0;
-    return (prove_all(rest, sp));
+	close_socket();
+	child_num = 0;
+	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "dp_close ", arglist);
     return (NO);
@@ -1597,7 +1597,9 @@ int b_dp_prove(int arglist, int rest)
 	    error(WRONG_ARGS, "dp_prove", arg1);
 
 	send_to_child(GET_INT(arg1), pred_to_str(arg2));
-	res = convert_to_variant(str_to_pred(receive_from_child(GET_INT(arg1))));
+	res =
+	    convert_to_variant(str_to_pred
+			       (receive_from_child(GET_INT(arg1))));
 	return (prove_all(res, sp));
     }
     error(ARITY_ERR, "dp_prove ", arglist);
@@ -1748,8 +1750,8 @@ int b_dp_and(int arglist, int rest)
 
 	for (i = 0; i < n; i++) {
 	    res = convert_to_variant(str_to_pred(receive_from_child(i)));
-		if(prove_all(res, sp)==NO)
-			return(NO);
+	    if (prove_all(res, sp) == NO)
+		return (NO);
 	}
 	return (YES);
     }
@@ -1781,7 +1783,7 @@ int b_dp_report(int arglist, int rest)
 
 int b_dp_or(int arglist, int rest)
 {
-    int n, arg1, temp, m, i, pred,res;
+    int n, arg1, temp, m, i, pred, res;
 
     n = length(arglist);
     if (n == 1) {
@@ -1801,7 +1803,8 @@ int b_dp_or(int arglist, int rest)
 	    temp = cdr(temp);
 	    i++;
 	}
-	res = convert_to_variant(str_to_pred(receive_from_child_part(m, 0)));
+	res =
+	    convert_to_variant(str_to_pred(receive_from_child_part(m, 0)));
 	return (prove_all(res, sp));
     }
     error(ARITY_ERR, "dp_or ", arglist);
