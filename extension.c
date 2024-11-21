@@ -1394,8 +1394,7 @@ int receive_from_child_part(int n, int opt)
 		error(SYSTEM_ERROR, "receive from child", NIL);
 	    }
 	    // receive result and ignore
-	    while ((m =
-		    read(sockfd[i], bridge, sizeof(bridge) - 1)) == 0) {
+	    while ((m = read(sockfd[i], bridge, sizeof(bridge) - 1)) == 0) {
 	    }
 	}
     }

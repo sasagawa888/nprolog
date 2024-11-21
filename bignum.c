@@ -280,22 +280,22 @@ void print_bigx(int x)
 
     y = get_pointer(x);		//get pointer of bigcell
     len = get_length(x);	//get length of bignum;
-    if(!bridge_flag)
-    fprintf(GET_PORT(output_stream), "%d", bigcell[y]);
+    if (!bridge_flag)
+	fprintf(GET_PORT(output_stream), "%d", bigcell[y]);
     else {
-        sprintf(str1, "%d", bigcell[y]);
-        strcat(bridge,str1);
+	sprintf(str1, "%d", bigcell[y]);
+	strcat(bridge, str1);
     }
     y--;
     len--;
 
     do {
-    if(!bridge_flag)
-	fprintf(GET_PORT(output_stream), "%09d", bigcell[y]);
-    else{
-        sprintf(str1,"%09d", bigcell[y]);
-        strcat(bridge,str1);
-    }
+	if (!bridge_flag)
+	    fprintf(GET_PORT(output_stream), "%09d", bigcell[y]);
+	else {
+	    sprintf(str1, "%09d", bigcell[y]);
+	    strcat(bridge, str1);
+	}
 	y--;
 	len--;
     }

@@ -1168,7 +1168,7 @@ void print(int addr)
 	break;
     case SINGLE:
 	if (addr == NIL) {
-		printstr("[]");
+	    printstr("[]");
 	} else if (variablep(addr)) {
 	    if (!bridge_flag)
 		fprintf(GET_PORT(output_stream), "%s", GET_NAME(addr));
@@ -1183,7 +1183,7 @@ void print(int addr)
 	break;
     case STRUCT:
 	if (sexp_flag) {
-		printc('(');
+	    printc('(');
 	    printsexp(addr);
 	} else if (postfixp(addr)) {
 	    if (!ignore_flag)
@@ -1203,7 +1203,7 @@ void print(int addr)
 	    } else
 		printlist_canonical(addr);
 	} else if (eqlp(car(addr), CURL)) {
-		printc('{');
+	    printc('{');
 	    printcurl(cdr(addr));
 	} else if (mixturep(car(addr))) {
 	    if (length(addr) == 2)
@@ -1216,13 +1216,13 @@ void print(int addr)
 		printinfix(addr);
 	    else {
 		if (car(addr) == DOTOBJ || car(addr) == AND || car(addr) == OR) {	// '.' ',' ';'
-			printc('\'');
+		    printc('\'');
 		    print(car(addr));
-			printc('\'');
+		    printc('\'');
 		} else		//other functor
 		    print(car(addr));
 		if (!nullp(cdr(addr))) {
-			printc('(');
+		    printc('(');
 		    printtuple(cdr(addr));
 		}
 	    }
@@ -1235,7 +1235,7 @@ void print(int addr)
 		printc('(');
 		print(cadr(addr));
 		printc(')');
-		}
+	    }
 	} else if (operationp(addr) ||
 		   predicatep(addr) ||
 		   builtinp(addr) || compiledp(addr) || functionp(addr)) {
@@ -1245,17 +1245,17 @@ void print(int addr)
 		printtuple(cdr(addr));
 	    }
 	} else {
-		printstr("#[");
+	    printstr("#[");
 	    printlist(addr);
 	}
 	break;
     case STREAM:
 	if (addr == standard_input) {
-		printstr("<stdin>");
+	    printstr("<stdin>");
 	} else if (addr == standard_output) {
-		printstr("<stdout>");
+	    printstr("<stdout>");
 	} else if (addr == standard_error) {
-		printstr("<stderr>");
+	    printstr("<stderr>");
 	} else {
 	    if (!bridge_flag)
 		fprintf(GET_PORT(output_stream), "<stream%d>", addr);
@@ -1274,11 +1274,11 @@ void print(int addr)
 		strcat(bridge, str1);
 	    }
 	} else {
-		printstr(GET_NAME(addr));
+	    printstr(GET_NAME(addr));
 	}
 	break;
     default:
-	    printstr("<undef>");
+	printstr("<undef>");
 	break;
     }
 }
@@ -1291,20 +1291,20 @@ void print_quoted(int addr)
     strcpy(str, GET_NAME(addr));
     pos = 0;
     c = str[pos];
-	printc('\'');
+    printc('\'');
     while (c != NUL) {
 	if (c == '\\') {
 	    pos++;
 	    c = str[pos];
 	    if (c == NUL) {
-		    printc('\\');
+		printc('\\');
 		goto exit;
 	    } else if (c == '"') {
 		printc(c);
 		pos++;
 	    } else {
-		    printc('\\');
-		    printc(c);
+		printc('\\');
+		printc(c);
 		pos++;
 	    }
 	} else if (c == '\'') {
@@ -1404,7 +1404,7 @@ void printc(char c)
     }
 }
 
-void printstr(char* s)
+void printstr(char *s)
 {
     char str1[256];
 
@@ -1463,21 +1463,21 @@ void printinfix(int addr)
 	if (infix_operator_p(caddr(addr))) {
 	    printc('(');
 	    print(caddr(addr));
-		printc(')');
+	    printc(')');
 	} else if (infixp(caddr(addr)) &&
 		   get_2nd_weight(car(caddr(addr))) >
 		   get_2nd_weight(car(addr))) {
-		printc('(');
+	    printc('(');
 	    print(caddr(addr));
-		printc(')');
+	    printc(')');
 	} else if (infixp(cadr(addr)) && infixp(caddr(addr)) &&
 		   get_2nd_weight(car(cadr(addr))) <
 		   get_2nd_weight(car(caddr(addr)))) {
-		printc('(');
+	    printc('(');
 	    print(caddr(addr));
-		printc(')');
+	    printc(')');
 	} else if (single_operation_p(caddr(addr))) {
-		printc(' ');
+	    printc(' ');
 	    print(caddr(addr));
 	} else
 	    print(caddr(addr));
@@ -1514,17 +1514,17 @@ void printpostfix(int addr)
 
 void printsexp(int addr)
 {
-    if (nullp(addr)){
+    if (nullp(addr)) {
 	printc(')');
-    }else if ((!(structurep(cdr(addr)))) && (!(nullp(cdr(addr))))) {
+    } else if ((!(structurep(cdr(addr)))) && (!(nullp(cdr(addr))))) {
 	print(car(addr));
-	printstr( " . ");
+	printstr(" . ");
 	print(cdr(addr));
 	printc(')');
     } else {
 	print(car(addr));
-	if (!nullp(cdr(addr))){
-		printc(' ');
+	if (!nullp(cdr(addr))) {
+	    printc(' ');
 	}
 	printsexp(cdr(addr));
     }
@@ -1551,41 +1551,41 @@ void printlist(int addr)
     } else if ((!(structurep(cdr(addr)))) && (!(nullp(cdr(addr))))) {
 	if (operationp(car(addr)) &&
 	    !argumentsp(car(addr)) && heavy999p(car(car(addr)))) {
-		printc('(');
+	    printc('(');
 	    print(car(addr));
-		printc(')');
+	    printc(')');
 	} else if (car(addr) == AND) {
-		printstr( "','");
+	    printstr("','");
 	} else if (car(addr) == DOTOBJ) {
-		printstr( "'.'");
-	} else{
+	    printstr("'.'");
+	} else {
 	    print(car(addr));
 	}
-	    printc('|');
+	printc('|');
 
 	if (operationp(cdr(addr)) &&
 	    !argumentsp(cdr(addr)) && heavy999p(car(cdr(addr)))) {
-		printc('(');
+	    printc('(');
 	    print(cdr(addr));
-		printc(')');
-	} else{
+	    printc(')');
+	} else {
 	    print(cdr(addr));
 	}
-	    printc(']');
+	printc(']');
     } else {
 	if (operationp(car(addr)) &&
 	    !argumentsp(car(addr)) && heavy999p(car(car(addr)))) {
-		printc('(');
+	    printc('(');
 	    print(car(addr));
-		printc(')');
+	    printc(')');
 	} else if (car(addr) == AND) {
-		printstr( "','");
+	    printstr("','");
 	} else if (car(addr) == DOTOBJ) {
-		printstr( "'.'");
+	    printstr("'.'");
 	} else
 	    print(car(addr));
 	if (!nullp(cdr(addr))) {
-		printc(',');
+	    printc(',');
 	}
 	printlist(cdr(addr));
     }
@@ -1743,21 +1743,21 @@ void printbody(int addr)
 	printbody(cadr(addr));
 	print(car(addr));
 	if (!bridge_flag)
-	fprintf(GET_PORT(output_stream), "\n    ");
-	strcat(bridge,"\n    ");
+	    fprintf(GET_PORT(output_stream), "\n    ");
+	strcat(bridge, "\n    ");
 	printbody(caddr(addr));
     } else if (operationp(addr) && car(addr) == OR) {
 	if (!bridge_flag)
-	fprintf(GET_PORT(output_stream), "(");
-	else 
-	strcat(bridge,"(");
+	    fprintf(GET_PORT(output_stream), "(");
+	else
+	    strcat(bridge, "(");
 	printbody1(cadr(addr));
 	print(car(addr));
 	printbody1(caddr(addr));
 	if (!bridge_flag)
-	fprintf(GET_PORT(output_stream), ")");
-	else 
-	strcat(bridge,")");
+	    fprintf(GET_PORT(output_stream), ")");
+	else
+	    strcat(bridge, ")");
     } else {
 	print(addr);
     }
