@@ -1297,6 +1297,7 @@ void print_bigx(int x);
 void printbody(int addr);
 void printbody1(int addr);
 void printc(char c);
+void printstr(char* s);
 void printclause(int addr);
 void printenv(void);
 void print_quoted(int addr);
