@@ -270,37 +270,32 @@ int makebinbigx(char *bignum)
 }
 
 
-/* old code
-void print_bigx(int x){
-    int y;
-    
-    if(get_sign(x) == -1)
-        printf("-");
-    y = get_msb(x);
-    fprintf(GET_PORT(output_stream),"%d",GET_CAR(y));
-    y = prev(y);
-    
-    do{
-        fprintf(GET_PORT(output_stream),"%09d", GET_CAR(y));
-        y = prev(y);
-    }while(!nullp(y));
-}
-*/
 void print_bigx(int x)
 {
     int y, len;
+    char str1[256];
 
     if (get_sign(x) == -1)
 	fputc('-', GET_PORT(output_stream));
 
     y = get_pointer(x);		//get pointer of bigcell
     len = get_length(x);	//get length of bignum;
+    if(!bridge_flag)
     fprintf(GET_PORT(output_stream), "%d", bigcell[y]);
+    else {
+        sprintf(str1, "%d", bigcell[y]);
+        strcat(bridge,str1);
+    }
     y--;
     len--;
 
     do {
+    if(!bridge_flag)
 	fprintf(GET_PORT(output_stream), "%09d", bigcell[y]);
+    else{
+        sprintf(str1,"%09d", bigcell[y]);
+        strcat(bridge,str1);
+    }
 	y--;
 	len--;
     }
