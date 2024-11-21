@@ -3263,11 +3263,13 @@ int b_string_term(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "string_term ", arg1);
-	if (!stringp(arg1))
+	if (!wide_variable_p(arg1) && !stringp(arg1))
 	    error(NOT_STR, "string_term ", arg1);
 
+	if (wide_variable_p(arg1) && wide_variable_p(arg2))
+	    error(WRONG_ARGS, "string_term ", arglist);
+	
+	if(wide_variable_p(arg2)){
 	l = strlen(GET_NAME(arg1));
 	memset(str, '\0', STRSIZE);
 	strcpy(str, GET_NAME(arg1));
@@ -3284,7 +3286,19 @@ int b_string_term(int arglist, int rest)
 	    return (prove_all(rest, sp));
 	else
 	    return (NO);
-    }
+    } else if(wide_variable_p(arg1)){
+		memset(bridge, '\0', sizeof(bridge));
+		bridge_flag = 1;
+		print(arg2);
+		bridge_flag = 0;
+		res = makestr(bridge);
+		if (unify(arg1, res) == YES)
+	    return (prove_all(rest, sp));
+	else
+	    return (NO);
+	}else
+	    return (NO);
+	}
     error(ARITY_ERR, "string_term ", arglist);
     return (NO);
 }
