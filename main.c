@@ -30,7 +30,7 @@ int ustack[STACKSIZE];
 int record_hash_table[HASHTBSIZE][RECORDMAX];	// for hash record database 
 int record_pt = 1;		// current index of record database
 int counter[31];		// counter str_set,str_dec ... 
-char bridge[STRSIZE];		// for string_term/2
+char bridge[BUFSIZE];		// for string_term/2
 token stok = { GO, OTHER };
 
 jmp_buf buf;			// for REPL halt and error handling.
@@ -135,7 +135,6 @@ struct sockaddr_in parent_addr, child_addr[PARASIZE];
 int child_num;
 pthread_t receiver_thread;
 int child_result[PARASIZE];
-char buffer2[BUFSIZE];
 
 //-----editor-----
 char buffer[BUFSIZE][10];

@@ -1290,14 +1290,14 @@ int receive_from_parent(void)
 	}
     }
     // read message from parent
-    memset(buffer2, 0, sizeof(buffer2));
-    n = read(sockfd[1], buffer2, sizeof(buffer2) - 1);
+    memset(bridge, 0, sizeof(bridge));
+    n = read(sockfd[1], bridge, sizeof(bridge) - 1);
     if (n < 0) {
 	error(SYSTEM_ERROR, "receive from parent", NIL);
     }
 
 
-    return (makestr(buffer2));
+    return (makestr(bridge));
 
 }
 
@@ -1306,9 +1306,9 @@ void send_to_parent(int x)
     int n;
 
     // send message to parent
-    memset(buffer2, 0, sizeof(buffer2));
-    strcpy(buffer2, GET_NAME(x));
-    n = write(sockfd[1], buffer2, strlen(buffer2));
+    memset(bridge, 0, sizeof(bridge));
+    strcpy(bridge, GET_NAME(x));
+    n = write(sockfd[1], bridge, strlen(bridge));
     if (n < 0) {
 	error(SYSTEM_ERROR, "send to parent", x);
     }
@@ -1320,10 +1320,10 @@ int send_to_child(int n, int x)
     int m;
 
     // send message to child
-    memset(buffer2, 0, sizeof(buffer2));
-    strcpy(buffer2, GET_NAME(x));
-    strcat(buffer2, "\n");
-    m = write(sockfd[n], buffer2, strlen(buffer2));
+    memset(bridge, 0, sizeof(bridge));
+    strcpy(bridge, GET_NAME(x));
+    strcat(bridge, "\n");
+    m = write(sockfd[n], bridge, strlen(bridge));
     if (m < 0) {
 	error(SYSTEM_ERROR, "send to child", NIL);
     }
@@ -1337,36 +1337,36 @@ int receive_from_child(int n)
 
     // receive from child
   reread:
-    memset(buffer2, 0, sizeof(buffer2));
-    m = read(sockfd[n], buffer2, sizeof(buffer2) - 1);
+    memset(bridge, 0, sizeof(bridge));
+    m = read(sockfd[n], bridge, sizeof(bridge) - 1);
     if (m < 0) {
 	error(SYSTEM_ERROR, "receive from child", makeint(n));
     }
 
   retry:
-    if (buffer2[0] == '\x02') {
+    if (bridge[0] == '\x02') {
 	i = 0;
-	while (buffer2[i + 1] != '\x03') {
-	    sub_buffer[i] = buffer2[i + 1];
+	while (bridge[i + 1] != '\x03') {
+	    sub_buffer[i] = bridge[i + 1];
 	    i++;
 	}
 	sub_buffer[i] = 0;
 	printf("%s", sub_buffer);
 	j = 0;
 	i = i + 2;
-	while (buffer2[j + i] != 0) {
-	    buffer2[j] = buffer2[j + i];
+	while (bridge[j + i] != 0) {
+	    bridge[j] = bridge[j + i];
 	    j++;
 	}
-	buffer2[j] = 0;
-	if (buffer2[0] == 0)
+	bridge[j] = 0;
+	if (bridge[0] == 0)
 	    goto reread;
 	else
 	    goto retry;
-    } else if (buffer2[0] == '\x15') {
+    } else if (bridge[0] == '\x15') {
 	error(SYSTEM_ERROR, "in child", makeint(n));
     } else {
-	return (makestr(buffer2));
+	return (makestr(bridge));
     }
 
     return (0);
@@ -1387,15 +1387,15 @@ int receive_from_child_part(int n, int opt)
     for (i = 0; i < n; i++) {
 	if (child_result[i] == -1) {
 	    // send child stop signal
-	    memset(buffer2, 0, sizeof(buffer2));
-	    buffer2[0] = '\x11';
-	    m = write(sockfd[i], buffer2, strlen(buffer2));
+	    memset(bridge, 0, sizeof(bridge));
+	    bridge[0] = '\x11';
+	    m = write(sockfd[i], bridge, strlen(bridge));
 	    if (m < 0) {
 		error(SYSTEM_ERROR, "receive from child", NIL);
 	    }
 	    // receive result and ignore
 	    while ((m =
-		    read(sockfd[i], buffer2, sizeof(buffer2) - 1)) == 0) {
+		    read(sockfd[i], bridge, sizeof(bridge) - 1)) == 0) {
 	    }
 	}
     }
@@ -1411,10 +1411,10 @@ int receive_from_child_part1(int n, int opt)
     // receive from child
     m = 0;
   retry:
-    memset(buffer2, 0, sizeof(buffer2));
+    memset(bridge, 0, sizeof(bridge));
     for (i = 0; i < n; i++) {
 	if (child_result[i] == -1) {
-	    m = read(sockfd[i], buffer2, sizeof(buffer2));
+	    m = read(sockfd[i], bridge, sizeof(bridge));
 	}
 	if (m < 0) {
 	    error(SYSTEM_ERROR, "receive from child", makeint(i));
@@ -1454,30 +1454,30 @@ int receive_from_child_part2(int n)
     int i, j;
 
   retry:
-    if (buffer2[0] == '\x02') {
+    if (bridge[0] == '\x02') {
 	i = 0;
-	while (buffer2[i + 1] != '\x03') {
-	    sub_buffer[i] = buffer2[i + 1];
+	while (bridge[i + 1] != '\x03') {
+	    sub_buffer[i] = bridge[i + 1];
 	    i++;
 	}
 	sub_buffer[i] = 0;
 	printf("%s", sub_buffer);
 	j = 0;
 	i = i + 2;
-	while (buffer2[j + i] != 0) {
-	    buffer2[j] = buffer2[j + i];
+	while (bridge[j + i] != 0) {
+	    bridge[j] = bridge[j + i];
 	    j++;
 	}
-	buffer2[j] = 0;
-	if (buffer2[0] == 0)
+	bridge[j] = 0;
+	if (bridge[0] == 0)
 	    return (-1);
 	else
 	    goto retry;
 
-    } else if (buffer2[0] == '\x15') {
+    } else if (bridge[0] == '\x15') {
 	error(SYSTEM_ERROR, "in child", makeint(n));
     } else {
-	return (str_to_pred(makestr(buffer2)));
+	return (str_to_pred(makestr(bridge)));
     }
 
     return (0);
@@ -1496,28 +1496,28 @@ void *receiver(void *arg)
 
 	if (child_busy_flag) {
 	    res = receive_from_parent();
-	    memset(buffer2, 0, sizeof(buffer2));
-	    strcpy(buffer2, GET_NAME(res));
+	    memset(bridge, 0, sizeof(bridge));
+	    strcpy(bridge, GET_NAME(res));
 	  retry:
-	    if (buffer2[0] == '\x11') {
+	    if (bridge[0] == '\x11') {
 		// child stop 
 		exit_flag = 1;
-	    } else if (buffer2[0] == '\x12') {
+	    } else if (bridge[0] == '\x12') {
 		// child pause 
 
-	    } else if (buffer2[0] == '\x13') {
+	    } else if (bridge[0] == '\x13') {
 		// chidl resume 
 
 	    }
 
-	    if (buffer2[1] != 0) {
+	    if (bridge[1] != 0) {
 		int i;
 		i = 0;
-		while (buffer2[i + 1] != 0) {
-		    buffer2[i] = buffer2[i + 1];
+		while (bridge[i + 1] != 0) {
+		    bridge[i] = bridge[i + 1];
 		    i++;
 		}
-		buffer2[i] = 0;
+		bridge[i] = 0;
 		goto retry;
 	    }
 
@@ -1630,16 +1630,16 @@ int b_dp_transfer(int arglist, int rest)
 
 	    int bytes_read;
 	    while ((bytes_read =
-		    fread(buffer2, sizeof(char), sizeof(buffer2),
+		    fread(bridge, sizeof(char), sizeof(bridge),
 			  file)) > 0) {
-		m = write(sockfd[i], buffer2, bytes_read);
+		m = write(sockfd[i], bridge, bytes_read);
 		if (m < 0) {
 		    error(SYSTEM_ERROR, "dp_transfer", NIL);
 		}
 	    }
-	    memset(buffer2, 0, sizeof(buffer2));
-	    buffer2[0] = EOF;
-	    m = write(sockfd[i], buffer2, 1);
+	    memset(bridge, 0, sizeof(bridge));
+	    bridge[0] = EOF;
+	    m = write(sockfd[i], bridge, 1);
 	    if (m < 0) {
 		error(SYSTEM_ERROR, "dp_transfer", NIL);
 	    }
@@ -1672,13 +1672,13 @@ int b_dp_receive(int arglist, int rest)
 
 	int bytes_received;
 	while ((bytes_received =
-		read(sockfd[1], buffer2, sizeof(buffer2))) > 0) {
-	    if (buffer2[bytes_received - 1] == EOF) {
-		buffer2[bytes_received - 1] = 0;
-		fwrite(buffer2, sizeof(char), bytes_received - 1, file);
+		read(sockfd[1], bridge, sizeof(bridge))) > 0) {
+	    if (bridge[bytes_received - 1] == EOF) {
+		bridge[bytes_received - 1] = 0;
+		fwrite(bridge, sizeof(char), bytes_received - 1, file);
 		break;
 	    }
-	    fwrite(buffer2, sizeof(char), bytes_received, file);
+	    fwrite(bridge, sizeof(char), bytes_received, file);
 	}
 	fclose(file);
 	return (prove_all(rest, sp));

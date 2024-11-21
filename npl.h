@@ -202,7 +202,7 @@ extern int cell_hash_table[HASHTBSIZE];
 extern int record_hash_table[HASHTBSIZE][RECORDMAX]; 
 extern int record_pt;       
 extern int counter[31]; 
-extern char bridge[STRSIZE];
+extern char bridge[BUFSIZE];
 extern int variables;
 extern int variables_save;
 extern int end_of_file_answer;
