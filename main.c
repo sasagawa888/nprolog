@@ -1342,26 +1342,48 @@ void print(int addr)
 
 void print_quoted(int addr)
 {
-    char str[ATOMSIZE], c;
+    char str[ATOMSIZE], str1[256], c;
     int pos;
 
     strcpy(str, GET_NAME(addr));
     pos = 0;
     c = str[pos];
-    fprintf(GET_PORT(output_stream), "%c", '\'');
+    if (!bridge_flag)
+	fprintf(GET_PORT(output_stream), "%c", '\'');
+    else {
+	sprintf(str1, "%c", '\'');
+	strcat(bridge, str1);
+    }
     while (c != NUL) {
 	if (c == '\\') {
 	    pos++;
 	    c = str[pos];
 	    if (c == NUL) {
-		fprintf(GET_PORT(output_stream), "%c", '\\');
+		if (!bridge_flag)
+		    fprintf(GET_PORT(output_stream), "%c", '\\');
+		else {
+		    sprintf(str1, "%c", '\\');
+		    strcat(bridge, str1);
+		}
 		goto exit;
 	    } else if (c == '"') {
-		fprintf(GET_PORT(output_stream), "%c", c);
+		if (!bridge_flag)
+		    fprintf(GET_PORT(output_stream), "%c", c);
+		else {
+		    sprintf(str1, "%c", c);
+		    strcat(bridge, str1);
+		}
 		pos++;
 	    } else {
-		fprintf(GET_PORT(output_stream), "%c", '\\');
-		fprintf(GET_PORT(output_stream), "%c", c);
+		if (!bridge_flag) {
+		    fprintf(GET_PORT(output_stream), "%c", '\\');
+		    fprintf(GET_PORT(output_stream), "%c", c);
+		} else {
+		    sprintf(str1, "%c", '\\');
+		    strcat(bridge, str1);
+		    sprintf(str1, "%c", c);
+		    strcat(bridge, str1);
+		}
 		pos++;
 	    }
 	} else if (c == '\'') {
@@ -1454,12 +1476,26 @@ void print_not_quoted(int addr)
 
 void printc(char c)
 {
-    fprintf(GET_PORT(output_stream), "%c", c);
+    char str1[256];
+
+    if (!bridge_flag)
+	fprintf(GET_PORT(output_stream), "%c", c);
+    else {
+	sprintf(str1, "%c", c);
+	strcat(bridge, str1);
+    }
 }
 
 void printlong(int addr)
 {
-    fprintf(GET_PORT(output_stream), "%lld", GET_LONG(addr));
+    char str1[256];
+
+    if (!bridge_flag)
+	fprintf(GET_PORT(output_stream), "%lld", GET_LONG(addr));
+    else {
+	sprintf(str1, "%lld", GET_LONG(addr));
+	strcat(bridge, str1);
+    }
 }
 
 /*
@@ -1579,45 +1615,88 @@ void printarguments(int addr)
 
 void printlist(int addr)
 {
-    if (nullp(addr))
-	fprintf(GET_PORT(output_stream), "]");
-    else if ((!(structurep(cdr(addr)))) && (!(nullp(cdr(addr))))) {
+    if (nullp(addr)) {
+	if (!bridge_flag)
+	    fprintf(GET_PORT(output_stream), "]");
+	else
+	    strcat(bridge, "]");
+    } else if ((!(structurep(cdr(addr)))) && (!(nullp(cdr(addr))))) {
 	if (operationp(car(addr)) &&
 	    !argumentsp(car(addr)) && heavy999p(car(car(addr)))) {
-	    fprintf(GET_PORT(output_stream), "(");
+	    if (!bridge_flag)
+		fprintf(GET_PORT(output_stream), "(");
+	    else
+		strcat(bridge, "(");
 	    print(car(addr));
-	    fprintf(GET_PORT(output_stream), ")");
+	    if (!bridge_flag)
+		fprintf(GET_PORT(output_stream), ")");
+	    else
+		strcat(bridge, ")");
 	} else if (car(addr) == AND) {
-	    fprintf(GET_PORT(output_stream), "','");
+	    if (!bridge_flag)
+		fprintf(GET_PORT(output_stream), "','");
+	    else
+		strcat(bridge, "','");
 	} else if (car(addr) == DOTOBJ) {
-	    fprintf(GET_PORT(output_stream), "'.'");
+	    if (!bridge_flag)
+		fprintf(GET_PORT(output_stream), "'.'");
+	    else
+		strcat(bridge, "','");
 	} else
 	    print(car(addr));
 
-	fprintf(GET_PORT(output_stream), "|");
+	if (!bridge_flag)
+	    fprintf(GET_PORT(output_stream), "|");
+	else
+	    strcat(bridge, "|");
 
 	if (operationp(cdr(addr)) &&
 	    !argumentsp(cdr(addr)) && heavy999p(car(cdr(addr)))) {
-	    fprintf(GET_PORT(output_stream), "(");
+	    if (!bridge_flag)
+		fprintf(GET_PORT(output_stream), "(");
+	    else
+		strcat(bridge, "(");
 	    print(cdr(addr));
-	    fprintf(GET_PORT(output_stream), ")");
+	    if (!bridge_flag)
+		fprintf(GET_PORT(output_stream), ")");
+	    else
+		strcat(bridge, ")");
 	} else
 	    print(cdr(addr));
-	fprintf(GET_PORT(output_stream), "]");
+	if (!bridge_flag)
+	    fprintf(GET_PORT(output_stream), "]");
+	else
+	    strcat(bridge, "]");
     } else {
 	if (operationp(car(addr)) &&
 	    !argumentsp(car(addr)) && heavy999p(car(car(addr)))) {
-	    fprintf(GET_PORT(output_stream), "(");
+	    if (!bridge_flag)
+		fprintf(GET_PORT(output_stream), "(");
+	    else
+		strcat(bridge, "(");
 	    print(car(addr));
-	    fprintf(GET_PORT(output_stream), ")");
+	    if (!bridge_flag)
+		fprintf(GET_PORT(output_stream), ")");
+	    else
+		strcat(bridge, ")");
 	} else if (car(addr) == AND) {
-	    fprintf(GET_PORT(output_stream), "','");
+	    if (!bridge_flag)
+		fprintf(GET_PORT(output_stream), "','");
+	    else
+		strcat(bridge, "','");
 	} else if (car(addr) == DOTOBJ) {
-	    fprintf(GET_PORT(output_stream), "'.'");
+	    if (!bridge_flag)
+		fprintf(GET_PORT(output_stream), "'.'");
+	    else
+		strcat(bridge, "'.'");
 	} else
 	    print(car(addr));
-	if (!nullp(cdr(addr)))
-	    fprintf(GET_PORT(output_stream), ",");
+	if (!nullp(cdr(addr))) {
+	    if (!bridge_flag)
+		fprintf(GET_PORT(output_stream), ",");
+	    else
+		strcat(bridge, ",");
+	}
 	printlist(cdr(addr));
     }
 }
