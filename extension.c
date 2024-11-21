@@ -1179,11 +1179,11 @@ int pred_to_str(int x)
 {
     int res;
 
-	memset(string_term_buffer,'\0', sizeof(string_term_buffer));
-	string_term_flag = 1;
+	memset(bridge,'\0', sizeof(bridge));
+	bridge_flag = 1;
     print(x);
-    string_term_flag = 0;
-    res = makestr((char*)string_term_buffer);
+    bridge_flag = 0;
+    res = makestr((char*)bridge);
     return (res);
 }
 
@@ -1191,9 +1191,9 @@ int str_to_pred(int x)
 {
 	int res;
 
-	string_term_flag = 1;
+	bridge_flag = 1;
     res = variable_to_call(readparse());
-    string_term_flag = 0;
+    bridge_flag = 0;
     return (res);
 }
 

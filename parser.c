@@ -458,7 +458,7 @@ int readc(void)
 {
     int c;
 
-    if (string_term_flag == 1)
+    if (bridge_flag == 1)
 	return (read_string_term(1));
     else if (input_stream == standard_input && repl_flag)
 	c = read_line(0);
@@ -476,7 +476,7 @@ int readc(void)
 
 void unreadc(char c)
 {
-    if (string_term_flag == 1) {
+    if (bridge_flag == 1) {
 	read_string_term(-1);
 	return;
     }

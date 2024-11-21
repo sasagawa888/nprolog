@@ -3272,14 +3272,14 @@ int b_string_term(int arglist, int rest)
 	memset(str, '\0', STRSIZE);
 	strcpy(str, GET_NAME(arg1));
 	for (i = 0; i < l; i++)
-	    string_term_buffer[i] = str[i];
+	    bridge[i] = str[i];
 
-	string_term_buffer[l] = '.';
-	string_term_buffer[l + 1] = 0;
+	bridge[l] = '.';
+	bridge[l + 1] = 0;
 	read_string_term(0);	//initilize 
-	string_term_flag = 1;
+	bridge_flag = 1;
 	res = readparse();
-	string_term_flag = 0;
+	bridge_flag = 0;
 	if (unify(arg2, res) == YES)
 	    return (prove_all(rest, sp));
 	else
@@ -3302,7 +3302,7 @@ int read_string_term(int flag)
     }
 
 
-    return (string_term_buffer[pos++]);
+    return (bridge[pos++]);
 }
 
 int b_substring(int arglist, int rest)
