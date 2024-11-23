@@ -260,7 +260,7 @@ int main(int argc, char *argv[])
 	    usage();
 	    exit(EXIT_SUCCESS);
 	case 'n':
-	    printf("N-Prolog runs with network mode.");
+	    printf("N-Prolog runs with network mode.\n");
 	    network_flag = 1;
 	    init_parent();
 	    init_receiver();
@@ -295,15 +295,13 @@ int main(int argc, char *argv[])
 		//printf("proof = %d\n", proof);
 		fflush(stdout);
 	    } else if (network_flag) {
-		input = receive_from_parent();
-		print(input);
 		input =
-		    variable_to_call(convert_to_variable(str_to_pred(input)));
+		    variable_to_call(convert_to_variable(str_to_pred(receive_from_parent())));
 		printf("receive_from_parent ");
 		sprint(input);
 		printf("\n");
 		fflush(stdout);
-		if (equalp(input, makeint(999))) {
+		if (equalp(input, makeatom("end_of_file",SYS))) {
 		    printf("exit_from_network_mode\n");
 		    close_socket();
 		    exit(0);

@@ -1579,7 +1579,7 @@ int b_dp_close(int arglist, int rest)
     n = length(arglist);
     if (n == 0) {
 
-	exp = makestr("999");
+	exp = makestr("end_of_file");
 	for (i = 0; i < child_num; i++) {
 	    send_to_child(i, exp);
 	}
