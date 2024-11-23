@@ -1548,7 +1548,7 @@ int b_dp_create(int arglist, int rest)
 
     if (n == 1) {
 	child_num = 0;
-	arg1 = arglist;
+	arg1 = car(arglist);
 	while (!nullp(arg1)) {
 	    if (!atomp(car(arg1)))
 		error(NOT_ATOM, "dp_create", arg1);
