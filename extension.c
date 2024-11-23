@@ -1339,6 +1339,7 @@ void send_to_child(int n, int x)
 	memset(bridge, 0, sizeof(bridge));
 	strcpy(bridge,GET_NAME(x));
     m = write(sockfd[n], bridge, strlen(bridge));
+	memset(bridge, 0, sizeof(bridge));
     if (m < 0) {
 	error(SYSTEM_ERROR, "send to child", NIL);
     }
@@ -1579,7 +1580,7 @@ int b_dp_close(int arglist, int rest)
     n = length(arglist);
     if (n == 0) {
 
-	exp = makestr("end_of_file");
+	exp = makestr("end_of_file.");
 	for (i = 0; i < child_num; i++) {
 	    send_to_child(i, exp);
 	}
