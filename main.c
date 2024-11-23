@@ -296,7 +296,7 @@ int main(int argc, char *argv[])
 		fflush(stdout);
 	    } else if (network_flag) {
 		input =
-		    variable_to_call(str_to_pred(receive_from_parent()));
+		    variable_to_call(convert_to_variable(str_to_pred(receive_from_parent())));
 		printf("receive_from_parent ");
 		sprint(input);
 		printf("\n");

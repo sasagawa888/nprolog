@@ -1197,12 +1197,17 @@ int str_to_pred(int x)
     return (res);
 }
 
-// under construction V1 -> v_1
+// under construction V_1 -> v_1
 int convert_to_variant(int x)
 {
     return (x);
 }
 
+// under construction v_1 -> V_1
+int convert_to_variable(int x)
+{
+    return (x);
+}
 
 void init_parent(void)
 {

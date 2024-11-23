@@ -950,6 +950,8 @@ int cons(int car, int cdr);
 int cons_next(int x, int y);
 int cons_prev(int x, int y);
 int constantp(int addr);
+int convert_to_variant(int x);
+int convert_to_variable(int x);
 int copy_heap(int x);
 int copy_term(int x);
 int copy_variable(int x);
