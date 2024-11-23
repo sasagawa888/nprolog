@@ -1194,6 +1194,7 @@ int str_to_pred(int x)
 
     bridge_flag = 1;
     res = variable_to_call(readparse());
+	memset(bridge, 0, sizeof(bridge));
     bridge_flag = 0;
     return (res);
 }
@@ -1312,6 +1313,7 @@ void send_to_parent(int x)
     memset(bridge, 0, sizeof(bridge));
     strcpy(bridge, GET_NAME(x));
     n = write(sockfd[1], bridge, strlen(bridge));
+	memset(bridge, 0, sizeof(bridge));
     if (n < 0) {
 	error(SYSTEM_ERROR, "send to parent", x);
     }
