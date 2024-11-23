@@ -430,6 +430,8 @@ int b_ask(int arglist, int rest)
     n = length(arglist);
     if (n == 0) {
 	x1 = variables;
+	if(network_flag)
+	memset(bridge, 0, sizeof(bridge));
 	if (nullp(x1) || has_no_value_p(x1)) {
 	    return (prove_all(rest, sp));
 		// ignore singleton e.g. X=X
@@ -443,7 +445,6 @@ int b_ask(int arglist, int rest)
 	x2 = reverse(x2);
 
 	if(network_flag){
-		memset(bridge, 0, sizeof(bridge));
 		bridge_flag = 1;
 	}
 	/* if network-mode write to buffer e.g. X = 1,Y = 2,
