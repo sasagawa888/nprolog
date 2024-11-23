@@ -1323,6 +1323,7 @@ void send_to_parent_buffer(void)
 {
     int n;
 
+	printf("%s\n",bridge);
     n = write(sockfd[1], bridge, strlen(bridge));
     if (n < 0) {
 	error(SYSTEM_ERROR, "send to parent buffer ", NIL);
