@@ -1323,7 +1323,6 @@ void send_to_parent_buffer(void)
 {
     int n;
 
-	printf("%s\n",bridge);
     n = write(sockfd[1], bridge, strlen(bridge));
     if (n < 0) {
 	error(SYSTEM_ERROR, "send to parent buffer ", NIL);
@@ -1334,6 +1333,8 @@ void send_to_child(int n, int x)
 {
     int m;
 
+	memset(bridge, 0, sizeof(bridge));
+	strcpy(bridge,GET_NAME(x));
     m = write(sockfd[n], bridge, strlen(bridge));
     if (m < 0) {
 	error(SYSTEM_ERROR, "send to child", NIL);
