@@ -1647,7 +1647,7 @@ int b_dp_transfer(int arglist, int rest)
 	fclose(file);
 	return (prove_all(rest, sp));
     }
-    error(ARITY_ERR, "dp_receive ", arglist);
+    error(ARITY_ERR, "dp_transfer ", arglist);
     return (NO);
 }
 

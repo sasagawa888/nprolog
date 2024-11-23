@@ -311,7 +311,6 @@ int main(int argc, char *argv[])
 		    child_busy_flag = 0;
 		    printf("send_to_parent ");
 		    printf("\n");
-		    send_to_parent(makestr(bridge));
 		    fflush(stdout);
 		}
 	    }
@@ -401,11 +400,14 @@ void query(int x)
     print(res);
     printf("\n");
 	 } else {
+	bridge_flag = 1;
 	if (res == YES)
-	    send_to_parent(makestr("true."));
+	    printstr("true.");
 	else
-	    send_to_parent(makestr("fail."));
+	    printstr("fail.");
     }
+	bridge_flag = 0;
+	send_to_parent_buffer();
     return;
 }
 

@@ -441,7 +441,7 @@ int b_ask(int arglist, int rest)
 	    x1 = cdr(x1);
 	}
 	x2 = reverse(x2);
-	
+
 	if(network_flag){
 		memset(bridge, 0, sizeof(bridge));
 		bridge_flag = 1;
@@ -463,7 +463,6 @@ int b_ask(int arglist, int rest)
 	}
 	if(network_flag){
 		bridge_flag = 0;
-		send_to_parent_buffer();
 		return(YES);
 	}
 
