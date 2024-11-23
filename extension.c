@@ -1182,7 +1182,7 @@ int pred_to_str(int x)
     memset(bridge, '\0', sizeof(bridge));
     bridge_flag = 1;
     print(x);
-	printc('.');
+	printstr(".\n");
     bridge_flag = 0;
     res = makestr((char *) bridge);
     return (res);

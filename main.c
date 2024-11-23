@@ -404,9 +404,9 @@ void query(int x)
 	 } else {
 	bridge_flag = 1;
 	if (res == YES)
-	    printstr("true.");
+	    printstr("true.\n");
 	else
-	    printstr("fail.");
+	    printstr("fail.\n");
     }
 	bridge_flag = 0;
 	send_to_parent_buffer();
