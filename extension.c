@@ -1271,7 +1271,7 @@ void close_socket(void)
 }
 
 
-void receive_from_parent(void)
+int receive_from_parent(void)
 {
     int n;
 
@@ -1295,7 +1295,7 @@ void receive_from_parent(void)
     if (n < 0) {
 	error(SYSTEM_ERROR, "receive from parent", NIL);
     }
-
+	return(makestr(bridge));
 }
 
 void send_to_parent(int x)
@@ -1312,19 +1312,14 @@ void send_to_parent(int x)
 
 }
 
-int send_to_child(int n, int x)
+void send_to_child(int n, int x)
 {
     int m;
 
-    // send message to child
-    memset(bridge, 0, sizeof(bridge));
-    strcpy(bridge, GET_NAME(x));
-    strcat(bridge, "\n");
     m = write(sockfd[n], bridge, strlen(bridge));
     if (m < 0) {
 	error(SYSTEM_ERROR, "send to child", NIL);
     }
-    return (0);
 }
 
 int receive_from_child(int n)

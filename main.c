@@ -295,11 +295,7 @@ int main(int argc, char *argv[])
 	    //printf("proof = %d\n", proof);
 	    fflush(stdout);
 		} else if (network_flag) {
-		//prove as child Prolog
-		receive_from_parent();
-		bridge_flag = 1;
-		input = variable_to_call(readparse());
-		bridge_flag = 0;
+		input = variable_to_call(str_to_pred(receive_from_parent()));
 		printf("receive_from_parent ");
 		sprint(input);
 		printf("\n");
@@ -310,10 +306,8 @@ int main(int argc, char *argv[])
 		    exit(0);
 		} else {
 		    child_busy_flag = 1;
-			bridge_flag = 1;
 		    query(input);
 		    child_busy_flag = 0;
-			bridge_flag = 0;
 		    printf("send_to_parent ");
 		    printf("\n");
 			send_to_parent(makestr(bridge));
