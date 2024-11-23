@@ -280,22 +280,23 @@ int main(int argc, char *argv[])
   repl:
     if (ret == 0)
 	while (1) {
-		if (!network_flag){
-	    input_stream = standard_input;
-	    output_stream = standard_output;
-	    error_stream = standard_error;
-	    init_repl();
-	    printf("?- ");
-	    fflush(stdout);
-	    input = variable_to_call(readparse());
-	    if (!repl_flag)
-		clear_input_buffer();
-	    query(input);
-	    //sexp_flag = 1;print(variable_to_call(parser(NIL,NIL,NIL,NIL,0,0)));
-	    //printf("proof = %d\n", proof);
-	    fflush(stdout);
-		} else if (network_flag) {
-		input = variable_to_call(str_to_pred(receive_from_parent()));
+	    if (!network_flag) {
+		input_stream = standard_input;
+		output_stream = standard_output;
+		error_stream = standard_error;
+		init_repl();
+		printf("?- ");
+		fflush(stdout);
+		input = variable_to_call(readparse());
+		if (!repl_flag)
+		    clear_input_buffer();
+		query(input);
+		//sexp_flag = 1;print(variable_to_call(parser(NIL,NIL,NIL,NIL,0,0)));
+		//printf("proof = %d\n", proof);
+		fflush(stdout);
+	    } else if (network_flag) {
+		input =
+		    variable_to_call(str_to_pred(receive_from_parent()));
 		printf("receive_from_parent ");
 		sprint(input);
 		printf("\n");
@@ -310,7 +311,7 @@ int main(int argc, char *argv[])
 		    child_busy_flag = 0;
 		    printf("send_to_parent ");
 		    printf("\n");
-			send_to_parent(makestr(bridge));
+		    send_to_parent(makestr(bridge));
 		    fflush(stdout);
 		}
 	    }
@@ -395,9 +396,16 @@ void query(int x)
 
     variables = listreverse(unique(varslist(x)));
     res = prove_all(addask(x), sp);
+	if(!network_flag){
     ESCRST;
     print(res);
     printf("\n");
+	 } else {
+	if (res == YES)
+	    send_to_parent(makestr("true."));
+	else
+	    send_to_parent(makestr("fail."));
+    }
     return;
 }
 
@@ -428,9 +436,9 @@ void query_break(int x)
     variables = listreverse(unique(varslist(x)));
     res = prove_all(addask(x), sp);
     variables = variables_save;
-    ESCRST;
-    print(res);
-    printf("\n");
+	ESCRST;
+	print(res);
+	printf("\n");
     return;
 }
 

@@ -1327,6 +1327,7 @@ void recall_variant(int x);
 void release_variant(int x);
 void reset(int i);
 void send_to_parent(int x);
+void send_to_parent_buffer(void);
 void sned_to_child(int n, int x);
 void set_sign(int x, int y);
 void sprint(int addr);

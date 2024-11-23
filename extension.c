@@ -1295,7 +1295,7 @@ int receive_from_parent(void)
     if (n < 0) {
 	error(SYSTEM_ERROR, "receive from parent", NIL);
     }
-	return(makestr(bridge));
+    return (makestr(bridge));
 }
 
 void send_to_parent(int x)
@@ -1309,7 +1309,16 @@ void send_to_parent(int x)
     if (n < 0) {
 	error(SYSTEM_ERROR, "send to parent", x);
     }
+}
 
+void send_to_parent_buffer(void)
+{
+    int n;
+
+    n = write(sockfd[1], bridge, strlen(bridge));
+    if (n < 0) {
+	error(SYSTEM_ERROR, "send to parent buffer ", NIL);
+    }
 }
 
 void send_to_child(int n, int x)

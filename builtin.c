@@ -432,8 +432,8 @@ int b_ask(int arglist, int rest)
 	x1 = variables;
 	if (nullp(x1) || has_no_value_p(x1)) {
 	    return (prove_all(rest, sp));
+		// ignore singleton e.g. X=X
 	}
-	// ignore singleton e.g. X=X
 	x2 = NIL;
 	while (!nullp(x1)) {
 	    if (variablep(car(x1)) && car(x1) != deref(car(x1)))
@@ -441,13 +441,30 @@ int b_ask(int arglist, int rest)
 	    x1 = cdr(x1);
 	}
 	x2 = reverse(x2);
+	
+	if(network_flag){
+		memset(bridge, 0, sizeof(bridge));
+		bridge_flag = 1;
+	}
+	/* if network-mode write to buffer e.g. X = 1,Y = 2,
+	 * normal-mode write to termial 
+	 * X = 1
+	 * Y = 2
+	*/
 	while (!nullp(x2)) {
 	    print(car(x2));
-	    printf(" = ");
+	    printstr(" = ");
 	    printanswer(deref(car(x2)));
+		if(network_flag)
+		printc(',');
 	    if (!nullp(cdr(x2)))
 		printf("\n");
 	    x2 = cdr(x2);
+	}
+	if(network_flag){
+		bridge_flag = 0;
+		send_to_parent_buffer();
+		return(YES);
 	}
 
 	putchar(' ');
