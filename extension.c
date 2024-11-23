@@ -1271,7 +1271,7 @@ void close_socket(void)
 }
 
 
-int receive_from_parent(void)
+void receive_from_parent(void)
 {
     int n;
 
@@ -1295,9 +1295,6 @@ int receive_from_parent(void)
     if (n < 0) {
 	error(SYSTEM_ERROR, "receive from parent", NIL);
     }
-
-
-    return (makestr(bridge));
 
 }
 
@@ -1487,16 +1484,13 @@ int receive_from_child_part2(int n)
 // Thread for child lisp receiver
 void *receiver(void *arg)
 {
-    int res;
 
     while (1) {
 	if (receiver_exit_flag)
 	    goto exit;
 
 	if (child_busy_flag) {
-	    res = receive_from_parent();
-	    memset(bridge, 0, sizeof(bridge));
-	    strcpy(bridge, GET_NAME(res));
+	    receive_from_parent();
 	  retry:
 	    if (bridge[0] == '\x11') {
 		// child stop 
