@@ -295,8 +295,10 @@ int main(int argc, char *argv[])
 		//printf("proof = %d\n", proof);
 		fflush(stdout);
 	    } else if (network_flag) {
+		input = receive_from_parent();
+		print(input);
 		input =
-		    variable_to_call(convert_to_variable(str_to_pred(receive_from_parent())));
+		    variable_to_call(convert_to_variable(str_to_pred(input)));
 		printf("receive_from_parent ");
 		sprint(input);
 		printf("\n");
