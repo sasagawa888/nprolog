@@ -1675,12 +1675,12 @@ int b_dp_receive(int arglist, int rest)
 	child_busy_flag = 0;
 	arg1 = car(arglist);
 
-	/*
+
 	file = fopen(GET_NAME(arg1), "w");
 	if (!file) {
 	    error(CANT_OPEN, "dp_receive", arg1);
 	}
-
+	/*
 	int bytes_received;
 	while ((bytes_received =
 		read(sockfd[1], transfer, sizeof(transfer))) > 0) {
@@ -1692,10 +1692,10 @@ int b_dp_receive(int arglist, int rest)
 		printf("rec %s",transfer);
 	    fwrite(transfer, sizeof(char), bytes_received, file);
 	}
+	*/
 	printf("rec1");
 	fclose(file);
 	printf("rec2");
-	*/
 	return (YES);
     }
     error(ARITY_ERR, "dp_receive ", arglist);
