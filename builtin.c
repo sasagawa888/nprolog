@@ -201,6 +201,7 @@ void initbuiltin(void)
     defbuiltin("dp_transfer", b_dp_transfer, 1);
     defbuiltin("dp_receive", b_dp_receive, 1);
     defbuiltin("dp_compile", b_dp_compile, 1);
+	defbuiltin("dp_consult" ,b_dp_consult, 1);
     defbuiltin("dp_report", b_dp_report, 1);
 
     //-----JUMP project---------

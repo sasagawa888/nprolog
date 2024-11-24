@@ -1702,12 +1702,12 @@ int b_dp_receive(int arglist, int rest)
     return (NO);
 }
 
-int d_dp_consult(int arglist, int rest)
+int b_dp_consult(int arglist, int rest)
 {
     int arg1, pred, i;
 
     arg1 = car(arglist);
-    if (!stringp(arg1))
+    if (!atomp(arg1))
 	error(NOT_STR, "dp_consult", arg1);
 
     pred = list2(makeatom("consult", SYS), arg1);

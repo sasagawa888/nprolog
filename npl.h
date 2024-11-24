@@ -749,6 +749,7 @@ int b_dp_or(int arglist, int rest);
 int b_dp_transfer(int arglist, int rest);
 int b_dp_receive(int arglist ,int rest);
 int b_dp_compile(int arglist, int rest);
+int b_dp_consult(int arglist, int rest);
 int b_dp_report(int arglist, int rest);
 int b_dup(int arglist, int rest);
 int b_edit(int arglist, int rest);
