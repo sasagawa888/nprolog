@@ -1632,31 +1632,24 @@ int b_dp_transfer(int arglist, int rest)
 	for (i = 0; i < child_num; i++) {
 	    send_to_child(i, pred_to_str(exp));
 
-	
 	    int bytes_read;
 	    while ((bytes_read =
 		    fread(transfer, sizeof(char), sizeof(transfer),
 			  file)) > 0) {
 		m = write(sockfd[i], transfer, bytes_read);
-		printf("send %s",transfer);
 		if (m < 0) {
 		    error(SYSTEM_ERROR, "dp_transfer", NIL);
 		}
 	    }
-		printf("send1");
 	    memset(transfer, 0, sizeof(transfer));
 	    transfer[0] = EOF;
 	    m = write(sockfd[i], transfer, 1);
-		printf("send2");
 	    if (m < 0) {
 		error(SYSTEM_ERROR, "dp_transfer", NIL);
 	    }
-		printf("send3");
 	    receive_from_child(i);
-		printf("send4");
 	    fseek(file, 0, SEEK_SET);
 	}
-	printf("send5");
 	fclose(file);
 	return (prove_all(rest, sp));
     }
@@ -1689,13 +1682,10 @@ int b_dp_receive(int arglist, int rest)
 		fwrite(transfer, sizeof(char), bytes_received - 1, file);
 		break;
 	    }
-		printf("rec %s",transfer);
 	    fwrite(transfer, sizeof(char), bytes_received, file);
 	}
 	child_busy_flag = 1;
-	printf("rec1");
 	fclose(file);
-	printf("rec2");
 	return (YES);
     }
     error(ARITY_ERR, "dp_receive ", arglist);
