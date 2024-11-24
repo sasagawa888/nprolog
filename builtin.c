@@ -2754,7 +2754,7 @@ int b_clause(int arglist, int rest)
 		if (prove_all(rest, sp) == YES)
 		    return (YES);
 	    } else if (predicatep(clause) && unify(arg1, clause) == YES &&
-		       unify(arg2, PTRUE) == YES) {
+		       unify(arg2, OPLTRUE) == YES) {
 		if (prove_all(rest, sp) == YES)
 		    return (YES);
 	    }
@@ -4928,7 +4928,7 @@ int b_member(int arglist, int rest)
 
 	wp = save1;
 	unbind(save2);
-	if (res == FALSE)
+	if (res == OPLFALSE)
 	    return (res);
 
 	save1 = wp;
