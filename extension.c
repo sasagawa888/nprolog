@@ -1684,11 +1684,11 @@ int b_dp_receive(int arglist, int rest)
 	int bytes_received;
 	while ((bytes_received =
 		read(sockfd[1], transfer, sizeof(transfer))) > 0) {
-	    //if (transfer[bytes_received - 1] == EOF) {
-		//transfer[bytes_received - 1] = 0;
-		//fwrite(transfer, sizeof(char), bytes_received - 1, file);
-		//break;
-	   // }
+	    if (transfer[bytes_received - 1] == EOF) {
+		transfer[bytes_received - 1] = 0;
+		fwrite(transfer, sizeof(char), bytes_received - 1, file);
+		break;
+	    }
 		printf("rec %s",transfer);
 	    fwrite(transfer, sizeof(char), bytes_received, file);
 	}
