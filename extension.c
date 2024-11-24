@@ -1636,20 +1636,25 @@ int b_dp_transfer(int arglist, int rest)
 		    fread(bridge, sizeof(char), sizeof(bridge),
 			  file)) > 0) {
 		m = write(sockfd[i], bridge, bytes_read);
+		printf("send %s",bridge);
 		if (m < 0) {
 		    error(SYSTEM_ERROR, "dp_transfer", NIL);
 		}
 	    }
+		printf("send1");
 	    memset(bridge, 0, sizeof(bridge));
 	    bridge[0] = EOF;
 	    m = write(sockfd[i], bridge, 1);
+		printf("send2");
 	    if (m < 0) {
 		error(SYSTEM_ERROR, "dp_transfer", NIL);
 	    }
+		printf("send3");
 	    receive_from_child(i);
+		printf("send4");
 	    fseek(file, 0, SEEK_SET);
 	}
-
+	printf("send5");
 	fclose(file);
 	return (prove_all(rest, sp));
     }
@@ -1681,12 +1686,12 @@ int b_dp_receive(int arglist, int rest)
 		fwrite(bridge, sizeof(char), bytes_received - 1, file);
 		break;
 	    }
-		printf("%s",bridge);
+		printf("rec %s",bridge);
 	    fwrite(bridge, sizeof(char), bytes_received, file);
 	}
-	printf("asdf");
+	printf("rec1");
 	fclose(file);
-	printf("asdf2");
+	printf("rec2");
 	return (YES);
     }
     error(ARITY_ERR, "dp_receive ", arglist);
