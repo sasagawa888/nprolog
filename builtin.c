@@ -2754,7 +2754,7 @@ int b_clause(int arglist, int rest)
 		if (prove_all(rest, sp) == YES)
 		    return (YES);
 	    } else if (predicatep(clause) && unify(arg1, clause) == YES &&
-		       unify(arg2, TRUE) == YES) {
+		       unify(arg2, PTRUE) == YES) {
 		if (prove_all(rest, sp) == YES)
 		    return (YES);
 	    }
