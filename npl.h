@@ -1173,7 +1173,7 @@ int readparen(void);
 int readdouble(void);
 int read_string_term(int flag);
 int receive_from_parent(void);
-int receive_from_child_part1(int n, int opt);
+int receive_from_child_part1(int n);
 int receive_from_child_part2(int n);
 int remove_cut(int x);
 int remove_duplicate(int x);

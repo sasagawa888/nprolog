@@ -1387,8 +1387,8 @@ int receive_from_child(int n)
     return (0);
 }
 
-// opt == 0 find NIL, opt == 1 find non NIL 
-int receive_from_child_part(int n, int opt)
+
+int receive_from_child_part(int n)
 {
     int i, m, res;
 
@@ -1396,7 +1396,7 @@ int receive_from_child_part(int n, int opt)
     for (i = 0; i < n; i++) {
 	child_result[i] = -1;
     }
-    res = receive_from_child_part1(n, opt);
+    res = receive_from_child_part1(n);
 
     // kill not received child
     for (i = 0; i < n; i++) {
@@ -1418,7 +1418,7 @@ int receive_from_child_part(int n, int opt)
 }
 
 
-int receive_from_child_part1(int n, int opt)
+int receive_from_child_part1(int n)
 {
     int m, i;
 
@@ -1437,11 +1437,9 @@ int receive_from_child_part1(int n, int opt)
 	}
     }
 
-    //if find non nil, return it, else retry reading.
+    //if find true return it.
     for (i = 0; i < n; i++) {
-	if (opt == 1 && child_result[i] > NIL)
-	    return (child_result[i]);
-	else if (opt == 0 && child_result[i] == NIL)
+	if (child_result[i] == makeatom("true",SYS))
 	    return (child_result[i]);
     }
 
@@ -1452,14 +1450,8 @@ int receive_from_child_part1(int n, int opt)
 	    goto retry;
     }
 
-    //if opt==1 and all results are nil, return nil
-    //if opt==0 and all returls are non nil,return T
-    if (opt == 1)
-	return (NIL);
-    else if (opt == 0)
-	return (TRUE);
-
-    return (0);
+	// if not exist YES, return fail.
+    return (makeatom("fail",SYS));
 }
 
 int receive_from_child_part2(int n)
@@ -1740,6 +1732,27 @@ int b_dp_compile(int arglist, int rest)
     return (NO);
 }
 
+
+int b_dp_report(int arglist, int rest)
+{
+    int n, arg1;
+    char sub_buffer[STRSIZE];
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if (!stringp(arg1))
+	    error(NOT_STR, "dp_report", arg1);
+
+	memset(sub_buffer, 0, sizeof(sub_buffer));
+	sprintf(sub_buffer, "\x02%s\x03", GET_NAME(arg1));
+	send_to_parent(makestr(sub_buffer));
+	return (prove_all(rest, sp));
+    }
+    error(ARITY_ERR, "dp_report ", arglist);
+    return (NO);
+}
+
 int b_dp_and(int arglist, int rest)
 {
     int n, arg1, m, i, pred, res;
@@ -1771,51 +1784,26 @@ int b_dp_and(int arglist, int rest)
 }
 
 
-int b_dp_report(int arglist, int rest)
-{
-    int n, arg1;
-    char sub_buffer[STRSIZE];
-
-    n = length(arglist);
-    if (n == 1) {
-	arg1 = car(arglist);
-	if (!stringp(arg1))
-	    error(NOT_STR, "dp_report", arg1);
-
-	memset(sub_buffer, 0, sizeof(sub_buffer));
-	sprintf(sub_buffer, "\x02%s\x03", GET_NAME(arg1));
-	send_to_parent(makestr(sub_buffer));
-	return (prove_all(rest, sp));
-    }
-    error(ARITY_ERR, "dp_report ", arglist);
-    return (NO);
-}
-
-
 int b_dp_or(int arglist, int rest)
 {
-    int n, arg1, temp, m, i, pred, res;
+    int n, arg1, m, i, pred, res;
 
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
 	m = length(arg1);
-	temp = cdr(arglist);
-	while (!nullp(temp)) {
-	    if (!listp(car(temp)))
-		error(WRONG_ARGS, "dp_or", arglist);
-	    temp = cdr(temp);
-	}
+	if (m > child_num)
+	    error(ILLEGAL_ARGS, "dp_or ", arg1);
+	
 	i = 0;
-	temp = cdr(arglist);
-	while (!nullp(temp)) {
-	    pred = deref(car(temp));
+	while (!nullp(arg1)) {
+	    pred = deref(car(arg1));
 	    send_to_child(i, pred_to_str(pred));
-	    temp = cdr(temp);
+	    arg1 = cdr(arg1);
 	    i++;
 	}
 	res =
-	    convert_to_variant(str_to_pred(receive_from_child_part(m, 0)));
+	    convert_to_variant(str_to_pred(receive_from_child_part(m)));
 	return (prove_all(res, sp));
     }
     error(ARITY_ERR, "dp_or ", arglist);
