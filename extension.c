@@ -1495,8 +1495,7 @@ int receive_from_child_part2(int n)
 // Thread for child lisp receiver
 void *receiver(void *arg)
 {
-	return;
-	
+
     while (1) {
 	if (receiver_exit_flag)
 	    goto exit;
@@ -1729,7 +1728,7 @@ int b_dp_compile(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	if (!stringp(arg1))
+	if (!atomp(arg1))
 	    error(NOT_STR, "dp_compile", arg1);
 
 	pred = list2(makeatom("compile_file", SYS), arg1);
