@@ -30,7 +30,8 @@ int ustack[STACKSIZE];
 int record_hash_table[HASHTBSIZE][RECORDMAX];	// for hash record database 
 int record_pt = 1;		// current index of record database
 int counter[31];		// counter str_set,str_dec ... 
-char bridge[BUFSIZE];		// for string_term/2
+char bridge[BUFSIZE];		// for string_term/2 and parallel buffer
+char transfer[BUFSIZE];     // buffer for dp_transfer
 token stok = { GO, OTHER };
 
 jmp_buf buf;			// for REPL halt and error handling.

@@ -1627,27 +1627,24 @@ int b_dp_transfer(int arglist, int rest)
 	}
 
 	exp = list2(makeatom("dp_receive", SYS), arg1);
-	send_to_child(0, pred_to_str(exp));
-	receive_from_child(0);
 
-	/*
 	for (i = 0; i < child_num; i++) {
 	    send_to_child(i, pred_to_str(exp));
 
 	    int bytes_read;
 	    while ((bytes_read =
-		    fread(bridge, sizeof(char), sizeof(bridge),
+		    fread(transfer, sizeof(char), sizeof(transfer),
 			  file)) > 0) {
-		m = write(sockfd[i], bridge, bytes_read);
-		printf("send %s",bridge);
+		m = write(sockfd[i], transfer, bytes_read);
+		printf("send %s",transfer);
 		if (m < 0) {
 		    error(SYSTEM_ERROR, "dp_transfer", NIL);
 		}
 	    }
 		printf("send1");
-	    memset(bridge, 0, sizeof(bridge));
-	    bridge[0] = EOF;
-	    m = write(sockfd[i], bridge, 1);
+	    memset(transfer, 0, sizeof(transfer));
+	    transfer[0] = EOF;
+	    m = write(sockfd[i], transfer, 1);
 		printf("send2");
 	    if (m < 0) {
 		error(SYSTEM_ERROR, "dp_transfer", NIL);
@@ -1659,7 +1656,6 @@ int b_dp_transfer(int arglist, int rest)
 	}
 	printf("send5");
 	fclose(file);
-	*/
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "dp_transfer ", arglist);
@@ -1677,7 +1673,6 @@ int b_dp_receive(int arglist, int rest)
 	child_busy_flag = 0;
 	arg1 = car(arglist);
 
-	/*
 	file = fopen(GET_NAME(arg1), "w");
 	if (!file) {
 	    error(CANT_OPEN, "dp_receive", arg1);
@@ -1685,19 +1680,19 @@ int b_dp_receive(int arglist, int rest)
 
 	int bytes_received;
 	while ((bytes_received =
-		read(sockfd[1], bridge, sizeof(bridge))) > 0) {
-	    if (bridge[bytes_received - 1] == EOF) {
-		bridge[bytes_received - 1] = 0;
-		fwrite(bridge, sizeof(char), bytes_received - 1, file);
+		read(sockfd[1], transfer, sizeof(transfer))) > 0) {
+	    if (transfer[bytes_received - 1] == EOF) {
+		transfer[bytes_received - 1] = 0;
+		fwrite(transfer, sizeof(char), bytes_received - 1, file);
 		break;
 	    }
-		printf("rec %s",bridge);
-	    fwrite(bridge, sizeof(char), bytes_received, file);
+		printf("rec %s",transfer);
+	    fwrite(transfer, sizeof(char), bytes_received, file);
 	}
 	printf("rec1");
 	fclose(file);
 	printf("rec2");
-	*/
+
 	return (YES);
     }
     error(ARITY_ERR, "dp_receive ", arglist);
