@@ -1646,7 +1646,7 @@ int b_dp_transfer(int arglist, int rest)
 	    if (m < 0) {
 		error(SYSTEM_ERROR, "dp_transfer", NIL);
 	    }
-	    //receive_from_child(i);
+	    receive_from_child(i);
 	    fseek(file, 0, SEEK_SET);
 	}
 
@@ -1681,6 +1681,7 @@ int b_dp_receive(int arglist, int rest)
 		fwrite(bridge, sizeof(char), bytes_received - 1, file);
 		break;
 	    }
+		printf("%s",bridge);
 	    fwrite(bridge, sizeof(char), bytes_received, file);
 	}
 	fclose(file);
