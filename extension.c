@@ -1627,7 +1627,9 @@ int b_dp_transfer(int arglist, int rest)
 	}
 
 	exp = list2(makeatom("dp_receive", SYS), arg1);
+	receive_from_child(0);
 
+	/*
 	for (i = 0; i < child_num; i++) {
 	    send_to_child(i, pred_to_str(exp));
 
@@ -1656,6 +1658,7 @@ int b_dp_transfer(int arglist, int rest)
 	}
 	printf("send5");
 	fclose(file);
+	*/
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "dp_transfer ", arglist);
@@ -1673,6 +1676,7 @@ int b_dp_receive(int arglist, int rest)
 	child_busy_flag = 0;
 	arg1 = car(arglist);
 
+	/*
 	file = fopen(GET_NAME(arg1), "w");
 	if (!file) {
 	    error(CANT_OPEN, "dp_receive", arg1);
@@ -1692,6 +1696,7 @@ int b_dp_receive(int arglist, int rest)
 	printf("rec1");
 	fclose(file);
 	printf("rec2");
+	*/
 	return (YES);
     }
     error(ARITY_ERR, "dp_receive ", arglist);
