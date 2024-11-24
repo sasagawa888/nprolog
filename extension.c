@@ -1627,6 +1627,7 @@ int b_dp_transfer(int arglist, int rest)
 	}
 
 	exp = list2(makeatom("dp_receive", SYS), arg1);
+	send_to_child(0, pred_to_str(exp));
 	receive_from_child(0);
 
 	/*
