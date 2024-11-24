@@ -403,7 +403,7 @@ void query(int x)
 	 } else {
 	bridge_flag = 1;
 	if (res == YES)
-	    printstr("true.\n");
+	    printstr("trues.\n");
 	else
 	    printstr("fail.\n");
     }

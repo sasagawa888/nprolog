@@ -1715,8 +1715,8 @@ int b_dp_consult(int arglist, int rest)
     for (i = 0; i < child_num; i++) {
 	send_to_child(i, pred_to_str(pred));
 	receive_from_child(i);
-	return (YES);
     }
+	return(YES);
     error(ARITY_ERR, "dp_consult ", arglist);
     return (NO);
 }
