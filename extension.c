@@ -1495,7 +1495,8 @@ int receive_from_child_part2(int n)
 // Thread for child lisp receiver
 void *receiver(void *arg)
 {
-
+	return;
+	
     while (1) {
 	if (receiver_exit_flag)
 	    goto exit;
