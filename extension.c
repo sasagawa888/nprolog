@@ -1439,7 +1439,7 @@ int receive_from_child_part1(int n)
 
     //if find true return it.
     for (i = 0; i < n; i++) {
-	if (child_result[i] == makeatom("true",SYS))
+	if (child_result[i] != -1 && child_result[i] != makeatom("fail",SYS))
 	    return (child_result[i]);
     }
 
