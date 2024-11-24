@@ -1618,7 +1618,7 @@ int b_dp_transfer(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	if (!stringp(arg1))
+	if (!atomp(arg1))
 	    error(NOT_STR, "dp_transfer", arg1);
 
 	file = fopen(GET_NAME(arg1), "r");
