@@ -1684,7 +1684,9 @@ int b_dp_receive(int arglist, int rest)
 		printf("%s",bridge);
 	    fwrite(bridge, sizeof(char), bytes_received, file);
 	}
+	printf("asdf");
 	fclose(file);
+	printf("asdf2");
 	return (YES);
     }
     error(ARITY_ERR, "dp_receive ", arglist);
