@@ -1439,7 +1439,7 @@ int receive_from_child_part1(int n)
 
     //if find true return it.
     for (i = 0; i < n; i++) {
-	if (child_result[i] != -1 && child_result[i] != makeatom("fail",SYS))
+	if (child_result[i] != -1 && strcmp(GET_NAME(child_result[i]),"fail.") != 0)
 	    return (child_result[i]);
     }
 
@@ -1483,7 +1483,7 @@ int receive_from_child_part2(int n)
     } else if (bridge[0] == '\x15') {
 	error(SYSTEM_ERROR, "in child", makeint(n));
     } else {
-	return (str_to_pred(makestr(bridge)));
+	return (makestr(bridge));
     }
 
     return (0);
