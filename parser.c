@@ -1159,7 +1159,7 @@ void gettoken(void)
 	return;
 
     }
-    error(SYNTAX_ERR, "illegal token ", NIL);
+    error(SYNTAX_ERR, "illegal token ", makestr(stok.buf));
 }
 
 
