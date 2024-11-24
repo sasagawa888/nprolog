@@ -1330,6 +1330,7 @@ void send_to_parent_buffer(void)
     if (n < 0) {
 	error(SYSTEM_ERROR, "send to parent buffer ", NIL);
     }
+	memset(bridge, 0, sizeof(bridge));
 }
 
 void send_to_child(int n, int x)
