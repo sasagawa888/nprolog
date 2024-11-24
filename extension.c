@@ -1685,6 +1685,7 @@ int b_dp_receive(int arglist, int rest)
 	    fwrite(bridge, sizeof(char), bytes_received, file);
 	}
 	fclose(file);
+	send_to_parent(makestr("true."));
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "dp_receive ", arglist);
