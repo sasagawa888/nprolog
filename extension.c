@@ -10,6 +10,7 @@
 #include <netdb.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <fcntl.h>
 #include "npl.h"
 
 //-----------JUMP project(builtin for compiler)------------
@@ -1660,12 +1661,14 @@ int b_dp_transfer(int arglist, int rest)
 // child Prolog
 int b_dp_receive(int arglist, int rest)
 {
-    int n, arg1;
+    int n, arg1, flags;
     FILE *file;
 
     n = length(arglist);
     if (n == 1) {
 	child_busy_flag = 0;
+	flags = fcntl(sockfd[1], F_GETFL);  
+	fcntl(sockfd[1], F_SETFL, flags | O_NONBLOCK); 
 	arg1 = car(arglist);
 
 
@@ -1685,6 +1688,8 @@ int b_dp_receive(int arglist, int rest)
 	    fwrite(transfer, sizeof(char), bytes_received, file);
 	}
 	child_busy_flag = 1;
+	flags = fcntl(sockfd[1], F_GETFL);         
+	fcntl(sockfd[1], F_SETFL, flags & ~O_NONBLOCK); 
 	fclose(file);
 	return (YES);
     }
