@@ -1643,13 +1643,8 @@ int b_dp_transfer(int arglist, int rest)
 		}
 	    }
 	    memset(transfer, 0, sizeof(transfer));
-	    transfer[0] = EOF;
-		transfer[1] = EOF;
-		transfer[2] = EOF;
-		transfer[3] = EOF;
-		transfer[4] = EOF;
-		transfer[5] = EOF;
-	    m = write(sockfd[i], transfer, 6);
+	    transfer[0] = 0x15;
+	    m = write(sockfd[i], transfer, 1);
 	    if (m < 0) {
 		error(SYSTEM_ERROR, "dp_transfer", NIL);
 	    }
@@ -1683,7 +1678,7 @@ int b_dp_receive(int arglist, int rest)
 	int bytes_received;
 	while ((bytes_received =
 		read(sockfd[1], transfer, sizeof(transfer))) > 0) {
-	    if (transfer[bytes_received - 1] == EOF) {
+	    if (transfer[bytes_received - 1] == 0x15) {
 		transfer[bytes_received - 1] = 0;
 		fwrite(transfer, sizeof(char), bytes_received - 1, file);
 		break;
