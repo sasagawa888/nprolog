@@ -1538,7 +1538,7 @@ void *receiver(void *arg)
 void init_receiver(void)
 {
     // create child receiver thread 
-    //pthread_create(&receiver_thread, NULL, receiver, NULL);
+    pthread_create(&receiver_thread, NULL, receiver, NULL);
 
 }
 
@@ -1644,7 +1644,12 @@ int b_dp_transfer(int arglist, int rest)
 	    }
 	    memset(transfer, 0, sizeof(transfer));
 	    transfer[0] = EOF;
-	    m = write(sockfd[i], transfer, 1);
+		transfer[1] = EOF;
+		transfer[2] = EOF;
+		transfer[3] = EOF;
+		transfer[4] = EOF;
+		transfer[5] = EOF;
+	    m = write(sockfd[i], transfer, 6);
 	    if (m < 0) {
 		error(SYSTEM_ERROR, "dp_transfer", NIL);
 	    }
@@ -1661,14 +1666,12 @@ int b_dp_transfer(int arglist, int rest)
 // child Prolog
 int b_dp_receive(int arglist, int rest)
 {
-    int n, arg1, flags;
+    int n, arg1;
     FILE *file;
 
     n = length(arglist);
     if (n == 1) {
 	child_busy_flag = 0;
-	flags = fcntl(sockfd[1], F_GETFL);  
-	fcntl(sockfd[1], F_SETFL, flags | O_NONBLOCK); 
 	arg1 = car(arglist);
 
 
@@ -1688,8 +1691,6 @@ int b_dp_receive(int arglist, int rest)
 	    fwrite(transfer, sizeof(char), bytes_received, file);
 	}
 	child_busy_flag = 1;
-	flags = fcntl(sockfd[1], F_GETFL);         
-	fcntl(sockfd[1], F_SETFL, flags & ~O_NONBLOCK); 
 	fclose(file);
 	return (YES);
     }
