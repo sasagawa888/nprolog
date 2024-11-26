@@ -31,7 +31,7 @@ int record_hash_table[HASHTBSIZE][RECORDMAX];	// for hash record database
 int record_pt = 1;		// current index of record database
 int counter[31];		// counter str_set,str_dec ... 
 char bridge[BUFSIZE];		// for string_term/2 and parallel buffer
-char transfer[BUFSIZE];     // buffer for dp_transfer
+char transfer[BUFSIZE];		// buffer for dp_transfer
 token stok = { GO, OTHER };
 
 jmp_buf buf;			// for REPL halt and error handling.
@@ -301,12 +301,13 @@ int main(int argc, char *argv[])
 		error_stream = standard_error;
 		init_repl();
 		input =
-		    variable_to_call(convert_to_variable(str_to_pred(receive_from_parent())));
+		    variable_to_call(convert_to_variable
+				     (str_to_pred(receive_from_parent())));
 		printf("receive_from_parent ");
 		sprint(input);
 		printf("\n");
 		fflush(stdout);
-		if (equalp(input, makeatom("end_of_file",SYS))) {
+		if (equalp(input, makeatom("end_of_file", SYS))) {
 		    printf("exit_from_network_mode\n");
 		    close_socket();
 		    exit(0);
@@ -400,11 +401,11 @@ void query(int x)
 
     variables = listreverse(unique(varslist(x)));
     res = prove_all(addask(x), sp);
-	if(!network_flag){
-    ESCRST;
-    print(res);
-    printf("\n");
-	 } else {
+    if (!network_flag) {
+	ESCRST;
+	print(res);
+	printf("\n");
+    } else {
 	bridge_flag = 1;
 	if (res == YES)
 	    printstr("true.\n");
@@ -412,7 +413,7 @@ void query(int x)
 	    printstr("fail.\n");
 	bridge_flag = 0;
 	send_to_parent_buffer();
-	 }
+    }
     return;
 }
 
@@ -443,9 +444,9 @@ void query_break(int x)
     variables = listreverse(unique(varslist(x)));
     res = prove_all(addask(x), sp);
     variables = variables_save;
-	ESCRST;
-	print(res);
-	printf("\n");
+    ESCRST;
+    print(res);
+    printf("\n");
     return;
 }
 

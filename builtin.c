@@ -201,7 +201,7 @@ void initbuiltin(void)
     defbuiltin("dp_transfer", b_dp_transfer, 1);
     defbuiltin("dp_receive", b_dp_receive, 1);
     defbuiltin("dp_compile", b_dp_compile, 1);
-	defbuiltin("dp_consult" ,b_dp_consult, 1);
+    defbuiltin("dp_consult", b_dp_consult, 1);
     defbuiltin("dp_report", b_dp_report, 1);
 
     //-----JUMP project---------
@@ -431,11 +431,11 @@ int b_ask(int arglist, int rest)
     n = length(arglist);
     if (n == 0) {
 	x1 = variables;
-	if(network_flag)
-	memset(bridge, 0, sizeof(bridge));
+	if (network_flag)
+	    memset(bridge, 0, sizeof(bridge));
 	if (nullp(x1) || has_no_value_p(x1)) {
 	    return (prove_all(rest, sp));
-		// ignore singleton e.g. X=X
+	    // ignore singleton e.g. X=X
 	}
 	x2 = NIL;
 	while (!nullp(x1)) {
@@ -445,27 +445,27 @@ int b_ask(int arglist, int rest)
 	}
 	x2 = reverse(x2);
 
-	if(network_flag){
-		bridge_flag = 1;
+	if (network_flag) {
+	    bridge_flag = 1;
 	}
 	/* if network-mode write to buffer e.g. X = 1,Y = 2,
 	 * normal-mode write to termial 
 	 * X = 1
 	 * Y = 2
-	*/
+	 */
 	while (!nullp(x2)) {
 	    print(car(x2));
 	    printstr(" = ");
 	    printanswer(deref(car(x2)));
-		if(network_flag)
+	    if (network_flag)
 		printc(',');
 	    if (!nullp(cdr(x2)))
 		printf("\n");
 	    x2 = cdr(x2);
 	}
-	if(network_flag){
-		bridge_flag = 0;
-		return(YES);
+	if (network_flag) {
+	    bridge_flag = 0;
+	    return (YES);
 	}
 
 	putchar(' ');

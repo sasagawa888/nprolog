@@ -1183,7 +1183,7 @@ int pred_to_str(int x)
     memset(bridge, '\0', sizeof(bridge));
     bridge_flag = 1;
     print(x);
-	printstr(".\n");
+    printstr(".\n");
     bridge_flag = 0;
     res = makestr((char *) bridge);
     return (res);
@@ -1194,11 +1194,11 @@ int str_to_pred(int x)
     int res;
 
     bridge_flag = 1;
-	memset(bridge, '\0', sizeof(bridge));
-	strcpy(bridge,GET_NAME(x));
-	read_string_term(0);
+    memset(bridge, '\0', sizeof(bridge));
+    strcpy(bridge, GET_NAME(x));
+    read_string_term(0);
     res = variable_to_call(readparse());
-	memset(bridge, 0, sizeof(bridge));
+    memset(bridge, 0, sizeof(bridge));
     bridge_flag = 0;
     return (res);
 }
@@ -1317,7 +1317,7 @@ void send_to_parent(int x)
     memset(bridge, 0, sizeof(bridge));
     strcpy(bridge, GET_NAME(x));
     n = write(sockfd[1], bridge, strlen(bridge));
-	memset(bridge, 0, sizeof(bridge));
+    memset(bridge, 0, sizeof(bridge));
     if (n < 0) {
 	error(SYSTEM_ERROR, "send to parent", x);
     }
@@ -1331,17 +1331,17 @@ void send_to_parent_buffer(void)
     if (n < 0) {
 	error(SYSTEM_ERROR, "send to parent buffer ", NIL);
     }
-	memset(bridge, 0, sizeof(bridge));
+    memset(bridge, 0, sizeof(bridge));
 }
 
 void send_to_child(int n, int x)
 {
     int m;
 
-	memset(bridge, 0, sizeof(bridge));
-	strcpy(bridge,GET_NAME(x));
+    memset(bridge, 0, sizeof(bridge));
+    strcpy(bridge, GET_NAME(x));
     m = write(sockfd[n], bridge, strlen(bridge));
-	memset(bridge, 0, sizeof(bridge));
+    memset(bridge, 0, sizeof(bridge));
     if (m < 0) {
 	error(SYSTEM_ERROR, "send to child", NIL);
     }
@@ -1441,7 +1441,8 @@ int receive_from_child_part1(int n)
 
     //if find true return it.
     for (i = 0; i < n; i++) {
-	if (child_result[i] != -1 && strcmp(GET_NAME(child_result[i]),"fail.") != 0)
+	if (child_result[i] != -1
+	    && strcmp(GET_NAME(child_result[i]), "fail.") != 0)
 	    return (child_result[i]);
     }
 
@@ -1452,8 +1453,8 @@ int receive_from_child_part1(int n)
 	    goto retry;
     }
 
-	// if not exist YES, return fail.
-    return (makeatom("fail",SYS));
+    // if not exist YES, return fail.
+    return (makeatom("fail", SYS));
 }
 
 int receive_from_child_part2(int n)
@@ -1707,7 +1708,7 @@ int b_dp_consult(int arglist, int rest)
 	send_to_child(i, pred_to_str(pred));
 	receive_from_child(i);
     }
-	return(YES);
+    return (YES);
     error(ARITY_ERR, "dp_consult ", arglist);
     return (NO);
 }
@@ -1797,7 +1798,7 @@ int b_dp_or(int arglist, int rest)
 	m = length(arg1);
 	if (m > child_num)
 	    error(ILLEGAL_ARGS, "dp_or ", arg1);
-	
+
 	i = 0;
 	while (!nullp(arg1)) {
 	    pred = deref(car(arg1));
@@ -1805,8 +1806,7 @@ int b_dp_or(int arglist, int rest)
 	    arg1 = cdr(arg1);
 	    i++;
 	}
-	res =
-	    convert_to_variant(str_to_pred(receive_from_child_part(m)));
+	res = convert_to_variant(str_to_pred(receive_from_child_part(m)));
 	return (prove_all(res, sp));
     }
     error(ARITY_ERR, "dp_or ", arglist);

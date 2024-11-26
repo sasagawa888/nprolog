@@ -671,7 +671,24 @@ void gettoken(void)
 	stok.type = DBLQUOTE;
 	return;
     }
-
+    //variant
+    if (c == 'v') {
+	c = readc();
+	if (c == '_') {
+	    pos = 0;
+	    c = readc();
+	    while (isdigit(c)) {
+		SETBUF(c)
+		    c = readc();
+	    }
+	    SETBUFEND(NUL)
+		stok.type = VARIANT;
+	    stok.ch = c;
+	    stok.ahead = c;
+	    return;
+	}
+	unreadc(c);
+    }
     //constant-atom in Unicode
     if (islower(c) || unicodep(c)) {
 	pos = 0;
@@ -1444,9 +1461,12 @@ int readitem1(void)
 	}
 	SET_VAR(temp, NIL);
 	return (temp);
-
     case ANOYMOUS:
 	return (makeatom(stok.buf, ANOY));
+	case VARIANT:
+	temp = atoi(stok.buf);
+	temp = temp + CELLSIZE;
+	return(temp);
     case STRING:
 	return (makestr(stok.buf));
     case LBRACKET:

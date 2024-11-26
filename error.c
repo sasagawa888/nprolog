@@ -314,9 +314,9 @@ void error(int errnum, char *fun, int arg)
 
     read_line(-2);		// clear buffer
 
-	if(network_flag){
-		send_to_parent(makestr("end_of_file."));
-	}
+    if (network_flag) {
+	send_to_parent(makestr("end_of_file."));
+    }
 
     if (init_flag) {
 	init_flag = 0;
