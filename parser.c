@@ -1463,10 +1463,10 @@ int readitem1(void)
 	return (temp);
     case ANOYMOUS:
 	return (makeatom(stok.buf, ANOY));
-	case VARIANT:
+    case VARIANT:
 	temp = atoi(stok.buf);
 	temp = temp + CELLSIZE;
-	return(temp);
+	return (temp);
     case STRING:
 	return (makestr(stok.buf));
     case LBRACKET:

@@ -1206,13 +1206,34 @@ int str_to_pred(int x)
 // under construction V_1 -> v_1
 int convert_to_variant(int x)
 {
-    return (x);
+    char *substr, *var;
+    int i;
+
+    if (narrow_variable_p(x)) {
+	var = GET_NAME(x);
+	substr = &var[2];
+	i = atoi(substr);
+	i = i + CELLSIZE;
+	return (i);
+    } else if (atomp(x)) {
+	return (x);
+    }
+    return (wcons(convert_to_variant(car(x)), convert_to_variant(cdr(x))));
 }
 
 // under construction v_1 -> V_1
 int convert_to_variable(int x)
 {
-    return (x);
+    char str[256];
+
+    if (IS_ALPHA(x)) {
+	sprintf(str, "V_%d", x - CELLSIZE);
+	return (makevar(str));
+    } else if (atomp(x)) {
+	return (x);
+    } else
+	return (wcons(convert_to_variable(car(x)),
+		      convert_to_variable(cdr(x))));
 }
 
 void init_parent(void)

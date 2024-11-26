@@ -1127,6 +1127,7 @@ int minus(int arg1, int arg2);
 int mixturep(int addr);
 int mult(int arg1, int arg2);
 int mode_option_p(int x);
+int narrow_variable_p(int addr);
 int negative_zerop(int x);
 int negativep(int x);
 int next(int x);

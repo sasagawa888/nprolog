@@ -1403,7 +1403,13 @@ int variablep(int addr)
 
 }
 
-
+int narrow_variable_p(int addr)
+{
+    if (singlep(addr) && GET_AUX(addr) == VAR)
+	return (1);
+    else
+	return (0);
+}
 
 // variable + anoymous_variable
 int wide_variable_p(int addr)
