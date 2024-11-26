@@ -318,6 +318,7 @@ void error(int errnum, char *fun, int arg)
 	memset(bridge, 0, sizeof(bridge));
 	bridge[0] = 0x15;
 	send_to_parent_buffer();
+	child_busy_flag = 0;
     }
 
     if (init_flag) {
