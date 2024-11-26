@@ -69,3 +69,11 @@ The child process can receive instructions from the parent process via a thread 
 The parent process sends the atom 'end_of_file' to each child process to terminate the network mode.
 
 Communication between the parent and child processes is conducted via a buffer called bridge. Predicates are converted into strings and transmitted over TCP/IP. The receiving side converts these strings back into predicates and executes them. The functionality of string_term/2 is utilized for this purpose.
+
+The child process sends the control code 0x15 to the parent process if an error occurs. Upon receiving this code, the parent process displays that an error has occurred in the nth child process and triggers the error handling mechanism. The child process automatically recovers from the error and waits for further instructions from the parent process in the REPL.
+
+In dp_transfer/1, the control code 0x15 is sent as a signal to indicate the end of file transmission during file transfers. Initially, EOF was used for this purpose, but it was not recognized on Raspberry Pi systems. Therefore, it was decided to switch to using 0x15.
+
+# Progress Update
+The required code has been added. Moving forward, partial functional testing will be conducted. Each component will be tested using the n_test predicate to verify whether the intended transformations and judgments are functioning correctly. After completing these tests, the operation of the distributed parallel functionality will be verified.
+11/26/2024
