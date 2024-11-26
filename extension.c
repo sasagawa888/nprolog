@@ -1209,13 +1209,15 @@ int convert_to_variant(int x)
     char *substr, *var;
     int i;
 
-    if (narrow_variable_p(x)) {
+	if(nullp(x))
+		return(NIL);
+    else if (narrow_variable_p(x)) {
 	var = GET_NAME(x);
 	substr = &var[2];
 	i = atoi(substr);
 	i = i + CELLSIZE;
 	return (i);
-    } else if (atomp(x)) {
+    } else if (!structurep(x)) {
 	return (x);
     }
     return (wcons(convert_to_variant(car(x)), convert_to_variant(cdr(x))));
@@ -1226,10 +1228,12 @@ int convert_to_variable(int x)
 {
     char str[256];
 
-    if (IS_ALPHA(x)) {
+	if(nullp(x))
+	return(NIL);
+    else if (IS_ALPHA(x)) {
 	sprintf(str, "V_%d", x - CELLSIZE);
 	return (makevar(str));
-    } else if (atomp(x)) {
+    } else if (!structurep(x)) {
 	return (x);
     } else
 	return (wcons(convert_to_variable(car(x)),
@@ -1831,5 +1835,23 @@ int b_dp_or(int arglist, int rest)
 	return (prove_all(res, sp));
     }
     error(ARITY_ERR, "dp_or ", arglist);
+    return (NO);
+}
+
+int b_n_test(int arglist, int rest)
+{
+	int n,arg1,arg2;
+
+	n = length(arglist);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	
+	if(unify(arg2,convert_to_variable(arg1)) == YES)
+		return(prove_all(rest,sp));
+	
+	return(NO);
+	}
+	error(ARITY_ERR, "n_test ", arglist);
     return (NO);
 }

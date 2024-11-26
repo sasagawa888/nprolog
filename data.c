@@ -1403,11 +1403,25 @@ int variablep(int addr)
 
 }
 
-int narrow_variable_p(int addr)
+int variantp(int addr)
 {
-    if (singlep(addr) && GET_AUX(addr) == VAR)
+    if (IS_ALPHA(addr))
 	return (1);
     else
+	return (0);
+}
+
+int narrow_variable_p(int addr)
+{
+    char *var;
+
+    if (singlep(addr) && GET_AUX(addr) == VAR) {
+	var = GET_NAME(addr);
+	if (var[0] == 'V' && var[1] == '_')
+	    return (1);
+	else
+	    return (0);
+    } else
 	return (0);
 }
 

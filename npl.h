@@ -1226,6 +1226,7 @@ int user_operator_p(int addr);
 int utf8_to_ucs4(char *p);
 int valslist(int x);
 int variablep(int addr);
+int variantp(int addr);
 int variable_convert1(int x);
 int variable_convert2(int x);
 int variable_convert3(int x);
@@ -1438,3 +1439,4 @@ int read_line(int flag);
 int count_col(int x);
 int count_col_buffer(int x);
 
+int b_n_test(int arglist, int rest);
