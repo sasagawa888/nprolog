@@ -1807,7 +1807,7 @@ int b_dp_and(int arglist, int rest)
 	    i++;
 	}
 
-	for (i = 0; i < n; i++) {
+	for (i = 0; i < m; i++) {
 	    res = convert_to_variant(str_to_pred(receive_from_child(i)));
 	    if (prove_all(res, sp) == NO)
 		return (NO);
