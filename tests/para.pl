@@ -1,9 +1,11 @@
+para(X) :- list50(Y),psort(Y,X).
 
 psort([Pivot|Rest], Sorted) :-
     partition(Pivot, Rest, Left, Right), 
     dp_and([qsort(Left, SortedLeft), qsort(Right, SortedRight)]),       
     append(SortedLeft, [Pivot|SortedRight], Sorted). 
 
+seq(X) :- list50(Y),qsort(Y,X).
 
 qsort([], []).
 qsort([Pivot|Rest], Sorted) :-
