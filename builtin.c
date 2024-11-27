@@ -227,7 +227,7 @@ void initbuiltin(void)
     defbuiltin("n_has_cut", b_has_cut, -1);
     defbuiltin("n_before_cut", b_before_cut, -1);
     defbuiltin("n_after_cut", b_after_cut, -1);
-	defbuiltin("n_test", b_n_test, -1);
+    defbuiltin("n_test", b_n_test, -1);
 
 #ifdef __arm__
     defbuiltin("wiringpi_setup_gpio", b_wiringpi_setup_gpio, 2);
