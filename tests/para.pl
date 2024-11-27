@@ -1,16 +1,24 @@
 
+psort([Pivot|Rest], Sorted) :-
+    partition(Pivot, Rest, Left, Right), 
+    dp_and([qsort(Left, SortedLeft), qsort(Right, SortedRight)]),       
+    append(SortedLeft, [Pivot|SortedRight], Sorted). 
 
-qsort([], []). 
-qsort([Pivot|Tail], Sorted) :-
-    partition(Pivot, Tail, Left, Right),
-    dp_and([qsort(Left, LeftSorted),qsort(Right, RightSorted)]),   
-    append(LeftSorted, [Pivot|RightSorted], Sorted). 
 
-partition([X|L], Y, [X|L1], L2) :-
-    X < Y, !, partition(L, Y, L1, L2).
-partition([X|L], Y, L1, [X|L2]) :-
-    !,partition(L, Y, L1, L2).
-partition([], _ , [], []) :- !.
+qsort([], []).
+qsort([Pivot|Rest], Sorted) :-
+    partition(Pivot, Rest, Left, Right), 
+    qsort(Left, SortedLeft),          
+    qsort(Right, SortedRight),       
+    append(SortedLeft, [Pivot|SortedRight], Sorted). 
+
+partition(_, [], [], []). 
+partition(Pivot, [H|T], [H|Left], Right) :-
+    H =< Pivot,  
+    partition(Pivot, T, Left, Right).
+partition(Pivot, [H|T], Left, [H|Right]) :-
+    H > Pivot,  
+    partition(Pivot, T, Left, Right).
 
 % List of 50 elements for another test
 list50([27, 74, 17, 33, 94, 18, 46, 83, 65, 2, 32, 53, 28, 85, 99, 47, 28, 82, 6, 11,
