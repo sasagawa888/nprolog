@@ -1806,7 +1806,7 @@ int b_dp_and(int arglist, int rest)
 	    if (prove_all(res, sp) == NO)
 		return (NO);
 	}
-	return (YES);
+	return (prove_all(rest,sp));
     }
     error(ARITY_ERR, "dp_and ", arglist);
     return (NO);
@@ -1832,7 +1832,8 @@ int b_dp_or(int arglist, int rest)
 	    i++;
 	}
 	res = convert_to_variant(str_to_pred(receive_from_child_part(m)));
-	return (prove_all(res, sp));
+	if (prove_all(res, sp)==YES)
+		return(prove_all(rest,sp));
     }
     error(ARITY_ERR, "dp_or ", arglist);
     return (NO);
