@@ -1631,7 +1631,8 @@ int b_dp_prove(int arglist, int rest)
 	res =
 	    convert_to_variant(str_to_pred
 			       (receive_from_child(GET_INT(arg1))));
-	return (prove_all(res, sp));
+	if (prove_all(res, sp) == YES)
+		return(prove_all(rest,sp));
     }
     error(ARITY_ERR, "dp_prove ", arglist);
     return (NO);
