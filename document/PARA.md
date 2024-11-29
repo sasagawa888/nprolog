@@ -1,5 +1,5 @@
 # Distributed Parallel
-This is a distributed parallel extension for N-Prolog. N-Prolog is oriented toward computational experiments and aims to explore the potential of Prolog in medium-scale parallel computation.
+This is a distributed parallel extension for N-Prolog. N-Prolog is oriented toward computational experiments and aims to explore the potential of Prolog in medium-scale distributed parallel computation.
 
 ![DP](para1.png)
 
