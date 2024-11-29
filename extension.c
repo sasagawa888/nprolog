@@ -1581,6 +1581,7 @@ int b_dp_create(int arglist, int rest)
     n = length(arglist);
 
     if (n == 1) {
+	network_flag = 1;
 	child_num = 0;
 	arg1 = car(arglist);
 	while (!nullp(arg1)) {
@@ -1612,6 +1613,7 @@ int b_dp_close(int arglist, int rest)
 
 	close_socket();
 	child_num = 0;
+	network_flag = 0;
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "dp_close ", arglist);

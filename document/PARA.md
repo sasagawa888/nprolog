@@ -1,5 +1,5 @@
 # Distributed Parallel
-under construction
+This is a distributed parallel extension for N-Prolog. N-Prolog is oriented toward computational experiments and aims to explore the potential of Prolog in medium-scale parallel computation.
 
 ![DP](para1.png)
 
@@ -34,7 +34,7 @@ N-Prolog on parent machine terminal. and dp_create/1 to establish TCP/IP between
          string_term(X,1+2),dp_repoert(X).
 
     dp_close: Sends termination command to child machines and closes communication.
-
+    (Note) If halt is executed without performing dp_close, an error will occur. To terminate properly, dp_close is required.
 
 # Example
 
@@ -80,3 +80,15 @@ In dp_transfer/1, the control code 0x15 is sent as a signal to indicate the end 
 
 # Error Handling
 This section concerns cases where an error occurs on a child device. When a child device encounters an error, it notifies the parent device via TCP/IP communication. Subsequently, the child device recovers from the error and resumes its role as a child in network mode. Upon receiving an error notification from a child device, the parent device triggers a system error and displays which child device encountered the error. Since the communication between the parent and child devices remains intact, the distributed parallel computation continues uninterrupted.
+
+# Internal Implementation
+dp_transfer/1 is responsible for sending a file via TCP/IP on the child device while also invoking dp_receive/1 on the child device. This allows the child device to receive the transferred file contents and record them into a file.
+
+When a child device completes its computation and notifies the parent device, it uses dp_countup/1 to report the proof count. The parent device executes this function, adding the proof count to its own. This is used in measure/1 to calculate LIPS (Logical Inferences Per Second).
+
+
+# The Era of Parallelism
+
+In modern times, multi-core PCs have become commonplace. In the 20th century, single-core PCs were the norm. Additionally, PCs have become remarkably affordable, with machines like the Raspberry Pi also available. We can confidently say that the era of parallelism has arrived.
+
+In the 20th century, deep learning (DL) had not yet become practical because the machines of the time were too slow for the required computations. Today, with advancements in GPUs, DL has rapidly developed. Similarly, I believe the time has come for symbolic parallel reasoning to finally become practical, thanks to the current environment.
