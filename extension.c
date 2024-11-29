@@ -1755,7 +1755,7 @@ int b_dp_compile(int arglist, int rest)
 	if (!atomp(arg1))
 	    error(NOT_STR, "dp_compile", arg1);
 
-	pred = list2(makeatom("compile_file", SYS), arg1);
+	pred = list2(makeatom("compile_file", PRED), arg1);
 
 	for (i = 0; i < child_num; i++) {
 	    send_to_child(i, pred_to_str(pred));
