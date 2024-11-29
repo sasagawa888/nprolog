@@ -29,7 +29,7 @@ address
 #define ATOMSIZE 1024
 #define BUFSIZE 1024
 #define STRSIZE 1024
-#define PARASIZE 20
+#define PARASIZE 100
 #define OPERATOR_NUMBER 24
 #define FUNCTION_NUMBER 22
 #define BUILTIN_NUMBER 200
