@@ -1762,6 +1762,7 @@ int b_dp_compile(int arglist, int rest)
 	    receive_from_child(i);
 	}
 
+	prove_all(pred,sp);
 	return (YES);
     }
     error(ARITY_ERR, "dp_compile ", arglist);
