@@ -1845,20 +1845,17 @@ int b_dp_or(int arglist, int rest)
     return (NO);
 }
 
-int b_n_test(int arglist, int rest)
+int b_dp_countup(int arglist, int rest)
 {
-    int n, arg1, arg2;
+	int n,arg1;
 
-    n = length(arglist);
-    if (n == 2) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
+	n=length(arglist);
+	if(n==1){
+		arg1 = car(arglist);
 
-	if (unify(arg2, convert_to_variable(arg1)) == YES)
-	    return (prove_all(rest, sp));
-
-	return (NO);
-    }
-    error(ARITY_ERR, "n_test ", arglist);
+		proof = proof+GET_INT(arg1);
+		return (prove_all(rest, sp));
+	}
+	error(ARITY_ERR, "dp_countup ", arglist);
     return (NO);
 }

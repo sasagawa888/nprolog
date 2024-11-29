@@ -199,10 +199,11 @@ void initbuiltin(void)
     defbuiltin("dp_and", b_dp_and, 1);
     defbuiltin("dp_or", b_dp_or, 1);
     defbuiltin("dp_transfer", b_dp_transfer, 1);
-    defbuiltin("dp_receive", b_dp_receive, 1);
+    defbuiltin("dp_receive", b_dp_receive, -1);
     defbuiltin("dp_compile", b_dp_compile, 1);
     defbuiltin("dp_consult", b_dp_consult, 1);
     defbuiltin("dp_report", b_dp_report, 1);
+	defbuiltin("dp_countup", b_dp_countup, -1);
 
     //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_reconsult_predicate, -1);
@@ -227,7 +228,7 @@ void initbuiltin(void)
     defbuiltin("n_has_cut", b_has_cut, -1);
     defbuiltin("n_before_cut", b_before_cut, -1);
     defbuiltin("n_after_cut", b_after_cut, -1);
-    defbuiltin("n_test", b_n_test, -1);
+    
 
 #ifdef __arm__
     defbuiltin("wiringpi_setup_gpio", b_wiringpi_setup_gpio, 2);

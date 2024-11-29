@@ -407,10 +407,17 @@ void query(int x)
 	printf("\n");
     } else {
 	bridge_flag = 1;
-	if (res == YES)
+	if (res == YES){
+		printstr("dp_countup(");
+		printint(proof);
+		printstr("),");
 	    printstr("true.\n");
-	else
+	} else{
+		printstr("dp_countup(");
+		printint(proof);
+		printstr("),");
 	    printstr("fail.\n");
+	}
 	bridge_flag = 0;
 	send_to_parent_buffer();
     }
@@ -1452,6 +1459,19 @@ void printstr(char *s)
 	strcat(bridge, str1);
     }
 }
+
+void printint(int n)
+{
+    char str1[256];
+
+    if (!bridge_flag)
+	fprintf(GET_PORT(output_stream), "%d", n);
+    else {
+	sprintf(str1, "%d", n);
+	strcat(bridge, str1);
+    }
+}
+
 
 void printlong(int addr)
 {
