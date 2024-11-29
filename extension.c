@@ -1739,6 +1739,7 @@ int b_dp_consult(int arglist, int rest)
 	send_to_child(i, pred_to_str(pred));
 	receive_from_child(i);
     }
+	prove_all(pred,sp);
     return (YES);
     error(ARITY_ERR, "dp_consult ", arglist);
     return (NO);
