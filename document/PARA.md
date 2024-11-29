@@ -14,6 +14,7 @@ N-Prolog on parent machine terminal. and dp_create/1 to establish TCP/IP between
     npl -n: Launches child Prolog in network mode with the -n option.
 
     dp_create([IP0,IP1, …,IPn]): Provides IP addresse of child machines to establish TCP/IP communication with the parent Lisp. IP addresse is provided as atom. e.g. '178.1.166.2'
+    Up to 100 child devices can be connected.
 
     dp-and([p0,p1, ...,pn]): It executes the predicates from P0 to PN in parallel. If all of them return YES, it returns YES. If even one returns NO, it returns NO.
 
@@ -24,10 +25,13 @@ N-Prolog on parent machine terminal. and dp_create/1 to establish TCP/IP between
     dp_compile(Fn): Compiles file Fn on both parent and child machines.
 
     dp_consult(Fn): Loads file Fn on both parent and child machines.
+    (Note) Internally, reconsult/1 is used. Existing predicates will be overwritten.
 
     dp_prove(Nth,Pred): Prove Predicate on the Nth child Prolog for testing.
 
     dp_report(Str): Display String on parent terminal.
+    e.g. dp_report($Hello World$').
+         string_term(X,1+2),dp_repoert(X).
 
     dp_close: Sends termination command to child machines and closes communication.
 
@@ -74,6 +78,5 @@ The child process sends the control code 0x15 to the parent process if an error 
 
 In dp_transfer/1, the control code 0x15 is sent as a signal to indicate the end of file transmission during file transfers. Initially, EOF was used for this purpose, but it was not recognized on Raspberry Pi systems. Therefore, it was decided to switch to using 0x15.
 
-# Progress Update
-The required code has been added. Moving forward, partial functional testing will be conducted. Each component will be tested using the n_test predicate to verify whether the intended transformations and judgments are functioning correctly. After completing these tests, the operation of the distributed parallel functionality will be verified.
-11/26/2024
+# Error Handling
+This section concerns cases where an error occurs on a child device. When a child device encounters an error, it notifies the parent device via TCP/IP communication. Subsequently, the child device recovers from the error and resumes its role as a child in network mode. Upon receiving an error notification from a child device, the parent device triggers a system error and displays which child device encountered the error. Since the communication between the parent and child devices remains intact, the distributed parallel computation continues uninterrupted.

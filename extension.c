@@ -1733,7 +1733,7 @@ int b_dp_consult(int arglist, int rest)
     if (!atomp(arg1))
 	error(NOT_STR, "dp_consult", arg1);
 
-    pred = list2(makeatom("consult", SYS), arg1);
+    pred = list2(makeatom("reconsult", SYS), arg1);
 
     for (i = 0; i < child_num; i++) {
 	send_to_child(i, pred_to_str(pred));
