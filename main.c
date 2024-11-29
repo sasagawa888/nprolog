@@ -113,12 +113,13 @@ int check_flag = 0;		// for n_error/2 error check
 int break_flag = 0;		// for break/0 0=normal,1=break.
 int parallel_flag = 0;		/* while executing parallel */
 int parallel_exit_flag = 0;	/* To exit parallel threads */
-int process_flag = 0;		/* when invoke as child process, flag is true */
-int thread_flag = 0;		/* when invoke as multi thread, flag is true */
-int network_flag = 0;		/* when invoke as network child, flag is true */
-int connect_flag = 0;		/* when child listen, connect_flag is true */
+int process_flag = 0;		/* when invoke as child process, flag is 1 */
+int thread_flag = 0;		/* when invoke as multi thread, flag is 1 */
+int network_flag = 0;		/* when invoke as network child, flag is 1 */
+int connect_flag = 0;		/* when child listen, connect_flag is 1 */
 int receiver_exit_flag = 0;	/* TO exit child TCP/IP receiver */
-int child_busy_flag = 0;	/* while evalating in child, child_buzy_flag is true */
+int child_busy_flag = 0;	/* while evalating in child, child_buzy_flag is 1 */
+int parent_network_flag = 0; /* while comunicating child, parent_network_flag = 1*/
 int exit_flag;
 
 //stream

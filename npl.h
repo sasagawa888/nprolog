@@ -452,6 +452,7 @@ extern int network_flag;
 extern int connect_flag;
 extern int receiver_exit_flag;
 extern int child_busy_flag;
+extern int parent_network_flag;
 extern int exit_flag;
 extern char buffer2[BUFSIZE];
 
