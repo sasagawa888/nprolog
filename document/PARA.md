@@ -86,9 +86,16 @@ dp_transfer/1 is responsible for sending a file via TCP/IP on the child device w
 
 When a child device completes its computation and notifies the parent device, it uses dp_countup/1 to report the proof count. The parent device executes this function, adding the proof count to its own. This is used in measure/1 to calculate LIPS (Logical Inferences Per Second).
 
+Note
+To enable distributed parallelism in N-Prolog, access to intermediate variables has been made possible. However, this feature is intended for system use and should not be used by users.
+
+Clauses may be executed recursively, and during each recursion, variables are replaced with intermediate variables through alpha conversion. These intermediate variables are represented as v_1, v_2, and so on. While it is possible to unify with these variables in the REPL, doing so can result in incorrect computation outcomes.
+
+When intermediate variables are sent to child devices, they are replaced with standard Prolog variables. For instance, v_1 is converted to uppercase V_1. These are reserved variables within the system, and users should refrain from using them, as doing so will disrupt correct computations.
+
+
 
 # The Era of Parallelism
-
 In modern times, multi-core PCs have become commonplace. In the 20th century, single-core PCs were the norm. Additionally, PCs have become remarkably affordable, with machines like the Raspberry Pi also available. We can confidently say that the era of parallelism has arrived.
 
 In the 20th century, deep learning (DL) had not yet become practical because the machines of the time were too slow for the required computations. Today, with advancements in GPUs, DL has rapidly developed. Similarly, I believe the time has come for symbolic parallel reasoning to finally become practical, thanks to the current environment.
