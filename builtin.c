@@ -3764,7 +3764,7 @@ int b_halt(int arglist, int rest)
 
     n = length(arglist);
     if (n == 0) {
-	if(network_flag)
+	if(parent_network_flag)
 	error(SYSTEM_ERROR, "Execute dp_close before halting. ", NIL);
 
 	printf("- good bye -\n");
