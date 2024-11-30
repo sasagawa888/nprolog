@@ -192,3 +192,10 @@ arg_list(K,Y,M) :- PY =.. [prd|Y],arg(K,PY,M).
 :- op(700,xfx,[isq,isg]).
 Z isg X*Y :-
       p(GX,X),p(GY,Y),GZ isq GX*GY,p(GZ,Z),!.
+
+%p196
+generate_e(N,E) :- gene_e_aux(E,N,[]).
+gene_e_aux(L,0,L) :- !.
+gene_e_aux(Const,N,L) :-
+        N1 is N - 1,
+        gene_e_aux(Const,N1,[N|L]).
