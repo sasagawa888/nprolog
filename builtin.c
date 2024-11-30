@@ -401,12 +401,12 @@ int b_op(int arglist, int rest)
 	    while (!nullp(arg3)) {
 		if (wide_variable_p(car(arg3)))
 		    error(INSTANTATION_ERR, "ope ", car(arg3));
-		else if (!atomp(car(arg3)))
+		else if (!atomp(car(arg3)) && !operatorp(car(arg3)))
 		    error(NOT_ATOM, "ope ", car(arg3));
 		else if (operatorp(car(arg3)))
 		    defoperator(GET_NAME(arg3), NIL, weight, type, 0);
 		else
-		    defoperator(GET_NAME(car(arg3)), NIL, weight, type, 1);
+		    defoperator(GET_NAME(car(arg3)), NIL, weight, type, 2);
 
 		arg3 = cdr(arg3);
 	    }
