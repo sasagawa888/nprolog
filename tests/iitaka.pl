@@ -177,3 +177,13 @@ Z isl [A|LA] - X :- memberd(A,X),!,Z isl LA -X.
 [] isl [] / A.
 X isl [A|X] / A :- !.
 [C|X] isl [C|CL] / A :- X isl LC / A.
+
+%p179
+arg_list(K,Y,M) :- PY =.. [prd|Y],arg(K,PY,M).
+
+:- op(700,xfx,isq).
+
+[J] isq X * [I] :-
+    arg_list(I,X,J),!.
+[J|LJ] isq X * [I|LI] :-
+    arg_list(I,X,J),!,LJ isq X * LI.

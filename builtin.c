@@ -352,7 +352,7 @@ int b_op(int arglist, int rest)
 	if (!atomp(arg3) && !listp(arg3))
 	    error(NOT_ATOM, "op ", arg3);
 	weight = GET_INT(arg1);
-	if (!(weight >= 0 && weight <= 1200))
+	if (!(weight > 0 && weight <= 1200))
 	    error(OPE_PRIORITY_ERR, "op ", arg1);
 	if (arg3 == DOTOBJ)
 	    error(MODIFY_OPE_ERR, "op ", arg3);
