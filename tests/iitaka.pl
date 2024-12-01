@@ -187,6 +187,27 @@ arg_list(K,Y,M) :- PY =.. [prd|Y],arg(K,PY,M).
     arg_list(I,X,J),!.
 [J|LJ] isq X * [I|LI] :-
     arg_list(I,X,J),!,LJ isq X * LI.
+
+%p180
+:- op(700,xfx,:).
+Z isq 1//X :-
+        listr_map(X,Marpr),map_list3(Mapr,Z),!.
+
+listr_map(List,Mapr) :- listr_map_aux(List,Mapr,1).
+listr_map_aux([],[],_) :- !.
+listr_map_aux([A|WL],[I:A | WMap1], I) :-
+        I1 is I+1,!,
+        listr_map_aux(WL,WMap1,I1).
+
+%p171
+delete1(X = [A|X]-A) :- !.
+delete1([B|Y] = [B|X]-A) :- delete1(Y = X - A).
+
+%p134
+delete0(X = [A|X]-A).
+delete0([B|Y] = [B|X]-A) :- delete0(Y = X - A).
+
+
     
 %p193
 :- op(700,xfx,[isq,isg]).
