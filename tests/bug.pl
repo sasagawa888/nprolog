@@ -1,11 +1,8 @@
 
+seq :- test1,test2,write(done).
 
-%p179
-arg_list(K,Y,M) :- PY =.. [prd|Y],arg(K,PY,M).
+test1 :- fail.
+test1.
 
-:- op(700,xfx,isq).
-
-[J] isq X * [I] :-
-    arg_list(I,X,J),!.
-[J|LJ] isq X * [I|LI] :-
-    arg_list(I,X,J),!,LJ isq X * LI.
+test2 :- fail.
+test2.
