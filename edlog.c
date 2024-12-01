@@ -48,7 +48,7 @@ int ed_col1;			//position of terminal when include unicode ed_col1 is different 
 int ed_start;
 int ed_end;
 bool ed_ins = true;
-int ed_tab = 0;
+int ed_tab = 8;
 int ed_indent = 1;
 char ed_data[ROW_SIZE][COL_SIZE];
 char ed_copy[COPY_SIZE][COL_SIZE];
@@ -623,7 +623,7 @@ void tab_key()
 	remove_headspace(ed_row);
 	softtabs(i);
     } else {
-	softtabs(ed_tab);
+	softtabs(ed_tab - ed_col);
     }
     display_screen();
     restore_cursol();
