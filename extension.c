@@ -1249,8 +1249,8 @@ void init_parent(void)
 {
 
     // create socket
-    sockfd[0] = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd[0] < 0) {
+    parent_sockfd[0] = socket(AF_INET, SOCK_STREAM, 0);
+    if (parent_sockfd[0] < 0) {
 	error(SYSTEM_ERROR, "init parent", NIL);
     }
     // initialize parent_addr
@@ -1261,7 +1261,7 @@ void init_parent(void)
 
     // bind socket
     if (bind
-	(sockfd[0], (struct sockaddr *) &parent_addr,
+	(parent_sockfd[0], (struct sockaddr *) &parent_addr,
 	 sizeof(parent_addr)) < 0) {
 	error(SYSTEM_ERROR, "init parent", NIL);
     }
@@ -1272,8 +1272,8 @@ void init_child(int n, int x)
 {
 
     // create socket
-    sockfd[n] = socket(AF_INET, SOCK_STREAM, 0);
-    if (sockfd[n] < 0) {
+    child_sockfd[n] = socket(AF_INET, SOCK_STREAM, 0);
+    if (child_sockfd[n] < 0) {
 	error(SYSTEM_ERROR, "dp_create", makeint(n));
     }
     // initialize child_addr
@@ -1286,7 +1286,7 @@ void init_child(int n, int x)
 
 
     if (connect
-	(sockfd[n], (struct sockaddr *) &child_addr[n],
+	(child_sockfd[n], (struct sockaddr *) &child_addr[n],
 	 sizeof(child_addr[n])) < 0) {
 	error(SYSTEM_ERROR, "dp_create", makeint(n));
     }
@@ -1300,11 +1300,11 @@ void close_socket(void)
 
     if (child_num > 0) {
 	for (i = 0; i < child_num; i++)
-	    close(sockfd[i]);
+	    close(child_sockfd[i]);
     } else if (network_flag) {
 	printf("N-Prolog exit network mode.\n");
-	close(sockfd[0]);
-	close(sockfd[1]);
+	close(parent_sockfd[0]);
+	close(parent_sockfd[1]);
     }
 
     receiver_exit_flag = 1;
@@ -1318,21 +1318,21 @@ int receive_from_parent(void)
 
     if (!connect_flag) {
 	//wait conneting
-	listen(sockfd[0], 5);
+	listen(parent_sockfd[0], 5);
 	parent_len = sizeof(parent_addr);
 	connect_flag = 1;
 
 	// connection from parent
-	sockfd[1] =
-	    accept(sockfd[0], (struct sockaddr *) &parent_addr,
+	parent_sockfd[1] =
+	    accept(parent_sockfd[0], (struct sockaddr *) &parent_addr,
 		   &parent_len);
-	if (sockfd[1] < 0) {
+	if (parent_sockfd[1] < 0) {
 	    error(SYSTEM_ERROR, "receive from parent", NIL);
 	}
     }
     // read message from parent
     memset(bridge, 0, sizeof(bridge));
-    n = read(sockfd[1], bridge, sizeof(bridge) - 1);
+    n = read(parent_sockfd[1], bridge, sizeof(bridge) - 1);
     if (n < 0) {
 	error(SYSTEM_ERROR, "receive from parent", NIL);
     }
@@ -1346,7 +1346,7 @@ void send_to_parent(int x)
     // send message to parent
     memset(bridge, 0, sizeof(bridge));
     strcpy(bridge, GET_NAME(x));
-    n = write(sockfd[1], bridge, strlen(bridge));
+    n = write(parent_sockfd[1], bridge, strlen(bridge));
     memset(bridge, 0, sizeof(bridge));
     if (n < 0) {
 	error(SYSTEM_ERROR, "send to parent", x);
@@ -1357,7 +1357,7 @@ void send_to_parent_buffer(void)
 {
     int n;
 
-    n = write(sockfd[1], bridge, strlen(bridge));
+    n = write(parent_sockfd[1], bridge, strlen(bridge));
     if (n < 0) {
 	error(SYSTEM_ERROR, "send to parent buffer ", NIL);
     }
@@ -1370,7 +1370,7 @@ void send_to_child(int n, int x)
 
     memset(bridge, 0, sizeof(bridge));
     strcpy(bridge, GET_NAME(x));
-    m = write(sockfd[n], bridge, strlen(bridge));
+    m = write(child_sockfd[n], bridge, strlen(bridge));
     memset(bridge, 0, sizeof(bridge));
     if (m < 0) {
 	error(SYSTEM_ERROR, "send to child", NIL);
@@ -1385,7 +1385,7 @@ int receive_from_child(int n)
     // receive from child
   reread:
     memset(bridge, 0, sizeof(bridge));
-    m = read(sockfd[n], bridge, sizeof(bridge) - 1);
+    m = read(child_sockfd[n], bridge, sizeof(bridge) - 1);
     if (m < 0) {
 	error(SYSTEM_ERROR, "receive from child", makeint(n));
     }
@@ -1436,12 +1436,12 @@ int receive_from_child_part(int n)
 	    // send child stop signal
 	    memset(bridge, 0, sizeof(bridge));
 	    bridge[0] = '\x11';
-	    m = write(sockfd[i], bridge, strlen(bridge));
+	    m = write(child_sockfd[i], bridge, strlen(bridge));
 	    if (m < 0) {
 		error(SYSTEM_ERROR, "receive from child", NIL);
 	    }
 	    // receive result and ignore
-	    while ((m = read(sockfd[i], bridge, sizeof(bridge) - 1)) == 0) {
+	    while ((m = read(child_sockfd[i], bridge, sizeof(bridge) - 1)) == 0) {
 	    }
 	}
     }
@@ -1460,7 +1460,7 @@ int receive_from_child_part1(int n)
     memset(bridge, 0, sizeof(bridge));
     for (i = 0; i < n; i++) {
 	if (child_result[i] == -1) {
-	    m = read(sockfd[i], bridge, sizeof(bridge));
+	    m = read(child_sockfd[i], bridge, sizeof(bridge));
 	}
 	if (m < 0) {
 	    error(SYSTEM_ERROR, "receive from child", makeint(i));
@@ -1671,14 +1671,14 @@ int b_dp_transfer(int arglist, int rest)
 	    while ((bytes_read =
 		    fread(transfer, sizeof(char), sizeof(transfer),
 			  file)) > 0) {
-		m = write(sockfd[i], transfer, bytes_read);
+		m = write(child_sockfd[i], transfer, bytes_read);
 		if (m < 0) {
 		    error(SYSTEM_ERROR, "dp_transfer", NIL);
 		}
 	    }
 	    memset(transfer, 0, sizeof(transfer));
 	    transfer[0] = 0x15;
-	    m = write(sockfd[i], transfer, 1);
+	    m = write(child_sockfd[i], transfer, 1);
 	    if (m < 0) {
 		error(SYSTEM_ERROR, "dp_transfer", NIL);
 	    }
@@ -1711,7 +1711,7 @@ int b_dp_receive(int arglist, int rest)
 
 	int bytes_received;
 	while ((bytes_received =
-		read(sockfd[1], transfer, sizeof(transfer))) > 0) {
+		read(parent_sockfd[1], transfer, sizeof(transfer))) > 0) {
 	    if (transfer[bytes_received - 1] == 0x15) {
 		transfer[bytes_received - 1] = 0;
 		fwrite(transfer, sizeof(char), bytes_received - 1, file);

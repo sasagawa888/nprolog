@@ -131,7 +131,8 @@ int output_stream;
 int error_stream;
 
 /* -----distributed parallel & TCPIP------*/
-int sockfd[PARASIZE];
+int parent_sockfd[2];
+int child_sockfd[PARASIZE];
 socklen_t parent_len;
 struct sockaddr_in parent_addr, child_addr[PARASIZE];
 int child_num;
