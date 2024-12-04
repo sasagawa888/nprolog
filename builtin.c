@@ -203,8 +203,8 @@ void initbuiltin(void)
     defbuiltin("dp_compile", b_dp_compile, 1);
     defbuiltin("dp_consult", b_dp_consult, 1);
     defbuiltin("dp_report", b_dp_report, 1);
-	defbuiltin("dp_countup", b_dp_countup, -1);
-	defbuiltin("dp_parent", b_dp_parent, 0);
+    defbuiltin("dp_countup", b_dp_countup, -1);
+    defbuiltin("dp_parent", b_dp_parent, 0);
 
     //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_reconsult_predicate, -1);
@@ -229,7 +229,7 @@ void initbuiltin(void)
     defbuiltin("n_has_cut", b_has_cut, -1);
     defbuiltin("n_before_cut", b_before_cut, -1);
     defbuiltin("n_after_cut", b_after_cut, -1);
-    
+
 
 #ifdef __arm__
     defbuiltin("wiringpi_setup_gpio", b_wiringpi_setup_gpio, 2);
@@ -434,7 +434,7 @@ int b_ask(int arglist, int rest)
     n = length(arglist);
     if (n == 0) {
 	x1 = variables;
-	if (network_flag)
+	if (child_flag)
 	    memset(bridge, 0, sizeof(bridge));
 	if (nullp(x1) || has_no_value_p(x1)) {
 	    return (prove_all(rest, sp));
@@ -448,7 +448,7 @@ int b_ask(int arglist, int rest)
 	}
 	x2 = reverse(x2);
 
-	if (network_flag) {
+	if (child_flag) {
 	    bridge_flag = 1;
 	}
 	/* if network-mode write to buffer e.g. X = 1,Y = 2,
@@ -460,13 +460,13 @@ int b_ask(int arglist, int rest)
 	    print(car(x2));
 	    printstr(" = ");
 	    printanswer(deref(car(x2)));
-	    if (network_flag)
+	    if (child_flag)
 		printc(',');
 	    if (!nullp(cdr(x2)))
 		printf("\n");
 	    x2 = cdr(x2);
 	}
-	if (network_flag) {
+	if (child_flag) {
 	    bridge_flag = 0;
 	    return (YES);
 	}
@@ -3765,8 +3765,8 @@ int b_halt(int arglist, int rest)
 
     n = length(arglist);
     if (n == 0) {
-	if(parent_network_flag)
-	error(SYSTEM_ERROR, "Execute dp_close before halting. ", NIL);
+	if (parent_flag)
+	    error(SYSTEM_ERROR, "Execute dp_close before halting. ", NIL);
 
 	printf("- good bye -\n");
 	longjmp(buf, 2);

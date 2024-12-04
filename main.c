@@ -115,11 +115,11 @@ int parallel_flag = 0;		/* while executing parallel */
 int parallel_exit_flag = 0;	/* To exit parallel threads */
 int process_flag = 0;		/* when invoke as child process, flag is 1 */
 int thread_flag = 0;		/* when invoke as multi thread, flag is 1 */
-int network_flag = 0;		/* when invoke as network child, flag is 1 */
+int child_flag = 0;		/* when invoke as network child, flag is 1 */
 int connect_flag = 0;		/* when child listen, connect_flag is 1 */
 int receiver_exit_flag = 0;	/* TO exit child TCP/IP receiver */
 int child_busy_flag = 0;	/* while evalating in child, child_buzy_flag is 1 */
-int parent_network_flag = 0; /* while comunicating child, parent_network_flag = 1*/
+int parent_flag = 0;		/* while comunicating child, parent_flag = 1 */
 int exit_flag;
 
 //stream
@@ -169,6 +169,7 @@ void usage()
     printf("List of options:\n");
     printf("-c filename -- NPL starts after reading the file.\n");
     printf("-h          -- display help.\n");
+	printf("-n          -- NPL run with network mode.\n");
     printf("-r          -- NPL does not use editable REPL.\n");
     printf("-s filename -- NPL run file with script mode.\n");
     printf("-v          -- dislplay version number.\n");
@@ -264,9 +265,18 @@ int main(int argc, char *argv[])
 	    exit(EXIT_SUCCESS);
 	case 'n':
 	    printf("N-Prolog runs with network mode.\n");
-	    network_flag = 1;
+	    child_flag = 1;
 	    init_parent();
 	    init_receiver();
+		fp = fopen("network.pl", "r");
+	    if (fp != NULL)
+		fclose(fp);
+	    else {
+		printf("Not exist %s\n", optarg);
+		exit(EXIT_FAILURE);
+	    }
+	    b_consult(list1(makeconst(optarg)), NIL);
+	    break;
 	    break;
 	default:
 	    usage();
@@ -283,7 +293,7 @@ int main(int argc, char *argv[])
   repl:
     if (ret == 0)
 	while (1) {
-	    if (!network_flag) {
+	    if (!child_flag) {
 		input_stream = standard_input;
 		output_stream = standard_output;
 		error_stream = standard_error;
@@ -297,7 +307,7 @@ int main(int argc, char *argv[])
 		//sexp_flag = 1;print(variable_to_call(parser(NIL,NIL,NIL,NIL,0,0)));
 		//printf("proof = %d\n", proof);
 		fflush(stdout);
-	    } else if (network_flag) {
+	    } else if (child_flag) {
 		input_stream = standard_input;
 		output_stream = standard_output;
 		error_stream = standard_error;
@@ -309,18 +319,12 @@ int main(int argc, char *argv[])
 		sprint(input);
 		printf("\n");
 		fflush(stdout);
-		if (equalp(input, makeatom("end_of_file", SYS))) {
-		    printf("exit_from_network_mode\n");
-		    close_socket();
-		    exit(0);
-		} else {
-		    child_busy_flag = 1;
-		    query(input);
-		    child_busy_flag = 0;
-		    printf("send_to_parent ");
-		    printf("\n");
-		    fflush(stdout);
-		}
+		child_busy_flag = 1;
+		query(input);
+		child_busy_flag = 0;
+		printf("send_to_parent ");
+		printf("\n");
+		fflush(stdout);
 	    }
     } else if (ret == 1) {
 	ret = 0;
@@ -403,21 +407,21 @@ void query(int x)
 
     variables = listreverse(unique(varslist(x)));
     res = prove_all(addask(x), sp);
-    if (!network_flag) {
+    if (!child_flag) {
 	ESCRST;
 	print(res);
 	printf("\n");
     } else {
 	bridge_flag = 1;
-	if (res == YES){
-		printstr("dp_countup(");
-		printint(proof);
-		printstr("),");
+	if (res == YES) {
+	    printstr("dp_countup(");
+	    printint(proof);
+	    printstr("),");
 	    printstr("true.\n");
-	} else{
-		printstr("dp_countup(");
-		printint(proof);
-		printstr("),");
+	} else {
+	    printstr("dp_countup(");
+	    printint(proof);
+	    printstr("),");
 	    printstr("fail.\n");
 	}
 	bridge_flag = 0;

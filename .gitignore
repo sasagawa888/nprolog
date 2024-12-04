@@ -3,4 +3,5 @@ npl
 *.c~
 *.h~
 dp.pl
+network.pl
 

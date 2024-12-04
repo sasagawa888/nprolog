@@ -314,7 +314,7 @@ void error(int errnum, char *fun, int arg)
 
     read_line(-2);		// clear buffer
 
-    if (network_flag) {
+    if (child_flag) {
 	memset(bridge, 0, sizeof(bridge));
 	bridge[0] = 0x15;
 	send_to_parent_buffer();

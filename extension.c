@@ -1293,24 +1293,6 @@ void init_child(int n, int x)
 
 }
 
-void close_socket(void)
-{
-
-    int i;
-
-    if (child_num > 0) {
-	for (i = 0; i < child_num; i++)
-	    close(child_sockfd[i]);
-    } else if (network_flag) {
-	printf("N-Prolog exit network mode.\n");
-	close(parent_sockfd[0]);
-	close(parent_sockfd[1]);
-    }
-
-    receiver_exit_flag = 1;
-
-}
-
 
 int receive_from_parent(void)
 {
@@ -1441,7 +1423,9 @@ int receive_from_child_part(int n)
 		error(SYSTEM_ERROR, "receive from child", NIL);
 	    }
 	    // receive result and ignore
-	    while ((m = read(child_sockfd[i], bridge, sizeof(bridge) - 1)) == 0) {
+	    while ((m =
+		    read(child_sockfd[i], bridge,
+			 sizeof(bridge) - 1)) == 0) {
 	    }
 	}
     }
@@ -1581,7 +1565,7 @@ int b_dp_create(int arglist, int rest)
     n = length(arglist);
 
     if (n == 1) {
-	parent_network_flag = 1;
+	parent_flag = 1;
 	child_num = 0;
 	arg1 = car(arglist);
 	while (!nullp(arg1)) {
@@ -1606,14 +1590,28 @@ int b_dp_close(int arglist, int rest)
     n = length(arglist);
     if (n == 0) {
 
-	exp = makestr("end_of_file.");
-	for (i = 0; i < child_num; i++) {
-	    send_to_child(i, exp);
+	if (parent_flag) {
+	    exp = makestr("dp_close.");
+	    for (i = 0; i < child_num; i++) {
+		send_to_child(i, exp);
+	    }
 	}
 
-	close_socket();
+	if (parent_flag) {
+	    for (i = 0; i < child_num; i++)
+		close(child_sockfd[i]);
+	}
+
+	if (child_flag) {
+	    printf("N-Prolog exit network mode.\n");
+	    close(parent_sockfd[0]);
+	    close(parent_sockfd[1]);
+	    receiver_exit_flag = 1;
+	    longjmp(buf, 2);
+	}
+
 	child_num = 0;
-	parent_network_flag = 0;
+	parent_flag = 0;
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "dp_close ", arglist);
@@ -1741,7 +1739,7 @@ int b_dp_consult(int arglist, int rest)
 	send_to_child(i, pred_to_str(pred));
 	receive_from_child(i);
     }
-	prove_all(pred,sp);
+    prove_all(pred, sp);
     return (YES);
     error(ARITY_ERR, "dp_consult ", arglist);
     return (NO);
@@ -1764,7 +1762,7 @@ int b_dp_compile(int arglist, int rest)
 	    receive_from_child(i);
 	}
 
-	prove_all(pred,sp);
+	prove_all(pred, sp);
 	return (YES);
     }
     error(ARITY_ERR, "dp_compile ", arglist);
@@ -1851,31 +1849,31 @@ int b_dp_or(int arglist, int rest)
 
 int b_dp_countup(int arglist, int rest)
 {
-	int n,arg1;
+    int n, arg1;
 
-	n=length(arglist);
-	if(n==1){
-		arg1 = car(arglist);
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
 
-		proof = proof+GET_INT(arg1);
-		return (prove_all(rest, sp));
-	}
-	error(ARITY_ERR, "dp_countup ", arglist);
+	proof = proof + GET_INT(arg1);
+	return (prove_all(rest, sp));
+    }
+    error(ARITY_ERR, "dp_countup ", arglist);
     return (NO);
 }
 
 int b_dp_parent(int arglist, int rest)
 {
-	int n;
+    int n;
 
-	n=length(arglist);
-	if(n==0){
+    n = length(arglist);
+    if (n == 0) {
 
-		if(parent_network_flag)
-		return (prove_all(rest, sp));
-		else
-		return(NO);
-	}
-	error(ARITY_ERR, "dp_parent ", arglist);
+	if (parent_flag)
+	    return (prove_all(rest, sp));
+	else
+	    return (NO);
+    }
+    error(ARITY_ERR, "dp_parent ", arglist);
     return (NO);
 }
