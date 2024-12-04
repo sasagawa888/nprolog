@@ -265,18 +265,14 @@ int main(int argc, char *argv[])
 	    exit(EXIT_SUCCESS);
 	case 'n':
 	    printf("N-Prolog runs with network mode.\n");
+		fp = fopen("network.pl", "r");
+	    if (fp != NULL){
+		fclose(fp);
+	    b_consult(list1(makeconst("network.pl")), NIL);
+		}
 	    child_flag = 1;
 	    init_parent();
 	    init_receiver();
-		fp = fopen("network.pl", "r");
-	    if (fp != NULL)
-		fclose(fp);
-	    else {
-		printf("Not exist %s\n", optarg);
-		exit(EXIT_FAILURE);
-	    }
-	    b_consult(list1(makeconst(optarg)), NIL);
-	    break;
 	    break;
 	default:
 	    usage();
