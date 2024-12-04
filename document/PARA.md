@@ -73,7 +73,7 @@ In N-Prolog, the predicate ask/0, which is used internally, is appended at the e
 
 The child process can receive instructions from the parent process via a thread during the proof process. The commands are as follows: 0x11 for stop, 0x12 for pause, and 0x13 for resume. When the child process starts in network mode, it initializes this thread in advance.
 
-The parent process sends the atom 'end_of_file' to each child process to terminate the network mode.
+The parent process sends the atom 'dp_close' to each child process to terminate the network mode.
 
 Communication between the parent and child processes is conducted via a buffer called bridge. Predicates are converted into strings and transmitted over TCP/IP. The receiving side converts these strings back into predicates and executes them. The functionality of string_term/2 is utilized for this purpose.
 
