@@ -36,6 +36,8 @@ N-Prolog on parent machine terminal. and dp_create/1 to establish TCP/IP between
     dp_close: Sends termination command to child machines and closes communication.
     (Note) If halt is executed without performing dp_close, an error will occur. To terminate properly, dp_close is required.
 
+    dp_parent: When the system is operating as a parent, it returns YES; otherwise, it returns NO. Even if it is a child, it will return YES if it also functions as a parent with its own children.
+
 # Example
 
 ```
