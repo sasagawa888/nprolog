@@ -204,6 +204,7 @@ void initbuiltin(void)
     defbuiltin("dp_consult", b_dp_consult, 1);
     defbuiltin("dp_report", b_dp_report, 1);
 	defbuiltin("dp_countup", b_dp_countup, -1);
+	defbuiltin("dp_parent", b_dp_parent, 0);
 
     //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_reconsult_predicate, -1);

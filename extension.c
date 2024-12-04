@@ -1863,3 +1863,19 @@ int b_dp_countup(int arglist, int rest)
 	error(ARITY_ERR, "dp_countup ", arglist);
     return (NO);
 }
+
+int b_dp_parent(int arglist, int rest)
+{
+	int n;
+
+	n=length(arglist);
+	if(n==0){
+
+		if(parent_network_flag)
+		return (prove_all(rest, sp));
+		else
+		return(NO);
+	}
+	error(ARITY_ERR, "dp_parent ", arglist);
+    return (NO);
+}

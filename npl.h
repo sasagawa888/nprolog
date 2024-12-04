@@ -753,6 +753,7 @@ int b_dp_receive(int arglist ,int rest);
 int b_dp_compile(int arglist, int rest);
 int b_dp_consult(int arglist, int rest);
 int b_dp_report(int arglist, int rest);
+int b_dp_parent(int arglist, int rest);
 int b_dup(int arglist, int rest);
 int b_edit(int arglist, int rest);
 int b_end_of_file(int arglist, int rest);
