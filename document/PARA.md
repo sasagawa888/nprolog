@@ -97,6 +97,19 @@ Clauses may be executed recursively, and during each recursion, variables are re
 When intermediate variables are sent to child devices, they are replaced with standard Prolog variables. For instance, v_1 is converted to uppercase V_1. These are reserved variables within the system, and users should refrain from using them, as doing so will disrupt correct computations.
 
 
+# Tree-Structured Network
+Distributed parallel child devices can be configured in a tree-like structure. A child device can have its own child devices, treating itself as a parent device.
+![DP](para2.png)
+
+To configure the network, start by launching the lowest-level child devices in network mode. Then, launch the immediate parent device in network mode. Provide the parent device with a file named network.pl. This file is loaded and executed immediately after startup. In this file, include a predicate using dp_create/1 to initialize the child devices.
+
+e.g. network.pl
+```
+:- dp_create([IP0,IP2,...IPn]).
+```
+The predicates dp_transfer/1, dp_consult/1, dp_compile/1, and dp_close/0 operate recursively in such a network. Specifically, when these predicates are executed on the top-level parent device, they are first executed on its child devices and then propagated to the grandchild devices. This process continues through all hierarchical levels, ensuring execution across the entire network.
+
+In distributed parallel computing for fluid dynamics, the data structures involved in computation are typically flat. However, much of human knowledge exhibits recursive structures, and intelligent reasoning often follows a depth-first search pattern. To leverage Prolog's logical inference and backtracking capabilities, we adapted a distributed network with a tree-like hierarchical structure. This approach can be applied to scenarios such as lookahead strategies in board games or solving problems like the knight's tour.
 
 # The Era of Parallelism
 In modern times, multi-core PCs have become commonplace. In the 20th century, single-core PCs were the norm. Additionally, PCs have become remarkably affordable, with machines like the Raspberry Pi also available. We can confidently say that the era of parallelism has arrived.
