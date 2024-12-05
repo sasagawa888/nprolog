@@ -99,6 +99,7 @@ When intermediate variables are sent to child devices, they are replaced with st
 
 # Tree-Structured Network
 Distributed parallel child devices can be configured in a tree-like structure. A child device can have its own child devices, treating itself as a parent device.
+
 ![DP](para2.png)
 
 To configure the network, start by launching the lowest-level child devices in network mode. Then, launch the immediate parent device in network mode. Provide the parent device with a file named network.pl. This file is loaded and executed immediately after startup. In this file, include a predicate using dp_create/1 to initialize the child devices.
