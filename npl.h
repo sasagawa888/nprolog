@@ -440,6 +440,7 @@ extern int syntax_flag;
 extern int fileerr_flag;
 extern int exist_flag;
 extern int bridge_flag;
+extern int ctrl_c_flag;
 extern int init_flag;
 extern int script_flag;
 extern int check_flag;

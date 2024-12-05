@@ -1362,7 +1362,7 @@ void send_to_child(int n, int x)
 int receive_from_child(int n)
 {
     int m, i, j;
-    char sub_buffer[256];
+    char sub_buffer[256], sub_buffer1[256 + 2];
 
     // receive from child
   reread:
@@ -1379,8 +1379,14 @@ int receive_from_child(int n)
 	    sub_buffer[i] = bridge[i + 1];
 	    i++;
 	}
-	sub_buffer[i] = 0;
-	printf("%s", sub_buffer);
+	if (!(child_flag && parent_flag)) {
+	    sub_buffer[i] = 0;
+	    printf("%s", sub_buffer);
+	} else {
+	    memset(sub_buffer1, 0, sizeof(sub_buffer1));
+	    sprintf(sub_buffer1, "\x02%s\x03", sub_buffer);
+	    send_to_parent(makestr(sub_buffer1));
+	}
 	j = 0;
 	i = i + 2;
 	while (bridge[j + i] != 0) {
@@ -1393,7 +1399,13 @@ int receive_from_child(int n)
 	else
 	    goto retry;
     } else if (bridge[0] == '\x15') {
-	error(SYSTEM_ERROR, "in child", makeint(n));
+	if (!(child_flag && parent_flag)) {
+	    error(SYSTEM_ERROR, "in child", makeint(n));
+	} else {
+	    memset(sub_buffer1, 0, sizeof(sub_buffer1));
+	    sub_buffer1[0] = '\x15';
+	    send_to_parent(makestr(sub_buffer1));
+	}
     } else {
 	return (makestr(bridge));
     }
@@ -1473,7 +1485,7 @@ int receive_from_child_part1(int n)
 
 int receive_from_child_part2(int n)
 {
-    char sub_buffer[256];
+    char sub_buffer[256], sub_buffer1[256 + 2];
     int i, j;
 
   retry:
@@ -1483,8 +1495,14 @@ int receive_from_child_part2(int n)
 	    sub_buffer[i] = bridge[i + 1];
 	    i++;
 	}
-	sub_buffer[i] = 0;
-	printf("%s", sub_buffer);
+	if (!(child_flag && parent_flag)) {
+	    sub_buffer[i] = 0;
+	    printf("%s", sub_buffer);
+	} else {
+	    memset(sub_buffer1, 0, sizeof(sub_buffer1));
+	    sprintf(sub_buffer1, "\x02%s\x03", sub_buffer);
+	    send_to_parent(makestr(sub_buffer1));
+	}
 	j = 0;
 	i = i + 2;
 	while (bridge[j + i] != 0) {
@@ -1498,7 +1516,13 @@ int receive_from_child_part2(int n)
 	    goto retry;
 
     } else if (bridge[0] == '\x15') {
-	error(SYSTEM_ERROR, "in child", makeint(n));
+	if (!(child_flag && parent_flag)) {
+	    error(SYSTEM_ERROR, "in child", makeint(n));
+	} else {
+	    memset(sub_buffer1, 0, sizeof(sub_buffer1));
+	    sub_buffer1[0] = '\x15';
+	    send_to_parent(makestr(sub_buffer1));
+	}
     } else {
 	return (makestr(bridge));
     }
@@ -1511,6 +1535,8 @@ int receive_from_child_part2(int n)
 // Thread for child lisp receiver
 void *receiver(void *arg)
 {
+    int i;
+	char sub_buffer[256];
 
     while (1) {
 	if (receiver_exit_flag)
@@ -1521,7 +1547,13 @@ void *receiver(void *arg)
 	  retry:
 	    if (bridge[0] == '\x11') {
 		// child stop 
-		exit_flag = 1;
+		if (!(child_flag && parent_flag)) {
+		    memset(sub_buffer, 0, sizeof(sub_buffer));
+		    sub_buffer[0] = '\x11';
+		    for (i = 0; i < child_num; i++)
+			send_to_child(i, makestr(sub_buffer));
+		}
+		ctrl_c_flag = 1;
 	    } else if (bridge[0] == '\x12') {
 		// child pause 
 
@@ -1684,10 +1716,10 @@ int b_dp_transfer(int arglist, int rest)
 	    fseek(file, 0, SEEK_SET);
 	}
 	fclose(file);
-	if(parent_flag){
-		pred2 = list2(makeatom("dp_transfer", SYS), arg1);
-		for (i = 0; i < child_num; i++) 
-	    send_to_child(i, pred_to_str(pred2));
+	if (parent_flag) {
+	    pred2 = list2(makeatom("dp_transfer", SYS), arg1);
+	    for (i = 0; i < child_num; i++)
+		send_to_child(i, pred_to_str(pred2));
 	}
 	return (prove_all(rest, sp));
     }
@@ -1739,15 +1771,15 @@ int b_dp_consult(int arglist, int rest)
 	error(NOT_STR, "dp_consult", arg1);
 
     pred1 = list2(makeatom("reconsult", SYS), arg1);
-	prove_all(pred1, sp);
+    prove_all(pred1, sp);
 
-	if(parent_flag){
+    if (parent_flag) {
 	pred2 = list2(makeatom("dp_consult", SYS), arg1);
-    for (i = 0; i < child_num; i++) {
-	send_to_child(i, pred_to_str(pred2));
-	receive_from_child(i);
-    }
+	for (i = 0; i < child_num; i++) {
+	    send_to_child(i, pred_to_str(pred2));
+	    receive_from_child(i);
 	}
+    }
     return (YES);
     error(ARITY_ERR, "dp_consult ", arglist);
     return (NO);
@@ -1766,12 +1798,12 @@ int b_dp_compile(int arglist, int rest)
 	pred1 = list2(makeatom("compile_file", PRED), arg1);
 	prove_all(pred1, sp);
 
-	if(parent_flag){
-	pred2 = list2(makeatom("dp_compile", SYS), arg1);
-	for (i = 0; i < child_num; i++) {
-	    send_to_child(i, pred_to_str(pred2));
-	    receive_from_child(i);
-	}
+	if (parent_flag) {
+	    pred2 = list2(makeatom("dp_compile", SYS), arg1);
+	    for (i = 0; i < child_num; i++) {
+		send_to_child(i, pred_to_str(pred2));
+		receive_from_child(i);
+	    }
 	}
 	return (YES);
     }

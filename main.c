@@ -169,7 +169,7 @@ void usage()
     printf("List of options:\n");
     printf("-c filename -- NPL starts after reading the file.\n");
     printf("-h          -- display help.\n");
-	printf("-n          -- NPL run with network mode.\n");
+    printf("-n          -- NPL run with network mode.\n");
     printf("-r          -- NPL does not use editable REPL.\n");
     printf("-s filename -- NPL run file with script mode.\n");
     printf("-v          -- dislplay version number.\n");
@@ -265,11 +265,11 @@ int main(int argc, char *argv[])
 	    exit(EXIT_SUCCESS);
 	case 'n':
 	    printf("N-Prolog runs with network mode.\n");
-		fp = fopen("network.pl", "r");
-	    if (fp != NULL){
+	    fp = fopen("network.pl", "r");
+	    if (fp != NULL) {
 		fclose(fp);
-	    b_consult(list1(makeconst("network.pl")), NIL);
-		}
+		b_consult(list1(makeconst("network.pl")), NIL);
+	    }
 	    child_flag = 1;
 	    init_parent();
 	    init_receiver();
@@ -530,10 +530,12 @@ int prove(int goal, int bindings, int rest)
     int clause, clauses, clause1, varlis, save1, save2, res;
 
     proof++;
-    if (ctrl_c_flag == 1) {
+    if (ctrl_c_flag) {
 	printf("ctrl+C\n\n");
 	longjmp(buf, 1);
     }
+	
+
     if (nest > 50000)
 	error(RESOURCE_ERR, "prove recursion over max", NIL);
 
