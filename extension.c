@@ -1646,7 +1646,7 @@ int b_dp_prove(int arglist, int rest)
 // parent Prolog
 int b_dp_transfer(int arglist, int rest)
 {
-    int n, arg1, exp, i, m;
+    int n, arg1, pred1, pred2, i, m;
     FILE *file;
 
     n = length(arglist);
@@ -1660,10 +1660,10 @@ int b_dp_transfer(int arglist, int rest)
 	    error(CANT_OPEN, "dp_transfer", arg1);
 	}
 
-	exp = list2(makeatom("dp_receive", SYS), arg1);
+	pred1 = list2(makeatom("dp_receive", SYS), arg1);
 
 	for (i = 0; i < child_num; i++) {
-	    send_to_child(i, pred_to_str(exp));
+	    send_to_child(i, pred_to_str(pred1));
 
 	    int bytes_read;
 	    while ((bytes_read =
@@ -1684,6 +1684,11 @@ int b_dp_transfer(int arglist, int rest)
 	    fseek(file, 0, SEEK_SET);
 	}
 	fclose(file);
+	if(parent_flag){
+		pred2 = list2(makeatom("dp_transfer", SYS), arg1);
+		for (i = 0; i < child_num; i++) 
+	    send_to_child(i, pred_to_str(pred2));
+	}
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "dp_transfer ", arglist);
@@ -1727,19 +1732,22 @@ int b_dp_receive(int arglist, int rest)
 
 int b_dp_consult(int arglist, int rest)
 {
-    int arg1, pred, i;
+    int arg1, pred1, pred2, i;
 
     arg1 = car(arglist);
     if (!atomp(arg1))
 	error(NOT_STR, "dp_consult", arg1);
 
-    pred = list2(makeatom("reconsult", SYS), arg1);
+    pred1 = list2(makeatom("reconsult", SYS), arg1);
+	prove_all(pred1, sp);
 
+	if(parent_flag){
+	pred2 = list2(makeatom("dp_consult", SYS), arg1);
     for (i = 0; i < child_num; i++) {
-	send_to_child(i, pred_to_str(pred));
+	send_to_child(i, pred_to_str(pred2));
 	receive_from_child(i);
     }
-    prove_all(pred, sp);
+	}
     return (YES);
     error(ARITY_ERR, "dp_consult ", arglist);
     return (NO);
@@ -1747,7 +1755,7 @@ int b_dp_consult(int arglist, int rest)
 
 int b_dp_compile(int arglist, int rest)
 {
-    int n, arg1, pred, i;
+    int n, arg1, pred1, pred2, i;
 
     n = length(arglist);
     if (n == 1) {
@@ -1755,14 +1763,16 @@ int b_dp_compile(int arglist, int rest)
 	if (!atomp(arg1))
 	    error(NOT_STR, "dp_compile", arg1);
 
-	pred = list2(makeatom("compile_file", PRED), arg1);
+	pred1 = list2(makeatom("compile_file", PRED), arg1);
+	prove_all(pred1, sp);
 
+	if(parent_flag){
+	pred2 = list2(makeatom("dp_compile", SYS), arg1);
 	for (i = 0; i < child_num; i++) {
-	    send_to_child(i, pred_to_str(pred));
+	    send_to_child(i, pred_to_str(pred2));
 	    receive_from_child(i);
 	}
-
-	prove_all(pred, sp);
+	}
 	return (YES);
     }
     error(ARITY_ERR, "dp_compile ", arglist);
