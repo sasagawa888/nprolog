@@ -120,7 +120,6 @@ int connect_flag = 0;		/* when child listen, connect_flag is 1 */
 int receiver_exit_flag = 0;	/* TO exit child TCP/IP receiver */
 int child_busy_flag = 0;	/* while evalating in child, child_buzy_flag is 1 */
 int parent_flag = 0;		/* while comunicating child, parent_flag = 1 */
-int exit_flag;
 
 //stream
 int standard_input;
