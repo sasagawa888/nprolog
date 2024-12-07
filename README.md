@@ -352,3 +352,7 @@ round(X,N)　Round X to N decimal places. N is an integer between 0 and 15.　
 randi(n)    generate random integer (n >= x >= 0) 
 random generate random float (1 >= x >= 0)
 ```
+
+# Distributed Parallelism
+N-Prolog supports distributed parallelism. It enables parallel execution across multiple machines connected via TCP/IP.
+For more details, please refer to PARA.md.
