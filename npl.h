@@ -457,6 +457,7 @@ extern int child_busy_flag;
 extern int parent_busy_flag;
 extern int parent_flag;
 extern int pause_flag;
+extern int shutdown_flag;
 
 //------pointer----
 extern int hp; //heap pointer

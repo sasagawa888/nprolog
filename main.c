@@ -123,6 +123,7 @@ int child_busy_flag = 0;	/* while executing in child, child_busy_flag is 1 */
 int parent_busy_flag = 0;   /* while executing dp_and/1 dp_or/1, parent_busy_flag = 1*/
 int parent_flag = 0;		/* while comunicating child, parent_flag = 1 */
 int pause_flag = 0;         /* while pause in child, pause_flag = 1 */
+int shutdown_flag = 0;      /* when receive dp_close, shutdown_flag = 1 */
 
 //stream
 int standard_input;
@@ -313,16 +314,22 @@ int main(int argc, char *argv[])
 		input =
 		    variable_to_call(convert_to_variable
 				     (str_to_pred(receive_from_parent())));
-		printf("receive_from_parent ");
+		printf("Receive from parent ");
 		sprint(input);
 		printf("\n");
 		fflush(stdout);
 		child_busy_flag = 1;
 		query(input);
 		child_busy_flag = 0;
-		printf("send_to_parent ");
+		printf("Send to parent ");
 		printf("\n");
 		fflush(stdout);
+		if(shutdown_flag){
+			printf("Shutting down the system...\n");
+    		int ret = system("sudo shutdown now");
+			if(ret == -1)
+			error(SYSTEM_ERROR, "dp_close shatdown ", NIL);
+		}
 	    }
     } else if (ret == 1) {
 	ret = 0;
