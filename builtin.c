@@ -205,10 +205,10 @@ void initbuiltin(void)
     defbuiltin("dp_report", b_dp_report, 1);
     defbuiltin("dp_countup", b_dp_countup, -1);
     defbuiltin("dp_parent", b_dp_parent, 0);
-	defbuiltin("dp_child", b_dp_child, 0);
-	defbuiltin("dp_wait", b_dp_wait, 1);
-	defbuiltin("dp_pause", b_dp_pause, 1);
-	defbuiltin("dp_resume", b_dp_resume, 1);
+    defbuiltin("dp_child", b_dp_child, 0);
+    defbuiltin("dp_wait", b_dp_wait, 1);
+    defbuiltin("dp_pause", b_dp_pause, 1);
+    defbuiltin("dp_resume", b_dp_resume, 1);
 
     //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_reconsult_predicate, -1);

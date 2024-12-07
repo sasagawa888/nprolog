@@ -1536,7 +1536,7 @@ int receive_from_child_part2(int n)
 void *receiver(void *arg)
 {
     int i;
-	char sub_buffer[256];
+    char sub_buffer[256];
 
     while (1) {
 	if (receiver_exit_flag)
@@ -1651,7 +1651,7 @@ int b_dp_close(int arglist, int rest)
 	    close(parent_sockfd[0]);
 	    close(parent_sockfd[1]);
 	    receiver_exit_flag = 1;
-		shutdown_flag = 1;
+	    shutdown_flag = 1;
 	    longjmp(buf, 2);
 	}
 
@@ -1847,7 +1847,7 @@ int b_dp_report(int arglist, int rest)
 
 int b_dp_and(int arglist, int rest)
 {
-    int n, arg1, m, i,j, pred, res;
+    int n, arg1, m, i, j, pred, res;
 
     n = length(arglist);
     if (n == 1) {
@@ -1866,13 +1866,15 @@ int b_dp_and(int arglist, int rest)
 	parent_busy_flag = 1;
 	for (i = 0; i < m; i++) {
 	    res = convert_to_variant(str_to_pred(receive_from_child(i)));
-	    if (prove_all(res, sp) == NO){
-		for(j=i;j<m;j++){
-			res = convert_to_variant(str_to_pred(receive_from_child(j)));
+	    if (prove_all(res, sp) == NO) {
+		for (j = i; j < m; j++) {
+		    res =
+			convert_to_variant(str_to_pred
+					   (receive_from_child(j)));
 		}
 		parent_busy_flag = 0;
 		return (NO);
-		}
+	    }
 	}
 	parent_busy_flag = 0;
 	return (prove_all(rest, sp));
@@ -1959,13 +1961,13 @@ int b_dp_child(int arglist, int rest)
 
 int b_dp_wait(int arglist, int rest)
 {
-    int n,arg1;
+    int n, arg1;
 
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	if(!integerp(arg1))
-		error(NOT_INT, "dp_wait ", arg1);
+	if (!integerp(arg1))
+	    error(NOT_INT, "dp_wait ", arg1);
 
 	sleep(GET_INT(arg1));
 	return (prove_all(rest, sp));
@@ -1976,21 +1978,21 @@ int b_dp_wait(int arglist, int rest)
 
 int b_dp_pause(int arglist, int rest)
 {
-    int n,arg1;
-	char sub_buffer[256];
+    int n, arg1;
+    char sub_buffer[256];
 
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	if(!integerp(arg1))
-		error(NOT_INT, "dp_pause ", arg1);
-	
-	if(!parent_busy_flag)
-		return(NO);
+	if (!integerp(arg1))
+	    error(NOT_INT, "dp_pause ", arg1);
 
-	memset(sub_buffer,0,sizeof(sub_buffer));
+	if (!parent_busy_flag)
+	    return (NO);
+
+	memset(sub_buffer, 0, sizeof(sub_buffer));
 	sub_buffer[0] = 0x11;
-	send_to_child(GET_INT(arg1),makestr(sub_buffer));
+	send_to_child(GET_INT(arg1), makestr(sub_buffer));
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "dp_pause ", arglist);
@@ -1999,24 +2001,23 @@ int b_dp_pause(int arglist, int rest)
 
 int b_dp_resume(int arglist, int rest)
 {
-    int n,arg1;
-	char sub_buffer[256];
+    int n, arg1;
+    char sub_buffer[256];
 
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	if(!integerp(arg1))
-		error(NOT_INT, "dp_resume ", arg1);
-	
-	if(!parent_busy_flag)
-		return(NO);
+	if (!integerp(arg1))
+	    error(NOT_INT, "dp_resume ", arg1);
 
-	memset(sub_buffer,0,sizeof(sub_buffer));
+	if (!parent_busy_flag)
+	    return (NO);
+
+	memset(sub_buffer, 0, sizeof(sub_buffer));
 	sub_buffer[0] = 0x11;
-	send_to_child(GET_INT(arg1),makestr(sub_buffer));
+	send_to_child(GET_INT(arg1), makestr(sub_buffer));
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "dp_resume ", arglist);
     return (NO);
 }
-

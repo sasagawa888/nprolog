@@ -80,7 +80,7 @@ char extended[EXTENDED_NUMBER][30] = {
     { "existerrors" }, { "dp_create" }, { "dp_consult" },
     { "dp_transfer" }, { "dp_and" }, { "dp_or" },
     { "dp_compile" }, { "dp_prove" }, { "dp_close" }, { "dp_parent" },
-    { "dp_child" },{ "dp_wait" }, { "dp_pause" }, { "dp_resume" },
+    { "dp_child" }, { "dp_wait" }, { "dp_pause" }, { "dp_resume" },
 };
 
 

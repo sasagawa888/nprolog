@@ -1,4 +1,4 @@
-
+%test
 seq :- test1,test2,write(done).
 
 test1 :- fail.
