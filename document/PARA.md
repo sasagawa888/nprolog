@@ -12,7 +12,7 @@ N-Prolog on parent machine terminal. and dp_create/1 to establish TCP/IP between
 # Spec
 
     npl -n: Launches child Prolog in network mode with the -n option.
-    A child can also function as a parent. By including dp_create/1 in startup.pl, communication with the child is established immediately after starting in network mode using npl -n. With this functionality, the parent can delegate computations to a grandchild via the child.
+    A child can also function as a parent. By including dp_create/1 in network.pl, communication with the child is established immediately after starting in network mode using npl -n. With this functionality, the parent can delegate computations to a grandchild via the child.
 
     dp_create([IP0,IP1, …,IPn]): Provides IP addresse of child machines to establish TCP/IP communication with the parent Lisp. IP addresse is provided as atom. e.g. '178.1.166.2'
     Up to 100 child devices can be connected.
