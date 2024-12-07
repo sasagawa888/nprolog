@@ -1968,6 +1968,10 @@ int b_dp_wait(int arglist, int rest)
 	arg1 = car(arglist);
 	if (!integerp(arg1))
 	    error(NOT_INT, "dp_wait ", arg1);
+	if (negativep(arg1))
+		error(WRONG_ARGS, "dp_wait ", arg1);
+	if (GET_INT(arg1) > 60)
+		error(WRONG_ARGS, "dp_wait ", arg1);
 
 	sleep(GET_INT(arg1));
 	return (prove_all(rest, sp));
@@ -1986,6 +1990,10 @@ int b_dp_pause(int arglist, int rest)
 	arg1 = car(arglist);
 	if (!integerp(arg1))
 	    error(NOT_INT, "dp_pause ", arg1);
+	if (negativep(arg1))
+		error(WRONG_ARGS, "dp_pause ", arg1);
+	if (GET_INT(arg1) >= child_num)
+		error(WRONG_ARGS, "dp_pause ", arg1);
 
 	if (!parent_busy_flag)
 	    return (NO);
@@ -2009,6 +2017,10 @@ int b_dp_resume(int arglist, int rest)
 	arg1 = car(arglist);
 	if (!integerp(arg1))
 	    error(NOT_INT, "dp_resume ", arg1);
+	if (negativep(arg1))
+		error(WRONG_ARGS, "dp_resume ", arg1);
+	if (GET_INT(arg1) >= child_num)
+		error(WRONG_ARGS, "dp_resume ", arg1);
 
 	if (!parent_busy_flag)
 	    return (NO);
