@@ -454,7 +454,9 @@ extern int child_flag;
 extern int connect_flag;
 extern int receiver_exit_flag;
 extern int child_busy_flag;
+extern int parent_busy_flag;
 extern int parent_flag;
+extern int pause_flag;
 
 //------pointer----
 extern int hp; //heap pointer
@@ -754,6 +756,10 @@ int b_dp_compile(int arglist, int rest);
 int b_dp_consult(int arglist, int rest);
 int b_dp_report(int arglist, int rest);
 int b_dp_parent(int arglist, int rest);
+int b_dp_child(int arglist, int rest);
+int b_dp_wait(int arglist, int rest);
+int b_dp_pause(int arglist, int rest);
+int b_dp_resume(int arglist, int rest);
 int b_dup(int arglist, int rest);
 int b_edit(int arglist, int rest);
 int b_end_of_file(int arglist, int rest);

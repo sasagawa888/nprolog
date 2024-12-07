@@ -39,6 +39,14 @@ N-Prolog on parent machine terminal. and dp_create/1 to establish TCP/IP between
 
     dp_parent: When the system is operating as a parent, it returns YES; otherwise, it returns NO. Even if it is a child, it will return YES if it also functions as a parent with its own children.
 
+    dp_child: Returns YES if it is a pure child machine without any child machines. Otherwise, returns NO.
+
+    dp_wait(Time): Wait for Time seconds.
+
+    dp_pause(Nth): Send a wait command to the Nth child and its child machines in the hierarchy.
+
+    dp_resume(Nth): Cancel the wait command for the Nth child and its child machines int the hierarchy.
+
 # Example
 
 ```

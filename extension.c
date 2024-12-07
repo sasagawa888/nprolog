@@ -1556,10 +1556,22 @@ void *receiver(void *arg)
 		ctrl_c_flag = 1;
 	    } else if (bridge[0] == '\x12') {
 		// child pause 
-
+		if (!(child_flag && parent_flag)) {
+		    memset(sub_buffer, 0, sizeof(sub_buffer));
+		    sub_buffer[0] = '\x12';
+		    for (i = 0; i < child_num; i++)
+			send_to_child(i, makestr(sub_buffer));
+		}
+		pause_flag = 1;
 	    } else if (bridge[0] == '\x13') {
-		// chidl resume 
-
+		// child resume 
+		if (!(child_flag && parent_flag)) {
+		    memset(sub_buffer, 0, sizeof(sub_buffer));
+		    sub_buffer[0] = '\x11';
+		    for (i = 0; i < child_num; i++)
+			send_to_child(i, makestr(sub_buffer));
+		}
+		pause_flag = 0;
 	    }
 
 	    if (bridge[1] != 0) {
@@ -1834,7 +1846,7 @@ int b_dp_report(int arglist, int rest)
 
 int b_dp_and(int arglist, int rest)
 {
-    int n, arg1, m, i, pred, res;
+    int n, arg1, m, i,j, pred, res;
 
     n = length(arglist);
     if (n == 1) {
@@ -1850,12 +1862,18 @@ int b_dp_and(int arglist, int rest)
 	    arg1 = cdr(arg1);
 	    i++;
 	}
-
+	parent_busy_flag = 1;
 	for (i = 0; i < m; i++) {
 	    res = convert_to_variant(str_to_pred(receive_from_child(i)));
-	    if (prove_all(res, sp) == NO)
+	    if (prove_all(res, sp) == NO){
+		for(j=i;j<m;j++){
+			res = convert_to_variant(str_to_pred(receive_from_child(j)));
+		}
+		parent_busy_flag = 0;
 		return (NO);
+		}
 	}
+	parent_busy_flag = 0;
 	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "dp_and ", arglist);
@@ -1881,7 +1899,9 @@ int b_dp_or(int arglist, int rest)
 	    arg1 = cdr(arg1);
 	    i++;
 	}
+	parent_busy_flag = 1;
 	res = convert_to_variant(str_to_pred(receive_from_child_part(m)));
+	parent_busy_flag = 0;
 	if (prove_all(res, sp) == YES)
 	    return (prove_all(rest, sp));
     }
@@ -1919,3 +1939,83 @@ int b_dp_parent(int arglist, int rest)
     error(ARITY_ERR, "dp_parent ", arglist);
     return (NO);
 }
+
+int b_dp_child(int arglist, int rest)
+{
+    int n;
+
+    n = length(arglist);
+    if (n == 0) {
+
+	if (!parent_flag && child_flag)
+	    return (prove_all(rest, sp));
+	else
+	    return (NO);
+    }
+    error(ARITY_ERR, "dp_parent ", arglist);
+    return (NO);
+}
+
+int b_dp_wait(int arglist, int rest)
+{
+    int n,arg1;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if(!integerp(arg1))
+		error(NOT_INT, "dp_wait ", arg1);
+
+	sleep(GET_INT(arg1));
+	return (prove_all(rest, sp));
+    }
+    error(ARITY_ERR, "dp_wait ", arglist);
+    return (NO);
+}
+
+int b_dp_pause(int arglist, int rest)
+{
+    int n,arg1;
+	char sub_buffer[256];
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if(!integerp(arg1))
+		error(NOT_INT, "dp_pause ", arg1);
+	
+	if(!parent_busy_flag)
+		return(NO);
+
+	memset(sub_buffer,0,sizeof(sub_buffer));
+	sub_buffer[0] = 0x11;
+	send_to_child(GET_INT(arg1),makestr(sub_buffer));
+	return (prove_all(rest, sp));
+    }
+    error(ARITY_ERR, "dp_pause ", arglist);
+    return (NO);
+}
+
+int b_dp_resume(int arglist, int rest)
+{
+    int n,arg1;
+	char sub_buffer[256];
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if(!integerp(arg1))
+		error(NOT_INT, "dp_resume ", arg1);
+	
+	if(!parent_busy_flag)
+		return(NO);
+
+	memset(sub_buffer,0,sizeof(sub_buffer));
+	sub_buffer[0] = 0x11;
+	send_to_child(GET_INT(arg1),makestr(sub_buffer));
+	return (prove_all(rest, sp));
+    }
+    error(ARITY_ERR, "dp_resume ", arglist);
+    return (NO);
+}
+
