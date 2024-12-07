@@ -61,6 +61,7 @@ test(nonvar) :-
     verify(nonvar(X)),
     verify(not(nonvar(Y))).
 
+
 test(var) :-
     verify(var(X)),
     verify(var(_)),

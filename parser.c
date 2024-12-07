@@ -688,6 +688,7 @@ void gettoken(void)
 	    return;
 	}
 	unreadc(c);
+	c = 'v';
     }
     //constant-atom in Unicode
     if (islower(c) || unicodep(c)) {
