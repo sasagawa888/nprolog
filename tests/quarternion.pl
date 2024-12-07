@@ -1,6 +1,6 @@
 /* quantum-number iitaka p41*/
 
-%:- op(700,xfx,isq).
+:- op(700,xfx,isq).
 
 X isq q(R1,I1,J1,K1)+q(R2,I2,J2,K2) :-
     R is R1 + R2,
