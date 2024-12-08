@@ -1415,76 +1415,6 @@ int receive_from_child(int n)
 
 
 
-int receive_from_child_and(int n)
-{
-    int i, m, res;
-
-    //initialize -1 (not received)
-    for (i = 0; i < n; i++) {
-	child_result[i] = -1;
-    }
-    res = receive_from_child_and1(n);
-
-    // kill not received child
-    for (i = 0; i < n; i++) {
-	if (child_result[i] == -1) {
-	    // send child stop signal
-	    memset(bridge, 0, sizeof(bridge));
-	    bridge[0] = '\x11';
-	    m = write(child_sockfd[i], bridge, strlen(bridge));
-	    if (m < 0) {
-		error(SYSTEM_ERROR, "receive from child", NIL);
-	    }
-	    // receive result and ignore
-	    while ((m =
-		    read(child_sockfd[i], bridge,
-			 sizeof(bridge) - 1)) == 0) {
-	    }
-	}
-    }
-
-    return (res);
-}
-
-
-int receive_from_child_and1(int n)
-{
-    int m, i;
-
-    // receive from child
-    m = 0;
-  retry:
-    memset(bridge, 0, sizeof(bridge));
-    for (i = 0; i < n; i++) {
-	if (child_result[i] == -1) {
-	    m = read(child_sockfd[i], bridge, sizeof(bridge));
-	}
-	if (m < 0) {
-	    error(SYSTEM_ERROR, "receive from child", makeint(i));
-	} else if (m > 0) {
-	    child_result[i] = receive_from_child_common(i);
-	}
-    }
-
-    //if find fail return it.
-    for (i = 0; i < n; i++) {
-	if (child_result[i] != -1
-	    && strcmp(GET_NAME(child_result[i]), "fail.") == 0)
-	    return (child_result[i]);
-    }
-
-
-    //if exist not received result, goto retry
-    for (i = 0; i < n; i++) {
-	if (child_result[i] == -1)
-	    goto retry;
-    }
-
-    // if not exist YES, return fail.
-    return (makeatom("fail", SYS));
-}
-
-
 
 int receive_from_child_or(int n)
 {
@@ -1533,7 +1463,7 @@ int receive_from_child_or1(int n)
 	if (m < 0) {
 	    error(SYSTEM_ERROR, "receive from child", makeint(i));
 	} else if (m > 0) {
-	    child_result[i] = receive_from_child_common(i);
+	    child_result[i] = receive_from_child_or2(i);
 	}
     }
 
@@ -1555,7 +1485,7 @@ int receive_from_child_or1(int n)
     return (makeatom("fail", SYS));
 }
 
-int receive_from_child_common(int n)
+int receive_from_child_or2(int n)
 {
     char sub_buffer[256], sub_buffer1[256 + 2];
     int i, j;
@@ -1919,7 +1849,7 @@ int b_dp_report(int arglist, int rest)
 
 int b_dp_and(int arglist, int rest)
 {
-    int n, arg1, m, i, pred, res;
+    int n, arg1, m, i, j, pred, res;
 
     n = length(arglist);
     if (n == 1) {
@@ -1935,13 +1865,22 @@ int b_dp_and(int arglist, int rest)
 	    arg1 = cdr(arg1);
 	    i++;
 	}
-	res = convert_to_variant(str_to_pred(receive_from_child_and(m)));
-	return (prove_all(res, sp));
+	for (i = 0; i < m; i++) {
+	    res = convert_to_variant(str_to_pred(receive_from_child(i)));
+	    if (prove_all(res, sp) == NO) {
+		for (j = i; j < m; j++) {
+		    res =
+			convert_to_variant(str_to_pred
+					   (receive_from_child(j)));
+		}
+		return (NO);
+	    }
+	}
+	return (prove_all(rest, sp));
     }
     error(ARITY_ERR, "dp_and ", arglist);
     return (NO);
 }
-
 
 int b_dp_or(int arglist, int rest)
 {
