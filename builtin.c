@@ -4950,7 +4950,7 @@ int b_member(int arglist, int rest)
 	y = makevariant();
 	l = makevariant();
 	if (unify(arg1, x) == YES && unify(arg2, wlistcons(y, l)) == YES) {
-	    body = wlist3(makeatom("member", SYS), x, l);
+	    body = wlist3(makeatom("member", SYS), x, l,0);
 	    if ((res = prove(body, sp[0], rest)) == YES)
 		return (YES);
 	}

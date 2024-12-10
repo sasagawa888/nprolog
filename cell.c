@@ -540,7 +540,7 @@ int op_connect(int x, int y)
     else if (nullp(y))
 	return (x);
     else if (!operationp(x))
-	return (wlist3(AND, x, y));
+	return (wlist3(AND, x, y,0));
     else
-	return (wlist3(car(x), cadr(x), op_connect(caddr(x), y)));
+	return (wlist3(car(x), cadr(x), op_connect(caddr(x), y),0));
 }
