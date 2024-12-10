@@ -3424,7 +3424,7 @@ int b_float_text(int arglist, int rest)
 		    return (prove_all(rest, sp[0]));
 		else
 		    return (NO);
-	    } else if (unify(arg3, wcons(makepred("fixed"), wcons(n, NIL)))
+	    } else if (unify(arg3, wcons(makepred("fixed"), wcons(n, NIL,0),0))
 		       == YES) {
 		d = GET_INT(deref(n));
 		if (d > 15)
@@ -3439,7 +3439,7 @@ int b_float_text(int arglist, int rest)
 		    return (NO);
 	    } else
 		if (unify
-		    (arg3, wcons(makepred("scientific"), wcons(n, NIL)))
+		    (arg3, wcons(makepred("scientific"), wcons(n, NIL,0),0))
 		    == YES) {
 		d = GET_INT(deref(n));
 		if (d > 15)

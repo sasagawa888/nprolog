@@ -675,7 +675,7 @@ int prove(int goal, int bindings, int rest)
 		wcons(IFTHENELSE,
 		      wcons(cadr(cadr(goal)),
 			    wcons(caddr(cadr(goal)),
-				  wcons(caddr(goal), NIL))));
+				  wcons(caddr(goal), NIL,0),0),0),0);
 	    // redefine goal = ifthenelse(if,then,else)
 	    return (prove(goal, bindings, rest));
 	} else
@@ -1140,15 +1140,15 @@ int walpha_conversion(int x)
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else if (listp(x)) {
-	temp = wcons(walpha_conversion(car(x)), walpha_conversion(cdr(x)));
+	temp = wcons(walpha_conversion(car(x)), walpha_conversion(cdr(x)),0);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else if (predicatep(x)) {
-	temp = wcons(car(x), walpha_conversion(cdr(x)));
+	temp = wcons(car(x), walpha_conversion(cdr(x)),0);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else {			//buiiltin
-	temp = wcons(walpha_conversion(car(x)), walpha_conversion(cdr(x)));
+	temp = wcons(walpha_conversion(car(x)), walpha_conversion(cdr(x)),0);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     }

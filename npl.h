@@ -1249,7 +1249,7 @@ int variable_name_p(int x);
 int variable_to_call(int x);
 int varslist(int x);
 int walpha_conversion(int x);
-int wcons(int car, int cdr);
+int wcons(int car, int cdr, int th);
 int wide_integer_p(int addr);
 int wide_variable_p(int addr);
 int wlistcons(int x, int y);

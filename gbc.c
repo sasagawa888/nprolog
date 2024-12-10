@@ -118,7 +118,7 @@ void gbcmark(void)
     markcell(error_stream);
 
     //mark stack
-    for (i = 0; i < sp; i++) {
+    for (i = 0; i < sp[0]; i++) {
 	if (alpha_variable_p(stack[i]))
 	    markcell(variant[stack[i] - CELLSIZE]);
 	else

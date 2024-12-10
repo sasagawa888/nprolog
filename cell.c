@@ -443,7 +443,7 @@ int wlistcons(int x, int y)
 {
     int res;
 
-    res = wcons(x, y);
+    res = wcons(x, y,0);
     SET_AUX(res, LIST);
     return (res);
 }

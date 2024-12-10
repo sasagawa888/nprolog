@@ -125,7 +125,7 @@ int cons(int car, int cdr)
 
 
 
-int wcons(int car, int cdr)
+int wcons(int car, int cdr, int th)
 {
 
     int addr;
@@ -664,7 +664,7 @@ list10(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
 int wlist1(int x)
 {
 
-    return (wcons(x, NIL));
+    return (wcons(x, NIL,0));
 
 }
 
@@ -673,7 +673,7 @@ int wlist1(int x)
 int wlist2(int x, int y)
 {
 
-    return (wcons(x, wcons(y, NIL)));
+    return (wcons(x, wcons(y, NIL,0),0));
 
 }
 
@@ -682,7 +682,7 @@ int wlist2(int x, int y)
 int wlist3(int x1, int x2, int x3)
 {
 
-    return (wcons(x1, wcons(x2, wcons(x3, NIL))));
+    return (wcons(x1, wcons(x2, wcons(x3, NIL,0),0),0));
 
 }
 
@@ -691,7 +691,7 @@ int wlist3(int x1, int x2, int x3)
 int wlist4(int x1, int x2, int x3, int x4)
 {
 
-    return (wcons(x1, wcons(x2, wcons(x3, wcons(x4, NIL)))));
+    return (wcons(x1, wcons(x2, wcons(x3, wcons(x4, NIL,0),0),0),0));
 
 }
 
@@ -700,7 +700,7 @@ int wlist4(int x1, int x2, int x3, int x4)
 int wlist5(int x1, int x2, int x3, int x4, int x5)
 {
 
-    return (cons(x1, cons(x2, cons(x3, cons(x4, cons(x5, NIL))))));
+    return (wcons(x1, wcons(x2, wcons(x3, wcons(x4, wcons(x5, NIL,0),0),0),0),0));
 
 }
 
@@ -711,7 +711,7 @@ int wlist6(int x1, int x2, int x3, int x4, int x5, int x6)
 
     return (wcons
 	    (x1,
-	     wcons(x2, wcons(x3, wcons(x4, wcons(x5, wcons(x6, NIL)))))));
+	     wcons(x2, wcons(x3, wcons(x4, wcons(x5, wcons(x6, NIL,0),0),0),0),0),0));
 
 }
 
@@ -720,10 +720,10 @@ int wlist6(int x1, int x2, int x3, int x4, int x5, int x6)
 int wlist7(int x1, int x2, int x3, int x4, int x5, int x6, int x7)
 {
 
-    return (cons
+    return (wcons
 	    (x1,
-	     cons(x2,
-		  cons(x3, cons(x4, cons(x5, cons(x6, cons(x7, NIL))))))));
+	     wcons(x2,
+		  wcons(x3, wcons(x4, wcons(x5, wcons(x6, wcons(x7, NIL,0),0),0),0),0),0),0));
 
 }
 
@@ -740,7 +740,7 @@ int wlist8(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8)
 			       wcons(x5,
 				     wcons(x6,
 					   wcons(x7,
-						 wcons(x8, NIL)))))))));
+						 wcons(x8, NIL,0),0),0),0),0),0),0),0));
 
 }
 
@@ -761,7 +761,7 @@ wlist9(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
 					   wcons(x7,
 						 wcons(x8,
 						       wcons(x9,
-							     NIL))))))))));
+							     NIL,0),0),0),0),0),0),0),0),0));
 
 }
 
@@ -784,7 +784,7 @@ wlist10(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
 						       wcons(x9,
 							     wcons
 							     (x10,
-							      NIL)))))))))));
+							      NIL,0),0),0),0),0),0),0),0),0),0));
 
 }
 
@@ -2323,7 +2323,7 @@ int deref(int x)
 
     else {
 
-	temp = wcons(deref(car(x)), deref(cdr(x)));
+	temp = wcons(deref(car(x)), deref(cdr(x)),0);
 
 	SET_AUX(temp, GET_AUX(x));
 
