@@ -4999,7 +4999,7 @@ int b_append(int arglist, int rest)
 	if (unify(arg1, wlistcons(x, ls)) == YES &&
 	    unify(arg2, ys) == YES && unify(arg3, wlistcons(x, zs)) == YES)
 	{
-	    body = wlist4(makeatom("append", SYS), ls, ys, zs);
+	    body = wlist4(makeatom("append", SYS), ls, ys, zs,0);
 	    if (prove(body, sp[0], rest) == YES)
 		return (YES);
 	}

@@ -1256,7 +1256,7 @@ int wlistcons(int x, int y);
 int wlist1(int x, int th);
 int wlist2(int x, int y, int th);
 int wlist3(int x1, int x2, int x3, int th);
-int wlist4(int x1, int x2, int x3, int x4);
+int wlist4(int x1, int x2, int x3, int x4, int th);
 int wlist5(int x1, int x2, int x3, int x4, int x5);
 int wlist6(int x1, int x2, int x3, int x4, int x5, int x6);
 int wlist7(int x1, int x2, int x3, int x4, int x5, int x6, int x7);

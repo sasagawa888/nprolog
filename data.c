@@ -688,10 +688,10 @@ int wlist3(int x1, int x2, int x3, int th)
 
 
 
-int wlist4(int x1, int x2, int x3, int x4)
+int wlist4(int x1, int x2, int x3, int x4, int th)
 {
 
-    return (wcons(x1, wcons(x2, wcons(x3, wcons(x4, NIL, 0), 0), 0), 0));
+    return (wcons(x1, wcons(x2, wcons(x3, wcons(x4, NIL, th), th), th), th));
 
 }
 
