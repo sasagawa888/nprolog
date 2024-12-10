@@ -4950,7 +4950,7 @@ int b_member(int arglist, int rest)
 	y = makevariant();
 	l = makevariant();
 	if (unify(arg1, x) == YES && unify(arg2, wlistcons(y, l)) == YES) {
-	    body = wlist3(makeatom("member", SYS), x, l,0);
+	    body = wlist3(makeatom("member", SYS), x, l, 0);
 	    if ((res = prove(body, sp[0], rest)) == YES)
 		return (YES);
 	}
@@ -4999,7 +4999,7 @@ int b_append(int arglist, int rest)
 	if (unify(arg1, wlistcons(x, ls)) == YES &&
 	    unify(arg2, ys) == YES && unify(arg3, wlistcons(x, zs)) == YES)
 	{
-	    body = wlist4(makeatom("append", SYS), ls, ys, zs,0);
+	    body = wlist4(makeatom("append", SYS), ls, ys, zs, 0);
 	    if (prove(body, sp[0], rest) == YES)
 		return (YES);
 	}

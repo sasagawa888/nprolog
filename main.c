@@ -505,7 +505,7 @@ int addtail_body(int x, int y)
     else if (!conjunctionp(y))
 	return (wlist3(AND, y, x, 0));
     else
-	return (wlist3(car(y), cadr(y), addtail_body(x, caddr(y)),0));
+	return (wlist3(car(y), cadr(y), addtail_body(x, caddr(y)), 0));
 }
 
 
@@ -717,7 +717,7 @@ int before_cut(int x)
     else if (conjunctionp(caddr(x)) && cadr(caddr(x)) == CUT)
 	return (cadr(x));
     else
-	return (wlist3(AND, cadr(x), before_cut(caddr(x)),0));
+	return (wlist3(AND, cadr(x), before_cut(caddr(x)), 0));
 
 }
 
@@ -1136,7 +1136,7 @@ int walpha_conversion(int x)
     } else if (operationp(x)) {
 	temp = wlist3(car(x),
 		      walpha_conversion(cadr(x)),
-		      walpha_conversion(caddr(x)),0);
+		      walpha_conversion(caddr(x)), 0);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else if (listp(x)) {

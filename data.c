@@ -691,38 +691,40 @@ int wlist3(int x1, int x2, int x3, int th)
 int wlist4(int x1, int x2, int x3, int x4, int th)
 {
 
-    return (wcons(x1, wcons(x2, wcons(x3, wcons(x4, NIL, th), th), th), th));
+    return (wcons
+	    (x1, wcons(x2, wcons(x3, wcons(x4, NIL, th), th), th), th));
 
 }
 
 
 
-int wlist5(int x1, int x2, int x3, int x4, int x5)
+int wlist5(int x1, int x2, int x3, int x4, int x5, int th)
 {
 
     return (wcons
 	    (x1,
-	     wcons(x2, wcons(x3, wcons(x4, wcons(x5, NIL, 0), 0), 0), 0),
-	     0));
+	     wcons(x2, wcons(x3, wcons(x4, wcons(x5, NIL, th), th), th),
+		   th), 0));
 
 }
 
 
 
-int wlist6(int x1, int x2, int x3, int x4, int x5, int x6)
+int wlist6(int x1, int x2, int x3, int x4, int x5, int x6, int th)
 {
 
     return (wcons
 	    (x1,
 	     wcons(x2,
-		   wcons(x3, wcons(x4, wcons(x5, wcons(x6, NIL, 0), 0), 0),
-			 0), 0), 0));
+		   wcons(x3,
+			 wcons(x4, wcons(x5, wcons(x6, NIL, th), th), th),
+			 th), th), th));
 
 }
 
 
 
-int wlist7(int x1, int x2, int x3, int x4, int x5, int x6, int x7)
+int wlist7(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int th)
 {
 
     return (wcons
@@ -730,14 +732,15 @@ int wlist7(int x1, int x2, int x3, int x4, int x5, int x6, int x7)
 	     wcons(x2,
 		   wcons(x3,
 			 wcons(x4,
-			       wcons(x5, wcons(x6, wcons(x7, NIL, 0), 0),
-				     0), 0), 0), 0), 0));
+			       wcons(x5, wcons(x6, wcons(x7, NIL, th), th),
+				     th), th), th), th), th));
 
 }
 
 
 
-int wlist8(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8)
+int wlist8(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
+	   int th)
 {
 
     return (wcons
@@ -748,8 +751,8 @@ int wlist8(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8)
 			       wcons(x5,
 				     wcons(x6,
 					   wcons(x7,
-						 wcons(x8, NIL, 0), 0), 0),
-				     0), 0), 0), 0), 0));
+						 wcons(x8, NIL, th), th),
+					   th), th), th), th), th), th));
 
 }
 
@@ -757,7 +760,7 @@ int wlist8(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8)
 
 int
 wlist9(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
-       int x9)
+       int x9, int th)
 {
 
     return (wcons
@@ -770,9 +773,9 @@ wlist9(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
 					   wcons(x7,
 						 wcons(x8,
 						       wcons(x9,
-							     NIL, 0), 0),
-						 0), 0), 0), 0), 0), 0),
-	     0));
+							     NIL, th), th),
+						 th), th), th), th), th),
+		   th), th));
 
 }
 
@@ -780,7 +783,7 @@ wlist9(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
 
 int
 wlist10(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
-	int x9, int x10)
+	int x9, int x10, int th)
 {
 
     return (wcons
@@ -795,9 +798,9 @@ wlist10(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
 						       wcons(x9,
 							     wcons
 							     (x10,
-							      NIL, 0), 0),
-						       0), 0), 0), 0), 0),
-			 0), 0), 0));
+							      NIL, th),
+							     th), th), th),
+					   th), th), th), th), th), th));
 
 }
 
