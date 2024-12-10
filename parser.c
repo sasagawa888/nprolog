@@ -569,14 +569,14 @@ void gettoken(void)
 	c = stok.ch;
 	stok.ch = NUL;
 	stok.ahead = NUL;
-    } else{
+    } else {
 	c = readc();
-	}
+    }
 
-	//ignore ctrl+c pause or resume signal from parent
-	if(c == 0x11 || c == 0x12 || c == 0x13){
+    //ignore ctrl+c pause or resume signal from parent
+    if (c == 0x11 || c == 0x12 || c == 0x13) {
 	c = readc();
-	}
+    }
 
   skip:
     while (c == SPACE || c == EOL || c == TAB || c == RET) {

@@ -72,10 +72,10 @@ double timer;			// for timer_microseconds/1
 
 //------pointer----
 int hp;				//heap pointer
-int sp[THREADSIZE]; //stack pointer
+int sp[THREADSIZE];		//stack pointer
 int fc;				//free counter
-int ac[THREADSIZE];	//alpha conversion variable count
-int wp[THREADSIZE];	//working pointer
+int ac[THREADSIZE];		//alpha conversion variable count
+int wp[THREADSIZE];		//working pointer
 int gc;				//invoked GC count
 
 // bignum pointer
@@ -360,8 +360,8 @@ void init_repl(void)
     ac[0] = CELLSIZE + 1;
     wp[0] = HEAPSIZE + 1;
     unbind(0);
-	for (i=0;i<THREADSIZE;i++)
-    	sp[i] = 0;
+    for (i = 0; i < THREADSIZE; i++)
+	sp[i] = 0;
     ctrl_c_flag = 0;
     fskip_flag = OFF;
     sskip_flag = OFF;
@@ -675,7 +675,7 @@ int prove(int goal, int bindings, int rest)
 		wcons(IFTHENELSE,
 		      wcons(cadr(cadr(goal)),
 			    wcons(caddr(cadr(goal)),
-				  wcons(caddr(goal), NIL,0),0),0),0);
+				  wcons(caddr(goal), NIL, 0), 0), 0), 0);
 	    // redefine goal = ifthenelse(if,then,else)
 	    return (prove(goal, bindings, rest));
 	} else
@@ -1130,7 +1130,7 @@ int walpha_conversion(int x)
     else if (!structurep(x))
 	return (x);
     else if (operationp(x) && nullp(caddr(x))) {	// e.g. :- foo(x)
-	temp = wlist2(car(x), walpha_conversion(cadr(x)));
+	temp = wlist2(car(x), walpha_conversion(cadr(x)), 0);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else if (operationp(x)) {
@@ -1140,15 +1140,17 @@ int walpha_conversion(int x)
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else if (listp(x)) {
-	temp = wcons(walpha_conversion(car(x)), walpha_conversion(cdr(x)),0);
+	temp =
+	    wcons(walpha_conversion(car(x)), walpha_conversion(cdr(x)), 0);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else if (predicatep(x)) {
-	temp = wcons(car(x), walpha_conversion(cdr(x)),0);
+	temp = wcons(car(x), walpha_conversion(cdr(x)), 0);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else {			//buiiltin
-	temp = wcons(walpha_conversion(car(x)), walpha_conversion(cdr(x)),0);
+	temp =
+	    wcons(walpha_conversion(car(x)), walpha_conversion(cdr(x)), 0);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     }

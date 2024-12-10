@@ -758,7 +758,7 @@ int b_heapdump(int arglist, int rest)
 	if (!integerp(arg2))
 	    error(NOT_INT, "heapd ", arg2);
 	if (greaterp(arg1, arg2))
-	    error(WRONG_ARGS, "heapd ", wlist2(arg1, arg2));
+	    error(WRONG_ARGS, "heapd ", wlist2(arg1, arg2, 0));
 
 	heapdump(get_int(arg1), get_int(arg2));
 	return (prove_all(rest, sp[0]));
@@ -1223,7 +1223,8 @@ int convert_to_variant(int x)
     } else if (!structurep(x)) {
 	return (x);
     }
-    return (wcons(convert_to_variant(car(x)), convert_to_variant(cdr(x)),0));
+    return (wcons
+	    (convert_to_variant(car(x)), convert_to_variant(cdr(x)), 0));
 }
 
 // under construction v_1 -> V_1
@@ -1242,7 +1243,7 @@ int convert_to_variable(int x)
 	return (x);
     } else
 	return (wcons(convert_to_variable(car(x)),
-		      convert_to_variable(cdr(x)),0));
+		      convert_to_variable(cdr(x)), 0));
 }
 
 void init_parent(void)

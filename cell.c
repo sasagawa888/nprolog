@@ -57,8 +57,8 @@ void initcell(void)
     makeatom("off", SIMP);	//address = 50
     makeatom("/", OPE);		//address = 52
     makeatom("err", SIMP);	//address = 54
-    makeatom("<pause>", SIMP); //address = 56
-    makeatom("<resume>", SIMP); //address = 58
+    makeatom("<pause>", SIMP);	//address = 56
+    makeatom("<resume>", SIMP);	//address = 58
 }
 
 int freshcell(void)
@@ -443,7 +443,7 @@ int wlistcons(int x, int y)
 {
     int res;
 
-    res = wcons(x, y,0);
+    res = wcons(x, y, 0);
     SET_AUX(res, LIST);
     return (res);
 }
