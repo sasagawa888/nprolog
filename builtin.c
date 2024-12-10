@@ -316,7 +316,7 @@ int b_repeat(int arglist, int rest)
 
     save1 = wp[0];
     save2 = sp[0];
-    save3 = ac;
+    save3 = ac[0];
     n = length(arglist);
     if (n == 0) {
       loop:
@@ -325,7 +325,7 @@ int b_repeat(int arglist, int rest)
 	}
 	wp[0] = save1;
 	unbind(save2);
-	ac = save3;
+	ac[0] = save3;
 	goto loop;
     }
 
@@ -5067,7 +5067,7 @@ int b_between(int arglist, int rest)
 
 	save1 = wp[0];
 	save2 = sp[0];
-	save3 = ac;
+	save3 = ac[0];
 	low = get_int(arg1);
 	high = get_int(arg2);
 
@@ -5089,11 +5089,11 @@ int b_between(int arglist, int rest)
 	    low++;
 	    wp[0] = save1;
 	    unbind(save2);
-	    ac = save3;
+	    ac[0] = save3;
 	}
 	wp[0] = save1;
 	unify(arg3, arg2);
-	ac = save3;
+	ac[0] = save3;
 	return (NO);
     }
     error(ARITY_ERR, "between ", arglist);

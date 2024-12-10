@@ -74,7 +74,7 @@ double timer;			// for timer_microseconds/1
 int hp;				//heap pointer
 int sp[THREADSIZE]; //stack pointer
 int fc;				//free counter
-int ac;				//alpha conversion variable count
+int ac[THREADSIZE];	//alpha conversion variable count
 int wp[THREADSIZE];	//working pointer
 int gc;				//invoked GC count
 
@@ -357,7 +357,7 @@ void init_repl(void)
     stok.flag = GO;
     proof = 0;
     nest = 0;
-    ac = CELLSIZE + 1;
+    ac[0] = CELLSIZE + 1;
     wp[0] = HEAPSIZE + 1;
     unbind(0);
 	for (i=0;i<THREADSIZE;i++)
@@ -606,7 +606,7 @@ int prove(int goal, int bindings, int rest)
 	}
 	while (!nullp(clauses)) {
 	    save1 = wp[0];
-	    save2 = ac;
+	    save2 = ac[0];
 	    clause = car(clauses);
 	    clauses = cdr(clauses);
 	    varlis = GET_VAR(clause);
@@ -650,7 +650,7 @@ int prove(int goal, int bindings, int rest)
 				prove_trace(DBCUTFAIL, goal, bindings,
 					    rest);
 			    wp[0] = save1;
-			    ac = save2;
+			    ac[0] = save2;
 			    unbind(bindings);
 			    return (NO);
 			}
@@ -662,7 +662,7 @@ int prove(int goal, int bindings, int rest)
 		prove_trace(DBREDO, goal, bindings, rest);
 
 	    wp[0] = save1;
-	    ac = save2;
+	    ac[0] = save2;
 	    unbind(bindings);
 	}
 	//trace
