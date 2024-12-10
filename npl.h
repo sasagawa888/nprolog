@@ -30,6 +30,8 @@ address
 #define BUFSIZE 1024
 #define STRSIZE 1024
 #define PARASIZE 100
+#define THREADSIZE 6
+#define PROCSIZE 10
 #define OPERATOR_NUMBER 24
 #define FUNCTION_NUMBER 22
 #define BUILTIN_NUMBER 200
@@ -460,7 +462,7 @@ extern int shutdown_flag;
 
 //------pointer----
 extern int hp; //heap pointer
-extern int sp; //stack pointer
+extern int sp[THREADSIZE]; //stack pointer
 extern int fc; //free counter
 extern int ac; //alpha conversion variable counter
 extern int wp; //working pointer

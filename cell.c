@@ -383,14 +383,14 @@ int makeexspec(int old_spec, int spec)
 //stack
 void push_stack(int x)
 {
-    stack[sp++] = x;
-    if (sp >= STACKSIZE)
+    stack[sp[0]++] = x;
+    if (sp[0] >= STACKSIZE)
 	error(STACK_OVERF, NIL, NIL);
 }
 
 int pop_stack(void)
 {
-    return (stack[--sp]);
+    return (stack[--sp[0]]);
 }
 
 
@@ -398,7 +398,7 @@ int pop_stack(void)
 //------for JUMP compiler-----
 int get_sp(void)
 {
-    return (sp);
+    return (sp[0]);
 }
 
 int callsubr(int x, int arglist, int rest)
@@ -408,7 +408,7 @@ int callsubr(int x, int arglist, int rest)
 
 int set_sp(int x)
 {
-    sp = x;
+    sp[0] = x;
     return (0);
 }
 

@@ -2707,7 +2707,7 @@ void unbind(int x)
     int i;
 
 
-    for (i = x; i < sp; i++) {
+    for (i = x; i < sp[0]; i++) {
 
 	if (alpha_variable_p(stack[i])) {
 
@@ -2734,7 +2734,7 @@ void unbind(int x)
 
     }
 
-    sp = x;
+    sp[0] = x;
 
 }
 
@@ -2918,7 +2918,7 @@ void printenv(void)
 
     int i;
 
-    for (i = 0; i < sp; i++) {
+    for (i = 0; i < sp[0]; i++) {
 
 	if (alpha_variable_p(stack[i])) {
 
@@ -2942,7 +2942,7 @@ void printenv(void)
 
     }
 
-    printf("sp = %d", sp);
+    printf("sp = %d", sp[0]);
 
 }
 

@@ -72,7 +72,7 @@ double timer;			// for timer_microseconds/1
 
 //------pointer----
 int hp;				//heap pointer
-int sp;				//stack pointer
+int sp[THREADSIZE]; //stack pointer
 int fc;				//free counter
 int ac;				//alpha conversion variable count
 int wp;				//working pointer
@@ -360,7 +360,8 @@ void init_repl(void)
     ac = CELLSIZE + 1;
     wp = HEAPSIZE + 1;
     unbind(0);
-    sp = 0;
+	for (i=0;i<THREADSIZE;i++)
+    	sp[i] = 0;
     ctrl_c_flag = 0;
     fskip_flag = OFF;
     sskip_flag = OFF;
@@ -411,7 +412,7 @@ void query(int x)
 	error(NOT_CALLABLE, "?- ", x);
 
     variables = listreverse(unique(varslist(x)));
-    res = prove_all(addask(x), sp);
+    res = prove_all(addask(x), sp[0]);
     if (!child_flag) {
 	ESCRST;
 	print(res);
@@ -460,7 +461,7 @@ void query_break(int x)
 
     variables_save = variables;
     variables = listreverse(unique(varslist(x)));
-    res = prove_all(addask(x), sp);
+    res = prove_all(addask(x), sp[0]);
     variables = variables_save;
     ESCRST;
     print(res);
@@ -521,7 +522,7 @@ int prove_all(int goals, int bindings)
 	    return (prove(cadr(goals), bindings, caddr(goals)));
 	} else {
 	    if (prove_all(before_cut(goals), bindings) == YES) {
-		res = prove_all(after_cut(goals), sp);
+		res = prove_all(after_cut(goals), sp[0]);
 		if (res == YES)
 		    return (YES);
 		else if (res == NO)
@@ -616,7 +617,7 @@ int prove(int goal, int bindings, int rest)
 	    // case of predicate
 	    if (predicatep(clause1) || user_operation_p(clause1)) {
 		if (unify(goal, clause1) == YES) {
-		    if (prove_all(rest, sp) == YES) {
+		    if (prove_all(rest, sp[0]) == YES) {
 			//trace
 			if (debug_flag == ON)
 			    prove_trace(DBEXIT, goal, bindings, rest);
@@ -634,7 +635,7 @@ int prove(int goal, int bindings, int rest)
 		if (unify(goal, (cadr(clause1))) == YES) {
 		    clause1 = addtail_body(rest, caddr(clause1));
 		    nest++;
-		    if ((res = prove_all(clause1, sp)) == YES) {
+		    if ((res = prove_all(clause1, sp[0])) == YES) {
 			nest--;
 			//trace
 			if (debug_flag == ON)
