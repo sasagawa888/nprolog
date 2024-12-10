@@ -465,7 +465,7 @@ extern int hp; //heap pointer
 extern int sp[THREADSIZE]; //stack pointer
 extern int fc; //free counter
 extern int ac; //alpha conversion variable counter
-extern int wp; //working pointer
+extern int wp[THREADSIZE]; //working pointer
 extern int up; //unify stack pointer
 extern int gc; //invokded GC count
 

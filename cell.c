@@ -414,12 +414,12 @@ int set_sp(int x)
 
 int get_wp(void)
 {
-    return (wp);
+    return (wp[0]);
 }
 
 int set_wp(int x)
 {
-    wp = x;
+    wp[0] = x;
     return (0);
 }
 

@@ -131,11 +131,11 @@ int wcons(int car, int cdr)
     int addr;
 
 
-    addr = wp;
+    addr = wp[0];
 
-    wp++;
+    wp[0]++;
 
-    if (wp >= CELLSIZE) {
+    if (wp[0] >= CELLSIZE) {
 
 	error(RESOURCE_ERR, "wcons ", NIL);
 

@@ -273,7 +273,7 @@ int b_length(int arglist, int rest)
 	    error(LESS_THAN_ZERO, "length ", arg2);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    error(NOT_INT, "length ", arg2);
-	save1 = wp;
+	save1 = wp[0];
 	if ((listp(arg1) && length(arg1) != -1) || nullp(arg1)) {
 	    if (unify(arg2, makeint(length(arg1))) == YES)
 		return (prove_all(rest, sp[0]));
@@ -300,7 +300,7 @@ int b_length(int arglist, int rest)
 		ls = wlistcons(makevariant(), ls);
 	    }
 	}
-	wp = save1;
+	wp[0] = save1;
 	unbind(save2);
 	return (NO);
     }
@@ -314,7 +314,7 @@ int b_repeat(int arglist, int rest)
 {
     int n, save1, save2, save3;
 
-    save1 = wp;
+    save1 = wp[0];
     save2 = sp[0];
     save3 = ac;
     n = length(arglist);
@@ -323,7 +323,7 @@ int b_repeat(int arglist, int rest)
 	if (prove_all(rest, sp[0]) == YES) {
 	    return (YES);
 	}
-	wp = save1;
+	wp[0] = save1;
 	unbind(save2);
 	ac = save3;
 	goto loop;
@@ -2633,7 +2633,7 @@ int b_retract(int arglist, int rest)
 	    clauses = GET_CAR(car(cadr(arg1)));
 
 	new_clauses = NIL;
-	save1 = wp;
+	save1 = wp[0];
 	while (!nullp(clauses)) {
 	    clause = car(clauses);
 	    clauses = cdr(clauses);
@@ -2659,10 +2659,10 @@ int b_retract(int arglist, int rest)
 	    }
 	    new_clauses = cons(clause, new_clauses);
 	  next:
-	    wp = save1;
+	    wp[0] = save1;
 	    unbind(save2);
 	}
-	wp = save1;
+	wp[0] = save1;
 	sp[0] = save2;
 	return (NO);
     }
@@ -2752,7 +2752,7 @@ int b_clause(int arglist, int rest)
 	else
 	    clauses = GET_CAR(car(arg1));
 
-	save1 = wp;
+	save1 = wp[0];
 	save2 = sp[0];
 	while (!nullp(clauses)) {
 	    clause = car(clauses);
@@ -2766,10 +2766,10 @@ int b_clause(int arglist, int rest)
 		if (prove_all(rest, sp[0]) == YES)
 		    return (YES);
 	    }
-	    wp = save1;
+	    wp[0] = save1;
 	    unbind(save2);
 	}
-	wp = save1;
+	wp[0] = save1;
 	unbind(save2);
 	return (NO);
     }
@@ -3722,7 +3722,7 @@ int b_break(int arglist, int rest)
     n = length(arglist);
     if (n == 0) {
 	break_flag = 1;
-	save1 = wp;
+	save1 = wp[0];
 	save2 = sp[0];
       repl:
 	ret = setjmp(buf2);
@@ -3735,7 +3735,7 @@ int b_break(int arglist, int rest)
 	    }
 	} else if (ret == 1) {
 	    ret = 0;
-	    wp = save1;
+	    wp[0] = save1;
 	    sp[0] = save2;
 	    return (prove_all(rest, sp[0]));
 	} else {
@@ -3904,7 +3904,7 @@ int b_system(int arglist, int rest)
 	    error(WRONG_ARGS, "system", arg1);
 
 	syslist = reverse(builtins);
-	save1 = wp;
+	save1 = wp[0];
 	save2 = sp[0];
 	while (!nullp(syslist)) {
 	    pred = car(syslist);
@@ -3913,10 +3913,10 @@ int b_system(int arglist, int rest)
 		if (prove(NIL, sp[0], rest) == YES)
 		    return (YES);
 
-	    wp = save1;
+	    wp[0] = save1;
 	    unbind(save2);
 	}
-	wp = save1;
+	wp[0] = save1;
 	unbind(save2);
 	return (NO);
     }
@@ -4354,7 +4354,7 @@ int b_current_predicate(int arglist, int rest)
 	    error(WRONG_ARGS, "current_predicate ", arg1);
 
 	predlist = reverse(predicates);
-	save1 = wp;
+	save1 = wp[0];
 	save2 = sp[0];
 	while (!nullp(predlist)) {
 	    pred = car(predlist);
@@ -4368,11 +4368,11 @@ int b_current_predicate(int arglist, int rest)
 		    if (prove(NIL, sp[0], rest) == YES)
 			return (YES);
 
-		wp = save1;
+		wp[0] = save1;
 		unbind(save2);
 	    }
 	}
-	wp = save1;
+	wp[0] = save1;
 	unbind(save2);
 	return (NO);
     }
@@ -4430,7 +4430,7 @@ int b_current_op(int arglist, int rest)
 
 	lis = op_list;
 	spec = NIL;
-	save1 = wp;
+	save1 = wp[0];
 	save2 = sp[0];
 	while (!nullp(lis)) {
 	    weight = car(car(lis));
@@ -4444,10 +4444,10 @@ int b_current_op(int arglist, int rest)
 		if (prove(NIL, sp[0], rest) == YES)
 		    return (YES);
 	    lis = cdr(lis);
-	    wp = save1;
+	    wp[0] = save1;
 	    unbind(save2);
 	}
-	wp = save1;
+	wp[0] = save1;
 	unbind(save2);
 	return (NO);
     }
@@ -4849,7 +4849,7 @@ int b_statistics(int arglist, int rest)
 	    if (unify(arg2, makeint(fc)) == YES);
 	    return (prove_all(rest, sp[0]));
 	} else if (arg1 == makeatom("wp", SIMP)) {
-	    if (unify(arg2, makeint(wp)) == YES);
+	    if (unify(arg2, makeint(wp[0])) == YES);
 	    return (prove_all(rest, sp[0]));
 	} else if (arg1 == makeatom("sp", SIMP)) {
 	    if (unify(arg2, makeint(sp[0])) == YES);
@@ -4929,7 +4929,7 @@ int b_member(int arglist, int rest)
 	if (nullp(arg2))
 	    return (NO);
 
-	save1 = wp;
+	save1 = wp[0];
 	x = makevariant();
 	l = makevariant();
 	if (unify(arg1, x) == YES && unify(arg2, wlistcons(x, l)) == YES) {
@@ -4937,12 +4937,12 @@ int b_member(int arglist, int rest)
 		return (YES);
 	}
 
-	wp = save1;
+	wp[0] = save1;
 	unbind(save2);
 	if (res == NFALSE)
 	    return (res);
 
-	save1 = wp;
+	save1 = wp[0];
 	x = makevariant();
 	y = makevariant();
 	l = makevariant();
@@ -4951,7 +4951,7 @@ int b_member(int arglist, int rest)
 	    if ((res = prove(body, sp[0], rest)) == YES)
 		return (YES);
 	}
-	wp = save1;
+	wp[0] = save1;
 	unbind(save2);
 	return (res);
     }
@@ -4980,15 +4980,15 @@ int b_append(int arglist, int rest)
 	if (!listp(arg3) && !nullp(arg3) && !wide_variable_p(arg3))
 	    error(NOT_LIST, "append ", arg3);
 
-	save1 = wp;
+	save1 = wp[0];
 	if (unify(arg1, NIL) == YES && unify(arg2, arg3) == YES) {
 	    if (prove(NIL, sp[0], rest) == YES)
 		return (YES);
 	}
-	wp = save1;
+	wp[0] = save1;
 	unbind(save2);
 
-	save1 = wp;
+	save1 = wp[0];
 	x = makevariant();
 	ls = makevariant();
 	ys = makevariant();
@@ -5000,7 +5000,7 @@ int b_append(int arglist, int rest)
 	    if (prove(body, sp[0], rest) == YES)
 		return (YES);
 	}
-	wp = save1;
+	wp[0] = save1;
 	unbind(save2);
 	return (NO);
     }
@@ -5065,7 +5065,7 @@ int b_between(int arglist, int rest)
 	if (!wide_variable_p(arg3) && !wide_integer_p(arg3))
 	    error(NOT_INT, "between ", arg3);
 
-	save1 = wp;
+	save1 = wp[0];
 	save2 = sp[0];
 	save3 = ac;
 	low = get_int(arg1);
@@ -5087,11 +5087,11 @@ int b_between(int arglist, int rest)
 		return (YES);
 
 	    low++;
-	    wp = save1;
+	    wp[0] = save1;
 	    unbind(save2);
 	    ac = save3;
 	}
-	wp = save1;
+	wp[0] = save1;
 	unify(arg3, arg2);
 	ac = save3;
 	return (NO);
@@ -5111,7 +5111,7 @@ int b_bagof(int arglist, int rest)
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
-	save1 = wp;
+	save1 = wp[0];
 	save2 = sp[0];
 	vars = listreverse(unique(varslist(arg2)));
 	free = get_free(arg2);
@@ -5129,7 +5129,7 @@ int b_bagof(int arglist, int rest)
 	    if (prove_all(rest, sp[0]) == YES)
 		return (YES);
 
-	    wp = save1;
+	    wp[0] = save1;
 	    unbind(save2);
 	    lis = cdr(lis);
 	}
@@ -5150,7 +5150,7 @@ int b_setof(int arglist, int rest)
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
-	save1 = wp;
+	save1 = wp[0];
 	save2 = sp[0];
 	vars = listreverse(unique(varslist(arg2)));
 	free = get_free(arg2);
@@ -5168,7 +5168,7 @@ int b_setof(int arglist, int rest)
 	    if (prove_all(rest, sp[0]) == YES)
 		return (YES);
 
-	    wp = save1;
+	    wp[0] = save1;
 	    unbind(save2);
 	    lis = cdr(lis);
 	}
@@ -5188,7 +5188,7 @@ int b_findall(int arglist, int rest)
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
-	save1 = wp;
+	save1 = wp[0];
 	save2 = sp[0];
 	goal = get_goal(arg2);
 	goal = addtail_body(list2(makesys("%bagofhelper"), arg1), goal);
@@ -5200,7 +5200,7 @@ int b_findall(int arglist, int rest)
 	if (prove_all(rest, sp[0]) == YES)
 	    return (YES);
 
-	wp = save1;
+	wp[0] = save1;
 	unbind(save2);
 	return (NO);
     }
@@ -6077,7 +6077,7 @@ int b_recorded(int arglist, int rest)
 
 	arg1 = makeatom(GET_NAME(arg1), SIMP);
 	chain = GET_RECORD(arg1);
-	save1 = wp;
+	save1 = wp[0];
 	save2 = sp[0];
 	while (!nullp(chain)) {
 	    if (unify(arg2, car(chain)) == YES
@@ -6086,10 +6086,10 @@ int b_recorded(int arglist, int rest)
 		    return (YES);
 	    }
 	    chain = cdr(chain);
-	    wp = save1;
+	    wp[0] = save1;
 	    unbind(save2);
 	}
-	wp = save1;
+	wp[0] = save1;
 	unbind(save2);
 	return (NO);
     }
@@ -6379,7 +6379,7 @@ int b_key(int arglist, int rest)
 	arg1 = car(arglist);
 
 	list = reverse(key_list);
-	save1 = wp;
+	save1 = wp[0];
 	save2 = sp[0];
 	while (!nullp(list)) {
 	    key = car(list);
@@ -6397,11 +6397,11 @@ int b_key(int arglist, int rest)
 		    if (prove(NIL, sp[0], rest) == YES)
 			return (YES);
 		}
-		wp = save1;
+		wp[0] = save1;
 		unbind(save2);
 	    }
 	}
-	wp = save1;
+	wp[0] = save1;
 	unbind(save2);
 	return (NO);
     } else if (n == 2) {
@@ -6412,7 +6412,7 @@ int b_key(int arglist, int rest)
 	if (!wide_variable_p(arg2))
 	    error(NOT_VAR, "key ", arg2);
 
-	save1 = wp;
+	save1 = wp[0];
 	save2 = sp[0];
 	arg1 = makeatom(GET_NAME(arg1), SIMP);
 	chain = GET_RECORD(arg1);
@@ -6420,7 +6420,7 @@ int b_key(int arglist, int rest)
 	    if (prove(NIL, sp[0], rest) == YES)
 		return (YES);
 	}
-	wp = save1;
+	wp[0] = save1;
 	unbind(save2);
 	return (NO);
     }

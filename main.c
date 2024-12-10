@@ -75,7 +75,7 @@ int hp;				//heap pointer
 int sp[THREADSIZE]; //stack pointer
 int fc;				//free counter
 int ac;				//alpha conversion variable count
-int wp;				//working pointer
+int wp[THREADSIZE];	//working pointer
 int gc;				//invoked GC count
 
 // bignum pointer
@@ -358,7 +358,7 @@ void init_repl(void)
     proof = 0;
     nest = 0;
     ac = CELLSIZE + 1;
-    wp = HEAPSIZE + 1;
+    wp[0] = HEAPSIZE + 1;
     unbind(0);
 	for (i=0;i<THREADSIZE;i++)
     	sp[i] = 0;
@@ -605,7 +605,7 @@ int prove(int goal, int bindings, int rest)
 
 	}
 	while (!nullp(clauses)) {
-	    save1 = wp;
+	    save1 = wp[0];
 	    save2 = ac;
 	    clause = car(clauses);
 	    clauses = cdr(clauses);
@@ -649,7 +649,7 @@ int prove(int goal, int bindings, int rest)
 			    if (debug_flag == ON)
 				prove_trace(DBCUTFAIL, goal, bindings,
 					    rest);
-			    wp = save1;
+			    wp[0] = save1;
 			    ac = save2;
 			    unbind(bindings);
 			    return (NO);
@@ -661,7 +661,7 @@ int prove(int goal, int bindings, int rest)
 	    if (debug_flag == ON && !nullp(clauses))
 		prove_trace(DBREDO, goal, bindings, rest);
 
-	    wp = save1;
+	    wp[0] = save1;
 	    ac = save2;
 	    unbind(bindings);
 	}
