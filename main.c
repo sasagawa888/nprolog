@@ -301,7 +301,7 @@ int main(int argc, char *argv[])
 		input = variable_to_call(readparse());
 		if (!repl_flag)
 		    clear_input_buffer();
-		query(input);
+		query(input,0);
 		//sexp_flag = 1;print(variable_to_call(parser(NIL,NIL,NIL,NIL,0,0)));
 		//printf("proof = %d\n", proof);
 		fflush(stdout);
@@ -318,7 +318,7 @@ int main(int argc, char *argv[])
 		printf("\n");
 		fflush(stdout);
 		child_busy_flag = 1;
-		query(input);
+		query(input,0);
 		child_busy_flag = 0;
 		printf("Send to parent ");
 		printf("\n");
@@ -389,7 +389,7 @@ void init_repl(void)
 
 }
 
-void query(int x)
+void query(int x, int th)
 {
     int res;
 
@@ -412,7 +412,7 @@ void query(int x)
 	error(NOT_CALLABLE, "?- ", x);
 
     variables = listreverse(unique(varslist(x)));
-    res = prove_all(addask(x), sp[0]);
+    res = prove_all(addask(x), sp[th]);
     if (!child_flag) {
 	ESCRST;
 	print(res);
@@ -436,7 +436,7 @@ void query(int x)
     return;
 }
 
-void query_break(int x)
+void query_break(int x, int th)
 {
     int res;
 
@@ -461,7 +461,7 @@ void query_break(int x)
 
     variables_save = variables;
     variables = listreverse(unique(varslist(x)));
-    res = prove_all(addask(x), sp[0]);
+    res = prove_all(addask(x), sp[th]);
     variables = variables_save;
     ESCRST;
     print(res);
@@ -988,7 +988,7 @@ void debugger(int goal, int bindings, int rest)
 	read = variable_to_call(readparse());
 	if (read == FEND)
 	    goto break_exit;
-	query(read);
+	query(read,0);
 	fflush(stdout);
 	goto break_loop;
       break_exit:
@@ -1065,7 +1065,7 @@ void debugger(int goal, int bindings, int rest)
 	printf("?- ");
 	fflush(stdout);
 	read = variable_to_call(readparse());
-	query(read);
+	query(read,0);
 	fflush(stdout);
 	break;
     case ';':

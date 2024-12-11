@@ -3733,7 +3733,7 @@ int b_break(int arglist, int rest)
 	    while (1) {
 		printf("?= ");
 		fflush(stdout);
-		query_break(variable_to_call(readparse()));
+		query_break(variable_to_call(readparse()),0);
 		fflush(stdout);
 	    }
 	} else if (ret == 1) {
