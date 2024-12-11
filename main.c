@@ -359,7 +359,7 @@ void init_repl(void)
     nest = 0;
     ac[0] = CELLSIZE + 1;
     wp[0] = HEAPSIZE + 1;
-    unbind(0);
+    unbind(0,0);
     for (i = 0; i < THREADSIZE; i++)
 	sp[i] = 0;
     ctrl_c_flag = 0;
@@ -651,7 +651,7 @@ int prove(int goal, int bindings, int rest)
 					    rest);
 			    wp[0] = save1;
 			    ac[0] = save2;
-			    unbind(bindings);
+			    unbind(bindings,0);
 			    return (NO);
 			}
 		    }
@@ -663,7 +663,7 @@ int prove(int goal, int bindings, int rest)
 
 	    wp[0] = save1;
 	    ac[0] = save2;
-	    unbind(bindings);
+	    unbind(bindings,0);
 	}
 	//trace
 	if (debug_flag == ON)
@@ -684,19 +684,19 @@ int prove(int goal, int bindings, int rest)
 	    return (YES);
 	else {
 	    if (res == NFALSE) {
-		unbind(bindings);
+		unbind(bindings,0);
 		return (NO);
 	    }
-	    unbind(bindings);
+	    unbind(bindings,0);
 	    if (prove_all(addtail_body(rest, caddr(goal)), bindings) ==
 		YES)
 		return (YES);
 	    else {
-		unbind(bindings);
+		unbind(bindings,0);
 		return (NO);
 	    }
 	}
-	unbind(bindings);
+	unbind(bindings,0);
 	return (NO);
     }
     return (NO);

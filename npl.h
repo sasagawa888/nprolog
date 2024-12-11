@@ -1353,7 +1353,7 @@ void set_sign(int x, int y);
 void sprint(int addr);
 void prove_trace(int port, int goal, int bindings, int rest);
 void ucs4_to_utf8(int n, char *p);
-void unbind(int x);
+void unbind(int x, int th);
 void unreadc(char c);
 char *prolog_file_name(char *name);
 

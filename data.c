@@ -2717,7 +2717,7 @@ int unify_nil(int x, int y)
 
 
 //unbind to local-stack x
-void unbind(int x)
+void unbind(int x, int th)
 {
 
     int i;

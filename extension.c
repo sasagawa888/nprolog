@@ -33,9 +33,9 @@ int b_reconsult_predicate(int arglist, int rest)
 		return (YES);
 
 	    lis = cdr(lis);
-	    unbind(save1);
+	    unbind(save1,0);
 	}
-	unbind(save1);
+	unbind(save1,0);
 	return (NO);
     }
     return (NO);
