@@ -2723,7 +2723,7 @@ void unbind(int x, int th)
     int i;
 
 
-    for (i = x; i < sp[0]; i++) {
+    for (i = x; i < sp[th]; i++) {
 
 	if (alpha_variable_p(stack[i])) {
 
@@ -2750,7 +2750,7 @@ void unbind(int x, int th)
 
     }
 
-    sp[0] = x;
+    sp[th] = x;
 
 }
 
