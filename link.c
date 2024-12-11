@@ -61,7 +61,6 @@ void dynamic_link(int x)
     init_f1(CADAR_IDX, (tpred) cadar);
     init_f1(PRINT_IDX, (tpred) print);
     init_f1(MAKEINT_IDX, (tpred) makeint);
-    init_f1(UNBIND_IDX, (tpred) unbind);
     init_f1(LENGTH_IDX, (tpred) length);
     init_f1(SET_SP_IDX, (tpred) set_sp);
     init_f1(DEREF_IDX, (tpred) deref);
@@ -127,6 +126,7 @@ void dynamic_link(int x)
     init_f2(UNIFY_NIL_IDX, (tpred) unify_nil);
     init_f2(ROUND_IDX, (tpred) f_round);
     init_f2(EXEC_ALL_IDX, (tpred) exec_all);
+    init_f2(UNBIND_IDX, (tpred) unbind);
 
 
     //argument-3

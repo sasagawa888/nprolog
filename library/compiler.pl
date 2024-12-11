@@ -19,7 +19,7 @@ if(n == 2){
         if(Jexec_all(Jaddtail_body(rest,body),save2,0) == YES)
             return(YES);
     }
-    Junbind(save2);
+    Junbind(save2,th);
     Jset_wp(save1);}
 
     % second clause
@@ -33,7 +33,7 @@ if(n == 2){
         if(Jexec_all(Jaddtail_body(rest,body),save2) == YES)
             return(YES);
     }
-    Junbind(save2);
+    Junbind(save2,th);
     Jset_wp(save1);
 
     Jerrorcomp(makeint(AIRTY_ERR),Jmakecomp(<name>),arglist);
@@ -408,7 +408,7 @@ jump_gen_a_pred5(P) :-
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(P),
     write('if(Jexec_all(rest,Jget_sp()) == YES) return(YES);'),nl,
-    write('Junbind(save2);'),nl,
+    write('Junbind(save2,0);'),nl,
     write('Jset_wp(save1);'),nl.
 
 % user ope
@@ -417,7 +417,7 @@ jump_gen_a_pred5(P) :-
     write('save1 = Jget_wp();'),nl,
 	jump_gen_head(P),
     write('if(Jexec_all(rest,Jget_sp()) == YES) return(YES);'),nl,
-    write('Junbind(save2);'),nl,
+    write('Junbind(save2,0);'),nl,
     write('Jset_wp(save1);'),nl.
 
 
@@ -449,7 +449,7 @@ if(unify(....)){
     if(Jexec_all(body,Jget_sp()) == YES)
         return(YES)};
 
-Junbind(save2);
+Junbind(save2,th);
 Jset_wp(save1);
 
 
@@ -461,13 +461,13 @@ jump_gen_body(((X1;X2);Y),N) :-
     write('{dp['),write(N),write(']=Jget_sp();'),nl,
     N1 is N+1,
     jump_gen_body(X,N1),
-    write('Junbind(dp['),write(N),write(']);'),nl,
+    write('Junbind(dp['),write(N),write('],0);'),nl,
     write('body = '),nl,
     jump_gen_body1(Y,N),
     write(';'),nl,
     write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(dp['),write(N),write(']);}'),nl.
+    write('Junbind(dp['),write(N),write('],0);}'),nl.
 
 
 jump_gen_body((X;(Y1;Y2)),N) :-
@@ -477,23 +477,23 @@ jump_gen_body((X;(Y1;Y2)),N) :-
     write(';'),nl,
     write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(dp['),write(N),write(']);'),nl,
+    write('Junbind(dp['),write(N),write('],0);'),nl,
     N1 is N+1,
     jump_gen_body((Y1;Y2),N1),
-    write('Junbind(dp['),write(N),write(']);}'),nl.
+    write('Junbind(dp['),write(N),write('],0);}'),nl.
 
 
 jump_gen_body((X;Y),N) :-
     n_has_cut(X),
     write('{dp['),write(N),write(']=Jget_sp();'),nl,
     jump_gen_body(X,N),
-    write('Junbind(dp['),write(N),write(']);'),nl,
+    write('Junbind(dp['),write(N),write('],0);'),nl,
     write('body = '),nl,
     jump_gen_body1(Y,N),
     write(';'),nl,
     write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(dp['),write(N),write(']);}'),nl.
+    write('Junbind(dp['),write(N),write('],0);}'),nl.
 
 jump_gen_body((X;Y),N) :-
     write('{dp['),write(N),write(']=Jget_sp();'),nl,
@@ -502,13 +502,13 @@ jump_gen_body((X;Y),N) :-
     write(';'),nl,
     write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(dp['),write(N),write(']);'),nl,
+    write('Junbind(dp['),write(N),write('],0);'),nl,
     write('body = '),nl,
     jump_gen_body1(Y,N),
     write(';'),nl,
     write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp()) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(dp['),write(N),write(']);}'),nl.
+    write('Junbind(dp['),write(N),write('],0);}'),nl.
 
 
 % has cut
@@ -523,7 +523,7 @@ jump_gen_body(X,N) :-
     write('if((res=Jexec_all(body,Jget_sp())) == YES)'),nl,
     jump_gen_after_body(X2,N),
     write('}'),nl,
-    write('Junbind(save2);'),nl,
+    write('Junbind(save2,0);'),nl,
     write('Jset_wp(save1);'),nl.
 
 % nested has cut
@@ -538,7 +538,7 @@ jump_gen_body(X,N) :-
     write('if(Jexec_all(body,Jget_sp()) == YES)'),nl,
     jump_gen_body(X2,N),
     write('}'),nl,
-    write('Junbind(save2);'),nl,
+    write('Junbind(save2,0);'),nl,
     write('Jset_wp(save1);'),nl.
     
     
@@ -549,7 +549,7 @@ jump_gen_body(X,N) :-
     write(';'),nl,
     write('if((res=Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(save2);'),nl,
+    write('Junbind(save2,0);'),nl,
     write('Jset_wp(save1);}'),nl.
     
 jump_gen_after_body(X,N) :-
@@ -558,7 +558,7 @@ jump_gen_after_body(X,N) :-
     write(';'),nl,
     write('if((Jexec_all(Jaddtail_body(rest,body),Jget_sp())) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(save2);'),nl,
+    write('Junbind(save2,0);'),nl,
     write('Jset_wp(save1);'),nl,
     write('return(NO);}'),nl.
 

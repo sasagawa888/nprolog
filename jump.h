@@ -121,9 +121,6 @@ static inline int Jmakeint(int x) {
     return f1[MAKEINT_IDX](x);
 }
 
-static inline int Junbind(int x) {
-    return f1[UNBIND_IDX](x);
-}
 
 static inline int Jlength(int x) {
     return f1[LENGTH_IDX](x);
@@ -374,6 +371,11 @@ static inline int Jround(int x, int y) {
 static inline int Jexec_all(int x, int y) {
     return f2[EXEC_ALL_IDX](x, y);
 }
+
+static inline int Junbind(int x, int y) {
+    return f2[UNBIND_IDX](x, y);
+}
+
 
 static inline int Jlist3(int x, int y, int z) {
     return f3[LIST3_IDX](x, y, z);
