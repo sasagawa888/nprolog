@@ -20,7 +20,7 @@ written by kenichi sasagawa 2016/8~
 #include "npl.h"
 
 //global vers
-int proof = 0;
+int proof[THREADSIZE];
 int nest = 0;
 cell heap[CELLSIZE];
 int cell_hash_table[HASHTBSIZE];
@@ -355,7 +355,7 @@ void init_repl(void)
     int i;
 
     stok.flag = GO;
-    proof = 0;
+    proof[0] = 0;
     nest = 0;
     ac[0] = CELLSIZE + 1;
     wp[0] = HEAPSIZE + 1;
@@ -421,12 +421,12 @@ void query(int x, int th)
 	bridge_flag = 1;
 	if (res == YES) {
 	    printstr("dp_countup(");
-	    printint(proof);
+	    printint(proof[0]);
 	    printstr("),");
 	    printstr("true.\n");
 	} else {
 	    printstr("dp_countup(");
-	    printint(proof);
+	    printint(proof[0]);
 	    printstr("),");
 	    printstr("fail.\n");
 	}
@@ -539,7 +539,7 @@ int prove(int goal, int bindings, int rest)
 {
     int clause, clauses, clause1, varlis, save1, save2, res;
 
-    proof++;
+    proof[0]++;
     if (ctrl_c_flag) {
 	printf("ctrl+C\n");
 	longjmp(buf, 1);

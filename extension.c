@@ -868,7 +868,7 @@ int exec(int goal, int bindings, int rest)
 {
     int res;
 
-    proof++;
+    proof[0]++;
     goal = deref(goal);
 
     if (nullp(goal)) {
@@ -1917,7 +1917,7 @@ int b_dp_countup(int arglist, int rest)
     if (n == 1) {
 	arg1 = car(arglist);
 
-	proof = proof + GET_INT(arg1);
+	proof[0] = proof[0] + GET_INT(arg1);
 	return (prove_all(rest, sp[0]));
     }
     error(ARITY_ERR, "dp_countup ", arglist);

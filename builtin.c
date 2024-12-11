@@ -3593,12 +3593,12 @@ int b_measure(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	proof = 0;
+	proof[0] = 0;
 	start_time = getETime();	//time_flag on and it store start time
 	prove_all(arg1, sp[0]);
 	end_time = getETime();
 	time = end_time - start_time;
-	lips = (double) proof / time;
+	lips = (double) proof[0] / time;
 	ESCFGREEN;
 	printf("Elapsed Time=%.6f (second)  %.0f(LIPS)\n", time, lips);
 	ESCFORG;

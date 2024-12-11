@@ -426,8 +426,8 @@ int set_wp(int x)
 
 int inc_proof(void)
 {
-    proof++;
-    return (proof);
+    proof[0]++;
+    return (proof[0]);
 }
 
 int listcons(int x, int y)

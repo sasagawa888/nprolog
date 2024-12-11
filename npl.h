@@ -220,7 +220,7 @@ extern int key_list;
 extern int error_code;
 extern int bag_list;
 extern int nonfree_list;
-extern int proof;
+extern int proof[THREADSIZE];
 extern int parse_mode;
 extern int left_margin;
 extern int break_nest;
