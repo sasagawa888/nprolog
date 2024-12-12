@@ -96,7 +96,6 @@ void dynamic_link(int x)
     init_f2(EQSMALLERP_IDX, (tpred) eqsmallerp);
     init_f2(GREATERP_IDX, (tpred) greaterp);
     init_f2(EQGREATERP_IDX, (tpred) eqgreaterp);
-    init_f2(UNIFY_IDX, (tpred) unify);
     init_f2(MOD_IDX, (tpred) f_mod);
     init_f2(EXPT_IDX, (tpred) f_expt);
     init_f2(SQRT_IDX, (tpred) f_sqrt);
@@ -133,7 +132,7 @@ void dynamic_link(int x)
     init_f3(WLIST3_IDX, (tpred) wlist3);
     init_f3(ERRORCOMP_IDX, (tpred) errorcomp);
     init_f3(WLISTCONS_IDX, (tpred) wlistcons);
-
+    init_f3(UNIFY_IDX, (tpred) unify);
 
     //argument-1 string type
     init_f4(MAKECONST_IDX, (tpred) makeconst);

@@ -14,7 +14,7 @@ if(n == 2){
     varZ = Jmakevariant(th);
     varY = Jmakevariant(th);
     save1 = Jget_wp(th);
-    if(Junify(term1,arg1) == YES && Junify_var(term2,arg2) == YES){
+    if(Junify(term1,arg1,th) == YES && Junify_var(term2,arg2) == YES){
         body =Jwcons(119,Jwcons(varX,Jwcons(varY,NIL)));
         if(Jexec_all(Jaddtail_body(rest,body),save2,0) == YES)
             return(YES);
@@ -28,7 +28,7 @@ if(n == 2){
     varZ1 = Jmakevariant(th);
     ...
     save1 = Jget_wp(th);
-    if(Junify(term1,arg1) == YES && Junify_const(term1,arg2) == YES){
+    if(Junify(term1,arg1,th) == YES && Junify_const(term1,arg2) == YES){
         body = Jwlist3(Jmakeope(","),Jwcons(173,Jwc ....)));
         if(Jexec_all(Jaddtail_body(rest,body),save2) == YES)
             return(YES);
@@ -50,7 +50,7 @@ void init_declare(void){
 
 
 unification 
-Junify(head,arg)  all-round
+Junify(head,arg,th)  all-round
 Junify_const(head,arg)  for constant term
 Junify_var(head,arg)    for variable term
 Junify_nil(head,arg)    for [] check.
@@ -685,7 +685,7 @@ jump_gen_a_body(X) :-
 
 /*
 generate_unify of head
-e.g.  foo(X) -> if(Junify(arg1,varX) == YES)
+e.g.  foo(X) -> if(Junify(arg1,varX,th) == YES)
 anoymous variable generate 1 as true.
 e.g   foo(_) -> if(1)
 */
@@ -740,6 +740,8 @@ jump_gen_head1([X|Xs],N) :-
     jump_gen_a_argument(X),
     write(',arg'),
     write(N),
+    write(','),
+    write(0),
     write(') == YES && '),
     N1 is N + 1,
     jump_gen_head1(Xs,N1).
@@ -1141,7 +1143,7 @@ int n,arg1,arg2,arg3,varD1,varN,varL,varB,varD;
 if(n == 3){
     loop:
     head = Jwlist3(NIL,makeconst("_"),makeconst("_"));
-    if(Jcar(arglist) == NIL){if(Junify(arglist,head)==YES) 
+    if(Jcar(arglist) == NIL){if(Junify(arglist,head,th)==YES) 
                                   return(Jexec_all(rest,Jget_sp(th)));
                              else 
                                   return(NO);}
@@ -1290,7 +1292,7 @@ jump_gen_tail_head(X) :-
 
 %  varA = makevariant(th);
 %  head = wlist1(varA);
-%  if(o && o && ... &1) return(Junify(arglist,head));
+%  if(o && o && ... &1) return(Junify(arglist,head,th));
 jump_gen_tail_head_unify(Pred) :-
     Pred =.. [_|Args],
     n_generate_variable(Args,V),
@@ -1307,11 +1309,11 @@ jump_gen_tail_head_unify1([X|Xs]) :-
     write(' = Jmakevariant(0);'),nl,
     jump_gen_tail_head_unify1(Xs).
 
-% if( && &&) return(Junify(arglist,head));
+% if( && &&) return(Junify(arglist,head,th));
 jump_gen_tail_head_unify2(X) :-
     write('if('),
     jump_gen_tail_head2(X,[]),
-    write('){if(Junify(arglist,head)==YES) return(Jexec_all(rest,Jget_sp(0))); else return(NO);}'),
+    write('){if(Junify(arglist,head,0)==YES) return(Jexec_all(rest,Jget_sp(0))); else return(NO);}'),
     nl.
     
 % unify head
@@ -1405,6 +1407,8 @@ jump_gen_tail_a_body(X = Y,Head) :-
     jump_gen_a_argument(X),
     write(','),
     jump_gen_a_argument(Y),
+    write(','),
+    write(0),
     write(')==NO) return(NO);').
 
 jump_gen_tail_a_body(X =:= Y,Head) :-

@@ -259,9 +259,6 @@ static inline int Jeqgreaterp(int x, int y) {
     return f2[EQGREATERP_IDX](x, y);
 }
 
-static inline int Junify(int x, int y) {
-    return f2[UNIFY_IDX](x, y);
-}
 
 static inline int Jmod(int x, int y) {
     return f2[MOD_IDX](x, y);
@@ -399,6 +396,11 @@ static inline int Jerrorcomp(int x, int y, int z) {
 static inline int Jwlistcons(int x, int y, int th) {
     return f3[WLISTCONS_IDX](x, y, th);
 }
+
+static inline int Junify(int x, int y, int th) {
+    return f3[UNIFY_IDX](x, y, th);
+}
+
 
 
 static inline int Jmakeconst(char* x) {
