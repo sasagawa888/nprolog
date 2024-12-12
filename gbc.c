@@ -118,13 +118,14 @@ void gbcmark(void)
     markcell(error_stream);
 
     //mark stack
-    for (i = 0; i < sp[0]; i++) {
-	if (alpha_variable_p(stack[i]))
-	    markcell(variant[stack[i] - CELLSIZE]);
-	else
-	    markcell(stack[i]);
+    for (i = 0; i < thread_num; i++) {
+	for (j = 0; j < sp[i]; j++) {
+	    if (alpha_variable_p(stack[j]))
+		markcell(variant[stack[j] - CELLSIZE]);
+	    else
+		markcell(stack[j]);
+	}
     }
-
 }
 
 void gbcsweep(void)

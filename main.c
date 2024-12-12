@@ -562,7 +562,7 @@ int prove(int goal, int bindings, int rest)
     if (nest > 40000)
 	error(RESOURCE_ERR, "prove recursion over max", NIL);
 
-    goal = deref(goal,0);
+    goal = deref(goal, 0);
 
     if (nullp(goal)) {
 	return (prove_all(rest, bindings));
@@ -619,7 +619,7 @@ int prove(int goal, int bindings, int rest)
 
 	    // case of predicate
 	    if (predicatep(clause1) || user_operation_p(clause1)) {
-		if (unify(goal, clause1,0) == YES) {
+		if (unify(goal, clause1, 0) == YES) {
 		    if (prove_all(rest, sp[0]) == YES) {
 			//trace
 			if (debug_flag == ON)
@@ -635,7 +635,7 @@ int prove(int goal, int bindings, int rest)
 	    }
 	    // case of clause
 	    else {
-		if (unify(goal, (cadr(clause1)),0) == YES) {
+		if (unify(goal, (cadr(clause1)), 0) == YES) {
 		    clause1 = addtail_body(rest, caddr(clause1));
 		    nest++;
 		    if ((res = prove_all(clause1, sp[0])) == YES) {
@@ -1105,7 +1105,7 @@ int valslist(int x)
     if (nullp(x))
 	return (NIL);
     else
-	return (cons(cons(car(x), deref1(car(x),0)), valslist(cdr(x))));
+	return (cons(cons(car(x), deref1(car(x), 0)), valslist(cdr(x))));
 }
 
 int operate(int x)

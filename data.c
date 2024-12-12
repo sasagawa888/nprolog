@@ -2333,10 +2333,10 @@ int deref(int x, int th)
 	return (NIL);
 
     else if (!structurep(x))
-	return (deref1(x,th));
+	return (deref1(x, th));
 
     else {
-	temp = wcons(deref(car(x),th), deref(cdr(x),th), th);
+	temp = wcons(deref(car(x), th), deref(cdr(x), th), th);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     }
@@ -2362,9 +2362,8 @@ int deref1(int x, int th)
 	    x = res;
 	    goto loop;
 
-	}
-	else if (structurep(res))
-	    return (deref(res,th));
+	} else if (structurep(res))
+	    return (deref(res, th));
 	else
 	    return (res);
     } else
@@ -2386,7 +2385,7 @@ int unify(int x, int y, int th)
 
     else if (variablep(x) && !variablep(y)) {
 
-	x1 = deref1(x,th);
+	x1 = deref1(x, th);
 
 	if (x1 == x) {
 
@@ -2397,13 +2396,13 @@ int unify(int x, int y, int th)
 	}
 
 	else
-	    return (unify(x1, y,th));
+	    return (unify(x1, y, th));
 
     }
 
     else if (!variablep(x) && variablep(y)) {
 
-	y1 = deref1(y,th);
+	y1 = deref1(y, th);
 
 	if (y1 == y) {
 
@@ -2414,15 +2413,15 @@ int unify(int x, int y, int th)
 	}
 
 	else
-	    return (unify(x, y1,th));
+	    return (unify(x, y1, th));
 
     }
 
     else if (variablep(x) && variablep(y)) {
 
-	x1 = deref1(x,th);
+	x1 = deref1(x, th);
 
-	y1 = deref1(y,th);
+	y1 = deref1(y, th);
 
 	if (variablep(x1) && variablep(y1)) {
 
@@ -2466,7 +2465,7 @@ int unify(int x, int y, int th)
 
 	else {
 
-	    return (unify(x1, y1,th));
+	    return (unify(x1, y1, th));
 
 	}
 
@@ -2516,7 +2515,8 @@ int unify(int x, int y, int th)
     else if (!listp(x) && listp(y))
 	return (NO);
 
-    else if (unify(car(x), car(y),0) == YES && unify(cdr(x), cdr(y),0) == YES)
+    else if (unify(car(x), car(y), 0) == YES
+	     && unify(cdr(x), cdr(y), 0) == YES)
 	return (YES);
 
     else
@@ -2546,7 +2546,7 @@ int unify_var(int x, int y, int th)
 
     else if (!variablep(y)) {
 
-	x1 = deref1(x,th);
+	x1 = deref1(x, th);
 
 	if (x1 == x) {
 
@@ -2557,15 +2557,15 @@ int unify_var(int x, int y, int th)
 	}
 
 	else
-	    return (unify(x1, y,th));
+	    return (unify(x1, y, th));
 
     }
 
     else if (variablep(y)) {
 
-	x1 = deref1(x,th);
+	x1 = deref1(x, th);
 
-	y1 = deref1(y,th);
+	y1 = deref1(y, th);
 
 	if (variablep(x1) && variablep(y1)) {
 
@@ -2601,7 +2601,7 @@ int unify_var(int x, int y, int th)
 
 	else {
 
-	    return (unify(x1, y1,th));
+	    return (unify(x1, y1, th));
 
 	}
 
@@ -2633,7 +2633,7 @@ int unify_const(int x, int y, int th)
 
     else if (variablep(y)) {
 
-	y1 = deref1(y,th);
+	y1 = deref1(y, th);
 
 	if (variablep(y1)) {
 
@@ -2677,7 +2677,7 @@ int unify_nil(int x, int y, int th)
 
     else if (variablep(y)) {
 
-	y1 = deref1(y,th);
+	y1 = deref1(y, th);
 
 	if (variablep(y1)) {
 
