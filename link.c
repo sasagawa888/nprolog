@@ -117,7 +117,6 @@ void dynamic_link(int x)
     init_f2(ADDTAIL_BODY_IDX, (tpred) addtail_body);
     init_f2(NTH_IDX, (tpred) nth);
     init_f2(ROUND_IDX, (tpred) f_round);
-    init_f2(EXEC_ALL_IDX, (tpred) exec_all);
     init_f2(UNBIND_IDX, (tpred) unbind);
     init_f2(SET_SP_IDX, (tpred) set_sp);
     init_f2(SET_WP_IDX, (tpred) set_wp);
@@ -133,6 +132,7 @@ void dynamic_link(int x)
     init_f3(UNIFY_VAR_IDX, (tpred) unify_var);
     init_f3(UNIFY_CONST_IDX, (tpred) unify_const);
     init_f3(UNIFY_NIL_IDX, (tpred) unify_nil);
+    init_f3(EXEC_ALL_IDX, (tpred) exec_all);
 
     //argument-1 string type
     init_f4(MAKECONST_IDX, (tpred) makeconst);

@@ -346,10 +346,6 @@ static inline int Jround(int x, int y) {
     return f2[ROUND_IDX](x, y);
 }
 
-static inline int Jexec_all(int x, int y) {
-    return f2[EXEC_ALL_IDX](x, y);
-}
-
 static inline int Junbind(int x, int y) {
     return f2[UNBIND_IDX](x, y);
 }
@@ -402,6 +398,10 @@ static inline int Junify_nil(int x, int y, int th) {
     return f3[UNIFY_NIL_IDX](x, y, th);
 }
 
+
+static inline int Jexec_all(int x, int y, int th) {
+    return f3[EXEC_ALL_IDX](x, y, th);
+}
 
 
 static inline int Jmakeconst(char* x) {

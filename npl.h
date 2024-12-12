@@ -176,12 +176,12 @@ enum { CONS_IDX, PLUS_IDX, MINUS_IDX, MULT_IDX, DIVIDE_IDX, REMAINDER_IDX,
        LIST2_IDX, SET_CAR_IDX, SET_CDR_IDX, COMPLEMENT_IDX, SET_AUX_IDX,
        NOT_NUMEQP_IDX, DIV_IDX, SET_VAR_IDX, WCONS_IDX, WLIST2_IDX, 
        ADDTAIL_BODY_IDX, NTH_IDX, 
-       ROUND_IDX, EXEC_ALL_IDX, UNBIND_IDX, SET_SP_IDX, SET_WP_IDX,DEREF_IDX,
+       ROUND_IDX, UNBIND_IDX, SET_SP_IDX, SET_WP_IDX,DEREF_IDX,
        NUM_FN2S
 };
 
 enum { LIST3_IDX, CALLSUBR_IDX, WLIST3_IDX, ERRORCOMP_IDX, WLISTCONS_IDX,UNIFY_IDX, 
-       UNIFY_VAR_IDX, UNIFY_CONST_IDX, UNIFY_NIL_IDX,
+       UNIFY_VAR_IDX, UNIFY_CONST_IDX, UNIFY_NIL_IDX, EXEC_ALL_IDX,
        NUM_FN3S,
 };
 
@@ -986,8 +986,8 @@ int eqp(int addr1, int addr2);
 int eqsmallerp(int x1, int x2);
 int equalp(int addr1, int addr2);
 int eval(int x);
-int exec(int goal, int bindings, int rest);
-int exec_all(int goals, int bindings);
+int exec(int goal, int bindings, int rest, int th);
+int exec_all(int goals, int bindings, int th);
 void evalterm(int x, int [3]);
 int exact_to_inexact(int x);
 int exist_unbind_var_p(int x);

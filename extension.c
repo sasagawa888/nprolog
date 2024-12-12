@@ -842,37 +842,37 @@ int b_after_cut(int arglist, int rest)
     return (NO);
 }
 
-int exec_all(int goals, int bindings)
+int exec_all(int goals, int bindings, int th)
 {
 
     if (nullp(goals))
 	return (YES);
     /* ,(;(D1;D2),Xs) */
     else if (listp(goals) && car(cadr(goals)) == OR) {
-	if (exec_all(cadr(cadr(goals)), bindings) == YES)
-	    return (exec_all(caddr(goals), bindings));
-	else if (exec_all(caddr(cadr(goals)), bindings) == YES)
-	    return (exec_all(caddr(goals), bindings));
+	if (exec_all(cadr(cadr(goals)), bindings, th) == YES)
+	    return (exec_all(caddr(goals), bindings, th));
+	else if (exec_all(caddr(cadr(goals)), bindings, th) == YES)
+	    return (exec_all(caddr(goals), bindings, th));
 	else
 	    return (NO);
     } else if (car(goals) != AND)
-	return (exec(goals, bindings, NIL));
+	return (exec(goals, bindings, NIL, th));
     else {
-	return (exec(cadr(goals), bindings, caddr(goals)));
+	return (exec(cadr(goals), bindings, caddr(goals),th));
     }
 
     return (NO);
 }
 
-int exec(int goal, int bindings, int rest)
+int exec(int goal, int bindings, int rest, int th)
 {
     int res;
 
-    proof[0]++;
-    goal = deref(goal,0);
+    proof[th]++;
+    goal = deref(goal,th);
 
     if (nullp(goal)) {
-	return (exec_all(rest, bindings));
+	return (exec_all(rest, bindings, th));
     } else if (builtinp(goal)) {
 	if (atomp(goal)) {
 	    if ((res = (GET_SUBR(goal)) (NIL, rest)) == YES)
