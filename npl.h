@@ -175,12 +175,13 @@ enum { CONS_IDX, PLUS_IDX, MINUS_IDX, MULT_IDX, DIVIDE_IDX, REMAINDER_IDX,
        LEFTSHIFT_IDX, RIGHTSHIFT_IDX, LOGICALAND_IDX, LOGICALOR_IDX, LISTCONS_IDX,
        LIST2_IDX, SET_CAR_IDX, SET_CDR_IDX, COMPLEMENT_IDX, SET_AUX_IDX,
        NOT_NUMEQP_IDX, DIV_IDX, SET_VAR_IDX, WCONS_IDX, WLIST2_IDX, 
-       ADDTAIL_BODY_IDX, NTH_IDX, UNIFY_CONST_IDX, UNIFY_VAR_IDX, UNIFY_NIL_IDX,
+       ADDTAIL_BODY_IDX, NTH_IDX, UNIFY_CONST_IDX, UNIFY_NIL_IDX,
        ROUND_IDX, EXEC_ALL_IDX, UNBIND_IDX, SET_SP_IDX, SET_WP_IDX,DEREF_IDX,
        NUM_FN2S
 };
 
 enum { LIST3_IDX, CALLSUBR_IDX, WLIST3_IDX, ERRORCOMP_IDX, WLISTCONS_IDX,UNIFY_IDX, 
+       UNIFY_VAR_IDX,
        NUM_FN3S,
 };
 
@@ -1232,7 +1233,7 @@ int thunkp(int addr);
 int unicodep(char c);
 int unify(int x, int y, int th);
 int unify_const(int x, int y);
-int unify_var(int x, int y);
+int unify_var(int x, int y, int th);
 int unify_list(int x, int y);
 int unify_nil(int x, int y);
 int unique(int x);

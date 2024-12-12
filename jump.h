@@ -345,9 +345,6 @@ static inline int Junify_const(int x, int y) {
     return f2[UNIFY_CONST_IDX](x, y);
 }
 
-static inline int Junify_var(int x, int y) {
-    return f2[UNIFY_VAR_IDX](x, y);
-}
 
 static inline int Junify_nil(int x, int y) {
     return f2[UNIFY_NIL_IDX](x, y);
@@ -401,6 +398,9 @@ static inline int Junify(int x, int y, int th) {
     return f3[UNIFY_IDX](x, y, th);
 }
 
+static inline int Junify_var(int x, int y, int th) {
+    return f3[UNIFY_VAR_IDX](x, y, th);
+}
 
 
 static inline int Jmakeconst(char* x) {
