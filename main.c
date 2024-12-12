@@ -141,6 +141,9 @@ int child_num;
 pthread_t receiver_thread;
 int child_result[PARASIZE];
 
+//---------multi-thread--------
+int thread_num;
+
 //-----editor-----
 char buffer[BUFSIZE][10];
 int ed_tab = 4;

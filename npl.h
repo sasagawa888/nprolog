@@ -289,6 +289,9 @@ extern int child_num;
 extern pthread_t receiver_thread;
 extern int child_result[PARASIZE];
 
+/* multi-thread */
+extern int thread_num;
+
 #ifdef __APPLE__
 #define FLUSH               fpurge(stdin);
 #else
@@ -974,7 +977,6 @@ int c_lang_p(int x);
 int dcgp(int x);
 int deref(int x);
 int deref1(int x);
-int deref_array(int arity[256], int head);
 int disjunctionp(int addr);
 int divide(int arg1, int arg2);
 int eof_action_option_p(int x);
@@ -1165,7 +1167,7 @@ int parser(int operand, int operator, int weight, int spec, int terminal, int pa
 int parse(int operand, int operator);
 int parse1(int operand, int operator ,int weight, int spec);
 int plus(int arg1, int arg2);
-int pop_stack(void);
+int pop_stack(int th);
 int pop_ustack(void);
 int position_option_p(int x);
 int positive_zerop(int x);
@@ -1273,7 +1275,7 @@ void assign_variant(int x);
 void bigx_gbc(int x);
 void bigx_minus2(int arg, int c, int msb);
 void bigx_plus2(int arg, int c, int msb);
-void bindsym(int x, int val);
+void bindsym(int x, int val, int th);
 void cellprint(int addr);
 void checkarg(int test, char *fun, int arg);
 void checkgbc(void);
@@ -1339,8 +1341,7 @@ void printpostfix(int addr);
 void printprefix(int addr);
 void printsexp(int addr);
 void printtuple(int addr);
-void push_stack(int x);
-void push_ustack(int x);
+void push_stack(int x, int th);
 void putinbag(int key, int data);
 void query(int x, int th);
 void query_break(int x, int th);

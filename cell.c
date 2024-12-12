@@ -88,7 +88,7 @@ void initstream(void)
     makealias("error", standard_error, STDIO);
 }
 
-void bindsym(int x, int val)
+void bindsym(int x, int val, int th)
 {
 
     if (alpha_variable_p(x))
@@ -96,9 +96,9 @@ void bindsym(int x, int val)
     else if (atom_variable_p(x))
 	SET_CAR(x, val);
     else
-	error(ILLEGAL_ARGS, "nbindsym", x);
+	error(ILLEGAL_ARGS, "bindsym", x);
 
-    push_stack(x);
+    push_stack(x, th);
 }
 
 
@@ -381,16 +381,16 @@ int makeexspec(int old_spec, int spec)
 }
 
 //stack
-void push_stack(int x)
+void push_stack(int x, int th)
 {
-    stack[sp[0]++] = x;
-    if (sp[0] >= STACKSIZE)
+    stack[sp[th]++] = x;
+    if (sp[th] >= STACKSIZE)
 	error(STACK_OVERF, NIL, NIL);
 }
 
-int pop_stack(void)
+int pop_stack(int th)
 {
-    return (stack[--sp[0]]);
+    return (stack[--sp[th]]);
 }
 
 
@@ -542,5 +542,5 @@ int op_connect(int x, int y, int th)
     else if (!operationp(x))
 	return (wlist3(AND, x, y, th));
     else
-	return (wlist3(car(x), cadr(x), op_connect(caddr(x), y,th),th));
+	return (wlist3(car(x), cadr(x), op_connect(caddr(x), y, th), th));
 }

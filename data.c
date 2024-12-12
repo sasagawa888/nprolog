@@ -2327,9 +2327,7 @@ void heapdump(int start, int end)
 //Prolog unification
 int deref(int x)
 {
-
     int temp;
-
 
     if (nullp(x))
 	return (NIL);
@@ -2338,13 +2336,9 @@ int deref(int x)
 	return (deref1(x));
 
     else {
-
 	temp = wcons(deref(car(x)), deref(cdr(x)), 0);
-
 	SET_AUX(temp, GET_AUX(x));
-
 	return (temp);
-
     }
 
 }
@@ -2404,7 +2398,7 @@ int unify(int x, int y)
 
 	if (x1 == x) {
 
-	    bindsym(x, y);
+	    bindsym(x, y, 0);
 
 	    return (YES);
 
@@ -2421,7 +2415,7 @@ int unify(int x, int y)
 
 	if (y1 == y) {
 
-	    bindsym(y, x);
+	    bindsym(y, x, 0);
 
 	    return (YES);
 
@@ -2447,7 +2441,7 @@ int unify(int x, int y)
 	    }
 
 	    else if (x != y) {	//ordinaly case
-		bindsym(x1, y1);
+		bindsym(x1, y1, 0);
 
 		return (YES);
 
@@ -2455,7 +2449,7 @@ int unify(int x, int y)
 
 	    else {
 
-		bindsym(x1, makevariant(0));	// ex ?- X = X
+		bindsym(x1, makevariant(0), 0);	// ex ?- X = X
 		return (YES);
 
 	    }
@@ -2464,7 +2458,7 @@ int unify(int x, int y)
 
 	else if (variablep(x1) && !variablep(y1)) {
 
-	    bindsym(x1, y1);
+	    bindsym(x1, y1, 0);
 
 	    return (YES);
 
@@ -2472,7 +2466,7 @@ int unify(int x, int y)
 
 	else if (!variablep(x1) && variablep(y1)) {
 
-	    bindsym(y1, x1);
+	    bindsym(y1, x1, 0);
 
 	    return (YES);
 
@@ -2564,7 +2558,7 @@ int unify_var(int x, int y)
 
 	if (x1 == x) {
 
-	    bindsym(x, y);
+	    bindsym(x, y, 0);
 
 	    return (YES);
 
@@ -2584,13 +2578,13 @@ int unify_var(int x, int y)
 	if (variablep(x1) && variablep(y1)) {
 
 	    if (x != y) {	//ordinaly case
-		bindsym(x1, y1);
+		bindsym(x1, y1, 0);
 
 	    }
 
 	    else {
 
-		bindsym(x1, makevariant(0));	// ex ?- X = X
+		bindsym(x1, makevariant(0), 0);	// ex ?- X = X
 	    }
 
 	    return (YES);
@@ -2599,7 +2593,7 @@ int unify_var(int x, int y)
 
 	else if (variablep(x1) && !variablep(y1)) {
 
-	    bindsym(x1, y1);
+	    bindsym(x1, y1, 0);
 
 	    return (YES);
 
@@ -2607,7 +2601,7 @@ int unify_var(int x, int y)
 
 	else if (!variablep(x1) && variablep(y1)) {
 
-	    bindsym(y1, x1);
+	    bindsym(y1, x1, 0);
 
 	    return (YES);
 
@@ -2651,7 +2645,7 @@ int unify_const(int x, int y)
 
 	if (variablep(y1)) {
 
-	    bindsym(y1, x);
+	    bindsym(y1, x, 0);
 
 	    return (YES);
 
@@ -2695,7 +2689,7 @@ int unify_nil(int x, int y)
 
 	if (variablep(y1)) {
 
-	    bindsym(y1, x);
+	    bindsym(y1, x, 0);
 
 	    return (YES);
 
@@ -2932,34 +2926,34 @@ int sorteqlp(int x, int y)
 void printenv(void)
 {
 
-    int i;
+    int i, j;
+    for (j = 0; j < thread_num; j++) {
+	for (i = 0; i < sp[j]; i++) {
 
-    for (i = 0; i < sp[0]; i++) {
+	    if (alpha_variable_p(stack[i])) {
 
-	if (alpha_variable_p(stack[i])) {
+		print(stack[i]);
 
-	    print(stack[i]);
+		printf("=");
 
-	    printf("=");
+		print(variant[stack[i] - CELLSIZE]);
 
-	    print(variant[stack[i] - CELLSIZE]);
+	    }
+
+	    else if (atom_variable_p(stack[i])) {
+
+		print(stack[i]);
+
+		printf("=");
+
+		print(GET_CAR(stack[i]));
+
+	    }
 
 	}
 
-	else if (atom_variable_p(stack[i])) {
-
-	    print(stack[i]);
-
-	    printf("=");
-
-	    print(GET_CAR(stack[i]));
-
-	}
-
+	printf("sp = %d", sp[j]);
     }
-
-    printf("sp = %d", sp[0]);
-
 }
 
 
