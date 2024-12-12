@@ -2666,7 +2666,7 @@ int unify_const(int x, int y, int th)
 
 
 // typed unify. x is [] (empty list)
-int unify_nil(int x, int y)
+int unify_nil(int x, int y, int th)
 {
 
     int y1;
@@ -2677,11 +2677,11 @@ int unify_nil(int x, int y)
 
     else if (variablep(y)) {
 
-	y1 = deref1(y,0);
+	y1 = deref1(y,th);
 
 	if (variablep(y1)) {
 
-	    bindsym(y1, x, 0);
+	    bindsym(y1, x, th);
 
 	    return (YES);
 

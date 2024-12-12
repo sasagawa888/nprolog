@@ -53,7 +53,7 @@ unification
 Junify(head,arg,th)  all-round
 Junify_const(head,arg,th)  for constant term
 Junify_var(head,arg,th)    for variable term
-Junify_nil(head,arg)    for [] check.
+Junify_nil(head,arg,th)    for [] check.
 */
 
 % optimize flag
@@ -706,6 +706,8 @@ jump_gen_head1([[]|Xs],N) :-
     jump_gen_a_argument(X),
     write(',arg'),
     write(N),
+    write(','),
+    write(0),
     write(') == YES && '),
     N1 is N + 1,
     jump_gen_head1(Xs,N1).
