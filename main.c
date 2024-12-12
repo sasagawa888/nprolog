@@ -415,7 +415,7 @@ void query(int x, int th)
 	error(NOT_CALLABLE, "?- ", x);
 
     variables = listreverse(unique(varslist(x)));
-    res = prove_all(addask(x), sp[th]);
+    res = prove_all(addask(x), sp[th],th);
     if (!child_flag) {
 	ESCRST;
 	print(res);
@@ -464,7 +464,7 @@ void query_break(int x, int th)
 
     variables_save = variables;
     variables = listreverse(unique(varslist(x)));
-    res = prove_all(addask(x), sp[th]);
+    res = prove_all(addask(x), sp[th],th);
     variables = variables_save;
     ESCRST;
     print(res);
@@ -512,20 +512,20 @@ int addtail_body(int x, int y)
 }
 
 
-int prove_all(int goals, int bindings)
+int prove_all(int goals, int bindings, int th)
 {
     int res;
 
     if (nullp(goals))
 	return (YES);
     else if (car(goals) != AND)
-	return (prove(goals, bindings, NIL));
+	return (prove(goals, bindings, NIL,th));
     else {
 	if (!has_cut_p(goals)) {
-	    return (prove(cadr(goals), bindings, caddr(goals)));
+	    return (prove(cadr(goals), bindings, caddr(goals),th));
 	} else {
-	    if (prove_all(before_cut(goals), bindings) == YES) {
-		res = prove_all(after_cut(goals), sp[0]);
+	    if (prove_all(before_cut(goals), bindings,th) == YES) {
+		res = prove_all(after_cut(goals), sp[0],th);
 		if (res == YES)
 		    return (YES);
 		else if (res == NO)
@@ -538,11 +538,11 @@ int prove_all(int goals, int bindings)
     return (NO);
 }
 
-int prove(int goal, int bindings, int rest)
+int prove(int goal, int bindings, int rest, int th)
 {
     int clause, clauses, clause1, varlis, save1, save2, res;
 
-    proof[0]++;
+    proof[th]++;
     if (ctrl_c_flag) {
 	printf("ctrl+C\n");
 	longjmp(buf, 1);
@@ -562,10 +562,10 @@ int prove(int goal, int bindings, int rest)
     if (nest > 40000)
 	error(RESOURCE_ERR, "prove recursion over max", NIL);
 
-    goal = deref(goal, 0);
+    goal = deref(goal, th);
 
     if (nullp(goal)) {
-	return (prove_all(rest, bindings));
+	return (prove_all(rest, bindings,th));
     } else if (builtinp(goal)) {
 	if (atomp(goal)) {
 	    if ((res = (GET_SUBR(goal)) (NIL, rest)) == YES)
@@ -620,7 +620,7 @@ int prove(int goal, int bindings, int rest)
 	    // case of predicate
 	    if (predicatep(clause1) || user_operation_p(clause1)) {
 		if (unify(goal, clause1, 0) == YES) {
-		    if (prove_all(rest, sp[0]) == YES) {
+		    if (prove_all(rest, sp[0],th) == YES) {
 			//trace
 			if (debug_flag == ON)
 			    prove_trace(DBEXIT, goal, bindings, rest);
@@ -638,7 +638,7 @@ int prove(int goal, int bindings, int rest)
 		if (unify(goal, (cadr(clause1)), 0) == YES) {
 		    clause1 = addtail_body(rest, caddr(clause1));
 		    nest++;
-		    if ((res = prove_all(clause1, sp[0])) == YES) {
+		    if ((res = prove_all(clause1, sp[0],th)) == YES) {
 			nest--;
 			//trace
 			if (debug_flag == ON)
@@ -666,7 +666,7 @@ int prove(int goal, int bindings, int rest)
 
 	    wp[0] = save1;
 	    ac[0] = save2;
-	    unbind(bindings, 0);
+	    unbind(bindings, th);
 	}
 	//trace
 	if (debug_flag == ON)
@@ -680,9 +680,9 @@ int prove(int goal, int bindings, int rest)
 			    wcons(caddr(cadr(goal)),
 				  wcons(caddr(goal), NIL, 0), 0), 0), 0);
 	    // redefine goal = ifthenelse(if,then,else)
-	    return (prove(goal, bindings, rest));
+	    return (prove(goal, bindings, rest,th));
 	} else
-	    if ((res = prove_all(addtail_body(rest, cadr(goal)), bindings))
+	    if ((res = prove_all(addtail_body(rest, cadr(goal)), bindings,th))
 		== YES)
 	    return (YES);
 	else {
@@ -691,15 +691,15 @@ int prove(int goal, int bindings, int rest)
 		return (NO);
 	    }
 	    unbind(bindings, 0);
-	    if (prove_all(addtail_body(rest, caddr(goal)), bindings) ==
+	    if (prove_all(addtail_body(rest, caddr(goal)), bindings,th) ==
 		YES)
 		return (YES);
 	    else {
-		unbind(bindings, 0);
+		unbind(bindings, th);
 		return (NO);
 	    }
 	}
-	unbind(bindings, 0);
+	unbind(bindings, th);
 	return (NO);
     }
     return (NO);
