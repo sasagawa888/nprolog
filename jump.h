@@ -68,11 +68,6 @@ static inline int Jfreshcell(void)
     return f0[FRESHCELL_IDX]();
 }
 
-static inline int Jmakevariant(void) {
-    return f0[MAKEVARIANT_IDX]();
-}
-
-
 static inline int Jdebug(void) {
     return f0[DEBUG_IDX]();
 }
@@ -203,6 +198,12 @@ static inline int Jget_wp(int x) {
 static inline int Jinc_proof(int x) {
     return f1[INC_PROOF_IDX](x);
 }
+
+
+static inline int Jmakevariant(int x) {
+    return f1[MAKEVARIANT_IDX](x);
+}
+
 
 
 static inline int Jcons(int x, int y) {

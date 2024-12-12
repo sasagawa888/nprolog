@@ -190,13 +190,13 @@ int makeatom1(char *pname, int property)
     return (addr);
 }
 
-int makevariant(void)
+int makevariant(int th)
 {
     int addr;
 
-    addr = ac[0];
-    ac[0]++;
-    if (ac[0] >= VARIANTMAX)
+    addr = ac[th];
+    ac[th]++;
+    if (ac[th] >= VARIANTMAX)
 	error(VARIANT_OVERF, "makevariant", NIL);
     return (addr);
 }

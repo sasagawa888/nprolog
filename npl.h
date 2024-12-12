@@ -155,7 +155,7 @@ typedef struct cursor {
 } cursor;
 
 
-enum { CHECKGBC_IDX, GBC_IDX, FRESHCELL_IDX, MAKEVARIANT_IDX, 
+enum { CHECKGBC_IDX, GBC_IDX, FRESHCELL_IDX, 
        DEBUG_IDX, 
        NUM_FN0S
 };
@@ -165,6 +165,7 @@ enum { CAR_IDX, CDR_IDX, CADR_IDX, CADDR_IDX, CAAR_IDX, CADAR_IDX, PRINT_IDX, MA
        SIN_IDX, ASIN_IDX, COS_IDX, ACOS_IDX, TAN_IDX, ATAN_IDX, EXP_IDX, LOG_IDX,
        LN_IDX, LIST1_IDX, RANDOM_IDX, RANDI_IDX,  WLIST1_IDX, OPERATE_IDX,
        LISTP_IDX,  STRUCTUREP_IDX, VARIABLEP_IDX, GET_SP_IDX, GET_WP_IDX, INC_PROOF_IDX,
+       MAKEVARIANT_IDX, 
        NUM_FN1S
 };
 
@@ -1128,7 +1129,7 @@ int makestr(char *name);
 int makesys(char *name);
 int makestream(FILE *port, int i_o, int type, int action ,int fname);
 int makeuser(char *name);
-int makevariant(void);
+int makevariant(int th);
 int makevar(char *name);
 int memory_variant(int x);
 int memq(int x, int y);

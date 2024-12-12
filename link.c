@@ -45,7 +45,6 @@ void dynamic_link(int x)
     init_f0(CHECKGBC_IDX, (tpred) checkgbc);
     init_f0(GBC_IDX, (tpred) gbc);
     init_f0(FRESHCELL_IDX, (tpred) freshcell);
-    init_f0(MAKEVARIANT_IDX, (tpred) makevariant);
     init_f0(DEBUG_IDX, (tpred) debug);
 
 
@@ -81,6 +80,7 @@ void dynamic_link(int x)
     init_f1(GET_SP_IDX, (tpred) get_sp);
     init_f1(GET_WP_IDX, (tpred) get_wp);
     init_f1(INC_PROOF_IDX, (tpred) inc_proof);
+    init_f1(MAKEVARIANT_IDX, (tpred) makevariant);
 
     //argument-2 type
     init_f2(CONS_IDX, (tpred) cons);

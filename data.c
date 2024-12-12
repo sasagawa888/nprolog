@@ -2455,7 +2455,7 @@ int unify(int x, int y)
 
 	    else {
 
-		bindsym(x1, makevariant());	// ex ?- X = X
+		bindsym(x1, makevariant(0));	// ex ?- X = X
 		return (YES);
 
 	    }
@@ -2590,7 +2590,7 @@ int unify_var(int x, int y)
 
 	    else {
 
-		bindsym(x1, makevariant());	// ex ?- X = X
+		bindsym(x1, makevariant(0));	// ex ?- X = X
 	    }
 
 	    return (YES);
@@ -2762,7 +2762,7 @@ void assign_variant(int x)
 
     while (!nullp(x)) {
 
-	SET_CDR(car(x), makevariant());
+	SET_CDR(car(x), makevariant(0));
 
 	x = cdr(x);
 

@@ -281,7 +281,7 @@ int b_length(int arglist, int rest)
 	    i = GET_INT(arg2);
 	    res = NIL;
 	    while (i > 0) {
-		res = wlistcons(makevariant(), res, 0);
+		res = wlistcons(makevariant(0), res, 0);
 		i--;
 	    }
 	    if (unify(arg1, res) == YES)
@@ -297,7 +297,7 @@ int b_length(int arglist, int rest)
 
 		unbind(save2, 0);
 		i++;
-		ls = wlistcons(makevariant(), ls, 0);
+		ls = wlistcons(makevariant(0), ls, 0);
 	    }
 	}
 	wp[0] = save1;
@@ -3417,7 +3417,7 @@ int b_float_text(int arglist, int rest)
 
 	if (floatp(arg1)) {
 	    int n, d;
-	    n = makevariant();
+	    n = makevariant(0);
 	    if (unify(arg3, makeconst("general")) == YES) {
 		sprintf(str, "%g", GET_FLT(arg1));
 		if (unify(arg2, makestr(str)) == YES)
@@ -4084,7 +4084,7 @@ int b_functor(int arglist, int rest)
 	    } else {
 		res = NIL;
 		while (i > 0) {
-		    res = cons(makevariant(), res);
+		    res = cons(makevariant(0), res);
 		    i--;
 		}
 		res = reverse(res);
@@ -4933,8 +4933,8 @@ int b_member(int arglist, int rest)
 	    return (NO);
 
 	save1 = wp[0];
-	x = makevariant();
-	l = makevariant();
+	x = makevariant(0);
+	l = makevariant(0);
 	if (unify(arg1, x) == YES
 	    && unify(arg2, wlistcons(x, l, 0)) == YES) {
 	    if ((res = prove(NIL, sp[0], rest)) == YES)
@@ -4947,9 +4947,9 @@ int b_member(int arglist, int rest)
 	    return (res);
 
 	save1 = wp[0];
-	x = makevariant();
-	y = makevariant();
-	l = makevariant();
+	x = makevariant(0);
+	y = makevariant(0);
+	l = makevariant(0);
 	if (unify(arg1, x) == YES
 	    && unify(arg2, wlistcons(y, l, 0)) == YES) {
 	    body = wlist3(makeatom("member", SYS), x, l, 0);
@@ -4994,10 +4994,10 @@ int b_append(int arglist, int rest)
 	unbind(save2, 0);
 
 	save1 = wp[0];
-	x = makevariant();
-	ls = makevariant();
-	ys = makevariant();
-	zs = makevariant();
+	x = makevariant(0);
+	ls = makevariant(0);
+	ys = makevariant(0);
+	zs = makevariant(0);
 	if (unify(arg1, wlistcons(x, ls, 0)) == YES &&
 	    unify(arg2, ys) == YES
 	    && unify(arg3, wlistcons(x, zs, 0)) == YES) {

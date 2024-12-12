@@ -10,9 +10,9 @@ if(n == 2){
     arg2 = Jnth(arglist,2);
   
     % first clause
-    varX = Jmakevariant();
-    varZ = Jmakevariant();
-    varY = Jmakevariant();
+    varX = Jmakevariant(th);
+    varZ = Jmakevariant(th);
+    varY = Jmakevariant(th);
     save1 = Jget_wp(th);
     if(Junify(term1,arg1) == YES && Junify_var(term2,arg2) == YES){
         body =Jwcons(119,Jwcons(varX,Jwcons(varY,NIL)));
@@ -23,9 +23,9 @@ if(n == 2){
     Jset_wp(save1,th);}
 
     % second clause
-    varX1 = Jmakevariant();
-    varY1 = Jmakevariant();
-    varZ1 = Jmakevariant();
+    varX1 = Jmakevariant(th);
+    varY1 = Jmakevariant(th);
+    varZ1 = Jmakevariant(th);
     ...
     save1 = Jget_wp(th);
     if(Junify(term1,arg1) == YES && Junify_const(term1,arg2) == YES){
@@ -430,12 +430,12 @@ jump_gen_all_var([L|Ls]) :-
     write(','),
     jump_gen_all_var(Ls).
 
-% varA = Jmakevariant(), varB = Jmakevariant();
+% varA = Jmakevariant(th), varB = Jmakevariant(th);
 jump_gen_var([]).
 jump_gen_var([L|Ls]) :-
     n_atom_convert(L,L1),
     write(L1),
-    write(' = Jmakevariant();'),nl,
+    write(' = Jmakevariant(0);'),nl,
     jump_gen_var(Ls).
 
 
@@ -1286,7 +1286,7 @@ jump_gen_tail_head(X) :-
     jump_gen_tail_head2(Y,[]),
     write(')').
 
-%  varA = makevariant();
+%  varA = makevariant(th);
 %  head = wlist1(varA);
 %  if(o && o && ... &1) return(Junify(arglist,head));
 jump_gen_tail_head_unify(Pred) :-
@@ -1298,11 +1298,11 @@ jump_gen_tail_head_unify(Pred) :-
     write(';'),nl,
     jump_gen_tail_head_unify2(Args).
 
-% varA = Jmakevariant(); varB = Jmakevariant(); ...
+% varA = Jmakevariant(th); varB = Jmakevariant(th); ...
 jump_gen_tail_head_unify1([]).
 jump_gen_tail_head_unify1([X|Xs]) :-
     write(X),
-    write(' = Jmakevariant();'),nl,
+    write(' = Jmakevariant(0);'),nl,
     jump_gen_tail_head_unify1(Xs).
 
 % if( && &&) return(Junify(arglist,head));
