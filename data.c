@@ -2376,7 +2376,7 @@ int deref1(int x, int th)
 
 
 
-int unify(int x, int y)
+int unify(int x, int y, int th)
 {
 
     int x1, y1;
@@ -2386,43 +2386,43 @@ int unify(int x, int y)
 
     else if (variablep(x) && !variablep(y)) {
 
-	x1 = deref1(x,0);
+	x1 = deref1(x,th);
 
 	if (x1 == x) {
 
-	    bindsym(x, y, 0);
+	    bindsym(x, y, th);
 
 	    return (YES);
 
 	}
 
 	else
-	    return (unify(x1, y));
+	    return (unify(x1, y,th));
 
     }
 
     else if (!variablep(x) && variablep(y)) {
 
-	y1 = deref1(y,0);
+	y1 = deref1(y,th);
 
 	if (y1 == y) {
 
-	    bindsym(y, x, 0);
+	    bindsym(y, x, th);
 
 	    return (YES);
 
 	}
 
 	else
-	    return (unify(x, y1));
+	    return (unify(x, y1,th));
 
     }
 
     else if (variablep(x) && variablep(y)) {
 
-	x1 = deref1(x,0);
+	x1 = deref1(x,th);
 
-	y1 = deref1(y,0);
+	y1 = deref1(y,th);
 
 	if (variablep(x1) && variablep(y1)) {
 
@@ -2433,7 +2433,7 @@ int unify(int x, int y)
 	    }
 
 	    else if (x != y) {	//ordinaly case
-		bindsym(x1, y1, 0);
+		bindsym(x1, y1, th);
 
 		return (YES);
 
@@ -2441,7 +2441,7 @@ int unify(int x, int y)
 
 	    else {
 
-		bindsym(x1, makevariant(0), 0);	// ex ?- X = X
+		bindsym(x1, makevariant(th), th);	// ex ?- X = X
 		return (YES);
 
 	    }
@@ -2450,7 +2450,7 @@ int unify(int x, int y)
 
 	else if (variablep(x1) && !variablep(y1)) {
 
-	    bindsym(x1, y1, 0);
+	    bindsym(x1, y1, th);
 
 	    return (YES);
 
@@ -2458,7 +2458,7 @@ int unify(int x, int y)
 
 	else if (!variablep(x1) && variablep(y1)) {
 
-	    bindsym(y1, x1, 0);
+	    bindsym(y1, x1, th);
 
 	    return (YES);
 
@@ -2466,7 +2466,7 @@ int unify(int x, int y)
 
 	else {
 
-	    return (unify(x1, y1));
+	    return (unify(x1, y1,th));
 
 	}
 
@@ -2516,7 +2516,7 @@ int unify(int x, int y)
     else if (!listp(x) && listp(y))
 	return (NO);
 
-    else if (unify(car(x), car(y)) == YES && unify(cdr(x), cdr(y)) == YES)
+    else if (unify(car(x), car(y),0) == YES && unify(cdr(x), cdr(y),0) == YES)
 	return (YES);
 
     else
@@ -2557,7 +2557,7 @@ int unify_var(int x, int y)
 	}
 
 	else
-	    return (unify(x1, y));
+	    return (unify(x1, y,0));
 
     }
 
@@ -2601,7 +2601,7 @@ int unify_var(int x, int y)
 
 	else {
 
-	    return (unify(x1, y1));
+	    return (unify(x1, y1,0));
 
 	}
 

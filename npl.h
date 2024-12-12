@@ -1230,7 +1230,7 @@ int term_variables(int x, int y);
 int type_option_p(int x);
 int thunkp(int addr);
 int unicodep(char c);
-int unify(int x, int y);
+int unify(int x, int y, int th);
 int unify_const(int x, int y);
 int unify_var(int x, int y);
 int unify_list(int x, int y);
