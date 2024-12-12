@@ -2026,7 +2026,7 @@ int b_dp_resume(int arglist, int rest)
     return (NO);
 }
 
-/*
+
 // multi thread parallel functions 
 void mt_enqueue(int n)
 {
@@ -2080,10 +2080,8 @@ void *parallel(void *arg)
 	if (parallel_exit_flag)
 	    goto exit;
 
-	ep[num] = ep[0];
-	TRY para_output[num] = eval(para_input[num], num);
-	EXCEPT(Exit_Thread);
-	END_TRY;
+	//ep[num] = ep[0];
+	//para_output[num] = eval(para_input[num], num);
 	mt_enqueue(num);
 	if (mt_queue_pt == mt_queue_num) {
 	    pthread_mutex_lock(&mutex);
@@ -2120,7 +2118,7 @@ void exit_para(void)
 {
     int i;
 
-    parallel_exit_flag = true;
+    parallel_exit_flag = 1;
     for (i = 1; i <= mt_queue_num; i++) {
 	pthread_mutex_lock(&mutex);
 	pthread_cond_signal(&mt_cond_para[i]);
@@ -2142,216 +2140,46 @@ int wait_para(void)
     return (0);
 }
 
-int f_mt_create(int arglist, int th)
+int b_mt_create(int arglist, int rest)
 {
-    int arg1;
+    int n,arg1;
 
+	n=length(arglist);
+	if(n==1){
     arg1 = car(arglist);
 
     if (!integerp(arg1))
-	error(NOT_INT, "mt-create", arg1, th);
+	error(NOT_INT, "mt-create", arg1);
     if (GET_INT(arg1) > PARASIZE)
-	error(WRONG_ARGS, "mt-create", arg1, th);
+	error(WRONG_ARGS, "mt-create", arg1);
     if (thread_flag)
-	error(WRONG_ARGS, "mt-create", arg1, th);
+	error(WRONG_ARGS, "mt-create", arg1);
 
     mt_queue_num = GET_INT(arg1);
     thread_num = mt_queue_num;
-    thread_flag = true;
+    thread_flag = 1;
     init_para();
     gbc();
-    return (T);
+    return (prove_all(rest,sp[0],0));
+	}
+	error(ARITY_ERR, "mt_create ", arglist);
+    return (NO);
 }
 
-int f_mt_close(int arglist, int th)
+int b_mt_close(int arglist, int rest)
 {
-    if (!nullp(arglist))
-	error(ILLEGAL_ARGS, "mt-close", arglist, th);
-
+	int n;
+	n=length(arglist);
+	if(n==0){
+    
     exit_para();
-    thread_flag = false;
+    thread_flag = 0;
     mt_queue_num = 0;
     thread_num = 1;
     gbc();
-    return (T);
+    return (prove_all(rest,sp[0],0));
+	}
+	error(ARITY_ERR, "mt_close ", arglist);
+    return (NO);
 }
 
-
-int f_mt_let(int arglist, int th)
-{
-    int arg1, arg2, temp, i, res, num[PARASIZE];
-
-    arg1 = car(arglist);
-    arg2 = cdr(arglist);
-    if (length(arglist) == 0)
-	error(WRONG_ARGS, "mt-let", arglist, th);
-    if (length(arg1) > mt_queue_num)
-	error(WRONG_ARGS, "mt-let", arg1, th);
-    if (!listp(arg1))
-	error(IMPROPER_ARGS, "mt-let", arg1, th);
-    temp = arg1;
-    while (!nullp(temp)) {
-	int temparg1;
-
-	temparg1 = car(car(temp));
-	if (improper_list_p(car(temp)))
-	    error(IMPROPER_ARGS, "mt-let", car(temp), th);
-	if (length(car(temp)) != 2)
-	    error(IMPROPER_ARGS, "mt-let", car(temp), th);
-	if (!symbolp(temparg1))
-	    error(NOT_SYM, "mt-let", temparg1, th);
-	if (temparg1 == T || temparg1 == NIL
-	    || temparg1 == make_sym("*PI*")
-	    || temparg1 == make_sym("*MOST-POSITIVE-FLOAT*")
-	    || temparg1 == make_sym("*MOST-NEGATIVE-FLOAT*"))
-	    error(WRONG_ARGS, "mt-let", arg1, th);
-	if (STRING_REF(temparg1, 0) == ':'
-	    || STRING_REF(temparg1, 0) == '&')
-	    error(WRONG_ARGS, "mt-let", arg1, th);
-	if (!listp(cadr(temp)))
-	    error(WRONG_ARGS, "mt-let", arg1, th);
-	temp = cdr(temp);
-    }
-
-    check_gbc(th);
-
-    temp = arg1;
-    i = 0;
-    parallel_flag = 1;
-    while (!nullp(temp)) {
-	num[i] = eval_para(cadr(car(temp)));
-	temp = cdr(temp);
-	i++;
-    }
-
-    pthread_mutex_lock(&mutex);
-    pthread_cond_wait(&mt_cond_main, &mutex);
-    pthread_mutex_unlock(&mutex);
-    parallel_flag = 0;
-    if (error_flag) {
-	error_flag = false;
-	signal_condition(signal_condition_x, signal_condition_y, th);
-    }
-
-    temp = arg1;
-    i = 0;
-    while (!nullp(temp)) {
-	add_lex_env(car(car(temp)), para_output[num[i]], 0);
-	temp = cdr(temp);
-	i++;
-    }
-
-    res = NIL;
-    while (arg2 != NIL) {
-	shelter_push(arg2, 0);
-	res = eval(car(arg2), 0);
-	shelter_pop(0);
-	arg2 = cdr(arg2);
-    }
-    return (res);
-}
-
-
-int f_mt_call(int arglist, int th)
-{
-    int arg1, arg2, temp, i, num[PARASIZE];
-
-    arg1 = car(arglist);
-    arg2 = cdr(arglist);
-    if (length(arglist) == 0)
-	error(WRONG_ARGS, "mt-call", arglist, th);
-    if (length(arg2) > mt_queue_num)
-	error(WRONG_ARGS, "mt-call", arg1, th);
-
-    temp = arg2;
-    while (!nullp(temp)) {
-	if (!listp(car(temp)))
-	    error(WRONG_ARGS, "mt-call", arg2, th);
-	temp = cdr(temp);
-    }
-
-    check_gbc(th);
-
-    temp = arg2;
-    i = 0;
-    parallel_flag = 1;
-    while (!nullp(temp)) {
-	num[i] = eval_para(car(temp));
-	temp = cdr(temp);
-	i++;
-    }
-
-    pthread_mutex_lock(&mutex);
-    pthread_cond_wait(&mt_cond_main, &mutex);
-    pthread_mutex_unlock(&mutex);
-    parallel_flag = 0;
-    if (error_flag) {
-	error_flag = false;
-	signal_condition(signal_condition_x, signal_condition_y, th);
-    }
-
-    temp = NIL;
-    i--;
-    while (i >= 0) {
-	temp = tcons(para_output[num[i]], temp, th);
-	i--;
-    }
-    return (apply(eval(arg1, th), temp, th));
-}
-
-
-int f_mt_exec(int arglist, int th)
-{
-    int temp, i, num[PARASIZE];
-
-    if (length(arglist) == 0)
-	error(WRONG_ARGS, "mt-exec", arglist, th);
-    if (length(arglist) > mt_queue_num)
-	error(WRONG_ARGS, "mt-exec", arglist, th);
-
-    temp = arglist;
-    while (!nullp(temp)) {
-	if (!listp(car(temp)))
-	    error(WRONG_ARGS, "mt-exec", arglist, th);
-	temp = cdr(temp);
-    }
-
-
-    check_gbc(th);
-
-    temp = arglist;
-    i = 0;
-    parallel_flag = 1;
-    while (!nullp(temp)) {
-	num[i] = eval_para(car(temp));
-	temp = cdr(temp);
-	i++;
-    }
-
-    pthread_mutex_lock(&mutex);
-    pthread_cond_wait(&mt_cond_main, &mutex);
-    pthread_mutex_unlock(&mutex);
-    parallel_flag = 0;
-    if (error_flag) {
-	error_flag = false;
-	signal_condition(signal_condition_x, signal_condition_y, th);
-    }
-
-    i--;
-    return (para_output[num[i]]);
-}
-
-
-
-int f_mt_lock(int arglist, int th)
-{
-
-    int res;
-
-    pthread_mutex_lock(&mutex1);
-    res = f_progn(arglist, th);
-    pthread_mutex_unlock(&mutex1);
-    return (res);
-}
-
-*/

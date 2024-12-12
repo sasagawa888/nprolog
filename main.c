@@ -141,8 +141,21 @@ int child_num;
 pthread_t receiver_thread;
 int child_result[PARASIZE];
 
-//---------multi-thread--------
-int thread_num;
+/* multi thread */
+pthread_mutex_t mutex;
+pthread_mutex_t mutex1;
+int mt_queue[PARASIZE];
+int mt_queue_pt;
+int mt_queue_num;
+int thread_num = 1;
+int para_input[PARASIZE];
+int para_output[PARASIZE];
+pthread_t mt_para_thread[PARASIZE];
+pthread_cond_t mt_cond_para[PARASIZE];
+pthread_cond_t mt_cond_main;
+pthread_cond_t mt_cond_queue;
+pthread_attr_t mt_para_attr[PARASIZE];
+size_t mt_para_size[PARASIZE];
 
 //-----editor-----
 char buffer[BUFSIZE][10];

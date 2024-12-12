@@ -291,7 +291,21 @@ extern pthread_t receiver_thread;
 extern int child_result[PARASIZE];
 
 /* multi-thread */
+extern pthread_mutex_t mutex;
+extern pthread_mutex_t mutex1;
+extern int mt_queue[PARASIZE];
+extern int mt_queue_pt;
+extern int mt_queue_num;
 extern int thread_num;
+extern int para_input[PARASIZE];
+extern int para_output[PARASIZE];
+extern pthread_t mt_para_thread[PARASIZE];
+extern pthread_cond_t mt_cond_para[PARASIZE];
+extern pthread_cond_t mt_cond_main;
+extern pthread_cond_t mt_cond_queue;
+extern pthread_attr_t mt_para_attr[PARASIZE];
+extern size_t mt_para_size[PARASIZE];
+
 
 #ifdef __APPLE__
 #define FLUSH               fpurge(stdin);
