@@ -533,14 +533,14 @@ void debug(void)
 DEBUG}
 
 
-int op_connect(int x, int y)
+int op_connect(int x, int y, int th)
 {
     if (nullp(x))
 	return (y);
     else if (nullp(y))
 	return (x);
     else if (!operationp(x))
-	return (wlist3(AND, x, y, 0));
+	return (wlist3(AND, x, y, th));
     else
-	return (wlist3(car(x), cadr(x), op_connect(caddr(x), y), 0));
+	return (wlist3(car(x), cadr(x), op_connect(caddr(x), y,th),th));
 }

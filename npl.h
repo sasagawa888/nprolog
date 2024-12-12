@@ -1156,7 +1156,7 @@ int o_cons(int x, int y);
 int o_dcg(int x, int y);
 int o_define(int x, int y);
 int o_ignore(int nest, int n);
-int op_connect(int x, int y);
+int op_connect(int x, int y, int th);
 int operate(int x);
 int operationp(int addr);
 int operatorp(int addr);
