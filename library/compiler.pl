@@ -1201,7 +1201,7 @@ jump_gen_tail_pred1(P,N) :-
     write(N),
     write('){'),,nl,
     write('loop:'),nl,
-    write('Jinc_proof();'),nl,
+    write('Jinc_proof(0);'),nl,
     jump_gen_tail_pred2(P,N),
     write('}'),
     write('return(NO);'),nl.

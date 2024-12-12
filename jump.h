@@ -77,10 +77,6 @@ static inline int Jdebug(void) {
     return f0[DEBUG_IDX]();
 }
 
-static inline int Jinc_proof(void) {
-    return f0[INC_PROOF_IDX]();
-}
-
 
 static inline int Jcar(x){
     return f1[CAR_IDX](x);
@@ -202,6 +198,10 @@ static inline int Jget_sp(int x) {
 
 static inline int Jget_wp(int x) {
     return f1[GET_WP_IDX](x);
+}
+
+static inline int Jinc_proof(int x) {
+    return f1[INC_PROOF_IDX](x);
 }
 
 

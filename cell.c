@@ -424,10 +424,10 @@ int set_wp(int x, int th)
 }
 
 
-int inc_proof(void)
+int inc_proof(int th)
 {
-    proof[0]++;
-    return (proof[0]);
+    proof[th]++;
+    return (proof[th]);
 }
 
 int listcons(int x, int y)
