@@ -28,7 +28,7 @@ if(n == 2){
     varZ1 = Jmakevariant(th);
     ...
     save1 = Jget_wp(th);
-    if(Junify(term1,arg1,th) == YES && Junify_const(term1,arg2) == YES){
+    if(Junify(term1,arg1,th) == YES && Junify_const(term1,arg2,th) == YES){
         body = Jwlist3(Jmakeope(","),Jwcons(173,Jwc ....)));
         if(Jexec_all(Jaddtail_body(rest,body),save2) == YES)
             return(YES);
@@ -51,7 +51,7 @@ void init_declare(void){
 
 unification 
 Junify(head,arg,th)  all-round
-Junify_const(head,arg)  for constant term
+Junify_const(head,arg,th)  for constant term
 Junify_var(head,arg,th)    for variable term
 Junify_nil(head,arg)    for [] check.
 */
@@ -733,6 +733,8 @@ jump_gen_head1([X|Xs],N) :-
     jump_gen_a_argument(X),
     write(',arg'),
     write(N),
+    write(','),
+    write(0),
     write(') == YES && '),
     N1 is N + 1,
     jump_gen_head1(Xs,N1). 
