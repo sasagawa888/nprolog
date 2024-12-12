@@ -13,7 +13,7 @@ if(n == 2){
     varX = Jmakevariant();
     varZ = Jmakevariant();
     varY = Jmakevariant();
-    save1 = Jget_wp();
+    save1 = Jget_wp(th);
     if(Junify(term1,arg1) == YES && Junify_var(term2,arg2) == YES){
         body =Jwcons(119,Jwcons(varX,Jwcons(varY,NIL)));
         if(Jexec_all(Jaddtail_body(rest,body),save2,0) == YES)
@@ -27,7 +27,7 @@ if(n == 2){
     varY1 = Jmakevariant();
     varZ1 = Jmakevariant();
     ...
-    save1 = Jget_wp();
+    save1 = Jget_wp(th);
     if(Junify(term1,arg1) == YES && Junify_const(term1,arg2) == YES){
         body = Jwlist3(Jmakeope(","),Jwcons(173,Jwc ....)));
         if(Jexec_all(Jaddtail_body(rest,body),save2) == YES)
@@ -379,7 +379,7 @@ jump_gen_a_pred4([C|Cs]) :-
 
 
 /*
-save1 = Jget_wp();
+save1 = Jget_wp(th);
 save2 = jget_sp(th);
 if( )... head
 {body = }
@@ -392,7 +392,7 @@ if( )... head
 */
 % clause
 jump_gen_a_pred5((Head :- Body)) :-
-    write('save1 = Jget_wp();'),nl,
+    write('save1 = Jget_wp(0);'),nl,
 	jump_gen_head(Head),
     jump_gen_body(Body,0).
 
@@ -405,7 +405,7 @@ jump_gen_a_pred5(P) :-
 % predicate
 jump_gen_a_pred5(P) :-
 	n_property(P,predicate),
-    write('save1 = Jget_wp();'),nl,
+    write('save1 = Jget_wp(0);'),nl,
 	jump_gen_head(P),
     write('if(Jexec_all(rest,Jget_sp(0)) == YES) return(YES);'),nl,
     write('Junbind(save2,0);'),nl,
@@ -414,7 +414,7 @@ jump_gen_a_pred5(P) :-
 % user ope
 jump_gen_a_pred5(P) :-
 	n_property(P,userop),
-    write('save1 = Jget_wp();'),nl,
+    write('save1 = Jget_wp(0);'),nl,
 	jump_gen_head(P),
     write('if(Jexec_all(rest,Jget_sp(0)) == YES) return(YES);'),nl,
     write('Junbind(save2,0);'),nl,

@@ -46,7 +46,6 @@ void dynamic_link(int x)
     init_f0(GBC_IDX, (tpred) gbc);
     init_f0(FRESHCELL_IDX, (tpred) freshcell);
     init_f0(MAKEVARIANT_IDX, (tpred) makevariant);
-    init_f0(GET_WP_IDX, (tpred) get_wp);
     init_f0(DEBUG_IDX, (tpred) debug);
     init_f0(INC_PROOF_IDX, (tpred) inc_proof);
 
@@ -61,7 +60,6 @@ void dynamic_link(int x)
     init_f1(PRINT_IDX, (tpred) print);
     init_f1(MAKEINT_IDX, (tpred) makeint);
     init_f1(LENGTH_IDX, (tpred) length);
-    init_f1(SET_SP_IDX, (tpred) set_sp);
     init_f1(DEREF_IDX, (tpred) deref);
     init_f1(GET_INT_IDX, (tpred) get_int);
     init_f1(SIN_IDX, (tpred) f_sin);
@@ -83,6 +81,7 @@ void dynamic_link(int x)
     init_f1(STRUCTUREP_IDX, (tpred) structurep);
     init_f1(VARIABLEP_IDX, (tpred) variablep);
     init_f1(GET_SP_IDX, (tpred) get_sp);
+    init_f1(GET_WP_IDX, (tpred) get_wp);
 
     //argument-2 type
     init_f2(CONS_IDX, (tpred) cons);
@@ -127,6 +126,7 @@ void dynamic_link(int x)
     init_f2(ROUND_IDX, (tpred) f_round);
     init_f2(EXEC_ALL_IDX, (tpred) exec_all);
     init_f2(UNBIND_IDX, (tpred) unbind);
+    init_f2(SET_SP_IDX, (tpred) set_sp);
 
 
     //argument-3

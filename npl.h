@@ -155,16 +155,16 @@ typedef struct cursor {
 } cursor;
 
 
-enum { CHECKGBC_IDX, GBC_IDX, FRESHCELL_IDX, MAKEVARIANT_IDX, GET_WP_IDX,
+enum { CHECKGBC_IDX, GBC_IDX, FRESHCELL_IDX, MAKEVARIANT_IDX, 
        DEBUG_IDX, INC_PROOF_IDX,
        NUM_FN0S
 };
 
 enum { CAR_IDX, CDR_IDX, CADR_IDX, CADDR_IDX, CAAR_IDX, CADAR_IDX, PRINT_IDX, MAKEINT_IDX,
-       LENGTH_IDX, SET_SP_IDX, DEREF_IDX, GET_INT_IDX,
+       LENGTH_IDX, DEREF_IDX, GET_INT_IDX,
        SIN_IDX, ASIN_IDX, COS_IDX, ACOS_IDX, TAN_IDX, ATAN_IDX, EXP_IDX, LOG_IDX,
        LN_IDX, LIST1_IDX, RANDOM_IDX, RANDI_IDX, SET_WP_IDX, WLIST1_IDX, OPERATE_IDX,
-       LISTP_IDX,  STRUCTUREP_IDX, VARIABLEP_IDX, GET_SP_IDX,
+       LISTP_IDX,  STRUCTUREP_IDX, VARIABLEP_IDX, GET_SP_IDX, GET_WP_IDX,
        NUM_FN1S
 };
 
@@ -175,7 +175,7 @@ enum { CONS_IDX, PLUS_IDX, MINUS_IDX, MULT_IDX, DIVIDE_IDX, REMAINDER_IDX,
        LIST2_IDX, SET_CAR_IDX, SET_CDR_IDX, COMPLEMENT_IDX, SET_AUX_IDX,
        NOT_NUMEQP_IDX, DIV_IDX, SET_VAR_IDX, WCONS_IDX, WLIST2_IDX, WLISTCONS_IDX,
        ADDTAIL_BODY_IDX, NTH_IDX, UNIFY_CONST_IDX, UNIFY_VAR_IDX, UNIFY_NIL_IDX,
-       ROUND_IDX, EXEC_ALL_IDX, UNBIND_IDX,
+       ROUND_IDX, EXEC_ALL_IDX, UNBIND_IDX, SET_SP_IDX, 
        NUM_FN2S
 };
 
@@ -1039,7 +1039,7 @@ int get_msb(int x);
 int get_nth(int x, int n);
 int get_sign(int x);
 int get_sp(int th);
-int get_wp(void);
+int get_wp(int);
 int get_up(void);
 int get_goal(int n);
 int get_cut_jmp(void);
@@ -1198,7 +1198,7 @@ int reposition_option_p(int x);
 int resolve_all(int end, int bindings, int n);
 int resolve(int end, int bindings, int trail, int n);
 int reverse(int x);
-int set_sp(int x);
+int set_sp(int x, int th);
 int set_wp(int x);
 int set_up(int x);
 int set_aux(int x, int y);

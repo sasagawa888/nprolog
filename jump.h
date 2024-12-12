@@ -73,10 +73,6 @@ static inline int Jmakevariant(void) {
 }
 
 
-static inline int Jget_wp(void) {
-    return f0[GET_WP_IDX]();
-}
-
 static inline int Jdebug(void) {
     return f0[DEBUG_IDX]();
 }
@@ -204,6 +200,11 @@ static inline int Jvariablep(int x) {
 
 static inline int Jget_sp(int x) {
     return f1[GET_SP_IDX](x);
+}
+
+
+static inline int Jget_wp(int x) {
+    return f1[GET_WP_IDX](x);
 }
 
 

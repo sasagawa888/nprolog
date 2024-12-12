@@ -406,15 +406,15 @@ int callsubr(int x, int arglist, int rest)
     return ((GET_SUBR(x) (arglist, rest)));
 }
 
-int set_sp(int x)
+int set_sp(int x, int th)
 {
-    sp[0] = x;
+    sp[th] = x;
     return (0);
 }
 
-int get_wp(void)
+int get_wp(int th)
 {
-    return (wp[0]);
+    return (wp[th]);
 }
 
 int set_wp(int x)
