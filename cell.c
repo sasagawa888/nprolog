@@ -439,11 +439,11 @@ int listcons(int x, int y)
     return (res);
 }
 
-int wlistcons(int x, int y)
+int wlistcons(int x, int y, int th)
 {
     int res;
 
-    res = wcons(x, y, 0);
+    res = wcons(x, y, th);
     SET_AUX(res, LIST);
     return (res);
 }

@@ -1074,6 +1074,8 @@ jump_gen_argument_list([X|Xs]) :-
     jump_gen_a_argument(X),
     write(','),
     jump_gen_a_argument(Xs),
+    write(','),
+    write(0),
     write(')').
 
 /*

@@ -338,9 +338,6 @@ static inline int Jwlist2(int x, int y) {
     return f2[WLIST2_IDX](x, y);
 }
 
-static inline int Jwlistcons(int x, int y) {
-    return f2[WLISTCONS_IDX](x, y);
-}
 
 static inline int Jaddtail_body(int x, int y) {
     return f2[ADDTAIL_BODY_IDX](x, y);
@@ -394,6 +391,10 @@ static inline int Jwlist3(int x, int y, int z) {
 
 static inline int Jerrorcomp(int x, int y, int z) {
     return f3[ERRORCOMP_IDX](x, y, z);
+}
+
+static inline int Jwlistcons(int x, int y, int th) {
+    return f3[WLISTCONS_IDX](x, y, th);
 }
 
 

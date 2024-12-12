@@ -173,13 +173,13 @@ enum { CONS_IDX, PLUS_IDX, MINUS_IDX, MULT_IDX, DIVIDE_IDX, REMAINDER_IDX,
        GREATERP_IDX, EQGREATERP_IDX, UNIFY_IDX, MOD_IDX, EXPT_IDX, SQRT_IDX,
        LEFTSHIFT_IDX, RIGHTSHIFT_IDX, LOGICALAND_IDX, LOGICALOR_IDX, LISTCONS_IDX,
        LIST2_IDX, SET_CAR_IDX, SET_CDR_IDX, COMPLEMENT_IDX, SET_AUX_IDX,
-       NOT_NUMEQP_IDX, DIV_IDX, SET_VAR_IDX, WCONS_IDX, WLIST2_IDX, WLISTCONS_IDX,
+       NOT_NUMEQP_IDX, DIV_IDX, SET_VAR_IDX, WCONS_IDX, WLIST2_IDX, 
        ADDTAIL_BODY_IDX, NTH_IDX, UNIFY_CONST_IDX, UNIFY_VAR_IDX, UNIFY_NIL_IDX,
        ROUND_IDX, EXEC_ALL_IDX, UNBIND_IDX, SET_SP_IDX, SET_WP_IDX,
        NUM_FN2S
 };
 
-enum { LIST3_IDX, CALLSUBR_IDX, WLIST3_IDX, ERRORCOMP_IDX, 
+enum { LIST3_IDX, CALLSUBR_IDX, WLIST3_IDX, ERRORCOMP_IDX, WLISTCONS_IDX,
        NUM_FN3S,
 };
 
@@ -1252,7 +1252,7 @@ int walpha_conversion(int x);
 int wcons(int car, int cdr, int th);
 int wide_integer_p(int addr);
 int wide_variable_p(int addr);
-int wlistcons(int x, int y);
+int wlistcons(int x, int y, int th);
 int wlist1(int x, int th);
 int wlist2(int x, int y, int th);
 int wlist3(int x1, int x2, int x3, int th);

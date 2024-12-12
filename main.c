@@ -301,7 +301,7 @@ int main(int argc, char *argv[])
 		input = variable_to_call(readparse());
 		if (!repl_flag)
 		    clear_input_buffer();
-		query(input,0);
+		query(input, 0);
 		//sexp_flag = 1;print(variable_to_call(parser(NIL,NIL,NIL,NIL,0,0)));
 		//printf("proof = %d\n", proof);
 		fflush(stdout);
@@ -318,7 +318,7 @@ int main(int argc, char *argv[])
 		printf("\n");
 		fflush(stdout);
 		child_busy_flag = 1;
-		query(input,0);
+		query(input, 0);
 		child_busy_flag = 0;
 		printf("Send to parent ");
 		printf("\n");
@@ -359,7 +359,7 @@ void init_repl(void)
     nest = 0;
     ac[0] = CELLSIZE + 1;
     wp[0] = HEAPSIZE + 1;
-    unbind(0,0);
+    unbind(0, 0);
     for (i = 0; i < THREADSIZE; i++)
 	sp[i] = 0;
     ctrl_c_flag = 0;
@@ -651,7 +651,7 @@ int prove(int goal, int bindings, int rest)
 					    rest);
 			    wp[0] = save1;
 			    ac[0] = save2;
-			    unbind(bindings,0);
+			    unbind(bindings, 0);
 			    return (NO);
 			}
 		    }
@@ -663,7 +663,7 @@ int prove(int goal, int bindings, int rest)
 
 	    wp[0] = save1;
 	    ac[0] = save2;
-	    unbind(bindings,0);
+	    unbind(bindings, 0);
 	}
 	//trace
 	if (debug_flag == ON)
@@ -684,19 +684,19 @@ int prove(int goal, int bindings, int rest)
 	    return (YES);
 	else {
 	    if (res == NFALSE) {
-		unbind(bindings,0);
+		unbind(bindings, 0);
 		return (NO);
 	    }
-	    unbind(bindings,0);
+	    unbind(bindings, 0);
 	    if (prove_all(addtail_body(rest, caddr(goal)), bindings) ==
 		YES)
 		return (YES);
 	    else {
-		unbind(bindings,0);
+		unbind(bindings, 0);
 		return (NO);
 	    }
 	}
-	unbind(bindings,0);
+	unbind(bindings, 0);
 	return (NO);
     }
     return (NO);
@@ -988,7 +988,7 @@ void debugger(int goal, int bindings, int rest)
 	read = variable_to_call(readparse());
 	if (read == FEND)
 	    goto break_exit;
-	query(read,0);
+	query(read, 0);
 	fflush(stdout);
 	goto break_loop;
       break_exit:
@@ -1065,7 +1065,7 @@ void debugger(int goal, int bindings, int rest)
 	printf("?- ");
 	fflush(stdout);
 	read = variable_to_call(readparse());
-	query(read,0);
+	query(read, 0);
 	fflush(stdout);
 	break;
     case ';':

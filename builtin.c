@@ -281,7 +281,7 @@ int b_length(int arglist, int rest)
 	    i = GET_INT(arg2);
 	    res = NIL;
 	    while (i > 0) {
-		res = wlistcons(makevariant(), res);
+		res = wlistcons(makevariant(), res, 0);
 		i--;
 	    }
 	    if (unify(arg1, res) == YES)
@@ -295,13 +295,13 @@ int b_length(int arglist, int rest)
 		if (prove_all(rest, sp[0]) == YES)
 		    return (YES);
 
-		unbind(save2,0);
+		unbind(save2, 0);
 		i++;
-		ls = wlistcons(makevariant(), ls);
+		ls = wlistcons(makevariant(), ls, 0);
 	    }
 	}
 	wp[0] = save1;
-	unbind(save2,0);
+	unbind(save2, 0);
 	return (NO);
     }
     error(ARITY_ERR, "length ", arglist);
@@ -324,7 +324,7 @@ int b_repeat(int arglist, int rest)
 	    return (YES);
 	}
 	wp[0] = save1;
-	unbind(save2,0);
+	unbind(save2, 0);
 	ac[0] = save3;
 	goto loop;
     }
@@ -1202,7 +1202,7 @@ int b_stdin(int arglist, int rest)
 	    input_stream = save1;
 	    return (prove_all(rest, sp[0]));
 	}
-	unbind(save2,0);
+	unbind(save2, 0);
 	input_stream = save1;
 	return (NO);
     }
@@ -1230,7 +1230,7 @@ int b_stdout(int arglist, int rest)
 	    output_stream = save1;
 	    return (prove_all(rest, sp[0]));
 	}
-	unbind(save2,0);
+	unbind(save2, 0);
 	output_stream = save1;
 	return (NO);
     }
@@ -1263,7 +1263,7 @@ int b_stdinout(int arglist, int rest)
 	    output_stream = save2;
 	    return (prove_all(rest, sp[0]));
 	}
-	unbind(save3,0);
+	unbind(save3, 0);
 	input_stream = save1;
 	output_stream = save2;
 	return (NO);
@@ -1878,13 +1878,13 @@ int b_directory(int arglist, int rest)
 	    } else
 		error(SYSTEM_ERROR, "directory ", NIL);
 
-	    unbind(save,0);
+	    unbind(save, 0);
 	    dp = readdir(dir);
 	}
 	if (dir != NULL)
 	    closedir(dir);
 
-	unbind(save,0);
+	unbind(save, 0);
 	return (NO);
     }
     error(ARITY_ERR, "directory ", arglist);
@@ -2660,7 +2660,7 @@ int b_retract(int arglist, int rest)
 	    new_clauses = cons(clause, new_clauses);
 	  next:
 	    wp[0] = save1;
-	    unbind(save2,0);
+	    unbind(save2, 0);
 	}
 	wp[0] = save1;
 	sp[0] = save2;
@@ -2767,10 +2767,10 @@ int b_clause(int arglist, int rest)
 		    return (YES);
 	    }
 	    wp[0] = save1;
-	    unbind(save2,0);
+	    unbind(save2, 0);
 	}
 	wp[0] = save1;
-	unbind(save2,0);
+	unbind(save2, 0);
 	return (NO);
     }
     error(ARITY_ERR, "clause ", arglist);
@@ -3536,11 +3536,11 @@ int b_ifthen(int arglist, int rest)
 	if (prove_all(arg1, sp[0]) == YES) {
 	    return (prove_all(addtail_body(rest, arg2), sp[0]));
 	} else {
-	    unbind(save1,0);
+	    unbind(save1, 0);
 	    return (NO);
 	}
 
-	unbind(save1,0);
+	unbind(save1, 0);
 	return (NO);
     }
     error(ARITY_ERR, "ifthen ", arglist);
@@ -3568,7 +3568,7 @@ int b_ifthenelse(int arglist, int rest)
 	if (prove_all(arg1, sp[0]) == YES) {
 	    return (prove_all(addtail_body(rest, arg2), sp[0]));
 	} else {
-	    unbind(save,0);
+	    unbind(save, 0);
 	    return (prove_all(addtail_body(rest, arg3), sp[0]));
 	}
     }
@@ -3733,7 +3733,7 @@ int b_break(int arglist, int rest)
 	    while (1) {
 		printf("?= ");
 		fflush(stdout);
-		query_break(variable_to_call(readparse()),0);
+		query_break(variable_to_call(readparse()), 0);
 		fflush(stdout);
 	    }
 	} else if (ret == 1) {
@@ -3917,10 +3917,10 @@ int b_system(int arglist, int rest)
 		    return (YES);
 
 	    wp[0] = save1;
-	    unbind(save2,0);
+	    unbind(save2, 0);
 	}
 	wp[0] = save1;
-	unbind(save2,0);
+	unbind(save2, 0);
 	return (NO);
     }
 
@@ -4372,11 +4372,11 @@ int b_current_predicate(int arglist, int rest)
 			return (YES);
 
 		wp[0] = save1;
-		unbind(save2,0);
+		unbind(save2, 0);
 	    }
 	}
 	wp[0] = save1;
-	unbind(save2,0);
+	unbind(save2, 0);
 	return (NO);
     }
     error(ARITY_ERR, "current_predicate ", arglist);
@@ -4448,10 +4448,10 @@ int b_current_op(int arglist, int rest)
 		    return (YES);
 	    lis = cdr(lis);
 	    wp[0] = save1;
-	    unbind(save2,0);
+	    unbind(save2, 0);
 	}
 	wp[0] = save1;
-	unbind(save2,0);
+	unbind(save2, 0);
 	return (NO);
     }
     error(ARITY_ERR, "current_op ", arglist);
@@ -4935,13 +4935,14 @@ int b_member(int arglist, int rest)
 	save1 = wp[0];
 	x = makevariant();
 	l = makevariant();
-	if (unify(arg1, x) == YES && unify(arg2, wlistcons(x, l)) == YES) {
+	if (unify(arg1, x) == YES
+	    && unify(arg2, wlistcons(x, l, 0)) == YES) {
 	    if ((res = prove(NIL, sp[0], rest)) == YES)
 		return (YES);
 	}
 
 	wp[0] = save1;
-	unbind(save2,0);
+	unbind(save2, 0);
 	if (res == NFALSE)
 	    return (res);
 
@@ -4949,13 +4950,14 @@ int b_member(int arglist, int rest)
 	x = makevariant();
 	y = makevariant();
 	l = makevariant();
-	if (unify(arg1, x) == YES && unify(arg2, wlistcons(y, l)) == YES) {
+	if (unify(arg1, x) == YES
+	    && unify(arg2, wlistcons(y, l, 0)) == YES) {
 	    body = wlist3(makeatom("member", SYS), x, l, 0);
 	    if ((res = prove(body, sp[0], rest)) == YES)
 		return (YES);
 	}
 	wp[0] = save1;
-	unbind(save2,0);
+	unbind(save2, 0);
 	return (res);
     }
     error(ARITY_ERR, "member ", arglist);
@@ -4989,22 +4991,22 @@ int b_append(int arglist, int rest)
 		return (YES);
 	}
 	wp[0] = save1;
-	unbind(save2,0);
+	unbind(save2, 0);
 
 	save1 = wp[0];
 	x = makevariant();
 	ls = makevariant();
 	ys = makevariant();
 	zs = makevariant();
-	if (unify(arg1, wlistcons(x, ls)) == YES &&
-	    unify(arg2, ys) == YES && unify(arg3, wlistcons(x, zs)) == YES)
-	{
+	if (unify(arg1, wlistcons(x, ls, 0)) == YES &&
+	    unify(arg2, ys) == YES
+	    && unify(arg3, wlistcons(x, zs, 0)) == YES) {
 	    body = wlist4(makeatom("append", SYS), ls, ys, zs, 0);
 	    if (prove(body, sp[0], rest) == YES)
 		return (YES);
 	}
 	wp[0] = save1;
-	unbind(save2,0);
+	unbind(save2, 0);
 	return (NO);
     }
     error(ARITY_ERR, "append ", arglist);
@@ -5091,7 +5093,7 @@ int b_between(int arglist, int rest)
 
 	    low++;
 	    wp[0] = save1;
-	    unbind(save2,0);
+	    unbind(save2, 0);
 	    ac[0] = save3;
 	}
 	wp[0] = save1;
@@ -5133,7 +5135,7 @@ int b_bagof(int arglist, int rest)
 		return (YES);
 
 	    wp[0] = save1;
-	    unbind(save2,0);
+	    unbind(save2, 0);
 	    lis = cdr(lis);
 	}
 	return (NO);
@@ -5172,7 +5174,7 @@ int b_setof(int arglist, int rest)
 		return (YES);
 
 	    wp[0] = save1;
-	    unbind(save2,0);
+	    unbind(save2, 0);
 	    lis = cdr(lis);
 	}
 	return (NO);
@@ -5204,7 +5206,7 @@ int b_findall(int arglist, int rest)
 	    return (YES);
 
 	wp[0] = save1;
-	unbind(save2,0);
+	unbind(save2, 0);
 	return (NO);
     }
     error(ARITY_ERR, "findall ", arglist);
@@ -5907,7 +5909,7 @@ int b_retrieveh(int arglist, int rest)
 	    if (prove_all(rest, sp[0]) == YES)
 		return (YES);
 
-	    unbind(save1,0);
+	    unbind(save1, 0);
 	  skip:
 	    lis = cdr(lis);
 	}
@@ -6090,10 +6092,10 @@ int b_recorded(int arglist, int rest)
 	    }
 	    chain = cdr(chain);
 	    wp[0] = save1;
-	    unbind(save2,0);
+	    unbind(save2, 0);
 	}
 	wp[0] = save1;
-	unbind(save2,0);
+	unbind(save2, 0);
 	return (NO);
     }
     error(ARITY_ERR, "recorded ", arglist);
@@ -6306,7 +6308,7 @@ int b_removeh(int arglist, int rest)
 		if (prove_all(rest, sp[0]) == YES)
 		    return (YES);
 	    }
-	    unbind(save1,0);
+	    unbind(save1, 0);
 	    if (prev == NIL)
 		goto repeat;
 	  skip:
@@ -6401,11 +6403,11 @@ int b_key(int arglist, int rest)
 			return (YES);
 		}
 		wp[0] = save1;
-		unbind(save2,0);
+		unbind(save2, 0);
 	    }
 	}
 	wp[0] = save1;
-	unbind(save2,0);
+	unbind(save2, 0);
 	return (NO);
     } else if (n == 2) {
 	arg1 = car(arglist);
@@ -6424,7 +6426,7 @@ int b_key(int arglist, int rest)
 		return (YES);
 	}
 	wp[0] = save1;
-	unbind(save2,0);
+	unbind(save2, 0);
 	return (NO);
     }
 

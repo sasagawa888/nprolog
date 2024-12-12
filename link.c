@@ -4,8 +4,8 @@
 #include "npl.h"
 
 
-typedef void (*tpred)(char *, int(*pred)(int, int));
-typedef void (*tuser)(char *, int(*user)(int, int), int weight, int spec);
+typedef void (*tpred)(char *, int (*pred)(int, int));
+typedef void (*tuser)(char *, int (*user)(int, int), int weight, int spec);
 
 void dynamic_link(int x)
 {
@@ -47,7 +47,7 @@ void dynamic_link(int x)
     init_f0(FRESHCELL_IDX, (tpred) freshcell);
     init_f0(MAKEVARIANT_IDX, (tpred) makevariant);
     init_f0(DEBUG_IDX, (tpred) debug);
-    
+
 
     //argument-1 type
     init_f1(CAR_IDX, (tpred) car);
@@ -116,7 +116,6 @@ void dynamic_link(int x)
     init_f2(SET_VAR_IDX, (tpred) set_var);
     init_f2(WCONS_IDX, (tpred) wcons);
     init_f2(WLIST2_IDX, (tpred) wlist2);
-    init_f2(WLISTCONS_IDX, (tpred) wlistcons);
     init_f2(ADDTAIL_BODY_IDX, (tpred) addtail_body);
     init_f2(NTH_IDX, (tpred) nth);
     init_f2(UNIFY_CONST_IDX, (tpred) unify_const);
@@ -133,6 +132,7 @@ void dynamic_link(int x)
     init_f3(CALLSUBR_IDX, (tpred) callsubr);
     init_f3(WLIST3_IDX, (tpred) wlist3);
     init_f3(ERRORCOMP_IDX, (tpred) errorcomp);
+    init_f3(WLISTCONS_IDX, (tpred) wlistcons);
 
 
     //argument-1 string type
