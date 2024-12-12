@@ -396,9 +396,9 @@ int pop_stack(void)
 
 
 //------for JUMP compiler-----
-int get_sp(void)
+int get_sp(int th)
 {
-    return (sp[0]);
+    return (sp[th]);
 }
 
 int callsubr(int x, int arglist, int rest)

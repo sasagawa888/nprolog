@@ -72,9 +72,6 @@ static inline int Jmakevariant(void) {
     return f0[MAKEVARIANT_IDX]();
 }
 
-static inline int Jget_sp(void) {
-    return f0[GET_SP_IDX]();
-}
 
 static inline int Jget_wp(void) {
     return f0[GET_WP_IDX]();
@@ -203,6 +200,10 @@ static inline int Jstructurep(int x) {
 
 static inline int Jvariablep(int x) {
     return f1[VARIABLEP_IDX](x);
+}
+
+static inline int Jget_sp(int x) {
+    return f1[GET_SP_IDX](x);
 }
 
 

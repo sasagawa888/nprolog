@@ -155,7 +155,7 @@ typedef struct cursor {
 } cursor;
 
 
-enum { CHECKGBC_IDX, GBC_IDX, FRESHCELL_IDX, MAKEVARIANT_IDX, GET_SP_IDX, GET_WP_IDX,
+enum { CHECKGBC_IDX, GBC_IDX, FRESHCELL_IDX, MAKEVARIANT_IDX, GET_WP_IDX,
        DEBUG_IDX, INC_PROOF_IDX,
        NUM_FN0S
 };
@@ -164,7 +164,7 @@ enum { CAR_IDX, CDR_IDX, CADR_IDX, CADDR_IDX, CAAR_IDX, CADAR_IDX, PRINT_IDX, MA
        LENGTH_IDX, SET_SP_IDX, DEREF_IDX, GET_INT_IDX,
        SIN_IDX, ASIN_IDX, COS_IDX, ACOS_IDX, TAN_IDX, ATAN_IDX, EXP_IDX, LOG_IDX,
        LN_IDX, LIST1_IDX, RANDOM_IDX, RANDI_IDX, SET_WP_IDX, WLIST1_IDX, OPERATE_IDX,
-       LISTP_IDX,  STRUCTUREP_IDX, VARIABLEP_IDX,
+       LISTP_IDX,  STRUCTUREP_IDX, VARIABLEP_IDX, GET_SP_IDX,
        NUM_FN1S
 };
 
@@ -1038,7 +1038,7 @@ int get_2nd_weight(int addr);
 int get_msb(int x);
 int get_nth(int x, int n);
 int get_sign(int x);
-int get_sp(void);
+int get_sp(int th);
 int get_wp(void);
 int get_up(void);
 int get_goal(int n);
