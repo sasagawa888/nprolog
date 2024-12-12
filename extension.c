@@ -2183,3 +2183,52 @@ int b_mt_close(int arglist, int rest)
     return (NO);
 }
 
+/*
+int b_mt_and(int arglist, int rest)
+{
+    int arg1, arg2, temp, i, num[PARASIZE];
+
+    arg1 = car(arglist);
+    arg2 = cdr(arglist);
+    if (length(arglist) == 0)
+	error(WRONG_ARGS, "mt-call", arglist, th);
+    if (length(arg2) > mt_queue_num)
+	error(WRONG_ARGS, "mt-call", arg1, th);
+
+    temp = arg2;
+    while (!nullp(temp)) {
+	if (!listp(car(temp)))
+	    error(WRONG_ARGS, "mt-call", arg2, th);
+	temp = cdr(temp);
+    }
+
+    check_gbc(th);
+
+    temp = arg2;
+    i = 0;
+    parallel_flag = 1;
+    while (!nullp(temp)) {
+	num[i] = eval_para(car(temp));
+	temp = cdr(temp);
+	i++;
+    }
+
+    pthread_mutex_lock(&mutex);
+    pthread_cond_wait(&mt_cond_main, &mutex);
+    pthread_mutex_unlock(&mutex);
+    parallel_flag = 0;
+    if (error_flag) {
+	error_flag = false;
+	signal_condition(signal_condition_x, signal_condition_y, th);
+    }
+
+    temp = NIL;
+    i--;
+    while (i >= 0) {
+	temp = tcons(para_output[num[i]], temp, th);
+	i--;
+    }
+    return (apply(eval(arg1, th), temp, th));
+}
+
+*/
