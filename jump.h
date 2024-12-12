@@ -176,9 +176,6 @@ static inline int Jrandi(int x) {
     return f1[RANDI_IDX](x);
 }
 
-static inline int Jset_wp(int x) {
-    return f1[SET_WP_IDX](x);
-}
 
 static inline int Jwlist1(int x) {
     return f1[WLIST1_IDX](x);
@@ -376,6 +373,10 @@ static inline int Jexec_all(int x, int y) {
 
 static inline int Junbind(int x, int y) {
     return f2[UNBIND_IDX](x, y);
+}
+
+static inline int Jset_wp(int x, int y) {
+    return f2[SET_WP_IDX](x,y);
 }
 
 

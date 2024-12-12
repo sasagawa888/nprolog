@@ -74,7 +74,6 @@ void dynamic_link(int x)
     init_f1(LIST1_IDX, (tpred) list1);
     init_f1(RANDOM_IDX, (tpred) f_random);
     init_f1(RANDI_IDX, (tpred) f_randi);
-    init_f1(SET_WP_IDX, (tpred) set_wp);
     init_f1(WLIST1_IDX, (tpred) wlist1);
     init_f1(OPERATE_IDX, (tpred) operate);
     init_f1(LISTP_IDX, (tpred) listp);
@@ -127,7 +126,7 @@ void dynamic_link(int x)
     init_f2(EXEC_ALL_IDX, (tpred) exec_all);
     init_f2(UNBIND_IDX, (tpred) unbind);
     init_f2(SET_SP_IDX, (tpred) set_sp);
-
+    init_f2(SET_WP_IDX, (tpred) set_wp);
 
     //argument-3
     init_f3(LIST3_IDX, (tpred) list3);

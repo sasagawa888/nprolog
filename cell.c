@@ -417,9 +417,9 @@ int get_wp(int th)
     return (wp[th]);
 }
 
-int set_wp(int x)
+int set_wp(int x, int th)
 {
-    wp[0] = x;
+    wp[th] = x;
     return (0);
 }
 

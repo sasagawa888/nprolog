@@ -20,7 +20,7 @@ if(n == 2){
             return(YES);
     }
     Junbind(save2,th);
-    Jset_wp(save1);}
+    Jset_wp(save1,th);}
 
     % second clause
     varX1 = Jmakevariant();
@@ -34,7 +34,7 @@ if(n == 2){
             return(YES);
     }
     Junbind(save2,th);
-    Jset_wp(save1);
+    Jset_wp(save1,th);
 
     Jerrorcomp(makeint(AIRTY_ERR),Jmakecomp(<name>),arglist);
     return(NO);
@@ -409,7 +409,7 @@ jump_gen_a_pred5(P) :-
 	jump_gen_head(P),
     write('if(Jexec_all(rest,Jget_sp(0)) == YES) return(YES);'),nl,
     write('Junbind(save2,0);'),nl,
-    write('Jset_wp(save1);'),nl.
+    write('Jset_wp(save1,0);'),nl.
 
 % user ope
 jump_gen_a_pred5(P) :-
@@ -418,7 +418,7 @@ jump_gen_a_pred5(P) :-
 	jump_gen_head(P),
     write('if(Jexec_all(rest,Jget_sp(0)) == YES) return(YES);'),nl,
     write('Junbind(save2,0);'),nl,
-    write('Jset_wp(save1);'),nl.
+    write('Jset_wp(save1,0);'),nl.
 
 
 
@@ -450,7 +450,7 @@ if(unify(....)){
         return(YES)};
 
 Junbind(save2,th);
-Jset_wp(save1);
+Jset_wp(save1,th);
 
 
 */
@@ -524,7 +524,7 @@ jump_gen_body(X,N) :-
     jump_gen_after_body(X2,N),
     write('}'),nl,
     write('Junbind(save2,0);'),nl,
-    write('Jset_wp(save1);'),nl.
+    write('Jset_wp(save1,0);'),nl.
 
 % nested has cut
 jump_gen_body(X,N) :-
@@ -539,7 +539,7 @@ jump_gen_body(X,N) :-
     jump_gen_body(X2,N),
     write('}'),nl,
     write('Junbind(save2,0);'),nl,
-    write('Jset_wp(save1);'),nl.
+    write('Jset_wp(save1,0);'),nl.
     
     
 % conjunction 
@@ -550,7 +550,7 @@ jump_gen_body(X,N) :-
     write('if((res=Jexec_all(Jaddtail_body(rest,body),Jget_sp(0))) == YES)'),nl,
     write('return(YES);'),nl,
     write('Junbind(save2,0);'),nl,
-    write('Jset_wp(save1);}'),nl.
+    write('Jset_wp(save1,0);}'),nl.
     
 jump_gen_after_body(X,N) :-
     write('{body = '),
@@ -559,7 +559,7 @@ jump_gen_after_body(X,N) :-
     write('if((Jexec_all(Jaddtail_body(rest,body),Jget_sp(0))) == YES)'),nl,
     write('return(YES);'),nl,
     write('Junbind(save2,0);'),nl,
-    write('Jset_wp(save1);'),nl,
+    write('Jset_wp(save1,0);'),nl,
     write('return(NO);}'),nl.
 
 
