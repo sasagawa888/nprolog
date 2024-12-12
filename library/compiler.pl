@@ -785,6 +785,8 @@ jump_eval_form(X) :-
     n_atom_convert(X,X1),
     write('Jderef('),
     write(X1),
+    write(','),
+    write(0),
     write(')').
 jump_eval_form(X) :-
 	atom(X),

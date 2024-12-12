@@ -111,10 +111,6 @@ static inline int Jlength(int x) {
 }
 
 
-static inline int Jderef(int x) {
-    return f1[DEREF_IDX](x);
-}
-
 static inline int Jget_int(int x) {
     return f1[GET_INT_IDX](x);
 }
@@ -376,6 +372,12 @@ static inline int Junbind(int x, int y) {
 static inline int Jset_wp(int x, int y) {
     return f2[SET_WP_IDX](x,y);
 }
+
+
+static inline int Jderef(int x, int y) {
+    return f2[DEREF_IDX](x,y);
+}
+
 
 
 static inline int Jlist3(int x, int y, int z) {

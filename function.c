@@ -479,7 +479,7 @@ int eval(int x)
     else if (bignump(x))
 	return (x);
     else if (variablep(x))
-	return (deref(x));
+	return (deref(x,0));
     else if (!structurep(x)) {
 	if (eqp(x, makefunc("pi")))
 	    return (makeflt(3.14159265358979323846));
@@ -593,8 +593,8 @@ void evalterm(int x, int result[3])
 {
 
     result[0] = car(x);
-    result[1] = eval(deref(cadr(x)));
-    result[2] = eval(deref(caddr(x)));
+    result[1] = eval(deref(cadr(x),0));
+    result[2] = eval(deref(caddr(x),0));
     return;
 }
 

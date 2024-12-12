@@ -446,7 +446,7 @@ int b_ask(int arglist, int rest)
 	}
 	x2 = NIL;
 	while (!nullp(x1)) {
-	    if (variablep(car(x1)) && car(x1) != deref(car(x1)))
+	    if (variablep(car(x1)) && car(x1) != deref(car(x1),0))
 		x2 = cons(car(x1), x2);
 	    x1 = cdr(x1);
 	}
@@ -463,7 +463,7 @@ int b_ask(int arglist, int rest)
 	while (!nullp(x2)) {
 	    print(car(x2));
 	    printstr(" = ");
-	    printanswer(deref(car(x2)));
+	    printanswer(deref(car(x2),0));
 	    if (child_flag)
 		printc(',');
 	    if (!nullp(cdr(x2)))
@@ -3428,7 +3428,7 @@ int b_float_text(int arglist, int rest)
 		if (unify
 		    (arg3, wcons(makepred("fixed"), wcons(n, NIL, 0), 0))
 		    == YES) {
-		d = GET_INT(deref(n));
+		d = GET_INT(deref(n,0));
 		if (d > 15)
 		    d = 15;
 		else if (d < 0)
@@ -3444,7 +3444,7 @@ int b_float_text(int arglist, int rest)
 		    (arg3,
 		     wcons(makepred("scientific"), wcons(n, NIL, 0), 0))
 		    == YES) {
-		d = GET_INT(deref(n));
+		d = GET_INT(deref(n,0));
 		if (d > 15)
 		    d = 15;
 		else if (d < 0)
@@ -5276,10 +5276,10 @@ int b_bagofhelper(int arglist, int rest)
 	nonfree = nonfree_list;
 	key = NIL;
 	while (!nullp(nonfree)) {
-	    key = cons(cons(car(nonfree), deref(car(nonfree))), key);
+	    key = cons(cons(car(nonfree), deref(car(nonfree),0)), key);
 	    nonfree = cdr(nonfree);
 	}
-	putinbag(key, deref(arg1));
+	putinbag(key, deref(arg1,0));
 	return (NO);
     }
     return (NO);
@@ -5854,7 +5854,7 @@ int b_recordh(int arglist, int rest)
 	    error(NOT_ATOM, "recordh ", arg2);
 
 
-	arg3 = deref(arg3);
+	arg3 = deref(arg3,0);
 	if (!integerp(arg3))
 	    error(NOT_INT, "recordh ", arg3);
 
@@ -6230,7 +6230,7 @@ int b_erase(int arglist, int rest)
 
     if (n == 1) {
 	arg1 = car(arglist);
-	arg1 = deref(arg1);
+	arg1 = deref(arg1,0);
 	if (!integerp(arg1))
 	    error(NOT_INT, "erase ", arg1);
 
@@ -6250,7 +6250,7 @@ int b_eraseall(int arglist, int rest)
 
     if (n == 1) {
 	arg1 = car(arglist);
-	arg1 = deref(arg1);
+	arg1 = deref(arg1,0);
 	if (!atomp(arg1))
 	    error(NOT_ATOM, "erase ", arg1);
 

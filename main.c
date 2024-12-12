@@ -562,7 +562,7 @@ int prove(int goal, int bindings, int rest)
     if (nest > 40000)
 	error(RESOURCE_ERR, "prove recursion over max", NIL);
 
-    goal = deref(goal);
+    goal = deref(goal,0);
 
     if (nullp(goal)) {
 	return (prove_all(rest, bindings));
@@ -1105,7 +1105,7 @@ int valslist(int x)
     if (nullp(x))
 	return (NIL);
     else
-	return (cons(cons(car(x), deref1(car(x))), valslist(cdr(x))));
+	return (cons(cons(car(x), deref1(car(x),0)), valslist(cdr(x))));
 }
 
 int operate(int x)

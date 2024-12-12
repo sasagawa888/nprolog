@@ -58,7 +58,6 @@ void dynamic_link(int x)
     init_f1(PRINT_IDX, (tpred) print);
     init_f1(MAKEINT_IDX, (tpred) makeint);
     init_f1(LENGTH_IDX, (tpred) length);
-    init_f1(DEREF_IDX, (tpred) deref);
     init_f1(GET_INT_IDX, (tpred) get_int);
     init_f1(SIN_IDX, (tpred) f_sin);
     init_f1(ASIN_IDX, (tpred) f_asin);
@@ -126,6 +125,7 @@ void dynamic_link(int x)
     init_f2(UNBIND_IDX, (tpred) unbind);
     init_f2(SET_SP_IDX, (tpred) set_sp);
     init_f2(SET_WP_IDX, (tpred) set_wp);
+    init_f2(DEREF_IDX, (tpred) deref);
 
     //argument-3
     init_f3(LIST3_IDX, (tpred) list3);

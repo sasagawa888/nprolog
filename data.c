@@ -2325,7 +2325,7 @@ void heapdump(int start, int end)
 
 
 //Prolog unification
-int deref(int x)
+int deref(int x, int th)
 {
     int temp;
 
@@ -2333,10 +2333,10 @@ int deref(int x)
 	return (NIL);
 
     else if (!structurep(x))
-	return (deref1(x));
+	return (deref1(x,th));
 
     else {
-	temp = wcons(deref(car(x)), deref(cdr(x)), 0);
+	temp = wcons(deref(car(x),th), deref(cdr(x),th), th);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     }
@@ -2345,7 +2345,7 @@ int deref(int x)
 
 
 
-int deref1(int x)
+int deref1(int x, int th)
 {
 
     int res;
@@ -2359,24 +2359,16 @@ int deref1(int x)
 	    return (x);
 
 	else if (variablep(res)) {
-
 	    x = res;
-
 	    goto loop;
 
 	}
-
 	else if (structurep(res))
-	    return (deref(res));
-
+	    return (deref(res,th));
 	else
 	    return (res);
-
-    }
-
-    else
+    } else
 	return (x);
-
 
     return (NIL);
 
@@ -2394,7 +2386,7 @@ int unify(int x, int y)
 
     else if (variablep(x) && !variablep(y)) {
 
-	x1 = deref1(x);
+	x1 = deref1(x,0);
 
 	if (x1 == x) {
 
@@ -2411,7 +2403,7 @@ int unify(int x, int y)
 
     else if (!variablep(x) && variablep(y)) {
 
-	y1 = deref1(y);
+	y1 = deref1(y,0);
 
 	if (y1 == y) {
 
@@ -2428,9 +2420,9 @@ int unify(int x, int y)
 
     else if (variablep(x) && variablep(y)) {
 
-	x1 = deref1(x);
+	x1 = deref1(x,0);
 
-	y1 = deref1(y);
+	y1 = deref1(y,0);
 
 	if (variablep(x1) && variablep(y1)) {
 
@@ -2554,7 +2546,7 @@ int unify_var(int x, int y)
 
     else if (!variablep(y)) {
 
-	x1 = deref1(x);
+	x1 = deref1(x,0);
 
 	if (x1 == x) {
 
@@ -2571,9 +2563,9 @@ int unify_var(int x, int y)
 
     else if (variablep(y)) {
 
-	x1 = deref1(x);
+	x1 = deref1(x,0);
 
-	y1 = deref1(y);
+	y1 = deref1(y,0);
 
 	if (variablep(x1) && variablep(y1)) {
 
@@ -2641,7 +2633,7 @@ int unify_const(int x, int y)
 
     else if (variablep(y)) {
 
-	y1 = deref1(y);
+	y1 = deref1(y,0);
 
 	if (variablep(y1)) {
 
@@ -2685,7 +2677,7 @@ int unify_nil(int x, int y)
 
     else if (variablep(y)) {
 
-	y1 = deref1(y);
+	y1 = deref1(y,0);
 
 	if (variablep(y1)) {
 

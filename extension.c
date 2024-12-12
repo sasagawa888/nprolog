@@ -22,7 +22,7 @@ int b_reconsult_predicate(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	save1 = sp[0];
-	arg1 = deref(car(arglist));
+	arg1 = deref(car(arglist),0);
 	if (!wide_variable_p(arg1))
 	    error(NOT_VAR, "n_reconsult_predicate ", arg1);
 
@@ -66,7 +66,7 @@ int b_filename(int arglist, int rest)
 
     n = length(arglist);
     if (n == 2) {
-	arg1 = deref(car(arglist));
+	arg1 = deref(car(arglist),0);
 	arg2 = cadr(arglist);
 	strcpy(str1, GET_NAME(arg1));
 	len = strlen(GET_NAME(arg1));
@@ -98,8 +98,8 @@ int b_atom_convert(int arglist, int rest)
     //   str1=input   str2=unicode-buffer str3=usc4-buffer str4 = output-string 
     n = length(arglist);
     if (n == 2) {
-	arg1 = deref(car(arglist));
-	arg2 = deref(cadr(arglist));
+	arg1 = deref(car(arglist),0);
+	arg2 = deref(cadr(arglist),0);
 
 	strcpy(str1, GET_NAME(arg1));
 	pos1 = 0;
@@ -226,7 +226,7 @@ int b_arity_count(int arglist, int rest)
 
     n = length(arglist);
     if (n == 2) {
-	arg1 = deref(car(arglist));
+	arg1 = deref(car(arglist),0);
 	arg2 = cadr(arglist);
 
 	if (unify(arg2, listreverse(GET_ARITY(arg1))) == YES)
@@ -244,7 +244,7 @@ int b_generate_all_variable(int arglist, int rest)
 
     n = length(arglist);
     if (n == 2) {
-	arg1 = deref(car(arglist));
+	arg1 = deref(car(arglist),0);
 	arg2 = cadr(arglist);
 	if (unify(arg2, generate_all_variable(GET_CAR(arg1))) == YES)
 	    return (prove_all(rest, sp[0]));
@@ -260,7 +260,7 @@ int b_generate_variable(int arglist, int rest)
 
     n = length(arglist);
     if (n == 2) {
-	arg1 = deref(car(arglist));
+	arg1 = deref(car(arglist),0);
 	arg2 = cadr(arglist);
 	if (unify(arg2, generate_variable(arg1)) == YES)
 	    return (prove_all(rest, sp[0]));
@@ -327,7 +327,7 @@ int b_compiler_anoymous(int arglist, int rest)
 
     n = length(arglist);
     if (n == 1) {
-	arg1 = deref(car(arglist));
+	arg1 = deref(car(arglist),0);
 	if (compiler_anoymous_p(arg1))
 	    return (prove_all(rest, sp[0]));
 	else
@@ -360,7 +360,7 @@ int b_compiler_variable(int arglist, int rest)
 
     n = length(arglist);
     if (n == 1) {
-	arg1 = deref(car(arglist));
+	arg1 = deref(car(arglist),0);
 	if (compiler_variable_p(arg1))
 	    return (prove_all(rest, sp[0]));
 	else
@@ -391,7 +391,7 @@ int b_variable_convert(int arglist, int rest)
 
     n = length(arglist);
     if (n == 2) {
-	arg1 = deref(car(arglist));
+	arg1 = deref(car(arglist),0);
 	arg2 = cadr(arglist);
 
 	if (unify(arg2, variable_convert1(arg1)) == YES)
@@ -474,9 +474,9 @@ int b_clause_with_arity(int arglist, int rest)
 
     n = length(arglist);
     if (n == 3) {
-	arg1 = deref(car(arglist));
-	arg2 = deref(cadr(arglist));
-	arg3 = deref(caddr(arglist));
+	arg1 = deref(car(arglist),0);
+	arg2 = deref(cadr(arglist),0);
+	arg3 = deref(caddr(arglist),0);
 	if (!singlep(arg1))
 	    error(NOT_ATOM, "n_clause_with_arity", arg1);
 	if (!integerp(arg2))
@@ -652,9 +652,9 @@ int b_findatom(int arglist, int rest)
 
     n = length(arglist);
     if (n == 3) {
-	arg1 = deref(car(arglist));	//atom
-	arg2 = deref(cadr(arglist));	//property
-	arg3 = deref(caddr(arglist));	//address
+	arg1 = deref(car(arglist),0);	//atom
+	arg2 = deref(cadr(arglist),0);	//property
+	arg3 = deref(caddr(arglist),0);	//address
 
 	res = NIL;
 	if (eqlp(arg2, makeconst("constant")))
@@ -686,7 +686,7 @@ int b_defined_predicate(int arglist, int rest)
 
     n = length(arglist);
     if (n == 1) {
-	arg1 = deref(car(arglist));
+	arg1 = deref(car(arglist),0);
 
 	if (predicatep(arg1)) {
 	    if (atomp(arg1) && GET_CAR(arg1) != NIL)
@@ -707,7 +707,7 @@ int b_defined_userop(int arglist, int rest)
 
     n = length(arglist);
     if (n == 1) {
-	arg1 = deref(car(arglist));
+	arg1 = deref(car(arglist),0);
 
 	if (user_operation_p(arg1) || user_operator_p(arg1)) {
 	    if (atomp(arg1) && GET_CAR(arg1) != NIL)
@@ -869,7 +869,7 @@ int exec(int goal, int bindings, int rest)
     int res;
 
     proof[0]++;
-    goal = deref(goal);
+    goal = deref(goal,0);
 
     if (nullp(goal)) {
 	return (exec_all(rest, bindings));
@@ -1861,7 +1861,7 @@ int b_dp_and(int arglist, int rest)
 
 	i = 0;
 	while (!nullp(arg1)) {
-	    pred = deref(car(arg1));
+	    pred = deref(car(arg1),0);
 	    send_to_child(i, pred_to_str(pred));
 	    arg1 = cdr(arg1);
 	    i++;
@@ -1896,7 +1896,7 @@ int b_dp_or(int arglist, int rest)
 
 	i = 0;
 	while (!nullp(arg1)) {
-	    pred = deref(car(arg1));
+	    pred = deref(car(arg1),0);
 	    send_to_child(i, pred_to_str(pred));
 	    arg1 = cdr(arg1);
 	    i++;

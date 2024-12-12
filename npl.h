@@ -161,7 +161,7 @@ enum { CHECKGBC_IDX, GBC_IDX, FRESHCELL_IDX,
 };
 
 enum { CAR_IDX, CDR_IDX, CADR_IDX, CADDR_IDX, CAAR_IDX, CADAR_IDX, PRINT_IDX, MAKEINT_IDX,
-       LENGTH_IDX, DEREF_IDX, GET_INT_IDX,
+       LENGTH_IDX,  GET_INT_IDX,
        SIN_IDX, ASIN_IDX, COS_IDX, ACOS_IDX, TAN_IDX, ATAN_IDX, EXP_IDX, LOG_IDX,
        LN_IDX, LIST1_IDX, RANDOM_IDX, RANDI_IDX,  WLIST1_IDX, OPERATE_IDX,
        LISTP_IDX,  STRUCTUREP_IDX, VARIABLEP_IDX, GET_SP_IDX, GET_WP_IDX, INC_PROOF_IDX,
@@ -176,7 +176,7 @@ enum { CONS_IDX, PLUS_IDX, MINUS_IDX, MULT_IDX, DIVIDE_IDX, REMAINDER_IDX,
        LIST2_IDX, SET_CAR_IDX, SET_CDR_IDX, COMPLEMENT_IDX, SET_AUX_IDX,
        NOT_NUMEQP_IDX, DIV_IDX, SET_VAR_IDX, WCONS_IDX, WLIST2_IDX, 
        ADDTAIL_BODY_IDX, NTH_IDX, UNIFY_CONST_IDX, UNIFY_VAR_IDX, UNIFY_NIL_IDX,
-       ROUND_IDX, EXEC_ALL_IDX, UNBIND_IDX, SET_SP_IDX, SET_WP_IDX,
+       ROUND_IDX, EXEC_ALL_IDX, UNBIND_IDX, SET_SP_IDX, SET_WP_IDX,DEREF_IDX,
        NUM_FN2S
 };
 
@@ -975,11 +975,10 @@ int copy_variable(int x);
 int ctrl_to_number(char c);
 int c_lang_p(int x);
 int dcgp(int x);
-int deref(int x);
-int deref1(int x);
+int deref(int x, int th);
+int deref1(int x, int th);
 int disjunctionp(int addr);
 int divide(int arg1, int arg2);
-int eof_action_option_p(int x);
 int eqgreaterp(int x1, int x2);
 int eqlp(int addr1, int addr2);
 int eqp(int addr1, int addr2);
