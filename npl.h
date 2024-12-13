@@ -105,7 +105,7 @@ typedef struct __packed{
         struct{
             union{
                 int intnum;
-                int     ( *subr) (int, int);
+                int     ( *subr) (int, int, int);
                 FILE    *port;
             } car;
             union{
@@ -180,15 +180,19 @@ enum { CONS_IDX, PLUS_IDX, MINUS_IDX, MULT_IDX, DIVIDE_IDX, REMAINDER_IDX,
        NUM_FN2S
 };
 
-enum { LIST3_IDX, CALLSUBR_IDX, WLIST3_IDX, ERRORCOMP_IDX, WLISTCONS_IDX,UNIFY_IDX, 
+enum { LIST3_IDX, WLIST3_IDX, ERRORCOMP_IDX, WLISTCONS_IDX,UNIFY_IDX, 
        UNIFY_VAR_IDX, UNIFY_CONST_IDX, UNIFY_NIL_IDX, EXEC_ALL_IDX,
        NUM_FN3S,
 };
 
 enum { MAKECONST_IDX, MAKEPRED_IDX, MAKEVAR_IDX, MAKESTRFLT_IDX, MAKECOMP_IDX,
        MAKESYS_IDX, MAKEOPE_IDX, MAKEUSER_IDX, MAKESTRLONG_IDX, MAKEBIGX_IDX,
-       MAKESTR_IDX, MAKEFUNC_IDX,
+       MAKESTR_IDX, MAKEFUNC_IDX, 
        NUM_FN4S
+};
+
+enum { CALLSUBR_IDX,
+       NUM_FN5S,
 };
 
 
@@ -955,7 +959,7 @@ int bigx_to_parmanent(int x);
 int builtin_zero_p(int addr);
 int builtinp(int addr);
 int butlast(int addr);
-int callsubr(int x,int restest,int rest);
+int callsubr(int x,int restest,int rest,int th);
 int caar(int addr);
 int cadar(int addr);
 int caddr(int addr);

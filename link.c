@@ -17,6 +17,7 @@ void dynamic_link(int x)
     int (*init_f2)(int x, tpred y);
     int (*init_f3)(int x, tpred y);
     int (*init_f4)(int x, tpred y);
+    int (*init_f5)(int x, tpred y);
     void (*init_deftpred)(tpred x);
     void (*init_deftinfix)(tuser x);
     void (*init_tpredicate)();
@@ -36,6 +37,7 @@ void dynamic_link(int x)
     init_f2 = dlsym(hmod, "init2");
     init_f3 = dlsym(hmod, "init3");
     init_f4 = dlsym(hmod, "init4");
+    init_f5 = dlsym(hmod, "init5");
     init_deftpred = dlsym(hmod, "init_deftpred");
     init_deftinfix = dlsym(hmod, "init_deftinfix");
     init_tpredicate = dlsym(hmod, "init_tpredicate");
@@ -124,7 +126,6 @@ void dynamic_link(int x)
 
     //argument-3
     init_f3(LIST3_IDX, (tpred) list3);
-    init_f3(CALLSUBR_IDX, (tpred) callsubr);
     init_f3(WLIST3_IDX, (tpred) wlist3);
     init_f3(ERRORCOMP_IDX, (tpred) errorcomp);
     init_f3(WLISTCONS_IDX, (tpred) wlistcons);
@@ -147,6 +148,7 @@ void dynamic_link(int x)
     init_f4(MAKEBIGX_IDX, (tpred) makebigx);
     init_f4(MAKESTR_IDX, (tpred) makestr);
     init_f4(MAKEFUNC_IDX, (tpred) makefunc);
+    init_f4(CALLSUBR_IDX, (tpred) callsubr);
 
     init_deftpred((tpred) defcompiled);
     init_deftinfix((tuser) definfixcomp);

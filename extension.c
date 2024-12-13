@@ -875,24 +875,24 @@ int exec(int goal, int bindings, int rest, int th)
 	return (exec_all(rest, bindings, th));
     } else if (builtinp(goal)) {
 	if (atomp(goal)) {
-	    if ((res = (GET_SUBR(goal)) (NIL, rest)) == YES)
+	    if ((res = (GET_SUBR(goal)) (NIL, rest,th)) == YES)
 		return (YES);
 
 	    return (res);
 	} else {
-	    if ((res = (GET_SUBR(car(goal))) (cdr(goal), rest)) == YES)
+	    if ((res = (GET_SUBR(car(goal))) (cdr(goal), rest,th)) == YES)
 		return (YES);
 
 	    return (res);
 	}
     } else if (compiledp(goal)) {
 	if (atomp(goal)) {
-	    if ((GET_SUBR(goal)) (NIL, rest) == YES)
+	    if ((GET_SUBR(goal)) (NIL, rest,th) == YES)
 		return (YES);
 
 	    return (NO);
 	} else {
-	    if ((GET_SUBR(car(goal))) (cdr(goal), rest) == YES)
+	    if ((GET_SUBR(car(goal))) (cdr(goal), rest,th) == YES)
 		return (YES);
 
 	    return (NO);

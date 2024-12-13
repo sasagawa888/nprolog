@@ -401,9 +401,9 @@ int get_sp(int th)
     return (sp[th]);
 }
 
-int callsubr(int x, int arglist, int rest)
+int callsubr(int x, int arglist, int rest, int th)
 {
-    return ((GET_SUBR(x) (arglist, rest)));
+    return ((GET_SUBR(x) (arglist, rest,th)));
 }
 
 int set_sp(int x, int th)

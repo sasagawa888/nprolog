@@ -581,24 +581,24 @@ int prove(int goal, int bindings, int rest, int th)
 	return (prove_all(rest, bindings,th));
     } else if (builtinp(goal)) {
 	if (atomp(goal)) {
-	    if ((res = (GET_SUBR(goal)) (NIL, rest)) == YES)
+	    if ((res = (GET_SUBR(goal)) (NIL, rest, th)) == YES)
 		return (YES);
 
 	    return (res);
 	} else {
-	    if ((res = (GET_SUBR(car(goal))) (cdr(goal), rest)) == YES)
+	    if ((res = (GET_SUBR(car(goal))) (cdr(goal), rest, th)) == YES)
 		return (YES);
 
 	    return (res);
 	}
     } else if (compiledp(goal)) {
 	if (atomp(goal)) {
-	    if ((GET_SUBR(goal)) (NIL, rest) == YES)
+	    if ((GET_SUBR(goal)) (NIL, rest,th) == YES)
 		return (YES);
 
 	    return (NO);
 	} else {
-	    if ((GET_SUBR(car(goal))) (cdr(goal), rest) == YES)
+	    if ((GET_SUBR(car(goal))) (cdr(goal), rest,th) == YES)
 		return (YES);
 
 	    return (NO);
@@ -1128,7 +1128,7 @@ int operate(int x)
     operator = car(x);
     operand1 = cadr(x);
     operand2 = caddr(x);
-    return ((GET_SUBR(operator)) (operand1, operand2));
+    return ((GET_SUBR(operator)) (operand1, operand2,0));
 }
 
 int walpha_conversion(int x)

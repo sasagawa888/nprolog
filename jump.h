@@ -8,6 +8,7 @@ typedef int (*fn1)(int);
 typedef int (*fn2)(int , int);
 typedef int (*fn3)(int , int , int);
 typedef int (*fn4)(char*);
+typedef int (*fn5)(int , int , int, int);
 typedef void (*tpred)(char*, int(*pred)(int , int));
 typedef void (*tuser)(char*, int(*user)(int , int), int weight, int spec);
 
@@ -16,6 +17,7 @@ static fn1 f1[NUM_FN1S];
 static fn2 f2[NUM_FN2S];
 static fn3 f3[NUM_FN3S];
 static fn4 f4[NUM_FN4S];
+static fn5 f5[NUM_FN5S];
 tpred deftpred;
 tuser deftinfix;
 tpred deftsys;
@@ -41,6 +43,11 @@ void init3(int n, tpred x){
 void init4(int n, tpred x){
     f4[n] = (fn4)x;
 }
+
+void init5(int n, tpred x){
+    f5[n] = (fn5)x;
+}
+
 
 //for define compiled builtin predicate
 void init_deftpred(tpred x){
@@ -365,10 +372,6 @@ static inline int Jlist3(int x, int y, int z) {
     return f3[LIST3_IDX](x, y, z);
 }
 
-static inline int Jcallsubr(int x, int y, int z) {
-    return f3[CALLSUBR_IDX](x, y, z);
-}
-
 static inline int Jwlist3(int x, int y, int z) {
     return f3[WLIST3_IDX](x, y, z);
 }
@@ -452,3 +455,7 @@ static inline int Jmakefun(char* x) {
     return f4[MAKEFUNC_IDX](x);
 }
 
+
+static inline int Jcallsubr(int x, int y, int z, int th) {
+    return f5[CALLSUBR_IDX](x, y, z, th);
+}
