@@ -256,10 +256,10 @@ void initbuiltin(void)
     return;
 }
 
-int b_length(int arglist, int rest)
+int b_length(int arglist, int rest, int th)
 {
     int n, arg1, arg2, i, ls, res, save1, save2;
-    save2 = sp[0];
+    save2 = sp[th];
     n = length(arglist);
     if (n == 2) {
 	arg1 = car(arglist);
@@ -273,35 +273,35 @@ int b_length(int arglist, int rest)
 	    error(LESS_THAN_ZERO, "length ", arg2);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    error(NOT_INT, "length ", arg2);
-	save1 = wp[0];
+	save1 = wp[th];
 	if ((listp(arg1) && length(arg1) != -1) || nullp(arg1)) {
-	    if (unify(arg2, makeint(length(arg1)), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, makeint(length(arg1)), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	} else if (integerp(arg2)) {
 	    i = GET_INT(arg2);
 	    res = NIL;
 	    while (i > 0) {
-		res = wlistcons(makevariant(0), res, 0);
+		res = wlistcons(makevariant(th), res, th);
 		i--;
 	    }
-	    if (unify(arg1, res, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg1, res, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	} else if (wide_variable_p(arg1) && wide_variable_p(arg2)) {
 	    ls = NIL;
 	    i = 0;
 	    while (1) {
-		unify(arg1, ls, 0);
-		unify(arg2, makeint(i), 0);
-		if (prove_all(rest, sp[0],0) == YES)
+		unify(arg1, ls, th);
+		unify(arg2, makeint(i), th);
+		if (prove_all(rest, sp[th],th) == YES)
 		    return (YES);
 
-		unbind(save2, 0);
+		unbind(save2, th);
 		i++;
-		ls = wlistcons(makevariant(0), ls, 0);
+		ls = wlistcons(makevariant(th), ls, th);
 	    }
 	}
-	wp[0] = save1;
-	unbind(save2, 0);
+	wp[th] = save1;
+	unbind(save2, th);
 	return (NO);
     }
     error(ARITY_ERR, "length ", arglist);
