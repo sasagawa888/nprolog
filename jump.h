@@ -331,10 +331,6 @@ static inline int Jset_var(int x, int y) {
     return f2[SET_VAR_IDX](x, y);
 }
 
-static inline int Jwcons(int x, int y) {
-    return f2[WCONS_IDX](x, y);
-}
-
 static inline int Jwlist2(int x, int y) {
     return f2[WLIST2_IDX](x, y);
 }
@@ -401,6 +397,11 @@ static inline int Junify_nil(int x, int y, int th) {
 static inline int Jexec_all(int x, int y, int th) {
     return f3[EXEC_ALL_IDX](x, y, th);
 }
+
+static inline int Jwcons(int x, int y, int th) {
+    return f3[WCONS_IDX](x, y, th);
+}
+
 
 
 static inline int Jmakeconst(char* x) {

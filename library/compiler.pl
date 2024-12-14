@@ -15,7 +15,7 @@ if(n == 2){
     varY = Jmakevariant(th);
     save1 = Jget_wp(th);
     if(Junify(term1,arg1,th) == YES && Junify_var(term2,arg2,th) == YES){
-        body =Jwcons(119,Jwcons(varX,Jwcons(varY,NIL)));
+        body =Jwcons(119,Jwcons(varX,Jwcons(varY,NIL),th),th);
         if(Jexec_all(Jaddtail_body(rest,body),save2,th) == YES)
             return(YES);
     }
@@ -29,7 +29,7 @@ if(n == 2){
     ...
     save1 = Jget_wp(th);
     if(Junify(term1,arg1,th) == YES && Junify_const(term1,arg2,th) == YES){
-        body = Jwlist3(Jmakeope(","),Jwcons(173,Jwc ....)),th);
+        body = Jwlist3(Jmakeope(","),Jwcons(173,Jwc ...., th)),th);
         if(Jexec_all(Jaddtail_body(rest,body),save2,th) == YES)
             return(YES);
     }
@@ -617,7 +617,7 @@ jump_gen_a_body(X) :-
     write(P),
     write('"),'),
     jump_gen_argument(L),
-    write(')').
+    write(',th)').
 jump_gen_a_body(X) :-
     n_property(X,predicate),
     X =.. [P|L],
@@ -625,7 +625,7 @@ jump_gen_a_body(X) :-
     write(P),
     write('"),'),
     jump_gen_argument(L),
-    write(')').
+    write(',th)').
 % atom builtin e.g. nl fail
 jump_gen_a_body(X) :-
     n_property(X,builtin),
@@ -640,7 +640,7 @@ jump_gen_a_body(X) :-
     write(A),
     write(','),
     jump_gen_argument(L),
-    write(')').
+    write(',th)').
 jump_gen_a_body(X) :-
     n_property(X,operation),
     gen_body1(X).
@@ -651,7 +651,7 @@ jump_gen_a_body(X) :-
     write(P),
     write('"),'),
     jump_gen_argument(L),
-    write(')').
+    write(',th)').
 jump_gen_a_body(X) :-
     n_property(X,userop),
     functor(X,P,0),
@@ -665,7 +665,7 @@ jump_gen_a_body(X) :-
     write(P),
     write('"),'),
     jump_gen_argument(L),
-    write(')').
+    write(',th)').
 jump_gen_a_body(X) :-
     n_property(X,userop),
     X =.. [P|L],
@@ -673,7 +673,7 @@ jump_gen_a_body(X) :-
     write(P),
     write('"),'),
     jump_gen_argument(L),
-    write(')').
+    write(',th)').
 jump_gen_a_body(X) :-
     atom(X),
 	write('Jmakepred("'),
@@ -935,7 +935,7 @@ jump_gen_argument([X|Xs]) :-
     jump_gen_a_argument(X),
     write(','),
     jump_gen_argument(Xs),
-    write(')').
+    write(',th)').
 /*
 generate one argument
 there are all type of prolog object
@@ -980,7 +980,7 @@ jump_gen_a_argument(X) :-
     write(Y),
     write('"),'),
     jump_gen_argument(Z),
-    write(')').
+    write(',th)').
 jump_gen_a_argument(X) :-
     n_property(X,predicate),
     X =.. [Y|Z],
@@ -988,7 +988,7 @@ jump_gen_a_argument(X) :-
     write(Y),
     write('"),'),
     jump_gen_argument(Z),
-    write(')').
+    write(',th)').
 jump_gen_a_argument(X) :-
     n_property(X,builtin),
     functor(X,Y,0),
@@ -1002,7 +1002,7 @@ jump_gen_a_argument(X) :-
     write(A),
     write(','),
     jump_gen_argument(Z),
-    write(')').
+    write(',th)').
 jump_gen_a_argument(X) :-
     n_property(X,compiled),
     functor(X,Y,0),
@@ -1016,7 +1016,7 @@ jump_gen_a_argument(X) :-
     write(A),
     write(','),
     jump_gen_argument(Z),
-    write(')').
+    write(',th)').
 jump_gen_a_argument(X) :-
     n_property(X,operation),
     functor(X,Y,0),
@@ -1030,7 +1030,7 @@ jump_gen_a_argument(X) :-
     write(A),
     write(','),
     jump_gen_argument(Z),
-    write(')').
+    write(',th)').
 %predicate indicator  e.g. foo/1
 jump_gen_a_argument(A/B) :-
     atom(A),
@@ -1053,7 +1053,7 @@ jump_gen_a_argument(X) :-
     write(F),
     write('"),'),
     jump_gen_argument(Z),
-    write(')').
+    write(',th)').
 jump_gen_a_argument(X) :-
     n_property(X,userop),
     functor(X,Y,0),
@@ -1067,7 +1067,7 @@ jump_gen_a_argument(X) :-
     write(Y),
     write('"),'),
     jump_gen_argument(Z),
-    write(')').
+    write(',th)').
 jump_gen_a_argument(X) :-
 	atom(X),
     write('Jmakeconst("'),
