@@ -430,7 +430,7 @@ int o_cons(int x, int y)
     return (listcons(x, y));
 }
 
-int b_ask(int arglist, int rest)
+int b_ask(int arglist, int rest, int th)
 {
     int n, x1, x2;
     char c;
@@ -463,7 +463,7 @@ int b_ask(int arglist, int rest)
 	while (!nullp(x2)) {
 	    print(car(x2));
 	    printstr(" = ");
-	    printanswer(deref(car(x2), 0));
+	    printanswer(deref(car(x2), th));
 	    if (child_flag)
 		printc(',');
 	    if (!nullp(cdr(x2)))
@@ -485,7 +485,7 @@ int b_ask(int arglist, int rest)
 
 	if (c == '.' || c == EOL) {
 	    fputs(".\n", stdout);
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	} else if (c == ';' || c == ' ') {
 	    fputs(";\n", stdout);
 	    return (NO);
@@ -496,7 +496,7 @@ int b_ask(int arglist, int rest)
 }
 
 
-int b_unify(int arglist, int rest)
+int b_unify(int arglist, int rest, int th)
 {
     int n, arg1, arg2, res;
 
@@ -504,9 +504,9 @@ int b_unify(int arglist, int rest)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-	res = unify(arg1, arg2, 0);
+	res = unify(arg1, arg2, th);
 	if (res == YES)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -514,7 +514,7 @@ int b_unify(int arglist, int rest)
     return (NO);
 }
 
-int b_notunify(int arglist, int rest)
+int b_notunify(int arglist, int rest, int th)
 {
     int n, arg1, arg2, res;
 
@@ -523,12 +523,12 @@ int b_notunify(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (operationp(arg1))
-	    arg1 = operate(arg1,0);
+	    arg1 = operate(arg1,th);
 	if (operationp(arg2))
-	    arg2 = operate(arg2,0);
-	res = unify(arg1, arg2, 0);
+	    arg2 = operate(arg2,th);
+	res = unify(arg1, arg2, th);
 	if (res == NO)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -540,7 +540,7 @@ int b_notunify(int arglist, int rest)
 
 
 //input and output
-int b_write(int arglist, int rest)
+int b_write(int arglist, int rest, int th)
 {
     int n, arg1, arg2, save;
 
@@ -570,14 +570,14 @@ int b_write(int arglist, int rest)
 	fflush(GET_PORT(output_stream));
 	quoted_flag = 1;
 	output_stream = save;
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "write ", arglist);
     return (NO);
 }
 
 
-int b_display(int arglist, int rest)
+int b_display(int arglist, int rest, int th)
 {
     int n, arg1, arg2, save;
 
@@ -607,14 +607,14 @@ int b_display(int arglist, int rest)
 	quoted_flag = 0;
 	ignore_flag = 0;
 	output_stream = save;
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "display ", arglist);
     return (NO);
 }
 
 
-int b_writeq(int arglist, int rest)
+int b_writeq(int arglist, int rest,  int th)
 {
     int n, arg1, arg2, save;
 
@@ -642,14 +642,14 @@ int b_writeq(int arglist, int rest)
 	print(arg2);
 	quoted_flag = 0;
 	output_stream = save;
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "writeq ", arglist);
     return (NO);
 }
 
 
-int b_nl(int arglist, int rest)
+int b_nl(int arglist, int rest, int th)
 {
     int n, arg1, save;
 
@@ -657,7 +657,7 @@ int b_nl(int arglist, int rest)
     if (n == 0) {
 	fprintf(GET_PORT(output_stream), "\n");
 	fflush(GET_PORT(output_stream));
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     } else if (n == 1) {
 	arg1 = car(arglist);
 	if (!streamp(arg1) && !aliasp(arg1))
@@ -671,13 +671,13 @@ int b_nl(int arglist, int rest)
 	fprintf(GET_PORT(output_stream), "\n");
 	fflush(GET_PORT(output_stream));
 	output_stream = save;
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "nl ", arglist);
     return (NO);
 }
 
-int b_put(int arglist, int rest)
+int b_put(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -695,14 +695,14 @@ int b_put(int arglist, int rest)
 	    error(NOT_INT, "put ", arg1);
 
 	fprintf(GET_PORT(arg1), "%c", (char) GET_INT(arg2));
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "put ", arglist);
     return (NO);
 }
 
 
-int b_get0(int arglist, int rest)
+int b_get0(int arglist, int rest, int th)
 {
     int n, c, arg1, arg2, i, res;
 
@@ -736,7 +736,7 @@ int b_get0(int arglist, int rest)
 	i = makeint((int) c);
 	res = unify(arg2, i, 0);
 	if (res == YES)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -745,7 +745,7 @@ int b_get0(int arglist, int rest)
 }
 
 
-int b_get(int arglist, int rest)
+int b_get(int arglist, int rest, int th)
 {
     int n, c, arg1, arg2, i, res;
 
@@ -783,9 +783,9 @@ int b_get(int arglist, int rest)
 	    goto loop;
 
       exit:
-	res = unify(arg2, makeint(i), 0);
+	res = unify(arg2, makeint(i), th);
 	if (res == YES)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -794,7 +794,7 @@ int b_get(int arglist, int rest)
 }
 
 
-int b_get0_noecho(int arglist, int rest)
+int b_get0_noecho(int arglist, int rest, int th)
 {
     int n, c, arg1, i, res;
 
@@ -803,9 +803,9 @@ int b_get0_noecho(int arglist, int rest)
 	arg1 = car(arglist);
 	c = n_getch();
 	i = makeint((int) c);
-	res = unify(arg1, i, 0);
+	res = unify(arg1, i, th);
 	if (res == YES)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -816,7 +816,7 @@ int b_get0_noecho(int arglist, int rest)
 
 
 
-int b_get_code(int arglist, int rest)
+int b_get_code(int arglist, int rest, int th)
 {
     int n, arg1, arg2, c, i, res;
     char str[10];
@@ -883,9 +883,9 @@ int b_get_code(int arglist, int rest)
 
 	res = NIL;
 
-	res = unify(arg2, makeint(i), 0);
+	res = unify(arg2, makeint(i), th);
 	if (res == YES)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -893,7 +893,7 @@ int b_get_code(int arglist, int rest)
     return (NO);
 }
 
-int b_get_byte(int arglist, int rest)
+int b_get_byte(int arglist, int rest, int th)
 {
     int n, arg1, arg2, c, res;
 
@@ -918,9 +918,9 @@ int b_get_byte(int arglist, int rest)
 	    arg1 = GET_CAR(arg1);
 	c = fgetc(GET_PORT(arg1));
 
-	res = unify(arg2, makeint(c), 0);
+	res = unify(arg2, makeint(c), th);
 	if (res == YES)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -929,7 +929,7 @@ int b_get_byte(int arglist, int rest)
 }
 
 
-int b_tab(int arglist, int rest)
+int b_tab(int arglist, int rest, int th)
 {
     int n, arg1, arg2, count;
 
@@ -957,7 +957,7 @@ int b_tab(int arglist, int rest)
 	    fprintf(GET_PORT(arg1), " ");
 	    count--;
 	}
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "tab ", arglist);
     return (NO);
@@ -988,7 +988,7 @@ int singletonp(int x)
 
 
 
-int b_read(int arglist, int rest)
+int b_read(int arglist, int rest, int th)
 {
     int n, arg1, arg2, save1, save2, temp, res;
 
@@ -1017,11 +1017,11 @@ int b_read(int arglist, int rest)
 	repl_flag = 0;
 
 	temp = variable_to_call(readparse());
-	res = unify(arg2, temp, 0);
+	res = unify(arg2, temp, th);
 	input_stream = save1;
 	repl_flag = save2;
 	if (res == YES)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -1029,7 +1029,7 @@ int b_read(int arglist, int rest)
     return (NO);
 }
 
-int b_read_line(int arglist, int rest)
+int b_read_line(int arglist, int rest, int th)
 {
     int n, arg1, arg2, save1, save2, res, pos;
     char str[STRSIZE], c;
@@ -1069,11 +1069,11 @@ int b_read_line(int arglist, int rest)
 	    c = readc();
 	}
 	str[pos] = NUL;
-	res = unify(arg2, makestr(str), 0);
+	res = unify(arg2, makestr(str), th);
 	input_stream = save1;
 	repl_flag = save2;
 	if (res == YES)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -1082,7 +1082,7 @@ int b_read_line(int arglist, int rest)
 }
 
 
-int b_read_string(int arglist, int rest)
+int b_read_string(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, save1, save2, res, pos, maxlen;
     char str[STRSIZE], c;
@@ -1129,11 +1129,11 @@ int b_read_string(int arglist, int rest)
 	    c = readc();
 	}
 	str[pos] = NUL;
-	res = unify(arg3, makestr(str), 0);
+	res = unify(arg3, makestr(str), th);
 	input_stream = save1;
 	repl_flag = save2;
 	if (res == YES)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -1143,7 +1143,7 @@ int b_read_string(int arglist, int rest)
 
 
 
-int b_skip(int arglist, int rest)
+int b_skip(int arglist, int rest, int th)
 {
     int n, arg1, arg2, save;
     char c, str[STRSIZE];
@@ -1175,14 +1175,14 @@ int b_skip(int arglist, int rest)
 	while (strcmp(str, GET_NAME(arg2)) != 0 && c != EOF);
 
 	input_stream = save;
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "skip ", arglist);
     return (NO);
 }
 
 
-int b_stdin(int arglist, int rest)
+int b_stdin(int arglist, int rest, int th)
 {
     int n, arg1, arg2, save1, save2;
 
@@ -1197,12 +1197,12 @@ int b_stdin(int arglist, int rest)
 	    error(NOT_CALLABLE, "stdin ", arg2);
 
 	save1 = input_stream;
-	save2 = sp[0];
-	if (prove_all(arg2, sp[0],0) == YES) {
+	save2 = sp[th];
+	if (prove_all(arg2, sp[th],th) == YES) {
 	    input_stream = save1;
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	}
-	unbind(save2, 0);
+	unbind(save2, th);
 	input_stream = save1;
 	return (NO);
     }
@@ -1210,7 +1210,7 @@ int b_stdin(int arglist, int rest)
     return (NO);
 }
 
-int b_stdout(int arglist, int rest)
+int b_stdout(int arglist, int rest, int th)
 {
     int n, arg1, arg2, save1, save2;
 
@@ -1225,12 +1225,12 @@ int b_stdout(int arglist, int rest)
 	    error(NOT_CALLABLE, "stdout ", arg2);
 
 	save1 = output_stream;
-	save2 = sp[0];
-	if (prove_all(arg2, sp[0],0) == YES) {
+	save2 = sp[th];
+	if (prove_all(arg2, sp[th],th) == YES) {
 	    output_stream = save1;
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	}
-	unbind(save2, 0);
+	unbind(save2, th);
 	output_stream = save1;
 	return (NO);
     }
@@ -1238,7 +1238,7 @@ int b_stdout(int arglist, int rest)
     return (NO);
 }
 
-int b_stdinout(int arglist, int rest)
+int b_stdinout(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, save1, save2, save3;
 
@@ -1257,13 +1257,13 @@ int b_stdinout(int arglist, int rest)
 
 	save1 = input_stream;
 	save2 = output_stream;
-	save3 = sp[0];
-	if (prove_all(arg3, sp[0],0) == YES) {
+	save3 = sp[th];
+	if (prove_all(arg3, sp[th],th) == YES) {
 	    input_stream = save1;
 	    output_stream = save2;
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	}
-	unbind(save3, 0);
+	unbind(save3, th);
 	input_stream = save1;
 	output_stream = save2;
 	return (NO);
@@ -1273,7 +1273,7 @@ int b_stdinout(int arglist, int rest)
 }
 
 
-int b_create(int arglist, int rest)
+int b_create(int arglist, int rest, int th)
 {
     int n, arg1, arg2, stream;
 
@@ -1288,7 +1288,7 @@ int b_create(int arglist, int rest)
 
 	if (eqp(arg1, makeconst("user"))) {
 	    output_stream = standard_output;
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	} else {
 	    stream =
 		makestream(fopen(GET_NAME(arg2), "w"), OPL_OUTPUT,
@@ -1296,8 +1296,8 @@ int b_create(int arglist, int rest)
 
 	    if (GET_PORT(stream) == NULL)
 		error(CANT_OPEN, "create ", arg2);
-	    unify(arg1, stream, 0);
-	    return (prove_all(rest, sp[0],0));
+	    unify(arg1, stream, th);
+	    return (prove_all(rest, sp[th],th));
 	}
     }
     error(ARITY_ERR, "create ", arglist);
@@ -1307,7 +1307,7 @@ int b_create(int arglist, int rest)
 
 
 
-int b_open(int arglist, int rest)
+int b_open(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, stream;
     FILE *fp;
@@ -1324,7 +1324,7 @@ int b_open(int arglist, int rest)
 
 	if (eqp(arg1, makeconst("user"))) {
 	    output_stream = standard_output;
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	} else {
 	    fp = fopen(GET_NAME(arg2), "r");
 	    if (fp == NULL) {
@@ -1339,8 +1339,8 @@ int b_open(int arglist, int rest)
 
 		if (GET_PORT(stream) == NULL)
 		    error(CANT_OPEN, "open ", arg2);
-		unify(arg1, stream, 0);
-		return (prove_all(rest, sp[0],0));
+		unify(arg1, stream, th);
+		return (prove_all(rest, sp[th],th));
 	    } else if (arg3 == makeconst("r")) {
 		stream =
 		    makestream(fopen(GET_NAME(arg2), "r"), OPL_INPUT,
@@ -1348,8 +1348,8 @@ int b_open(int arglist, int rest)
 
 		if (GET_PORT(stream) == NULL)
 		    error(CANT_OPEN, "open ", arg2);
-		unify(arg1, stream, 0);
-		return (prove_all(rest, sp[0],0));
+		unify(arg1, stream, th);
+		return (prove_all(rest, sp[th],th));
 	    } else if (arg3 == makeconst("rw")) {
 		stream =
 		    makestream(fopen(GET_NAME(arg2), "r+"), OPL_INPUT,
@@ -1358,7 +1358,7 @@ int b_open(int arglist, int rest)
 		if (GET_PORT(stream) == NULL)
 		    error(CANT_OPEN, "open ", arg2);
 		unify(arg1, stream, 0);
-		return (prove_all(rest, sp[0],0));
+		return (prove_all(rest, sp[th],th));
 	    } else if (arg3 == makeconst("a") || arg3 == makeconst("ra")) {
 		stream =
 		    makestream(fopen(GET_NAME(arg2), "a+"), OPL_INPUT,
@@ -1366,8 +1366,8 @@ int b_open(int arglist, int rest)
 
 		if (GET_PORT(stream) == NULL)
 		    error(CANT_OPEN, "open ", arg2);
-		unify(arg1, stream, 0);
-		return (prove_all(rest, sp[0],0));
+		unify(arg1, stream, th);
+		return (prove_all(rest, sp[th],th));
 	    }
 	    error(NOT_OPEN_OPTION, "open ", arg3);
 	}
@@ -1376,7 +1376,7 @@ int b_open(int arglist, int rest)
     return (NO);
 }
 
-int b_dup(int arglist, int rest)
+int b_dup(int arglist, int rest, int th)
 {
     int n, arg1, arg2, addr;
 
@@ -1396,14 +1396,14 @@ int b_dup(int arglist, int rest)
 	SET_VAR(addr, GET_VAR(arg1));	//text/binary
 	SET_AUX(addr, GET_AUX(arg1));	//for eof_action
 	if (unify(arg2, addr, 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "dup ", arglist);
     return (NO);
 }
 
 
-int b_close(int arglist, int rest)
+int b_close(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -1411,14 +1411,14 @@ int b_close(int arglist, int rest)
     if (n == 1) {
 	arg1 = car(arglist);
 	fclose(GET_PORT(arg1));
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "close ", arglist);
     return (NO);
 }
 
 
-int b_see(int arglist, int rest)
+int b_see(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -1432,7 +1432,7 @@ int b_see(int arglist, int rest)
 
 	if (eqp(arg1, makeconst("user"))) {
 	    input_stream = standard_input;
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	} else {
 	    input_stream =
 		makestream(fopen(GET_NAME(arg1), "r"), OPL_INPUT, OPL_TEXT,
@@ -1440,14 +1440,14 @@ int b_see(int arglist, int rest)
 
 	    if (GET_PORT(input_stream) == NULL)
 		error(CANT_OPEN, "see", arg1);
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	}
     }
     error(ARITY_ERR, "see ", arglist);
     return (NO);
 }
 
-int b_seeing(int arglist, int rest)
+int b_seeing(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -1456,8 +1456,8 @@ int b_seeing(int arglist, int rest)
 	arg1 = car(arglist);
 	if (!wide_variable_p(arg1))
 	    error(NOT_VAR, "seeing ", arg1);
-	if (unify(arg1, GET_CDR(input_stream), 0) == YES) {
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg1, GET_CDR(input_stream), th) == YES) {
+	    return (prove_all(rest, sp[th],th));
 	}
     }
     error(ARITY_ERR, "seeing ", arglist);
@@ -1465,7 +1465,7 @@ int b_seeing(int arglist, int rest)
 }
 
 
-int b_seen(int arglist, int rest)
+int b_seen(int arglist, int rest, int th)
 {
     int n;
 
@@ -1475,13 +1475,13 @@ int b_seen(int arglist, int rest)
 	    fclose(GET_PORT(input_stream));
 	    input_stream = standard_input;
 	}
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "seen ", arglist);
     return (NO);
 }
 
-int b_tell(int arglist, int rest)
+int b_tell(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -1496,7 +1496,7 @@ int b_tell(int arglist, int rest)
 
 	if (eqp(arg1, makeconst("user"))) {
 	    output_stream = standard_output;
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	} else {
 	    output_stream =
 		makestream(fopen(GET_NAME(arg1), "w"), OPL_OUTPUT,
@@ -1504,7 +1504,7 @@ int b_tell(int arglist, int rest)
 
 	    if (GET_PORT(input_stream) == NULL)
 		error(CANT_OPEN, "tell ", arg1);
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	}
     }
     error(ARITY_ERR, "tell ", arglist);
