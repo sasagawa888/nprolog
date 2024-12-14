@@ -426,7 +426,7 @@ int b_op(int arglist, int rest)
 int o_cons(int x, int y)
 {
     if (operationp(y))
-	y = operate(y);
+	y = operate(y,0);
     return (listcons(x, y));
 }
 
@@ -523,9 +523,9 @@ int b_notunify(int arglist, int rest)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (operationp(arg1))
-	    arg1 = operate(arg1);
+	    arg1 = operate(arg1,0);
 	if (operationp(arg2))
-	    arg2 = operate(arg2);
+	    arg2 = operate(arg2,0);
 	res = unify(arg1, arg2, 0);
 	if (res == NO)
 	    return (prove_all(rest, sp[0],0));
@@ -1623,7 +1623,7 @@ int b_consult(int arglist, int rest)
 	    }
 	    // DCG syntax e.g. a-->b.
 	    if (dcgp(clause)) {
-		operate(clause);
+		operate(clause,0);
 		goto skip;
 	    }
 	    //assert
@@ -1698,7 +1698,7 @@ int b_reconsult(int arglist, int rest)
 	    }
 	    // DCG syntax e.g. a-->b.
 	    if (dcgp(clause)) {
-		operate(clause);
+		operate(clause,0);
 		goto skip;
 	    }
 	    //delete old definition
@@ -2543,7 +2543,7 @@ int b_assert(int arglist, int rest)
 
 
 	    SET_VAR(arg1, unique(varslist(arg1)));
-	    operate(arg1);
+	    operate(arg1,0);
 	    checkgbc();
 	    return (prove_all(rest, sp[0],0));
 	}
@@ -2589,7 +2589,7 @@ int b_asserta(int arglist, int rest)
 		error(BUILTIN_EXIST, "asserta ", arg1);
 
 	    SET_VAR(arg1, unique(varslist(arg1)));
-	    operate(arg1);
+	    operate(arg1,0);
 	    assert_flag = 0;
 	    checkgbc();
 	    return (prove_all(rest, sp[0],0));
@@ -4093,7 +4093,7 @@ int b_functor(int arglist, int rest)
 		    SET_AUX(arg2, PRED);
 		res = cons(arg2, res);
 		if (arg2 == DOTOBJ && GET_INT(arg3) == 2)
-		    res = operate(res);
+		    res = operate(res,0);
 		if (unify(arg1, res, 0) == YES)
 		    return (prove_all(rest, sp[0],0));
 		else
@@ -4314,7 +4314,7 @@ int b_univ(int arglist, int rest)
 		return (NO);
 	} else if (variablep(arg1) && listp(arg2)) {
 	    if (car(arg2) == DOTOBJ) {
-		arg2 = operate(arg2);
+		arg2 = operate(arg2,0);
 		SET_AUX(arg2, 0);
 	    } else if (numberp(car(arg2))) {
 		return (NO);

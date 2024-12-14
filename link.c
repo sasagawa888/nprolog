@@ -74,7 +74,6 @@ void dynamic_link(int x)
     init_f1(RANDOM_IDX, (tpred) f_random);
     init_f1(RANDI_IDX, (tpred) f_randi);
     init_f1(WLIST1_IDX, (tpred) wlist1);
-    init_f1(OPERATE_IDX, (tpred) operate);
     init_f1(LISTP_IDX, (tpred) listp);
     init_f1(STRUCTUREP_IDX, (tpred) structurep);
     init_f1(VARIABLEP_IDX, (tpred) variablep);
@@ -148,7 +147,9 @@ void dynamic_link(int x)
     init_f4(MAKEBIGX_IDX, (tpred) makebigx);
     init_f4(MAKESTR_IDX, (tpred) makestr);
     init_f4(MAKEFUNC_IDX, (tpred) makefunc);
-    init_f4(CALLSUBR_IDX, (tpred) callsubr);
+
+    /* argument 4*/
+    init_f5(CALLSUBR_IDX, (tpred) callsubr);
 
     init_deftpred((tpred) defcompiled);
     init_deftinfix((tuser) definfixcomp);

@@ -163,7 +163,7 @@ enum { CHECKGBC_IDX, GBC_IDX, FRESHCELL_IDX,
 enum { CAR_IDX, CDR_IDX, CADR_IDX, CADDR_IDX, CAAR_IDX, CADAR_IDX, PRINT_IDX, MAKEINT_IDX,
        LENGTH_IDX,  GET_INT_IDX,
        SIN_IDX, ASIN_IDX, COS_IDX, ACOS_IDX, TAN_IDX, ATAN_IDX, EXP_IDX, LOG_IDX,
-       LN_IDX, LIST1_IDX, RANDOM_IDX, RANDI_IDX,  WLIST1_IDX, OPERATE_IDX,
+       LN_IDX, LIST1_IDX, RANDOM_IDX, RANDI_IDX,  WLIST1_IDX, 
        LISTP_IDX,  STRUCTUREP_IDX, VARIABLEP_IDX, GET_SP_IDX, GET_WP_IDX, INC_PROOF_IDX,
        MAKEVARIANT_IDX, 
        NUM_FN1S
@@ -176,7 +176,7 @@ enum { CONS_IDX, PLUS_IDX, MINUS_IDX, MULT_IDX, DIVIDE_IDX, REMAINDER_IDX,
        LIST2_IDX, SET_CAR_IDX, SET_CDR_IDX, COMPLEMENT_IDX, SET_AUX_IDX,
        NOT_NUMEQP_IDX, DIV_IDX, SET_VAR_IDX, WCONS_IDX, WLIST2_IDX, 
        ADDTAIL_BODY_IDX, NTH_IDX, 
-       ROUND_IDX, UNBIND_IDX, SET_SP_IDX, SET_WP_IDX,DEREF_IDX,
+       ROUND_IDX, UNBIND_IDX, SET_SP_IDX, SET_WP_IDX, DEREF_IDX, 
        NUM_FN2S
 };
 
@@ -1178,7 +1178,7 @@ int o_dcg(int x, int y);
 int o_define(int x, int y);
 int o_ignore(int nest, int n);
 int op_connect(int x, int y, int th);
-int operate(int x);
+int operate(int x, int th);
 int operationp(int addr);
 int operatorp(int addr);
 int parser(int operand, int operator, int weight, int spec, int terminal, int parsemode);

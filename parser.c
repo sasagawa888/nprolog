@@ -1280,7 +1280,7 @@ int readitem(void)
     res = readitem1();
     // '.'(1,'.'(2,[])) -> [1,2]
     if (operationp(res) && car(res) == DOTOBJ)
-	res = operate(res);
+	res = operate(res,0);
 
     return (res);
 }

@@ -411,7 +411,7 @@ void query(int x, int th)
 
     // DCG syntax e.g. a-->b.
     if (dcgp(x)) {
-	operate(x);
+	operate(x,th);
 	return;
     }
     //[file1,file2] -> consult(file1),consult(file2).
@@ -458,7 +458,7 @@ void query_break(int x, int th)
 
     // DCG syntax e.g. a-->b.
     if (dcgp(x)) {
-	operate(x);
+	operate(x,th);
 	return;
     }
     //[file1,file2] -> consult(file1),consult(file2).
@@ -1121,14 +1121,14 @@ int valslist(int x)
 	return (cons(cons(car(x), deref1(car(x), 0)), valslist(cdr(x))));
 }
 
-int operate(int x)
+int operate(int x, int th)
 {
     int operator, operand1, operand2;
 
     operator = car(x);
     operand1 = cadr(x);
     operand2 = caddr(x);
-    return ((GET_SUBR(operator)) (operand1, operand2,0));
+    return ((GET_SUBR(operator)) (operand1, operand2,th));
 }
 
 int walpha_conversion(int x)

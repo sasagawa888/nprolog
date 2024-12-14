@@ -1467,7 +1467,7 @@ jump_gen_tail_a_body(X,Head) :-
     write(P),
     write('"),'),
     jump_gen_a_argument(L),
-    write(',NIL);'),nl.
+    write(',NIL,0);'),nl.
 
 % tail call
 jump_gen_tail_a_body(X,Head) :-
