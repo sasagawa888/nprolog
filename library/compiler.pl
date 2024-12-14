@@ -29,8 +29,8 @@ if(n == 2){
     ...
     save1 = Jget_wp(th);
     if(Junify(term1,arg1,th) == YES && Junify_const(term1,arg2,th) == YES){
-        body = Jwlist3(Jmakeope(","),Jwcons(173,Jwc ....)));
-        if(Jexec_all(Jaddtail_body(rest,body),save2) == YES)
+        body = Jwlist3(Jmakeope(","),Jwcons(173,Jwc ....)),th);
+        if(Jexec_all(Jaddtail_body(rest,body),save2,th) == YES)
             return(YES);
     }
     Junbind(save2,th);
@@ -571,23 +571,23 @@ jump_gen_body1((D1;D2),N) :-
 	jump_gen_body1(D1,N),
     write(','),
     jump_gen_body1(D2,N),
-    write(')').
+    write(',th)').
 jump_gen_body1(((D1;D2),Xs),N) :-
     write('Jwlist3(Jmakeope(","),'),
 	write('Jwlist3(Jmakeope(";"),'),
 	jump_gen_body1(D1,N),
     write(','),
     jump_gen_body1(D2,N),
-    write('),'),
+    write(',th),'),
     jump_gen_body1(Xs,N),
-    write(')').
+    write(',th)').
     
 jump_gen_body1((X,Xs),N) :-
 	write('Jwlist3(Jmakeope(","),'),
 	jump_gen_a_body(X),
     write(','),
     jump_gen_body1(Xs,N),
-    write(')').
+    write(',th)').
 
 jump_gen_body1(X,N) :-
 	jump_gen_a_body(X).
@@ -601,7 +601,7 @@ jump_gen_a_body((X;Xs)) :-
 	jump_gen_a_body(X),
     write(','),
     jump_gen_body1(Xs),
-    write(')').
+    write(',th)').
 % defined predicate will become compiled predicate
 jump_gen_a_body(X) :-
     n_defined_predicate(X),
@@ -1039,7 +1039,7 @@ jump_gen_a_argument(A/B) :-
     write(A),
     write('"),'),
     jump_gen_a_argument(B),
-    write(')').
+    write(',th)').
 jump_gen_a_argument(X) :-
     n_property(X,function),
     functor(X,F,0),

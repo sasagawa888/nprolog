@@ -372,10 +372,6 @@ static inline int Jlist3(int x, int y, int z) {
     return f3[LIST3_IDX](x, y, z);
 }
 
-static inline int Jwlist3(int x, int y, int z) {
-    return f3[WLIST3_IDX](x, y, z);
-}
-
 static inline int Jerrorcomp(int x, int y, int z) {
     return f3[ERRORCOMP_IDX](x, y, z);
 }
@@ -458,4 +454,8 @@ static inline int Jmakefun(char* x) {
 
 static inline int Jcallsubr(int x, int y, int z, int th) {
     return f5[CALLSUBR_IDX](x, y, z, th);
+}
+
+static inline int Jwlist3(int x, int y, int z, int th) {
+    return f5[WLIST3_IDX](x, y, z, th);
 }

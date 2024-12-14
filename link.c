@@ -125,7 +125,6 @@ void dynamic_link(int x)
 
     //argument-3
     init_f3(LIST3_IDX, (tpred) list3);
-    init_f3(WLIST3_IDX, (tpred) wlist3);
     init_f3(ERRORCOMP_IDX, (tpred) errorcomp);
     init_f3(WLISTCONS_IDX, (tpred) wlistcons);
     init_f3(UNIFY_IDX, (tpred) unify);
@@ -150,6 +149,7 @@ void dynamic_link(int x)
 
     /* argument 4 */
     init_f5(CALLSUBR_IDX, (tpred) callsubr);
+    init_f5(WLIST3_IDX, (tpred) wlist3);
 
     init_deftpred((tpred) defcompiled);
     init_deftinfix((tuser) definfixcomp);
