@@ -321,7 +321,7 @@ jump_gen_a_pred(P) :-
     write(P1),
     write('(int arglist, int rest, int th){'),nl,
     jump_gen_var_declare(P),
-    write('save2 = Jget_sp(0);'),nl,
+    write('save2 = Jget_sp(th);'),nl,
     write('n = Jlength(arglist);'),nl,
     n_arity_count(P,L),
     jump_gen_a_pred1(P,L),
@@ -392,7 +392,7 @@ if( )... head
 */
 % clause
 jump_gen_a_pred5((Head :- Body)) :-
-    write('save1 = Jget_wp(0);'),nl,
+    write('save1 = Jget_wp(th);'),nl,
 	jump_gen_head(Head),
     jump_gen_body(Body,0).
 
@@ -400,25 +400,25 @@ jump_gen_a_pred5((Head :- Body)) :-
 jump_gen_a_pred5(P) :-
 	n_property(P,predicate),
     functor(P,_,0),
-    write('return(Jexec_all(rest,Jget_sp(0),0));'),nl.
+    write('return(Jexec_all(rest,Jget_sp(th)th));'),nl.
 
 % predicate
 jump_gen_a_pred5(P) :-
 	n_property(P,predicate),
-    write('save1 = Jget_wp(0);'),nl,
+    write('save1 = Jget_wp(th);'),nl,
 	jump_gen_head(P),
-    write('if(Jexec_all(rest,Jget_sp(0),0) == YES) return(YES);'),nl,
-    write('Junbind(save2,0);'),nl,
-    write('Jset_wp(save1,0);'),nl.
+    write('if(Jexec_all(rest,Jget_sp(th),th) == YES) return(YES);'),nl,
+    write('Junbind(save2,th);'),nl,
+    write('Jset_wp(save1,th);'),nl.
 
 % user ope
 jump_gen_a_pred5(P) :-
 	n_property(P,userop),
-    write('save1 = Jget_wp(0);'),nl,
+    write('save1 = Jget_wp(th);'),nl,
 	jump_gen_head(P),
-    write('if(Jexec_all(rest,Jget_sp(0),0) == YES) return(YES);'),nl,
-    write('Junbind(save2,0);'),nl,
-    write('Jset_wp(save1,0);'),nl.
+    write('if(Jexec_all(rest,Jget_sp(th),th) == YES) return(YES);'),nl,
+    write('Junbind(save2,th);'),nl,
+    write('Jset_wp(save1,th);'),nl.
 
 
 
@@ -435,7 +435,7 @@ jump_gen_var([]).
 jump_gen_var([L|Ls]) :-
     n_atom_convert(L,L1),
     write(L1),
-    write(' = Jmakevariant(0);'),nl,
+    write(' = Jmakevariant(th);'),nl,
     jump_gen_var(Ls).
 
 
@@ -458,57 +458,57 @@ Jset_wp(save1,th);
 
 % disjunction
 jump_gen_body(((X1;X2);Y),N) :-
-    write('{dp['),write(N),write(']=Jget_sp(0);'),nl,
+    write('{dp['),write(N),write(']=Jget_sp(th);'),nl,
     N1 is N+1,
     jump_gen_body(X,N1),
-    write('Junbind(dp['),write(N),write('],0);'),nl,
+    write('Junbind(dp['),write(N),write('],th);'),nl,
     write('body = '),nl,
     jump_gen_body1(Y,N),
     write(';'),nl,
-    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp(0),0) == YES)'),nl,
+    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp(th),th) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(dp['),write(N),write('],0);}'),nl.
+    write('Junbind(dp['),write(N),write('],th);}'),nl.
 
 
 jump_gen_body((X;(Y1;Y2)),N) :-
-    write('{dp['),write(N),write(']=Jget_sp(0);'),nl,
+    write('{dp['),write(N),write(']=Jget_sp(th);'),nl,
     write('body = '),nl,
     jump_gen_body1(X,N),
     write(';'),nl,
-    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp(0),0) == YES)'),nl,
+    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp(th),th) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(dp['),write(N),write('],0);'),nl,
+    write('Junbind(dp['),write(N),write('],th);'),nl,
     N1 is N+1,
     jump_gen_body((Y1;Y2),N1),
-    write('Junbind(dp['),write(N),write('],0);}'),nl.
+    write('Junbind(dp['),write(N),write('],th);}'),nl.
 
 
 jump_gen_body((X;Y),N) :-
     n_has_cut(X),
-    write('{dp['),write(N),write(']=Jget_sp(0);'),nl,
+    write('{dp['),write(N),write(']=Jget_sp(th);'),nl,
     jump_gen_body(X,N),
-    write('Junbind(dp['),write(N),write('],0);'),nl,
+    write('Junbind(dp['),write(N),write('],th);'),nl,
     write('body = '),nl,
     jump_gen_body1(Y,N),
     write(';'),nl,
-    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp(0),0) == YES)'),nl,
+    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp(th),th) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(dp['),write(N),write('],0);}'),nl.
+    write('Junbind(dp['),write(N),write('],th);}'),nl.
 
 jump_gen_body((X;Y),N) :-
-    write('{dp['),write(N),write(']=Jget_sp(0);'),nl,
+    write('{dp['),write(N),write(']=Jget_sp(th);'),nl,
     write('body = '),nl,
     jump_gen_body1(X,N),
     write(';'),nl,
-    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp(0),0) == YES)'),nl,
+    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp(th),th) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(dp['),write(N),write('],0);'),nl,
+    write('Junbind(dp['),write(N),write('],th);'),nl,
     write('body = '),nl,
     jump_gen_body1(Y,N),
     write(';'),nl,
-    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp(0),0) == YES)'),nl,
+    write('if(Jexec_all(Jaddtail_body(rest,body),Jget_sp(th),th) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(dp['),write(N),write('],0);}'),nl.
+    write('Junbind(dp['),write(N),write('],th);}'),nl.
 
 
 % has cut
@@ -520,11 +520,11 @@ jump_gen_body(X,N) :-
     write('{body = '),
     jump_gen_body1(X1,N),
     write(';'),nl,
-    write('if((res=Jexec_all(body,Jget_sp(0),0)) == YES)'),nl,
+    write('if((res=Jexec_all(body,Jget_sp(th),th)) == YES)'),nl,
     jump_gen_after_body(X2,N),
     write('}'),nl,
-    write('Junbind(save2,0);'),nl,
-    write('Jset_wp(save1,0);'),nl.
+    write('Junbind(save2,th);'),nl,
+    write('Jset_wp(save1,th);'),nl.
 
 % nested has cut
 jump_gen_body(X,N) :-
@@ -535,11 +535,11 @@ jump_gen_body(X,N) :-
     write('{body = '),
     jump_gen_body1(X1,N),
     write(';'),nl,
-    write('if(Jexec_all(body,Jget_sp(0),0) == YES)'),nl,
+    write('if(Jexec_all(body,Jget_sp(th),th) == YES)'),nl,
     jump_gen_body(X2,N),
     write('}'),nl,
-    write('Junbind(save2,0);'),nl,
-    write('Jset_wp(save1,0);'),nl.
+    write('Junbind(save2,th);'),nl,
+    write('Jset_wp(save1,th);'),nl.
     
     
 % conjunction 
@@ -547,19 +547,19 @@ jump_gen_body(X,N) :-
     write('{body = '),
     jump_gen_body1(X,N),
     write(';'),nl,
-    write('if((res=Jexec_all(Jaddtail_body(rest,body),Jget_sp(0),0)) == YES)'),nl,
+    write('if((res=Jexec_all(Jaddtail_body(rest,body),Jget_sp(th),th)) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(save2,0);'),nl,
-    write('Jset_wp(save1,0);}'),nl.
+    write('Junbind(save2,th);'),nl,
+    write('Jset_wp(save1,th);}'),nl.
     
 jump_gen_after_body(X,N) :-
     write('{body = '),
     jump_gen_body1(X,N),
     write(';'),nl,
-    write('if((Jexec_all(Jaddtail_body(rest,body),Jget_sp(0),0)) == YES)'),nl,
+    write('if((Jexec_all(Jaddtail_body(rest,body),Jget_sp(th),th)) == YES)'),nl,
     write('return(YES);'),nl,
-    write('Junbind(save2,0);'),nl,
-    write('Jset_wp(save1,0);'),nl,
+    write('Junbind(save2,th);'),nl,
+    write('Jset_wp(save1,th);'),nl,
     write('return(NO);}'),nl.
 
 
@@ -707,7 +707,7 @@ jump_gen_head1([[]|Xs],N) :-
     write(',arg'),
     write(N),
     write(','),
-    write(0),
+    write(th),
     write(') == YES && '),
     N1 is N + 1,
     jump_gen_head1(Xs,N1).
@@ -724,7 +724,7 @@ jump_gen_head1([X|Xs],N) :-
     write(',arg'),
     write(N),
     write(','),
-    write(0),
+    write(th),
     write(') == YES && '),
     N1 is N + 1,
     jump_gen_head1(Xs,N1). 
@@ -736,7 +736,7 @@ jump_gen_head1([X|Xs],N) :-
     write(',arg'),
     write(N),
     write(','),
-    write(0),
+    write(th),
     write(') == YES && '),
     N1 is N + 1,
     jump_gen_head1(Xs,N1). 
@@ -747,7 +747,7 @@ jump_gen_head1([X|Xs],N) :-
     write(',arg'),
     write(N),
     write(','),
-    write(0),
+    write(th),
     write(') == YES && '),
     N1 is N + 1,
     jump_gen_head1(Xs,N1).
@@ -794,7 +794,7 @@ jump_eval_form(X) :-
     write('Jderef('),
     write(X1),
     write(','),
-    write(0),
+    write(th),
     write(')').
 jump_eval_form(X) :-
 	atom(X),
@@ -1085,7 +1085,7 @@ jump_gen_argument_list([X|Xs]) :-
     write(','),
     jump_gen_a_argument(Xs),
     write(','),
-    write(0),
+    write(th),
     write(')').
 
 /*
@@ -1119,7 +1119,7 @@ jump_gen_exec2(X) :-
     write('body = '),
     jump_gen_body1(X,0),
     write(';'),nl,
-    write('Jexec_all(body,Jget_sp(0),0);'),!.
+    write('Jexec_all(body,Jget_sp(th),th);'),!.
 
 /*
 optimizer for deterministic predicate
@@ -1213,7 +1213,7 @@ jump_gen_tail_pred1(P,N) :-
     write(N),
     write('){'),,nl,
     write('loop:'),nl,
-    write('Jinc_proof(0);'),nl,
+    write('Jinc_proof(th);'),nl,
     jump_gen_tail_pred2(P,N),
     write('}'),
     write('return(NO);'),nl.
@@ -1312,14 +1312,14 @@ jump_gen_tail_head_unify(Pred) :-
 jump_gen_tail_head_unify1([]).
 jump_gen_tail_head_unify1([X|Xs]) :-
     write(X),
-    write(' = Jmakevariant(0);'),nl,
+    write(' = Jmakevariant(th);'),nl,
     jump_gen_tail_head_unify1(Xs).
 
 % if( && &&) return(Junify(arglist,head,th));
 jump_gen_tail_head_unify2(X) :-
     write('if('),
     jump_gen_tail_head2(X,[]),
-    write('){if(Junify(arglist,head,0)==YES) return(Jexec_all(rest,Jget_sp(0),0)); else return(NO);}'),
+    write('){if(Junify(arglist,head,th)==YES) return(Jexec_all(rest,Jget_sp(th),th)); else return(NO);}'),
     nl.
     
 % unify head
@@ -1414,7 +1414,7 @@ jump_gen_tail_a_body(X = Y,Head) :-
     write(','),
     jump_gen_a_argument(Y),
     write(','),
-    write(0),
+    write(th),
     write(')==NO) return(NO);').
 
 jump_gen_tail_a_body(X =:= Y,Head) :-
@@ -1467,7 +1467,7 @@ jump_gen_tail_a_body(X,Head) :-
     write(P),
     write('"),'),
     jump_gen_a_argument(L),
-    write(',NIL,0);'),nl.
+    write(',NIL,th);'),nl.
 
 % tail call
 jump_gen_tail_a_body(X,Head) :-
