@@ -24,7 +24,7 @@ int proof[THREADSIZE];
 int nest = 0;
 cell heap[CELLSIZE];
 int cell_hash_table[HASHTBSIZE];
-int variant[VARIANTSIZE];
+int variant[VARIANTSIZE][THREADSIZE];
 int bigcell[BIGSIZE];
 int stack[STACKSIZE];
 int ustack[STACKSIZE];
@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
     fp = fopen(str, "r");
     if (fp != NULL) {
 	fclose(fp);
-	b_consult(list1(makeconst(str)), NIL,0);
+	b_consult(list1(makeconst(str)), NIL, 0);
 	predicates = NIL;
     }
     strcpy(str, home);
@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
     fp = fopen(str, "r");
     if (fp != NULL) {
 	fclose(fp);
-	b_consult(list1(makeconst(str)), NIL,0);
+	b_consult(list1(makeconst(str)), NIL, 0);
 	predicates = NIL;
     }
     strcpy(str, home);
@@ -238,7 +238,7 @@ int main(int argc, char *argv[])
     fp = fopen(str, "r");
     if (fp != NULL) {
 	fclose(fp);
-	b_consult(list1(makeconst(str)), NIL,0);
+	b_consult(list1(makeconst(str)), NIL, 0);
 	predicates = NIL;
     }
     strcpy(str, home);
@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
     fp = fopen(str, "r");
     if (fp != NULL) {
 	fclose(fp);
-	b_consult(list1(makeconst(str)), NIL,0);
+	b_consult(list1(makeconst(str)), NIL, 0);
     }
 
     while ((ch = getopt(argc, argv, "c:s:rhvn")) != -1) {
@@ -259,7 +259,7 @@ int main(int argc, char *argv[])
 		printf("Not exist %s\n", optarg);
 		exit(EXIT_FAILURE);
 	    }
-	    b_consult(list1(makeconst(optarg)), NIL,0);
+	    b_consult(list1(makeconst(optarg)), NIL, 0);
 	    break;
 	case 's':
 	    fp = fopen(optarg, "r");
@@ -270,7 +270,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	    }
 	    script_flag = 1;
-	    b_consult(list1(makeconst(optarg)), NIL,0);
+	    b_consult(list1(makeconst(optarg)), NIL, 0);
 	    exit(EXIT_SUCCESS);
 	case 'r':
 	    repl_flag = 0;
@@ -286,7 +286,7 @@ int main(int argc, char *argv[])
 	    fp = fopen("network.pl", "r");
 	    if (fp != NULL) {
 		fclose(fp);
-		b_consult(list1(makeconst("network.pl")), NIL,0);
+		b_consult(list1(makeconst("network.pl")), NIL, 0);
 	    }
 	    child_flag = 1;
 	    init_parent();
@@ -368,7 +368,7 @@ void reset(int i)
 
 void init_repl(void)
 {
-    int i;
+    int i, j;
 
     stok.flag = GO;
     proof[0] = 0;
@@ -388,7 +388,9 @@ void init_repl(void)
     big_pt0 = 0;
     //initialize variant variable
     for (i = 0; i < VARIANTSIZE; i++) {
-	variant[i] = UNBIND;
+	for (j = 0; j < THREADSIZE; j++) {
+	    variant[i][j] = UNBIND;
+	}
     }
     i = variables;
     while (!nullp(i)) {
@@ -411,7 +413,7 @@ void query(int x, int th)
 
     // DCG syntax e.g. a-->b.
     if (dcgp(x)) {
-	operate(x,th);
+	operate(x, th);
 	return;
     }
     //[file1,file2] -> consult(file1),consult(file2).
@@ -428,7 +430,7 @@ void query(int x, int th)
 	error(NOT_CALLABLE, "?- ", x);
 
     variables = listreverse(unique(varslist(x)));
-    res = prove_all(addask(x), sp[th],th);
+    res = prove_all(addask(x), sp[th], th);
     if (!child_flag) {
 	ESCRST;
 	print(res);
@@ -458,7 +460,7 @@ void query_break(int x, int th)
 
     // DCG syntax e.g. a-->b.
     if (dcgp(x)) {
-	operate(x,th);
+	operate(x, th);
 	return;
     }
     //[file1,file2] -> consult(file1),consult(file2).
@@ -477,7 +479,7 @@ void query_break(int x, int th)
 
     variables_save = variables;
     variables = listreverse(unique(varslist(x)));
-    res = prove_all(addask(x), sp[th],th);
+    res = prove_all(addask(x), sp[th], th);
     variables = variables_save;
     ESCRST;
     print(res);
@@ -532,13 +534,13 @@ int prove_all(int goals, int bindings, int th)
     if (nullp(goals))
 	return (YES);
     else if (car(goals) != AND)
-	return (prove(goals, bindings, NIL,th));
+	return (prove(goals, bindings, NIL, th));
     else {
 	if (!has_cut_p(goals)) {
-	    return (prove(cadr(goals), bindings, caddr(goals),th));
+	    return (prove(cadr(goals), bindings, caddr(goals), th));
 	} else {
-	    if (prove_all(before_cut(goals), bindings,th) == YES) {
-		res = prove_all(after_cut(goals), sp[0],th);
+	    if (prove_all(before_cut(goals), bindings, th) == YES) {
+		res = prove_all(after_cut(goals), sp[0], th);
 		if (res == YES)
 		    return (YES);
 		else if (res == NO)
@@ -578,7 +580,7 @@ int prove(int goal, int bindings, int rest, int th)
     goal = deref(goal, th);
 
     if (nullp(goal)) {
-	return (prove_all(rest, bindings,th));
+	return (prove_all(rest, bindings, th));
     } else if (builtinp(goal)) {
 	if (atomp(goal)) {
 	    if ((res = (GET_SUBR(goal)) (NIL, rest, th)) == YES)
@@ -593,12 +595,12 @@ int prove(int goal, int bindings, int rest, int th)
 	}
     } else if (compiledp(goal)) {
 	if (atomp(goal)) {
-	    if ((GET_SUBR(goal)) (NIL, rest,th) == YES)
+	    if ((GET_SUBR(goal)) (NIL, rest, th) == YES)
 		return (YES);
 
 	    return (NO);
 	} else {
-	    if ((GET_SUBR(car(goal))) (cdr(goal), rest,th) == YES)
+	    if ((GET_SUBR(car(goal))) (cdr(goal), rest, th) == YES)
 		return (YES);
 
 	    return (NO);
@@ -633,7 +635,7 @@ int prove(int goal, int bindings, int rest, int th)
 	    // case of predicate
 	    if (predicatep(clause1) || user_operation_p(clause1)) {
 		if (unify(goal, clause1, 0) == YES) {
-		    if (prove_all(rest, sp[0],th) == YES) {
+		    if (prove_all(rest, sp[0], th) == YES) {
 			//trace
 			if (debug_flag == ON)
 			    prove_trace(DBEXIT, goal, bindings, rest, th);
@@ -651,7 +653,7 @@ int prove(int goal, int bindings, int rest, int th)
 		if (unify(goal, (cadr(clause1)), 0) == YES) {
 		    clause1 = addtail_body(rest, caddr(clause1));
 		    nest++;
-		    if ((res = prove_all(clause1, sp[0],th)) == YES) {
+		    if ((res = prove_all(clause1, sp[0], th)) == YES) {
 			nest--;
 			//trace
 			if (debug_flag == ON)
@@ -664,7 +666,7 @@ int prove(int goal, int bindings, int rest, int th)
 			    //trace
 			    if (debug_flag == ON)
 				prove_trace(DBCUTFAIL, goal, bindings,
-					    rest,th);
+					    rest, th);
 			    wp[0] = save1;
 			    ac[0] = save2;
 			    unbind(bindings, 0);
@@ -675,7 +677,7 @@ int prove(int goal, int bindings, int rest, int th)
 	    }
 	    //trace
 	    if (debug_flag == ON && !nullp(clauses))
-		prove_trace(DBREDO, goal, bindings, rest,th);
+		prove_trace(DBREDO, goal, bindings, rest, th);
 
 	    wp[0] = save1;
 	    ac[0] = save2;
@@ -683,7 +685,7 @@ int prove(int goal, int bindings, int rest, int th)
 	}
 	//trace
 	if (debug_flag == ON)
-	    prove_trace(DBFAIL, goal, bindings, rest,th);
+	    prove_trace(DBFAIL, goal, bindings, rest, th);
 
     } else if (disjunctionp(goal)) {
 	if (ifthenp(cadr(goal))) {
@@ -693,9 +695,10 @@ int prove(int goal, int bindings, int rest, int th)
 			    wcons(caddr(cadr(goal)),
 				  wcons(caddr(goal), NIL, 0), 0), 0), 0);
 	    // redefine goal = ifthenelse(if,then,else)
-	    return (prove(goal, bindings, rest,th));
+	    return (prove(goal, bindings, rest, th));
 	} else
-	    if ((res = prove_all(addtail_body(rest, cadr(goal)), bindings,th))
+	    if ((res =
+		 prove_all(addtail_body(rest, cadr(goal)), bindings, th))
 		== YES)
 	    return (YES);
 	else {
@@ -704,7 +707,7 @@ int prove(int goal, int bindings, int rest, int th)
 		return (NO);
 	    }
 	    unbind(bindings, 0);
-	    if (prove_all(addtail_body(rest, caddr(goal)), bindings,th) ==
+	    if (prove_all(addtail_body(rest, caddr(goal)), bindings, th) ==
 		YES)
 		return (YES);
 	    else {
@@ -1128,7 +1131,7 @@ int operate(int x, int th)
     operator = car(x);
     operand1 = cadr(x);
     operand2 = caddr(x);
-    return ((GET_SUBR(operator)) (operand1, operand2,th));
+    return ((GET_SUBR(operator)) (operand1, operand2, th));
 }
 
 int walpha_conversion(int x)

@@ -4,8 +4,8 @@
 #include "npl.h"
 
 
-typedef void (*tpred)(char *, int (*pred)(int, int));
-typedef void (*tuser)(char *, int (*user)(int, int), int weight, int spec);
+typedef void (*tpred)(char *, int(*pred)(int, int));
+typedef void (*tuser)(char *, int(*user)(int, int), int weight, int spec);
 
 void dynamic_link(int x)
 {
@@ -148,7 +148,7 @@ void dynamic_link(int x)
     init_f4(MAKESTR_IDX, (tpred) makestr);
     init_f4(MAKEFUNC_IDX, (tpred) makefunc);
 
-    /* argument 4*/
+    /* argument 4 */
     init_f5(CALLSUBR_IDX, (tpred) callsubr);
 
     init_deftpred((tpred) defcompiled);

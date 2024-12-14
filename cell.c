@@ -92,7 +92,7 @@ void bindsym(int x, int val, int th)
 {
 
     if (alpha_variable_p(x))
-	variant[x - CELLSIZE] = val;
+	variant[x - CELLSIZE][th] = val;
     else if (atom_variable_p(x))
 	SET_CAR(x, val);
     else
@@ -107,7 +107,7 @@ int findvar(int x)
 {
 
     if (alpha_variable_p(x))
-	return (variant[x - CELLSIZE]);
+	return (variant[x - CELLSIZE][0]);
     else if (atom_variable_p(x))
 	return (GET_CAR(x));
     else
@@ -403,7 +403,7 @@ int get_sp(int th)
 
 int callsubr(int x, int arglist, int rest, int th)
 {
-    return ((GET_SUBR(x) (arglist, rest,th)));
+    return ((GET_SUBR(x) (arglist, rest, th)));
 }
 
 int set_sp(int x, int th)

@@ -747,8 +747,8 @@ void sexp_next()
     } else {			/* atom */
 	while (ed_data[ed_row][ed_col] != ' ' &&
 	       ed_data[ed_row][ed_col] != '(' &&
-	       ed_data[ed_row][ed_col] != ')' &&
-	       ed_data[ed_row][ed_col] != EOL) {
+	       ed_data[ed_row][ed_col] != ')'
+	       && ed_data[ed_row][ed_col] != EOL) {
 	    ed_col++;
 	    ed_col1++;
 	}
@@ -944,8 +944,8 @@ void sexp_prev()
 	}
     }
 
-    if (ed_data[ed_row][ed_col] == ')' &&
-	ed_data[ed_row][ed_col - 1] == ')') {
+    if (ed_data[ed_row][ed_col] == ')'
+	&& ed_data[ed_row][ed_col - 1] == ')') {
 	ed_col--;
     }
 
@@ -2400,8 +2400,8 @@ void display_line(int line)
 		   ed_data[line][col] == ';' ||
 		   ed_data[line][col] == '_' ||
 		   ed_data[line][col] == '|' ||
-		   ed_data[line][col] == '!' ||
-		   ed_data[line][col] == '.') {
+		   ed_data[line][col] == '!' || ed_data[line][col] == '.')
+	{
 	    CHECK(addch, ed_data[line][col]);
 	    col++;
 	    col1++;
@@ -2413,15 +2413,15 @@ void display_line(int line)
 		    ed_data[line][col] == 'E' ||
 		    ed_data[line][col] == '.' ||
 		    ed_data[line][col] == 'x' ||
-		    ed_data[line][col] == 'o' ||
-		    ed_data[line][col] == 'b')) {
+		    ed_data[line][col] == 'o'
+		    || ed_data[line][col] == 'b')) {
 		CHECK(addch, ed_data[line][col]);
 		col++;
 		col1++;
 	    }
 	} else if (isUni2(ed_data[line][col]) ||
-		   isUni3(ed_data[line][col]) ||
-		   isUni4(ed_data[line][col])) {
+		   isUni3(ed_data[line][col])
+		   || isUni4(ed_data[line][col])) {
 	    display_unicode(line, col);
 	    col1 = col1 + increase_terminal(line, col);
 	    col = col + increase_buffer(line, col);

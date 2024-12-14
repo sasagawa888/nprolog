@@ -583,7 +583,7 @@ int eval(int x)
 	function = result[0];
 	arg1 = result[1];
 	arg2 = result[2];
-	return ((GET_SUBR(function)) (arg1, arg2,0));
+	return ((GET_SUBR(function)) (arg1, arg2, 0));
     }
     error(EVALUATION_ERR, "eval ", x);
     return (NIL);

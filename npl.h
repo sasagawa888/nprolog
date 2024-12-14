@@ -21,7 +21,7 @@ address
 #define HEAPSIZE     5000000
 #define FREESIZE         500
 #define STACKSIZE    1000000
-#define VARIANTSIZE 20000000
+#define VARIANTSIZE  5000000
 #define VARIANTMAX  CELLSIZE + VARIANTSIZE
 #define BIGSIZE 20000000
 #define NTTBASE 1000
@@ -30,7 +30,7 @@ address
 #define BUFSIZE 1024
 #define STRSIZE 1024
 #define PARASIZE 100
-#define THREADSIZE 6
+#define THREADSIZE 10
 #define PROCSIZE 10
 #define OPERATOR_NUMBER 24
 #define FUNCTION_NUMBER 22
@@ -198,7 +198,7 @@ enum { CALLSUBR_IDX,
 
 
 extern cell heap[CELLSIZE];
-extern int variant[VARIANTSIZE];
+extern int variant[VARIANTSIZE][THREADSIZE];
 extern int bigcell[BIGSIZE];
 extern int stack[STACKSIZE];
 extern int ustack[STACKSIZE];

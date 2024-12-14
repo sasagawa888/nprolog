@@ -732,15 +732,17 @@ int wlist7(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int th)
 	     wcons(x2,
 		   wcons(x3,
 			 wcons(x4,
-			       wcons(x5, wcons(x6, wcons(x7, NIL, th), th),
+			       wcons(x5,
+				     wcons(x6, wcons(x7, NIL, th), th),
 				     th), th), th), th), th));
 
 }
 
 
 
-int wlist8(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
-	   int th)
+int
+wlist8(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
+       int th)
 {
 
     return (wcons
@@ -773,9 +775,9 @@ wlist9(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
 					   wcons(x7,
 						 wcons(x8,
 						       wcons(x9,
-							     NIL, th), th),
-						 th), th), th), th), th),
-		   th), th));
+							     NIL, th),
+						       th), th), th),
+				     th), th), th), th), th));
 
 }
 
@@ -799,8 +801,9 @@ wlist10(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
 							     wcons
 							     (x10,
 							      NIL, th),
-							     th), th), th),
-					   th), th), th), th), th), th));
+							     th), th),
+						 th), th), th), th), th),
+		   th), th));
 
 }
 
@@ -2713,7 +2716,7 @@ void unbind(int x, int th)
 
 	if (alpha_variable_p(stack[i])) {
 
-	    variant[stack[i] - CELLSIZE] = UNBIND;
+	    variant[stack[i] - CELLSIZE][th] = UNBIND;
 
 	}
 
@@ -2721,7 +2724,7 @@ void unbind(int x, int th)
 
 	    if (alpha_variable_p(GET_CAR(stack[i]))) {
 
-		variant[GET_CAR(stack[i]) - CELLSIZE] = UNBIND;
+		variant[GET_CAR(stack[i]) - CELLSIZE][th] = UNBIND;
 
 	    }
 
@@ -2928,7 +2931,7 @@ void printenv(void)
 
 		printf("=");
 
-		print(variant[stack[i] - CELLSIZE]);
+		print(variant[stack[i] - CELLSIZE][j]);
 
 	    }
 
