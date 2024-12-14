@@ -606,7 +606,7 @@ int prove(int goal, int bindings, int rest, int th)
     } else if (predicatep(goal) || user_operation_p(goal)) {
 	//trace
 	if (debug_flag == ON)
-	    prove_trace(DBCALL, goal, bindings, rest);
+	    prove_trace(DBCALL, goal, bindings, rest, th);
 
 	if (atomp(goal))
 	    clauses = GET_CAR(goal);
@@ -636,13 +636,13 @@ int prove(int goal, int bindings, int rest, int th)
 		    if (prove_all(rest, sp[0],th) == YES) {
 			//trace
 			if (debug_flag == ON)
-			    prove_trace(DBEXIT, goal, bindings, rest);
+			    prove_trace(DBEXIT, goal, bindings, rest, th);
 
 			return (YES);
 		    } else {
 			//trace
 			if (debug_flag == ON)
-			    prove_trace(DBFAIL, goal, bindings, rest);
+			    prove_trace(DBFAIL, goal, bindings, rest, th);
 		    }
 		}
 	    }
@@ -655,7 +655,7 @@ int prove(int goal, int bindings, int rest, int th)
 			nest--;
 			//trace
 			if (debug_flag == ON)
-			    prove_trace(DBEXIT, goal, bindings, rest);
+			    prove_trace(DBEXIT, goal, bindings, rest, th);
 
 			return (YES);
 		    } else {
@@ -664,7 +664,7 @@ int prove(int goal, int bindings, int rest, int th)
 			    //trace
 			    if (debug_flag == ON)
 				prove_trace(DBCUTFAIL, goal, bindings,
-					    rest);
+					    rest,th);
 			    wp[0] = save1;
 			    ac[0] = save2;
 			    unbind(bindings, 0);
@@ -675,7 +675,7 @@ int prove(int goal, int bindings, int rest, int th)
 	    }
 	    //trace
 	    if (debug_flag == ON && !nullp(clauses))
-		prove_trace(DBREDO, goal, bindings, rest);
+		prove_trace(DBREDO, goal, bindings, rest,th);
 
 	    wp[0] = save1;
 	    ac[0] = save2;
@@ -683,7 +683,7 @@ int prove(int goal, int bindings, int rest, int th)
 	}
 	//trace
 	if (debug_flag == ON)
-	    prove_trace(DBFAIL, goal, bindings, rest);
+	    prove_trace(DBFAIL, goal, bindings, rest,th);
 
     } else if (disjunctionp(goal)) {
 	if (ifthenp(cadr(goal))) {
@@ -752,7 +752,7 @@ int after_cut(int x)
 
 }
 
-void prove_trace(int port, int goal, int bindings, int rest)
+void prove_trace(int port, int goal, int bindings, int rest, int th)
 {
     int spy, leap;
 

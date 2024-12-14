@@ -441,12 +441,12 @@ int b_ask(int arglist, int rest, int th)
 	if (child_flag)
 	    memset(bridge, 0, sizeof(bridge));
 	if (nullp(x1) || has_no_value_p(x1)) {
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	    // ignore singleton e.g. X=X
 	}
 	x2 = NIL;
 	while (!nullp(x1)) {
-	    if (variablep(car(x1)) && car(x1) != deref(car(x1), 0))
+	    if (variablep(car(x1)) && car(x1) != deref(car(x1), th))
 		x2 = cons(car(x1), x2);
 	    x1 = cdr(x1);
 	}
@@ -734,7 +734,7 @@ int b_get0(int arglist, int rest, int th)
 	    return (NO);
 
 	i = makeint((int) c);
-	res = unify(arg2, i, 0);
+	res = unify(arg2, i, th);
 	if (res == YES)
 	    return (prove_all(rest, sp[th],th));
 	else
@@ -1357,7 +1357,7 @@ int b_open(int arglist, int rest, int th)
 
 		if (GET_PORT(stream) == NULL)
 		    error(CANT_OPEN, "open ", arg2);
-		unify(arg1, stream, 0);
+		unify(arg1, stream, th);
 		return (prove_all(rest, sp[th],th));
 	    } else if (arg3 == makeconst("a") || arg3 == makeconst("ra")) {
 		stream =
@@ -1395,7 +1395,7 @@ int b_dup(int arglist, int rest, int th)
 	SET_OPT(addr, GET_OPT(arg1));	//input/output/inout
 	SET_VAR(addr, GET_VAR(arg1));	//text/binary
 	SET_AUX(addr, GET_AUX(arg1));	//for eof_action
-	if (unify(arg2, addr, 0) == YES)
+	if (unify(arg2, addr, th) == YES)
 	    return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "dup ", arglist);
@@ -1627,7 +1627,7 @@ int b_consult(int arglist, int rest, int th)
 		goto skip;
 	    }
 	    //assert
-	    b_assert(list1(clause), NIL);
+	    b_assert(list1(clause), NIL,th);
 	}
 	open_flag = 0;
 	fclose(GET_PORT(input_stream));
@@ -1719,7 +1719,7 @@ int b_reconsult(int arglist, int rest, int th)
 		SET_CAR(atom, NIL);
 	    }
 	    //assert
-	    b_assert(list1(clause), NIL);
+	    b_assert(list1(clause), NIL,th);
 	}
 	open_flag = 0;
 	fclose(GET_PORT(input_stream));
@@ -1759,7 +1759,7 @@ void memoize_arity(int clause, int atom)
     }
 }
 
-int b_save(int arglist, int rest)
+int b_save(int arglist, int rest, int th)
 {
     int n, arg1;
     static char str[STREAM];
@@ -1786,10 +1786,10 @@ int b_save(int arglist, int rest)
 	if (GET_PORT(output_stream) == NULL) {
 	    error(CANT_OPEN, "save ", arg1);
 	}
-	b_listing(NIL, NIL);
+	b_listing(NIL, NIL,th);
 	fclose(GET_PORT(output_stream));
 	output_stream = standard_output;
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
 
     } else if (n == 0) {
 	if (str == NULL) {
@@ -1799,17 +1799,17 @@ int b_save(int arglist, int rest)
 	output_stream =
 	    makestream(fopen(str, "w"), OPL_OUTPUT,
 		       OPL_TEXT, NIL, makeatom(str, SIMP));
-	b_listing(NIL, NIL);
+	b_listing(NIL, NIL,th);
 	fclose(GET_PORT(output_stream));
 	output_stream = standard_output;
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "save ", arglist);
     return (NO);
 }
 
 
-int b_directory(int arglist, int rest)
+int b_directory(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, arg4, arg5, arg6, save, mode, date, time;
     DIR *dir;
@@ -1841,7 +1841,7 @@ int b_directory(int arglist, int rest)
 	if (!wide_variable_p(arg6))
 	    error(NOT_VAR, "directory ", arg6);
 
-	save = sp[0];
+	save = sp[th];
 	dir = opendir(GET_NAME(arg1));
 	if (dir == NULL)
 	    error(SYSTEM_ERROR, "directory ", NIL);
@@ -1869,22 +1869,22 @@ int b_directory(int arglist, int rest)
 		date = cons(makeint(t_st->tm_year + 1900), date);
 		date = cons(makeconst("date"), date);
 		SET_AUX(car(date), PRED);
-		unify(arg2, makeconst(dp->d_name), 0);
-		unify(arg3, mode, 0);
-		unify(arg4, time, 0);
-		unify(arg5, date, 0);
-		unify(arg6, makeint(stat_buf.st_size), 0);
-		return (prove_all(rest, sp[0],0));
+		unify(arg2, makeconst(dp->d_name), th);
+		unify(arg3, mode, th);
+		unify(arg4, time, th);
+		unify(arg5, date, th);
+		unify(arg6, makeint(stat_buf.st_size), th);
+		return (prove_all(rest, sp[th],th));
 	    } else
 		error(SYSTEM_ERROR, "directory ", NIL);
 
-	    unbind(save, 0);
+	    unbind(save, th);
 	    dp = readdir(dir);
 	}
 	if (dir != NULL)
 	    closedir(dir);
 
-	unbind(save, 0);
+	unbind(save, th);
 	return (NO);
     }
     error(ARITY_ERR, "directory ", arglist);
@@ -1894,7 +1894,7 @@ int b_directory(int arglist, int rest)
 
 //arithmetic operation
 
-int b_is(int arglist, int rest)
+int b_is(int arglist, int rest, int th)
 {
     int n, arg1, arg2, res;
 
@@ -1907,9 +1907,9 @@ int b_is(int arglist, int rest)
 	    error(INSTANTATION_ERR, "is ", arg2);
 
 	arg2 = eval(arg2);
-	res = unify(arg1, arg2, 0);
+	res = unify(arg1, arg2, th);
 	if (res == YES)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -1918,7 +1918,7 @@ int b_is(int arglist, int rest)
 }
 
 
-int b_greater(int arglist, int rest)
+int b_greater(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -1941,7 +1941,7 @@ int b_greater(int arglist, int rest)
 	    error(NOT_NUM, "> ", arg2);
 
 	if (greaterp(arg1, arg2))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -1949,7 +1949,7 @@ int b_greater(int arglist, int rest)
     return (NO);
 }
 
-int b_smaller(int arglist, int rest)
+int b_smaller(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -1971,7 +1971,7 @@ int b_smaller(int arglist, int rest)
 	if (!numberp(arg2))
 	    error(NOT_NUM, "< ", arg2);
 	if (smallerp(arg1, arg2))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -1979,7 +1979,7 @@ int b_smaller(int arglist, int rest)
     return (NO);
 }
 
-int b_eqsmaller(int arglist, int rest)
+int b_eqsmaller(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -1999,7 +1999,7 @@ int b_eqsmaller(int arglist, int rest)
 	if (!numberp(arg2))
 	    error(NOT_NUM, "=< ", arg2);
 	if (eqsmallerp(arg1, arg2))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -2007,7 +2007,7 @@ int b_eqsmaller(int arglist, int rest)
     return (NO);
 }
 
-int b_eqgreater(int arglist, int rest)
+int b_eqgreater(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -2028,7 +2028,7 @@ int b_eqgreater(int arglist, int rest)
 	if (!numberp(arg2))
 	    error(NOT_NUM, ">= ", arg2);
 	if (eqgreaterp(arg1, arg2))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -2036,7 +2036,7 @@ int b_eqgreater(int arglist, int rest)
     return (NO);
 }
 
-int b_numeq(int arglist, int rest)
+int b_numeq(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -2050,7 +2050,7 @@ int b_numeq(int arglist, int rest)
 	    error(NOT_NUM, "=:= ", arg2);
 
 	if (numeqp(arg1, arg2))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -2058,7 +2058,7 @@ int b_numeq(int arglist, int rest)
     return (NO);
 }
 
-int b_notnumeq(int arglist, int rest)
+int b_notnumeq(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -2072,7 +2072,7 @@ int b_notnumeq(int arglist, int rest)
 	    error(NOT_NUM, "=\\= ", arg2);
 
 	if (!numeqp(arg1, arg2))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -2080,7 +2080,7 @@ int b_notnumeq(int arglist, int rest)
     return (NO);
 }
 
-int b_equalp(int arglist, int rest)
+int b_equalp(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -2092,7 +2092,7 @@ int b_equalp(int arglist, int rest)
 	if (anoymousp(arg1) && anoymousp(arg2))
 	    return (NO);
 	else if (equalp(arg1, arg2))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -2100,7 +2100,7 @@ int b_equalp(int arglist, int rest)
     return (NO);
 }
 
-int b_notequalp(int arglist, int rest)
+int b_notequalp(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -2110,9 +2110,9 @@ int b_notequalp(int arglist, int rest)
 	arg2 = cadr(arglist);
 
 	if (anoymousp(arg1) && anoymousp(arg2))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else if (!equalp(arg1, arg2))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -2120,7 +2120,7 @@ int b_notequalp(int arglist, int rest)
     return (NO);
 }
 
-int b_eq(int arglist, int rest)
+int b_eq(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -2130,7 +2130,7 @@ int b_eq(int arglist, int rest)
 	arg2 = cadr(arglist);
 
 	if (arg1 == arg2)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -2140,7 +2140,7 @@ int b_eq(int arglist, int rest)
 
 
 
-int b_compare(int arglist, int rest)
+int b_compare(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3;
 
@@ -2158,14 +2158,14 @@ int b_compare(int arglist, int rest)
 	    error(NOT_ORDER, "compare ", arg1);
 
 	if (equalp(arg2, arg3)) {
-	    if (unify(arg1, makeatom("=", SYS), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg1, makeatom("=", SYS), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	} else if (atsmaller(arg2, arg3)) {
-	    if (unify(arg1, makeatom("<", SYS), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg1, makeatom("<", SYS), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	} else if (atsmaller(arg3, arg2)) {
-	    if (unify(arg1, makeatom(">", SYS), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg1, makeatom(">", SYS), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	}
 
     }
@@ -2173,7 +2173,7 @@ int b_compare(int arglist, int rest)
     return (NO);
 }
 
-int b_atsmaller(int arglist, int rest)
+int b_atsmaller(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -2183,7 +2183,7 @@ int b_atsmaller(int arglist, int rest)
 	arg2 = cadr(arglist);
 
 	if (atsmaller(arg1, arg2))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -2272,7 +2272,7 @@ int ateqsmaller(int x, int y)
 }
 
 
-int b_ateqsmaller(int arglist, int rest)
+int b_ateqsmaller(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -2282,7 +2282,7 @@ int b_ateqsmaller(int arglist, int rest)
 	arg2 = cadr(arglist);
 
 	if (ateqsmaller(arg1, arg2))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -2292,7 +2292,7 @@ int b_ateqsmaller(int arglist, int rest)
 
 
 
-int b_atgreater(int arglist, int rest)
+int b_atgreater(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -2302,7 +2302,7 @@ int b_atgreater(int arglist, int rest)
 	arg2 = cadr(arglist);
 
 	if (!ateqsmaller(arg1, arg2))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -2311,7 +2311,7 @@ int b_atgreater(int arglist, int rest)
 }
 
 
-int b_ateqgreater(int arglist, int rest)
+int b_ateqgreater(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -2321,7 +2321,7 @@ int b_ateqgreater(int arglist, int rest)
 	arg2 = cadr(arglist);
 
 	if (!atsmaller(arg1, arg2))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -2330,7 +2330,7 @@ int b_ateqgreater(int arglist, int rest)
 }
 
 //timer
-int b_ctr_set(int arglist, int rest)
+int b_ctr_set(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -2347,14 +2347,14 @@ int b_ctr_set(int arglist, int rest)
 	    error(NOT_INT, "ctr_set ", arg2);
 
 	counter[GET_INT(arg1)] = GET_INT(arg2);
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
 
     }
     error(ARITY_ERR, "ctr_set ", arglist);
     return (NO);
 }
 
-int b_ctr_dec(int arglist, int rest)
+int b_ctr_dec(int arglist, int rest, int th)
 {
     int n, arg1, arg2, i;
 
@@ -2372,15 +2372,15 @@ int b_ctr_dec(int arglist, int rest)
 
 	i = counter[GET_INT(arg1)];
 	counter[GET_INT(arg1)] = i - 1;
-	if (unify(arg2, makeint(i), 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg2, makeint(i), th) == YES)
+	    return (prove_all(rest, sp[th],th));
 
     }
     error(ARITY_ERR, "ctr_dec ", arglist);
     return (NO);
 }
 
-int b_ctr_inc(int arglist, int rest)
+int b_ctr_inc(int arglist, int rest, int th)
 {
     int n, arg1, arg2, i;
 
@@ -2398,15 +2398,15 @@ int b_ctr_inc(int arglist, int rest)
 
 	i = counter[GET_INT(arg1)];
 	counter[GET_INT(arg1)] = i + 1;
-	if (unify(arg2, makeint(i), 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg2, makeint(i), th) == YES)
+	    return (prove_all(rest, sp[th],th));
 
     }
     error(ARITY_ERR, "ctr_inc ", arglist);
     return (NO);
 }
 
-int b_ctr_is(int arglist, int rest)
+int b_ctr_is(int arglist, int rest, int th)
 {
     int n, arg1, arg2, i;
 
@@ -2423,8 +2423,8 @@ int b_ctr_is(int arglist, int rest)
 	    error(NOT_VAR, "ctr_is ", arg2);
 
 	i = counter[GET_INT(arg1)];
-	if (unify(arg2, makeint(i), 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg2, makeint(i), th) == YES)
+	    return (prove_all(rest, sp[th],th));
 
     }
     error(ARITY_ERR, "str_is ", arglist);
@@ -2432,7 +2432,7 @@ int b_ctr_is(int arglist, int rest)
 }
 
 //true fail
-int b_fail(int arglist, int rest)
+int b_fail(int arglist, int rest, int th)
 {
     int n;
 
@@ -2443,7 +2443,7 @@ int b_fail(int arglist, int rest)
     return (NO);
 }
 
-int b_call(int arglist, int rest)
+int b_call(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -2463,13 +2463,13 @@ int b_call(int arglist, int rest)
 	if (atom_constant_p(arg1))
 	    arg1 = makeatom(GET_NAME(arg1), PRED);
 
-	return (prove_all(addtail_body(rest, arg1), sp[0],0));
+	return (prove_all(addtail_body(rest, arg1), sp[th],th));
     }
     error(ARITY_ERR, "call ", arglist);
     return (NO);
 }
 
-int b_not(int arglist, int rest)
+int b_not(int arglist, int rest, int th)
 {
     int n, arg1, res;
 
@@ -2481,30 +2481,30 @@ int b_not(int arglist, int rest)
 	if (!callablep(arg1))
 	    error(NOT_CALLABLE, "not ", arg1);
 
-	res = prove(arg1, sp[0], NIL,0);
+	res = prove(arg1, sp[th], NIL,th);
 	if (res == YES)
 	    return (NO);
 	else
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "not ", arglist);
     return (NO);
 }
 
-int b_true(int arglist, int rest)
+int b_true(int arglist, int rest, int th)
 {
     int n;
 
     n = length(arglist);
     if (n == 0) {
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     return (NO);
 }
 
 
 //database operation
-int b_assert(int arglist, int rest)
+int b_assert(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -2533,7 +2533,7 @@ int b_assert(int arglist, int rest)
 	    else
 		add_data(car(arg1), arg1);
 	    checkgbc();
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	} else if (clausep(arg1)) {
 	    if (!callablep(cadr(arg1)))
 		error(NOT_CALLABLE, "assertz ", arg1);
@@ -2543,9 +2543,9 @@ int b_assert(int arglist, int rest)
 
 
 	    SET_VAR(arg1, unique(varslist(arg1)));
-	    operate(arg1,0);
+	    operate(arg1,th);
 	    checkgbc();
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	}
 	error(NOT_CALLABLE, "assertz ", arg1);
     }
@@ -2553,7 +2553,7 @@ int b_assert(int arglist, int rest)
     return (NO);
 }
 
-int b_asserta(int arglist, int rest)
+int b_asserta(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -2581,7 +2581,7 @@ int b_asserta(int arglist, int rest)
 	    else
 		insert_data(car(arg1), arg1);
 	    checkgbc();
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	} else if (clausep(arg1)) {
 	    if (!callablep(cadr(arg1)))
 		error(NOT_CALLABLE, "asserta ", arg1);
@@ -2589,10 +2589,10 @@ int b_asserta(int arglist, int rest)
 		error(BUILTIN_EXIST, "asserta ", arg1);
 
 	    SET_VAR(arg1, unique(varslist(arg1)));
-	    operate(arg1,0);
+	    operate(arg1,th);
 	    assert_flag = 0;
 	    checkgbc();
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	}
 	error(NOT_CALLABLE, "asserta ", arg1);
     }
@@ -2600,11 +2600,11 @@ int b_asserta(int arglist, int rest)
     return (NO);
 }
 
-int b_retract(int arglist, int rest)
+int b_retract(int arglist, int rest, int th)
 {
     int n, arg1, clause, head, clauses, new_clauses, save1, save2;
 
-    save2 = sp[0];
+    save2 = sp[th];
     clause = clauses = head = NIL;
     n = length(arglist);
     if (n == 1) {
@@ -2633,12 +2633,12 @@ int b_retract(int arglist, int rest)
 	    clauses = GET_CAR(car(cadr(arg1)));
 
 	new_clauses = NIL;
-	save1 = wp[0];
+	save1 = wp[th];
 	while (!nullp(clauses)) {
 	    clause = car(clauses);
 	    clauses = cdr(clauses);
 
-	    if (unify(arg1, clause, 0) == YES) {
+	    if (unify(arg1, clause, th) == YES) {
 		if (atom_predicate_p(arg1))
 		    SET_CAR(clause,
 			    append(listreverse(new_clauses), clauses));
@@ -2652,18 +2652,18 @@ int b_retract(int arglist, int rest)
 		    SET_CAR(car(cadr(arg1)),
 			    append(listreverse(new_clauses), clauses));
 
-		if (prove_all(rest, sp[0],0) == YES)
+		if (prove_all(rest, sp[th],th) == YES)
 		    return (YES);
 		else
 		    goto next;
 	    }
 	    new_clauses = cons(clause, new_clauses);
 	  next:
-	    wp[0] = save1;
-	    unbind(save2, 0);
+	    wp[th] = save1;
+	    unbind(save2, th);
 	}
-	wp[0] = save1;
-	sp[0] = save2;
+	wp[th] = save1;
+	sp[th] = save2;
 	return (NO);
     }
     error(ARITY_ERR, "retract ", arglist);
@@ -2671,7 +2671,7 @@ int b_retract(int arglist, int rest)
 }
 
 
-int b_abolish(int arglist, int rest)
+int b_abolish(int arglist, int rest, int th)
 {
     int n, arg1, pred, clause, arity, clauses, new_clauses;
 
@@ -2722,13 +2722,13 @@ int b_abolish(int arglist, int rest)
 	SET_CAR(pred, listreverse(new_clauses));
 	if (nullp(new_clauses))
 	    listremove(cadr(arg1), predicates);
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "abolish ", arglist);
     return (NO);
 }
 
-int b_clause(int arglist, int rest)
+int b_clause(int arglist, int rest, int th)
 {
     int n, arg1, arg2, clause, clauses, save1, save2;
 
@@ -2752,32 +2752,32 @@ int b_clause(int arglist, int rest)
 	else
 	    clauses = GET_CAR(car(arg1));
 
-	save1 = wp[0];
-	save2 = sp[0];
+	save1 = wp[th];
+	save2 = sp[th];
 	while (!nullp(clauses)) {
 	    clause = car(clauses);
 	    clauses = cdr(clauses);
-	    if (clausep(clause) && unify(arg1, cadr(clause), 0) == YES &&
-		unify(arg2, caddr(clause), 0) == YES) {
-		if (prove_all(rest, sp[0],0) == YES)
+	    if (clausep(clause) && unify(arg1, cadr(clause), th) == YES &&
+		unify(arg2, caddr(clause), th) == YES) {
+		if (prove_all(rest, sp[th],th) == YES)
 		    return (YES);
-	    } else if (predicatep(clause) && unify(arg1, clause, 0) == YES
-		       && unify(arg2, NTRUE, 0) == YES) {
-		if (prove_all(rest, sp[0],0) == YES)
+	    } else if (predicatep(clause) && unify(arg1, clause, th) == YES
+		       && unify(arg2, NTRUE, th) == YES) {
+		if (prove_all(rest, sp[th],th) == YES)
 		    return (YES);
 	    }
-	    wp[0] = save1;
-	    unbind(save2, 0);
+	    wp[th] = save1;
+	    unbind(save2, th);
 	}
-	wp[0] = save1;
-	unbind(save2, 0);
+	wp[th] = save1;
+	unbind(save2, th);
 	return (NO);
     }
     error(ARITY_ERR, "clause ", arglist);
     return (NO);
 }
 
-int b_nth_char(int arglist, int rest)
+int b_nth_char(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, pos, code;
     char str1[STRSIZE], str2[10];
@@ -2840,8 +2840,8 @@ int b_nth_char(int arglist, int rest)
 	else			//unicode
 	    code = makeint(utf8_to_ucs4(str2));
 
-	unify(arg3, makeint(code), 0);
-	return (prove_all(rest, sp[0],0));
+	unify(arg3, makeint(code), th);
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "nth_char ", arglist);
     return (NO);
@@ -2849,7 +2849,7 @@ int b_nth_char(int arglist, int rest)
 
 
 //transform
-int b_name(int arglist, int rest)
+int b_name(int arglist, int rest, int th)
 {
     int n, arg1, arg2, ls, atom, pos, code, res;
     char str1[STRSIZE], str2[10];
@@ -2917,14 +2917,14 @@ int b_name(int arglist, int rest)
 		ls = cons(code, ls);
 	    }
 	    ls = listreverse(ls);
-	    res = unify(arg2, ls, 0);
+	    res = unify(arg2, ls, th);
 	    if (res == YES)
-		return (prove_all(rest, sp[0],0));
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (structurep(arg2)) {
 	    ls = arg2;
-	    str1[0] = NUL;
+	    str1[th] = NUL;
 	    while (!nullp(ls)) {
 		if (GET_INT(car(ls)) < ' ')
 		    sprintf(str2, "\\x%x\\", GET_INT(car(ls)));
@@ -2934,9 +2934,9 @@ int b_name(int arglist, int rest)
 		ls = cdr(ls);
 	    }
 	    atom = makeconst(str1);
-	    res = unify(arg1, atom, 0);
+	    res = unify(arg1, atom, th);
 	    if (res == YES)
-		return (prove_all(rest, sp[0],0));
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else
@@ -2946,7 +2946,7 @@ int b_name(int arglist, int rest)
     return (NO);
 }
 
-int b_list_text(int arglist, int rest)
+int b_list_text(int arglist, int rest, int th)
 {
     int n, arg1, arg2, ls, atom, pos, code, index, res;
     char str1[STRSIZE], str2[10];
@@ -3012,15 +3012,15 @@ int b_list_text(int arglist, int rest)
 		ls = cons(code, ls);
 	    }
 	    ls = listreverse(ls);
-	    res = unify(arg1, ls, 0);
+	    res = unify(arg1, ls, th);
 	    if (res == YES)
-		return (prove_all(rest, sp[0],0));
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 
 	} else if (structurep(arg1)) {
 	    ls = arg1;
-	    str1[0] = NUL;
+	    str1[th] = NUL;
 	    while (!nullp(ls)) {
 		if (GET_INT(car(ls)) < ' ')
 		    sprintf(str2, "\\x%x\\", GET_INT(car(ls)));
@@ -3046,8 +3046,8 @@ int b_list_text(int arglist, int rest)
 	    else
 		atom = makestr(str1);
 
-	    if (unify(arg2, atom, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, atom, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else
@@ -3058,7 +3058,7 @@ int b_list_text(int arglist, int rest)
 }
 
 
-int b_atom_concat(int arglist, int rest)
+int b_atom_concat(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, atom;
     char str1[STRSIZE];
@@ -3082,8 +3082,8 @@ int b_atom_concat(int arglist, int rest)
 	strcat(str1, GET_NAME(arg2));
 	atom = makeconst(str1);
 
-	if (unify(arg3, atom, 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg3, atom, th) == YES)
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
 
@@ -3092,7 +3092,7 @@ int b_atom_concat(int arglist, int rest)
     return (NO);
 }
 
-int b_atom_string(int arglist, int rest)
+int b_atom_string(int arglist, int rest, int th)
 {
     int n, arg1, arg2, temp;
 
@@ -3108,14 +3108,14 @@ int b_atom_string(int arglist, int rest)
 
 	if (atomp(arg1)) {
 	    temp = makestr(GET_NAME(arg1));
-	    if (unify(arg2, temp, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, temp, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (stringp(arg2)) {
 	    temp = makeconst(GET_NAME(arg2));
-	    if (unify(arg1, temp, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg1, temp, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	}
@@ -3124,7 +3124,7 @@ int b_atom_string(int arglist, int rest)
     return (NO);
 }
 
-int b_char_code(int arglist, int rest)
+int b_char_code(int arglist, int rest, int th)
 {
     int n, arg1, arg2, code, res;
     char str[2];
@@ -3146,36 +3146,36 @@ int b_char_code(int arglist, int rest)
 	    strcpy(str, GET_NAME(arg1));
 	    if (str[0] == '\\') {
 		if (str[1] == 'n')
-		    return (unify(arg2, makeint(EOL), 0));
+		    return (unify(arg2, makeint(EOL), th));
 		else if (str[1] == 't')
-		    return (unify(arg2, makeint(TAB), 0));
+		    return (unify(arg2, makeint(TAB), th));
 		else if (str[1] == 'f')
-		    return (unify(arg2, makeint(FF), 0));
+		    return (unify(arg2, makeint(FF), th));
 		else if (str[1] == 'r')
-		    return (unify(arg2, makeint(CR), 0));
+		    return (unify(arg2, makeint(CR), th));
 		else if (str[1] == 'v')
-		    return (unify(arg2, makeint(VT), 0));
+		    return (unify(arg2, makeint(VT), th));
 		else if (str[1] == 'a')
-		    return (unify(arg2, makeint(BEL), 0));
+		    return (unify(arg2, makeint(BEL), th));
 		else if (str[1] == 'b')
-		    return (unify(arg2, makeint(BS), 0));
+		    return (unify(arg2, makeint(BS), th));
 		else
 		    error(SYNTAX_ERR, "char_code ", NIL);
 	    }
 	    //unicode
 	    code = makeint(utf8_to_ucs4(GET_NAME(arg1)));
-	    res = unify(arg2, code, 0);
+	    res = unify(arg2, code, th);
 	    if (res == YES)
-		return (prove_all(rest, sp[0],0));
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 
 	} else if (integerp(arg2)) {
 	    //unicode
 	    ucs4_to_utf8(GET_INT(arg2), str);
-	    res = unify(arg1, makeconst(str), 0);
+	    res = unify(arg1, makeconst(str), th);
 	    if (res == YES)
-		return (prove_all(rest, sp[0],0));
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else
@@ -3189,7 +3189,7 @@ int b_char_code(int arglist, int rest)
 
 //----------string transform-------------------
 
-int b_concat(int arglist, int rest)
+int b_concat(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, str;
     char str1[STRSIZE];
@@ -3219,8 +3219,8 @@ int b_concat(int arglist, int rest)
 	}
 	str = makestr(str1);
 
-	if (unify(arg2, str, 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg2, str, th) == YES)
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     } else if (n == 3) {
@@ -3241,8 +3241,8 @@ int b_concat(int arglist, int rest)
 	strcat(str1, GET_NAME(arg2));
 	str = makestr(str1);
 
-	if (unify(arg3, str, 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg3, str, th) == YES)
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
 
@@ -3251,7 +3251,7 @@ int b_concat(int arglist, int rest)
     return (NO);
 }
 
-int b_string_length(int arglist, int rest)
+int b_string_length(int arglist, int rest, int th)
 {
     int n, arg1, arg2, val;
 
@@ -3269,8 +3269,8 @@ int b_string_length(int arglist, int rest)
 	    error(NOT_INT, "string_length ", arg2);
 
 	val = makeint(string_length(arg1));
-	if (unify(arg2, val, 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg2, val, th) == YES)
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -3278,7 +3278,7 @@ int b_string_length(int arglist, int rest)
     return (NO);
 }
 
-int b_string_term(int arglist, int rest)
+int b_string_term(int arglist, int rest, int th)
 {
     int n, arg1, arg2, l, i, res;
     char str[STRSIZE];
@@ -3307,8 +3307,8 @@ int b_string_term(int arglist, int rest)
 	    bridge_flag = 1;
 	    res = readparse();
 	    bridge_flag = 0;
-	    if (unify(arg2, res, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, res, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (wide_variable_p(arg1)) {
@@ -3317,8 +3317,8 @@ int b_string_term(int arglist, int rest)
 	    print(arg2);
 	    bridge_flag = 0;
 	    res = makestr(bridge);
-	    if (unify(arg1, res, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg1, res, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else
@@ -3344,7 +3344,7 @@ int read_string_term(int flag)
     return (bridge[pos++]);
 }
 
-int b_substring(int arglist, int rest)
+int b_substring(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, arg4, i, j, k, start, len, str;
     char str1[STRSIZE], str2[STRSIZE];
@@ -3388,8 +3388,8 @@ int b_substring(int arglist, int rest)
 	    j++;
 	}
 	str = makestr(str2);
-	if (unify(arg4, str, 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg4, str, th) == YES)
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -3398,7 +3398,7 @@ int b_substring(int arglist, int rest)
 }
 
 
-int b_float_text(int arglist, int rest)
+int b_float_text(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3;
     char str[STRSIZE], format[STRSIZE];
@@ -3417,43 +3417,43 @@ int b_float_text(int arglist, int rest)
 
 	if (floatp(arg1)) {
 	    int n, d;
-	    n = makevariant(0);
-	    if (unify(arg3, makeconst("general"), 0) == YES) {
+	    n = makevariant(th);
+	    if (unify(arg3, makeconst("general"), th) == YES) {
 		sprintf(str, "%g", GET_FLT(arg1));
-		if (unify(arg2, makestr(str), 0) == YES)
-		    return (prove_all(rest, sp[0],0));
+		if (unify(arg2, makestr(str), th) == YES)
+		    return (prove_all(rest, sp[th],th));
 		else
 		    return (NO);
 	    } else
 		if (unify
-		    (arg3, wcons(makepred("fixed"), wcons(n, NIL, 0), 0),
-		     0)
+		    (arg3, wcons(makepred("fixed"), wcons(n, NIL, th), th),
+		     th)
 		    == YES) {
-		d = GET_INT(deref(n, 0));
+		d = GET_INT(deref(n, th));
 		if (d > 15)
 		    d = 15;
 		else if (d < 0)
 		    d = 0;
 		sprintf(format, "%%-%d.%df", d, d);
 		sprintf(str, format, GET_FLT(arg1));
-		if (unify(arg2, makestr(str), 0) == YES)
-		    return (prove_all(rest, sp[0],0));
+		if (unify(arg2, makestr(str), th) == YES)
+		    return (prove_all(rest, sp[th],th));
 		else
 		    return (NO);
 	    } else
 		if (unify
 		    (arg3,
-		     wcons(makepred("scientific"), wcons(n, NIL, 0), 0), 0)
+		     wcons(makepred("scientific"), wcons(n, NIL, th), th), th)
 		    == YES) {
-		d = GET_INT(deref(n, 0));
+		d = GET_INT(deref(n, th));
 		if (d > 15)
 		    d = 15;
 		else if (d < 0)
 		    d = 0;
 		sprintf(format, "%%-.%de", d);
 		sprintf(str, format, GET_FLT(arg1));
-		if (unify(arg2, makestr(str), 0) == YES)
-		    return (prove_all(rest, sp[0],0));
+		if (unify(arg2, makestr(str), th) == YES)
+		    return (prove_all(rest, sp[th],th));
 		else
 		    return (NO);
 	    } else
@@ -3461,8 +3461,8 @@ int b_float_text(int arglist, int rest)
 
 	} else if (stringp(arg2)) {
 	    flt = atof(GET_NAME(arg2));
-	    if (unify(arg1, makeflt(flt), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg1, makeflt(flt), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	}
@@ -3472,7 +3472,7 @@ int b_float_text(int arglist, int rest)
     return (NO);
 }
 
-int b_int_text(int arglist, int rest)
+int b_int_text(int arglist, int rest, int th)
 {
     int n, arg1, arg2, i;
     char str[STRSIZE];
@@ -3489,14 +3489,14 @@ int b_int_text(int arglist, int rest)
 
 	if (integerp(arg1)) {
 	    sprintf(str, "%d", get_int(arg1));
-	    if (unify(arg2, makestr(str), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, makestr(str), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (stringp(arg2)) {
 	    i = atoi(GET_NAME(arg2));
-	    if (unify(arg1, makeint(i), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg1, makeint(i), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	}
@@ -3508,19 +3508,19 @@ int b_int_text(int arglist, int rest)
 
 
 //controle
-int b_cut(int arglist, int rest)
+int b_cut(int arglist, int rest, int th)
 {
     int n;
 
     n = length(arglist);
     if (n == 0) {
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "! ", arglist);
     return (NO);
 }
 
-int b_ifthen(int arglist, int rest)
+int b_ifthen(int arglist, int rest, int th)
 {
     int n, arg1, arg2, save1;
 
@@ -3528,27 +3528,27 @@ int b_ifthen(int arglist, int rest)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-	save1 = sp[0];
+	save1 = sp[th];
 	if (variablep(arg1))
 	    error(INSTANTATION_ERR, "ifthen ", arg1);
 	if (variablep(arg2))
 	    error(INSTANTATION_ERR, "ifthen ", arg2);
 
-	if (prove_all(arg1, sp[0],0) == YES) {
-	    return (prove_all(addtail_body(rest, arg2), sp[0],0));
+	if (prove_all(arg1, sp[th],th) == YES) {
+	    return (prove_all(addtail_body(rest, arg2), sp[th],th));
 	} else {
-	    unbind(save1, 0);
+	    unbind(save1, th);
 	    return (NO);
 	}
 
-	unbind(save1, 0);
+	unbind(save1, th);
 	return (NO);
     }
     error(ARITY_ERR, "ifthen ", arglist);
     return (NO);
 }
 
-int b_ifthenelse(int arglist, int rest)
+int b_ifthenelse(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, save;
 
@@ -3565,12 +3565,12 @@ int b_ifthenelse(int arglist, int rest)
 	if (variablep(arg3))
 	    error(INSTANTATION_ERR, "ifthenelse ", arg3);
 
-	save = sp[0];
-	if (prove_all(arg1, sp[0],0) == YES) {
-	    return (prove_all(addtail_body(rest, arg2), sp[0],0));
+	save = sp[th];
+	if (prove_all(arg1, sp[th],th) == YES) {
+	    return (prove_all(addtail_body(rest, arg2), sp[th],th));
 	} else {
-	    unbind(save, 0);
-	    return (prove_all(addtail_body(rest, arg3), sp[0],0));
+	    unbind(save, th);
+	    return (prove_all(addtail_body(rest, arg3), sp[th],th));
 	}
     }
     error(ARITY_ERR, "ifthenelse ", arglist);
@@ -3586,7 +3586,7 @@ double getETime()
     return tv.tv_sec + (double) tv.tv_usec * 1e-6;
 }
 
-int b_measure(int arglist, int rest)
+int b_measure(int arglist, int rest, int th)
 {
     int n, arg1;
     double start_time, end_time, time, lips;
@@ -3594,69 +3594,69 @@ int b_measure(int arglist, int rest)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	proof[0] = 0;
+	proof[th] = 0;
 	start_time = getETime();	//time_flag on and it store start time
-	prove_all(arg1, sp[0],0);
+	prove_all(arg1, sp[th],th);
 	end_time = getETime();
 	time = end_time - start_time;
-	lips = (double) proof[0] / time;
+	lips = (double) proof[th] / time;
 	ESCFGREEN;
 	printf("Elapsed Time=%.6f (second)  %.0f(LIPS)\n", time, lips);
 	ESCFORG;
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "measure ", arglist);
     return (NO);
 }
 
 
-int b_trace(int arglist, int rest)
+int b_trace(int arglist, int rest, int th)
 {
     int n;
 
     n = length(arglist);
     if (n == 0) {
 	debug_flag = ON;
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "trace ", arglist);
     return (NO);
 }
 
-int b_notrace(int arglist, int rest)
+int b_notrace(int arglist, int rest, int th)
 {
     int n;
 
     n = length(arglist);
     if (n == 0) {
 	debug_flag = OFF;
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "notrace ", arglist);
     return (NO);
 }
 
-int b_spy(int arglist, int rest)
+int b_spy(int arglist, int rest, int th)
 {
     int n, arg1;
 
     n = length(arglist);
     if (n == 0) {
 	print(spy_list);
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     } else if (n == 1) {
 	arg1 = car(arglist);
 	arg1 = copy_heap(arg1);
 
 	if (!memberp(arg1, spy_list))
 	    spy_list = cons(arg1, spy_list);
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "spy ", arglist);
     return (NO);
 }
 
-int b_nospy(int arglist, int rest)
+int b_nospy(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -3665,18 +3665,18 @@ int b_nospy(int arglist, int rest)
 	while (!nullp(spy_list)) {
 	    spy_list = cdr(spy_list);
 	}
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     } else if (n == 1) {
 	arg1 = car(arglist);
 	arg1 = copy_heap(arg1);
 	spy_list = listremove(arg1, spy_list);
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "nospy ", arglist);
     return (NO);
 }
 
-int b_leash(int arglist, int rest)
+int b_leash(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -3685,16 +3685,16 @@ int b_leash(int arglist, int rest)
 	arg1 = car(arglist);
 	if (arg1 == makeatom("full", SIMP)) {
 	    trace_flag = FULL;
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	} else if (arg1 == makeatom("tight", SIMP)) {
 	    trace_flag = TIGHT;
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	} else if (arg1 == makeatom("half", SIMP)) {
 	    trace_flag = HALF;
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	} else if (arg1 == makeatom("off", SIMP)) {
 	    trace_flag = OFF;
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	} else
 	    return (NO);
     }
@@ -3702,7 +3702,7 @@ int b_leash(int arglist, int rest)
     return (NO);
 }
 
-int b_debug(int arglist, int rest)
+int b_debug(int arglist, int rest, int th)
 {
     int n;
 
@@ -3713,35 +3713,35 @@ int b_debug(int arglist, int rest)
 	printf("spy_list=");
 	print(spy_list);
 	printf("\n");
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "debug ", arglist);
     return (NO);
 }
 
-int b_break(int arglist, int rest)
+int b_break(int arglist, int rest, int th)
 {
     int n, ret, save1, save2;
 
     n = length(arglist);
     if (n == 0) {
 	break_flag = 1;
-	save1 = wp[0];
-	save2 = sp[0];
+	save1 = wp[th];
+	save2 = sp[th];
       repl:
 	ret = setjmp(buf2);
 	if (ret == 0) {
 	    while (1) {
 		printf("?= ");
 		fflush(stdout);
-		query_break(variable_to_call(readparse()), 0);
+		query_break(variable_to_call(readparse()), th);
 		fflush(stdout);
 	    }
 	} else if (ret == 1) {
 	    ret = 0;
-	    wp[0] = save1;
-	    sp[0] = save2;
-	    return (prove_all(rest, sp[0],0));
+	    wp[th] = save1;
+	    sp[th] = save2;
+	    return (prove_all(rest, sp[th],th));
 	} else {
 	    goto repl;
 	}
@@ -3750,7 +3750,7 @@ int b_break(int arglist, int rest)
     return (NO);
 }
 
-int b_end_of_file(int arglist, int rest)
+int b_end_of_file(int arglist, int rest, int th)
 {
     int n;
 
@@ -3767,7 +3767,7 @@ int b_end_of_file(int arglist, int rest)
     return (NO);
 }
 
-int b_halt(int arglist, int rest)
+int b_halt(int arglist, int rest, int th)
 {
     int n;
 
@@ -3783,7 +3783,7 @@ int b_halt(int arglist, int rest)
     return (NO);
 }
 
-int b_abort(int arglist, int rest)
+int b_abort(int arglist, int rest, int th)
 {
     int n;
 
@@ -3797,7 +3797,7 @@ int b_abort(int arglist, int rest)
 
 
 //check data type
-int b_atom(int arglist, int rest)
+int b_atom(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -3806,7 +3806,7 @@ int b_atom(int arglist, int rest)
 	arg1 = car(arglist);
 
 	if (atomp(arg1))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -3814,7 +3814,7 @@ int b_atom(int arglist, int rest)
     return (NO);
 }
 
-int b_integer(int arglist, int rest)
+int b_integer(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -3822,7 +3822,7 @@ int b_integer(int arglist, int rest)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (integerp(arg1) || longnump(arg1) || bignump(arg1))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -3830,7 +3830,7 @@ int b_integer(int arglist, int rest)
     return (NO);
 }
 
-int b_real(int arglist, int rest)
+int b_real(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -3838,7 +3838,7 @@ int b_real(int arglist, int rest)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (floatp(arg1))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -3846,7 +3846,7 @@ int b_real(int arglist, int rest)
     return (NO);
 }
 
-int b_number(int arglist, int rest)
+int b_number(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -3854,7 +3854,7 @@ int b_number(int arglist, int rest)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (numberp(arg1))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -3863,7 +3863,7 @@ int b_number(int arglist, int rest)
 }
 
 
-int b_compound(int arglist, int rest)
+int b_compound(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -3871,7 +3871,7 @@ int b_compound(int arglist, int rest)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (compoundp(arg1))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -3879,7 +3879,7 @@ int b_compound(int arglist, int rest)
     return (NO);
 }
 
-int b_ground(int arglist, int rest)
+int b_ground(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -3888,7 +3888,7 @@ int b_ground(int arglist, int rest)
 	arg1 = car(arglist);
 
 	if (groundp(arg1))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -3896,7 +3896,7 @@ int b_ground(int arglist, int rest)
     return (NO);
 }
 
-int b_system(int arglist, int rest)
+int b_system(int arglist, int rest, int th)
 {
     int n, arg1, save1, save2, syslist, pred;
 
@@ -3908,20 +3908,20 @@ int b_system(int arglist, int rest)
 	    error(WRONG_ARGS, "system", arg1);
 
 	syslist = reverse(builtins);
-	save1 = wp[0];
-	save2 = sp[0];
+	save1 = wp[th];
+	save2 = sp[th];
 	while (!nullp(syslist)) {
 	    pred = car(syslist);
 	    syslist = cdr(syslist);
-	    if (unify(arg1, pred, 0) == YES)
-		if (prove(NIL, sp[0], rest,0) == YES)
+	    if (unify(arg1, pred, th) == YES)
+		if (prove(NIL, sp[th], rest,th) == YES)
 		    return (YES);
 
-	    wp[0] = save1;
-	    unbind(save2, 0);
+	    wp[th] = save1;
+	    unbind(save2, th);
 	}
-	wp[0] = save1;
-	unbind(save2, 0);
+	wp[th] = save1;
+	unbind(save2, th);
 	return (NO);
     }
 
@@ -3929,7 +3929,7 @@ int b_system(int arglist, int rest)
     return (NO);
 }
 
-int b_var(int arglist, int rest)
+int b_var(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -3937,9 +3937,9 @@ int b_var(int arglist, int rest)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (variablep(arg1))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else if (anoymousp(arg1))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -3947,7 +3947,7 @@ int b_var(int arglist, int rest)
     return (NO);
 }
 
-int b_nonvar(int arglist, int rest)
+int b_nonvar(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -3960,13 +3960,13 @@ int b_nonvar(int arglist, int rest)
 	else if (anoymousp(arg1))
 	    return (NO);
 	else
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "nonvar ", arglist);
     return (NO);
 }
 
-int b_atomic(int arglist, int rest)
+int b_atomic(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -3975,7 +3975,7 @@ int b_atomic(int arglist, int rest)
 	arg1 = car(arglist);
 
 	if (atomicp(arg1))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -3983,7 +3983,7 @@ int b_atomic(int arglist, int rest)
     return (NO);
 }
 
-int b_list(int arglist, int rest)
+int b_list(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -3991,7 +3991,7 @@ int b_list(int arglist, int rest)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (listp(arg1) || nullp(arg1))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -3999,7 +3999,7 @@ int b_list(int arglist, int rest)
     return (NO);
 }
 
-int b_string(int arglist, int rest)
+int b_string(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -4008,7 +4008,7 @@ int b_string(int arglist, int rest)
 	arg1 = car(arglist);
 
 	if (stringp(arg1))
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -4019,7 +4019,7 @@ int b_string(int arglist, int rest)
 
 
 //-----structure------
-int b_functor(int arglist, int rest)
+int b_functor(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, res, i;
 
@@ -4053,39 +4053,39 @@ int b_functor(int arglist, int rest)
 	if (listp(arg1) && atomp(arg2) && integerp(arg3)) {
 	    i = GET_INT(arg3);
 	    if (i == 0) {
-		if (unify(arg1, arg2, 0) == YES)
-		    return (prove_all(rest, sp[3],0));
+		if (unify(arg1, arg2, th) == YES)
+		    return (prove_all(rest, sp[th],th));
 		else
 		    return (NO);
 	    } else {
 
 		if (eqlp(arg2, DOTOBJ) && GET_INT(arg3) == 2)
-		    return (prove_all(rest, sp[0],0));
+		    return (prove_all(rest, sp[th],th));
 		else
 		    return (NO);
 	    }
 	} else if (listp(arg1) &&
 		   wide_variable_p(arg2) && wide_variable_p(arg3)) {
-	    unify(arg2, makeatom(".", SYS), 0);
-	    unify(arg3, makeint(2), 0);
-	    return (prove_all(rest, sp[0],0));
+	    unify(arg2, makeatom(".", SYS), th);
+	    unify(arg3, makeint(2), th);
+	    return (prove_all(rest, sp[th],th));
 	} else if (structurep(arg1)) {
-	    if (unify(car(arg1), arg2, 0) == YES &&
-		unify(makeint(length(cdr(arg1))), arg3, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(car(arg1), arg2, th) == YES &&
+		unify(makeint(length(cdr(arg1))), arg3, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (variablep(arg1) && constantp(arg2) && integerp(arg3)) {
 	    i = GET_INT(arg3);
 	    if (i == 0) {
-		if (unify(arg1, arg2, 0) == YES)
-		    return (prove_all(rest, sp[0],0));
+		if (unify(arg1, arg2, th) == YES)
+		    return (prove_all(rest, sp[th],th));
 		else
 		    return (NO);
 	    } else {
 		res = NIL;
 		while (i > 0) {
-		    res = cons(makevariant(0), res);
+		    res = cons(makevariant(th), res);
 		    i--;
 		}
 		res = reverse(res);
@@ -4093,16 +4093,16 @@ int b_functor(int arglist, int rest)
 		    SET_AUX(arg2, PRED);
 		res = cons(arg2, res);
 		if (arg2 == DOTOBJ && GET_INT(arg3) == 2)
-		    res = operate(res,0);
-		if (unify(arg1, res, 0) == YES)
-		    return (prove_all(rest, sp[0],0));
+		    res = operate(res,th);
+		if (unify(arg1, res, th) == YES)
+		    return (prove_all(rest, sp[th],th));
 		else
 		    return (NO);
 	    }
 	} else if (atomicp(arg1)) {
-	    if (unify(arg1, arg2, 0) == YES
-		&& unify(makeint(0), arg3, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg1, arg2, th) == YES
+		&& unify(makeint(th), arg3, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else
@@ -4112,7 +4112,7 @@ int b_functor(int arglist, int rest)
     return (NO);
 }
 
-int b_arg(int arglist, int rest)
+int b_arg(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, elt, i;
 
@@ -4138,8 +4138,8 @@ int b_arg(int arglist, int rest)
 	    if (i < 1 || i >= length(arg2))
 		return (NO);
 	    elt = nth(cdr(arg2), i);
-	    if (unify(arg3, elt, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg3, elt, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	}
@@ -4148,7 +4148,7 @@ int b_arg(int arglist, int rest)
     return (NO);
 }
 
-int b_arg0(int arglist, int rest)
+int b_arg0(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, elt, i;
 
@@ -4174,8 +4174,8 @@ int b_arg0(int arglist, int rest)
 	    if (i < 1 || i >= length(arg2))
 		return (NO);
 	    elt = nth(cdr(arg2), i);
-	    if (unify(arg3, elt, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg3, elt, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	}
@@ -4186,7 +4186,7 @@ int b_arg0(int arglist, int rest)
 
 
 //-----other----
-int b_listing(int arglist, int rest)
+int b_listing(int arglist, int rest, int th)
 {
     int n, arg1, clauses, pred, list, temp;
 
@@ -4205,7 +4205,7 @@ int b_listing(int arglist, int rest)
 	    }
 	}
 	listing_flag = 0;
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     if (n == 1) {
 	arg1 = car(arglist);
@@ -4220,7 +4220,7 @@ int b_listing(int arglist, int rest)
 		clauses = cdr(clauses);
 	    }
 	    listing_flag = 0;
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	} else if (eqlp(car(arg1), makeope("/")) &&
 		   atomp(cadr(arg1)) && integerp(caddr(arg1))) {
 	    clauses = GET_CAR(cadr(arg1));
@@ -4240,7 +4240,7 @@ int b_listing(int arglist, int rest)
 		clauses = cdr(clauses);
 	    }
 	    listing_flag = 0;
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	} else {
 	    error(WRONG_ARGS, "listing ", arglist);
 	}
@@ -4251,7 +4251,7 @@ int b_listing(int arglist, int rest)
 
 
 //transform bwtween predicate and data
-int b_univ(int arglist, int rest)
+int b_univ(int arglist, int rest, int th)
 {
     int n, arg1, arg2, res;
 
@@ -4272,49 +4272,49 @@ int b_univ(int arglist, int rest)
 	if (!wide_variable_p(arg1) && atomicp(arg1)) {
 	    res = list1(arg1);
 	    SET_AUX(res, LIST);
-	    if (unify(res, arg2, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(res, arg2, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (predicatep(arg1)) {
 	    res = structure_to_list(arg1);
-	    if (unify(res, arg2, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(res, arg2, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (builtinp(arg1)) {
 	    res = structure_to_list(arg1);
-	    if (unify(res, arg2, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(res, arg2, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (compiledp(arg1)) {
 	    res = structure_to_list(arg1);
-	    if (unify(res, arg2, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(res, arg2, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (operationp(arg1)) {
 	    res = structure_to_list(arg1);
-	    if (unify(res, arg2, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(res, arg2, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (user_operation_p(arg1)) {
 	    res = structure_to_list(arg1);
-	    if (unify(res, arg2, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(res, arg2, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (functionp(arg1)) {
 	    res = structure_to_list(arg1);
-	    if (unify(res, arg2, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(res, arg2, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (variablep(arg1) && listp(arg2)) {
 	    if (car(arg2) == DOTOBJ) {
-		arg2 = operate(arg2,0);
+		arg2 = operate(arg2,th);
 		SET_AUX(arg2, 0);
 	    } else if (numberp(car(arg2))) {
 		return (NO);
@@ -4326,20 +4326,20 @@ int b_univ(int arglist, int rest)
 	    } else {
 		arg2 = list_to_structure(arg2);
 	    }
-	    if (unify(arg1, arg2, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg1, arg2, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (listp(arg1)) {
 	    arg1 = list3(DOTOBJ, car(arg1), cdr(arg1));
 	    SET_AUX(arg1, LIST);
-	    if (unify(arg1, arg2, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg1, arg2, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else {
-	    if (unify(arg1, arg2, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg1, arg2, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	}
@@ -4348,7 +4348,7 @@ int b_univ(int arglist, int rest)
     return (NO);
 }
 
-int b_current_predicate(int arglist, int rest)
+int b_current_predicate(int arglist, int rest, int th)
 {
     int n, arg1, save1, save2, predlist, pred, aritylist, arity;
 
@@ -4359,8 +4359,8 @@ int b_current_predicate(int arglist, int rest)
 	    error(WRONG_ARGS, "current_predicate ", arg1);
 
 	predlist = reverse(predicates);
-	save1 = wp[0];
-	save2 = sp[0];
+	save1 = wp[th];
+	save2 = sp[th];
 	while (!nullp(predlist)) {
 	    pred = car(predlist);
 	    predlist = cdr(predlist);
@@ -4368,17 +4368,17 @@ int b_current_predicate(int arglist, int rest)
 	    while (!nullp(aritylist)) {
 		arity = car(aritylist);
 		aritylist = cdr(aritylist);
-		if (unify(arg1, list3(makeatom("/", OPE), pred, arity), 0)
+		if (unify(arg1, list3(makeatom("/", OPE), pred, arity), th)
 		    == YES)
-		    if (prove(NIL, sp[0], rest,0) == YES)
+		    if (prove(NIL, sp[th], rest,th) == YES)
 			return (YES);
 
-		wp[0] = save1;
-		unbind(save2, 0);
+		wp[th] = save1;
+		unbind(save2, th);
 	    }
 	}
-	wp[0] = save1;
-	unbind(save2, 0);
+	wp[th] = save1;
+	unbind(save2, th);
 	return (NO);
     }
     error(ARITY_ERR, "current_predicate ", arglist);
@@ -4406,7 +4406,7 @@ int specp(int x)
 	return (0);
 }
 
-int b_current_op(int arglist, int rest)
+int b_current_op(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, save1, save2, lis, weight, spec, op, w, s, o;
 
@@ -4435,32 +4435,32 @@ int b_current_op(int arglist, int rest)
 
 	lis = op_list;
 	spec = NIL;
-	save1 = wp[0];
-	save2 = sp[0];
+	save1 = wp[th];
+	save2 = sp[th];
 	while (!nullp(lis)) {
 	    weight = car(car(lis));
 	    spec = cadr(car(lis));
 	    op = caddr(car(lis));
 
-	    w = unify(arg1, weight, 0);
-	    s = unify(arg2, spec, 0);
-	    o = unify(arg3, op, 0);
+	    w = unify(arg1, weight, th);
+	    s = unify(arg2, spec, th);
+	    o = unify(arg3, op, th);
 	    if (w == YES && s == YES && o == YES)
-		if (prove(NIL, sp[0], rest,0) == YES)
+		if (prove(NIL, sp[th], rest,th) == YES)
 		    return (YES);
 	    lis = cdr(lis);
-	    wp[0] = save1;
-	    unbind(save2, 0);
+	    wp[th] = save1;
+	    unbind(save2, th);
 	}
-	wp[0] = save1;
-	unbind(save2, 0);
+	wp[th] = save1;
+	unbind(save2, th);
 	return (NO);
     }
     error(ARITY_ERR, "current_op ", arglist);
     return (NO);
 }
 
-int b_predicate_property(int arglist, int rest)
+int b_predicate_property(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -4473,35 +4473,35 @@ int b_predicate_property(int arglist, int rest)
 	    error(INSTANTATION_ERR, "predicate_property ", arg1);
 
 	if (atomp(arg1) && GET_AUX(arg1) == SYS) {
-	    if (unify(arg2, makeconst("built_in"), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, makeconst("built_in"), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (structurep(arg1) && GET_AUX(car(arg1)) == SYS) {
-	    if (unify(arg2, makeconst("built_in"), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, makeconst("built_in"), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (atomp(arg1) && GET_AUX(arg1) == PRED &&
 		   GET_CAR(arg1) != NIL) {
-	    if (unify(arg2, makeconst("dynamic"), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, makeconst("dynamic"), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (structurep(arg1) && GET_AUX(car(arg1)) == PRED &&
 		   GET_CAR(car(arg1)) != NIL) {
-	    if (unify(arg2, makeconst("dynamic"), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, makeconst("dynamic"), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (atomp(arg1) && GET_AUX(arg1) == COMP) {
-	    if (unify(arg2, makeconst("static"), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, makeconst("static"), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (structurep(arg1) && GET_AUX(car(arg1)) == COMP) {
-	    if (unify(arg2, makeconst("static"), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, makeconst("static"), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else
@@ -4513,14 +4513,14 @@ int b_predicate_property(int arglist, int rest)
 }
 
 
-int b_reset_op(int arglist, int rest)
+int b_reset_op(int arglist, int rest, int th)
 {
     int n;
 
     n = length(arglist);
     if (n == 0) {
 	initoperator();
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "reset_op ", arglist);
     return (NO);
@@ -4573,7 +4573,7 @@ int o_dcg(int x, int y)
 
 
 
-int b_gbc(int arglist, int rest)
+int b_gbc(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -4582,7 +4582,7 @@ int b_gbc(int arglist, int rest)
 	arg1 = car(arglist);
 	if (arg1 == makeconst("full")) {
 	    gbc();
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	} else {
 	    error(WRONG_ARGS, "gc ", arglist);
 	}
@@ -4600,7 +4600,7 @@ int o_ignore(int nest, int n)
 
 
 //-----------file system-------------------
-int b_mkdir(int arglist, int rest)
+int b_mkdir(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -4613,14 +4613,14 @@ int b_mkdir(int arglist, int rest)
 	    error(NOT_ATOM, "mkdir ", arg1);
 
 	mkdir(GET_NAME(arg1), 0777);
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "mkdir ", arglist);
     return (NO);
 }
 
 
-int b_rmdir(int arglist, int rest)
+int b_rmdir(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -4633,14 +4633,14 @@ int b_rmdir(int arglist, int rest)
 	    error(NOT_ATOM, "rmdir ", arg1);
 
 	rmdir(GET_NAME(arg1));
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "rmdir ", arglist);
     return (NO);
 }
 
 
-int b_chdir(int arglist, int rest)
+int b_chdir(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -4653,7 +4653,7 @@ int b_chdir(int arglist, int rest)
 	    error(NOT_ATOM, "chdir ", arg1);
 
 	if (chdir(GET_NAME(arg1)) != -1)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -4661,7 +4661,7 @@ int b_chdir(int arglist, int rest)
     return (NO);
 }
 
-int b_delete(int arglist, int rest)
+int b_delete(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -4674,14 +4674,14 @@ int b_delete(int arglist, int rest)
 	    error(NOT_ATOM, "delete ", arg1);
 
 	remove(GET_NAME(arg1));
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "delete ", arglist);
     return (NO);
 }
 
 
-int b_rename(int arglist, int rest)
+int b_rename(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -4700,7 +4700,7 @@ int b_rename(int arglist, int rest)
 
 
 	rename(GET_NAME(arg1), GET_NAME(arg2));
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "rename ", arglist);
     return (NO);
@@ -4771,7 +4771,7 @@ int b_edit(int arglist, int rest, int th)
 }
 
 
-int b_shell(int arglist, int rest)
+int b_shell(int arglist, int rest, int th)
 {
     int n, arg1, res;
     char str1[STRSIZE];
@@ -4786,14 +4786,14 @@ int b_shell(int arglist, int rest)
 	res = system(str1);
 	if (res == -1)
 	    error(SYSTEM_ERROR, "shell", arg1);
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "shell ", arglist);
     return (NO);
 }
 
 
-int b_syntaxerrors(int arglist, int rest)
+int b_syntaxerrors(int arglist, int rest, int th)
 {
     int n, arg1, arg2, res;
 
@@ -4806,10 +4806,10 @@ int b_syntaxerrors(int arglist, int rest)
 	if (arg2 != YES && arg2 != NO && !wide_variable_p(arg2))
 	    error(ILLEGAL_ARGS, "syntaxerrors ", arg1);
 
-	res = unify(arg1, syntax_flag, 0);
+	res = unify(arg1, syntax_flag, th);
 	syntax_flag = arg2;
 	if (res == YES)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -4817,7 +4817,7 @@ int b_syntaxerrors(int arglist, int rest)
     return (NO);
 }
 
-int b_fileerrors(int arglist, int rest)
+int b_fileerrors(int arglist, int rest, int th)
 {
     int n, arg1, arg2, res;
 
@@ -4830,10 +4830,10 @@ int b_fileerrors(int arglist, int rest)
 	if (arg2 != YES && arg2 != NO && !wide_variable_p(arg2))
 	    error(ILLEGAL_ARGS, "fileerrors ", arg1);
 
-	res = unify(arg1, syntax_flag, 0);
+	res = unify(arg1, syntax_flag, th);
 	fileerr_flag = arg2;
 	if (res == YES)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -4841,7 +4841,7 @@ int b_fileerrors(int arglist, int rest)
     return (NO);
 }
 
-int b_statistics(int arglist, int rest)
+int b_statistics(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -4851,17 +4851,17 @@ int b_statistics(int arglist, int rest)
 	arg2 = cadr(arglist);
 
 	if (arg1 == makeatom("free", SIMP)) {
-	    if (unify(arg2, makeint(fc), 0) == YES);
-	    return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, makeint(fc), th) == YES);
+	    return (prove_all(rest, sp[th],th));
 	} else if (arg1 == makeatom("wp", SIMP)) {
-	    if (unify(arg2, makeint(wp[0]), 0) == YES);
-	    return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, makeint(wp[th]), th) == YES);
+	    return (prove_all(rest, sp[th],th));
 	} else if (arg1 == makeatom("sp", SIMP)) {
-	    if (unify(arg2, makeint(sp[0]), 0) == YES);
-	    return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, makeint(sp[th]), th) == YES);
+	    return (prove_all(rest, sp[th],th));
 	} else if (arg1 == makeatom("gc", SYS)) {
-	    if (unify(arg2, makeint(gc), 0) == YES);
-	    return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, makeint(gc), th) == YES);
+	    return (prove_all(rest, sp[th],th));
 	} else {
 	    return (NO);
 	}
@@ -4873,7 +4873,7 @@ int b_statistics(int arglist, int rest)
 
 
 
-int b_sort(int arglist, int rest)
+int b_sort(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -4887,8 +4887,8 @@ int b_sort(int arglist, int rest)
 	if (!wide_variable_p(arg2) && !listp(arg2) && !nullp(arg2))
 	    error(NOT_VAR, "sort ", arg2);
 
-	if (unify(arg2, sort(arg1), 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg2, sort(arg1), th) == YES)
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -4896,7 +4896,7 @@ int b_sort(int arglist, int rest)
     return (NO);
 }
 
-int b_keysort(int arglist, int rest)
+int b_keysort(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -4910,8 +4910,8 @@ int b_keysort(int arglist, int rest)
 	if (!wide_variable_p(arg2) && !listp(arg2) && !nullp(arg2))
 	    error(NOT_VAR, "key_sort ", arg2);
 
-	if (unify(arg2, keysort(arg1), 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg2, keysort(arg1), th) == YES)
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -4919,11 +4919,11 @@ int b_keysort(int arglist, int rest)
     return (NO);
 }
 
-int b_member(int arglist, int rest)
+int b_member(int arglist, int rest, int th)
 {
     int n, arg1, arg2, x, y, l, save1, save2, body, res;
 
-    save2 = sp[0];
+    save2 = sp[th];
     res = NIL;
     n = length(arglist);
     if (n == 2) {
@@ -4934,32 +4934,32 @@ int b_member(int arglist, int rest)
 	if (nullp(arg2))
 	    return (NO);
 
-	save1 = wp[0];
-	x = makevariant(0);
-	l = makevariant(0);
-	if (unify(arg1, x, 0) == YES
-	    && unify(arg2, wlistcons(x, l, 0), 0) == YES) {
-	    if ((res = prove(NIL, sp[0], rest,0)) == YES)
+	save1 = wp[th];
+	x = makevariant(th);
+	l = makevariant(th);
+	if (unify(arg1, x, th) == YES
+	    && unify(arg2, wlistcons(x, l, th), th) == YES) {
+	    if ((res = prove(NIL, sp[th], rest,th)) == YES)
 		return (YES);
 	}
 
-	wp[0] = save1;
-	unbind(save2, 0);
+	wp[th] = save1;
+	unbind(save2, th);
 	if (res == NFALSE)
 	    return (res);
 
-	save1 = wp[0];
-	x = makevariant(0);
-	y = makevariant(0);
-	l = makevariant(0);
-	if (unify(arg1, x, 0) == YES
-	    && unify(arg2, wlistcons(y, l, 0), 0) == YES) {
-	    body = wlist3(makeatom("member", SYS), x, l, 0);
-	    if ((res = prove(body, sp[0], rest,0)) == YES)
+	save1 = wp[th];
+	x = makevariant(th);
+	y = makevariant(th);
+	l = makevariant(th);
+	if (unify(arg1, x, th) == YES
+	    && unify(arg2, wlistcons(y, l, th), th) == YES) {
+	    body = wlist3(makeatom("member", SYS), x, l, th);
+	    if ((res = prove(body, sp[th], rest,th)) == YES)
 		return (YES);
 	}
-	wp[0] = save1;
-	unbind(save2, 0);
+	wp[th] = save1;
+	unbind(save2, th);
 	return (res);
     }
     error(ARITY_ERR, "member ", arglist);
@@ -4968,11 +4968,11 @@ int b_member(int arglist, int rest)
 
 //---------extention--------
 
-int b_append(int arglist, int rest)
+int b_append(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, x, ls, ys, zs, save1, save2, body;
 
-    save2 = sp[0];
+    save2 = sp[th];
     body = NIL;
     n = length(arglist);
     if (n == 3) {
@@ -4987,28 +4987,28 @@ int b_append(int arglist, int rest)
 	if (!listp(arg3) && !nullp(arg3) && !wide_variable_p(arg3))
 	    error(NOT_LIST, "append ", arg3);
 
-	save1 = wp[0];
-	if (unify(arg1, NIL, 0) == YES && unify(arg2, arg3, 0) == YES) {
-	    if (prove(NIL, sp[0], rest,0) == YES)
+	save1 = wp[th];
+	if (unify(arg1, NIL, th) == YES && unify(arg2, arg3, th) == YES) {
+	    if (prove(NIL, sp[th], rest,th) == YES)
 		return (YES);
 	}
-	wp[0] = save1;
-	unbind(save2, 0);
+	wp[th] = save1;
+	unbind(save2, th);
 
-	save1 = wp[0];
-	x = makevariant(0);
-	ls = makevariant(0);
-	ys = makevariant(0);
-	zs = makevariant(0);
-	if (unify(arg1, wlistcons(x, ls, 0), 0) == YES &&
-	    unify(arg2, ys, 0) == YES
-	    && unify(arg3, wlistcons(x, zs, 0), 0) == YES) {
-	    body = wlist4(makeatom("append", SYS), ls, ys, zs, 0);
-	    if (prove(body, sp[0], rest,0) == YES)
+	save1 = wp[th];
+	x = makevariant(th);
+	ls = makevariant(th);
+	ys = makevariant(th);
+	zs = makevariant(th);
+	if (unify(arg1, wlistcons(x, ls, th), th) == YES &&
+	    unify(arg2, ys, th) == YES
+	    && unify(arg3, wlistcons(x, zs, th), th) == YES) {
+	    body = wlist4(makeatom("append", SYS), ls, ys, zs, th);
+	    if (prove(body, sp[th], rest,th) == YES)
 		return (YES);
 	}
-	wp[0] = save1;
-	unbind(save2, 0);
+	wp[th] = save1;
+	unbind(save2, th);
 	return (NO);
     }
     error(ARITY_ERR, "append ", arglist);
@@ -5016,7 +5016,7 @@ int b_append(int arglist, int rest)
 }
 
 //listreverse/2
-int b_reverse(int arglist, int rest)
+int b_reverse(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -5035,13 +5035,13 @@ int b_reverse(int arglist, int rest)
 	    error(WRONG_ARGS, "reverse ", arg2);
 
 	if (!variablep(arg1)) {
-	    if (unify(listreverse(arg1), arg2, 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(listreverse(arg1), arg2, th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (!variablep(arg2)) {
-	    if (unify(arg1, listreverse(arg2), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg1, listreverse(arg2), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else
@@ -5052,7 +5052,7 @@ int b_reverse(int arglist, int rest)
 }
 
 
-int b_between(int arglist, int rest)
+int b_between(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, save1, save2, save3, low, high, betweenval;
 
@@ -5072,16 +5072,16 @@ int b_between(int arglist, int rest)
 	if (!wide_variable_p(arg3) && !wide_integer_p(arg3))
 	    error(NOT_INT, "between ", arg3);
 
-	save1 = wp[0];
-	save2 = sp[0];
-	save3 = ac[0];
+	save1 = wp[th];
+	save2 = sp[th];
+	save3 = ac[th];
 	low = get_int(arg1);
 	high = get_int(arg2);
 
 	if (groundp(arg3)) {
 	    betweenval = get_int(arg3);
 	    if (betweenval >= low && betweenval <= high) {
-		if (prove_all(rest, sp[0],0) == YES)
+		if (prove_all(rest, sp[th],th) == YES)
 		    return (YES);
 	    }
 	    return (NO);
@@ -5089,18 +5089,18 @@ int b_between(int arglist, int rest)
 
 	while (low <= high) {
 	    //printf("%d",low);
-	    unify(arg3, makeint(low), 0);
-	    if (prove_all(rest, sp[0],0) == YES)
+	    unify(arg3, makeint(low), th);
+	    if (prove_all(rest, sp[th],th) == YES)
 		return (YES);
 
 	    low++;
-	    wp[0] = save1;
-	    unbind(save2, 0);
-	    ac[0] = save3;
+	    wp[th] = save1;
+	    unbind(save2, th);
+	    ac[th] = save3;
 	}
-	wp[0] = save1;
-	unify(arg3, arg2, 0);
-	ac[0] = save3;
+	wp[th] = save1;
+	unify(arg3, arg2, th);
+	ac[th] = save3;
 	return (NO);
     }
     error(ARITY_ERR, "between ", arglist);
@@ -5108,7 +5108,7 @@ int b_between(int arglist, int rest)
 }
 
 
-int b_bagof(int arglist, int rest)
+int b_bagof(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, save1, save2, free, vars, nonfree, goal, lis;
 
@@ -5118,8 +5118,8 @@ int b_bagof(int arglist, int rest)
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
-	save1 = wp[0];
-	save2 = sp[0];
+	save1 = wp[th];
+	save2 = sp[th];
 	vars = listreverse(unique(varslist(arg2)));
 	free = get_free(arg2);
 	nonfree = get_nonfree(vars, free, arg1);
@@ -5127,17 +5127,17 @@ int b_bagof(int arglist, int rest)
 	goal = addtail_body(list2(makesys("%bagofhelper"), arg1), goal);
 	bag_list = NIL;
 	nonfree_list = nonfree;
-	prove_all(goal, sp[0],0);
+	prove_all(goal, sp[th],th);
 
 	lis = reverse(bag_list);
 	while (!nullp(lis)) {
 	    apply_unify(caar(lis));
-	    unify(arg3, listreverse(cdar(lis)), 0);
-	    if (prove_all(rest, sp[0],0) == YES)
+	    unify(arg3, listreverse(cdar(lis)), th);
+	    if (prove_all(rest, sp[th],th) == YES)
 		return (YES);
 
-	    wp[0] = save1;
-	    unbind(save2, 0);
+	    wp[th] = save1;
+	    unbind(save2, th);
 	    lis = cdr(lis);
 	}
 	return (NO);
@@ -5147,7 +5147,7 @@ int b_bagof(int arglist, int rest)
 }
 
 
-int b_setof(int arglist, int rest)
+int b_setof(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, save1, save2, free, vars, nonfree, goal, lis;
 
@@ -5157,8 +5157,8 @@ int b_setof(int arglist, int rest)
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
-	save1 = wp[0];
-	save2 = sp[0];
+	save1 = wp[th];
+	save2 = sp[th];
 	vars = listreverse(unique(varslist(arg2)));
 	free = get_free(arg2);
 	nonfree = get_nonfree(vars, free, arg1);
@@ -5166,17 +5166,17 @@ int b_setof(int arglist, int rest)
 	goal = addtail_body(list2(makesys("%bagofhelper"), arg1), goal);
 	bag_list = NIL;
 	nonfree_list = nonfree;
-	prove_all(goal, sp[0],0);
+	prove_all(goal, sp[th],th);
 
 	lis = reverse(bag_list);
 	while (!nullp(lis)) {
 	    apply_unify(caar(lis));
-	    unify(arg3, sort(remove_duplicate(cdar(lis))), 0);
-	    if (prove_all(rest, sp[0],0) == YES)
+	    unify(arg3, sort(remove_duplicate(cdar(lis))), th);
+	    if (prove_all(rest, sp[th],th) == YES)
 		return (YES);
 
-	    wp[0] = save1;
-	    unbind(save2, 0);
+	    wp[th] = save1;
+	    unbind(save2, th);
 	    lis = cdr(lis);
 	}
 	return (NO);
@@ -5185,7 +5185,7 @@ int b_setof(int arglist, int rest)
     return (NO);
 }
 
-int b_findall(int arglist, int rest)
+int b_findall(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, save1, save2, goal;
 
@@ -5195,20 +5195,20 @@ int b_findall(int arglist, int rest)
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
-	save1 = wp[0];
-	save2 = sp[0];
+	save1 = wp[th];
+	save2 = sp[th];
 	goal = get_goal(arg2);
 	goal = addtail_body(list2(makesys("%bagofhelper"), arg1), goal);
 	bag_list = NIL;
 	nonfree_list = NIL;
-	prove_all(goal, sp[0],0);
+	prove_all(goal, sp[th],th);
 
-	unify(arg3, listreverse(cdar(bag_list)), 0);
-	if (prove_all(rest, sp[0],0) == YES)
+	unify(arg3, listreverse(cdar(bag_list)), th);
+	if (prove_all(rest, sp[th],th) == YES)
 	    return (YES);
 
-	wp[0] = save1;
-	unbind(save2, 0);
+	wp[th] = save1;
+	unbind(save2, th);
 	return (NO);
     }
     error(ARITY_ERR, "findall ", arglist);
@@ -5267,7 +5267,7 @@ void apply_unify(int x)
     }
 }
 
-int b_bagofhelper(int arglist, int rest)
+int b_bagofhelper(int arglist, int rest, int th)
 {
     int n, arg1, nonfree, key;
 
@@ -5278,10 +5278,10 @@ int b_bagofhelper(int arglist, int rest)
 	nonfree = nonfree_list;
 	key = NIL;
 	while (!nullp(nonfree)) {
-	    key = cons(cons(car(nonfree), deref(car(nonfree), 0)), key);
+	    key = cons(cons(car(nonfree), deref(car(nonfree), th)), key);
 	    nonfree = cdr(nonfree);
 	}
-	putinbag(key, deref(arg1, 0));
+	putinbag(key, deref(arg1, th));
 	return (NO);
     }
     return (NO);
@@ -5325,7 +5325,7 @@ int takeoutbug(int key)
 
 //------------------------------------------------
 
-int b_inc(int arglist, int rest)
+int b_inc(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -5350,18 +5350,18 @@ int b_inc(int arglist, int rest)
 	    error(LESS_THAN_ZERO, "inc ", arg2);
 
 	if (wide_variable_p(arg1)) {
-	    if (unify(arg1, minus(arg2, makeint(1)), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg1, minus(arg2, makeint(1)), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (wide_variable_p(arg2)) {
-	    if (unify(arg2, plus(arg1, makeint(1)), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, plus(arg1, makeint(1)), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else {
-	    if (unify(arg2, plus(arg1, makeint(1)), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, plus(arg1, makeint(1)), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	}
@@ -5371,7 +5371,7 @@ int b_inc(int arglist, int rest)
     return (NO);
 }
 
-int b_dec(int arglist, int rest)
+int b_dec(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -5396,18 +5396,18 @@ int b_dec(int arglist, int rest)
 	    error(LESS_THAN_ZERO, "dec ", arg2);
 
 	if (wide_variable_p(arg1)) {
-	    if (unify(arg1, plus(arg2, makeint(1)), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg1, plus(arg2, makeint(1)), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else if (wide_variable_p(arg2)) {
-	    if (unify(arg2, minus(arg1, makeint(1)), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, minus(arg1, makeint(1)), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	} else {
-	    if (unify(arg2, minus(arg1, makeint(1)), 0) == YES)
-		return (prove_all(rest, sp[0],0));
+	    if (unify(arg2, minus(arg1, makeint(1)), th) == YES)
+		return (prove_all(rest, sp[th],th));
 	    else
 		return (NO);
 	}
@@ -5417,7 +5417,7 @@ int b_dec(int arglist, int rest)
     return (NO);
 }
 
-int b_ansi_cup(int arglist, int rest)
+int b_ansi_cup(int arglist, int rest, int th)
 {
     int n, arg1, arg2, r, c;
 
@@ -5442,7 +5442,7 @@ int b_ansi_cup(int arglist, int rest)
 	r = get_int(arg1);
 	c = get_int(arg2);
 	ESCMOVE(r, c);
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "ansi_cup ", arglist);
     return (NO);
@@ -5503,7 +5503,7 @@ cursor get_cursor(void)
 }
 
 
-int b_ansi_cpr(int arglist, int rest)
+int b_ansi_cpr(int arglist, int rest, int th)
 {
     int n, arg1, arg2, r, c, res1, res2;
     cursor position;
@@ -5524,7 +5524,7 @@ int b_ansi_cpr(int arglist, int rest)
 	res1 = unify(arg1, r, 0);
 	res2 = unify(arg2, c, 0);
 	if (res1 == YES && res2 == YES)
-	    return (prove_all(rest, sp[0],0));
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -5532,7 +5532,7 @@ int b_ansi_cpr(int arglist, int rest)
     return (NO);
 }
 
-int b_ansi_scp(int arglist, int rest)
+int b_ansi_scp(int arglist, int rest, int th)
 {
     int n;
     cursor position;
@@ -5545,13 +5545,13 @@ int b_ansi_scp(int arglist, int rest)
 	cursor_col_store = position.col;
 	cursor_color_store = cursor_color;
 	cursor_style_store = cursor_style;
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "ansi_scp ", arglist);
     return (NO);
 }
 
-int b_ansi_rcp(int arglist, int rest)
+int b_ansi_rcp(int arglist, int rest, int th)
 {
     int n;
 
@@ -5560,13 +5560,13 @@ int b_ansi_rcp(int arglist, int rest)
 	ESCMOVE(cursor_row_store, cursor_col_store);
 	ESCCOLOR(cursor_color_store);
 	ESCCOLOR(cursor_style_store);
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "ansi_rcp ", arglist);
     return (NO);
 }
 
-int b_ansi_ed(int arglist, int rest)
+int b_ansi_ed(int arglist, int rest, int th)
 {
     int n;
 
@@ -5574,27 +5574,27 @@ int b_ansi_ed(int arglist, int rest)
     if (n == 0) {
 	ESCCLS;
 	ESCTOP;
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "ansi_ed ", arglist);
     return (NO);
 }
 
-int b_ansi_el(int arglist, int rest)
+int b_ansi_el(int arglist, int rest, int th)
 {
     int n;
 
     n = length(arglist);
     if (n == 0) {
 	ESCCLSL1;
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "ansi_el ", arglist);
     return (NO);
 }
 
 
-int b_ansi_cuu(int arglist, int rest)
+int b_ansi_cuu(int arglist, int rest, int th)
 {
     int n, arg1, m;
 
@@ -5612,13 +5612,13 @@ int b_ansi_cuu(int arglist, int rest)
 	    ESCMVU;
 	    m--;
 	}
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "ansi_cuu ", arglist);
     return (NO);
 }
 
-int b_ansi_cud(int arglist, int rest)
+int b_ansi_cud(int arglist, int rest, int th)
 {
     int n, arg1, m;
 
@@ -5636,13 +5636,13 @@ int b_ansi_cud(int arglist, int rest)
 	    ESCMVD;
 	    m--;
 	}
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "ansi_cud ", arglist);
     return (NO);
 }
 
-int b_ansi_cuf(int arglist, int rest)
+int b_ansi_cuf(int arglist, int rest, int th)
 {
     int n, arg1, m;
 
@@ -5660,13 +5660,13 @@ int b_ansi_cuf(int arglist, int rest)
 	    ESCMVR;
 	    m--;
 	}
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "ansi_cuf ", arglist);
     return (NO);
 }
 
-int b_ansi_cub(int arglist, int rest)
+int b_ansi_cub(int arglist, int rest, int th)
 {
     int n, arg1, m;
 
@@ -5684,13 +5684,13 @@ int b_ansi_cub(int arglist, int rest)
 	    ESCMVL;
 	    m--;
 	}
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "ansi_cub ", arglist);
     return (NO);
 }
 
-int b_ansi_sgr(int arglist, int rest)
+int b_ansi_sgr(int arglist, int rest, int th)
 {
     int n, arg1, m;
 
@@ -5712,7 +5712,7 @@ int b_ansi_sgr(int arglist, int rest)
 	    cursor_style = m;
 	else
 	    cursor_color = m;
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "ansi_sgr ", arglist);
     return (NO);
@@ -5720,7 +5720,7 @@ int b_ansi_sgr(int arglist, int rest)
 
 
 
-int b_date(int arglist, int rest)
+int b_date(int arglist, int rest, int th)
 {
     int n, arg1, res;
     struct tm *jst;
@@ -5737,8 +5737,8 @@ int b_date(int arglist, int rest)
 	res =
 	    list4(makepred("date"), makeint(jst->tm_year + 1900),
 		  makeint(jst->tm_mon + 1), makeint(jst->tm_mday));
-	if (unify(arg1, res, 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg1, res, th) == YES)
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -5746,7 +5746,7 @@ int b_date(int arglist, int rest)
     return (NO);
 }
 
-int b_date_day(int arglist, int rest)
+int b_date_day(int arglist, int rest, int th)
 {
     int n, arg1, arg2, y, m, d, w;
 
@@ -5767,8 +5767,8 @@ int b_date_day(int arglist, int rest)
 	    m += 12;
 	}
 	w = (y + y / 4 - y / 100 + y / 400 + (13 * m + 8) / 5 + d) % 7;
-	if (unify(arg2, makeint(w), 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg2, makeint(w), th) == YES)
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -5776,7 +5776,7 @@ int b_date_day(int arglist, int rest)
     return (NO);
 }
 
-int b_time(int arglist, int rest)
+int b_time(int arglist, int rest, int th)
 {
     int n, arg1, res;
     struct tm *jst;
@@ -5791,8 +5791,8 @@ int b_time(int arglist, int rest)
 	res =
 	    list4(makepred("time"), makeint(jst->tm_hour),
 		  makeint(jst->tm_min), makeint(jst->tm_sec));
-	if (unify(arg1, res, 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg1, res, th) == YES)
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -5800,15 +5800,15 @@ int b_time(int arglist, int rest)
     return (NO);
 }
 
-int b_errcode(int arglist, int rest)
+int b_errcode(int arglist, int rest, int th)
 {
     int n, arg1;
 
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	if (unify(arg1, makeint(error_code), 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg1, makeint(error_code), th) == YES)
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -5837,7 +5837,7 @@ record_hash_table
 
 */
 
-int b_recordh(int arglist, int rest)
+int b_recordh(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, data, record_id, index;
 
@@ -5856,7 +5856,7 @@ int b_recordh(int arglist, int rest)
 	    error(NOT_ATOM, "recordh ", arg2);
 
 
-	arg3 = deref(arg3, 0);
+	arg3 = deref(arg3, th);
 	if (!integerp(arg3))
 	    error(NOT_INT, "recordh ", arg3);
 
@@ -5871,13 +5871,13 @@ int b_recordh(int arglist, int rest)
 	data = cons(arg2, arg3);
 	add_hash_table(data, record_id, index);
 	checkgbc();
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "recordh ", arglist);
     return (NO);
 }
 
-int b_retrieveh(int arglist, int rest)
+int b_retrieveh(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, save1, record_id, index, lis, term;
 
@@ -5896,7 +5896,7 @@ int b_retrieveh(int arglist, int rest)
 	    error(NOT_ATOM, "retrieveh ", arg2);
 
 
-	save1 = sp[0];
+	save1 = sp[th];
 	record_id = GET_ARITY(arg1) - 1;	//id starts from 1
 	if (record_id < 0)
 	    error(NOT_RECORD, "retrieveh ", arg1);
@@ -5907,11 +5907,11 @@ int b_retrieveh(int arglist, int rest)
 	    if (car(term) != arg2)
 		goto skip;
 
-	    unify(arg3, cdr(term), 0);
-	    if (prove_all(rest, sp[0],0) == YES)
+	    unify(arg3, cdr(term), th);
+	    if (prove_all(rest, sp[th],th) == YES)
 		return (YES);
 
-	    unbind(save1, 0);
+	    unbind(save1, th);
 	  skip:
 	    lis = cdr(lis);
 	}
@@ -5922,7 +5922,7 @@ int b_retrieveh(int arglist, int rest)
 }
 
 
-int b_instance(int arglist, int rest)
+int b_instance(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -5936,8 +5936,8 @@ int b_instance(int arglist, int rest)
 	if (!wide_variable_p(arg2))
 	    error(NOT_VAR, "instance ", arg2);
 
-	if (unify(arg2, car(get_int(arg1)), 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg2, car(get_int(arg1)), th) == YES)
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -5946,7 +5946,7 @@ int b_instance(int arglist, int rest)
 }
 
 
-int b_recordz(int arglist, int rest)
+int b_recordz(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, temp, chain, next;
 
@@ -5988,8 +5988,8 @@ int b_recordz(int arglist, int rest)
 	    chain = cdr(temp);
 
 
-	if (unify(arg3, makeint(chain), 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg3, makeint(chain), th) == YES)
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -5997,7 +5997,7 @@ int b_recordz(int arglist, int rest)
     return (NO);
 }
 
-int b_record_after(int arglist, int rest)
+int b_record_after(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, chain, chain1;
 
@@ -6023,8 +6023,8 @@ int b_record_after(int arglist, int rest)
 	SET_CDR(chain, chain1);	// make bidirectional list
 	SET_AUX(chain1, chain);	// 
 
-	if (unify(arg3, makeint(chain1), 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg3, makeint(chain1), th) == YES)
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
     }
@@ -6033,7 +6033,7 @@ int b_record_after(int arglist, int rest)
 }
 
 
-int b_recorda(int arglist, int rest)
+int b_recorda(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, chain;
 
@@ -6062,8 +6062,8 @@ int b_recorda(int arglist, int rest)
 
 	SET_RECORD(arg1, bcons(arg2, chain));
 	checkgbc();
-	if (unify(arg3, makeint(GET_RECORD(arg1)), 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg3, makeint(GET_RECORD(arg1)), th) == YES)
+	    return (prove_all(rest, sp[th],th));
 	else
 	    return (NO);
 
@@ -6072,7 +6072,7 @@ int b_recorda(int arglist, int rest)
     return (NO);
 }
 
-int b_recorded(int arglist, int rest)
+int b_recorded(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, chain, save1, save2;
 
@@ -6084,27 +6084,27 @@ int b_recorded(int arglist, int rest)
 
 	arg1 = makeatom(GET_NAME(arg1), SIMP);
 	chain = GET_RECORD(arg1);
-	save1 = wp[0];
-	save2 = sp[0];
+	save1 = wp[th];
+	save2 = sp[th];
 	while (!nullp(chain)) {
-	    if (unify(arg2, car(chain), 0) == YES
-		&& unify(arg3, makeint(chain), 0) == YES) {
-		if (prove_all(rest, sp[0],0) == YES)
+	    if (unify(arg2, car(chain), th) == YES
+		&& unify(arg3, makeint(chain), th) == YES) {
+		if (prove_all(rest, sp[th],th) == YES)
 		    return (YES);
 	    }
 	    chain = cdr(chain);
-	    wp[0] = save1;
-	    unbind(save2, 0);
+	    wp[th] = save1;
+	    unbind(save2, th);
 	}
-	wp[0] = save1;
-	unbind(save2, 0);
+	wp[th] = save1;
+	unbind(save2, th);
 	return (NO);
     }
     error(ARITY_ERR, "recorded ", arglist);
     return (NO);
 }
 
-int b_nref(int arglist, int rest)
+int b_nref(int arglist, int rest, int th)
 {
     int n, arg1, arg2, chain;
 
@@ -6121,8 +6121,8 @@ int b_nref(int arglist, int rest)
 	chain = cdr(get_int(arg1));
 	if (chain == NIL)
 	    return (NO);
-	if (unify(arg2, makeint(chain), 0) == YES) {
-	    if (prove_all(rest, sp[0],0) == YES)
+	if (unify(arg2, makeint(chain), th) == YES) {
+	    if (prove_all(rest, sp[th],th) == YES)
 		return (YES);
 	    else
 		return (NO);
@@ -6132,7 +6132,7 @@ int b_nref(int arglist, int rest)
     return (NO);
 }
 
-int b_pref(int arglist, int rest)
+int b_pref(int arglist, int rest, int th)
 {
     int n, arg1, arg2, chain;
 
@@ -6148,8 +6148,8 @@ int b_pref(int arglist, int rest)
 	chain = GET_AUX(get_int(arg1));
 	if (chain == NIL)
 	    return (NO);
-	if (unify(arg2, makeint(chain), 0) == YES) {
-	    if (prove_all(rest, sp[0],0) == YES)
+	if (unify(arg2, makeint(chain), th) == YES) {
+	    if (prove_all(rest, sp[th],th) == YES)
 		return (YES);
 	    else
 		return (NO);
@@ -6159,7 +6159,7 @@ int b_pref(int arglist, int rest)
     return (NO);
 }
 
-int b_nth_ref(int arglist, int rest)
+int b_nth_ref(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, chain, i;
 
@@ -6189,8 +6189,8 @@ int b_nth_ref(int arglist, int rest)
 	return (NO);
 
       find:
-	if (unify(arg2, makeint(chain), 0) == YES) {
-	    if (prove(NIL, sp[0], rest,0) == YES)
+	if (unify(arg2, makeint(chain), th) == YES) {
+	    if (prove(NIL, sp[th], rest,th) == YES)
 		return (YES);
 	}
     }
@@ -6198,7 +6198,7 @@ int b_nth_ref(int arglist, int rest)
     return (NO);
 }
 
-int b_replace(int arglist, int rest)
+int b_replace(int arglist, int rest, int th)
 {
     int n, arg1, arg2, chain;
 
@@ -6214,7 +6214,7 @@ int b_replace(int arglist, int rest)
 	chain = get_int(arg1);
 	arg2 = copy_heap(arg2);
 	SET_CAR(chain, arg2);
-	if (prove(NIL, sp[0], rest,0) == YES)
+	if (prove(NIL, sp[th], rest,th) == YES)
 	    return (YES);
 	else
 	    return (NO);
@@ -6224,7 +6224,7 @@ int b_replace(int arglist, int rest)
 }
 
 
-int b_erase(int arglist, int rest)
+int b_erase(int arglist, int rest, int th)
 {
     int n, arg1, addr;
 
@@ -6232,7 +6232,7 @@ int b_erase(int arglist, int rest)
 
     if (n == 1) {
 	arg1 = car(arglist);
-	arg1 = deref(arg1, 0);
+	arg1 = deref(arg1, th);
 	if (!integerp(arg1))
 	    error(NOT_INT, "erase ", arg1);
 
@@ -6244,7 +6244,7 @@ int b_erase(int arglist, int rest)
     return (NO);
 }
 
-int b_eraseall(int arglist, int rest)
+int b_eraseall(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -6252,13 +6252,13 @@ int b_eraseall(int arglist, int rest)
 
     if (n == 1) {
 	arg1 = car(arglist);
-	arg1 = deref(arg1, 0);
+	arg1 = deref(arg1, th);
 	if (!atomp(arg1))
 	    error(NOT_ATOM, "erase ", arg1);
 
 	arg1 = makeatom(GET_NAME(arg1), SIMP);
 	SET_RECORD(arg1, NIL);
-	if (prove_all(rest, sp[0],0) == YES)
+	if (prove_all(rest, sp[th],th) == YES)
 	    return (YES);
 	else
 	    return (NO);
@@ -6269,7 +6269,7 @@ int b_eraseall(int arglist, int rest)
 
 
 
-int b_removeh(int arglist, int rest)
+int b_removeh(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, save1, record_id, index, lis, prev, term;
 
@@ -6288,7 +6288,7 @@ int b_removeh(int arglist, int rest)
 	    error(NOT_ATOM, "removeh ", arg2);
 
 
-	save1 = sp[0];
+	save1 = sp[th];
 	record_id = GET_ARITY(arg1) - 1;	//id starts from 1
 	if (record_id < 0)
 	    error(NOT_RECORD, "removeh ", arg1);
@@ -6301,16 +6301,16 @@ int b_removeh(int arglist, int rest)
 	    if (car(term) != arg2)
 		goto skip;
 
-	    if (unify(arg3, cdr(term), 0)) {
+	    if (unify(arg3, cdr(term), th)) {
 		if (prev != NIL)
 		    SET_CDR(prev, cdr(lis));	// delete unified term
 		else
 		    record_hash_table[index][record_id] = cdr(lis);
 		// if term is first one of list, set hashtable cdr of lis
-		if (prove_all(rest, sp[0],0) == YES)
+		if (prove_all(rest, sp[th],th) == YES)
 		    return (YES);
 	    }
-	    unbind(save1, 0);
+	    unbind(save1, th);
 	    if (prev == NIL)
 		goto repeat;
 	  skip:
@@ -6323,7 +6323,7 @@ int b_removeh(int arglist, int rest)
     return (NO);
 }
 
-int b_removeallh(int arglist, int rest)
+int b_removeallh(int arglist, int rest, int th)
 {
     int n, arg1, record_id, i;
 
@@ -6335,13 +6335,13 @@ int b_removeallh(int arglist, int rest)
 	for (i = 0; i < HASHTBSIZE; i++)
 	    record_hash_table[i][record_id] = NIL;
 	//as a result, removed term will be retrieve by GC
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "removeallh ", arglist);
     return (NO);
 }
 
-int b_ref(int arglist, int rest)
+int b_ref(int arglist, int rest, int th)
 {
     int n, arg1, list, key, num, chain;
 
@@ -6367,7 +6367,7 @@ int b_ref(int arglist, int rest)
 	return (NO);		//not find
 
       find:
-	if (prove_all(rest, sp[0],0) == YES) {
+	if (prove_all(rest, sp[th],th) == YES) {
 	    return (YES);
 	} else
 	    return (NO);
@@ -6377,7 +6377,7 @@ int b_ref(int arglist, int rest)
 }
 
 
-int b_key(int arglist, int rest)
+int b_key(int arglist, int rest, int th)
 {
     int n, arg1, arg2, save1, save2, list, key, chain, arity, keyarity;
 
@@ -6386,8 +6386,8 @@ int b_key(int arglist, int rest)
 	arg1 = car(arglist);
 
 	list = reverse(key_list);
-	save1 = wp[0];
-	save2 = sp[0];
+	save1 = wp[th];
+	save2 = sp[th];
 	while (!nullp(list)) {
 	    key = car(list);
 	    list = cdr(list);
@@ -6400,16 +6400,16 @@ int b_key(int arglist, int rest)
 		    arity = 0;
 
 		keyarity = list3(SLASH, key, makeint(arity));
-		if (unify(arg1, keyarity, 0) == YES) {
-		    if (prove(NIL, sp[0], rest,0) == YES)
+		if (unify(arg1, keyarity, th) == YES) {
+		    if (prove(NIL, sp[th], rest,th) == YES)
 			return (YES);
 		}
-		wp[0] = save1;
-		unbind(save2, 0);
+		wp[th] = save1;
+		unbind(save2, th);
 	    }
 	}
-	wp[0] = save1;
-	unbind(save2, 0);
+	wp[th] = save1;
+	unbind(save2, th);
 	return (NO);
     } else if (n == 2) {
 	arg1 = car(arglist);
@@ -6419,16 +6419,16 @@ int b_key(int arglist, int rest)
 	if (!wide_variable_p(arg2))
 	    error(NOT_VAR, "key ", arg2);
 
-	save1 = wp[0];
-	save2 = sp[0];
+	save1 = wp[th];
+	save2 = sp[th];
 	arg1 = makeatom(GET_NAME(arg1), SIMP);
 	chain = GET_RECORD(arg1);
-	if (unify(arg2, makeint(chain), 0) == YES) {
-	    if (prove(NIL, sp[0], rest,0) == YES)
+	if (unify(arg2, makeint(chain), th) == YES) {
+	    if (prove(NIL, sp[th], rest,th) == YES)
 		return (YES);
 	}
-	wp[0] = save1;
-	unbind(save2, 0);
+	wp[th] = save1;
+	unbind(save2, th);
 	return (NO);
     }
 
