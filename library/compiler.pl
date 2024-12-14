@@ -1,8 +1,8 @@
 /* template. generate c file as following
 
 #include "jump.h"
-int b_<name>(int arglist, int rest);
-int b_<name>(int arglist, int rest){
+int b_<name>(int arglist, int rest, int th);
+int b_<name>(int arglist, int rest, int th){
 int arg1,arg2,arg4,varX,varY,varZ,...,save1,save2,goal,cont;
 save2 = Jget_sp(th);
 if(n == 2){
@@ -263,7 +263,7 @@ jump_gen_type_declare(P) :-
 	write('int b_'),
     n_atom_convert(P,P1),
     write(P1),
-    write('(int arglist, int rest);'),
+    write('(int arglist, int rest, int th);'),
     nl.
 /*
 C variable declare.
@@ -319,7 +319,7 @@ jump_gen_a_pred(P) :-
 	write('int b_'),
     n_atom_convert(P,P1),
     write(P1),
-    write('(int arglist, int rest){'),nl,
+    write('(int arglist, int rest, int th){'),nl,
     jump_gen_var_declare(P),
     write('save2 = Jget_sp(0);'),nl,
     write('n = Jlength(arglist);'),nl,
@@ -1179,7 +1179,7 @@ jump_gen_tail_pred(P) :-
     write('int b_'),
     n_atom_convert(P,P1),
     write(P1),
-    write('(int arglist, int rest){'),
+    write('(int arglist, int rest, int th){'),
     nl,
     jump_gen_tail_var_declare(P),
     n_arity_count(P,[N]),

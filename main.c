@@ -222,7 +222,7 @@ int main(int argc, char *argv[])
     fp = fopen(str, "r");
     if (fp != NULL) {
 	fclose(fp);
-	b_consult(list1(makeconst(str)), NIL);
+	b_consult(list1(makeconst(str)), NIL,0);
 	predicates = NIL;
     }
     strcpy(str, home);
@@ -230,7 +230,7 @@ int main(int argc, char *argv[])
     fp = fopen(str, "r");
     if (fp != NULL) {
 	fclose(fp);
-	b_consult(list1(makeconst(str)), NIL);
+	b_consult(list1(makeconst(str)), NIL,0);
 	predicates = NIL;
     }
     strcpy(str, home);
@@ -238,7 +238,7 @@ int main(int argc, char *argv[])
     fp = fopen(str, "r");
     if (fp != NULL) {
 	fclose(fp);
-	b_consult(list1(makeconst(str)), NIL);
+	b_consult(list1(makeconst(str)), NIL,0);
 	predicates = NIL;
     }
     strcpy(str, home);
@@ -246,7 +246,7 @@ int main(int argc, char *argv[])
     fp = fopen(str, "r");
     if (fp != NULL) {
 	fclose(fp);
-	b_consult(list1(makeconst(str)), NIL);
+	b_consult(list1(makeconst(str)), NIL,0);
     }
 
     while ((ch = getopt(argc, argv, "c:s:rhvn")) != -1) {
@@ -259,7 +259,7 @@ int main(int argc, char *argv[])
 		printf("Not exist %s\n", optarg);
 		exit(EXIT_FAILURE);
 	    }
-	    b_consult(list1(makeconst(optarg)), NIL);
+	    b_consult(list1(makeconst(optarg)), NIL,0);
 	    break;
 	case 's':
 	    fp = fopen(optarg, "r");
@@ -270,7 +270,7 @@ int main(int argc, char *argv[])
 		exit(EXIT_FAILURE);
 	    }
 	    script_flag = 1;
-	    b_consult(list1(makeconst(optarg)), NIL);
+	    b_consult(list1(makeconst(optarg)), NIL,0);
 	    exit(EXIT_SUCCESS);
 	case 'r':
 	    repl_flag = 0;
@@ -286,7 +286,7 @@ int main(int argc, char *argv[])
 	    fp = fopen("network.pl", "r");
 	    if (fp != NULL) {
 		fclose(fp);
-		b_consult(list1(makeconst("network.pl")), NIL);
+		b_consult(list1(makeconst("network.pl")), NIL,0);
 	    }
 	    child_flag = 1;
 	    init_parent();

@@ -1511,21 +1511,21 @@ int b_tell(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_telling(int arglist, int rest)
+int b_telling(int arglist, int rest, int th)
 {
     int n, arg1;
 
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	if (unify(arg1, GET_CDR(output_stream), 0) == YES)
-	    return (prove_all(rest, sp[0],0));
+	if (unify(arg1, GET_CDR(output_stream), th) == YES)
+	    return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "telling ", arglist);
     return (NO);
 }
 
-int b_told(int arglist, int rest)
+int b_told(int arglist, int rest, int th)
 {
     int n;
 
@@ -1535,21 +1535,21 @@ int b_told(int arglist, int rest)
 	    fclose(GET_PORT(output_stream));
 	    output_stream = standard_output;
 	}
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "told ", arglist);
     return (NO);
 }
 
 
-int b_flush_output(int arglist, int rest)
+int b_flush_output(int arglist, int rest, int th)
 {
     int n, arg1;
 
     n = length(arglist);
     if (n == 0) {
 	fflush(stdout);
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     } else if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -1562,14 +1562,14 @@ int b_flush_output(int arglist, int rest)
 	    error(NOT_OUTPUT_STREAM, "flush_output ", arg1);
 
 	fflush(GET_PORT(arg1));
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "flush_output ", arglist);
     return (NO);
 }
 
 
-int b_consult(int arglist, int rest)
+int b_consult(int arglist, int rest, int th)
 {
     int n, arg1, clause, save;
     char str[STRSIZE];
@@ -1618,12 +1618,12 @@ int b_consult(int arglist, int rest)
 		//if(!builtinp(clause) && !user_operation_p(clause)){
 		//  error(SYNTAX_ERR,"consult",clause);
 		//}
-		prove_all(clause, sp[0],0);
+		prove_all(clause, sp[th],th);
 		goto skip;
 	    }
 	    // DCG syntax e.g. a-->b.
 	    if (dcgp(clause)) {
-		operate(clause,0);
+		operate(clause,th);
 		goto skip;
 	    }
 	    //assert
@@ -1634,14 +1634,14 @@ int b_consult(int arglist, int rest)
 	input_stream = save;
 
       exit:
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "consult ", arglist);
     return (NO);
 }
 
 
-int b_reconsult(int arglist, int rest)
+int b_reconsult(int arglist, int rest, int th)
 {
     int n, arg1, arg2, clause, head, atom, save;
     char str[STRSIZE];
@@ -1690,15 +1690,15 @@ int b_reconsult(int arglist, int rest)
 		&& length(clause) == 2) {
 		clause = cadr(clause);
 		if (arg2 == NIL)
-		    prove_all(clause, sp[0],0);
+		    prove_all(clause, sp[th],th);
 		else if (arg2 != NIL && !predicatep(cadr(clause)))
-		    prove_all(clause, sp[0],0);
+		    prove_all(clause, sp[th],th);
 		execute_list = listcons(clause, execute_list);
 		goto skip;
 	    }
 	    // DCG syntax e.g. a-->b.
 	    if (dcgp(clause)) {
-		operate(clause,0);
+		operate(clause,th);
 		goto skip;
 	    }
 	    //delete old definition
@@ -1726,7 +1726,7 @@ int b_reconsult(int arglist, int rest)
 	input_stream = save;
 
       exit:
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "reconsult ", arglist);
     return (NO);
@@ -4723,7 +4723,7 @@ char *prolog_file_name(char *name)
     return (str);
 }
 
-int b_edit(int arglist, int rest)
+int b_edit(int arglist, int rest, int th)
 {
     int n, arg1, arg2, res;
     char str[STRSIZE];
@@ -4759,12 +4759,12 @@ int b_edit(int arglist, int rest)
 	    error(SYSTEM_ERROR, "edit ", arg1);
 
 	if (arg2 == makeatom("r", SIMP))
-	    b_reconsult(list1(arg1), NIL);
+	    b_reconsult(list1(arg1), NIL,th);
 	else if (arg2 == makeatom("c", SIMP))
-	    b_consult(list1(arg1), NIL);
+	    b_consult(list1(arg1), NIL,th);
 
 
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "edit ", arglist);
     return (NO);
