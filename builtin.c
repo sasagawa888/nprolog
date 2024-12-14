@@ -310,22 +310,22 @@ int b_length(int arglist, int rest, int th)
 
 
 //compiled predicate
-int b_repeat(int arglist, int rest)
+int b_repeat(int arglist, int rest,  int th)
 {
     int n, save1, save2, save3;
 
-    save1 = wp[0];
-    save2 = sp[0];
-    save3 = ac[0];
+    save1 = wp[th];
+    save2 = sp[th];
+    save3 = ac[th];
     n = length(arglist);
     if (n == 0) {
       loop:
-	if (prove_all(rest, sp[0],0) == YES) {
+	if (prove_all(rest, sp[th],th) == YES) {
 	    return (YES);
 	}
-	wp[0] = save1;
-	unbind(save2, 0);
-	ac[0] = save3;
+	wp[th] = save1;
+	unbind(save2, th);
+	ac[th] = save3;
 	goto loop;
     }
 
@@ -334,7 +334,7 @@ int b_repeat(int arglist, int rest)
 }
 
 
-int b_op(int arglist, int rest)
+int b_op(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, weight, type;
 
@@ -416,7 +416,7 @@ int b_op(int arglist, int rest)
 		arg3 = cdr(arg3);
 	    }
 	}
-	return (prove_all(rest, sp[0],0));
+	return (prove_all(rest, sp[th],th));
     }
     error(ARITY_ERR, "op ", arglist);
     return (NO);
