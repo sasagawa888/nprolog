@@ -73,7 +73,6 @@ void dynamic_link(int x)
     init_f1(LIST1_IDX, (tpred) list1);
     init_f1(RANDOM_IDX, (tpred) f_random);
     init_f1(RANDI_IDX, (tpred) f_randi);
-    init_f1(WLIST1_IDX, (tpred) wlist1);
     init_f1(LISTP_IDX, (tpred) listp);
     init_f1(STRUCTUREP_IDX, (tpred) structurep);
     init_f1(VARIABLEP_IDX, (tpred) variablep);
@@ -113,7 +112,6 @@ void dynamic_link(int x)
     init_f2(NOT_NUMEQP_IDX, (tpred) not_numeqp);
     init_f2(DIV_IDX, (tpred) f_div);
     init_f2(SET_VAR_IDX, (tpred) set_var);
-    init_f2(WLIST2_IDX, (tpred) wlist2);
     init_f2(ADDTAIL_BODY_IDX, (tpred) addtail_body);
     init_f2(NTH_IDX, (tpred) nth);
     init_f2(ROUND_IDX, (tpred) f_round);
@@ -121,6 +119,7 @@ void dynamic_link(int x)
     init_f2(SET_SP_IDX, (tpred) set_sp);
     init_f2(SET_WP_IDX, (tpred) set_wp);
     init_f2(DEREF_IDX, (tpred) deref);
+    init_f2(WLIST1_IDX, (tpred) wlist1);
 
     //argument-3
     init_f3(LIST3_IDX, (tpred) list3);
@@ -132,6 +131,7 @@ void dynamic_link(int x)
     init_f3(UNIFY_NIL_IDX, (tpred) unify_nil);
     init_f3(EXEC_ALL_IDX, (tpred) exec_all);
     init_f3(WCONS_IDX, (tpred) wcons);
+    init_f3(WLIST2_IDX, (tpred) wlist2);
 
     //argument-1 string type
     init_f4(MAKECONST_IDX, (tpred) makeconst);

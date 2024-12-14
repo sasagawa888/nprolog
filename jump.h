@@ -171,11 +171,6 @@ static inline int Jrandi(int x) {
 }
 
 
-static inline int Jwlist1(int x) {
-    return f1[WLIST1_IDX](x);
-}
-
-
 static inline int Jlistp(int x) {
     return f1[LISTP_IDX](x);
 }
@@ -331,10 +326,6 @@ static inline int Jset_var(int x, int y) {
     return f2[SET_VAR_IDX](x, y);
 }
 
-static inline int Jwlist2(int x, int y) {
-    return f2[WLIST2_IDX](x, y);
-}
-
 
 static inline int Jaddtail_body(int x, int y) {
     return f2[ADDTAIL_BODY_IDX](x, y);
@@ -349,19 +340,22 @@ static inline int Jround(int x, int y) {
     return f2[ROUND_IDX](x, y);
 }
 
-static inline int Junbind(int x, int y) {
-    return f2[UNBIND_IDX](x, y);
+static inline int Junbind(int x, int th) {
+    return f2[UNBIND_IDX](x, th);
 }
 
-static inline int Jset_wp(int x, int y) {
-    return f2[SET_WP_IDX](x,y);
+static inline int Jset_wp(int x, int th) {
+    return f2[SET_WP_IDX](x,th);
 }
 
 
-static inline int Jderef(int x, int y) {
-    return f2[DEREF_IDX](x,y);
+static inline int Jderef(int x, int th) {
+    return f2[DEREF_IDX](x,th);
 }
 
+static inline int Jwlist1(int x, int th) {
+    return f2[WLIST1_IDX](x,th);
+}
 
 
 static inline int Jlist3(int x, int y, int z) {
@@ -402,6 +396,9 @@ static inline int Jwcons(int x, int y, int th) {
     return f3[WCONS_IDX](x, y, th);
 }
 
+static inline int Jwlist2(int x, int y, int th) {
+    return f3[WLIST2_IDX](x, y,th);
+}
 
 
 static inline int Jmakeconst(char* x) {
