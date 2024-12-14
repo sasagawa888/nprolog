@@ -36,7 +36,7 @@ address
 #define FUNCTION_NUMBER 22
 #define BUILTIN_NUMBER 200
 #define COMPILED_NUMBER 23
-#define EXTENDED_NUMBER 30
+#define EXTENDED_NUMBER 40
 #define NIL         0
 #define YES         2
 #define NO          4
@@ -836,6 +836,8 @@ int b_longnum(int arglist, int rest, int th);
 int b_mkdir(int arglist, int rest, int th);
 int b_member(int arglist, int rest, int th);
 int b_measure(int arglist, int rest, int th);
+int b_mt_create(int arglist, int rest, int th);
+int b_mt_close(int arglist, int rest, int th);
 int b_nl(int arglist, int rest, int th);
 int b_nonvar(int arglist, int rest, int th);
 int b_nospy(int arglist, int rest, int th);

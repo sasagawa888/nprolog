@@ -210,6 +210,10 @@ void initbuiltin(void)
     defbuiltin("dp_pause", b_dp_pause, 1);
     defbuiltin("dp_resume", b_dp_resume, 1);
 
+	//------multi thread--------------------
+	defbuiltin("mt_create", b_mt_create, 1);
+	defbuiltin("mt_close", b_mt_close, 1);
+
     //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_reconsult_predicate, -1);
     defbuiltin("n_reconsult_abolish", b_reconsult_abolish, -1);
