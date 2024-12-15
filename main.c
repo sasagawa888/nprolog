@@ -77,8 +77,8 @@ int fc;				//free counter
 int ac[THREADSIZE];	//alpha conversion variable count
 int wp[THREADSIZE];	//working pointer
 int gc;				//invoked GC count
-int wp_min[THREADSIZE];
-int wp_max[THREADSIZE];
+int wp_min[THREADSIZE]; // start wp point in each thread
+int wp_max[THREADSIZE]; // end wp point in each thread
 
 // bignum pointer
 int big_pt0 = 0;		// pointer of temporaly bignum
@@ -213,8 +213,8 @@ int main(int argc, char *argv[])
     input_stream = standard_input;
     output_stream = standard_output;
     error_stream = standard_error;
-	wp[0] = HEAPSIZE + 1;
-	wp_max[0] = CELLSIZE;
+    wp[0] = HEAPSIZE + 1;
+    wp_max[0] = CELLSIZE;
     init_repl();
     int ret = setjmp(buf);
     if (!init_flag)
@@ -376,15 +376,15 @@ void init_repl(void)
 
     stok.flag = GO;
     nest = 0;
-    for (i = 0; i < THREADSIZE; i++){
+    for (i = 0; i < THREADSIZE; i++) {
 	sp[i] = 0;
 	proof[i] = 0;
 	ac[i] = CELLSIZE + 1;
 	unbind(0, i);
-	}
-	for (i = 0; i<thread_num; i++){
-		wp[i] = wp_min[i];
-	}
+    }
+    for (i = 0; i < thread_num; i++) {
+	wp[i] = wp_min[i];
+    }
     ctrl_c_flag = 0;
     fskip_flag = OFF;
     sskip_flag = OFF;

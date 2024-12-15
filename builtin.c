@@ -1909,7 +1909,7 @@ int b_is(int arglist, int rest, int th)
 
 	if (wide_variable_p(arg2))
 	    error(INSTANTATION_ERR, "is ", arg2);
-	
+
 	arg2 = eval(arg2);
 	res = unify(arg1, arg2, th);
 	if (res == YES)

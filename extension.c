@@ -2159,10 +2159,10 @@ int b_mt_create(int arglist, int rest, int th)
 	thread_num = mt_queue_num;
 	thread_flag = 1;
 	init_para();
-	gbc();
-	for(i=0;i<thread_num;i++){
-		wp_min[i] = HEAPSIZE + 1 + (CELLSIZE - HEAPSIZE) / thread_num * i;
-		wp_max[i] = wp_min[i] + (CELLSIZE - HEAPSIZE) / thread_num;
+	for (i = 0; i < thread_num; i++) {
+	    wp_min[i] =
+		HEAPSIZE + 1 + (CELLSIZE - HEAPSIZE) / thread_num * i;
+	    wp_max[i] = wp_min[i] + (CELLSIZE - HEAPSIZE) / thread_num;
 	}
 	return (prove_all(rest, sp[th], th));
     }
@@ -2180,59 +2180,43 @@ int b_mt_close(int arglist, int rest, int th)
 	thread_flag = 0;
 	mt_queue_num = 0;
 	thread_num = 1;
-	gbc();
 	return (prove_all(rest, sp[th], th));
     }
     error(ARITY_ERR, "mt_close ", arglist);
     return (NO);
 }
 
-/*
+
 int b_mt_and(int arglist, int rest, int th)
 {
-    int arg1, arg2, temp, i, num[PARASIZE];
+    int n, arg1, i;
 
-    arg1 = car(arglist);
-    arg2 = cdr(arglist);
-    if (length(arglist) == th)
-	error(WRONG_ARGS, "mt-call", arglist, th);
-    if (length(arg2) > mt_queue_num)
-	error(WRONG_ARGS, "mt-call", arg1, th);
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if (length(arg1) > mt_queue_num)
+	    error(WRONG_ARGS, "mt_and", arg1);
 
-    temp = arg2;
-    while (!nullp(temp)) {
-	if (!listp(car(temp)))
-	    error(WRONG_ARGS, "mt-call", arg2, th);
-	temp = cdr(temp);
+
+	i = 0;
+	parallel_flag = 1;
+	while (!nullp(arg1)) {
+	    // send each thread
+	    arg1 = cdr(arg1);
+	    i++;
+	}
+
+	pthread_mutex_lock(&mutex);
+	pthread_cond_wait(&mt_cond_main, &mutex);
+	pthread_mutex_unlock(&mutex);
+	parallel_flag = 0;
+
+	// if error 
+
+	// receive result from each thread
+
+	return (prove_all(rest, sp[th], th));
     }
-
-    check_gbc(th);
-
-    temp = arg2;
-    i = 0;
-    parallel_flag = 1;
-    while (!nullp(temp)) {
-	num[i] = eval_para(car(temp));
-	temp = cdr(temp);
-	i++;
-    }
-
-    pthread_mutex_lock(&mutex);
-    pthread_cond_wait(&mt_cond_main, &mutex);
-    pthread_mutex_unlock(&mutex);
-    parallel_flag = 0;
-    if (error_flag) {
-	error_flag = false;
-	signal_condition(signal_condition_x, signal_condition_y, th);
-    }
-
-    temp = NIL;
-    i--;
-    while (i >= 0) {
-	temp = tcons(para_output[num[i]], temp, th);
-	i--;
-    }
-    return (apply(eval(arg1, th), temp, th));
+    error(ARITY_ERR, "mt_and ", arglist);
+    return (NO);
 }
-
-*/

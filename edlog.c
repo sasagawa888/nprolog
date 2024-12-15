@@ -2419,8 +2419,7 @@ void display_line(int line)
 		col++;
 		col1++;
 	    }
-	} else if (isUni2(ed_data[line][col]) ||
-		   isUni3(ed_data[line][col])
+	} else if (isUni2(ed_data[line][col]) || isUni3(ed_data[line][col])
 		   || isUni4(ed_data[line][col])) {
 	    display_unicode(line, col);
 	    col1 = col1 + increase_terminal(line, col);

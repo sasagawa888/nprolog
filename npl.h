@@ -485,13 +485,12 @@ extern int pause_flag;
 extern int shutdown_flag;
 
 //------pointer----
-extern int hp; //heap pointer
-extern int sp[THREADSIZE]; //stack pointer
-extern int fc; //free counter
-extern int ac[THREADSIZE]; //alpha conversion variable counter
-extern int wp[THREADSIZE]; //working pointer
-extern int up; //unify stack pointer
-extern int gc; //invokded GC count
+extern int hp; 
+extern int sp[THREADSIZE];
+extern int fc;
+extern int ac[THREADSIZE];
+extern int wp[THREADSIZE];
+extern int gc; 
 extern int wp_min[THREADSIZE];
 extern int wp_max[THREADSIZE];
 
@@ -841,6 +840,7 @@ int b_member(int arglist, int rest, int th);
 int b_measure(int arglist, int rest, int th);
 int b_mt_create(int arglist, int rest, int th);
 int b_mt_close(int arglist, int rest, int th);
+int b_mt_and(int arglist, int rest, int th);
 int b_nl(int arglist, int rest, int th);
 int b_nonvar(int arglist, int rest, int th);
 int b_nospy(int arglist, int rest, int th);
