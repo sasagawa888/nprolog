@@ -214,6 +214,7 @@ int main(int argc, char *argv[])
     output_stream = standard_output;
     error_stream = standard_error;
     wp[0] = HEAPSIZE + 1;
+	wp_min[0] = HEAPSIZE + 1;
     wp_max[0] = CELLSIZE;
     init_repl();
     int ret = setjmp(buf);
@@ -382,7 +383,7 @@ void init_repl(void)
 	ac[i] = CELLSIZE + 1;
 	unbind(0, i);
     }
-    for (i = 0; i < thread_num; i++) {
+    for (i = 0; i <= thread_num; i++) {
 	wp[i] = wp_min[i];
     }
     ctrl_c_flag = 0;

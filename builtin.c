@@ -213,6 +213,7 @@ void initbuiltin(void)
     //------multi thread--------------------
     defbuiltin("mt_create", b_mt_create, 1);
     defbuiltin("mt_close", b_mt_close, 1);
+	defbuiltin("mt_and", b_mt_and, 1);
 
     //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_reconsult_predicate, -1);

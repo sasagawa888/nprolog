@@ -2080,8 +2080,7 @@ void *parallel(void *arg)
 	if (parallel_exit_flag)
 	    goto exit;
 
-	//ep[num] = ep[th];
-	//para_output[num] = eval(para_input[num], num);
+	para_output[num] = prove_all(para_input[num],sp[num],num);
 	mt_enqueue(num);
 	if (mt_queue_pt == mt_queue_num) {
 	    pthread_mutex_lock(&mutex);
@@ -2201,7 +2200,7 @@ int b_mt_and(int arglist, int rest, int th)
 	i = 0;
 	parallel_flag = 1;
 	while (!nullp(arg1)) {
-	    // send each thread
+	    eval_para(car(arg1));
 	    arg1 = cdr(arg1);
 	    i++;
 	}
