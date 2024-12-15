@@ -2053,7 +2053,7 @@ int mt_dequeue(int arg)
 	mt_queue[i] = mt_queue[i + 1];
     }
     pthread_mutex_lock(&mutex);
-    para_input[num] = arg;
+    para_input[num] = convert_to_variable(arg,num);
     para_output[num] = NIL;
     pthread_cond_signal(&mt_cond_para[num]);
     pthread_mutex_unlock(&mutex);
@@ -2080,7 +2080,7 @@ void *parallel(void *arg)
 	if (parallel_exit_flag)
 	    goto exit;
 
-	para_output[num] = prove_all(para_input[num],sp[num],num);
+	query(para_input[num],num);
 	mt_enqueue(num);
 	if (mt_queue_pt == mt_queue_num) {
 	    pthread_mutex_lock(&mutex);

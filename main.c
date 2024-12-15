@@ -440,7 +440,7 @@ void query(int x, int th)
 
     variables[th] = listreverse(unique(varslist(x)));
     res = prove_all(addask(x), sp[th], th);
-    if (!child_flag) {
+    if (!child_flag || (thread_flag && th == 0)) {
 	ESCRST;
 	print(res);
 	printf("\n");
@@ -458,7 +458,12 @@ void query(int x, int th)
 	    printstr("fail.\n");
 	}
 	bridge_flag = 0;
-	send_to_parent_buffer();
+	if(child_flag){
+		send_to_parent_buffer();
+	}
+	else if (thread_flag && th > 0){
+		prove_all(convert_to_variant(str_to_pred(makestr(bridge)),0),sp[0],0);
+	}
     }
     return;
 }
