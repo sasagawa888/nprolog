@@ -446,12 +446,12 @@ void query(int x, int th)
 	bridge_flag = 1;
 	if (res == YES) {
 	    printstr("dp_countup(");
-	    printint(proof[0]);
+	    printint(proof[th]);
 	    printstr("),");
 	    printstr("true.\n");
 	} else {
 	    printstr("dp_countup(");
-	    printint(proof[0]);
+	    printint(proof[th]);
 	    printstr("),");
 	    printstr("fail.\n");
 	}
