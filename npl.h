@@ -203,7 +203,6 @@ extern cell heap[CELLSIZE];
 extern int variant[VARIANTSIZE][THREADSIZE];
 extern int bigcell[BIGSIZE];
 extern int stack[STACKSIZE];
-extern int ustack[STACKSIZE];
 extern token stok;
 extern jmp_buf buf;
 extern jmp_buf buf1;
@@ -493,6 +492,8 @@ extern int ac[THREADSIZE]; //alpha conversion variable counter
 extern int wp[THREADSIZE]; //working pointer
 extern int up; //unify stack pointer
 extern int gc; //invokded GC count
+extern int wp_min[THREADSIZE];
+extern int wp_max[THREADSIZE];
 
 //-----editor-----
 extern int repl_flag;

@@ -127,30 +127,18 @@ int cons(int car, int cdr)
 
 int wcons(int car, int cdr, int th)
 {
-
     int addr;
 
-
-    addr = wp[0];
-
-    wp[0]++;
-
-    if (wp[0] >= CELLSIZE) {
-
-	error(RESOURCE_ERR, "wcons ", NIL);
-
+    addr = wp[th];
+    wp[th]++;
+    if (wp[th] >= wp_max[th]) {
+	error(RESOURCE_ERR, "wcons ", makeint(th));
     }
-
     SET_TAG(addr, STRUCT);
-
     SET_CAR(addr, car);
-
     SET_CDR(addr, cdr);
-
     SET_AUX(addr, 0);
-
     return (addr);
-
 }
 
 /*

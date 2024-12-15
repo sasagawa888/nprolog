@@ -2142,7 +2142,7 @@ int wait_para(void)
 
 int b_mt_create(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, arg1, i;
 
     n = length(arglist);
     if (n == 1) {
@@ -2150,7 +2150,7 @@ int b_mt_create(int arglist, int rest, int th)
 
 	if (!integerp(arg1))
 	    error(NOT_INT, "mt-create", arg1);
-	if (GET_INT(arg1) > PARASIZE)
+	if (GET_INT(arg1) > THREADSIZE)
 	    error(WRONG_ARGS, "mt-create", arg1);
 	if (thread_flag)
 	    error(WRONG_ARGS, "mt-create", arg1);
@@ -2160,6 +2160,10 @@ int b_mt_create(int arglist, int rest, int th)
 	thread_flag = 1;
 	init_para();
 	gbc();
+	for(i=0;i<thread_num;i++){
+		wp_min[i] = HEAPSIZE + 1 + (CELLSIZE - HEAPSIZE) / thread_num * i;
+		wp_max[i] = wp_min[i] + (CELLSIZE - HEAPSIZE) / thread_num;
+	}
 	return (prove_all(rest, sp[th], th));
     }
     error(ARITY_ERR, "mt_create ", arglist);
