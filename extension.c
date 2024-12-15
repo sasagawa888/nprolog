@@ -2141,7 +2141,7 @@ int wait_para(void)
 
 int b_mt_create(int arglist, int rest, int th)
 {
-    int n, arg1, i;
+    int n, arg1, i,m;
 
     n = length(arglist);
     if (n == 1) {
@@ -2158,10 +2158,11 @@ int b_mt_create(int arglist, int rest, int th)
 	thread_num = mt_queue_num;
 	thread_flag = 1;
 	init_para();
-	for (i = 0; i < thread_num; i++) {
+	m = thread_num + 1;
+	for (i = 0; i < m; i++) {
 	    wp_min[i] =
-		HEAPSIZE + 1 + (CELLSIZE - HEAPSIZE) / thread_num * i;
-	    wp_max[i] = wp_min[i] + (CELLSIZE - HEAPSIZE) / thread_num;
+		HEAPSIZE + 1 + (CELLSIZE - HEAPSIZE) / m * i;
+	    wp_max[i] = wp_min[i] + (CELLSIZE - HEAPSIZE) / m;
 	}
 	return (prove_all(rest, sp[th], th));
     }
