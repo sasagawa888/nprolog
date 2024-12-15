@@ -38,8 +38,8 @@ token stok = { GO, OTHER };
 jmp_buf buf;			// for REPL halt and error handling.
 jmp_buf buf1;			// for n_error/2 error check.
 jmp_buf buf2;			// for break/0 end_of_file/0 exit break
-int variables = NIL;
-int variables_save = NIL;
+int variables[THREADSIZE];
+int variables_save[THREADSIZE];
 int end_of_file_answer = NIL;
 int end_of_file_rest = NIL;
 int predicates = NIL;
@@ -332,7 +332,7 @@ int main(int argc, char *argv[])
 		init_repl();
 		input =
 		    variable_to_call(convert_to_variable
-				     (str_to_pred(receive_from_parent())));
+				     (str_to_pred(receive_from_parent()),0));
 		printf("Receive from parent ");
 		sprint(input);
 		printf("\n");
@@ -399,12 +399,13 @@ void init_repl(void)
 	    variant[i][j] = UNBIND;
 	}
     }
-    i = variables;
+	for (j = 0; j < THREADSIZE; j++){
+    i = variables[j];
     while (!nullp(i)) {
 	SET_CAR(car(i), UNBIND);
 	SET_CDR(car(i), UNBIND);
 	i = cdr(i);
-    }
+    }}
     //initialize spy-point trace-level
     i = spy_list;
     while (!nullp(i)) {
@@ -436,7 +437,7 @@ void query(int x, int th)
     if (!callablep(x))
 	error(NOT_CALLABLE, "?- ", x);
 
-    variables = listreverse(unique(varslist(x)));
+    variables[th] = listreverse(unique(varslist(x)));
     res = prove_all(addask(x), sp[th], th);
     if (!child_flag) {
 	ESCRST;
@@ -484,10 +485,10 @@ void query_break(int x, int th)
 	error(NOT_CALLABLE, "?= ", x);
     }
 
-    variables_save = variables;
-    variables = listreverse(unique(varslist(x)));
+    variables_save[th] = variables[th];
+    variables[th] = listreverse(unique(varslist(x)));
     res = prove_all(addask(x), sp[th], th);
-    variables = variables_save;
+    variables[th] = variables_save[th];
     ESCRST;
     print(res);
     printf("\n");

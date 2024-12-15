@@ -441,7 +441,7 @@ int b_ask(int arglist, int rest, int th)
 
     n = length(arglist);
     if (n == 0) {
-	x1 = variables;
+	x1 = variables[th];
 	if (child_flag)
 	    memset(bridge, 0, sizeof(bridge));
 	if (nullp(x1) || has_no_value_p(x1)) {
@@ -3761,7 +3761,7 @@ int b_end_of_file(int arglist, int rest, int th)
     n = length(arglist);
     if (n == 0) {
 	if (break_flag) {
-	    variables = variables_save;
+	    variables[th] = variables_save[th];
 	    break_flag = 0;
 	    longjmp(buf2, 1);
 	} else

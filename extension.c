@@ -1204,7 +1204,7 @@ int str_to_pred(int x)
 }
 
 // under construction V_1 -> v_1
-int convert_to_variant(int x)
+int convert_to_variant(int x, int th)
 {
     char *substr, *var;
     int i;
@@ -1224,11 +1224,11 @@ int convert_to_variant(int x)
 	return (x);
     }
     return (wcons
-	    (convert_to_variant(car(x)), convert_to_variant(cdr(x)), 0));
+	    (convert_to_variant(car(x),th), convert_to_variant(cdr(x),th), th));
 }
 
 // under construction v_1 -> V_1
-int convert_to_variable(int x)
+int convert_to_variable(int x, int th)
 {
     char str[256];
 
@@ -1242,8 +1242,8 @@ int convert_to_variable(int x)
     } else if (!structurep(x)) {
 	return (x);
     } else
-	return (wcons(convert_to_variable(car(x)),
-		      convert_to_variable(cdr(x)), 0));
+	return (wcons(convert_to_variable(car(x),th),
+		      convert_to_variable(cdr(x),th), th));
 }
 
 void init_parent(void)
@@ -1683,7 +1683,7 @@ int b_dp_prove(int arglist, int rest, int th)
 	send_to_child(GET_INT(arg1), pred_to_str(arg2));
 	res =
 	    convert_to_variant(str_to_pred
-			       (receive_from_child(GET_INT(arg1))));
+			       (receive_from_child(GET_INT(arg1))),th);
 	if (prove_all(res, sp[th], th) == YES)
 	    return (prove_all(rest, sp[th], th));
     }
@@ -1867,12 +1867,12 @@ int b_dp_and(int arglist, int rest, int th)
 	    i++;
 	}
 	for (i = 0; i < m; i++) {
-	    res = convert_to_variant(str_to_pred(receive_from_child(i)));
+	    res = convert_to_variant(str_to_pred(receive_from_child(i)),th);
 	    if (prove_all(res, sp[th], th) == NO) {
 		for (j = i; j < m; j++) {
 		    res =
 			convert_to_variant(str_to_pred
-					   (receive_from_child(j)));
+					   (receive_from_child(j)),th);
 		}
 		return (NO);
 	    }
@@ -1901,7 +1901,7 @@ int b_dp_or(int arglist, int rest, int th)
 	    arg1 = cdr(arg1);
 	    i++;
 	}
-	res = convert_to_variant(str_to_pred(receive_from_child_or(m)));
+	res = convert_to_variant(str_to_pred(receive_from_child_or(m)),th);
 	if (prove_all(res, sp[th], th) == YES)
 	    return (prove_all(rest, sp[th], th));
     }
