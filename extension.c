@@ -2080,7 +2080,7 @@ void *parallel(void *arg)
 	if (parallel_exit_flag)
 	    goto exit;
 
-	query(para_input[num],num);
+	prove_all(para_input[num],sp[num],num);
 	mt_enqueue(num);
 	if (mt_queue_pt == mt_queue_num) {
 	    pthread_mutex_lock(&mutex);
