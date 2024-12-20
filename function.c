@@ -463,7 +463,7 @@ void initoperator(void)
 
 
 //function
-int eval(int x)
+int eval(int x, int th)
 {
     int function, arg1, arg2;
     int result[3];
@@ -479,7 +479,7 @@ int eval(int x)
     else if (bignump(x))
 	return (x);
     else if (variablep(x))
-	return (deref(x, 0));
+	return (deref(x, th));
     else if (!structurep(x)) {
 	if (eqp(x, makefunc("pi")))
 	    return (makeflt(3.14159265358979323846));
@@ -490,96 +490,96 @@ int eval(int x)
     } else if (eqp(car(x), makeatom("abs", FUNC))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "abs ", x);
-	evalterm(x, result);
+	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_abs(arg1));
     } else if (eqp(car(x), makeatom("sin", FUNC))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "sin ", x);
-	evalterm(x, result);
+	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_sin(arg1));
     } else if (eqp(car(x), makeatom("asin", FUNC))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "asin ", x);
-	evalterm(x, result);
+	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_asin(arg1));
     } else if (eqp(car(x), makeatom("cos", FUNC))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "cos ", x);
-	evalterm(x, result);
+	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_cos(arg1));
     } else if (eqp(car(x), makeatom("acos", FUNC))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "acos ", x);
-	evalterm(x, result);
+	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_acos(arg1));
     } else if (eqp(car(x), makeatom("tan", FUNC))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "tan ", x);
-	evalterm(x, result);
+	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_tan(arg1));
     } else if (eqp(car(x), makeatom("atan", FUNC))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "atan ", x);
-	evalterm(x, result);
+	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_atan(arg1));
     } else if (eqp(car(x), makeatom("exp", FUNC))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "exp ", x);
-	evalterm(x, result);
+	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_exp(arg1));
     } else if (eqp(car(x), makeatom("ln", FUNC))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "ln ", x);
-	evalterm(x, result);
+	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_ln(arg1));
     } else if (eqp(car(x), makeatom("log", FUNC))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "log ", x);
-	evalterm(x, result);
+	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_log(arg1));
     } else if (eqp(car(x), makeatom("sqrt", FUNC))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "sqrt ", x);
-	evalterm(x, result);
+	evalterm(x, result,th);
 	arg1 = result[1];
 	return (f_sqrt(arg1));
     } else if (eqp(car(x), makeatom("round", FUNC))) {
 	if (length(x) != 3)
 	    error(ARITY_ERR, "round ", x);
-	evalterm(x, result);
+	evalterm(x, result,th);
 	arg1 = result[1];
 	arg2 = result[2];
 	return (f_round(arg1, arg2));
     } else if (eqp(car(x), makeatom("integer", SYS))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "integer ", x);
-	evalterm(x, result);
+	evalterm(x, result,th);
 	arg1 = result[1];
 	return (f_integer(arg1));
     } else if (eqp(car(x), makeatom("float", SYS))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "float ", x);
-	evalterm(x, result);
+	evalterm(x, result,th);
 	arg1 = result[1];
 	return (f_float(arg1));
     } else if (eqp(car(x), makeatom("randi", FUNC))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "randi ", x);
-	evalterm(x, result);
+	evalterm(x, result,th);
 	arg1 = result[1];
 	return (f_randi(arg1));
     } else if (structurep(x) && operatorp(car(x))) {
-	evalterm(x, result);
+	evalterm(x, result,th);
 	function = result[0];
 	arg1 = result[1];
 	arg2 = result[2];
@@ -589,12 +589,12 @@ int eval(int x)
     return (NIL);
 }
 
-void evalterm(int x, int result[3])
+void evalterm(int x, int result[3], int th)
 {
 
     result[0] = car(x);
-    result[1] = eval(deref(cadr(x), 0));
-    result[2] = eval(deref(caddr(x), 0));
+    result[1] = eval(deref(cadr(x), th),th);
+    result[2] = eval(deref(caddr(x), th),th);
     return;
 }
 

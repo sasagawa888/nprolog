@@ -632,19 +632,19 @@ int prove(int goal, int bindings, int rest, int th)
 
 	}
 	while (!nullp(clauses)) {
-	    save1 = wp[0];
-	    save2 = ac[0];
+	    save1 = wp[th];
+	    save2 = ac[th];
 	    clause = car(clauses);
 	    clauses = cdr(clauses);
 	    varlis = GET_VAR(clause);
-	    assign_variant(varlis);
-	    clause1 = walpha_conversion(clause);
+	    assign_variant(varlis,th);
+	    clause1 = walpha_conversion(clause,th);
 	    release_variant(varlis);
 
 	    // case of predicate
 	    if (predicatep(clause1) || user_operation_p(clause1)) {
-		if (unify(goal, clause1, 0) == YES) {
-		    if (prove_all(rest, sp[0], th) == YES) {
+		if (unify(goal, clause1, th) == YES) {
+		    if (prove_all(rest, sp[th], th) == YES) {
 			//trace
 			if (debug_flag == ON)
 			    prove_trace(DBEXIT, goal, bindings, rest, th);
@@ -662,7 +662,7 @@ int prove(int goal, int bindings, int rest, int th)
 		if (unify(goal, (cadr(clause1)), 0) == YES) {
 		    clause1 = addtail_body(rest, caddr(clause1));
 		    nest++;
-		    if ((res = prove_all(clause1, sp[0], th)) == YES) {
+		    if ((res = prove_all(clause1, sp[th], th)) == YES) {
 			nest--;
 			//trace
 			if (debug_flag == ON)
@@ -676,9 +676,9 @@ int prove(int goal, int bindings, int rest, int th)
 			    if (debug_flag == ON)
 				prove_trace(DBCUTFAIL, goal, bindings,
 					    rest, th);
-			    wp[0] = save1;
-			    ac[0] = save2;
-			    unbind(bindings, 0);
+			    wp[th] = save1;
+			    ac[th] = save2;
+			    unbind(bindings, th);
 			    return (NO);
 			}
 		    }
@@ -688,8 +688,8 @@ int prove(int goal, int bindings, int rest, int th)
 	    if (debug_flag == ON && !nullp(clauses))
 		prove_trace(DBREDO, goal, bindings, rest, th);
 
-	    wp[0] = save1;
-	    ac[0] = save2;
+	    wp[th] = save1;
+	    ac[th] = save2;
 	    unbind(bindings, th);
 	}
 	//trace
@@ -702,7 +702,7 @@ int prove(int goal, int bindings, int rest, int th)
 		wcons(IFTHENELSE,
 		      wcons(cadr(cadr(goal)),
 			    wcons(caddr(cadr(goal)),
-				  wcons(caddr(goal), NIL, 0), 0), 0), 0);
+				  wcons(caddr(goal), NIL, th), th), th), th);
 	    // redefine goal = ifthenelse(if,then,else)
 	    return (prove(goal, bindings, rest, th));
 	} else
@@ -712,10 +712,10 @@ int prove(int goal, int bindings, int rest, int th)
 	    return (YES);
 	else {
 	    if (res == NFALSE) {
-		unbind(bindings, 0);
+		unbind(bindings, th);
 		return (NO);
 	    }
-	    unbind(bindings, 0);
+	    unbind(bindings, th);
 	    if (prove_all(addtail_body(rest, caddr(goal)), bindings, th) ==
 		YES)
 		return (YES);
@@ -1143,7 +1143,7 @@ int operate(int x, int th)
     return ((GET_SUBR(operator)) (operand1, operand2, th));
 }
 
-int walpha_conversion(int x)
+int walpha_conversion(int x, int th)
 {
     int temp;
 
@@ -1152,33 +1152,33 @@ int walpha_conversion(int x)
     else if (alpha_variable_p(x))
 	return (x);
     else if (anoymousp(x))
-	return (makevariant(0));
+	return (makevariant(th));
     else if (variablep(x))
 	return (GET_CDR(x));
     else if (!structurep(x))
 	return (x);
     else if (operationp(x) && nullp(caddr(x))) {	// e.g. :- foo(x)
-	temp = wlist2(car(x), walpha_conversion(cadr(x)), 0);
+	temp = wlist2(car(x), walpha_conversion(cadr(x),th), th);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else if (operationp(x)) {
 	temp = wlist3(car(x),
-		      walpha_conversion(cadr(x)),
-		      walpha_conversion(caddr(x)), 0);
+		      walpha_conversion(cadr(x),th),
+		      walpha_conversion(caddr(x),th), th);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else if (listp(x)) {
 	temp =
-	    wcons(walpha_conversion(car(x)), walpha_conversion(cdr(x)), 0);
+	    wcons(walpha_conversion(car(x),th), walpha_conversion(cdr(x),th), th);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else if (predicatep(x)) {
-	temp = wcons(car(x), walpha_conversion(cdr(x)), 0);
+	temp = wcons(car(x), walpha_conversion(cdr(x),th), th);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else {			//buiiltin
 	temp =
-	    wcons(walpha_conversion(car(x)), walpha_conversion(cdr(x)), 0);
+	    wcons(walpha_conversion(car(x),th), walpha_conversion(cdr(x),th), th);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     }

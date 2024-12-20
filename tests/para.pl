@@ -29,3 +29,7 @@ list50([27, 74, 17, 33, 94, 18, 46, 83, 65, 2, 32, 53, 28, 85, 99, 47, 28, 82, 6
 
 %test report
 message(X) :- dp_report(X).
+
+
+foo(0).
+foo(N) :- write(N),N1 is N-1,foo(N1).

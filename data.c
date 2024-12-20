@@ -2734,12 +2734,12 @@ void unbind(int x, int th)
 
 
 // link variable and variant
-void assign_variant(int x)
+void assign_variant(int x, int th)
 {
 
     while (!nullp(x)) {
 
-	SET_CDR(car(x), makevariant(0));
+	SET_CDR(car(x), makevariant(th));
 
 	x = cdr(x);
 
