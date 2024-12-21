@@ -34,10 +34,6 @@ void markcell(int addr)
 {
 
     if (IS_ALPHA(addr)) {
-	if (variant[addr - CELLSIZE] != UNBIND) {
-	    markcell(variant[addr - CELLSIZE]);
-	    return;
-	} else
 	    return;
     }
     if (IS_OUTCELL(addr))
@@ -90,8 +86,10 @@ void gbcmark(void)
     MARK_CELL(UNDEF);
 
     //mark variable-list
-    markcell(variables);
-    markcell(variables_save);
+    for(i=0;i>THREADSIZE;i++){
+    markcell(variables[i]);
+    markcell(variables_save[i]);
+    }
 
     //mark listing-list
     markcell(predicates);
@@ -121,7 +119,7 @@ void gbcmark(void)
     for (i = 0; i < thread_num; i++) {
 	for (j = 0; j < sp[i]; j++) {
 	    if (alpha_variable_p(stack[j][i]))
-		markcell(variant[stack[j][i] - CELLSIZE]);
+		markcell(variant[stack[j][i] - CELLSIZE][j]);
 	    else
 		markcell(stack[j][i]);
 	}

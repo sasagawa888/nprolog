@@ -370,7 +370,7 @@ defoperator(char *name, int (*func)(int, int), int weight, int spec,
     }
 }
 
-void definfix(char *name, int (*func)(int, int), int weight, int spec)
+void definfix(char *name, int (*func)(int, int, int), int weight, int spec)
 {
     int atom;
 
@@ -418,7 +418,7 @@ void defcompiled(char *name, int (*func)(int, int, int), int arity)
     return;
 }
 
-void definfixcomp(char *name, int (*func)(int, int), int weight, int spec)
+void definfixcomp(char *name, int (*func)(int, int, int), int weight, int spec)
 {
     int atom;
 
