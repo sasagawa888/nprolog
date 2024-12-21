@@ -103,11 +103,11 @@ void bindsym(int x, int val, int th)
 
 
 
-int findvar(int x)
+int findvar(int x, int th)
 {
 
     if (alpha_variable_p(x))
-	return (variant[x - CELLSIZE][0]);
+	return (variant[x - CELLSIZE][th]);
     else if (atom_variable_p(x))
 	return (GET_CAR(x));
     else
@@ -383,14 +383,14 @@ int makeexspec(int old_spec, int spec)
 //stack
 void push_stack(int x, int th)
 {
-    stack[sp[th]++] = x;
+    stack[sp[th]++][th] = x;
     if (sp[th] >= STACKSIZE)
 	error(STACK_OVERF, NIL, NIL);
 }
 
 int pop_stack(int th)
 {
-    return (stack[--sp[th]]);
+    return (stack[--sp[th]][th]);
 }
 
 

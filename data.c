@@ -1710,10 +1710,10 @@ int has_variable_p(int addr)
 
 
 
-int has_value_p(int addr)
+int has_value_p(int addr, int th)
 {
 
-    if (findvar(addr) == UNBIND)
+    if (findvar(addr,th) == UNBIND)
 	return (0);
 
     else
@@ -1723,13 +1723,13 @@ int has_value_p(int addr)
 
 
 
-int has_no_value_p(int x)
+int has_no_value_p(int x, int th)
 {
 
 
     while (!nullp(x)) {
 
-	if (has_value_p(car(x)))
+	if (has_value_p(car(x),th))
 	    return (0);
 
 	x = cdr(x);
@@ -2344,7 +2344,7 @@ int deref1(int x, int th)
     if (variablep(x)) {
 
       loop:
-	res = findvar(x);
+	res = findvar(x,th);
 
 	if (res == UNBIND)
 	    return (x);
@@ -2506,8 +2506,8 @@ int unify(int x, int y, int th)
     else if (!listp(x) && listp(y))
 	return (NO);
 
-    else if (unify(car(x), car(y), 0) == YES
-	     && unify(cdr(x), cdr(y), 0) == YES)
+    else if (unify(car(x), car(y), th) == YES
+	     && unify(cdr(x), cdr(y), th) == YES)
 	return (YES);
 
     else
@@ -2702,23 +2702,23 @@ void unbind(int x, int th)
 
     for (i = x; i < sp[th]; i++) {
 
-	if (alpha_variable_p(stack[i])) {
+	if (alpha_variable_p(stack[i][th])) {
 
-	    variant[stack[i] - CELLSIZE][th] = UNBIND;
+	    variant[stack[i][th] - CELLSIZE][th] = UNBIND;
 
 	}
 
-	else if (atom_variable_p(stack[i])) {
+	else if (atom_variable_p(stack[i][th])) {
 
-	    if (alpha_variable_p(GET_CAR(stack[i]))) {
+	    if (alpha_variable_p(GET_CAR(stack[i][th]))) {
 
-		variant[GET_CAR(stack[i]) - CELLSIZE][th] = UNBIND;
+		variant[GET_CAR(stack[i][th]) - CELLSIZE][th] = UNBIND;
 
 	    }
 
-	    SET_CAR(stack[i], UNBIND);
+	    SET_CAR(stack[i][th], UNBIND);
 
-	    SET_CDR(stack[i], UNBIND);
+	    SET_CDR(stack[i][th], UNBIND);
 
 	}
 
@@ -2906,30 +2906,30 @@ int sorteqlp(int x, int y)
 
 
 
-void printenv(void)
+void printenv(int th)
 {
 
     int i, j;
     for (j = 0; j < thread_num; j++) {
 	for (i = 0; i < sp[j]; i++) {
 
-	    if (alpha_variable_p(stack[i])) {
+	    if (alpha_variable_p(stack[i][th])) {
 
-		print(stack[i]);
+		print(stack[i][th]);
 
 		printf("=");
 
-		print(variant[stack[i] - CELLSIZE][j]);
+		print(variant[stack[i][th] - CELLSIZE][j]);
 
 	    }
 
-	    else if (atom_variable_p(stack[i])) {
+	    else if (atom_variable_p(stack[i][th])) {
 
-		print(stack[i]);
+		print(stack[i][th]);
 
 		printf("=");
 
-		print(GET_CAR(stack[i]));
+		print(GET_CAR(stack[i][th]));
 
 	    }
 

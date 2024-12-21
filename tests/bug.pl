@@ -1,6 +1,6 @@
+:- mt_create(2).
 
-foo(X) :- X is 1.
+foo(0).
+foo(N) :- write(N),N1 is N-1,foo(N1).
 
-bar(X) :- X is sin(1).
-
-boo :- between(0,3),write('hello'),write('world').
+% mt_and([foo(2),write(1)]).

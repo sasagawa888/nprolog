@@ -26,8 +26,7 @@ cell heap[CELLSIZE];
 int cell_hash_table[HASHTBSIZE];
 int variant[VARIANTSIZE][THREADSIZE];
 int bigcell[BIGSIZE];
-int stack[STACKSIZE];
-int ustack[STACKSIZE];
+int stack[STACKSIZE][THREADSIZE];
 int record_hash_table[HASHTBSIZE][RECORDMAX];	// for hash record database 
 int record_pt = 1;		// current index of record database
 int counter[31];		// counter str_set,str_dec ... 
@@ -659,7 +658,7 @@ int prove(int goal, int bindings, int rest, int th)
 	    }
 	    // case of clause
 	    else {
-		if (unify(goal, (cadr(clause1)), 0) == YES) {
+		if (unify(goal, (cadr(clause1)), th) == YES) {
 		    clause1 = addtail_body(rest, caddr(clause1));
 		    nest++;
 		    if ((res = prove_all(clause1, sp[th], th)) == YES) {

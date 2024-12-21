@@ -214,6 +214,7 @@ void initbuiltin(void)
     defbuiltin("mt_create", b_mt_create, 1);
     defbuiltin("mt_close", b_mt_close, 1);
 	defbuiltin("mt_and", b_mt_and, 1);
+	defbuiltin("mt_prove", b_mt_prove,2);
 
     //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_reconsult_predicate, -1);
@@ -445,7 +446,7 @@ int b_ask(int arglist, int rest, int th)
 	x1 = variables[th];
 	if (child_flag)
 	    memset(bridge, 0, sizeof(bridge));
-	if (nullp(x1) || has_no_value_p(x1)) {
+	if (nullp(x1) || has_no_value_p(x1,th)) {
 	    return (prove_all(rest, sp[th], th));
 	    // ignore singleton e.g. X=X
 	}
@@ -1913,6 +1914,7 @@ int b_is(int arglist, int rest, int th)
 
 	arg2 = eval(arg2,th);
 	res = unify(arg1, arg2, th);
+
 	if (res == YES)
 	    return (prove_all(rest, sp[th], th));
 	else

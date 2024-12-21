@@ -2220,3 +2220,18 @@ int b_mt_and(int arglist, int rest, int th)
     error(ARITY_ERR, "mt_and ", arglist);
     return (NO);
 }
+
+int b_mt_prove(int arglist, int rest, int th)
+{
+	int n,arg1,arg2;
+
+	n=length(arglist);
+	if(n==2){
+		arg1 = car(arglist);
+		arg2 = cadr(arglist);
+
+		return(prove_all(arg1,sp[GET_INT(arg2)],GET_INT(arg2)));
+	}
+	error(ARITY_ERR, "mt_prove ", arglist);
+    return (NO);
+}
