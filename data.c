@@ -3179,7 +3179,6 @@ int alpha_to_variable(int x)
 {
 
     int res;
-
     char str[ATOMSIZE];
 
 
