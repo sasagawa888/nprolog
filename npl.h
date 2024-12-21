@@ -841,6 +841,7 @@ int b_measure(int arglist, int rest, int th);
 int b_mt_create(int arglist, int rest, int th);
 int b_mt_close(int arglist, int rest, int th);
 int b_mt_and(int arglist, int rest, int th);
+int b_mt_or(int arglist, int rest, int th);
 int b_mt_prove(int arglist, int rest, int th);
 int b_nl(int arglist, int rest, int th);
 int b_nonvar(int arglist, int rest, int th);

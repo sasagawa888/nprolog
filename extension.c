@@ -2083,7 +2083,7 @@ void *parallel(void *arg)
 	if (parallel_exit_flag)
 	    goto exit;
 
-	prove_all(para_input[num], sp[num], num);
+	para_output[num] = prove_all(para_input[num], sp[num], num);
 	mt_enqueue(num);
 	if (mt_queue_pt == mt_queue_num) {
 	    pthread_mutex_lock(&mutex);
@@ -2191,7 +2191,7 @@ int b_mt_close(int arglist, int rest, int th)
 
 int b_mt_and(int arglist, int rest, int th)
 {
-    int n, arg1, i;
+    int n, arg1, i,j;
 
     n = length(arglist);
     if (n == 1) {
@@ -2213,15 +2213,56 @@ int b_mt_and(int arglist, int rest, int th)
 	pthread_mutex_unlock(&mutex);
 	parallel_flag = 0;
 
-	// if error 
-
 	// receive result from each thread
+	for(j=0;j<i;j++){
+		if(para_output[j] == NO)
+			return(NO);
+	}
 
 	return (prove_all(rest, sp[th], th));
     }
     error(ARITY_ERR, "mt_and ", arglist);
     return (NO);
 }
+
+int b_mt_or(int arglist, int rest, int th)
+{
+    int n, arg1, i,j;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if (length(arg1) > mt_queue_num)
+	    error(WRONG_ARGS, "mt_and", arg1);
+
+
+	i = 0;
+	parallel_flag = 1;
+	while (!nullp(arg1)) {
+	    eval_para(car(arg1));
+	    arg1 = cdr(arg1);
+	    i++;
+	}
+
+	pthread_mutex_lock(&mutex);
+	pthread_cond_wait(&mt_cond_main, &mutex);
+	pthread_mutex_unlock(&mutex);
+	parallel_flag = 0;
+
+	// receive result from each thread
+	for(j=0;j<i;j++){
+		if(para_output[j] == YES)
+			goto succ;
+	}
+	return(NO);
+
+	succ:
+	return (prove_all(rest, sp[th], th));
+    }
+    error(ARITY_ERR, "mt_and ", arglist);
+    return (NO);
+}
+
 
 int b_mt_prove(int arglist, int rest, int th)
 {
@@ -2232,7 +2273,7 @@ int b_mt_prove(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	return (prove_all(arg1, sp[GET_INT(arg2)], GET_INT(arg2)));
+	return (prove_all(arg2, sp[GET_INT(arg1)], GET_INT(arg1)));
     }
     error(ARITY_ERR, "mt_prove ", arglist);
     return (NO);
