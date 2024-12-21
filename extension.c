@@ -2074,6 +2074,7 @@ int eval_para(int arg)
 
 int query_thread(int x, int th)
 {
+	variables[th] = listreverse(unique(varslist(x)));
 	return(prove_all(addask(x,th), sp[th], th));
 }
 
