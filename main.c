@@ -71,13 +71,13 @@ double timer;			// for timer_microseconds/1
 
 //------pointer----
 int hp;				//heap pointer
-int sp[THREADSIZE];	//stack pointer
+int sp[THREADSIZE];		//stack pointer
 int fc;				//free counter
-int ac[THREADSIZE];	//alpha conversion variable count
-int wp[THREADSIZE];	//working pointer
+int ac[THREADSIZE];		//alpha conversion variable count
+int wp[THREADSIZE];		//working pointer
 int gc;				//invoked GC count
-int wp_min[THREADSIZE]; // start wp point in each thread
-int wp_max[THREADSIZE]; // end wp point in each thread
+int wp_min[THREADSIZE];		// start wp point in each thread
+int wp_max[THREADSIZE];		// end wp point in each thread
 
 // bignum pointer
 int big_pt0 = 0;		// pointer of temporaly bignum
@@ -213,7 +213,7 @@ int main(int argc, char *argv[])
     output_stream = standard_output;
     error_stream = standard_error;
     wp[0] = HEAPSIZE + 1;
-	wp_min[0] = HEAPSIZE + 1;
+    wp_min[0] = HEAPSIZE + 1;
     wp_max[0] = CELLSIZE;
     init_repl();
     int ret = setjmp(buf);
@@ -332,7 +332,8 @@ int main(int argc, char *argv[])
 		init_repl();
 		input =
 		    variable_to_call(convert_to_variable
-				     (str_to_pred(receive_from_parent()),0));
+				     (str_to_pred(receive_from_parent()),
+				      0));
 		printf("Receive from parent ");
 		sprint(input);
 		printf("\n");
@@ -399,13 +400,14 @@ void init_repl(void)
 	    variant[i][j] = UNBIND;
 	}
     }
-	for (j = 0; j < THREADSIZE; j++){
-    i = variables[j];
-    while (!nullp(i)) {
-	SET_CAR(car(i), UNBIND);
-	SET_CDR(car(i), UNBIND);
-	i = cdr(i);
-    }}
+    for (j = 0; j < THREADSIZE; j++) {
+	i = variables[j];
+	while (!nullp(i)) {
+	    SET_CAR(car(i), UNBIND);
+	    SET_CDR(car(i), UNBIND);
+	    i = cdr(i);
+	}
+    }
     //initialize spy-point trace-level
     i = spy_list;
     while (!nullp(i)) {
@@ -636,8 +638,8 @@ int prove(int goal, int bindings, int rest, int th)
 	    clause = car(clauses);
 	    clauses = cdr(clauses);
 	    varlis = GET_VAR(clause);
-	    assign_variant(varlis,th);
-	    clause1 = walpha_conversion(clause,th);
+	    assign_variant(varlis, th);
+	    clause1 = walpha_conversion(clause, th);
 	    release_variant(varlis);
 
 	    // case of predicate
@@ -701,7 +703,8 @@ int prove(int goal, int bindings, int rest, int th)
 		wcons(IFTHENELSE,
 		      wcons(cadr(cadr(goal)),
 			    wcons(caddr(cadr(goal)),
-				  wcons(caddr(goal), NIL, th), th), th), th);
+				  wcons(caddr(goal), NIL, th), th), th),
+		      th);
 	    // redefine goal = ifthenelse(if,then,else)
 	    return (prove(goal, bindings, rest, th));
 	} else
@@ -1157,27 +1160,29 @@ int walpha_conversion(int x, int th)
     else if (!structurep(x))
 	return (x);
     else if (operationp(x) && nullp(caddr(x))) {	// e.g. :- foo(x)
-	temp = wlist2(car(x), walpha_conversion(cadr(x),th), th);
+	temp = wlist2(car(x), walpha_conversion(cadr(x), th), th);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else if (operationp(x)) {
 	temp = wlist3(car(x),
-		      walpha_conversion(cadr(x),th),
-		      walpha_conversion(caddr(x),th), th);
+		      walpha_conversion(cadr(x), th),
+		      walpha_conversion(caddr(x), th), th);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else if (listp(x)) {
 	temp =
-	    wcons(walpha_conversion(car(x),th), walpha_conversion(cdr(x),th), th);
+	    wcons(walpha_conversion(car(x), th),
+		  walpha_conversion(cdr(x), th), th);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else if (predicatep(x)) {
-	temp = wcons(car(x), walpha_conversion(cdr(x),th), th);
+	temp = wcons(car(x), walpha_conversion(cdr(x), th), th);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     } else {			//buiiltin
 	temp =
-	    wcons(walpha_conversion(car(x),th), walpha_conversion(cdr(x),th), th);
+	    wcons(walpha_conversion(car(x), th),
+		  walpha_conversion(cdr(x), th), th);
 	SET_AUX(temp, GET_AUX(x));
 	return (temp);
     }

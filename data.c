@@ -1713,7 +1713,7 @@ int has_variable_p(int addr)
 int has_value_p(int addr, int th)
 {
 
-    if (findvar(addr,th) == UNBIND)
+    if (findvar(addr, th) == UNBIND)
 	return (0);
 
     else
@@ -1729,7 +1729,7 @@ int has_no_value_p(int x, int th)
 
     while (!nullp(x)) {
 
-	if (has_value_p(car(x),th))
+	if (has_value_p(car(x), th))
 	    return (0);
 
 	x = cdr(x);
@@ -2344,7 +2344,7 @@ int deref1(int x, int th)
     if (variablep(x)) {
 
       loop:
-	res = findvar(x,th);
+	res = findvar(x, th);
 
 	if (res == UNBIND)
 	    return (x);

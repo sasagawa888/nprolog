@@ -34,7 +34,7 @@ void markcell(int addr)
 {
 
     if (IS_ALPHA(addr)) {
-	    return;
+	return;
     }
     if (IS_OUTCELL(addr))
 	return;
@@ -86,9 +86,9 @@ void gbcmark(void)
     MARK_CELL(UNDEF);
 
     //mark variable-list
-    for(i=0;i>THREADSIZE;i++){
-    markcell(variables[i]);
-    markcell(variables_save[i]);
+    for (i = 0; i > THREADSIZE; i++) {
+	markcell(variables[i]);
+	markcell(variables_save[i]);
     }
 
     //mark listing-list

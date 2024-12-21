@@ -418,7 +418,8 @@ void defcompiled(char *name, int (*func)(int, int, int), int arity)
     return;
 }
 
-void definfixcomp(char *name, int (*func)(int, int, int), int weight, int spec)
+void definfixcomp(char *name, int (*func)(int, int, int), int weight,
+		  int spec)
 {
     int atom;
 
@@ -550,36 +551,36 @@ int eval(int x, int th)
     } else if (eqp(car(x), makeatom("sqrt", FUNC))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "sqrt ", x);
-	evalterm(x, result,th);
+	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_sqrt(arg1));
     } else if (eqp(car(x), makeatom("round", FUNC))) {
 	if (length(x) != 3)
 	    error(ARITY_ERR, "round ", x);
-	evalterm(x, result,th);
+	evalterm(x, result, th);
 	arg1 = result[1];
 	arg2 = result[2];
 	return (f_round(arg1, arg2));
     } else if (eqp(car(x), makeatom("integer", SYS))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "integer ", x);
-	evalterm(x, result,th);
+	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_integer(arg1));
     } else if (eqp(car(x), makeatom("float", SYS))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "float ", x);
-	evalterm(x, result,th);
+	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_float(arg1));
     } else if (eqp(car(x), makeatom("randi", FUNC))) {
 	if (length(x) != 2)
 	    error(ARITY_ERR, "randi ", x);
-	evalterm(x, result,th);
+	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_randi(arg1));
     } else if (structurep(x) && operatorp(car(x))) {
-	evalterm(x, result,th);
+	evalterm(x, result, th);
 	function = result[0];
 	arg1 = result[1];
 	arg2 = result[2];
@@ -593,8 +594,8 @@ void evalterm(int x, int result[3], int th)
 {
 
     result[0] = car(x);
-    result[1] = eval(deref(cadr(x), th),th);
-    result[2] = eval(deref(caddr(x), th),th);
+    result[1] = eval(deref(cadr(x), th), th);
+    result[2] = eval(deref(caddr(x), th), th);
     return;
 }
 

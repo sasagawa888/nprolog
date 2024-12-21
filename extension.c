@@ -1224,7 +1224,8 @@ int convert_to_variant(int x, int th)
 	return (x);
     }
     return (wcons
-	    (convert_to_variant(car(x),th), convert_to_variant(cdr(x),th), th));
+	    (convert_to_variant(car(x), th),
+	     convert_to_variant(cdr(x), th), th));
 }
 
 // under construction v_1 -> V_1
@@ -1242,8 +1243,8 @@ int convert_to_variable(int x, int th)
     } else if (!structurep(x)) {
 	return (x);
     } else
-	return (wcons(convert_to_variable(car(x),th),
-		      convert_to_variable(cdr(x),th), th));
+	return (wcons(convert_to_variable(car(x), th),
+		      convert_to_variable(cdr(x), th), th));
 }
 
 void init_parent(void)
@@ -1683,7 +1684,7 @@ int b_dp_prove(int arglist, int rest, int th)
 	send_to_child(GET_INT(arg1), pred_to_str(arg2));
 	res =
 	    convert_to_variant(str_to_pred
-			       (receive_from_child(GET_INT(arg1))),th);
+			       (receive_from_child(GET_INT(arg1))), th);
 	if (prove_all(res, sp[th], th) == YES)
 	    return (prove_all(rest, sp[th], th));
     }
@@ -1867,12 +1868,13 @@ int b_dp_and(int arglist, int rest, int th)
 	    i++;
 	}
 	for (i = 0; i < m; i++) {
-	    res = convert_to_variant(str_to_pred(receive_from_child(i)),th);
+	    res =
+		convert_to_variant(str_to_pred(receive_from_child(i)), th);
 	    if (prove_all(res, sp[th], th) == NO) {
 		for (j = i; j < m; j++) {
 		    res =
 			convert_to_variant(str_to_pred
-					   (receive_from_child(j)),th);
+					   (receive_from_child(j)), th);
 		}
 		return (NO);
 	    }
@@ -1901,7 +1903,8 @@ int b_dp_or(int arglist, int rest, int th)
 	    arg1 = cdr(arg1);
 	    i++;
 	}
-	res = convert_to_variant(str_to_pred(receive_from_child_or(m)),th);
+	res =
+	    convert_to_variant(str_to_pred(receive_from_child_or(m)), th);
 	if (prove_all(res, sp[th], th) == YES)
 	    return (prove_all(rest, sp[th], th));
     }
@@ -2053,7 +2056,7 @@ int mt_dequeue(int arg)
 	mt_queue[i] = mt_queue[i + 1];
     }
     pthread_mutex_lock(&mutex);
-    para_input[num] = convert_to_variable(arg,num);
+    para_input[num] = convert_to_variable(arg, num);
     para_output[num] = NIL;
     pthread_cond_signal(&mt_cond_para[num]);
     pthread_mutex_unlock(&mutex);
@@ -2080,7 +2083,7 @@ void *parallel(void *arg)
 	if (parallel_exit_flag)
 	    goto exit;
 
-	prove_all(para_input[num],sp[num],num);
+	prove_all(para_input[num], sp[num], num);
 	mt_enqueue(num);
 	if (mt_queue_pt == mt_queue_num) {
 	    pthread_mutex_lock(&mutex);
@@ -2141,7 +2144,7 @@ int wait_para(void)
 
 int b_mt_create(int arglist, int rest, int th)
 {
-    int n, arg1, i,m;
+    int n, arg1, i, m;
 
     n = length(arglist);
     if (n == 1) {
@@ -2160,8 +2163,7 @@ int b_mt_create(int arglist, int rest, int th)
 	init_para();
 	m = thread_num + 1;
 	for (i = 0; i < m; i++) {
-	    wp_min[i] =
-		HEAPSIZE + 1 + (CELLSIZE - HEAPSIZE) / m * i;
+	    wp_min[i] = HEAPSIZE + 1 + (CELLSIZE - HEAPSIZE) / m * i;
 	    wp_max[i] = wp_min[i] + (CELLSIZE - HEAPSIZE) / m;
 	}
 	return (prove_all(rest, sp[th], th));
@@ -2223,15 +2225,15 @@ int b_mt_and(int arglist, int rest, int th)
 
 int b_mt_prove(int arglist, int rest, int th)
 {
-	int n,arg1,arg2;
+    int n, arg1, arg2;
 
-	n=length(arglist);
-	if(n==2){
-		arg1 = car(arglist);
-		arg2 = cadr(arglist);
+    n = length(arglist);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
 
-		return(prove_all(arg1,sp[GET_INT(arg2)],GET_INT(arg2)));
-	}
-	error(ARITY_ERR, "mt_prove ", arglist);
+	return (prove_all(arg1, sp[GET_INT(arg2)], GET_INT(arg2)));
+    }
+    error(ARITY_ERR, "mt_prove ", arglist);
     return (NO);
 }

@@ -213,8 +213,8 @@ void initbuiltin(void)
     //------multi thread--------------------
     defbuiltin("mt_create", b_mt_create, 1);
     defbuiltin("mt_close", b_mt_close, 1);
-	defbuiltin("mt_and", b_mt_and, 1);
-	defbuiltin("mt_prove", b_mt_prove,2);
+    defbuiltin("mt_and", b_mt_and, 1);
+    defbuiltin("mt_prove", b_mt_prove, 2);
 
     //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_reconsult_predicate, -1);
@@ -446,7 +446,7 @@ int b_ask(int arglist, int rest, int th)
 	x1 = variables[th];
 	if (child_flag)
 	    memset(bridge, 0, sizeof(bridge));
-	if (nullp(x1) || has_no_value_p(x1,th)) {
+	if (nullp(x1) || has_no_value_p(x1, th)) {
 	    return (prove_all(rest, sp[th], th));
 	    // ignore singleton e.g. X=X
 	}
@@ -1912,7 +1912,7 @@ int b_is(int arglist, int rest, int th)
 	if (wide_variable_p(arg2))
 	    error(INSTANTATION_ERR, "is ", arg2);
 
-	arg2 = eval(arg2,th);
+	arg2 = eval(arg2, th);
 	res = unify(arg1, arg2, th);
 
 	if (res == YES)
@@ -1940,8 +1940,8 @@ int b_greater(int arglist, int rest, int th)
 	    error(INSTANTATION_ERR, "> ", arg2);
 
 
-	arg1 = eval(arg1,th);
-	arg2 = eval(arg2,th);
+	arg1 = eval(arg1, th);
+	arg2 = eval(arg2, th);
 	if (!numberp(arg1))
 	    error(NOT_NUM, "> ", arg1);
 	if (!numberp(arg2))
@@ -1971,8 +1971,8 @@ int b_smaller(int arglist, int rest, int th)
 	    error(INSTANTATION_ERR, "< ", arg2);
 
 
-	arg1 = eval(arg1,th);
-	arg2 = eval(arg2,th);
+	arg1 = eval(arg1, th);
+	arg2 = eval(arg2, th);
 	if (!numberp(arg1))
 	    error(NOT_NUM, "< ", arg1);
 	if (!numberp(arg2))
@@ -1999,8 +1999,8 @@ int b_eqsmaller(int arglist, int rest, int th)
 	if (wide_variable_p(arg2))
 	    error(INSTANTATION_ERR, "=< ", arg2);
 
-	arg1 = eval(arg1,th);
-	arg2 = eval(arg2,th);
+	arg1 = eval(arg1, th);
+	arg2 = eval(arg2, th);
 	if (!numberp(arg1))
 	    error(NOT_NUM, "=< ", arg1);
 	if (!numberp(arg2))
@@ -2028,8 +2028,8 @@ int b_eqgreater(int arglist, int rest, int th)
 	if (wide_variable_p(arg2))
 	    error(INSTANTATION_ERR, ">= ", arg2);
 
-	arg1 = eval(arg1,th);
-	arg2 = eval(arg2,th);
+	arg1 = eval(arg1, th);
+	arg2 = eval(arg2, th);
 	if (!numberp(arg1))
 	    error(NOT_NUM, ">= ", arg1);
 	if (!numberp(arg2))
@@ -2049,8 +2049,8 @@ int b_numeq(int arglist, int rest, int th)
 
     n = length(arglist);
     if (n == 2) {
-	arg1 = eval(car(arglist),th);
-	arg2 = eval(cadr(arglist),th);
+	arg1 = eval(car(arglist), th);
+	arg2 = eval(cadr(arglist), th);
 	if (!numberp(arg1))
 	    error(NOT_NUM, "=:= ", arg1);
 	if (!numberp(arg2))
@@ -2071,8 +2071,8 @@ int b_notnumeq(int arglist, int rest, int th)
 
     n = length(arglist);
     if (n == 2) {
-	arg1 = eval(car(arglist),th);
-	arg2 = eval(cadr(arglist),th);
+	arg1 = eval(car(arglist), th);
+	arg2 = eval(cadr(arglist), th);
 	if (!numberp(arg1))
 	    error(NOT_NUM, "=\\= ", arg1);
 	if (!numberp(arg2))
@@ -2698,7 +2698,8 @@ int b_abolish(int arglist, int rest, int th)
 	    error(STATIC_PROCEDURE, "abolish ", arg1);
 	if (!atomp(cadr(arg1)))
 	    error(NOT_ATOM, "abolish ", arg1);
-	if (integerp(eval(caddr(arg1),th)) && GET_INT(eval(caddr(arg1),th)) < 0)
+	if (integerp(eval(caddr(arg1), th))
+	    && GET_INT(eval(caddr(arg1), th)) < 0)
 	    error(LESS_THAN_ZERO, "abolish ", arg1);
 	if (!integerp(caddr(arg1)))
 	    error(NOT_INT, "abolish ", arg1);
@@ -4136,7 +4137,7 @@ int b_arg(int arglist, int rest, int th)
 	    error(NOT_INT, "arg ", arg1);
 	if (!compoundp(arg2))
 	    error(NOT_COMPOUND, "arg ", arg2);
-	if (integerp(eval(arg1,th)) && GET_INT(eval(arg1,th)) < 0)
+	if (integerp(eval(arg1, th)) && GET_INT(eval(arg1, th)) < 0)
 	    error(LESS_THAN_ZERO, "arg ", arg1);
 
 	if (integerp(arg1) && structurep(arg2)) {
@@ -4172,7 +4173,7 @@ int b_arg0(int arglist, int rest, int th)
 	    error(NOT_INT, "arg0 ", arg1);
 	if (!compoundp(arg2))
 	    error(NOT_COMPOUND, "arg0 ", arg2);
-	if (integerp(eval(arg1,th)) && GET_INT(eval(arg1,th)) < 0)
+	if (integerp(eval(arg1, th)) && GET_INT(eval(arg1, th)) < 0)
 	    error(LESS_THAN_ZERO, "arg0 ", arg1);
 
 	if (integerp(arg1) && structurep(arg2)) {
