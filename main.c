@@ -440,7 +440,7 @@ void query(int x, int th)
 	error(NOT_CALLABLE, "?- ", x);
 
     variables[th] = listreverse(unique(varslist(x)));
-    res = prove_all(addask(x), sp[th], th);
+    res = prove_all(addask(x,th), sp[th], th);
     if (!child_flag) {
 	ESCRST;
 	print(res);
@@ -489,7 +489,7 @@ void query_break(int x, int th)
 
     variables_save[th] = variables[th];
     variables[th] = listreverse(unique(varslist(x)));
-    res = prove_all(addask(x), sp[th], th);
+    res = prove_all(addask(x,th), sp[th], th);
     variables[th] = variables_save[th];
     ESCRST;
     print(res);
@@ -520,20 +520,20 @@ int list_to_ope(int x)
     return (NIL);
 }
 
-int addask(int x)
+int addask(int x, int th)
 {
-    return (addtail_body(makeatom("%ask", SYS), x));
+    return (addtail_body(makeatom("%ask", SYS), x, th));
 }
 
 
-int addtail_body(int x, int y)
+int addtail_body(int x, int y, int th)
 {
     if (nullp(y))
 	return (x);
     else if (!conjunctionp(y))
-	return (wlist3(AND, y, x, 0));
+	return (wlist3(AND, y, x, th));
     else
-	return (wlist3(car(y), cadr(y), addtail_body(x, caddr(y)), 0));
+	return (wlist3(car(y), cadr(y), addtail_body(x, caddr(y),th), th));
 }
 
 
@@ -661,7 +661,7 @@ int prove(int goal, int bindings, int rest, int th)
 	    // case of clause
 	    else {
 		if (unify(goal, (cadr(clause1)), th) == YES) {
-		    clause1 = addtail_body(rest, caddr(clause1));
+		    clause1 = addtail_body(rest, caddr(clause1),th);
 		    nest++;
 		    if ((res = prove_all(clause1, sp[th], th)) == YES) {
 			nest--;
@@ -709,7 +709,7 @@ int prove(int goal, int bindings, int rest, int th)
 	    return (prove(goal, bindings, rest, th));
 	} else
 	    if ((res =
-		 prove_all(addtail_body(rest, cadr(goal)), bindings, th))
+		 prove_all(addtail_body(rest, cadr(goal),th), bindings, th))
 		== YES)
 	    return (YES);
 	else {
@@ -718,7 +718,7 @@ int prove(int goal, int bindings, int rest, int th)
 		return (NO);
 	    }
 	    unbind(bindings, th);
-	    if (prove_all(addtail_body(rest, caddr(goal)), bindings, th) ==
+	    if (prove_all(addtail_body(rest, caddr(goal),th), bindings, th) ==
 		YES)
 		return (YES);
 	    else {

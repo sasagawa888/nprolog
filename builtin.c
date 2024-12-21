@@ -2471,7 +2471,7 @@ int b_call(int arglist, int rest, int th)
 	if (atom_constant_p(arg1))
 	    arg1 = makeatom(GET_NAME(arg1), PRED);
 
-	return (prove_all(addtail_body(rest, arg1), sp[th], th));
+	return (prove_all(addtail_body(rest, arg1,th), sp[th], th));
     }
     error(ARITY_ERR, "call ", arglist);
     return (NO);
@@ -3544,7 +3544,7 @@ int b_ifthen(int arglist, int rest, int th)
 	    error(INSTANTATION_ERR, "ifthen ", arg2);
 
 	if (prove_all(arg1, sp[th], th) == YES) {
-	    return (prove_all(addtail_body(rest, arg2), sp[th], th));
+	    return (prove_all(addtail_body(rest, arg2,th), sp[th], th));
 	} else {
 	    unbind(save1, th);
 	    return (NO);
@@ -3576,10 +3576,10 @@ int b_ifthenelse(int arglist, int rest, int th)
 
 	save = sp[th];
 	if (prove_all(arg1, sp[th], th) == YES) {
-	    return (prove_all(addtail_body(rest, arg2), sp[th], th));
+	    return (prove_all(addtail_body(rest, arg2,th), sp[th], th));
 	} else {
 	    unbind(save, th);
-	    return (prove_all(addtail_body(rest, arg3), sp[th], th));
+	    return (prove_all(addtail_body(rest, arg3,th), sp[th], th));
 	}
     }
     error(ARITY_ERR, "ifthenelse ", arglist);
@@ -5132,7 +5132,7 @@ int b_bagof(int arglist, int rest, int th)
 	free = get_free(arg2);
 	nonfree = get_nonfree(vars, free, arg1);
 	goal = get_goal(arg2);
-	goal = addtail_body(list2(makesys("%bagofhelper"), arg1), goal);
+	goal = addtail_body(wlist2(makesys("%bagofhelper"), arg1,th), goal, th);
 	bag_list = NIL;
 	nonfree_list = nonfree;
 	prove_all(goal, sp[th], th);
@@ -5171,7 +5171,7 @@ int b_setof(int arglist, int rest, int th)
 	free = get_free(arg2);
 	nonfree = get_nonfree(vars, free, arg1);
 	goal = get_goal(arg2);
-	goal = addtail_body(list2(makesys("%bagofhelper"), arg1), goal);
+	goal = addtail_body(wlist2(makesys("%bagofhelper"), arg1,th), goal,th);
 	bag_list = NIL;
 	nonfree_list = nonfree;
 	prove_all(goal, sp[th], th);
@@ -5206,7 +5206,7 @@ int b_findall(int arglist, int rest, int th)
 	save1 = wp[th];
 	save2 = sp[th];
 	goal = get_goal(arg2);
-	goal = addtail_body(list2(makesys("%bagofhelper"), arg1), goal);
+	goal = addtail_body(wlist2(makesys("%bagofhelper"), arg1,th), goal, th);
 	bag_list = NIL;
 	nonfree_list = NIL;
 	prove_all(goal, sp[th], th);
