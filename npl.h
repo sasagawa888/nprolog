@@ -1308,7 +1308,7 @@ void clrtrace(int goal);
 void cut_zero(int x);
 void debugger(int end, int bindings, int choice);
 void dectrace(int goal);
-void defbuiltin(char *name, int(*func)(int, int), int arity);
+void defbuiltin(char *name, int(*func)(int, int, int), int arity);
 void defcompiled(char *name, int(*func)(int, int), int arity);
 void definfix(char *name, int(*func)(int, int), int weight, int spec);
 void defoperator(char *name, int(*func)(int, int), int weight, int spec, int opt);

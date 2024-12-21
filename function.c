@@ -385,7 +385,7 @@ void definfix(char *name, int (*func)(int, int), int weight, int spec)
     return;
 }
 
-void defbuiltin(char *name, int (*func)(int, int), int arity)
+void defbuiltin(char *name, int (*func)(int, int, int), int arity)
 {
     int atom;
 
