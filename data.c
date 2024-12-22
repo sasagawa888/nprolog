@@ -1824,7 +1824,6 @@ int unify_const(int x, int y, int th)
 
 
 
-
 // typed unify. x is [] (empty list)
 int unify_nil(int x, int y, int th)
 {
@@ -1880,7 +1879,6 @@ void assign_variant(int x, int th)
 }
 
 
-
 // release link variable and ariant
 void release_variant(int x)
 {
@@ -1889,7 +1887,6 @@ void release_variant(int x)
 	x = cdr(x);
     }
 }
-
 
 
 
@@ -1902,7 +1899,6 @@ int sort(int x)
 	res = insert(res, (car(x)));
 	x = cdr(x);
     }
-
     return (res);
 }
 
@@ -1924,7 +1920,6 @@ int insert(int x, int y)
 
 int keysort(int x)
 {
-
     int res;
 
     res = NIL;
@@ -1932,7 +1927,6 @@ int keysort(int x)
 	res = keyinsert(res, (car(x)));
 	x = cdr(x);
     }
-
     return (res);
 }
 
@@ -1951,7 +1945,6 @@ int keyinsert(int x, int y)
 
     return (NIL);
 }
-
 
 
 
@@ -1989,7 +1982,6 @@ int sorteqlp(int x, int y)
 
 
 
-
 void printenv(int th)
 {
     int i, j;
@@ -2012,10 +2004,8 @@ void printenv(int th)
 
 
 
-
 void add_data(int pred, int data)
 {
-
     int clauses;
 
     //set arity. e.g. GET_CDR(pred) == #[2,3]
@@ -2029,7 +2019,6 @@ void add_data(int pred, int data)
 	}
 	SET_CDR(clauses, cons(data, NIL));
     }
-
     if (!memq(pred, predicates))
 	predicates = cons(pred, predicates);
 }
@@ -2038,17 +2027,11 @@ void add_data(int pred, int data)
 
 void insert_data(int pred, int data)
 {
-
-
     //set arity. e.g. GET_CDR(pred) == #[2,3]
     memoize_arity(data, pred);
-
-
     SET_CAR(pred, cons(data, GET_CAR(pred)));
-
     if (!memq(pred, predicates))
 	predicates = cons(pred, predicates);
-
 }
 
 
@@ -2078,9 +2061,7 @@ int variable_to_call(int x)
 	return (list3(car(x), cadr(x), variable_to_call(caddr(x))));
     else
 	return (x);
-
 }
-
 
 
 
@@ -2093,7 +2074,6 @@ int concat_atom(int x, int y)
     strcat(str, "_");
     strcat(str, GET_NAME(y));
     res = makeatom(str, PRED);
-
     return (res);
 }
 
@@ -2109,7 +2089,6 @@ int structure_to_list(int x)
 	res = listcons(car(x), res);
 	x = cdr(x);
     }
-
     if (operatorp(car(res)))
 	res = listcons(makeconst(GET_NAME(car(res))), cdr(res));
 
@@ -2120,7 +2099,6 @@ int structure_to_list(int x)
 
 int list_to_structure(int x)
 {
-
     int res;
 
     x = listreverse(x);
@@ -2137,7 +2115,6 @@ int list_to_structure(int x)
 
 int copy_term(int x)
 {
-
     int temp;
 
     if (nullp(x))
@@ -2153,7 +2130,6 @@ int copy_term(int x)
 
     return (x);
 }
-
 
 
 
@@ -2189,7 +2165,6 @@ int alpha_to_variable(int x)
     res = makeatom(str, VAR);
     return (res);
 }
-
 
 
 
@@ -2242,8 +2217,6 @@ int utf8_to_ucs4(char *p)
     } else
 	return (-1);
 }
-
-
 
 
 
