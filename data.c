@@ -2250,164 +2250,92 @@ int utf8_to_ucs4(char *p)
 //transform from Unicode to UTF-8
 void ucs4_to_utf8(int n, char *p)
 {
-
     int w, x, y, z;
 
-
     if (n <= 0x7f) {
-
 	*p = (char) n;
-
     }
-
     else if (n <= 0x07ff) {
-
 	x = UNI2MSK1 & n;
-
 	x = x >> 6;
-
 	x = UNI2ADD1 | x;
-
 	y = UNI2MSK2 & n;
-
 	y = UNIOADDO | y;
-
 	*p = (char) x;
-
 	p++;
-
 	*p = (char) y;
-
     }
-
     else if (n <= 0xffff) {
-
 	x = UNI3MSK1 & n;
-
 	x = x >> 12;
-
 	x = UNI3ADD1 | x;
-
 	y = UNI3MSK2 & n;
-
 	y = y >> 6;
-
 	y = UNIOADDO | y;
-
 	z = UNI3MSK3 & n;
-
 	z = UNIOADDO | z;
-
 	*p = (char) x;
-
 	p++;
-
 	*p = (char) y;
-
 	p++;
-
 	*p = (char) z;
-
     }
-
     else if (n < 0x1fffff) {
-
 	w = UNI4MSK1 & n;
-
 	w = w >> 18;
-
 	w = UNI4ADD1 | w;
-
 	x = UNI4MSK2 & n;
-
 	x = x >> 12;
-
 	x = UNIOADDO | x;
-
 	y = UNI4MSK3 & n;
-
 	y = y >> 6;
-
 	y = UNIOADDO | y;
-
 	z = UNI4MSK4 & n;
-
 	z = UNIOADDO | z;
-
 	*p = (char) w;
-
 	p++;
-
 	*p = (char) x;
-
 	p++;
-
 	*p = (char) y;
-
 	p++;
-
 	*p = (char) z;
-
     }
-
     else {
-
 	error(OUT_OF_RANGE, "Unicode->UTF-8", NIL);
-
     }
-
     p++;
-
     *p = NUL;
-
 }
-
 
 
 
 int ctrl_to_number(char c)
 {
-
     if (c == 'n')
 	return (makeint(EOL));
-
     else if (c == 't')
 	return (makeint(TAB));
-
     else if (c == 'f')
 	return ((makeint(FF)));
-
     else if (c == 'r')
 	return (makeint(CR));
-
     else if (c == 'v')
 	return (makeint(VT));
-
     else if (c == 'a')
 	return (makeint(BEL));
-
     else if (c == 'b')
 	return (makeint(BS));
-
     else
 	return (makeint(c));
 
-
     return (NIL);
-
 }
-
-
 
 
 int last_predicate(int x)
 {
-
-
     if (!operationp(x))
 	return (x);
-
     else
 	return (last_predicate(caddr(x)));
-
 }
