@@ -214,7 +214,7 @@ void initbuiltin(void)
     defbuiltin("mt_create", b_mt_create, 1);
     defbuiltin("mt_close", b_mt_close, 1);
     defbuiltin("mt_and", b_mt_and, 1);
-	defbuiltin("mt_or", b_mt_or,1);
+    defbuiltin("mt_or", b_mt_or, 1);
     defbuiltin("mt_prove", b_mt_prove, 2);
 
     //-----JUMP project---------

@@ -2191,7 +2191,7 @@ int b_mt_close(int arglist, int rest, int th)
 
 int b_mt_and(int arglist, int rest, int th)
 {
-    int n, arg1, i,j;
+    int n, arg1, i, j;
 
     n = length(arglist);
     if (n == 1) {
@@ -2214,9 +2214,9 @@ int b_mt_and(int arglist, int rest, int th)
 	parallel_flag = 0;
 
 	// receive result from each thread
-	for(j=0;j<i;j++){
-		if(para_output[j] == NO)
-			return(NO);
+	for (j = 0; j < i; j++) {
+	    if (para_output[j] == NO)
+		return (NO);
 	}
 
 	return (prove_all(rest, sp[th], th));
@@ -2227,7 +2227,7 @@ int b_mt_and(int arglist, int rest, int th)
 
 int b_mt_or(int arglist, int rest, int th)
 {
-    int n, arg1, i,j;
+    int n, arg1, i, j;
 
     n = length(arglist);
     if (n == 1) {
@@ -2250,13 +2250,13 @@ int b_mt_or(int arglist, int rest, int th)
 	parallel_flag = 0;
 
 	// receive result from each thread
-	for(j=0;j<i;j++){
-		if(para_output[j] == YES)
-			goto succ;
+	for (j = 0; j < i; j++) {
+	    if (para_output[j] == YES)
+		goto succ;
 	}
-	return(NO);
+	return (NO);
 
-	succ:
+      succ:
 	return (prove_all(rest, sp[th], th));
     }
     error(ARITY_ERR, "mt_and ", arglist);
