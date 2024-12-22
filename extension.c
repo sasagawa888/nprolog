@@ -2072,6 +2072,12 @@ int eval_para(int arg)
     return (num);
 }
 
+int query_thread(int x, int th)
+{
+	variables[th] = listreverse(unique(varslist(x)));
+	return(prove_all(addask(x),sp[th],th));
+}
+
 void *parallel(void *arg)
 {
     int num = *(int *) arg;
@@ -2083,8 +2089,10 @@ void *parallel(void *arg)
 	if (parallel_exit_flag)
 	    goto exit;
 
-	para_output[num] = prove_all(para_input[num], sp[num], num);
+	printf("start thread %d\n", num);
+	para_output[num] = query_thread(para_input[num], num);
 	mt_enqueue(num);
+	printf("stop thread %d\n", num);
 	if (mt_queue_pt == mt_queue_num) {
 	    pthread_mutex_lock(&mutex);
 	    pthread_cond_signal(&mt_cond_main);

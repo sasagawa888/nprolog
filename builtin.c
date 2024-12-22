@@ -459,6 +459,11 @@ int b_ask(int arglist, int rest, int th)
 	}
 	x2 = reverse(x2);
 
+	// if multi-thread mode unify variables and return YES.
+	if(thread_flag){
+		return(YES);
+	}
+
 	if (child_flag) {
 	    bridge_flag = 1;
 	}
@@ -498,8 +503,8 @@ int b_ask(int arglist, int rest, int th)
 	    return (NO);
 	} else
 	    goto loop;
-    }
     return (NO);
+	}
 }
 
 
