@@ -439,7 +439,7 @@ int o_cons(int x, int y)
 
 int b_ask(int arglist, int rest, int th)
 {
-    int n, x1, x2;
+    int n, x1, x2, x3;
     char c;
 
     n = length(arglist);
@@ -461,6 +461,11 @@ int b_ask(int arglist, int rest, int th)
 
 	// if multi-thread mode unify variables and return YES.
 	if(thread_flag && th != 0){
+		while(!nullp(x2)){
+			x3 = convert_to_variant(car(x2),th);
+			unify(x3,deref(x3,th),0);
+			x2 = cdr(x2);
+		}
 		return(YES);
 	}
 
