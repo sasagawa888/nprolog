@@ -460,7 +460,7 @@ int b_ask(int arglist, int rest, int th)
 	x2 = reverse(x2);
 
 	// if multi-thread mode unify variables and return YES.
-	if(thread_flag){
+	if(thread_flag && th != 0){
 		return(YES);
 	}
 

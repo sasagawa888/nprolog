@@ -638,9 +638,11 @@ int prove(int goal, int bindings, int rest, int th)
 	    clause = car(clauses);
 	    clauses = cdr(clauses);
 	    varlis = GET_VAR(clause);
+		pthread_mutex_lock(&mutex1);
 	    assign_variant(varlis, th);
 	    clause1 = walpha_conversion(clause, th);
 	    release_variant(varlis);
+		pthread_mutex_unlock(&mutex1);
 
 	    // case of predicate
 	    if (predicatep(clause1) || user_operation_p(clause1)) {

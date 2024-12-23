@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <pthread.h>
 #include "npl.h"
 
 
@@ -65,10 +66,12 @@ int freshcell(void)
 {
     int res;
 
+    pthread_mutex_lock(&mutex1); 
     res = hp;
     hp = GET_CDR(hp);
     SET_CDR(res, 0);
     fc--;
+    pthread_mutex_unlock(&mutex1);
     return (res);
 }
 
