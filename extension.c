@@ -2089,10 +2089,10 @@ void *parallel(void *arg)
 	if (parallel_exit_flag)
 	    goto exit;
 
-	printf("start thread %d\n", num);
+	//printf("start thread %d\n", num);
 	para_output[num] = query_thread(para_input[num], num);
 	mt_enqueue(num);
-	printf("stop thread %d\n", num);
+	//printf("stop thread %d\n", num);
 	if (mt_queue_pt == mt_queue_num) {
 	    pthread_mutex_lock(&mutex);
 	    pthread_cond_signal(&mt_cond_main);
@@ -2192,7 +2192,7 @@ int b_mt_close(int arglist, int rest, int th)
 
 int b_mt_and(int arglist, int rest, int th)
 {
-    int n, arg1, i, j;
+    int n, arg1, i, j, pred;
 
     n = length(arglist);
     if (n == 1) {
@@ -2203,7 +2203,8 @@ int b_mt_and(int arglist, int rest, int th)
 
 	i = 0;
 	while (!nullp(arg1)) {
-	    eval_para(car(arg1));
+		pred = convert_to_variable(car(arg1),th);
+	    eval_para(pred);
 	    arg1 = cdr(arg1);
 	    i++;
 	}

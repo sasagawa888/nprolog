@@ -463,7 +463,7 @@ int b_ask(int arglist, int rest, int th)
 	if(thread_flag && th != 0){
 		while(!nullp(x2)){
 			x3 = convert_to_variant(car(x2),th);
-			unify(x3,deref(x3,th),0);
+			unify(x3,deref(car(x2),th),0);
 			x2 = cdr(x2);
 		}
 		return(YES);

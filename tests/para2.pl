@@ -1,5 +1,7 @@
 % multi-thread parallel example
 
+:- mt_create(2).
+
 para(X) :- list50(Y),psort(Y,X).
 
 psort([Pivot|Rest], Sorted) :-
