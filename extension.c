@@ -2089,10 +2089,8 @@ void *parallel(void *arg)
 	if (parallel_exit_flag)
 	    goto exit;
 
-	//printf("start thread %d\n", num);
 	para_output[num] = query_thread(para_input[num], num);
 	mt_enqueue(num);
-	//printf("stop thread %d\n", num);
 	if (mt_queue_pt == mt_queue_num) {
 	    pthread_mutex_lock(&mutex);
 	    pthread_cond_signal(&mt_cond_main);
@@ -2135,11 +2133,6 @@ void exit_para(void)
 	pthread_mutex_unlock(&mutex);
     }
 
-}
-
-int get_para_output(int n)
-{
-    return (para_output[n]);
 }
 
 
