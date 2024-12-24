@@ -2209,7 +2209,6 @@ int b_mt_and(int arglist, int rest, int th)
 
 
 	i = 0;
-	parallel_flag = 1;
 	while (!nullp(arg1)) {
 	    eval_para(car(arg1));
 	    arg1 = cdr(arg1);
@@ -2219,7 +2218,10 @@ int b_mt_and(int arglist, int rest, int th)
 	pthread_mutex_lock(&mutex);
 	pthread_cond_wait(&mt_cond_main, &mutex);
 	pthread_mutex_unlock(&mutex);
-	parallel_flag = 0;
+	
+	//while(parallel_flag){
+	//	usleep(100);
+	//}
 
 	// receive result from each thread
 	for (j = 0; j < i; j++) {
