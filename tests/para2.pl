@@ -1,15 +1,15 @@
 % multi-thread parallel example
 
-:- mt_create(2).
+%:- mt_create(2).
 
-para(X) :- list500(Y),psort(Y,X).
+para(X) :- list50(Y),psort(Y,X).
 
 psort([Pivot|Rest], Sorted) :-
     partition(Pivot, Rest, Left, Right), 
     mt_and([qsort(Left, SortedLeft), qsort(Right, SortedRight)]),       
     append(SortedLeft, [Pivot|SortedRight], Sorted). 
 
-seq(X) :- list500(Y),qsort(Y,X).
+seq(X) :- list50(Y),qsort(Y,X).
 
 qsort([], []).
 qsort([Pivot|Rest], Sorted) :-
