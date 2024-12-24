@@ -2033,9 +2033,9 @@ int b_dp_resume(int arglist, int rest, int th)
 // multi thread parallel functions 
 void mt_enqueue(int n)
 {
-    mt_queue[mt_queue_pt] = n;
+	pthread_mutex_lock(&mutex);
+	mt_queue[mt_queue_pt] = n;
     mt_queue_pt++;
-    pthread_mutex_lock(&mutex);
     pthread_cond_signal(&mt_cond_queue);
     pthread_mutex_unlock(&mutex);
 }
@@ -2142,13 +2142,6 @@ int get_para_output(int n)
     return (para_output[n]);
 }
 
-int wait_para(void)
-{
-    pthread_mutex_lock(&mutex);
-    pthread_cond_wait(&mt_cond_main, &mutex);
-    pthread_mutex_unlock(&mutex);
-    return (0);
-}
 
 int b_mt_create(int arglist, int rest, int th)
 {
@@ -2219,9 +2212,6 @@ int b_mt_and(int arglist, int rest, int th)
 	pthread_cond_wait(&mt_cond_main, &mutex);
 	pthread_mutex_unlock(&mutex);
 	
-	//while(parallel_flag){
-	//	usleep(100);
-	//}
 
 	// receive result from each thread
 	for (j = 0; j < i; j++) {
