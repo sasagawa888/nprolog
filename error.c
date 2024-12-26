@@ -321,6 +321,11 @@ void error(int errnum, char *fun, int arg)
 	child_busy_flag = 0;
     }
 
+	if(thread_flag){
+		exit_para();
+		init_para();
+	}
+
     if (init_flag) {
 	init_flag = 0;
 	longjmp(buf, 2);
