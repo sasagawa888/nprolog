@@ -2154,6 +2154,27 @@ int copy_heap(int x)
 }
 
 
+int copy_work(int x, int th)
+{
+    if (nullp(x))
+	return (NIL);
+    else if (IS_ALPHA(x))
+	return (alpha_to_variable(x));
+    else if (singlep(x))
+	return (x);
+    else if (numberp(x))
+	return (x);
+    else if (stringp(x))
+	return (x);
+    else if (listp(x))
+	return (wlistcons(copy_work(car(x),th), copy_work(cdr(x),th),th));
+    else
+	return (wcons(copy_work(car(x),th), copy_work(cdr(x),th),th));
+
+    return (x);
+}
+
+
 
 // v_001(vairant) -> _v001(atom-variable)
 int alpha_to_variable(int x)

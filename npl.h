@@ -997,6 +997,7 @@ int convert_to_variant(int x, int th);
 int convert_to_variable(int x, int th);
 int copy_heap(int x);
 int copy_term(int x);
+int copy_work(int x, int th);
 int copy_variable(int x);
 int ctrl_to_number(char c);
 int c_lang_p(int x);
