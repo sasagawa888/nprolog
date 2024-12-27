@@ -1105,7 +1105,7 @@ generate execution
 */
 jump_gen_exec :-
     n_get_execute(X),
-    write('int body;'),nl,
+    write('int body,th; th=0;'),nl,
     jump_gen_exec1(X).
 
 jump_gen_exec1([]).
