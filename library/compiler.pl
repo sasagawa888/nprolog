@@ -400,7 +400,7 @@ jump_gen_a_pred5((Head :- Body)) :-
 jump_gen_a_pred5(P) :-
 	n_property(P,predicate),
     functor(P,_,0),
-    write('return(Jexec_all(rest,Jget_sp(th)th));'),nl.
+    write('return(Jexec_all(rest,Jget_sp(th),th));'),nl.
 
 % predicate
 jump_gen_a_pred5(P) :-

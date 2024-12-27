@@ -2246,7 +2246,7 @@ int b_mt_or(int arglist, int rest, int th)
 	pthread_mutex_unlock(&mutex);
 
 	// receive result from each thread
-	for (j = 0; j < i; j++) {
+	for (j = 1; j <= i; j++) {
 	    if (para_output[j] == YES)
 		goto succ;
 	}
@@ -2255,7 +2255,7 @@ int b_mt_or(int arglist, int rest, int th)
       succ:
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "mt_and ", arglist);
+    error(ARITY_ERR, "mt_or ", arglist);
     return (NO);
 }
 
