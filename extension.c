@@ -2151,8 +2151,8 @@ int b_mt_create(int arglist, int rest, int th)
 	    error(NOT_INT, "mt-create", arg1);
 	if (GET_INT(arg1) > THREADSIZE)
 	    error(WRONG_ARGS, "mt-create", arg1);
-	if (thread_flag)
-	    error(WRONG_ARGS, "mt-create", arg1);
+
+	if(thread_flag) return(NO);
 
 	mt_queue_num = GET_INT(arg1);
 	thread_num = mt_queue_num;
