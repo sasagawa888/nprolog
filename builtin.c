@@ -448,6 +448,7 @@ int b_ask(int arglist, int rest, int th)
 	if (child_flag)
 	    memset(bridge, 0, sizeof(bridge));
 	if (nullp(x1) || has_no_value_p(x1, th)) {
+		if(thread_flag) proof[0] = proof[0] + proof[th];
 	    return (prove_all(rest, sp[th], th));
 	    // ignore singleton e.g. X=X
 	}
