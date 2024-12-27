@@ -327,10 +327,6 @@ static inline int Jset_var(int x, int y) {
 }
 
 
-static inline int Jaddtail_body(int x, int y) {
-    return f2[ADDTAIL_BODY_IDX](x, y);
-}
-
 static inline int Jnth(int x, int y) {
     return f2[NTH_IDX](x, y);
 }
@@ -398,6 +394,11 @@ static inline int Jwcons(int x, int y, int th) {
 
 static inline int Jwlist2(int x, int y, int th) {
     return f3[WLIST2_IDX](x, y,th);
+}
+
+
+static inline int Jaddtail_body(int x, int y, int th) {
+    return f3[ADDTAIL_BODY_IDX](x, y, th);
 }
 
 

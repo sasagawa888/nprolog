@@ -2091,7 +2091,10 @@ void *parallel(void *arg)
 
 	para_output[num] = query_thread(para_input[num], num);
 	mt_enqueue(num);
-	if (mt_queue_pt == mt_queue_num) {
+	pthread_mutex_lock(&mutex);
+	active_thread--;
+	pthread_mutex_unlock(&mutex);
+	if (active_thread == 0) {
 	    pthread_mutex_lock(&mutex);
 	    pthread_cond_signal(&mt_cond_main);
 	    pthread_mutex_unlock(&mutex);
@@ -2202,13 +2205,14 @@ int b_mt_and(int arglist, int rest, int th)
 	    i++;
 	}
 
+	active_thread = i;
 	pthread_mutex_lock(&mutex);
 	pthread_cond_wait(&mt_cond_main, &mutex);
 	pthread_mutex_unlock(&mutex);
 	
 
 	// receive result from each thread
-	for (j = 0; j < i; j++) {
+	for (j = 1; j <= i; j++) {
 	    if (para_output[j] == NO)
 		return (NO);
 	}
@@ -2231,17 +2235,15 @@ int b_mt_or(int arglist, int rest, int th)
 
 
 	i = 0;
-	parallel_flag = 1;
 	while (!nullp(arg1)) {
 	    eval_para(car(arg1));
 	    arg1 = cdr(arg1);
 	    i++;
 	}
-
+	active_thread = i;
 	pthread_mutex_lock(&mutex);
 	pthread_cond_wait(&mt_cond_main, &mutex);
 	pthread_mutex_unlock(&mutex);
-	parallel_flag = 0;
 
 	// receive result from each thread
 	for (j = 0; j < i; j++) {
