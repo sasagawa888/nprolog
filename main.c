@@ -550,7 +550,7 @@ int prove_all(int goals, int bindings, int th)
 	    return (prove(cadr(goals), bindings, caddr(goals), th));
 	} else {
 	    if (prove_all(before_cut(goals), bindings, th) == YES) {
-		res = prove_all(after_cut(goals), sp[0], th);
+		res = prove_all(after_cut(goals), sp[th], th);
 		if (res == YES)
 		    return (YES);
 		else if (res == NO)
