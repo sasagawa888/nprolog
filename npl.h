@@ -661,7 +661,7 @@ double getETime(void);
 int readc(void);
 
 int absolute(int x);
-int addask(int x);
+int addask(int x, int th);
 int addatom(char *name, int property, int index);
 int addtail(int x, int y);
 int addtail_body(int x, int y,int th);

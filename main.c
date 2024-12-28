@@ -84,11 +84,11 @@ int big_pt0 = 0;		// pointer of temporaly bignum
 int big_pt1 = BIGNUM_PARMA;	// pointer of parmanent bignum
 
 //flag
-int repl_flag = 1;		//for editable REPL read_line 1=on, 0=off
+int repl_flag = 1;		    //for editable REPL read_line 1=on, 0=off
 int trace_flag = FULL;		//for debugger
-int open_flag = 0;		//for error 0=not int reading file, 1=in reading file 
-int gbc_flag = 0;		// 0=not display massage 1=display message
-int simp_flag = 1;		//for bignum 1=if bignum become more simple, simplify, 0=not
+int open_flag = 0;		    //for error 0=not int reading file, 1=in reading file 
+int gbc_flag = 0;		    // 0=not display massage 1=display message
+int simp_flag = 1;		    //for bignum 1=if bignum become more simple, simplify, 0=not
 int assert_flag = 0;		// 0=asserta, 1=assertz
 int debug_flag = OFF;		// 0=normal mode, 1=debug mode
 int fskip_flag = OFF;		// for debugger f command
@@ -96,11 +96,11 @@ int qskip_flag = OFF;		// for debugger q command
 int sskip_flag = OFF;		// for debugger s command 
 int xskip_flag = OFF;		// for debugger x command
 int semiskip_flag = OFF;	//for debugger ; command
-int sexp_flag = 0;		// for debug 0=normal, 1=print data as S expression like LISP
+int sexp_flag = 0;		    // for debug 0=normal, 1=print data as S expression like LISP
 int arguments_flag = 1;		//1= 1,2,3 -> (1,2,3) 0= 1,2,3 -> 1,2,3
 int quoted_flag = 1;		// 0=not print ' 1=print '
 int ignore_flag = 0;		// 0=infix notation 2+2 1=prefix notation +(2,2)
-int link_flag = 0;		// 0=not-link, 1=linked
+int link_flag = 0;		    // 0=not-link, 1=linked
 int listing_flag = 0;		//for print clause, 0=normal, 1=format print
 int colon_sets_calling_context_flag = 1;	//1=true, 0=false
 int prefix_flag = 0;		//for parser 0=not prefix, 1=prefix
@@ -109,21 +109,21 @@ int fileerr_flag = YES;		//fileerrors/2 YES=normal. NO=ignore file-errors
 int exist_flag = YES;		//existerrors/2 YES=normal, NO=ignore existance_errors
 int bridge_flag = 0;		//for string_term/2 0=normal, 1=readparse from bridge
 int ctrl_c_flag = 0;		//for ctrl_c  to stop prove
-int init_flag = 1;		//for halt
+int init_flag = 1;		    //for halt
 int script_flag = 0;		// script mode, 0=not scriplt-mode, 1=script-mode.
-int check_flag = 0;		// for n_error/2 error check
-int break_flag = 0;		// for break/0 0=normal,1=break.
+int check_flag = 0;		    // for n_error/2 error check
+int break_flag = 0;		    // for break/0 0=normal,1=break.
 int parallel_exit_flag = 0;	/* To exit parallel threads */
 int process_flag = 0;		/* when invoke as child process, flag is 1 */
 int thread_flag = 0;		/* when invoke as multi thread, flag is 1 */
-int child_flag = 0;		/* when invoke as network child, flag is 1 */
+int child_flag = 0;		    /* when invoke as network child, flag is 1 */
 int connect_flag = 0;		/* when child listen, connect_flag is 1 */
 int receiver_exit_flag = 0;	/* TO exit child TCP/IP receiver */
 int child_busy_flag = 0;	/* while executing in child, child_busy_flag is 1 */
 int parent_flag = 0;		/* while comunicating child, parent_flag = 1 */
-int pause_flag = 0;		/* while pause in child, pause_flag = 1 */
+int pause_flag = 0;		    /* while pause in child, pause_flag = 1 */
 int shutdown_flag = 0;		/* when receive dp_close, shutdown_flag = 1 */
-int active_thread = 0;		/* for mt_and/1 mt_or/1 */
+int active_thread = 0;      /* for mt_and/1 mt_or/1 */
 
 //stream
 int standard_input;
@@ -440,7 +440,7 @@ void query(int x, int th)
 	error(NOT_CALLABLE, "?- ", x);
 
     variables[th] = listreverse(unique(varslist(x)));
-    res = prove_all(addask(x), sp[th], th);
+    res = prove_all(addask(x,th), sp[th], th);
     if (!child_flag) {
 	ESCRST;
 	print(res);
@@ -489,7 +489,7 @@ void query_break(int x, int th)
 
     variables_save[th] = variables[th];
     variables[th] = listreverse(unique(varslist(x)));
-    res = prove_all(addask(x), sp[th], th);
+    res = prove_all(addask(x,th), sp[th], th);
     variables[th] = variables_save[th];
     ESCRST;
     print(res);
@@ -520,9 +520,9 @@ int list_to_ope(int x)
     return (NIL);
 }
 
-int addask(int x)
+int addask(int x, int th)
 {
-    return (addtail_body(makeatom("%ask", SYS), x, 0));
+    return (addtail_body(makeatom("%ask", SYS), x, th));
 }
 
 
@@ -533,8 +533,7 @@ int addtail_body(int x, int y, int th)
     else if (!conjunctionp(y))
 	return (wlist3(AND, y, x, th));
     else
-	return (wlist3
-		(car(y), cadr(y), addtail_body(x, caddr(y), th), th));
+	return (wlist3(car(y), cadr(y), addtail_body(x, caddr(y),th), th));
 }
 
 
@@ -639,11 +638,11 @@ int prove(int goal, int bindings, int rest, int th)
 	    clause = car(clauses);
 	    clauses = cdr(clauses);
 	    varlis = GET_VAR(clause);
-	    pthread_mutex_lock(&mutex1);
+		pthread_mutex_lock(&mutex1);
 	    assign_variant(varlis, th);
 	    clause1 = walpha_conversion(clause, th);
 	    release_variant(varlis);
-	    pthread_mutex_unlock(&mutex1);
+		pthread_mutex_unlock(&mutex1);
 
 	    // case of predicate
 	    if (predicatep(clause1) || user_operation_p(clause1)) {
@@ -664,7 +663,7 @@ int prove(int goal, int bindings, int rest, int th)
 	    // case of clause
 	    else {
 		if (unify(goal, (cadr(clause1)), th) == YES) {
-		    clause1 = addtail_body(rest, caddr(clause1), th);
+		    clause1 = addtail_body(rest, caddr(clause1),th);
 		    nest++;
 		    if ((res = prove_all(clause1, sp[th], th)) == YES) {
 			nest--;
@@ -712,8 +711,7 @@ int prove(int goal, int bindings, int rest, int th)
 	    return (prove(goal, bindings, rest, th));
 	} else
 	    if ((res =
-		 prove_all(addtail_body(rest, cadr(goal), th), bindings,
-			   th))
+		 prove_all(addtail_body(rest, cadr(goal),th), bindings, th))
 		== YES)
 	    return (YES);
 	else {
@@ -722,8 +720,8 @@ int prove(int goal, int bindings, int rest, int th)
 		return (NO);
 	    }
 	    unbind(bindings, th);
-	    if (prove_all
-		(addtail_body(rest, caddr(goal), th), bindings, th) == YES)
+	    if (prove_all(addtail_body(rest, caddr(goal),th), bindings, th) ==
+		YES)
 		return (YES);
 	    else {
 		unbind(bindings, th);
