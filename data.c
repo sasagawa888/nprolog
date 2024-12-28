@@ -202,20 +202,16 @@ int atom_length(int addr)
 	if (c == '\\') {
 	    n++;
 	    pos = pos + 2;
-	}
-	else if (isUni2(c)) {
+	} else if (isUni2(c)) {
 	    n++;
 	    pos = pos + 2;
-	}
-	else if (isUni3(c)) {
+	} else if (isUni3(c)) {
 	    n++;
 	    pos = pos + 3;
-	}
-	else if (isUni4(c)) {
+	} else if (isUni4(c)) {
 	    n++;
 	    pos = pos + 4;
-	}
-	else {
+	} else {
 	    n++;
 	    pos++;
 	}
@@ -231,7 +227,7 @@ int string_length(int addr)
     char str[STRSIZE], c;
     int pos, n;
 
-	strcpy(str, GET_NAME(addr));
+    strcpy(str, GET_NAME(addr));
     if (strlen(GET_NAME(addr)) == 2 && str[0] == '\\')
 	return (1);
 
@@ -242,20 +238,16 @@ int string_length(int addr)
 	if (c == '\\') {
 	    n++;
 	    pos = pos + 2;
-	}
-	else if (isUni2(c)) {
+	} else if (isUni2(c)) {
 	    n++;
 	    pos = pos + 2;
-	}
-	else if (isUni3(c)) {
+	} else if (isUni3(c)) {
 	    n++;
 	    pos = pos + 3;
-	}
-	else if (isUni4(c)) {
+	} else if (isUni4(c)) {
 	    n++;
 	    pos = pos + 4;
-	}
-	else {
+	} else {
 	    n++;
 	    pos++;
 	}
@@ -400,7 +392,7 @@ int list8(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8)
 
 
 int list9(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
-      int x9)
+	  int x9)
 {
     return (cons
 	    (x1,
@@ -416,7 +408,7 @@ int list9(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
 
 
 int list10(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
-       int x9, int x10)
+	   int x9, int x10)
 {
     return (cons
 	    (x1,
@@ -498,7 +490,7 @@ int wlist7(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int th)
 
 
 int wlist8(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
-       int th)
+	   int th)
 {
     return (wcons
 	    (x1,
@@ -535,7 +527,7 @@ int wlist9(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
 
 
 int wlist10(int x1, int x2, int x3, int x4, int x5, int x6, int x7, int x8,
-	int x9, int x10, int th)
+	    int x9, int x10, int th)
 {
     return (wcons
 	    (x1,
@@ -2167,9 +2159,10 @@ int copy_work(int x, int th)
     else if (stringp(x))
 	return (x);
     else if (listp(x))
-	return (wlistcons(copy_work(car(x),th), copy_work(cdr(x),th),th));
+	return (wlistcons
+		(copy_work(car(x), th), copy_work(cdr(x), th), th));
     else
-	return (wcons(copy_work(car(x),th), copy_work(cdr(x),th),th));
+	return (wcons(copy_work(car(x), th), copy_work(cdr(x), th), th));
 
     return (x);
 }
@@ -2248,8 +2241,7 @@ void ucs4_to_utf8(int n, char *p)
 
     if (n <= 0x7f) {
 	*p = (char) n;
-    }
-    else if (n <= 0x07ff) {
+    } else if (n <= 0x07ff) {
 	x = UNI2MSK1 & n;
 	x = x >> 6;
 	x = UNI2ADD1 | x;
@@ -2258,8 +2250,7 @@ void ucs4_to_utf8(int n, char *p)
 	*p = (char) x;
 	p++;
 	*p = (char) y;
-    }
-    else if (n <= 0xffff) {
+    } else if (n <= 0xffff) {
 	x = UNI3MSK1 & n;
 	x = x >> 12;
 	x = UNI3ADD1 | x;
@@ -2273,8 +2264,7 @@ void ucs4_to_utf8(int n, char *p)
 	*p = (char) y;
 	p++;
 	*p = (char) z;
-    }
-    else if (n < 0x1fffff) {
+    } else if (n < 0x1fffff) {
 	w = UNI4MSK1 & n;
 	w = w >> 18;
 	w = UNI4ADD1 | w;
@@ -2293,8 +2283,7 @@ void ucs4_to_utf8(int n, char *p)
 	*p = (char) y;
 	p++;
 	*p = (char) z;
-    }
-    else {
+    } else {
 	error(OUT_OF_RANGE, "Unicode->UTF-8", NIL);
     }
     p++;

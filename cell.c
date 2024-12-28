@@ -66,7 +66,7 @@ int freshcell(void)
 {
     int res;
 
-    pthread_mutex_lock(&mutex1); 
+    pthread_mutex_lock(&mutex1);
     res = hp;
     hp = GET_CDR(hp);
     SET_CDR(res, 0);

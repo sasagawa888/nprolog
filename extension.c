@@ -2033,8 +2033,8 @@ int b_dp_resume(int arglist, int rest, int th)
 // multi thread parallel functions 
 void mt_enqueue(int n)
 {
-	pthread_mutex_lock(&mutex);
-	mt_queue[mt_queue_pt] = n;
+    pthread_mutex_lock(&mutex);
+    mt_queue[mt_queue_pt] = n;
     mt_queue_pt++;
     pthread_cond_signal(&mt_cond_queue);
     pthread_mutex_unlock(&mutex);
@@ -2056,7 +2056,7 @@ int mt_dequeue(int arg)
 	mt_queue[i] = mt_queue[i + 1];
     }
     pthread_mutex_lock(&mutex);
-    para_input[num] = copy_work(convert_to_variable(arg, num),num);
+    para_input[num] = copy_work(convert_to_variable(arg, num), num);
     para_output[num] = NIL;
     pthread_cond_signal(&mt_cond_para[num]);
     pthread_mutex_unlock(&mutex);
@@ -2074,8 +2074,8 @@ int eval_para(int arg)
 
 int query_thread(int x, int th)
 {
-	variables[th] = listreverse(unique(varslist(x)));
-	return(prove_all(addask(x),sp[th],th));
+    variables[th] = listreverse(unique(varslist(x)));
+    return (prove_all(addask(x), sp[th], th));
 }
 
 void *parallel(void *arg)
@@ -2152,7 +2152,8 @@ int b_mt_create(int arglist, int rest, int th)
 	if (GET_INT(arg1) > THREADSIZE)
 	    error(WRONG_ARGS, "mt-create", arg1);
 
-	if(thread_flag) return(NO);
+	if (thread_flag)
+	    return (NO);
 
 	mt_queue_num = GET_INT(arg1);
 	thread_num = mt_queue_num;
@@ -2199,7 +2200,7 @@ int b_mt_and(int arglist, int rest, int th)
 
 	i = 0;
 	while (!nullp(arg1)) {
-		pred = convert_to_variable(car(arg1),th);
+	    pred = convert_to_variable(car(arg1), th);
 	    eval_para(pred);
 	    arg1 = cdr(arg1);
 	    i++;
@@ -2209,7 +2210,7 @@ int b_mt_and(int arglist, int rest, int th)
 	pthread_mutex_lock(&mutex);
 	pthread_cond_wait(&mt_cond_main, &mutex);
 	pthread_mutex_unlock(&mutex);
-	
+
 
 	// receive result from each thread
 	for (j = 1; j <= i; j++) {

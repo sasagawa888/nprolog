@@ -4,8 +4,8 @@
 #include "npl.h"
 
 
-typedef void (*tpred)(char *, int (*pred)(int, int));
-typedef void (*tuser)(char *, int (*user)(int, int), int weight, int spec);
+typedef void (*tpred)(char *, int(*pred)(int, int));
+typedef void (*tuser)(char *, int(*user)(int, int), int weight, int spec);
 
 void dynamic_link(int x)
 {

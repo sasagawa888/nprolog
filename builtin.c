@@ -448,7 +448,8 @@ int b_ask(int arglist, int rest, int th)
 	if (child_flag)
 	    memset(bridge, 0, sizeof(bridge));
 	if (nullp(x1) || has_no_value_p(x1, th)) {
-		if(thread_flag) proof[0] = proof[0] + proof[th];
+	    if (thread_flag)
+		proof[0] = proof[0] + proof[th];
 	    return (prove_all(rest, sp[th], th));
 	    // ignore singleton e.g. X=X
 	}
@@ -461,14 +462,14 @@ int b_ask(int arglist, int rest, int th)
 	x2 = reverse(x2);
 
 	// if multi-thread mode unify variables and return YES.
-	if(thread_flag && th != 0){
-		while(!nullp(x2)){
-			x3 = convert_to_variant(car(x2),th);
-			unify(x3,copy_work(deref(car(x2),th),0),0);
-			x2 = cdr(x2);
-		}
-		proof[0] = proof[0] + proof[th];
-		return(YES);
+	if (thread_flag && th != 0) {
+	    while (!nullp(x2)) {
+		x3 = convert_to_variant(car(x2), th);
+		unify(x3, copy_work(deref(car(x2), th), 0), 0);
+		x2 = cdr(x2);
+	    }
+	    proof[0] = proof[0] + proof[th];
+	    return (YES);
 	}
 
 	if (child_flag) {
@@ -510,8 +511,8 @@ int b_ask(int arglist, int rest, int th)
 	    return (NO);
 	} else
 	    goto loop;
-    return (NO);
-	}
+	return (NO);
+    }
 }
 
 
@@ -2483,7 +2484,7 @@ int b_call(int arglist, int rest, int th)
 	if (atom_constant_p(arg1))
 	    arg1 = makeatom(GET_NAME(arg1), PRED);
 
-	return (prove_all(addtail_body(rest, arg1,th), sp[th], th));
+	return (prove_all(addtail_body(rest, arg1, th), sp[th], th));
     }
     error(ARITY_ERR, "call ", arglist);
     return (NO);
@@ -3556,7 +3557,7 @@ int b_ifthen(int arglist, int rest, int th)
 	    error(INSTANTATION_ERR, "ifthen ", arg2);
 
 	if (prove_all(arg1, sp[th], th) == YES) {
-	    return (prove_all(addtail_body(rest, arg2,th), sp[th], th));
+	    return (prove_all(addtail_body(rest, arg2, th), sp[th], th));
 	} else {
 	    unbind(save1, th);
 	    return (NO);
@@ -3588,10 +3589,10 @@ int b_ifthenelse(int arglist, int rest, int th)
 
 	save = sp[th];
 	if (prove_all(arg1, sp[th], th) == YES) {
-	    return (prove_all(addtail_body(rest, arg2,th), sp[th], th));
+	    return (prove_all(addtail_body(rest, arg2, th), sp[th], th));
 	} else {
 	    unbind(save, th);
-	    return (prove_all(addtail_body(rest, arg3,th), sp[th], th));
+	    return (prove_all(addtail_body(rest, arg3, th), sp[th], th));
 	}
     }
     error(ARITY_ERR, "ifthenelse ", arglist);
@@ -5144,7 +5145,8 @@ int b_bagof(int arglist, int rest, int th)
 	free = get_free(arg2);
 	nonfree = get_nonfree(vars, free, arg1);
 	goal = get_goal(arg2);
-	goal = addtail_body(list2(makesys("%bagofhelper"), arg1), goal,th);
+	goal =
+	    addtail_body(list2(makesys("%bagofhelper"), arg1), goal, th);
 	bag_list = NIL;
 	nonfree_list = nonfree;
 	prove_all(goal, sp[th], th);
@@ -5183,7 +5185,8 @@ int b_setof(int arglist, int rest, int th)
 	free = get_free(arg2);
 	nonfree = get_nonfree(vars, free, arg1);
 	goal = get_goal(arg2);
-	goal = addtail_body(list2(makesys("%bagofhelper"), arg1), goal,th);
+	goal =
+	    addtail_body(list2(makesys("%bagofhelper"), arg1), goal, th);
 	bag_list = NIL;
 	nonfree_list = nonfree;
 	prove_all(goal, sp[th], th);
@@ -5218,7 +5221,8 @@ int b_findall(int arglist, int rest, int th)
 	save1 = wp[th];
 	save2 = sp[th];
 	goal = get_goal(arg2);
-	goal = addtail_body(list2(makesys("%bagofhelper"), arg1), goal,th);
+	goal =
+	    addtail_body(list2(makesys("%bagofhelper"), arg1), goal, th);
 	bag_list = NIL;
 	nonfree_list = NIL;
 	prove_all(goal, sp[th], th);
