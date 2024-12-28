@@ -2153,7 +2153,7 @@ int b_mt_create(int arglist, int rest, int th)
 	    error(WRONG_ARGS, "mt-create", arg1);
 
 	if (thread_flag)
-	    return (NO);
+	    return (YES);
 
 	mt_queue_num = GET_INT(arg1);
 	thread_num = mt_queue_num;

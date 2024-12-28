@@ -1,6 +1,6 @@
 % 10-queens program in parallel  
 
-:- mt_create(2);
+:- mt_create(2).
 %parallel 10queens
 para :- mt_and([test1,test2]).
 
