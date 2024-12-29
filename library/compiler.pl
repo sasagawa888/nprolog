@@ -1520,7 +1520,6 @@ jump_tail_recursive(Head,Body) :-
     functor(Last,Pred2,Arity2),
     Pred1 == Pred2,
     Arity1 == Arity2,
-    jump_independence(Head,Last),
     jump_self_independence(Head).
 
 jump_last_body((_,Body),Last) :-
@@ -1536,34 +1535,6 @@ jump_unidirectory((G,Gs)) :-
     n_property(G,builtin),
     jump_unidirectory(Gs).
 jump_unidirectory(_) :- fail.
-
-
-% foo([varA|varB])<=> foo(varA) false (depend)
-% foo([varA|varB])<=> foo(varC) true (independ)
-jump_independence(Pred1,Pred2) :-
-    pred1 =.. [_|Args1],
-    pred2 =.. [_|Args2],
-    jump_independence1(Args1,Args2).
-
-jump_independence1([],Y).
-jump_independence1([X|Xs],Y) :-
-    atomic(X),
-    jump_independence1(Xs,Y).
-jump_independence1([X|Xs],Y) :-
-    list(X),
-    jump_independence2(X,Y),
-    jump_independence1(Xs,Y).
-
-jump_independence2([],Y).
-jump_independence2(X,Y) :-
-    atomic(X).
-jump_independence2([X|Xs],Y) :-
-    atomic(X),
-    not(member(X,Y)),
-    jump_independence2(Xs,Y).
-jump_independence2([[X|Xs]|Ys],Y) :-
-    jump_independence2([X|Xs],Y),
-    jump_independence2(Ys,Y).
 
 
 % foo([varX|varL],[varX|1]) -> no
