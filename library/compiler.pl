@@ -1545,6 +1545,7 @@ jump_unidirectory(Head,Body) :-
     jump_unidirectory1(A1,Body).
 
 % body elements are all builtin predicate but last
+% if arguments of head depends on left-side of is/2, it is not unidirectory.
 jump_unidirectory1(A,(G1,G2)) :-
     n_property(G1,builtin),
     n_property(G2,predicate).
