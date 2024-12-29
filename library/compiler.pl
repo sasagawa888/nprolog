@@ -1506,7 +1506,7 @@ jump_type1_deterministic([],1).
 jump_type1_deterministic([],0) :- fail.
 jump_type1_deterministic([(Head :- Body)|Cs],_) :-
     jump_tail_recursive(Head,Body),
-    jump_unidirectory(Body),
+    jump_unidirectory(Head,Body),
     jump_type1_deterministic(Cs,1).
 jump_type1_deterministic([C|Cs],Flag) :-
     n_property(C,predicate),
@@ -1539,15 +1539,24 @@ jump_flatten([X|Xs],Y) :-
     jump_flatten(Xs,X2),
     append(X1,X2,Y).
 
+jump_unidirectory(Head,Body) :-
+    Head =.. [_|A],
+    jump_flatten(A,A1),
+    jump_unidirectory1(A1,Body).
 
 % body elements are all builtin predicate but last
-jump_unidirectory((G1,G2)) :-
+jump_unidirectory1(A,(G1,G2)) :-
     n_property(G1,builtin),
     n_property(G2,predicate).
-jump_unidirectory((G,Gs)) :-
+jump_unidirectory1(A,((X is Y),Gs)) :-
+    member(X,A),
+    write(user_output,X),nl,
+    write(user_output,A),nl,
+    !,fail.
+jump_unidirectory1(A,(G,Gs)) :-
     n_property(G,builtin),
-    jump_unidirectory(Gs).
-jump_unidirectory(_) :- fail.
+    jump_unidirectory1(A,Gs).
+jump_unidirectory1(A,_) :- fail.
 
 
 % foo([varX|varL],[varX|1]) -> no
