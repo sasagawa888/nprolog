@@ -1527,6 +1527,19 @@ jump_last_body((_,Body),Last) :-
 jump_last_body(Body,Body).
 
 
+jump_flatten([],[]).
+jump_flatten([X|Xs],[X|Y]) :-
+    atomic(X),
+    jump_flatten(Xs,Y).
+jump_flatten([X|Y],[X,Y]) :-
+    atomic(X),
+    atomic(Y).
+jump_flatten([X|Xs],Y) :-
+    jump_flatten(X,X1),
+    jump_flatten(Xs,X2),
+    append(X1,X2,Y).
+
+
 % body elements are all builtin predicate but last
 jump_unidirectory((G1,G2)) :-
     n_property(G1,builtin),
