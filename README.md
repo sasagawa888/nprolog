@@ -353,6 +353,6 @@ randi(n)    generate random integer (n >= x >= 0)
 random generate random float (1 >= x >= 0)
 ```
 
-# Distributed Parallelism
-N-Prolog supports distributed parallelism. It enables parallel execution across multiple machines connected via TCP/IP.
-For more details, please refer to PARA.md.
+# Parallelism
+N-Prolog supports distributed parallelism. It enables parallel execution across multiple machines connected via TCP/IP. And it supports multi thread parallelism.
+For more details, please refer to PARA1.md and PARA2.md.
