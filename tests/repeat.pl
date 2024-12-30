@@ -1,4 +1,3 @@
-
 repeat0.
 repeat0 :- repeat0.
 
