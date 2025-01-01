@@ -2089,7 +2089,14 @@ void *parallel(void *arg)
 	if (parallel_exit_flag)
 	    goto exit;
 
+	int ret = setjmp(buf3);
+	if (ret == 0){
 	para_output[num] = query_thread(para_input[num], num);
+	}
+	else if(ret == 1){
+		para_output[num] = NO;
+		ret = 0;
+	}
 	mt_enqueue(num);
 	pthread_mutex_lock(&mutex);
 	active_thread--;

@@ -37,6 +37,7 @@ token stok = { GO, OTHER };
 jmp_buf buf;			// for REPL halt and error handling.
 jmp_buf buf1;			// for n_error/2 error check.
 jmp_buf buf2;			// for break/0 end_of_file/0 exit break
+__thread jmp_buf buf3;
 int variables[THREADSIZE];
 int variables_save[THREADSIZE];
 int end_of_file_answer = NIL;

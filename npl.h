@@ -206,6 +206,7 @@ extern token stok;
 extern jmp_buf buf;
 extern jmp_buf buf1;
 extern jmp_buf buf2;
+extern __thread jmp_buf buf3;
 extern int cell_hash_table[HASHTBSIZE];
 extern int record_hash_table[HASHTBSIZE][RECORDMAX]; 
 extern int record_pt;       
