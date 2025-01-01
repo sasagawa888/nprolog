@@ -321,16 +321,16 @@ void error(int errnum, char *fun, int arg)
 	child_busy_flag = 0;
     }
 
-    if (thread_flag) {
-	exit_para();
-	init_para();
-    }
-
+    
     if (init_flag) {
 	init_flag = 0;
 	longjmp(buf, 2);
     } else if (break_flag) {
 	longjmp(buf2, 2);
+    } else if (thread_flag) {
+	ctrl_c_flag = 1;
+	printf("Error in thread. halt and restart N-Prolog\n");
+	longjmp(buf,1);
     } else
 	longjmp(buf, 1);
 }
