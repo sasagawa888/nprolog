@@ -429,7 +429,7 @@ void query(int x, int th)
     }
     //[file1,file2] -> consult(file1),consult(file2).
     if (listp(x))
-	x = list_to_ope(x);
+	x = list_to_ope(x,th);
 
     if (atomp(x) && !builtinp(x) && !compiledp(x))
 	x = makepred(GET_NAME(x));
@@ -476,7 +476,7 @@ void query_break(int x, int th)
     }
     //[file1,file2] -> consult(file1),consult(file2).
     if (listp(x))
-	x = list_to_ope(x);
+	x = list_to_ope(x,th);
 
     if (atomp(x) && !builtinp(x) && !compiledp(x))
 	x = makepred(GET_NAME(x));
@@ -499,7 +499,7 @@ void query_break(int x, int th)
 }
 
 
-int list_to_ope(int x)
+int list_to_ope(int x, int th)
 {
     if (nullp(x))
 	error(SYNTAX_ERR, "?-", x, 0);
@@ -512,11 +512,11 @@ int list_to_ope(int x)
 	if (atomp(car(x)))
 	    return (list3(makeatom(",", OPE),
 			  list2(makeatom("consult", SYS), car(x)),
-			  list_to_ope(cdr(x))));
+			  list_to_ope(cdr(x),th)));
 	else if (caar(x) == makeatom("-", OPE))
 	    return (list3(makeatom(",", OPE),
 			  list2(makeatom("reconsult", SYS), cadr(car(x))),
-			  list_to_ope(cdr(x))));
+			  list_to_ope(cdr(x),th)));
     }
     return (NIL);
 }

@@ -1629,7 +1629,7 @@ int b_consult(int arglist, int rest, int th)
 	execute_list = NIL;
 	while (1) {
 	  skip:
-	    clause = parser(NIL, NIL, NIL, NIL, 0, 0);
+	    clause = parser(NIL, NIL, NIL, NIL, 0, 0, th);
 	    if (clause == FEND)
 		break;
 
@@ -1703,7 +1703,7 @@ int b_reconsult(int arglist, int rest, int th)
 	execute_list = NIL;
 	while (1) {
 	  skip:
-	    clause = parser(NIL, NIL, NIL, NIL, 0, 0);
+	    clause = parser(NIL, NIL, NIL, NIL, 0, 0, th);
 	    if (clause == FEND)
 		break;
 
