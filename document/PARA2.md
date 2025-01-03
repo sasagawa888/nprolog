@@ -1,6 +1,4 @@
 # Multi-thread Parallel
-under construction
-
 This is a multi-thread parallel extension for N-Prolog. N-Prolog is oriented toward computational experiments and aims to explore the potential of Prolog in medium-scale parallel computation with distributed parallel.
 
 
@@ -83,3 +81,6 @@ enqueue [2,3,4,1]
 queue_pt = 4
 
 [thread](para4.png)
+
+# Constraint
+Bignums are not thread-safe in multithreading due to memory limitations.
