@@ -319,7 +319,7 @@ int main(int argc, char *argv[])
 		init_repl();
 		printf("?- ");
 		fflush(stdout);
-		input = variable_to_call(readparse());
+		input = variable_to_call(readparse(0));
 		if (!repl_flag)
 		    clear_input_buffer();
 		query(input, 0);
@@ -1018,7 +1018,7 @@ void debugger(int goal, int bindings, int rest)
 
 	printf("- ");
 	fflush(stdout);
-	read = variable_to_call(readparse());
+	read = variable_to_call(readparse(0));
 	if (read == FEND)
 	    goto break_exit;
 	query(read, 0);
@@ -1097,7 +1097,7 @@ void debugger(int goal, int bindings, int rest)
     case '@':
 	printf("?- ");
 	fflush(stdout);
-	read = variable_to_call(readparse());
+	read = variable_to_call(readparse(0));
 	query(read, 0);
 	fflush(stdout);
 	break;

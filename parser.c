@@ -5,14 +5,14 @@
 
 //#define CHECK   1 //for parser debug check
 
-int readparse(void)
+int readparse(int th)
 {
     int res;
 
     paren_nest = 0;
-    res = parser(NIL, NIL, NIL, NIL, 0, 0, 0);
+    res = parser(NIL, NIL, NIL, NIL, 0, 0, th);
     if (paren_nest != 0)
-	error(SYNTAX_ERR, "extra paren ", NIL,0);
+	error(SYNTAX_ERR, "extra paren ", NIL,th);
 
     return (res);
 }

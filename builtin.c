@@ -1038,7 +1038,7 @@ int b_read(int arglist, int rest, int th)
 	    input_stream = GET_CAR(arg1);
 	repl_flag = 0;
 
-	temp = variable_to_call(readparse());
+	temp = variable_to_call(readparse(th));
 	res = unify(arg2, temp, th);
 	input_stream = save1;
 	repl_flag = save2;
@@ -3329,7 +3329,7 @@ int b_string_term(int arglist, int rest, int th)
 	    bridge[l + 1] = 0;
 	    read_string_term(0);	//initilize 
 	    bridge_flag = 1;
-	    res = readparse();
+	    res = readparse(th);
 	    bridge_flag = 0;
 	    if (unify(arg2, res, th) == YES)
 		return (prove_all(rest, sp[th], th));
@@ -3758,7 +3758,7 @@ int b_break(int arglist, int rest, int th)
 	    while (1) {
 		printf("?= ");
 		fflush(stdout);
-		query_break(variable_to_call(readparse()), th);
+		query_break(variable_to_call(readparse(th)), th);
 		fflush(stdout);
 	    }
 	} else if (ret == 1) {

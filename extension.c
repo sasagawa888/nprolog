@@ -1197,7 +1197,7 @@ int str_to_pred(int x)
     memset(bridge, '\0', sizeof(bridge));
     strcpy(bridge, GET_NAME(x));
     read_string_term(0);
-    res = variable_to_call(readparse());
+    res = variable_to_call(readparse(0));
     memset(bridge, 0, sizeof(bridge));
     bridge_flag = 0;
     return (res);

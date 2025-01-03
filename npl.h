@@ -1206,7 +1206,7 @@ int prove(int goal, int bindings, int rest, int th);
 int prove_all(int goals, int bindings, int th);
 int quoted_option_p(int x);
 int quotient(int x, int y, int th);
-int readparse(void);
+int readparse(int th);
 int readitem(int th);
 int readitem1(int th);
 int readcurl(int th);
