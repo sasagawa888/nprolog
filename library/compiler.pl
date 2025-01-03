@@ -1551,8 +1551,6 @@ jump_unidirectory1(A,(G1,G2)) :-
     n_property(G2,predicate).
 jump_unidirectory1(A,((X is Y),Gs)) :-
     member(X,A),
-    write(user_output,X),nl,
-    write(user_output,A),nl,
     !,fail.
 jump_unidirectory1(A,(G,Gs)) :-
     n_property(G,builtin),
