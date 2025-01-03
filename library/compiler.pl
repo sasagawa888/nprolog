@@ -849,39 +849,39 @@ jump_eval_form(X mod Y) :-
 jump_eval_form(sin(X)) :-
 	write('Jsin('),
     jump_eval_form(X),
-    write(')').
+    write(',th)').
 jump_eval_form(asin(X)) :-
 	write('Jasin('),
     jump_eval_form(X),
-    write(')').
+    write(',th)').
 jump_eval_form(cos(X)) :-
 	write('Jcos('),
     jump_eval_form(X),
-    write(')').
+    write(',th)').
 jump_eval_form(acos(X)) :-
 	write('Jacos('),
     jump_eval_form(X),
-    write(')').
+    write(',th)').
 jump_eval_form(tan(X)) :-
 	write('Jtan('),
     jump_eval_form(X),
-    write(')').
+    write(',th)').
 jump_eval_form(atan(X)) :-
 	write('Jatan('),
     jump_eval_form(X),
-    write(')').
+    write(',th)').
 jump_eval_form(exp(X)) :-
 	write('Jexp('),
     jump_eval_form(X),
-    write(')').
+    write(',th)').
 jump_eval_form(log(X)) :-
 	write('Jlog('),
     jump_eval_form(X),
-    write(')').
+    write(',th)').
 jump_eval_form(ln(X)) :-
 	write('Jln('),
     jump_eval_form(X),
-    write(')').
+    write(',th)').
 
 jump_eval_form(X << Y) :-
 	write('Jleftshift('),

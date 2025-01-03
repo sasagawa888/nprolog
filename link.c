@@ -61,18 +61,6 @@ void dynamic_link(int x)
     init_f1(MAKEINT_IDX, (tpred) makeint);
     init_f1(LENGTH_IDX, (tpred) length);
     init_f1(GET_INT_IDX, (tpred) get_int);
-    init_f1(SIN_IDX, (tpred) f_sin);
-    init_f1(ASIN_IDX, (tpred) f_asin);
-    init_f1(COS_IDX, (tpred) f_cos);
-    init_f1(ACOS_IDX, (tpred) f_acos);
-    init_f1(TAN_IDX, (tpred) f_tan);
-    init_f1(ATAN_IDX, (tpred) f_atan);
-    init_f1(EXP_IDX, (tpred) f_exp);
-    init_f1(LOG_IDX, (tpred) f_log);
-    init_f1(LN_IDX, (tpred) f_ln);
-    init_f1(LIST1_IDX, (tpred) list1);
-    init_f1(RANDOM_IDX, (tpred) f_random);
-    init_f1(RANDI_IDX, (tpred) f_randi);
     init_f1(LISTP_IDX, (tpred) listp);
     init_f1(STRUCTUREP_IDX, (tpred) structurep);
     init_f1(VARIABLEP_IDX, (tpred) variablep);
@@ -119,6 +107,18 @@ void dynamic_link(int x)
     init_f2(SET_WP_IDX, (tpred) set_wp);
     init_f2(DEREF_IDX, (tpred) deref);
     init_f2(WLIST1_IDX, (tpred) wlist1);
+    init_f2(SIN_IDX, (tpred) f_sin);
+    init_f2(ASIN_IDX, (tpred) f_asin);
+    init_f2(COS_IDX, (tpred) f_cos);
+    init_f2(ACOS_IDX, (tpred) f_acos);
+    init_f2(TAN_IDX, (tpred) f_tan);
+    init_f2(ATAN_IDX, (tpred) f_atan);
+    init_f2(EXP_IDX, (tpred) f_exp);
+    init_f2(LOG_IDX, (tpred) f_log);
+    init_f2(LN_IDX, (tpred) f_ln);
+    init_f2(LIST1_IDX, (tpred) list1);
+    init_f2(RANDOM_IDX, (tpred) f_random);
+    init_f2(RANDI_IDX, (tpred) f_randi);
 
     //argument-3
     init_f3(LIST3_IDX, (tpred) list3);

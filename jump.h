@@ -122,42 +122,6 @@ static inline int Jget_int(int x) {
     return f1[GET_INT_IDX](x);
 }
 
-static inline int Jsin(int x) {
-    return f1[SIN_IDX](x);
-}
-
-static inline int Jasin(int x) {
-    return f1[ASIN_IDX](x);
-}
-
-static inline int Jcos(int x) {
-    return f1[COS_IDX](x);
-}
-
-static inline int Jacos(int x) {
-    return f1[ACOS_IDX](x);
-}
-
-static inline int Jtan(int x) {
-    return f1[TAN_IDX](x);
-}
-
-static inline int Jatan(int x) {
-    return f1[ATAN_IDX](x);
-}
-
-static inline int Jexp(int x) {
-    return f1[EXP_IDX](x);
-}
-
-static inline int Jlog(int x) {
-    return f1[LOG_IDX](x);
-}
-
-static inline int Jln(int x) {
-    return f1[LN_IDX](x);
-}
-
 static inline int Jlist1(int x) {
     return f1[LIST1_IDX](x);
 }
@@ -351,6 +315,43 @@ static inline int Jderef(int x, int th) {
 
 static inline int Jwlist1(int x, int th) {
     return f2[WLIST1_IDX](x,th);
+}
+
+
+static inline int Jsin(int x, int th) {
+    return f2[SIN_IDX](x,th);
+}
+
+static inline int Jasin(int x, int th) {
+    return f2[ASIN_IDX](x,th);
+}
+
+static inline int Jcos(int x, int th) {
+    return f2[COS_IDX](x,th);
+}
+
+static inline int Jacos(int x, int th) {
+    return f2[ACOS_IDX](x,th);
+}
+
+static inline int Jtan(int x, int th) {
+    return f2[TAN_IDX](x,th);
+}
+
+static inline int Jatan(int x, int th) {
+    return f2[ATAN_IDX](x,th);
+}
+
+static inline int Jexp(int x, int th) {
+    return f2[EXP_IDX](x,th);
+}
+
+static inline int Jlog(int x, int th) {
+    return f2[LOG_IDX](x,th);
+}
+
+static inline int Jln(int x, int th) {
+    return f2[LN_IDX](x,th);
 }
 
 
