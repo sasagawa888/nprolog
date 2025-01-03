@@ -809,43 +809,43 @@ jump_eval_form(X + Y) :-
     jump_eval_form(X),
     write(','),
     jump_eval_form(Y),
-    write(')').
+    write(',th)').
 jump_eval_form(X - Y) :-
 	write('Jminus('),
     jump_eval_form(X),
     write(','),
     jump_eval_form(Y),
-    write(')').
+    write(',th)').
 jump_eval_form(X * Y) :-
 	write('Jmult('),
     jump_eval_form(X),
     write(','),
     jump_eval_form(Y),
-    write(')').
+    write(',th)').
 jump_eval_form(X / Y) :-
 	write('Jdivide('),
     jump_eval_form(X),
     write(','),
     jump_eval_form(Y),
-    write(')').
+    write(',th)').
 jump_eval_form(X//Y) :-
 	write('Jdiv('),
     jump_eval_form(X),
     write(','),
     jump_eval_form(Y),
-    write(')').
+    write(',th)').
 jump_eval_form(X ^ Y) :-
 	write('Jexpt('),
     jump_eval_form(X),
     write(','),
     jump_eval_form(Y),
-    write(')').
+    write(',th)').
 jump_eval_form(X mod Y) :-
 	write('Jmod('),
     jump_eval_form(X),
     write(','),
     jump_eval_form(Y),
-    write(')').
+    write(',th)').
 jump_eval_form(sin(X)) :-
 	write('Jsin('),
     jump_eval_form(X),
@@ -888,39 +888,39 @@ jump_eval_form(X << Y) :-
     jump_eval_form(X),
     write(','),
     jump_eval_form(Y),
-    write(')').
+    write(',th)').
 jump_eval_form(X >> Y) :-
 	write('Jrightshift('),
     jump_eval_form(X),
     write(','),
     jump_eval_form(Y),
-    write(')').
+    write(',th)').
 
 jump_eval_form(X /\ Y) :-
 	write('Jlogicaland('),
     jump_eval_form(X),
     write(','),
     jump_eval_form(Y),
-    write(')').
+    write(',th)').
 jump_eval_form(X \/ Y) :-
 	  write('Jlogicalor('),
     jump_eval_form(X),
     write(','),
     jump_eval_form(Y),
-    write(')').
+    write(',th)').
 jump_eval_form(\ X) :-
-	  write('Jcomplement('),
+	write('Jcomplement('),
     jump_eval_form(X),
-    write(')').
+    write(',th)').
 jump_eval_form(randi(X)) :-
-	  write('Jrandi('),
+	write('Jrandi('),
     jump_eval_form(X),
-    write(')').
+    write(',th)').
 jump_eval_form(round(X,Y)) :-
 	  write('Jround('),
     jump_eval_form(X),
     jump_eval_form(Y),
-    write(')').
+    write(',th)').
 
 
 /*

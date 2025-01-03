@@ -126,8 +126,8 @@ static inline int Jlist1(int x) {
     return f1[LIST1_IDX](x);
 }
 
-static inline int Jrandom(int x) {
-    return f1[RANDOM_IDX](x);
+static inline int Jrandom(int th) {
+    return f1[RANDOM_IDX](th);
 }
 
 static inline int Jrandi(int x) {
@@ -172,29 +172,6 @@ static inline int Jcons(int x, int y) {
     return f2[CONS_IDX](x, y);
 }
 
-static inline int Jplus(int x, int y) {
-    return f2[PLUS_IDX](x, y);
-}
-
-static inline int Jminus(int x, int y) {
-    return f2[MINUS_IDX](x, y);
-}
-
-static inline int Jmult(int x, int y) {
-    return f2[MULT_IDX](x, y);
-}
-
-static inline int Jdivide(int x, int y) {
-    return f2[DIVIDE_IDX](x, y);
-}
-
-static inline int Jremainder(int x, int y) {
-    return f2[REMAINDER_IDX](x, y);
-}
-
-static inline int Jquotient(int x, int y) {
-    return f2[QUOTIENT_IDX](x, y);
-}
 
 static inline int Jeqp(int x, int y) {
     return f2[EQP_IDX](x, y);
@@ -226,34 +203,6 @@ static inline int Jeqgreaterp(int x, int y) {
 }
 
 
-static inline int Jmod(int x, int y) {
-    return f2[MOD_IDX](x, y);
-}
-
-static inline int Jexpt(int x, int y) {
-    return f2[EXPT_IDX](x, y);
-}
-
-static inline int Jsqrt(int x, int y) {
-    return f2[SQRT_IDX](x, y);
-}
-
-static inline int Jleftshift(int x, int y) {
-    return f2[LEFTSHIFT_IDX](x, y);
-}
-
-static inline int Jrightshift(int x, int y) {
-    return f2[RIGHTSHIFT_IDX](x, y);
-}
-
-static inline int Jlogicaland(int x, int y) {
-    return f2[LOGICALAND_IDX](x, y);
-}
-
-static inline int Jlogicalor(int x, int y) {
-    return f2[LOGICALOR_IDX](x, y);
-}
-
 static inline int Jlistcons(int x, int y) {
     return f2[LISTCONS_IDX](x, y);
 }
@@ -270,9 +219,6 @@ static inline int Jset_cdr(int x, int y) {
     return f2[SET_CDR_IDX](x, y);
 }
 
-static inline int Jcomplement(int x, int y) {
-    return f2[COMPLEMENT_IDX](x, y);
-}
 
 static inline int Jset_aux(int x, int y) {
     return f2[SET_AUX_IDX](x, y);
@@ -293,11 +239,6 @@ static inline int Jset_var(int x, int y) {
 
 static inline int Jnth(int x, int y) {
     return f2[NTH_IDX](x, y);
-}
-
-
-static inline int Jround(int x, int y) {
-    return f2[ROUND_IDX](x, y);
 }
 
 static inline int Junbind(int x, int th) {
@@ -400,6 +341,67 @@ static inline int Jwlist2(int x, int y, int th) {
 
 static inline int Jaddtail_body(int x, int y, int th) {
     return f3[ADDTAIL_BODY_IDX](x, y, th);
+}
+
+static inline int Jplus(int x, int y, int th) {
+    return f3[PLUS_IDX](x, y, th);
+}
+
+static inline int Jminus(int x, int y, int th) {
+    return f3[MINUS_IDX](x, y, th);
+}
+
+static inline int Jmult(int x, int y, int th) {
+    return f3[MULT_IDX](x, y, th);
+}
+
+static inline int Jdivide(int x, int y, int th) {
+    return f3[DIVIDE_IDX](x, y, th);
+}
+
+static inline int Jremainder(int x, int y, int th) {
+    return f3[REMAINDER_IDX](x, y, th);
+}
+
+static inline int Jquotient(int x, int y, int th) {
+    return f3[QUOTIENT_IDX](x, y, th);
+}
+
+
+static inline int Jmod(int x, int y, int th) {
+    return f3[MOD_IDX](x, y, th);
+}
+
+static inline int Jexpt(int x, int y, int th) {
+    return f3[EXPT_IDX](x, y, th);
+}
+
+static inline int Jsqrt(int x, int y, int th) {
+    return f3[SQRT_IDX](x, y, th);
+}
+
+static inline int Jleftshift(int x, int y, int th) {
+    return f3[LEFTSHIFT_IDX](x, y, th);
+}
+
+static inline int Jrightshift(int x, int y, int th) {
+    return f3[RIGHTSHIFT_IDX](x, y, th);
+}
+
+static inline int Jlogicaland(int x, int y, int th) {
+    return f3[LOGICALAND_IDX](x, y, th);
+}
+
+static inline int Jlogicalor(int x, int y, int th) {
+    return f3[LOGICALOR_IDX](x, y, th);
+}
+
+static inline int Jcomplement(int x, int y, int th) {
+    return f3[COMPLEMENT_IDX](x, y, th);
+}
+
+static inline int Jround(int x, int y, int th) {
+    return f3[ROUND_IDX](x, y, th);
 }
 
 

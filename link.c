@@ -68,15 +68,10 @@ void dynamic_link(int x)
     init_f1(GET_WP_IDX, (tpred) get_wp);
     init_f1(INC_PROOF_IDX, (tpred) inc_proof);
     init_f1(MAKEVARIANT_IDX, (tpred) makevariant);
+    init_f1(RANDOM_IDX, (tpred) f_random);
 
     //argument-2 type
     init_f2(CONS_IDX, (tpred) cons);
-    init_f2(PLUS_IDX, (tpred) f_plus);
-    init_f2(MINUS_IDX, (tpred) f_minus);
-    init_f2(MULT_IDX, (tpred) f_mult);
-    init_f2(DIVIDE_IDX, (tpred) f_divide);
-    init_f2(REMAINDER_IDX, (tpred) s_remainder);
-    init_f2(QUOTIENT_IDX, (tpred) quotient);
     init_f2(EQP_IDX, (tpred) eqp);
     init_f2(EQUALP_IDX, (tpred) equalp);
     init_f2(NUMEQP_IDX, (tpred) numeqp);
@@ -84,24 +79,15 @@ void dynamic_link(int x)
     init_f2(EQSMALLERP_IDX, (tpred) eqsmallerp);
     init_f2(GREATERP_IDX, (tpred) greaterp);
     init_f2(EQGREATERP_IDX, (tpred) eqgreaterp);
-    init_f2(MOD_IDX, (tpred) f_mod);
-    init_f2(EXPT_IDX, (tpred) f_expt);
-    init_f2(SQRT_IDX, (tpred) f_sqrt);
-    init_f2(LEFTSHIFT_IDX, (tpred) f_leftshift);
-    init_f2(RIGHTSHIFT_IDX, (tpred) f_rightshift);
-    init_f2(LOGICALAND_IDX, (tpred) f_logicaland);
-    init_f2(LOGICALOR_IDX, (tpred) f_logicalor);
     init_f2(LISTCONS_IDX, (tpred) listcons);
     init_f2(LIST2_IDX, (tpred) list2);
     init_f2(SET_CAR_IDX, (tpred) set_car);
     init_f2(SET_CDR_IDX, (tpred) set_cdr);
-    init_f2(COMPLEMENT_IDX, (tpred) f_complement);
     init_f2(SET_AUX_IDX, (tpred) set_aux);
     init_f2(NOT_NUMEQP_IDX, (tpred) not_numeqp);
     init_f2(DIV_IDX, (tpred) f_div);
     init_f2(SET_VAR_IDX, (tpred) set_var);
     init_f2(NTH_IDX, (tpred) nth);
-    init_f2(ROUND_IDX, (tpred) f_round);
     init_f2(UNBIND_IDX, (tpred) unbind);
     init_f2(SET_SP_IDX, (tpred) set_sp);
     init_f2(SET_WP_IDX, (tpred) set_wp);
@@ -117,7 +103,6 @@ void dynamic_link(int x)
     init_f2(LOG_IDX, (tpred) f_log);
     init_f2(LN_IDX, (tpred) f_ln);
     init_f2(LIST1_IDX, (tpred) list1);
-    init_f2(RANDOM_IDX, (tpred) f_random);
     init_f2(RANDI_IDX, (tpred) f_randi);
 
     //argument-3
@@ -132,6 +117,21 @@ void dynamic_link(int x)
     init_f3(WCONS_IDX, (tpred) wcons);
     init_f3(WLIST2_IDX, (tpred) wlist2);
     init_f3(ADDTAIL_BODY_IDX, (tpred) addtail_body);
+    init_f3(PLUS_IDX, (tpred) f_plus);
+    init_f3(MINUS_IDX, (tpred) f_minus);
+    init_f3(MULT_IDX, (tpred) f_mult);
+    init_f3(DIVIDE_IDX, (tpred) f_divide);
+    init_f3(REMAINDER_IDX, (tpred) s_remainder);
+    init_f3(QUOTIENT_IDX, (tpred) quotient);
+    init_f3(MOD_IDX, (tpred) f_mod);
+    init_f3(EXPT_IDX, (tpred) f_expt);
+    init_f3(SQRT_IDX, (tpred) f_sqrt);
+    init_f3(LEFTSHIFT_IDX, (tpred) f_leftshift);
+    init_f3(RIGHTSHIFT_IDX, (tpred) f_rightshift);
+    init_f3(LOGICALAND_IDX, (tpred) f_logicaland);
+    init_f3(LOGICALOR_IDX, (tpred) f_logicalor);
+    init_f3(COMPLEMENT_IDX, (tpred) f_complement);
+    init_f3(ROUND_IDX, (tpred) f_round);
 
     //argument-1 string type
     init_f4(MAKECONST_IDX, (tpred) makeconst);
