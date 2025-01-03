@@ -461,7 +461,7 @@ int minus(int arg1, int arg2, int th)
 	    return (minus(arg1, exact_to_inexact(arg2),th));
 	}
     }
-    error(NOT_COMPUTABLE, "-", list2(arg1, arg2),0);
+    error(NOT_COMPUTABLE, "-", list2(arg1, arg2),th);
     return (UNDEF);
 }
 
@@ -572,7 +572,7 @@ int mult(int arg1, int arg2, int th)
 	   }
 	 */
     }
-    error(NOT_COMPUTABLE, "*", list2(arg1, arg2),0);
+    error(NOT_COMPUTABLE, "*", list2(arg1, arg2),th);
     return (UNDEF);
 }
 
@@ -653,7 +653,7 @@ int divide(int arg1, int arg2, int th)
 
 	}
     }
-    error(NOT_COMPUTABLE, "/", list2(arg1, arg2),0);
+    error(NOT_COMPUTABLE, "/", list2(arg1, arg2),th);
     return (UNDEF);
 }
 

@@ -2094,7 +2094,7 @@ void *parallel(void *arg)
 	para_output[num] = query_thread(para_input[num], num);
 	}
 	else if(ret == 1){
-		para_output[num] = NO;
+		para_output[num] = -1; // error
 		ret = 0;
 	}
 	mt_enqueue(num);
@@ -2223,6 +2223,9 @@ int b_mt_and(int arglist, int rest, int th)
 	for (j = 1; j <= i; j++) {
 	    if (para_output[j] == NO)
 		return (NO);
+		else if(para_output[j] == -1)
+		longjmp(buf, 1);
+
 	}
 
 	return (prove_all(rest, sp[th], th));
@@ -2257,6 +2260,9 @@ int b_mt_or(int arglist, int rest, int th)
 	for (j = 1; j <= i; j++) {
 	    if (para_output[j] == YES)
 		goto succ;
+		else if(para_output[j] == -1)
+		longjmp(buf, 1);
+
 	}
 	return (NO);
 
