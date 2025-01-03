@@ -584,7 +584,7 @@ int eval(int x, int th)
 	function = result[0];
 	arg1 = result[1];
 	arg2 = result[2];
-	return ((GET_SUBR(function)) (arg1, arg2, 0));
+	return ((GET_SUBR(function)) (arg1, arg2, th));
     }
     error(EVALUATION_ERR, "eval ", x,th);
     return (NIL);
@@ -972,7 +972,7 @@ int f_abs(int x, int th)
     if (!numberp(x))
 	error(NOT_NUM, "abs ", x,th);
 
-    return (absolute(x));
+    return (absolute(x,th));
 }
 
 int f_sin(int x, int th)

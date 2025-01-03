@@ -366,14 +366,8 @@ int plus(int arg1, int arg2, int th)
 	    return (plus(arg1, exact_to_inexact(arg2),th));
 
 	}
-	/*
-	   case VEC:
-	   switch(tag2){
-	   case VEC:   return(vec_plus(arg1,arg2));
-	   }
-	 */
     }
-    error(NOT_COMPUTABLE, "+", list2(arg1, arg2),th);
+    error(NOT_COMPUTABLE, "+ ", list2(arg1, arg2),th);
     return (UNDEF);
 }
 
@@ -461,7 +455,7 @@ int minus(int arg1, int arg2, int th)
 	    return (minus(arg1, exact_to_inexact(arg2),th));
 	}
     }
-    error(NOT_COMPUTABLE, "-", list2(arg1, arg2),th);
+    error(NOT_COMPUTABLE, "- ", list2(arg1, arg2),th);
     return (UNDEF);
 }
 
@@ -572,7 +566,7 @@ int mult(int arg1, int arg2, int th)
 	   }
 	 */
     }
-    error(NOT_COMPUTABLE, "*", list2(arg1, arg2),th);
+    error(NOT_COMPUTABLE, "* ", list2(arg1, arg2),th);
     return (UNDEF);
 }
 
@@ -653,7 +647,7 @@ int divide(int arg1, int arg2, int th)
 
 	}
     }
-    error(NOT_COMPUTABLE, "/", list2(arg1, arg2),th);
+    error(NOT_COMPUTABLE, "/ ", list2(arg1, arg2),th);
     return (UNDEF);
 }
 
@@ -680,7 +674,7 @@ int quotient(int x, int y, int th)
     else if (bignump(x) && bignump(y))
 	return (bigx_div(x, y));
     else
-	error(ILLEGAL_ARGS, "div", list2(x, y),th);
+	error(ILLEGAL_ARGS, "div ", list2(x, y),th);
 
     return (UNDEF);
 }
@@ -709,7 +703,7 @@ int s_remainder(int x, int y, int th)
     } else if (bignump(x) && bignump(y))
 	return (minus(x, mult(quotient(x, y,th), y, th),th));
 
-    error(ILLEGAL_ARGS, "remainder", cons(x, y),th);
+    error(ILLEGAL_ARGS, "remainder ", cons(x, y),th);
     return (UNDEF);
 }
 
@@ -775,7 +769,7 @@ int long_long_quotient(int x, int y)
 	return (makelong(q));
 }
 
-int absolute(int x)
+int absolute(int x, int th)
 {
     if (integerp(x))
 	return (makeint(abs(GET_INT(x))));
@@ -786,64 +780,6 @@ int absolute(int x)
     } else if (floatp(x)) {
 	return (makeflt(fabs(GET_FLT(x))));
     }
-    error(ILLEGAL_ARGS, "abs", x,0);
+    error(ILLEGAL_ARGS, "abs ", x,th);
     return (UNDEF);
 }
-
-int angle(int y, int x)
-{
-
-    if (positive_zerop(y) && positivep(x))
-	return (makeflt(0.0));
-    else if (negative_zerop(y) && positivep(x))
-	return (makeflt(-0.0));
-    else if (positivep(y) && positivep(x))
-	return (makeflt
-		(atan
-		 (GET_FLT(exact_to_inexact(y)) /
-		  GET_FLT(exact_to_inexact(x)))));
-    else if (positivep(y) && zerop(x))
-	return (makeflt(PI / 2));
-    else if (positivep(y) && negativep(x))
-	return (makeflt
-		(PI +
-		 atan(GET_FLT(exact_to_inexact(y)) /
-		      GET_FLT(exact_to_inexact(x)))));
-    else if (positive_zerop(y) && negativep(x))
-	return (makeflt(PI));
-    else if (negative_zerop(y) && negativep(x))
-	return (makeflt(-PI));
-    else if (negativep(y) && negativep(x))
-	return (makeflt
-		(-PI +
-		 atan(GET_FLT(exact_to_inexact(y)) /
-		      GET_FLT(exact_to_inexact(x)))));
-    else if (negativep(y) && zerop(x))
-	return (makeflt(-(PI / 2)));
-    else if (negativep(y) && positivep(x))
-	return (makeflt
-		(atan
-		 (GET_FLT(exact_to_inexact(y)) /
-		  GET_FLT(exact_to_inexact(x)))));
-    else if (zerop(y) && positivep(x))
-	return (makeflt(0.0));
-    else if (zerop(y) && negativep(x))
-	return (makeflt(PI));
-    else if (positive_zerop(y) && positive_zerop(x))
-	return (makeflt(+0.0));
-    else if (negative_zerop(y) && positive_zerop(x))
-	return (makeflt(-0.0));
-    else if (positive_zerop(y) && negative_zerop(x))
-	return (makeflt(PI));
-    else if (negative_zerop(y) && negative_zerop(x))
-	return (makeflt(-PI));
-    else if (positive_zerop(y) && zerop(x))
-	return (makeflt(PI / 2));
-    else if (negative_zerop(y) && zerop(x))
-	return (makeflt(-(PI / 2)));
-    else {
-	error(ILLEGAL_ARGS, "angle", list2(x, y),0);
-	return (UNDEF);
-    }
-}
-

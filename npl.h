@@ -661,7 +661,7 @@ static const int BIGNUM_PARMA = BIGSIZE * 9 / 10; //from 90% to 100% of bigcell 
 double getETime(void);
 int readc(void);
 
-int absolute(int x);
+int absolute(int x, int th);
 int addask(int x, int th);
 int addatom(char *name, int property, int index);
 int addtail(int x, int y);
@@ -675,7 +675,6 @@ int alpha_variable_p(int addr);
 int alpha_to_variable(int x);
 int alphabeticalp(int addr);
 int already_checked_p(int x);
-int angle(int y, int x);
 int anoymousp(int x);
 int anoymous_conversion(int x);
 int append(int x, int y);
