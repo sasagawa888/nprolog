@@ -5376,17 +5376,17 @@ int b_inc(int arglist, int rest, int th)
 	    error(LESS_THAN_ZERO, "inc ", arg2,th);
 
 	if (wide_variable_p(arg1)) {
-	    if (unify(arg1, minus(arg2, makeint(1)), th) == YES)
+	    if (unify(arg1, minus(arg2, makeint(1),th), th) == YES)
 		return (prove_all(rest, sp[th], th));
 	    else
 		return (NO);
 	} else if (wide_variable_p(arg2)) {
-	    if (unify(arg2, plus(arg1, makeint(1)), th) == YES)
+	    if (unify(arg2, plus(arg1, makeint(1),th), th) == YES)
 		return (prove_all(rest, sp[th], th));
 	    else
 		return (NO);
 	} else {
-	    if (unify(arg2, plus(arg1, makeint(1)), th) == YES)
+	    if (unify(arg2, plus(arg1, makeint(1),th), th) == YES)
 		return (prove_all(rest, sp[th], th));
 	    else
 		return (NO);
@@ -5422,17 +5422,17 @@ int b_dec(int arglist, int rest, int th)
 	    error(LESS_THAN_ZERO, "dec ", arg2,th);
 
 	if (wide_variable_p(arg1)) {
-	    if (unify(arg1, plus(arg2, makeint(1)), th) == YES)
+	    if (unify(arg1, plus(arg2, makeint(1), th),th) == YES)
 		return (prove_all(rest, sp[th], th));
 	    else
 		return (NO);
 	} else if (wide_variable_p(arg2)) {
-	    if (unify(arg2, minus(arg1, makeint(1)), th) == YES)
+	    if (unify(arg2, minus(arg1, makeint(1),th), th) == YES)
 		return (prove_all(rest, sp[th], th));
 	    else
 		return (NO);
 	} else {
-	    if (unify(arg2, minus(arg1, makeint(1)), th) == YES)
+	    if (unify(arg2, minus(arg1, makeint(1),th), th) == YES)
 		return (prove_all(rest, sp[th], th));
 	    else
 		return (NO);

@@ -279,7 +279,7 @@ int negative_zerop(int x)
 //-----------------------------------
 //basic operation
 
-int plus(int arg1, int arg2)
+int plus(int arg1, int arg2, int th)
 {
     int n, s, tag1, tag2;
     double x1, y1, x2, result;
@@ -321,7 +321,7 @@ int plus(int arg1, int arg2)
 	    return (bigx_plus
 		    (bigx_long_to_big(arg1), bigx_int_to_big(arg2)));
 	case FLTN:
-	    return (plus(exact_to_inexact(arg1), arg2));
+	    return (plus(exact_to_inexact(arg1), arg2,th));
 	case LONGN:
 	    return (bigx_plus
 		    (bigx_long_to_big(arg1), bigx_long_to_big(arg2)));
@@ -333,7 +333,7 @@ int plus(int arg1, int arg2)
 	case INTN:
 	    return (bigx_plus(arg1, bigx_int_to_big(arg2)));
 	case FLTN:
-	    return (plus(exact_to_inexact(arg1), arg2));
+	    return (plus(exact_to_inexact(arg1), arg2,th));
 	case LONGN:
 	    return (bigx_plus(arg1, bigx_long_to_big(arg2)));
 	case BIGX:
@@ -361,9 +361,9 @@ int plus(int arg1, int arg2)
 		return (makeflt(result));
 	    }
 	case LONGN:
-	    return (plus(arg1, exact_to_inexact(arg2)));
+	    return (plus(arg1, exact_to_inexact(arg2),th));
 	case BIGX:
-	    return (plus(arg1, exact_to_inexact(arg2)));
+	    return (plus(arg1, exact_to_inexact(arg2),th));
 
 	}
 	/*
@@ -373,12 +373,12 @@ int plus(int arg1, int arg2)
 	   }
 	 */
     }
-    error(NOT_COMPUTABLE, "+", list2(arg1, arg2),0);
+    error(NOT_COMPUTABLE, "+", list2(arg1, arg2),th);
     return (UNDEF);
 }
 
 
-int minus(int arg1, int arg2)
+int minus(int arg1, int arg2, int th)
 {
     int n, s, tag1, tag2;
     double x1, y1, x2;
@@ -420,7 +420,7 @@ int minus(int arg1, int arg2)
 	    return (bigx_minus
 		    (bigx_long_to_big(arg1), bigx_int_to_big(arg2)));
 	case FLTN:
-	    return (minus(exact_to_inexact(arg1), arg2));
+	    return (minus(exact_to_inexact(arg1), arg2,th));
 	case LONGN:
 	    return (bigx_minus
 		    (bigx_long_to_big(arg1), bigx_long_to_big(arg2)));
@@ -433,7 +433,7 @@ int minus(int arg1, int arg2)
 	case INTN:
 	    return (bigx_minus(arg1, bigx_int_to_big(arg2)));
 	case FLTN:
-	    return (minus(exact_to_inexact(arg1), arg2));
+	    return (minus(exact_to_inexact(arg1), arg2,th));
 	case LONGN:
 	    return (bigx_minus(arg1, bigx_long_to_big(arg2)));
 	case BIGX:
@@ -456,9 +456,9 @@ int minus(int arg1, int arg2)
 		return (makeflt(x1 - x2));
 	    }
 	case LONGN:
-	    return (minus(arg1, exact_to_inexact(arg2)));
+	    return (minus(arg1, exact_to_inexact(arg2),th));
 	case BIGX:
-	    return (minus(arg1, exact_to_inexact(arg2)));
+	    return (minus(arg1, exact_to_inexact(arg2),th));
 	}
     }
     error(NOT_COMPUTABLE, "-", list2(arg1, arg2),0);
@@ -466,7 +466,7 @@ int minus(int arg1, int arg2)
 }
 
 
-int mult(int arg1, int arg2)
+int mult(int arg1, int arg2, int th)
 {
     int n, s, tag1, tag2;
     long long int l, l1, l2;
@@ -519,7 +519,7 @@ int mult(int arg1, int arg2)
 	    else
 		return (arg2);	//int 0
 	case FLTN:
-	    return (mult(exact_to_inexact(arg1), arg2));
+	    return (mult(exact_to_inexact(arg1), arg2,th));
 	case LONGN:
 	    return (bigx_mult
 		    (bigx_long_to_big(arg1), bigx_long_to_big(arg2)));
@@ -532,7 +532,7 @@ int mult(int arg1, int arg2)
 	case INTN:
 	    return (bigx_mult_i(arg1, arg2));
 	case FLTN:
-	    return (mult(exact_to_inexact(arg1), arg2));
+	    return (mult(exact_to_inexact(arg1), arg2,th));
 	case LONGN:
 	    return (bigx_mult(arg1, bigx_long_to_big(arg2)));
 	case BIGX:
@@ -562,7 +562,7 @@ int mult(int arg1, int arg2)
 	    }
 	case LONGN:
 	case BIGX:
-	    return (mult(arg1, exact_to_inexact(arg2)));
+	    return (mult(arg1, exact_to_inexact(arg2),th));
 	}
 	/*
 	   case ARR:
@@ -576,7 +576,7 @@ int mult(int arg1, int arg2)
     return (UNDEF);
 }
 
-int divide(int arg1, int arg2)
+int divide(int arg1, int arg2, int th)
 {
     int n, s, tag1, tag2;
     double x1, y1, x2;
@@ -609,7 +609,7 @@ int divide(int arg1, int arg2)
 	case LONGN:
 	case BIGX:
 	    return (divide
-		    (exact_to_inexact(arg1), exact_to_inexact(arg2)));
+		    (exact_to_inexact(arg1), exact_to_inexact(arg2),th));
 	}
     case LONGN:
 	switch (tag2) {
@@ -617,9 +617,9 @@ int divide(int arg1, int arg2)
 	case LONGN:
 	case BIGX:
 	    return (divide
-		    (exact_to_inexact(arg1), exact_to_inexact(arg2)));
+		    (exact_to_inexact(arg1), exact_to_inexact(arg2),th));
 	case FLTN:
-	    return (divide(exact_to_inexact(arg1), arg2));
+	    return (divide(exact_to_inexact(arg1), arg2,th));
 	}
 
     case BIGX:
@@ -628,9 +628,9 @@ int divide(int arg1, int arg2)
 	case LONGN:
 	case BIGX:
 	    return (divide
-		    (exact_to_inexact(arg1), exact_to_inexact(arg2)));
+		    (exact_to_inexact(arg1), exact_to_inexact(arg2),th));
 	case FLTN:
-	    return (divide(exact_to_inexact(arg1), arg2));
+	    return (divide(exact_to_inexact(arg1), arg2,th));
 	}
     case FLTN:
 	switch (tag2) {
@@ -649,7 +649,7 @@ int divide(int arg1, int arg2)
 	    }
 	case LONGN:
 	case BIGX:
-	    return (divide(arg1, exact_to_inexact(arg2)));
+	    return (divide(arg1, exact_to_inexact(arg2),th));
 
 	}
     }
@@ -658,7 +658,7 @@ int divide(int arg1, int arg2)
 }
 
 
-int quotient(int x, int y)
+int quotient(int x, int y, int th)
 {
 
     if (integerp(x) && longnump(y))
@@ -680,12 +680,12 @@ int quotient(int x, int y)
     else if (bignump(x) && bignump(y))
 	return (bigx_div(x, y));
     else
-	error(ILLEGAL_ARGS, "div", list2(x, y),0);
+	error(ILLEGAL_ARGS, "div", list2(x, y),th);
 
     return (UNDEF);
 }
 
-int s_remainder(int x, int y)
+int s_remainder(int x, int y, int th)
 {
     int i;
 
@@ -705,11 +705,11 @@ int s_remainder(int x, int y)
 	return (bigx_remainder_i(x, y));
     else if (bignump(x) && longnump(y)) {
 	i = bigx_long_to_big(y);
-	return (minus(x, mult(quotient(x, i), i)));
+	return (minus(x, mult(quotient(x, i,th), i, th),th));
     } else if (bignump(x) && bignump(y))
-	return (minus(x, mult(quotient(x, y), y)));
+	return (minus(x, mult(quotient(x, y,th), y, th),th));
 
-    error(ILLEGAL_ARGS, "remainder", cons(x, y),0);
+    error(ILLEGAL_ARGS, "remainder", cons(x, y),th);
     return (UNDEF);
 }
 
@@ -847,17 +847,3 @@ int angle(int y, int x)
     }
 }
 
-
-int isqrt(int x)
-{
-    return (isqrt1(makeint(1), makeint(1), x));
-}
-
-int isqrt1(int s, int s2, int x)
-{
-    if (eqsmallerp(mult(s, s), x) && eqsmallerp(x, mult(s2, s2)))
-	return (s);
-    else
-	return (isqrt1
-		(quotient(plus(quotient(x, s), s), makeint(2)), s, x));
-}

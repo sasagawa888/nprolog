@@ -612,7 +612,7 @@ int f_plus(int x, int y, int th)
 	error(NOT_NUM, "+ ", x,th);
     if (!numberp(y))
 	error(NOT_NUM, "+ ", y,th);
-    return (plus(x, y));
+    return (plus(x, y, th));
 }
 
 int f_minus(int x, int y, int th)
@@ -630,9 +630,9 @@ int f_minus(int x, int y, int th)
     if (!numberp(y))
 	error(NOT_NUM, "- ", y,th);
     if (!nullp(y))
-	return (minus(x, y));
+	return (minus(x, y,th));
     else
-	return (mult(x, makeint(-1)));
+	return (mult(x, makeint(-1),th));
 }
 
 int f_mult(int x, int y, int th)
@@ -645,7 +645,7 @@ int f_mult(int x, int y, int th)
 	error(NOT_NUM, "* ", x,th);
     if (!numberp(y))
 	error(NOT_NUM, "* ", y,th);
-    return (mult(x, y));
+    return (mult(x, y,th));
 }
 
 int f_divide(int x, int y, int th)
@@ -659,8 +659,8 @@ int f_divide(int x, int y, int th)
     if (!numberp(y))
 	error(NOT_NUM, "/ ", y,th);
     if (zerop(y))
-	error(DIV_ZERO, "/", NIL,0);
-    return (exact_to_inexact(divide(x, y)));
+	error(DIV_ZERO, "/", NIL,th);
+    return (exact_to_inexact(divide(x, y,th)));
 }
 
 int f_div(int x, int y, int th)
@@ -678,7 +678,7 @@ int f_div(int x, int y, int th)
     if (zerop(y))
 	error(DIV_ZERO, "/", NIL,th);
 
-    q = quotient(x, y);
+    q = quotient(x, y, th);
     return (q);
 }
 
@@ -702,13 +702,13 @@ int f_mod(int x, int y, int th)
 	error(NOT_INT, "mod ", y,th);
 
     if ((positivep(x) && positivep(y)) || (negativep(x) && negativep(y)))
-	res = s_remainder(x, y);
+	res = s_remainder(x, y,th);
     else if ((positivep(x) && negativep(y)))
-	res = plus(y, s_remainder(x, y));
+	res = plus(y, s_remainder(x, y,th),th);
     else if (negativep(x) && positivep(y))
-	res = mult(makeint(-1), plus(y, s_remainder(x, y)));
+	res = mult(makeint(-1), plus(y, s_remainder(x, y,th),th),th);
     else
-	res = s_remainder(x, y);
+	res = s_remainder(x, y,th);
     return (res);
 }
 
@@ -739,7 +739,7 @@ int f_expt(int x, int y, int th)
 
     if ((integerp(x) || longnump(x) || bignump(x))
 	&& (integerp(y) && GET_INT(y) > 0))
-	return (expt(x, GET_INT(y)));
+	return (expt(x, GET_INT(y),th));
 
     if ((integerp(x) || floatp(x)) && (integerp(y) || floatp(y))) {
 
@@ -756,7 +756,7 @@ int f_expt(int x, int y, int th)
 	else if (GET_INT(x) == 0)
 	    return (x);
 	else if (GET_INT(x) == -1) {
-	    if (zerop(s_remainder(y, makeint(2))))
+	    if (zerop(s_remainder(y, makeint(2),th)))
 		return (makeint(1));
 	    else
 		return (x);
@@ -768,7 +768,7 @@ int f_expt(int x, int y, int th)
 	else if (GET_FLT(x) == 0.0)
 	    return (x);
 	else if (GET_FLT(x) == -1.0) {
-	    if (zerop(s_remainder(y, makeint(2))))
+	    if (zerop(s_remainder(y, makeint(2),th)))
 		return (makeflt(1.0));
 	    else
 		return (x);
@@ -818,7 +818,7 @@ int f_expt(int x, int y, int th)
 }
 
 //x is cell address, y is integer of C
-int expt(int x, int y)
+int expt(int x, int y, int th)
 {
     int res, p;
 
@@ -826,10 +826,10 @@ int expt(int x, int y)
     p = x;
     while (y > 0) {
 	if ((y % 2) == 0) {
-	    p = mult(p, p);
+	    p = mult(p, p,th);
 	    y = y / 2;
 	} else {
-	    res = mult(res, p);
+	    res = mult(res, p,th);
 	    y = y - 1;
 	}
     }

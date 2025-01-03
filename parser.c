@@ -185,7 +185,7 @@ parser(int operand, int operator, int weight, int spec, int terminal,
 #endif
 	temp1 = parser(NIL, NIL, w1 + 1, FY, 1, parsemode);
 	if (temp == makeatom("-", OPE) && numberp(temp1))
-	    temp2 = mult(temp1, makeint(-1));
+	    temp2 = mult(temp1, makeint(-1),0);
 	else
 	    temp2 = list2(temp, temp1);
 
