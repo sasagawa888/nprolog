@@ -90,7 +90,7 @@ int wcons(int car, int cdr, int th)
     addr = wp[th];
     wp[th]++;
     if (wp[th] >= wp_max[th]) {
-	error(RESOURCE_ERR, "wcons ", makeint(th));
+	error(RESOURCE_ERR, "wcons ", makeint(th),th);
     }
     SET_TAG(addr, STRUCT);
     SET_CAR(addr, car);
@@ -1854,7 +1854,7 @@ void unbind(int x, int th)
 	    SET_CAR(stack[i][th], UNBIND);
 	    SET_CDR(stack[i][th], UNBIND);
 	} else
-	    error(ILLEGAL_ARGS, "unbind", x);
+	    error(ILLEGAL_ARGS, "unbind", x, th);
     }
     sp[th] = x;
 }
@@ -1929,7 +1929,7 @@ int keyinsert(int x, int y)
     if (nullp(x))
 	return (list1(y));
     else if (!(length(car(x)) == 3 && eqlp(caar(x), makeope("-"))))
-	error(ILLEGAL_ARGS, "keysort ", car(x));
+	error(ILLEGAL_ARGS, "keysort ", car(x),0);
     else if (sortsmaller(cadr(y), cadr(car(x))))
 	return (listcons(y, x));
     else
@@ -2284,7 +2284,7 @@ void ucs4_to_utf8(int n, char *p)
 	p++;
 	*p = (char) z;
     } else {
-	error(OUT_OF_RANGE, "Unicode->UTF-8", NIL);
+	error(OUT_OF_RANGE, "Unicode->UTF-8", NIL,0);
     }
     p++;
     *p = NUL;

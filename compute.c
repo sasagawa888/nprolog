@@ -49,7 +49,7 @@ int exact_to_inexact(int x)
     default:
 	return (x);
     }
-    error(OUT_OF_RANGE, "exact_to_inexact", x);
+    error(OUT_OF_RANGE, "exact_to_inexact", x, 0);
     return (UNDEF);
 }
 
@@ -373,7 +373,7 @@ int plus(int arg1, int arg2)
 	   }
 	 */
     }
-    error(NOT_COMPUTABLE, "+", list2(arg1, arg2));
+    error(NOT_COMPUTABLE, "+", list2(arg1, arg2),0);
     return (UNDEF);
 }
 
@@ -461,7 +461,7 @@ int minus(int arg1, int arg2)
 	    return (minus(arg1, exact_to_inexact(arg2)));
 	}
     }
-    error(NOT_COMPUTABLE, "-", list2(arg1, arg2));
+    error(NOT_COMPUTABLE, "-", list2(arg1, arg2),0);
     return (UNDEF);
 }
 
@@ -572,7 +572,7 @@ int mult(int arg1, int arg2)
 	   }
 	 */
     }
-    error(NOT_COMPUTABLE, "*", list2(arg1, arg2));
+    error(NOT_COMPUTABLE, "*", list2(arg1, arg2),0);
     return (UNDEF);
 }
 
@@ -653,7 +653,7 @@ int divide(int arg1, int arg2)
 
 	}
     }
-    error(NOT_COMPUTABLE, "/", list2(arg1, arg2));
+    error(NOT_COMPUTABLE, "/", list2(arg1, arg2),0);
     return (UNDEF);
 }
 
@@ -680,7 +680,7 @@ int quotient(int x, int y)
     else if (bignump(x) && bignump(y))
 	return (bigx_div(x, y));
     else
-	error(ILLEGAL_ARGS, "div", list2(x, y));
+	error(ILLEGAL_ARGS, "div", list2(x, y),0);
 
     return (UNDEF);
 }
@@ -709,7 +709,7 @@ int s_remainder(int x, int y)
     } else if (bignump(x) && bignump(y))
 	return (minus(x, mult(quotient(x, y), y)));
 
-    error(ILLEGAL_ARGS, "remainder", cons(x, y));
+    error(ILLEGAL_ARGS, "remainder", cons(x, y),0);
     return (UNDEF);
 }
 
@@ -786,7 +786,7 @@ int absolute(int x)
     } else if (floatp(x)) {
 	return (makeflt(fabs(GET_FLT(x))));
     }
-    error(ILLEGAL_ARGS, "abs", x);
+    error(ILLEGAL_ARGS, "abs", x,0);
     return (UNDEF);
 }
 
@@ -842,7 +842,7 @@ int angle(int y, int x)
     else if (negative_zerop(y) && zerop(x))
 	return (makeflt(-(PI / 2)));
     else {
-	error(ILLEGAL_ARGS, "angle", list2(x, y));
+	error(ILLEGAL_ARGS, "angle", list2(x, y),0);
 	return (UNDEF);
     }
 }

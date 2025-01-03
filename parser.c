@@ -12,7 +12,7 @@ int readparse(void)
     paren_nest = 0;
     res = parser(NIL, NIL, NIL, NIL, 0, 0);
     if (paren_nest != 0)
-	error(SYNTAX_ERR, "extra paren ", NIL);
+	error(SYNTAX_ERR, "extra paren ", NIL,0);
 
     return (res);
 }
@@ -39,7 +39,7 @@ parser(int operand, int operator, int weight, int spec, int terminal,
     gettoken();
     if (stok.type == FILEEND) {	// end of file
 	if (operand != NIL || operator != NIL)
-	    error(SYNTAX_ERR, "expected period ", NIL);
+	    error(SYNTAX_ERR, "expected period ", NIL,0);
 	return (FEND);
     }
     if (terminal == 1
@@ -58,12 +58,12 @@ parser(int operand, int operator, int weight, int spec, int terminal,
       exit:
 	if (nullp(operator)) {
 	    if (length(operand) != 1)
-		error(SYNTAX_ERR, "expected operator ", NIL);
+		error(SYNTAX_ERR, "expected operator ", NIL,0);
 	    else
 		return (car(operand));
 	} else {
 	    if (length(operand) != 2)
-		error(SYNTAX_ERR, "expected two operand ", NIL);
+		error(SYNTAX_ERR, "expected two operand ", NIL,0);
 	    else
 		return (cons(car(operator), reverse(operand)));
 	}
@@ -448,7 +448,7 @@ parser(int operand, int operator, int weight, int spec, int terminal,
 		     terminal, parsemode));
 	} else {
 	    if (length(operand) >= 2)
-		error(SYNTAX_ERR, "expected operator ", temp);
+		error(SYNTAX_ERR, "expected operator ", temp,0);
 
 	    return (parser
 		    (cons(temp, operand), operator, weight, spec, terminal,
@@ -501,13 +501,13 @@ void unreadc(char c)
 
 #define SETBUF(c) {                        \
 	if(pos >= BUFSIZE-1)                     \
-	error(RESOURCE_ERR, "gettoken ", NIL); \
+	error(RESOURCE_ERR, "gettoken ", NIL,0); \
 	stok.buf[pos++] = c;                   \
 }
 
 #define SETBUFEND(c) {                        \
 	if(pos >= BUFSIZE-1)                     \
-	error(RESOURCE_ERR, "gettoken ", NIL); \
+	error(RESOURCE_ERR, "gettoken ", NIL,0); \
 	stok.buf[pos] = c;                   \
 }
 
@@ -838,10 +838,10 @@ void gettoken(void)
 	c = readc();
 	while (c != '\'') {
 	    if (c == EOL)
-		error(SYNTAX_ERR, "unexpected EOL in quoted atom ", NIL);
+		error(SYNTAX_ERR, "unexpected EOL in quoted atom ", NIL,0);
 
 	    if (c == EOF)
-		error(SYNTAX_ERR, "unexpected EOF in quoted atom ", NIL);
+		error(SYNTAX_ERR, "unexpected EOF in quoted atom ", NIL,0);
 
 	    if (c == '\\') {
 		c = readc();
@@ -855,7 +855,7 @@ void gettoken(void)
 		    stok.buf[pos++] = '\\';
 		} else {
 		    error(SYNTAX_ERR, "illegal token in quoted atom ",
-			  NIL);
+			  NIL,0);
 		}
 	    }
 
@@ -900,9 +900,9 @@ void gettoken(void)
 	    if (c == '$') {
 		if (c1 == '$') {
 		SETBUF(c)} else
-		    error(SYNTAX_ERR, "double $ in string token ", NIL);
+		    error(SYNTAX_ERR, "double $ in string token ", NIL,0);
 	    } else if (c == EOF)
-		error(SYNTAX_ERR, "not exist right $ in file ", NIL);
+		error(SYNTAX_ERR, "not exist right $ in file ", NIL,0);
 	    else {
 		SETBUF(c) unreadc(c1);
 	    }
@@ -917,7 +917,7 @@ void gettoken(void)
     }
 
     if (c == '`')
-	error(SYNTAX_ERR, "illegal token back quote ", NIL);
+	error(SYNTAX_ERR, "illegal token back quote ", NIL,0);
 
 
     //number octal ex 0o12345
@@ -993,11 +993,11 @@ void gettoken(void)
 		    c = readc();
 		    while (c != '\\') {
 			if (!ishexch(c))
-			    error(SYNTAX_ERR, "illegal hex char", NIL);
+			    error(SYNTAX_ERR, "illegal hex char", NIL,0);
 			stok.buf[i] = c;
 			c = readc();
 			if (c == EOL)
-			    error(SYNTAX_ERR, "unexpected EOL", NIL);
+			    error(SYNTAX_ERR, "unexpected EOL", NIL,0);
 			i++;
 		    }
 		    stok.buf[i] = NUL;
@@ -1007,19 +1007,19 @@ void gettoken(void)
 		    i = 0;
 		    while (c != '\\') {
 			if (!isoctch(c))
-			    error(SYNTAX_ERR, "illegal oct char", NIL);
+			    error(SYNTAX_ERR, "illegal oct char", NIL,0);
 			stok.buf[i] = c;
 			c = readc();
 			if (c == EOL)
 			    error(SYNTAX_ERR, "unexpected EOL in oct char",
-				  NIL);
+				  NIL,0);
 			i++;
 		    }
 		    stok.buf[i] = NUL;
 		    stok.type = OCTNUM;
 		    return;
 		} else
-		    error(SYNTAX_ERR, "illegal number token", NIL);
+		    error(SYNTAX_ERR, "illegal number token", NIL,0);
 	    }
 	} else {
 	    unreadc(c);
@@ -1037,7 +1037,7 @@ void gettoken(void)
 	if (c == '.')
 	    goto float1;
 	if (c == 'E' || c == 'e')
-	    error(SYNTAX_ERR, "float number expected dot ", NIL);
+	    error(SYNTAX_ERR, "float number expected dot ", NIL,0);
 
 	SETBUFEND(NUL) if (strlen(stok.buf) <= 9)
 	    stok.type = INTEGER;
@@ -1076,7 +1076,7 @@ void gettoken(void)
 	if (c != '+' && c != '-' && !isdigit(c)) {
 	    SETBUF(c)
 		SETBUFEND(NUL) error(SYNTAX_ERR, "illegal float token ",
-				     NIL);
+				     NIL,0);
 	}
 	SETBUF(c) c = readc();
 	while (isdigit(c)) {
@@ -1125,7 +1125,7 @@ void gettoken(void)
 	return;
 
     }
-    error(SYNTAX_ERR, "illegal token ", makestr(stok.buf));
+    error(SYNTAX_ERR, "illegal token ", makestr(stok.buf),0);
 }
 
 
@@ -1291,7 +1291,7 @@ int readitem1(void)
 	gettoken();
 	if (stok.type == LPAREN) {
 	    if (stok.space == SKIP)
-		error(SYNTAX_ERR, "illegal compiled predicate ", temp);
+		error(SYNTAX_ERR, "illegal compiled predicate ", temp,0);
 
 	    temp1 = readparen();
 	    return (cons(temp, temp1));
@@ -1304,7 +1304,7 @@ int readitem1(void)
 	gettoken();
 	if (stok.type == LPAREN) {
 	    if (stok.space == SKIP)
-		error(SYNTAX_ERR, "illegal function ", temp);
+		error(SYNTAX_ERR, "illegal function ", temp, 0);
 
 	    temp1 = readparen();
 	    return (cons(temp, temp1));
@@ -1359,7 +1359,7 @@ int readitem1(void)
 		temp = makeatom(str, PRED);
 
 	    if (stok.space == SKIP)
-		error(SYNTAX_ERR, "illegal predicate ", temp);
+		error(SYNTAX_ERR, "illegal predicate ", temp,0);
 
 
 	    temp1 = readparen();
@@ -1433,7 +1433,7 @@ int readitem1(void)
     default:
 	break;
     }
-    error(CANT_READ, stok.buf, NIL);
+    error(CANT_READ, stok.buf, NIL,0);
     return (0);
 }
 
@@ -1462,7 +1462,7 @@ int readparen(void)
 	gettoken();		//read-ahead
 
 	if (stok.type == PERIOD) {
-	    error(SYNTAX_ERR, "not enough right paren", NIL);
+	    error(SYNTAX_ERR, "not enough right paren", NIL,0);
 	} else if (stok.type == COMMA || stok.type == RPAREN) {
 	    stok.flag = BACK;
 	} else {		// for example (*)=(*)
@@ -1477,14 +1477,14 @@ int readparen(void)
 	car = parser(NIL, NIL, 1201, NIL, 1, 1);
 	if ((operationp(car) || user_operation_p(car)) &&
 	    heavy999p(GET_CAR(car)) && prefix_flag != 1)
-	    error(SYNTAX_ERR, "expected ( ) ", car);
+	    error(SYNTAX_ERR, "expected ( ) ", car,0);
 
     }
 
   repeat:
     gettoken();
     if (stok.type == PERIOD) {
-	error(SYNTAX_ERR, "not enough right paren", NIL);
+	error(SYNTAX_ERR, "not enough right paren", NIL,0);
     } else if (stok.type == COMMA) {
 	cdr = readparen();
 	return (cons(car, cdr));
@@ -1496,7 +1496,7 @@ int readparen(void)
 	car = parser(list1(car), NIL, 1201, NIL, 1, 1);
 	goto repeat;
     } else {
-	error(SYNTAX_ERR, "illegal paren ", NIL);
+	error(SYNTAX_ERR, "illegal paren ", NIL,0);
     }
     return (NIL);
 }
@@ -1543,7 +1543,7 @@ int readlist(void)
 
 	if ((operationp(car) || user_operation_p(car)) &&
 	    heavy999p(GET_CAR(car)) && prefix_flag != 1)
-	    error(SYNTAX_ERR, "expected ( ) ", car);
+	    error(SYNTAX_ERR, "expected ( ) ", car,0);
 
     }
   repeat:
@@ -1554,7 +1554,7 @@ int readlist(void)
 	cdr = parser(NIL, NIL, 1201, NIL, 1, 1);
 	gettoken();		//discard Rbracket
 	if (stok.type != RBRACKET)
-	    error(SYNTAX_ERR, "illegal partial list ", 21);
+	    error(SYNTAX_ERR, "illegal partial list ", 21,0);
 	temp = cons(car, cdr);
 	SET_AUX(temp, LIST);
 	return (temp);
@@ -1573,7 +1573,7 @@ int readlist(void)
 	car = parser(list1(car), NIL, 1201, NIL, 1, 1);
 	goto repeat;
     } else {
-	error(SYNTAX_ERR, "illegal list ", NIL);
+	error(SYNTAX_ERR, "illegal list ", NIL,0);
     }
     return (NIL);
 }
@@ -1586,7 +1586,7 @@ int readdouble(void)
     if (temp == '"')
 	return (NIL);
     else if (temp == EOF)
-	error(SYNTAX_ERR, "expected double quote", NIL);
+	error(SYNTAX_ERR, "expected double quote", NIL,0);
     else
 	return (listcons(makeint(temp), readdouble()));
 
@@ -1611,13 +1611,13 @@ int readcurl(void)
     gettoken();
     if (stok.type == COMMA) {
 	if (nullp(car))
-	    error(SYNTAX_ERR, "illeagal curl {} ", NIL);
+	    error(SYNTAX_ERR, "illeagal curl {} ", NIL,0);
 	else
 	    return (list3(AND, car, readcurl()));
     } else if (stok.type == RCURL) {
 	return (car);
     } else
-	error(SYNTAX_ERR, "illegal curl {} ", NIL);
+	error(SYNTAX_ERR, "illegal curl {} ", NIL,0);
     return (NIL);
 }
 

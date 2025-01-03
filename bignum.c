@@ -37,8 +37,8 @@
 #include "npl.h"
 
 
-#define CHECKBIG0 if(big_pt0<0 || big_pt0>=BIGNUM_PARMA){error(RESOURCE_ERR,"bigcell pt0",big_pt0);}
-#define CHECKBIG1 if(big_pt1<0 || big_pt1>=BIGSIZE){error(RESOURCE_ERR,"bigcell pt1",big_pt1);}
+#define CHECKBIG0 if(big_pt0<0 || big_pt0>=BIGNUM_PARMA){error(RESOURCE_ERR,"bigcell pt0",big_pt0,0);}
+#define CHECKBIG1 if(big_pt1<0 || big_pt1>=BIGSIZE){error(RESOURCE_ERR,"bigcell pt1",big_pt1,0);}
 
 
 int get_length(int x)
@@ -1369,7 +1369,7 @@ int bigx_ntt_mult(int x, int y)
 
     ans_len = lenx + leny + 1;
     if (ans_len * 2 * 3 > NTTSIZE)
-	error(RESOURCE_ERR, "ntt-mult", makeint(ans_len));
+	error(RESOURCE_ERR, "ntt-mult", makeint(ans_len),0);
 
     //prepare NTT data. datasize is twice of max_len
     //Each one bigcell needs 3 NTT data.  n= 2^x >= max_len*2*3

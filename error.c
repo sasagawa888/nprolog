@@ -11,12 +11,12 @@
 //------error for compier-----
 void errorcomp(int errnum, int name, int arg)
 {
-    error(GET_INT(errnum), GET_NAME(name), arg);
+    error(GET_INT(errnum), GET_NAME(name), arg,0);
 }
 
 
 //-------error------
-void error(int errnum, char *fun, int arg)
+void error(int errnum, char *fun, int arg, int th)
 {
 
     error_code = errnum;
