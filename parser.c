@@ -1400,7 +1400,7 @@ int readitem1(void)
 	if (!break_flag) {
 	    SET_CAR(temp, UNBIND);	//value
 	    SET_CDR(temp, UNBIND);	//alpha variable
-	} else if (break_flag && !memberp(temp, variables)) {
+	} else if (break_flag && !memberp(temp, variables[0])) {
 	    /* In the execution of break/0, 
 	     * the unification of the variables up to that point must be maintained. 
 	     * However, the values of the new variables generated in break/0 should not be retained.

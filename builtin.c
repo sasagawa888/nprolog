@@ -430,10 +430,10 @@ int b_op(int arglist, int rest, int th)
 }
 
 
-int o_cons(int x, int y)
+int o_cons(int x, int y, int th)
 {
     if (operationp(y))
-	y = operate(y, 0);
+	y = operate(y, th);
     return (listcons(x, y));
 }
 
@@ -513,6 +513,8 @@ int b_ask(int arglist, int rest, int th)
 	    goto loop;
 	return (NO);
     }
+	error(ARITY_ERR, "ask ", arglist, th);
+    return (NO);
 }
 
 
@@ -4547,13 +4549,13 @@ int b_reset_op(int arglist, int rest, int th)
     return (NO);
 }
 
-int o_define(int x, int y)
+int o_define(int x, int y, int th)
 {
     int clause;
 
     if (!nullp(y)) {
 	if (builtinp(x))
-	    error(BUILTIN_EXIST, "assertz", x,0);
+	    error(BUILTIN_EXIST, "assertz", x,th);
 	if (atomp(x))
 	    SET_AUX(x, PRED);
 	clause = list3(DEFINE, x, y);
@@ -4576,19 +4578,19 @@ int o_define(int x, int y)
     }
     // :- predicate.
     else {
-	return (prove_all(x, sp[0], 0));
+	return (prove_all(x, sp[th], th));
     }
     return (NO);
 }
 
-int o_dcg(int x, int y)
+int o_dcg(int x, int y, int th)
 {
     int clause, res;
 
     clause = list2(makepred("dcg_expand"),
 		   list3(makeatom("-->", OPE), x, y));
 
-    res = prove_all(clause, sp[0], 0);
+    res = prove_all(clause, sp[th], th);
     return (res);
 }
 
@@ -4614,7 +4616,7 @@ int b_gbc(int arglist, int rest, int th)
 
 
 
-int o_ignore(int nest, int n)
+int o_ignore(int nest, int n, int th)
 {
     return (YES);
 }
