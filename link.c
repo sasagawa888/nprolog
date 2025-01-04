@@ -85,7 +85,6 @@ void dynamic_link(int x)
     init_f2(SET_CDR_IDX, (tpred) set_cdr);
     init_f2(SET_AUX_IDX, (tpred) set_aux);
     init_f2(NOT_NUMEQP_IDX, (tpred) not_numeqp);
-    init_f2(DIV_IDX, (tpred) f_div);
     init_f2(SET_VAR_IDX, (tpred) set_var);
     init_f2(NTH_IDX, (tpred) nth);
     init_f2(UNBIND_IDX, (tpred) unbind);
@@ -132,6 +131,7 @@ void dynamic_link(int x)
     init_f3(LOGICALOR_IDX, (tpred) f_logicalor);
     init_f3(COMPLEMENT_IDX, (tpred) f_complement);
     init_f3(ROUND_IDX, (tpred) f_round);
+    init_f3(DIV_IDX, (tpred) f_div);
 
     //argument-1 string type
     init_f4(MAKECONST_IDX, (tpred) makeconst);

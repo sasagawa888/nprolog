@@ -228,9 +228,6 @@ static inline int Jnot_numeqp(int x, int y) {
     return f2[NOT_NUMEQP_IDX](x, y);
 }
 
-static inline int Jdiv(int x, int y) {
-    return f2[DIV_IDX](x, y);
-}
 
 static inline int Jset_var(int x, int y) {
     return f2[SET_VAR_IDX](x, y);
@@ -402,6 +399,10 @@ static inline int Jcomplement(int x, int y, int th) {
 
 static inline int Jround(int x, int y, int th) {
     return f3[ROUND_IDX](x, y, th);
+}
+
+static inline int Jdiv(int x, int y, int th) {
+    return f3[DIV_IDX](x, y, th);
 }
 
 
