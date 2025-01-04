@@ -1,7 +1,4 @@
 
-test(X,Y) :-
-    X is sin(1)+cos(2),
-    Y =.. [sin,3].
 
 test1(X,Y,Z) :- Z is X << Y. 
 test2(X,Y,Z) :- Z is X >> Y.
@@ -17,4 +14,14 @@ test11(X,Y)  :- Y is cos(X).
 test12(X,Y)  :- Y is tan(X).
 test13(X,Y)  :- Y is integer(X).
 test14(X,Y)  :- Y is abs(X).
+test15(X,Y)  :- Y is sqrt(X).
+test16(X,Y)  :- Y is log(X).
+test17(X,Y)  :- Y is ln(X).
+test18(X,Y)  :- Y is asin(X).
+test19(X,Y)  :- Y is acos(X).
+test20(X,Y)  :- Y is atan(X).
+test21(X,Y)  :- Y is \X.
+test22(X,Y,Z)  :- Z is X/\Y.
+test23(X,Y,Z)  :- Z is X\/Y.
+
 
