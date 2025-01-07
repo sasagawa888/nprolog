@@ -103,6 +103,7 @@ void dynamic_link(int x)
     init_f2(LN_IDX, (tpred) f_ln);
     init_f2(LIST1_IDX, (tpred) list1);
     init_f2(RANDI_IDX, (tpred) f_randi);
+    init_f2(UNIFY_NIL_IDX, (tpred) unify_nil);
 
     //argument-3
     init_f3(LIST3_IDX, (tpred) list3);
@@ -111,7 +112,6 @@ void dynamic_link(int x)
     init_f3(UNIFY_IDX, (tpred) unify);
     init_f3(UNIFY_VAR_IDX, (tpred) unify_var);
     init_f3(UNIFY_CONST_IDX, (tpred) unify_const);
-    init_f3(UNIFY_NIL_IDX, (tpred) unify_nil);
     init_f3(EXEC_ALL_IDX, (tpred) exec_all);
     init_f3(WCONS_IDX, (tpred) wcons);
     init_f3(WLIST2_IDX, (tpred) wlist2);

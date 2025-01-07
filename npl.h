@@ -173,12 +173,12 @@ enum { CONS_IDX, EQP_IDX, EQUALP_IDX, NUMEQP_IDX, SMALLERP_IDX, EQSMALLERP_IDX,
        NOT_NUMEQP_IDX, SET_VAR_IDX, NTH_IDX, 
        UNBIND_IDX, SET_SP_IDX, SET_WP_IDX, DEREF_IDX, WLIST1_IDX, 
        SIN_IDX, ASIN_IDX, COS_IDX, ACOS_IDX, TAN_IDX, ATAN_IDX, EXP_IDX, LOG_IDX,
-       LN_IDX, LIST1_IDX, RANDOM_IDX, RANDI_IDX, 
+       LN_IDX, LIST1_IDX, RANDOM_IDX, RANDI_IDX, UNIFY_NIL_IDX,
        NUM_FN2S
 };
 
 enum { LIST3_IDX, ERRORCOMP_IDX, WLISTCONS_IDX,UNIFY_IDX, 
-       UNIFY_VAR_IDX, UNIFY_CONST_IDX, UNIFY_NIL_IDX, EXEC_ALL_IDX, WCONS_IDX,
+       UNIFY_VAR_IDX, UNIFY_CONST_IDX, EXEC_ALL_IDX, WCONS_IDX,
        WLIST2_IDX, ADDTAIL_BODY_IDX, PLUS_IDX, MINUS_IDX, MULT_IDX, DIVIDE_IDX, REMAINDER_IDX,
        QUOTIENT_IDX,  MOD_IDX, EXPT_IDX, SQRT_IDX, DIV_IDX,
        LEFTSHIFT_IDX, RIGHTSHIFT_IDX, LOGICALAND_IDX, LOGICALOR_IDX, COMPLEMENT_IDX, ROUND_IDX,
@@ -1259,7 +1259,7 @@ int unicodep(char c);
 int unify(int x, int y, int th);
 int unify_const(int x, int y, int th);
 int unify_var(int x, int y, int th);
-int unify_nil(int x, int y, int th);
+int unify_nil(int x, int th);
 int unique(int x);
 int user_operation_p(int addr);
 int user_operator_p(int addr);

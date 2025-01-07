@@ -293,6 +293,12 @@ static inline int Jln(int x, int th) {
 }
 
 
+static inline int Junify_nil(int x, int th) {
+    return f2[UNIFY_NIL_IDX](x, th);
+}
+
+
+
 static inline int Jlist3(int x, int y, int z) {
     return f3[LIST3_IDX](x, y, z);
 }
@@ -315,11 +321,6 @@ static inline int Junify_var(int x, int y, int th) {
 
 static inline int Junify_const(int x, int y, int th) {
     return f3[UNIFY_CONST_IDX](x, y, th);
-}
-
-
-static inline int Junify_nil(int x, int y, int th) {
-    return f3[UNIFY_NIL_IDX](x, y, th);
 }
 
 

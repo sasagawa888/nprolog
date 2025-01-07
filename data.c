@@ -1816,19 +1816,19 @@ int unify_const(int x, int y, int th)
 
 
 
-// typed unify. x is [] (empty list)
-int unify_nil(int x, int y, int th)
+// typed unify. x is [] ?  (empty list)
+int unify_nil(int x, int th)
 {
-    int y1;
+    int x1;
 
-    if (y == NIL)
+    if (x == NIL)
 	return (YES);
-    else if (variablep(y)) {
-	y1 = deref1(y, th);
-	if (variablep(y1)) {
-	    bindsym(y1, x, th);
+    else if (variablep(x)) {
+	x1 = deref1(x, th);
+	if (variablep(x1)) {
+	    bindsym(x1, NIL, th);
 	    return (YES);
-	} else if (y1 == NIL)
+	} else if (x1 == NIL)
 	    return (YES);
 	else
 	    return (NO);
