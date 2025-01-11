@@ -308,13 +308,11 @@ int increase_terminal(int row, int col)
 		}
 	    return (1);
 	}
-	// arabian
-	else if (unicode >= 0x0600 && unicode <= 0x06ff)
-	    return (1);
 	// tamil
 	else if (unicode >= 0xb80 && unicode <= 0xbff)
 	    return (1);
 	else
+	// kanji
 	    return (2);
     } else
 	return (1);
@@ -352,13 +350,11 @@ int decrease_terminal(int row, int col)
 		else 
 	    	return (1);
 	}
-	// arabian
-	else if (unicode >= 0x0600 && unicode <= 0x06ff)
-	    return (1);
 	// tamil
 	else if (unicode >= 0xb80 && unicode <= 0xbff)
 	    return (1);
 	else
+	// kanji
 	    return (2);
     } else
 	return (1);
