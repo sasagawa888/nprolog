@@ -4,7 +4,7 @@
 #include "npl.h"
 
 void
-defoperator(char *name, int (*func)(int, int,int), int weight, int spec,
+defoperator(char *name, int (*func)(int, int, int), int weight, int spec,
 	    int opt)
 {
     int atom, old_weight, old_spec, new_weight, new_spec, ex_spec;
@@ -485,100 +485,100 @@ int eval(int x, int th)
 	if (eqp(x, makefunc("pi")))
 	    return (makeflt(3.14159265358979323846));
 	else if (eqp(x, makefunc("random")))
-	    return (f_random(NIL,th));
+	    return (f_random(NIL, th));
 	else
-	    error(EVALUATION_ERR, "eval ", x,th);
+	    error(EVALUATION_ERR, "eval ", x, th);
     } else if (eqp(car(x), makeatom("abs", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "abs ", x,th);
+	    error(ARITY_ERR, "abs ", x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
-	return (f_abs(arg1,th));
+	return (f_abs(arg1, th));
     } else if (eqp(car(x), makeatom("sin", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "sin ", x,th);
+	    error(ARITY_ERR, "sin ", x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
-	return (f_sin(arg1,th));
+	return (f_sin(arg1, th));
     } else if (eqp(car(x), makeatom("asin", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "asin ", x,th);
+	    error(ARITY_ERR, "asin ", x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
-	return (f_asin(arg1,th));
+	return (f_asin(arg1, th));
     } else if (eqp(car(x), makeatom("cos", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "cos ", x,th);
+	    error(ARITY_ERR, "cos ", x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
-	return (f_cos(arg1,th));
+	return (f_cos(arg1, th));
     } else if (eqp(car(x), makeatom("acos", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "acos ", x,th);
+	    error(ARITY_ERR, "acos ", x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
-	return (f_acos(arg1,th));
+	return (f_acos(arg1, th));
     } else if (eqp(car(x), makeatom("tan", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "tan ", x,th);
+	    error(ARITY_ERR, "tan ", x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
-	return (f_tan(arg1,th));
+	return (f_tan(arg1, th));
     } else if (eqp(car(x), makeatom("atan", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "atan ", x,th);
+	    error(ARITY_ERR, "atan ", x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
-	return (f_atan(arg1,th));
+	return (f_atan(arg1, th));
     } else if (eqp(car(x), makeatom("exp", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "exp ", x,th);
+	    error(ARITY_ERR, "exp ", x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
-	return (f_exp(arg1,th));
+	return (f_exp(arg1, th));
     } else if (eqp(car(x), makeatom("ln", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "ln ", x,th);
+	    error(ARITY_ERR, "ln ", x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
-	return (f_ln(arg1,th));
+	return (f_ln(arg1, th));
     } else if (eqp(car(x), makeatom("log", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "log ", x,th);
+	    error(ARITY_ERR, "log ", x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
-	return (f_log(arg1,th));
+	return (f_log(arg1, th));
     } else if (eqp(car(x), makeatom("sqrt", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "sqrt ", x,th);
+	    error(ARITY_ERR, "sqrt ", x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
-	return (f_sqrt(arg1,th));
+	return (f_sqrt(arg1, th));
     } else if (eqp(car(x), makeatom("round", FUNC))) {
 	if (length(x) != 3)
-	    error(ARITY_ERR, "round ", x,th);
+	    error(ARITY_ERR, "round ", x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	arg2 = result[2];
-	return (f_round(arg1, arg2,th));
+	return (f_round(arg1, arg2, th));
     } else if (eqp(car(x), makeatom("integer", SYS))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "integer ", x,th);
+	    error(ARITY_ERR, "integer ", x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
-	return (f_integer(arg1,th));
+	return (f_integer(arg1, th));
     } else if (eqp(car(x), makeatom("float", SYS))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "float ", x,th);
+	    error(ARITY_ERR, "float ", x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
-	return (f_float(arg1,th));
+	return (f_float(arg1, th));
     } else if (eqp(car(x), makeatom("randi", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "randi ", x,th);
+	    error(ARITY_ERR, "randi ", x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
-	return (f_randi(arg1,th));
+	return (f_randi(arg1, th));
     } else if (structurep(x) && operatorp(car(x))) {
 	evalterm(x, result, th);
 	function = result[0];
@@ -586,7 +586,7 @@ int eval(int x, int th)
 	arg2 = result[2];
 	return ((GET_SUBR(function)) (arg1, arg2, th));
     }
-    error(EVALUATION_ERR, "eval ", x,th);
+    error(EVALUATION_ERR, "eval ", x, th);
     return (NIL);
 }
 
@@ -605,13 +605,13 @@ int f_plus(int x, int y, int th)
     if (nullp(y))
 	y = makeint(0);
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "+ ", x,th);
+	error(INSTANTATION_ERR, "+ ", x, th);
     if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "+ ", y,th);
+	error(INSTANTATION_ERR, "+ ", y, th);
     if (!numberp(x))
-	error(NOT_NUM, "+ ", x,th);
+	error(NOT_NUM, "+ ", x, th);
     if (!numberp(y))
-	error(NOT_NUM, "+ ", y,th);
+	error(NOT_NUM, "+ ", y, th);
     return (plus(x, y, th));
 }
 
@@ -622,45 +622,45 @@ int f_minus(int x, int y, int th)
 	x = makeint(0);
     }
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "- ", x,th);
+	error(INSTANTATION_ERR, "- ", x, th);
     if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "- ", y,th);
+	error(INSTANTATION_ERR, "- ", y, th);
     if (!numberp(x))
-	error(NOT_NUM, "- ", x,th);
+	error(NOT_NUM, "- ", x, th);
     if (!numberp(y))
-	error(NOT_NUM, "- ", y,th);
+	error(NOT_NUM, "- ", y, th);
     if (!nullp(y))
-	return (minus(x, y,th));
+	return (minus(x, y, th));
     else
-	return (mult(x, makeint(-1),th));
+	return (mult(x, makeint(-1), th));
 }
 
 int f_mult(int x, int y, int th)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "* ", x,th);
+	error(INSTANTATION_ERR, "* ", x, th);
     if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "* ", y,th);
+	error(INSTANTATION_ERR, "* ", y, th);
     if (!numberp(x))
-	error(NOT_NUM, "* ", x,th);
+	error(NOT_NUM, "* ", x, th);
     if (!numberp(y))
-	error(NOT_NUM, "* ", y,th);
-    return (mult(x, y,th));
+	error(NOT_NUM, "* ", y, th);
+    return (mult(x, y, th));
 }
 
 int f_divide(int x, int y, int th)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "/ ", x,th);
+	error(INSTANTATION_ERR, "/ ", x, th);
     if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "/ ", y,th);
+	error(INSTANTATION_ERR, "/ ", y, th);
     if (!numberp(x))
-	error(NOT_NUM, "/ ", x,th);
+	error(NOT_NUM, "/ ", x, th);
     if (!numberp(y))
-	error(NOT_NUM, "/ ", y,th);
+	error(NOT_NUM, "/ ", y, th);
     if (zerop(y))
-	error(DIV_ZERO, "/", NIL,th);
-    return (exact_to_inexact(divide(x, y,th)));
+	error(DIV_ZERO, "/", NIL, th);
+    return (exact_to_inexact(divide(x, y, th)));
 }
 
 int f_div(int x, int y, int th)
@@ -668,15 +668,15 @@ int f_div(int x, int y, int th)
     int q;
 
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "/ ", x,th);
+	error(INSTANTATION_ERR, "/ ", x, th);
     if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "/ ", y,th);
+	error(INSTANTATION_ERR, "/ ", y, th);
     if (!numberp(x))
-	error(NOT_NUM, "/ ", x,th);
+	error(NOT_NUM, "/ ", x, th);
     if (!numberp(y))
-	error(NOT_NUM, "/ ", y,th);
+	error(NOT_NUM, "/ ", y, th);
     if (zerop(y))
-	error(DIV_ZERO, "/", NIL,th);
+	error(DIV_ZERO, "/", NIL, th);
 
     q = quotient(x, y, th);
     return (q);
@@ -687,28 +687,28 @@ int f_mod(int x, int y, int th)
     int res;
 
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "mod ", x,th);
+	error(INSTANTATION_ERR, "mod ", x, th);
     if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "mod ", y,th);
+	error(INSTANTATION_ERR, "mod ", y, th);
     if (!numberp(x))
-	error(NOT_NUM, "mod ", x,th);
+	error(NOT_NUM, "mod ", x, th);
     if (!numberp(y))
-	error(NOT_NUM, "mod ", y,th);
+	error(NOT_NUM, "mod ", y, th);
     if (y == makeint(0))
-	error(DIV_ZERO, "mod", y,th);
+	error(DIV_ZERO, "mod", y, th);
     if (!wide_integer_p(x))
-	error(NOT_INT, "mod ", x,th);
+	error(NOT_INT, "mod ", x, th);
     if (!wide_integer_p(y))
-	error(NOT_INT, "mod ", y,th);
+	error(NOT_INT, "mod ", y, th);
 
     if ((positivep(x) && positivep(y)) || (negativep(x) && negativep(y)))
-	res = s_remainder(x, y,th);
+	res = s_remainder(x, y, th);
     else if ((positivep(x) && negativep(y)))
-	res = plus(y, s_remainder(x, y,th),th);
+	res = plus(y, s_remainder(x, y, th), th);
     else if (negativep(x) && positivep(y))
-	res = mult(makeint(-1), plus(y, s_remainder(x, y,th),th),th);
+	res = mult(makeint(-1), plus(y, s_remainder(x, y, th), th), th);
     else
-	res = s_remainder(x, y,th);
+	res = s_remainder(x, y, th);
     return (res);
 }
 
@@ -717,21 +717,21 @@ int f_expt(int x, int y, int th)
     double dx, dy, dz;
 
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "^ ", x,th);
+	error(INSTANTATION_ERR, "^ ", x, th);
     if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "^ ", y,th);
+	error(INSTANTATION_ERR, "^ ", y, th);
     if (negativep(x) && !wide_integer_p(y))
-	error(EVALUATION_ERR, "^ ", y,th);
+	error(EVALUATION_ERR, "^ ", y, th);
     if (!numberp(x))
-	error(NOT_NUM, "^ ", x,th);
+	error(NOT_NUM, "^ ", x, th);
     if (!numberp(y))
-	error(NOT_NUM, "^ ", y,th);
+	error(NOT_NUM, "^ ", y, th);
     if (floatp(x) && GET_FLT(x) >= DBL_MAX)
-	error(EVALUATION_ERR, "^ ", x,th);
+	error(EVALUATION_ERR, "^ ", x, th);
     if (floatp(x) && (fabs(GET_FLT(x)) <= DBL_MIN && GET_FLT(x) != 0))
-	error(EVALUATION_ERR, "^ ", x,th);
+	error(EVALUATION_ERR, "^ ", x, th);
     if (bignump(x) && (longnump(y) || bignump(y)))
-	error(EXPONENT_ERR, "^ ", y,th);
+	error(EXPONENT_ERR, "^ ", y, th);
 
     if ((integerp(x) || longnump(x) || bignump(x)) && integerp(y)
 	&& GET_INT(y) == 0)
@@ -739,7 +739,7 @@ int f_expt(int x, int y, int th)
 
     if ((integerp(x) || longnump(x) || bignump(x))
 	&& (integerp(y) && GET_INT(y) > 0))
-	return (expt(x, GET_INT(y),th));
+	return (expt(x, GET_INT(y), th));
 
     if ((integerp(x) || floatp(x)) && (integerp(y) || floatp(y))) {
 
@@ -756,7 +756,7 @@ int f_expt(int x, int y, int th)
 	else if (GET_INT(x) == 0)
 	    return (x);
 	else if (GET_INT(x) == -1) {
-	    if (zerop(s_remainder(y, makeint(2),th)))
+	    if (zerop(s_remainder(y, makeint(2), th)))
 		return (makeint(1));
 	    else
 		return (x);
@@ -768,7 +768,7 @@ int f_expt(int x, int y, int th)
 	else if (GET_FLT(x) == 0.0)
 	    return (x);
 	else if (GET_FLT(x) == -1.0) {
-	    if (zerop(s_remainder(y, makeint(2),th)))
+	    if (zerop(s_remainder(y, makeint(2), th)))
 		return (makeflt(1.0));
 	    else
 		return (x);
@@ -826,10 +826,10 @@ int expt(int x, int y, int th)
     p = x;
     while (y > 0) {
 	if ((y % 2) == 0) {
-	    p = mult(p, p,th);
+	    p = mult(p, p, th);
 	    y = y / 2;
 	} else {
-	    res = mult(res, p,th);
+	    res = mult(res, p, th);
 	    y = y - 1;
 	}
     }
@@ -888,13 +888,13 @@ int f_leftshift(int x, int y, int th)
 {
 
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "<< ", x,th);
+	error(INSTANTATION_ERR, "<< ", x, th);
     if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "<< ", y,th);
+	error(INSTANTATION_ERR, "<< ", y, th);
     if (!integerp(x))
-	error(NOT_INT, "<<", x,th);
+	error(NOT_INT, "<<", x, th);
     if (!integerp(y))
-	error(NOT_INT, "<<", y,th);
+	error(NOT_INT, "<<", y, th);
 
     x = GET_INT(x);
     y = GET_INT(y);
@@ -905,13 +905,13 @@ int f_rightshift(int x, int y, int th)
 {
 
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, ">> ", x,th);
+	error(INSTANTATION_ERR, ">> ", x, th);
     if (wide_variable_p(y))
-	error(INSTANTATION_ERR, ">> ", y,th);
+	error(INSTANTATION_ERR, ">> ", y, th);
     if (!integerp(x))
-	error(NOT_INT, ">> ", x,th);
+	error(NOT_INT, ">> ", x, th);
     if (!integerp(y))
-	error(NOT_INT, ">> ", y,th);
+	error(NOT_INT, ">> ", y, th);
 
     x = GET_INT(x);
     y = GET_INT(y);
@@ -922,13 +922,13 @@ int f_logicaland(int x, int y, int th)
 {
 
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "/\\ ", x,th);
+	error(INSTANTATION_ERR, "/\\ ", x, th);
     if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "/\\ ", y,th);
+	error(INSTANTATION_ERR, "/\\ ", y, th);
     if (!integerp(x))
-	error(NOT_INT, "/\\ ", x,th);
+	error(NOT_INT, "/\\ ", x, th);
     if (!integerp(y))
-	error(NOT_INT, "/\\ ", y,th);
+	error(NOT_INT, "/\\ ", y, th);
 
     x = GET_INT(x);
     y = GET_INT(y);
@@ -939,13 +939,13 @@ int f_logicalor(int x, int y, int th)
 {
 
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "\\/ ", x,th);
+	error(INSTANTATION_ERR, "\\/ ", x, th);
     if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "\\/ ", y,th);
+	error(INSTANTATION_ERR, "\\/ ", y, th);
     if (!integerp(x))
-	error(NOT_INT, "\\/ ", x,th);
+	error(NOT_INT, "\\/ ", x, th);
     if (!integerp(y))
-	error(NOT_INT, "\\/ ", y,th);
+	error(NOT_INT, "\\/ ", y, th);
 
     x = GET_INT(x);
     y = GET_INT(y);
@@ -956,9 +956,9 @@ int f_complement(int x, int y, int th)
 {
 
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "\\ ", x,th);
+	error(INSTANTATION_ERR, "\\ ", x, th);
     if (!integerp(x))
-	error(NOT_INT, "\\ ", x,th);
+	error(NOT_INT, "\\ ", x, th);
 
     x = GET_INT(x);
     return (makeint(~x));
@@ -968,19 +968,19 @@ int f_complement(int x, int y, int th)
 int f_abs(int x, int th)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "abs ", x,th);
+	error(INSTANTATION_ERR, "abs ", x, th);
     if (!numberp(x))
-	error(NOT_NUM, "abs ", x,th);
+	error(NOT_NUM, "abs ", x, th);
 
-    return (absolute(x,th));
+    return (absolute(x, th));
 }
 
 int f_sin(int x, int th)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "sin ", x,th);
+	error(INSTANTATION_ERR, "sin ", x, th);
     if (!numberp(x))
-	error(NOT_NUM, "sin ", x,th);
+	error(NOT_NUM, "sin ", x, th);
 
     return (makeflt(sin(GET_FLT(exact_to_inexact(x)))));
 }
@@ -988,9 +988,9 @@ int f_sin(int x, int th)
 int f_asin(int x, int th)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "asin ", x,th);
+	error(INSTANTATION_ERR, "asin ", x, th);
     if (!numberp(x))
-	error(NOT_NUM, "asin ", x,th);
+	error(NOT_NUM, "asin ", x, th);
 
     return (makeflt(asin(GET_FLT(exact_to_inexact(x)))));
 }
@@ -998,9 +998,9 @@ int f_asin(int x, int th)
 int f_cos(int x, int th)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "cos ", x,th);
+	error(INSTANTATION_ERR, "cos ", x, th);
     if (!numberp(x))
-	error(NOT_NUM, "cos ", x,th);
+	error(NOT_NUM, "cos ", x, th);
 
     return (makeflt(cos(GET_FLT(exact_to_inexact(x)))));
 }
@@ -1008,9 +1008,9 @@ int f_cos(int x, int th)
 int f_acos(int x, int th)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "acos ", x,th);
+	error(INSTANTATION_ERR, "acos ", x, th);
     if (!numberp(x))
-	error(NOT_NUM, "acos ", x,th);
+	error(NOT_NUM, "acos ", x, th);
 
     return (makeflt(acos(GET_FLT(exact_to_inexact(x)))));
 }
@@ -1018,9 +1018,9 @@ int f_acos(int x, int th)
 int f_tan(int x, int th)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "tan ", x,th);
+	error(INSTANTATION_ERR, "tan ", x, th);
     if (!numberp(x))
-	error(NOT_NUM, "tan ", x,th);
+	error(NOT_NUM, "tan ", x, th);
 
     return (makeflt(tan(GET_FLT(exact_to_inexact(x)))));
 }
@@ -1028,9 +1028,9 @@ int f_tan(int x, int th)
 int f_atan(int x, int th)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "atan ", x,th);
+	error(INSTANTATION_ERR, "atan ", x, th);
     if (!numberp(x))
-	error(NOT_NUM, "atan ", x,th);
+	error(NOT_NUM, "atan ", x, th);
 
     return (makeflt(atan(GET_FLT(exact_to_inexact(x)))));
 }
@@ -1038,9 +1038,9 @@ int f_atan(int x, int th)
 int f_exp(int x, int th)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "exp ", x,th);
+	error(INSTANTATION_ERR, "exp ", x, th);
     if (!numberp(x))
-	error(NOT_NUM, "exp ", x,th);
+	error(NOT_NUM, "exp ", x, th);
 
     return (makeflt(exp(GET_FLT(exact_to_inexact(x)))));
 }
@@ -1048,11 +1048,11 @@ int f_exp(int x, int th)
 int f_ln(int x, int th)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "ln ", x,th);
+	error(INSTANTATION_ERR, "ln ", x, th);
     if (!numberp(x))
-	error(NOT_NUM, "ln ", x,th);
+	error(NOT_NUM, "ln ", x, th);
     if (zerop(x) || negativep(x))
-	error(EVALUATION_ERR, "ln ", x,th);
+	error(EVALUATION_ERR, "ln ", x, th);
 
     return (makeflt(log(GET_FLT(exact_to_inexact(x)))));
 }
@@ -1061,11 +1061,11 @@ int f_ln(int x, int th)
 int f_log(int x, int th)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "log ", x,th);
+	error(INSTANTATION_ERR, "log ", x, th);
     if (!numberp(x))
-	error(NOT_NUM, "log ", x,th);
+	error(NOT_NUM, "log ", x, th);
     if (zerop(x) || negativep(x))
-	error(EVALUATION_ERR, "log ", x,th);
+	error(EVALUATION_ERR, "log ", x, th);
 
     return (makeflt(log10(GET_FLT(exact_to_inexact(x)))));
 }
@@ -1076,9 +1076,9 @@ int f_integer(int x, int th)
     double flt;
 
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "integer ", x,th);
+	error(INSTANTATION_ERR, "integer ", x, th);
     if (!numberp(x)) {
-	error(NOT_NUM, "integer ", x,th);
+	error(NOT_NUM, "integer ", x, th);
     }
 
 
@@ -1099,9 +1099,9 @@ int f_integer(int x, int th)
 int f_float(int x, int th)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "float ", x,th);
+	error(INSTANTATION_ERR, "float ", x, th);
     if (!numberp(x)) {
-	error(NOT_NUM, "float ", x,th);
+	error(NOT_NUM, "float ", x, th);
     }
 
     if (integerp(x))
@@ -1114,9 +1114,9 @@ int f_float(int x, int th)
 int f_randi(int x, int th)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "randi ", x,th);
+	error(INSTANTATION_ERR, "randi ", x, th);
     if (!integerp(x))
-	error(NOT_INT, "randi", x,th);
+	error(NOT_INT, "randi", x, th);
 
     x = GET_INT(x);
     return (makeint(rand() & x));
@@ -1127,7 +1127,7 @@ int f_random(int x, int th)
     double d;
 
     if (!nullp(x))
-	error(WRONG_ARGS, "random", x,th);
+	error(WRONG_ARGS, "random", x, th);
 
     d = (double) rand() / RAND_MAX;
     return (makeflt(d));

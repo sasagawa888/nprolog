@@ -4,8 +4,8 @@
 #include "npl.h"
 
 
-typedef void (*tpred)(char *, int(*pred)(int, int));
-typedef void (*tuser)(char *, int(*user)(int, int), int weight, int spec);
+typedef void (*tpred)(char *, int (*pred)(int, int));
+typedef void (*tuser)(char *, int (*user)(int, int), int weight, int spec);
 
 void dynamic_link(int x)
 {
@@ -30,7 +30,7 @@ void dynamic_link(int x)
 
     hmod = dlopen(str, RTLD_LAZY);
     if (hmod == NULL)
-	error(ILLEGAL_ARGS, "load", x,0);
+	error(ILLEGAL_ARGS, "load", x, 0);
 
     init_f0 = dlsym(hmod, "init0");
     init_f1 = dlsym(hmod, "init1");

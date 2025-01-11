@@ -134,74 +134,74 @@ int makehexbigx(char *bignum)
     while (i < j) {
 	switch (bignum[i]) {
 	case '0':
-	    num = plus(num, makeint(0),0);
+	    num = plus(num, makeint(0), 0);
 	    break;
 	case '1':
-	    num = plus(num, makeint(1),0);
+	    num = plus(num, makeint(1), 0);
 	    break;
 	case '2':
-	    num = plus(num, makeint(2),0);
+	    num = plus(num, makeint(2), 0);
 	    break;
 	case '3':
-	    num = plus(num, makeint(3),0);
+	    num = plus(num, makeint(3), 0);
 	    break;
 	case '4':
-	    num = plus(num, makeint(4),0);
+	    num = plus(num, makeint(4), 0);
 	    break;
 	case '5':
-	    num = plus(num, makeint(5),0);
+	    num = plus(num, makeint(5), 0);
 	    break;
 	case '6':
-	    num = plus(num, makeint(6),0);
+	    num = plus(num, makeint(6), 0);
 	    break;
 	case '7':
-	    num = plus(num, makeint(7),0);
+	    num = plus(num, makeint(7), 0);
 	    break;
 	case '8':
-	    num = plus(num, makeint(8),0);
+	    num = plus(num, makeint(8), 0);
 	    break;
 	case '9':
-	    num = plus(num, makeint(9),0);
+	    num = plus(num, makeint(9), 0);
 	    break;
 	case 'a':
-	    num = plus(num, makeint(10),0);
+	    num = plus(num, makeint(10), 0);
 	    break;
 	case 'b':
-	    num = plus(num, makeint(11),0);
+	    num = plus(num, makeint(11), 0);
 	    break;
 	case 'c':
-	    num = plus(num, makeint(12),0);
+	    num = plus(num, makeint(12), 0);
 	    break;
 	case 'd':
-	    num = plus(num, makeint(13),0);
+	    num = plus(num, makeint(13), 0);
 	    break;
 	case 'e':
-	    num = plus(num, makeint(14),0);
+	    num = plus(num, makeint(14), 0);
 	    break;
 	case 'f':
-	    num = plus(num, makeint(15),0);
+	    num = plus(num, makeint(15), 0);
 	    break;
 	case 'A':
-	    num = plus(num, makeint(11),0);
+	    num = plus(num, makeint(11), 0);
 	    break;
 	case 'B':
-	    num = plus(num, makeint(12),0);
+	    num = plus(num, makeint(12), 0);
 	    break;
 	case 'C':
-	    num = plus(num, makeint(13),0);
+	    num = plus(num, makeint(13), 0);
 	    break;
 	case 'D':
-	    num = plus(num, makeint(14),0);
+	    num = plus(num, makeint(14), 0);
 	    break;
 	case 'E':
-	    num = plus(num, makeint(15),0);
+	    num = plus(num, makeint(15), 0);
 	    break;
 	case 'F':
-	    num = plus(num, makeint(16),0);
+	    num = plus(num, makeint(16), 0);
 	    break;
 	}
 	i++;
-	num = mult(num, makeint(16),0);
+	num = mult(num, makeint(16), 0);
     }
     return (num);
 }
@@ -217,32 +217,32 @@ int makeoctbigx(char *bignum)
     while (i < j) {
 	switch (bignum[i]) {
 	case '0':
-	    num = plus(num, makeint(0),0);
+	    num = plus(num, makeint(0), 0);
 	    break;
 	case '1':
-	    num = plus(num, makeint(1),0);
+	    num = plus(num, makeint(1), 0);
 	    break;
 	case '2':
-	    num = plus(num, makeint(2),0);
+	    num = plus(num, makeint(2), 0);
 	    break;
 	case '3':
-	    num = plus(num, makeint(3),0);
+	    num = plus(num, makeint(3), 0);
 	    break;
 	case '4':
-	    num = plus(num, makeint(4),0);
+	    num = plus(num, makeint(4), 0);
 	    break;
 	case '5':
-	    num = plus(num, makeint(5),0);
+	    num = plus(num, makeint(5), 0);
 	    break;
 	case '6':
-	    num = plus(num, makeint(6),0);
+	    num = plus(num, makeint(6), 0);
 	    break;
 	case '7':
-	    num = plus(num, makeint(7),0);
+	    num = plus(num, makeint(7), 0);
 	    break;
 	}
 	i++;
-	num = mult(num, makeint(8),0);
+	num = mult(num, makeint(8), 0);
     }
     return (num);
 }
@@ -257,14 +257,14 @@ int makebinbigx(char *bignum)
     while (i < j) {
 	switch (bignum[i]) {
 	case '0':
-	    num = plus(num, makeint(0),0);
+	    num = plus(num, makeint(0), 0);
 	    break;
 	case '1':
-	    num = plus(num, makeint(1),0);
+	    num = plus(num, makeint(1), 0);
 	    break;
 	}
 	i++;
-	num = mult(num, makeint(2),0);
+	num = mult(num, makeint(2), 0);
     }
     return (num);
 }
@@ -904,7 +904,7 @@ int bigx_div1(int arg1, int arg2)
 
 	// e.g. (div 100000000000000000000000000 25000000000000000000000002) = 3 (not 4)
 	while (negativep(dividend)) {
-	    dividend = plus(dividend, bigx_shift(arg2, shift),0);
+	    dividend = plus(dividend, bigx_shift(arg2, shift), 0);
 	    q--;
 	}
 
@@ -976,7 +976,7 @@ int bigx_remainder(int arg1, int arg2)
 
 	// e.g. (div 100000000000000000000000000 25000000000000000000000002) = 3 (not 4)
 	while (negativep(dividend)) {
-	    dividend = plus(dividend, bigx_shift(arg2, shift),0);
+	    dividend = plus(dividend, bigx_shift(arg2, shift), 0);
 	    q--;
 	}
 
@@ -1369,7 +1369,7 @@ int bigx_ntt_mult(int x, int y)
 
     ans_len = lenx + leny + 1;
     if (ans_len * 2 * 3 > NTTSIZE)
-	error(RESOURCE_ERR, "ntt-mult", makeint(ans_len),0);
+	error(RESOURCE_ERR, "ntt-mult", makeint(ans_len), 0);
 
     //prepare NTT data. datasize is twice of max_len
     //Each one bigcell needs 3 NTT data.  n= 2^x >= max_len*2*3

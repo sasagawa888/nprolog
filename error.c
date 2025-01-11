@@ -11,7 +11,7 @@
 //------error for compier-----
 void errorcomp(int errnum, int name, int arg)
 {
-    error(GET_INT(errnum), GET_NAME(name), arg,0);
+    error(GET_INT(errnum), GET_NAME(name), arg, 0);
 }
 
 
@@ -321,14 +321,14 @@ void error(int errnum, char *fun, int arg, int th)
 	child_busy_flag = 0;
     }
 
-    
+
     if (init_flag) {
 	init_flag = 0;
 	longjmp(buf, 2);
     } else if (break_flag) {
 	longjmp(buf2, 2);
     } else if (thread_flag && th != 0) {
-	longjmp(buf3,1);
+	longjmp(buf3, 1);
     } else
 	longjmp(buf, 1);
 }
