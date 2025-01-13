@@ -24,7 +24,7 @@ int readparse(int th)
     if (paren_nest != 0){
 	error(SYNTAX_ERR, "extra paren ", NIL, th);}
 	if (double_clause(res)){
-	error(SYNTAX_ERR, "double :- ", res, th);}
+	error(SYNTAX_ERR, "require period ", res, th);}
     return (res);
 }
 
