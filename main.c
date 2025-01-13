@@ -1418,11 +1418,6 @@ void print_quoted(int addr)
 	    printc('\'');
 	    printc(c);
 	    pos++;
-	} else if (c <= 31) {
-	    printc('\\');
-	    printc(c);
-	    printc('\\');
-	    pos++;
 	} else if (isUni2(c)) {
 	    printc(str[pos++]);
 	    printc(str[pos++]);
@@ -1448,7 +1443,13 @@ void print_quoted(int addr)
 	    printc(str[pos++]);
 	    printc(str[pos++]);
 	    printc(str[pos++]);
-	} else
+	} else if (c <= 31) {
+	    printc('\\');
+	    printc(c);
+	    printc('\\');
+	    pos++;
+	}
+	else
 	    printc(str[pos++]);
 
 
@@ -1462,7 +1463,6 @@ void print_not_quoted(int addr)
 {
     char str[ATOMSIZE], c;
     int pos;
-
 
     strcpy(str, GET_NAME(addr));
     pos = 0;
