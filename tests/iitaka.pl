@@ -220,3 +220,13 @@ gene_e_aux(L,0,L) :- !.
 gene_e_aux(Const,N,L) :-
         N1 is N - 1,
         gene_e_aux(Const,N1,[N|L]).
+        
+%p165 chapter9 problem
+maplist([],_,[]).
+maplist([L|Ls],F,[M|Ms]) :-
+        X =.. [F,L,M],
+        call(X),
+        maplist(Ls,F,Ms).
+
+double(X,Y) :- Y is 2*X.
+
