@@ -323,7 +323,7 @@ int main(int argc, char *argv[])
 		if (!repl_flag)
 		    clear_input_buffer();
 		query(input, 0);
-		//sexp_flag = 1;print(variable_to_call(parser(NIL,NIL,NIL,NIL,0,0)));
+		//sexp_flag = 1;print(input);
 		//printf("proof = %d\n", proof);
 		fflush(stdout);
 	    } else if (child_flag) {

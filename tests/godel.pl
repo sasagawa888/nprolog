@@ -2,14 +2,15 @@
 
 dt('∃xy〜(x)∧(y)').
 
-char_to_code(C,X) :- code_list(Y),char_to_code1(C,Y,X). 
-char_to_code1(C,[C|Ys],1).
-char_to_code1(C,[Y|Ys],X) :- 
-    char_code1(C,Ys,X1),
-    X is X1+1.
+encode(X,N) :- name(X,Y).
 
-code_list([〜,∧,\,∃,=,0,s,'(',')','"',x,y]).
+atom_to_code(A,X) :- name(A,X),code_list(Y),atom_to_code1(X,Y,L). 
+
+code_list([]).
+ %[〜,∧,\,∃,=,0,s,'(',')','"',x,y])
 prime_list([2,3,5,7,11,13,17,19,23]).
+
+
 
 prime_factor(N,[]) :-
     N < 2.
