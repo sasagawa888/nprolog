@@ -24,6 +24,8 @@ prime_factor(N,L) :-
     M is sqrt(N),
     prime_factor1(N,3,M,L).
 
+prime_factor1(N,P,M,[]) :-
+    N < 2.
 prime_factor1(N,P,M,[N]) :-
     P > M.
 prime_factor1(N,P,M,[P|L]) :-
