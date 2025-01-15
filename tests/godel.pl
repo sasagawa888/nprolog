@@ -1,14 +1,58 @@
-
+% N-Prolog can't resolve bignumber prime factorization
 
 dt('∃xy〜(x)∧(y)').
 
-encode(X,N) :- name(X,Y).
+encode(A,N) :- name(A,X),prime_list(P),code_godel(X,P,N). 
 
-atom_to_code(A,X) :- name(A,X),code_list(Y),atom_to_code1(X,Y,L). 
+code_godel([],_,1).
+code_godel([C|Cs],[P|Ps],N) :-
+    uni_code(C,C1),
+    N1 is P^C1,
+    code_godel(Cs,Ps,N2),
+    N is N1*N2.
 
-code_list([]).
+decode(N,A) :-
+    prime_factor(N,L),
+    compress(L,L1),
+    decode1(L1,A).
+
+decode1([],A).
+decode1([C|Cs],X) :-
+    uni_code(C1,C),
+    name(A1,[C1]),
+    decode1(Cs,A),
+    atom_concat(A1,A,X).
+
+compress(List, Result) :-
+    compress1(List, [], Result).
+
+
+compress1([], [], []). 
+compress1([], [N, _], [N]). 
+compress1([X|Xs], [], R) :- 
+    compress1(Xs, [1, X], R).
+compress1([X|Xs], [N, X], R) :- 
+    N1 is N + 1,
+    compress1(Xs, [N1, X], R).
+compress1([X|Xs], [N, Y], [N|R]) :- 
+    X \= Y,
+    compress1(Xs, [1, X], R).
+
+
+prime_list([2,3,5,7,11,13,17,19,23,29,31]).
  %[〜,∧,\,∃,=,0,s,'(',')','"',x,y])
-prime_list([2,3,5,7,11,13,17,19,23]).
+uni_code(12316,1).
+uni_code(8743,2).
+uni_code(92,3).
+uni_code(8707,4).
+uni_code(61,5).
+uni_code(48,6).
+uni_code(115,7).
+uni_code(40,8).
+uni_code(41,9).
+uni_code(34,10).
+uni_code(120,11).
+uni_code(121,12).
 
 
 
