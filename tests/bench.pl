@@ -41,7 +41,7 @@ repeat_for(N) :-
 
 % Run various tests
 run(none, N) :- repeat_for(N), fail.
-run(sort, N) :-
+run(qsort, N) :-
     list50(X),
     repeat_for(N), 
     qsort(X, _, []), 

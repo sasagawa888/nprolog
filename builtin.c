@@ -274,8 +274,6 @@ int b_length(int arglist, int rest, int th)
 
 	if (!listp(arg1) && !nullp(arg1) && !wide_variable_p(arg1))
 	    error(NOT_LIST, "length ", arglist, th);
-	if (listp(arg1) && length(arg1) == -1)
-	    error(WRONG_ARGS, "length ", arglist, th);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
 	    error(LESS_THAN_ZERO, "length ", arg2, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
@@ -1630,7 +1628,6 @@ int b_consult(int arglist, int rest, int th)
 	while (1) {
 	  skip:
 	  	clause = readparse(th);
-	    //clause = parser(NIL, NIL, NIL, NIL, 0, 0, th);
 	    if (clause == FEND)
 		break;
 
@@ -1705,7 +1702,6 @@ int b_reconsult(int arglist, int rest, int th)
 	while (1) {
 	  skip:
 	  	clause = readparse(th);
-	    //clause = parser(NIL, NIL, NIL, NIL, 0, 0, th);
 	    if (clause == FEND)
 		break;
 
