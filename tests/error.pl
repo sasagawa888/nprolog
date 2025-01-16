@@ -91,6 +91,7 @@ ARITY_ERR           67
 :- n_error(length([],0,2),67).
 :- n_error(length([a|b],N),7).
 :- n_error(length([],-1),49).
+:- n_error(length(L,L),7).
 
 %member
 :- n_error(member(a,[],s),67).
