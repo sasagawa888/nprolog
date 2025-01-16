@@ -974,6 +974,12 @@ jump_gen_a_argument(X) :-
     write('")').
 jump_gen_a_argument(X) :-
     n_defined_predicate(X),
+    functor(X,Y,0),
+    write('Jmakecomp("'),
+    write(Y),
+    write('")').
+jump_gen_a_argument(X) :-
+    n_defined_predicate(X),
     X =.. [Y|Z],
     write('Jwcons(Jmakecomp("'),
     write(Y),
