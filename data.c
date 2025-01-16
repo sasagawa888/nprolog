@@ -174,6 +174,8 @@ int length(int addr)
 {
     int len = 0;
 
+	if(addr == NIL) return(0);
+	
     while (!(nullp(addr))) {
 	if (!structurep(addr))
 	    return (-1);
