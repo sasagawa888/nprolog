@@ -25,7 +25,7 @@ char function[FUNCTION_NUMBER][12] = {
 
 //builtin token
 char builtin[BUILTIN_NUMBER][30] = {
-    { "->" }, { "=.." }, { "\\+" }, { "==" }, { "\\==" }, { "@<" },
+    { "->" }, { "=.." }, { "==" }, { "\\==" }, { "@<" },
     { "@=<" }, { "@>" }, { "@>=" }, { "=:=" }, { "=/=" }, { "=\\=" },
     { "<" }, { "=<" }, { ">" }, { ">=" }, { "\\=" }, { "=" },
     { "is" }, { "edit" }, { "open" }, { "close" }, { "create" }, { "dup" },
@@ -36,15 +36,15 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "read_line" }, { "reset_op" }, { "skip" }, { "predicate_property" },
     { "tab" }, { "fail" }, { "not" }, { "true" }, { "halt" }, { "abort" },
     { "listing" }, { "functor" }, { "arg" }, { "writeq" }, { "display" },
-    { "ref" }, { "key" }, { "atom_concat" }, { "atom_string" },
+    { "ref" }, { "key" }, { "atom_string" },
     { "consult" }, { "reconsult" }, { "see" }, { "seeing" }, { "seen" },
     { "tell" }, { "telling" }, { "save" }, { "told" }, { "trace" },
     { "notrace" }, { "spy" }, { "nospy" }, { "leash" }, { "atom" },
     { "integer" }, { "real" }, { "float" }, { "number" },
     { "var" }, { "nonvar" }, { "atomic" }, { "list" }, { "gc" },
     { "time" }, { "name" }, { "nth_char" }, { "bounded" },
-    { "flush" }, { "date" }, { "date_day" }, { "char_code" },
-    { "string" }, { "string_chars" }, { "string_codes" }, { "ground" },
+    { "flush" }, { "date" }, { "date_day" }, 
+    { "string" }, { "string_chars" }, { "string_codes" }, 
     { "concat" }, { "substring" }, { "string_term" }, { "float_text" },
     { "inc" }, { "dec" }, { "compare" }, { "in" }, { "out" },
     { "mkdir" }, { "rmdir" }, { "chdir" }, { "string_length" },
