@@ -74,7 +74,7 @@ void error(int errnum, char *fun, int arg, int th)
 	break;
 
     case NOT_INT:
-	printf("Not an integer %s ", fun);
+	printf("Not an small integer %s ", fun);
 	print(arg);
 	break;
 
