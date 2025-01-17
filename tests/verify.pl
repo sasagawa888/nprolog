@@ -377,7 +377,7 @@ test(unification) :-
     X == 1.
 
 test(unification_failure) :-
-    \+ (X = 1, X = 2).
+    not (X = 1, X = 2).
 
 test(cut) :-
     (true -> X = 1 ; X = 2),
