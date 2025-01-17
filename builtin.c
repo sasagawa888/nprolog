@@ -2507,7 +2507,7 @@ int b_not(int arglist, int rest, int th)
 	if (!callablep(arg1))
 	    error(NOT_CALLABLE, "not ", arg1, th);
 
-	res = prove(arg1, sp[th], NIL, th);
+	res = prove_all(arg1, sp[th], th);
 	if (res == YES)
 	    return (NO);
 	else
