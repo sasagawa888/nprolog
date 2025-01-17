@@ -58,7 +58,7 @@ walk(U, U).
 path(U, U, _, []).
     path(U, V, L, [A|P]) :-
         arc(A, U, U1),
-        \+ member(U1, L),
+        not(member(U1, L)),
         path(U1, V, [U1|L], P).
 
 path_find(U, V, P) :- path(U, V, [U], P).
