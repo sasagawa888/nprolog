@@ -49,9 +49,9 @@ dcg_body(GRBody, S0, S, Body) :-
    dcg_cbody(GRBody, S0, S, Body).
 dcg_body(NonTerminal, S0, S, Goal) :-
    nonvar(NonTerminal),
-   \+ dcg_constr(NonTerminal),
+   not(dcg_constr(NonTerminal)),
    NonTerminal \= ( _ -> _ ),
-   NonTerminal \= ( \+ _ ),
+   NonTerminal \= ( not _ ),
    dcg_non_terminal(NonTerminal, S0, S, Goal).
 
 % The following constructs in a grammar rule body
@@ -80,7 +80,7 @@ dcg_cbody(( GRFirst, GRSecond ), S0, S, ( First, Second )) :-
    dcg_body(GRFirst, S0, S1, First),
    dcg_body(GRSecond, S1, S, Second).
 dcg_cbody(( GREither ; GROr ), S0, S, ( Either ; Or )) :-
-   \+ subsumes_term(( _ -> _ ),GREither),
+   not(subsumes_term(( _ -> _ ),GREither)),
    dcg_body(GREither, S0, S, Either),
    dcg_body(GROr, S0, S, Or).
 dcg_cbody(( GRCond ; GRElse ), S0, S, ( Cond ; Else )) :-
@@ -94,7 +94,7 @@ dcg_cbody({Goal}, S0, S, ( Goal, S0 = S )).
 dcg_cbody(call(Cont), S0, S, call(Cont, S0, S)).
 dcg_cbody(phrase(Body), S0, S, phrase(Body, S0, S)).
 dcg_cbody(!, S0, S, ( !, S0 = S )).
-dcg_cbody(\+ GRBody, S0, S, ( \+ phrase(GRBody,S0,_), S0 = S )).
+dcg_cbody(not(GRBody), S0, S, ( not(phrase(GRBody,S0,_)), S0 = S )).
 dcg_cbody(( GRIf -> GRThen ), S0, S, ( If -> Then )) :-
    dcg_body(GRIf, S0, S1, If),
    dcg_body(GRThen, S1, S, Then).
