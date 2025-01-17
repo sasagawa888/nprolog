@@ -5092,11 +5092,11 @@ int b_between(int arglist, int rest, int th)
 	    error(INSTANTATION_ERR, "between ", arg1, th);
 	if (wide_variable_p(arg2))
 	    error(INSTANTATION_ERR, "between ", arg2, th);
-	if (!wide_variable_p(arg1) && !wide_integer_p(arg1))
+	if (!wide_variable_p(arg1) && !integerp(arg1))
 	    error(NOT_INT, "between ", arg1, th);
-	if (!wide_variable_p(arg2) && !wide_integer_p(arg2))
+	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    error(NOT_INT, "between ", arg2, th);
-	if (!wide_variable_p(arg3) && !wide_integer_p(arg3))
+	if (!wide_variable_p(arg3) && !integerp(arg3))
 	    error(NOT_INT, "between ", arg3, th);
 
 	save1 = wp[th];
