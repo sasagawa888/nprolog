@@ -288,8 +288,8 @@ int b_length(int arglist, int rest, int th)
 	    if (unify(arg2, makeint(length(arg1)), th) == YES)
 		return (prove_all(rest, sp[th], th));
 	} else if(listp(arg1) && length(arg1) == -1 && wide_variable_p(improper_last(arg1))){
-		unify(improper_last(arg1),NIL,th);
-		unify(arg2,makeint(length(improper_butlast(arg1))),th);
+		if (unify(improper_last(arg1),NIL,th) == YES && 
+		    unify(arg2,makeint(length(improper_butlast(arg1))),th) == YES)
 		return (prove_all(rest, sp[th], th));
 	} else if (integerp(arg2)) {
 	    i = GET_INT(arg2);
