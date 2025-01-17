@@ -284,10 +284,7 @@ writeq/2
 atom_concat/3
 append/3
 between/3
-char_code/2
 compile_file/1  (invoke compiler)
-compound/1
-ground/1
 heapd/2     (dump heap area from 1st arg to 2nd arg)
 member/2
 measure/1   (measure elapsed time)
