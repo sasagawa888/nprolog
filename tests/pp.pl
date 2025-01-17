@@ -20,7 +20,7 @@ my_call(X) :-
     write(X),
     get(D), %discard EOL
     get(Z),
-    (\+(Z = ';') -> true;fail).
+    (not(Z = ';') -> true;fail).
 %user clause
 my_call(X) :-
     predicate_property(X,dynamic),
@@ -30,7 +30,7 @@ my_call(X) :-
     write(X),
     get(D), %discard EOL
     get(Z),
-    (\+(Z = ';') -> true;fail).
+    (not(Z = ';') -> true;fail).
 %variable
 my_call(X) :-
     var(X),
