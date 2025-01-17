@@ -144,7 +144,6 @@ yes
 # builtin predicate
 
 ```
-/+
 <
 =/
 \=
