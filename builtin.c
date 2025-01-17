@@ -274,7 +274,7 @@ int b_length(int arglist, int rest, int th)
 
 	if (!listp(arg1) && !nullp(arg1) && !wide_variable_p(arg1))
 	    error(NOT_LIST, "length ", arglist, th);
-	if (listp(arg1) && length(arg1) == -1)
+	if (listp(arg1) && length(arg1) == -1 && !wide_variable_p(improper_last(arg1)))
 		error(WRONG_ARGS, "length ", arg1, th);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
 	    error(LESS_THAN_ZERO, "length ", arg2, th);
@@ -286,6 +286,10 @@ int b_length(int arglist, int rest, int th)
 	save1 = wp[th];
 	if ((listp(arg1) && length(arg1) != -1) || nullp(arg1)) {
 	    if (unify(arg2, makeint(length(arg1)), th) == YES)
+		return (prove_all(rest, sp[th], th));
+	} else if(listp(arg1) && length(arg1) == -1 && wide_variable_p(improper_last(arg1))){
+		unify(improper_last(arg1),NIL,th);
+		unify(arg2,makeint(length(improper_butlast(arg1))),th);
 		return (prove_all(rest, sp[th], th));
 	} else if (integerp(arg2)) {
 	    i = GET_INT(arg2);
