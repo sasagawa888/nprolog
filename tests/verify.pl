@@ -1,9 +1,9 @@
 verify(X) :- 
-	ifthenelse(
-		call(X), 
-		true, 
-		(write('wrong '), write(X), nl)
-	).
+ ifthenelse(
+  call(X), 
+  true, 
+  (write('wrong '), write(X), nl)
+ ).
 
 alltest :-
     test(Test),write(Test),nl,fail.
