@@ -552,12 +552,6 @@ Enclose the atom and function in quotation marks.
 - `compile_file(fn)`  
   Compiles the Prolog code from the file `fn` and generates an object file.
 
-- `compound(E)`  
-  Checks whether `E` is a compound term.
-
-- `ground(E)`  
-  Checks whether `E` contains no uninstantiated variables.
-
 - `heapd(start, end)`  
   Displays the heap region addresses from `start` to `end`.
 
