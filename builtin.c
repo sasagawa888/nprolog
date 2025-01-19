@@ -274,22 +274,25 @@ int b_length(int arglist, int rest, int th)
 
 	if (!listp(arg1) && !nullp(arg1) && !wide_variable_p(arg1))
 	    error(NOT_LIST, "length ", arglist, th);
-	if (listp(arg1) && length(arg1) == -1 && !wide_variable_p(improper_last(arg1)))
-		error(WRONG_ARGS, "length ", arg1, th);
+	if (listp(arg1) && length(arg1) == -1
+	    && !wide_variable_p(improper_last(arg1)))
+	    error(WRONG_ARGS, "length ", arg1, th);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
 	    error(LESS_THAN_ZERO, "length ", arg2, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    error(NOT_INT, "length ", arg2, th);
-	if (variablep(arg1) && variablep(arg2) && eqp(arg1,arg2))
-		error(WRONG_ARGS, "length ", arg1, th);
+	if (variablep(arg1) && variablep(arg2) && eqp(arg1, arg2))
+	    error(WRONG_ARGS, "length ", arg1, th);
 
 	save1 = wp[th];
 	if ((listp(arg1) && length(arg1) != -1) || nullp(arg1)) {
 	    if (unify(arg2, makeint(length(arg1)), th) == YES)
 		return (prove_all(rest, sp[th], th));
-	} else if(listp(arg1) && length(arg1) == -1 && wide_variable_p(improper_last(arg1))){
-		if (unify(improper_last(arg1),NIL,th) == YES && 
-		    unify(arg2,makeint(length(improper_butlast(arg1))),th) == YES)
+	} else if (listp(arg1) && length(arg1) == -1
+		   && wide_variable_p(improper_last(arg1))) {
+	    if (unify(improper_last(arg1), NIL, th) == YES
+		&& unify(arg2, makeint(length(improper_butlast(arg1))),
+			 th) == YES)
 		return (prove_all(rest, sp[th], th));
 	} else if (integerp(arg2)) {
 	    i = GET_INT(arg2);
@@ -1636,7 +1639,7 @@ int b_consult(int arglist, int rest, int th)
 	execute_list = NIL;
 	while (1) {
 	  skip:
-	  	clause = readparse(th);
+	    clause = readparse(th);
 	    if (clause == FEND)
 		break;
 
@@ -1710,7 +1713,7 @@ int b_reconsult(int arglist, int rest, int th)
 	execute_list = NIL;
 	while (1) {
 	  skip:
-	  	clause = readparse(th);
+	    clause = readparse(th);
 	    if (clause == FEND)
 		break;
 

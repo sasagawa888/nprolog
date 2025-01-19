@@ -8,11 +8,10 @@
 
 int double_clause(int x)
 {
-	if(structurep(x) && car(x) == 26 &&
-	   structurep(caddr(x)) && car(caddr(x)) == 26) // double :- 
-		return(1);
-	else 
-		return(0);
+    if (structurep(x) && car(x) == DEFINE && structurep(caddr(x)) && car(caddr(x)) == DEFINE)	// double :- 
+	return (1);
+    else
+	return (0);
 }
 
 int readparse(int th)
@@ -21,10 +20,12 @@ int readparse(int th)
 
     paren_nest = 0;
     res = parser(NIL, NIL, NIL, NIL, 0, 0, th);
-    if (paren_nest != 0){
-	error(SYNTAX_ERR, "extra paren ", NIL, th);}
-	if (double_clause(res)){
-	error(SYNTAX_ERR, "require period ", res, th);}
+    if (paren_nest != 0) {
+	error(SYNTAX_ERR, "extra paren ", NIL, th);
+    }
+    if (double_clause(res)) {
+	error(SYNTAX_ERR, "require period ", res, th);
+    }
     return (res);
 }
 

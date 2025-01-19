@@ -301,18 +301,19 @@ int increase_terminal(int row, int col)
     if (isUni3(ed_data[row][col])) {
 	unicode = utf8_to_ucs4(row, col);
 	// tai
-	if (unicode >= 0x0e00 && unicode <= 0x0e7f){
-		// combination character has 0 width in terminal
-		if((unicode >= 0x0E31 && unicode <= 0x0E3A) || (unicode >= 0x0E47 && unicode <= 0x0E4E)){
-			return (0);
-		}
+	if (unicode >= 0x0e00 && unicode <= 0x0e7f) {
+	    // combination character has 0 width in terminal
+	    if ((unicode >= 0x0E31 && unicode <= 0x0E3A)
+		|| (unicode >= 0x0E47 && unicode <= 0x0E4E)) {
+		return (0);
+	    }
 	    return (1);
 	}
 	// tamil
 	else if (unicode >= 0xb80 && unicode <= 0xbff)
 	    return (1);
 	else
-	// kanji
+	    // kanji
 	    return (2);
     } else
 	return (1);
@@ -342,19 +343,19 @@ int decrease_terminal(int row, int col)
     if (isUni3(ed_data[row][col - 2])) {
 	unicode = utf8_to_ucs4(row, col - 2);
 	//tai
-	if (unicode >= 0x0e00 && unicode <= 0x0e7f){
-		// combination character has 0 width in terminal
-		if((unicode >= 0x0E31 && unicode <= 0x0E3A) || (unicode >= 0x0E47 && unicode <= 0x0E4E)){
-			return (0);
-		}
-		else 
-	    	return (1);
+	if (unicode >= 0x0e00 && unicode <= 0x0e7f) {
+	    // combination character has 0 width in terminal
+	    if ((unicode >= 0x0E31 && unicode <= 0x0E3A)
+		|| (unicode >= 0x0E47 && unicode <= 0x0E4E)) {
+		return (0);
+	    } else
+		return (1);
 	}
 	// tamil
 	else if (unicode >= 0xb80 && unicode <= 0xbff)
 	    return (1);
 	else
-	// kanji
+	    // kanji
 	    return (2);
     } else
 	return (1);
@@ -2162,17 +2163,17 @@ bool edit_loop(void)
 	    ed_col1++;
 	    skip = 3;
 	} else if (isUni3(c) && skip == 0) {
-		int unicode;
-		unicode = utf8_to_ucs4(ed_row,ed_col);
-		// in Tai language combination character has no space in display.
-		// Thus not increate ed_col1
-		if((unicode >= 0x0E31 && unicode <= 0x0E3A) || (unicode >= 0x0E47 && unicode <= 0x0E4E)){
-			skip = 2;
-		}
-		else{
-			ed_col1++;
-		    skip = 2;
-		}
+	    int unicode;
+	    unicode = utf8_to_ucs4(ed_row, ed_col);
+	    // in Tai language combination character has no space in display.
+	    // Thus not increate ed_col1
+	    if ((unicode >= 0x0E31 && unicode <= 0x0E3A)
+		|| (unicode >= 0x0E47 && unicode <= 0x0E4E)) {
+		skip = 2;
+	    } else {
+		ed_col1++;
+		skip = 2;
+	    }
 	}
 
 	if (skip > 0)

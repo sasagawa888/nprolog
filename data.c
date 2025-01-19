@@ -174,8 +174,9 @@ int length(int addr)
 {
     int len = 0;
 
-	if(addr == NIL) return(0);
-	
+    if (addr == NIL)
+	return (0);
+
     while (!(nullp(addr))) {
 	if (!structurep(addr))
 	    return (-1);
@@ -330,22 +331,22 @@ int last(int x)
 
 int improper_last(int x)
 {
-	if(singlep(x))
-		return(x);
-	else if(atomicp(x))
-		return(x);
-	else 
-		return(improper_last(cdr(x)));
+    if (singlep(x))
+	return (x);
+    else if (atomicp(x))
+	return (x);
+    else
+	return (improper_last(cdr(x)));
 }
 
 int improper_butlast(int x)
 {
-	if(singlep(x))
-		return(NIL);
-	else if(atomicp(x))
-		return(NIL);
-	else 
-		return(listcons(car(x),improper_butlast(cdr(x))));
+    if (singlep(x))
+	return (NIL);
+    else if (atomicp(x))
+	return (NIL);
+    else
+	return (listcons(car(x), improper_butlast(cdr(x))));
 }
 
 

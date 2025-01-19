@@ -1448,8 +1448,7 @@ void print_quoted(int addr)
 	    printc(c);
 	    printc('\\');
 	    pos++;
-	}
-	else
+	} else
 	    printc(str[pos++]);
 
 
