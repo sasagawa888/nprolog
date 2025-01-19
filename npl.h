@@ -50,7 +50,7 @@ address
 #define CALL        20
 #define QUEST	    22
 #define ANOYVAR     24
-#define DEFINE      26
+#define NECK        26
 #define ATMARK      28
 #define COLON       30
 #define NTRUE       32

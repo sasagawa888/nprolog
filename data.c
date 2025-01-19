@@ -1128,7 +1128,7 @@ int atom_predicate_p(int addr)
 int clausep(int addr)
 {
     if (IS_INCELL(addr) && structurep(addr) && GET_AUX(addr) != LIST
-	&& IS_INCELL(car(addr)) && car(addr) == DEFINE)
+	&& IS_INCELL(car(addr)) && car(addr) == NECK)
 	return (1);
     else
 	return (0);
@@ -2067,7 +2067,7 @@ int variable_to_call(int x)
 	return (list3
 		(car(x),
 		 variable_to_call(cadr(x)), variable_to_call(caddr(x))));
-    else if (structurep(x) && car(x) == DEFINE) {
+    else if (structurep(x) && car(x) == NECK) {
 	if (nullp(caddr(x)))	// e.g :- foo(x).
 	    return (list2(car(x), cadr(x)));
 	else			// normal case foo(X) :- bar(X).

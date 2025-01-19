@@ -1644,7 +1644,7 @@ int b_consult(int arglist, int rest, int th)
 		break;
 
 	    //e.g. :- op(...)
-	    if (operationp(clause) && car(clause) == DEFINE
+	    if (operationp(clause) && car(clause) == NECK
 		&& length(clause) == 2) {
 		clause = cadr(clause);
 		//if(!builtinp(clause) && !user_operation_p(clause)){
@@ -1718,7 +1718,7 @@ int b_reconsult(int arglist, int rest, int th)
 		break;
 
 	    //e.g. :- op(...)
-	    if (operationp(clause) && car(clause) == DEFINE
+	    if (operationp(clause) && car(clause) == NECK
 		&& length(clause) == 2) {
 		clause = cadr(clause);
 		if (arg2 == NIL)
@@ -4569,7 +4569,7 @@ int o_define(int x, int y, int th)
 	    error(BUILTIN_EXIST, "assertz", x, th);
 	if (atomp(x))
 	    SET_AUX(x, PRED);
-	clause = list3(DEFINE, x, y);
+	clause = list3(NECK, x, y);
 	SET_AUX(clause, CLAUSE);
 	SET_VAR(clause, reverse(unique(varslist(clause))));
 

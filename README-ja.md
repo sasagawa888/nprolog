@@ -4,7 +4,7 @@ N-Prolog(NPL)はARITY/PROLOG(MS-DOS)互換のインタプリタ、コンパイ�
 
 **N-PrologはISO-Prolog互換ではありません.** ARITY/PROLOG(MS-DOS)互換です。
 
-manual.txtにユーザーズマニュアルがあります。ご参照ください。
+MANUAL.mdにユーザーズマニュアルがあります。ご参照ください。
 ライセンスは修正BSDに基づいています。無償でお使いいただけます。
 
 ![npl](npl.png)
@@ -64,7 +64,7 @@ List of options:
 
 
 ## 目標
-N-Prologは１９８０年代のDEC10-Prologを楽しむことを目標にしています。
+N-Prologは1980年代のDEC10-Prologを楽しむことを目標にしています。
 
 
 ## 実行例

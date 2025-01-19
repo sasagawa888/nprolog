@@ -8,7 +8,7 @@
 
 int double_clause(int x)
 {
-    if (structurep(x) && car(x) == DEFINE && structurep(caddr(x)) && car(caddr(x)) == DEFINE)	// double :- 
+    if (structurep(x) && car(x) == NECK && structurep(caddr(x)) && car(caddr(x)) == NECK)	// double :- 
 	return (1);
     else
 	return (0);
