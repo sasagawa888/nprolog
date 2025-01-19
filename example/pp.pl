@@ -1,3 +1,4 @@
+
 %prolog in prolog
 
 pp :- 
@@ -16,7 +17,8 @@ my_call(X) :-
 my_call(X) :-
     predicate_property(X,dynamic),
     clause(X,true),
-    call(X),
+    write(X),
+    get(D), %discard EOL
     get(Z),
     (not(Z = ';') -> true;fail).
 %user clause
@@ -25,8 +27,10 @@ my_call(X) :-
     clause(X,Y),
     Y \= true,
     my_call(Y),
+    write(X),
+    get(D), %discard EOL
     get(Z),
-    (\+(Z = ';') -> true;fail).
+    (not(Z = ';') -> true;fail).
 %variable
 my_call(X) :-
     var(X),
