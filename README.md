@@ -1,5 +1,5 @@
 # N-Prolog
-N-Prolog(NPL) is an interpreter and compiler to be compatible with ARITY/PROLOG(MS-DOS)
+N-Prolog(NPL) is an interpreter and compiler to be super set of ARITY/PROLOG(MS-DOS)
 
 **N-Prolog is NOT ISO-Prolog.** Compatible with ARITY/PROLOG(MS-DOS) see document/NAMUAL.md
 
