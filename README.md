@@ -1,7 +1,6 @@
 # N-Prolog
-N-Prolog(NPL) is an interpreter and compiler to be compatible with ARITY/PROLOG(MS-DOS)
+N2-Prolog(NPL2) is an interpreter and compiler to be superset with ARITY/PROLOG(MS-DOS)
 
-**N-Prolog is NOT ISO-Prolog.** Compatible with ARITY/PROLOG(MS-DOS) see document/NAMUAL.md
 
 license is modified BSD.
 
@@ -344,4 +343,4 @@ random generate random float (1 >= x >= 0)
 
 # Parallelism
 N-Prolog supports distributed parallelism. It enables parallel execution across multiple machines connected via TCP/IP. And it supports multi thread parallelism.
-For more details, please refer to PARA1.md and PARA2.md.
+For more details, please refer to PARA1.md and PARA2.md.# n2prolog
