@@ -4170,12 +4170,6 @@ static const char *predicates_data[] = {
     "compile_file",
     "compile_file(fn)",
     "Compiles the Prolog code from the file fn and generates an object file.",
-    "compound",
-    "compound(E)",
-    "Checks whether E is a compound term.",
-    "ground",
-    "ground(E)",
-    "Checks whether E contains no uninstantiated variables.",
     "heapd",
     "heapd(start, end)",
     "Displays the heap region addresses from start to end.",
@@ -4200,6 +4194,9 @@ static const char *predicates_data[] = {
     "findall",
     "findall(X, Pred, Bag)",
     "Collects all X that unify with the predicate Pred into the list Bag.",
+	"select",
+    "select(X, L, Y)",
+    "Select atom X from the list L and unify L removed X.",
 
 };
 
