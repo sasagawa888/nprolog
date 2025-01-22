@@ -913,6 +913,7 @@ int b_string(int arglist, int rest, int th);
 int b_string_length(int arglist, int rest, int th);
 int b_string_term(int arglist, int rest, int th);
 int b_substring(int arglist, int rest, int th);
+int b_succ(int arglist, int rest, int th);
 int b_syntaxerrors(int arglist, int rest, int th);
 int b_system(int arglist, int rest, int th);
 int b_tab(int arglist, int rest, int th);

@@ -271,11 +271,12 @@ writeq/2
 ```
 atom_concat/3
 append/3
+member/2
 between/3
 select/3
+succ/2
 compile_file/1  (invoke compiler)
 heapd/2     (dump heap area from 1st arg to 2nd arg)
-member/2
 measure/1   (measure elapsed time)
 predicate_property/2
 reverse/2 

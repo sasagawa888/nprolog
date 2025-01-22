@@ -4197,7 +4197,9 @@ static const char *predicates_data[] = {
 	"select",
     "select(X, L, Y)",
     "Select atom X from the list L and unify L removed X.",
-
+	"succ",
+    "succ(X,Y)",
+    "Unify Y and X+1 or unify X and Y-1.",
 };
 
 #define NELEM(X) (sizeof(X) / sizeof((X)[0]))

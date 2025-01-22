@@ -191,6 +191,7 @@ void initbuiltin(void)
     defbuiltin("member", b_member, 2);
     defbuiltin("between", b_between, 3);
 	defbuiltin("select", b_select, 3);
+	defbuiltin("succ",b_succ, 2);
     defbuiltin("existerrors", b_existerrors, 2);
 
     //-----Distributed parallel
