@@ -276,6 +276,7 @@ writeq/2
 atom_concat/3
 append/3
 between/3
+select/3
 compile_file/1  (invoke compiler)
 heapd/2     (dump heap area from 1st arg to 2nd arg)
 member/2
@@ -339,7 +340,7 @@ atan(X)　      Xの逆正接関数
 exp(X)　　     Xの指数関数
 ln(X)          Xの自然対数関数
 log(X)　　     Xの常用対数関数
-sqrt(X)
+sqrt(X)        Xの平方根関数
 round(X,N)     Xを小数点以下N桁に丸める。Nは０〜１５の整数
 randi(n)      n以下0以上の整数乱数
 random　    １以下０以上の浮動小数点数乱数

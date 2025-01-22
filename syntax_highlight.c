@@ -60,7 +60,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "ctr_set" }, { "ctr_dec" }, { "ctr_inc" }, { "ctr_is" },
     { "heapd" }, { "list_text" }, { "nref" }, { "pref" }, { "nth_ref" },
     { "replace" }, { "member" }, { "append" }, { "repeat" }, { "system" },
-    { "retract" }, { "clause" }, { "call" }, { "directory" },
+    { "retract" }, { "clause" }, { "call" }, { "directory" }, { "select" },
     { "between" }, { "bagof" }, { "setof" }, { "findall" },
     { "current_predicate" }, { "current_op" }, { "retrieveh" }, { "removeh" }
 };
