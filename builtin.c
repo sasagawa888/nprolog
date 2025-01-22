@@ -31,7 +31,6 @@ void initbuiltin(void)
     definfix("\\=", b_notunify, 700, XFX);
     definfix("=..", b_univ, 700, XFX);
     definfix("->", b_ifthen, 1050, XFY);
-    //definfix("\\+", b_not, 900, FY);
     definfix("not", b_not, 900, FY);
 
     defbuiltin("!", b_cut, 0);
@@ -193,6 +192,7 @@ void initbuiltin(void)
 	defbuiltin("select", b_select, 3);
 	defbuiltin("succ",b_succ, 2);
     defbuiltin("existerrors", b_existerrors, 2);
+	definfix("\\+", b_not, 900, FY);
 
     //-----Distributed parallel
     defbuiltin("dp_create", b_dp_create, 1);

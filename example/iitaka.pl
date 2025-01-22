@@ -222,11 +222,11 @@ gene_e_aux(Const,N,L) :-
         gene_e_aux(Const,N1,[N|L]).
         
 %p165 chapter9 problem
-maplist([],_,[]).
-maplist([L|Ls],F,[M|Ms]) :-
+my_maplist([],_,[]).
+mt_maplist([L|Ls],F,[M|Ms]) :-
         X =.. [F,L,M],
         call(X),
-        maplist(Ls,F,Ms).
+        my_maplist(Ls,F,Ms).
 
 double(X,Y) :- Y is 2*X.
 

@@ -273,6 +273,7 @@ writeq/2
 # 組み込み述語（拡張）
 
 ```
+\\+ (not)
 atom_concat/3
 append/3
 member/2

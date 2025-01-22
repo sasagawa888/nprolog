@@ -269,6 +269,7 @@ writeq/2
 # builtin (extension)
 
 ```
+\\+
 atom_concat/3
 append/3
 member/2

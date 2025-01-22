@@ -1,3 +1,6 @@
 
-my_select(X, [X | Xs], Xs).
-my_select(X, [Y | Ys], [Y | Zs]) :- my_select(X, Ys, Zs).
+maplist(P,[]).
+maplist(P,[E|Es]) :-
+        %X =.. [P,E],
+        %call(X),
+        maplist(P,Es).
