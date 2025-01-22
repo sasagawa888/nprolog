@@ -345,7 +345,7 @@ jump_gen_a_pred2(P,N) :-
     write(N),
     write('){\n'),
     jump_gen_a_pred3(P,N),
-    write('return(NFALSE);}'),!.
+    write('return(NO);}'),!.
 
 % select all clauses that arity is N
 jump_gen_a_pred3(P,N) :-
