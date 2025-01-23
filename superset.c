@@ -84,3 +84,47 @@ int b_succ(int arglist, int rest, int th)
     error(ARITY_ERR,"succ ",arglist,th);
     return(NO);
 }
+
+
+int b_maplist(int arglist, int rest, int th){
+int arg1,arg2,varE,varEs,varP,n,pred,body,save1,save2;
+save2 = sp[th];
+pred = NIL;
+n = length(arglist);
+if(n == 2){
+arg1 = car(arglist);
+arg2 = cadr(arglist);
+if(!structurep(arg1))
+error(WRONG_ARGS,"maplist ",arg1,th);
+if(!listp(arg2) && !nullp(arg2))
+error(NOT_LIST,"maplist ",arg2,th);
+if(listp(arg2) && length(arg2) == -1)
+error(WRONG_ARGS,"maplist ",arg2,th);
+
+varP = makevariant(th);
+save1 = wp[th];
+if(unify_var(varP,arg1,th) == YES && unify_nil(arg2,th) == YES)
+if(prove_all(rest,sp[th],th) == YES) return(YES);
+unbind(save2,th);
+wp[th] = save1;
+varP = makevariant(th);
+varE = makevariant(th);
+varEs = makevariant(th);
+save1 = wp[th];
+if(unify_var(varP,arg1,th) == YES && unify(wlistcons(varE,varEs,th),arg2,th) == YES)
+pred = wappend(deref(varP,th),wlist1(deref(varE,th),th),th);
+pred = list_to_structure(pred);
+if(prove_all(pred,sp[th],th) == NO){
+    unbind(save2,th);
+    wp[th] = save1;
+    return(NO);
+}
+body = wcons(makesys("maplist"),wcons(varP,wcons(varEs,NIL,th),th),th);
+if(prove_all(addtail_body(rest,body,th),sp[th],th) == YES)
+return(YES);
+unbind(save2,th);
+wp[th] = save1;
+return(NO);}
+error(ARITY_ERR, "maplist" ,arglist, th);
+return(NO);
+}

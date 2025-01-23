@@ -4200,6 +4200,9 @@ static const char *predicates_data[] = {
 	"succ",
     "succ(X,Y)",
     "Unify Y and X+1 or unify X and Y-1.",
+	"maplist",
+    "maplist(P,L)",
+    "For all list L, predicate P is true return yes. otherwise return no.",
 };
 
 #define NELEM(X) (sizeof(X) / sizeof((X)[0]))

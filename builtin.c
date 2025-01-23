@@ -191,6 +191,7 @@ void initbuiltin(void)
     defbuiltin("between", b_between, 3);
 	defbuiltin("select", b_select, 3);
 	defbuiltin("succ",b_succ, 2);
+	defbuiltin("maplist", b_maplist, 2);
     defbuiltin("existerrors", b_existerrors, 2);
 	definfix("\\+", b_not, 900, FY);
 
