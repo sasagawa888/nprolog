@@ -269,7 +269,7 @@ writeq/2
 # builtin (extension)
 
 ```
-\\+ (not)
+\+ (not)
 atom_concat/3
 append/3
 member/2
@@ -279,6 +279,7 @@ succ/2
 maplist/2
 compound/1
 ground/1
+once/1
 compile_file/1  (invoke compiler)
 heapd/2     (dump heap area from 1st arg to 2nd arg)
 measure/1   (measure elapsed time)

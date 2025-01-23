@@ -150,3 +150,29 @@ int b_maplist(int arglist, int rest, int th)
     error(ARITY_ERR, "maplist", arglist, th);
     return (NO);
 }
+
+int b_once(int arglist, int rest, int th)
+{
+    int n, arg1;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+
+	if (wide_variable_p(arg1))
+	    error(INSTANTATION_ERR, "once ", arg1, th);
+	if (!callablep(arg1))
+	    error(NOT_CALLABLE, "once ", arg1, th);
+	if (wide_variable_p(arg1))
+	    error(INSTANTATION_ERR, "once ", arg1, th);
+	if (atom_constant_p(arg1))
+	    arg1 = makeatom(GET_NAME(arg1), PRED);
+
+	if(prove_all(arg1,sp[th],th) == YES)
+	return (prove_all(rest, sp[th], th));
+	else 
+	return(NO);
+    }
+    error(ARITY_ERR, "call ", arglist, th);
+    return (NO);
+}

@@ -4209,6 +4209,12 @@ static const char *predicates_data[] = {
 	"compound",
 	"compound(X)",
 	"Check if X is compound.",
+	"once",
+	"once(X)",
+	"call X only once.",
+	"atom_codes",
+    "atom_codes(Atom,List)",
+    "Convert a list to an atom, or convert an atom or an integer to a list.",
 };
 
 #define NELEM(X) (sizeof(X) / sizeof((X)[0]))

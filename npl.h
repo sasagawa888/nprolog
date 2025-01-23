@@ -860,6 +860,7 @@ int b_numeq(int arglist, int rest, int th);
 int b_nth_char(int arglist, int rest, int th);
 int b_nref(int arglist, int rest, int th);
 int b_nth_ref(int arglist, int rest, int th);
+int b_once(int arglist, int rest, int th);
 int b_op(int arglist, int rest, int th);
 int b_open(int arglist, int rest, int th);
 int b_peek_byte(int arglist, int rest, int th);
