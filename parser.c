@@ -931,32 +931,7 @@ void gettoken(int th)
 	stok.ahead = c;
 	return;
     }
-	//string double quote
-    if (c == '"') {
-	pos = 0;
-	c = readc();
-	c1 = readc();
-	while (!(c == '"' && c1 != '"')) {
-	    if (c == '"') {
-		if (c1 == '"') {
-		SETBUF(c)} else
-		    error(SYNTAX_ERR, "double \" in string token ", NIL,
-			  th);
-	    } else if (c == EOF)
-		error(SYNTAX_ERR, "not exist right \" in file ", NIL, th);
-	    else {
-		SETBUF(c) unreadc(c1);
-	    }
-	    c = readc();
-	    c1 = readc();
-	}
-	unreadc(c1);
-	SETBUFEND(NUL) stok.type = STRING;
-	stok.ch = NUL;
-	stok.ahead = c;
-	return;
-    }
-
+	
     if (c == '`')
 	error(SYNTAX_ERR, "illegal token back quote ", NIL, th);
 
