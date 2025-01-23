@@ -3,14 +3,8 @@
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 #endif
-#include <pthread.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <netdb.h>
 #include <unistd.h>
 #include <stdlib.h>
-#include <fcntl.h>
 #include "npl.h"
 
 //-----------JUMP project(builtin for compiler)------------
