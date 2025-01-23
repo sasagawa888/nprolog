@@ -87,14 +87,14 @@ int b_succ(int arglist, int rest, int th)
 
 
 int b_maplist(int arglist, int rest, int th){
-int arg1,arg2,varE,varEs,varP,n,pred,body,save1,save2;
+int arg1,arg2,varE,varEs,varP,n,pred,arg,body,save1,save2;
 save2 = sp[th];
 pred = NIL;
 n = length(arglist);
 if(n == 2){
 arg1 = car(arglist);
 arg2 = cadr(arglist);
-if(!structurep(arg1))
+if(!structurep(arg1) && !atomp(arg1))
 error(WRONG_ARGS,"maplist ",arg1,th);
 if(!listp(arg2) && !nullp(arg2))
 error(NOT_LIST,"maplist ",arg2,th);
@@ -112,7 +112,12 @@ varE = makevariant(th);
 varEs = makevariant(th);
 save1 = wp[th];
 if(unify_var(varP,arg1,th) == YES && unify(wlistcons(varE,varEs,th),arg2,th) == YES)
-pred = wappend(deref(varP,th),wlist1(deref(varE,th),th),th);
+pred = deref(varP,th);
+arg = deref(varE,th);
+if(structurep(pred))
+    pred = wappend(pred,wlist1(arg,th),th);
+else 
+    pred = wlist2(pred,arg,th);
 pred = list_to_structure(pred);
 if(prove_all(pred,sp[th],th) == NO){
     unbind(save2,th);
