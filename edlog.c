@@ -4215,6 +4215,9 @@ static const char *predicates_data[] = {
 	"atom_codes",
     "atom_codes(Atom,List)",
     "Convert a list to an atom, or convert an atom or an integer to a list.",
+	"char_code",
+    "char_codes(Atom,List)",
+    "Convert a list to a char atom, or convert a char atom to an integer list.",
 };
 
 #define NELEM(X) (sizeof(X) / sizeof((X)[0]))
