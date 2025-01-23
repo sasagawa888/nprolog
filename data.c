@@ -298,7 +298,7 @@ int wappend(int x, int y, int th)
     if (nullp(x))
 	return (y);
     else
-	return (wlistcons(car(x), wappend(cdr(x), y, th),th));
+	return (wlistcons(car(x), wappend(cdr(x), y, th), th));
 }
 
 

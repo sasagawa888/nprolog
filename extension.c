@@ -2287,4 +2287,3 @@ int b_mt_prove(int arglist, int rest, int th)
     error(ARITY_ERR, "mt_prove ", arglist, th);
     return (NO);
 }
-

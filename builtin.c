@@ -189,11 +189,11 @@ void initbuiltin(void)
     defbuiltin("append", b_append, 3);
     defbuiltin("member", b_member, 2);
     defbuiltin("between", b_between, 3);
-	defbuiltin("select", b_select, 3);
-	defbuiltin("succ",b_succ, 2);
-	defbuiltin("maplist", b_maplist, 2);
+    defbuiltin("select", b_select, 3);
+    defbuiltin("succ", b_succ, 2);
+    defbuiltin("maplist", b_maplist, 2);
     defbuiltin("existerrors", b_existerrors, 2);
-	definfix("\\+", b_not, 900, FY);
+    definfix("\\+", b_not, 900, FY);
 
     //-----Distributed parallel
     defbuiltin("dp_create", b_dp_create, 1);
