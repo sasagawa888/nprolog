@@ -19,6 +19,7 @@ NPL_OBJS = main.o \
 	function.o \
 	builtin.o \
 	extension.o \
+	parallel.o \
 	superset.o \
 	link.o \
 	data.o \
