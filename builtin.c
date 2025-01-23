@@ -65,7 +65,7 @@ void initbuiltin(void)
     defbuiltin("close", b_close, 1);
     defbuiltin("clause", b_clause, 2);
     defbuiltin("compare", b_compare, 2);
-    //defbuiltin("compound", b_compound, 1);
+    defbuiltin("compound", b_compound, 1);
     defbuiltin("concat", b_concat, 3);
     defbuiltin("consult", b_consult, 1);
     defbuiltin("create", b_create, 2);
@@ -102,7 +102,7 @@ void initbuiltin(void)
     defbuiltin("get0_noecho", b_get0_noecho, 1);
     defbuiltin("get_code", b_get_code, 1);
     defbuiltin("get_byte", b_get_byte, 1);
-    //defbuiltin("ground", b_ground, 1);
+    defbuiltin("ground", b_ground, 1);
     defbuiltin("halt", b_halt, 0);
     defbuiltin("heapd", b_heapdump, 2);
     defbuiltin("ifthen", b_ifthen, 2);

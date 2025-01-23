@@ -61,7 +61,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "heapd" }, { "list_text" }, { "nref" }, { "pref" }, { "nth_ref" },
     { "replace" }, { "member" }, { "append" }, { "repeat" }, { "system" },
     { "retract" }, { "clause" }, { "call" }, { "directory" }, { "select" },
-	{ "maplist" },
+	{ "maplist" }, { "ground" }, { "compound" },
     { "between" }, { "bagof" }, { "setof" }, { "findall" }, { "succ" },
     { "current_predicate" }, { "current_op" }, { "retrieveh" }, { "removeh" }
 };

@@ -4203,6 +4203,12 @@ static const char *predicates_data[] = {
     "maplist",
     "maplist(P,L)",
     "For all list L, predicate P is true return yes. otherwise return no.",
+	"ground",
+	"ground(X)",
+	"Check if X is gound.",
+	"compound",
+	"compound(X)",
+	"Check if X is compound.",
 };
 
 #define NELEM(X) (sizeof(X) / sizeof((X)[0]))
