@@ -26,3 +26,16 @@ setof/3
 findall/3
 existerrors/2
 write_canonical/1 /2
+
+
+# String
+In ARITY/PROLOG, strings were enclosed in $ symbols. In N-Prolog, this convention is maintained, but strings enclosed in double quotes (") are also recognized as strings. However, similar to ISO-Prolog, these are treated as lists.
+
+```
+N-Prolog Ver 3.80
+?- X = "abc".
+X = [97,98,99] .
+yes
+?- 
+
+```
