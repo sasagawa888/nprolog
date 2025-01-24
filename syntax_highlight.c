@@ -64,7 +64,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 	{ "maplist" }, { "ground" }, { "compound" }, { "once" }, { "atom_codes" },{ "char_code" },
     { "between" }, { "bagof" }, { "setof" }, { "findall" }, { "succ" },
     { "current_predicate" }, { "current_op" }, { "retrieveh" }, { "removeh" },
-    { "get_code" }, { "get_byte" }, { "put_char" },
+    { "get_code" }, { "get_byte" }, { "put_char" }, { "flush_output" },
 };
 
 //compiled predicate

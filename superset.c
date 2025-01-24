@@ -781,3 +781,28 @@ int b_put_char(int arglist, int rest, int th)
     return (NO);
 }
 
+int b_flush_output(int arglist, int rest, int th)
+{
+    int n, arg1;
+
+    n = length(arglist);
+    if (n == 0) {
+	fflush(stdout);
+	return (prove_all(rest, sp[th], th));
+    } else if (n == 1) {
+	arg1 = car(arglist);
+	if (wide_variable_p(arg1))
+	    error(INSTANTATION_ERR, "flush_output ", arg1, th);
+	if (!streamp(arg1) && !aliasp(arg1))
+	    error(NOT_STREAM, "flush_output ", arg1, th);
+	if (aliasp(arg1))
+	    arg1 = GET_CAR(arg1);
+	if (GET_OPT(arg1) == OPL_INPUT)
+	    error(NOT_OUTPUT_STREAM, "flush_output ", arg1, th);
+
+	fflush(GET_PORT(arg1));
+	return (prove_all(rest, sp[th], th));
+    }
+    error(ARITY_ERR, "flush_output ", arglist, th);
+    return (NO);
+}

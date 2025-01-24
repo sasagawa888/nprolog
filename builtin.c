@@ -197,6 +197,7 @@ void initbuiltin(void)
 	defbuiltin("get_code", b_get_code, 1);
     defbuiltin("get_byte", b_get_byte, 1);
 	defbuiltin("put_char", b_put_char, 1);
+	defbuiltin("flush_output", b_flush_output, 0);
     defbuiltin("existerrors", b_existerrors, 2);
     definfix("\\+", b_not, 900, FY);
 
@@ -1467,7 +1468,7 @@ int b_told(int arglist, int rest, int th)
 }
 
 
-int b_flush_output(int arglist, int rest, int th)
+int b_flush(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -1478,18 +1479,18 @@ int b_flush_output(int arglist, int rest, int th)
     } else if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "flush_output ", arg1, th);
+	    error(INSTANTATION_ERR, "flush ", arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "flush_output ", arg1, th);
+	    error(NOT_STREAM, "flush ", arg1, th);
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
 	if (GET_OPT(arg1) == OPL_INPUT)
-	    error(NOT_OUTPUT_STREAM, "flush_output ", arg1, th);
+	    error(NOT_OUTPUT_STREAM, "flush ", arg1, th);
 
 	fflush(GET_PORT(arg1));
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "flush_output ", arglist, th);
+    error(ARITY_ERR, "flush ", arglist, th);
     return (NO);
 }
 
