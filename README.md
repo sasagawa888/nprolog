@@ -282,15 +282,16 @@ ground/1
 once/1
 atom_codes/2
 char_code/2
-compile_file/1  (invoke compiler)
-heapd/2     (dump heap area from 1st arg to 2nd arg)
-measure/1   (measure elapsed time)
 predicate_property/2
 reverse/2 
 bagof/3
 setof/3
 findall/3
 existerrors/2
+write_canonical/1 /2
+compile_file/1  (invoke compiler)
+heapd/2     (dump heap area from 1st arg to 2nd arg)
+measure/1   (measure elapsed time)
 ```
 
 # wiringPi 

@@ -4218,6 +4218,9 @@ static const char *predicates_data[] = {
 	"char_code",
     "char_codes(Atom,List)",
     "Convert a list to a char atom, or convert a char atom to an integer list.",
+	"write_canonical",
+    "write_canonical(Term)",
+    "Write the term to standard output with prefix notation.",
 };
 
 #define NELEM(X) (sizeof(X) / sizeof((X)[0]))

@@ -1,0 +1,28 @@
+# Superset
+ under construction
+
+ N-Prolog is compatible with ARITY/PROLOG. This is an old language specification from the 1980s. Some predicates have been added to run more modern code, primarily based on ISO-Prolog. However, please note that these may not necessarily conform to the ISO-Prolog specification.
+
+ # Spec
+
+ ```
+\+ (not)
+atom_concat/3
+append/3
+member/2
+between/3
+select/3
+succ/2
+maplist/2
+compound/1
+ground/1
+once/1
+atom_codes/2
+char_code/2
+predicate_property/2
+reverse/2 
+bagof/3
+setof/3
+findall/3
+existerrors/2
+write_canonical/1 /2

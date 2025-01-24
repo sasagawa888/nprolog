@@ -194,6 +194,7 @@ void initbuiltin(void)
 	defbuiltin("once", b_once, 1);
 	defbuiltin("atom_codes", b_name, 2);
 	defbuiltin("char_code", b_char_code, 2);
+	defbuiltin("write_canonical", b_display, 1);
     defbuiltin("existerrors", b_existerrors, 2);
     definfix("\\+", b_not, 900, FY);
 
