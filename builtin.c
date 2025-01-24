@@ -53,7 +53,6 @@ void initbuiltin(void)
     defbuiltin("assert", b_assert, 1);
     defbuiltin("asserta", b_asserta, 1);
     defbuiltin("assertz", b_assert, 1);
-    defbuiltin("atom_concat", b_atom_concat, 3);
     defbuiltin("atom", b_atom, 1);
     defbuiltin("atom_string", b_atom_string, 2);
     defbuiltin("atomic", b_atomic, 1);
@@ -195,6 +194,8 @@ void initbuiltin(void)
 	defbuiltin("atom_codes", b_name, 2);
 	defbuiltin("char_code", b_char_code, 2);
 	defbuiltin("write_canonical", b_display, 1);
+	defbuiltin("atom_length", b_atom_length, 2);
+	defbuiltin("atom_concat", b_atom_concat, 3);
     defbuiltin("existerrors", b_existerrors, 2);
     definfix("\\+", b_not, 900, FY);
 

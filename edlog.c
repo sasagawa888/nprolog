@@ -4221,6 +4221,9 @@ static const char *predicates_data[] = {
 	"write_canonical",
     "write_canonical(Term)",
     "Write the term to standard output with prefix notation.",
+	"atom_length",
+	"atom_length(Atom,X)",
+	"Unify X and length of Atom",
 };
 
 #define NELEM(X) (sizeof(X) / sizeof((X)[0]))

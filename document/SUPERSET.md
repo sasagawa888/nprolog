@@ -26,6 +26,7 @@ setof/3
 findall/3
 existerrors/2
 write_canonical/1 /2
+atom_length/2
 
 
 # String

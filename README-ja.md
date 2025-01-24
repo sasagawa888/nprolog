@@ -292,6 +292,7 @@ setof/3
 finall/3
 existerrors/2
 write_canonical/1 /2
+atom_length/2
 compile_file/1  (invoke compiler)
 heapd/2     (dump heap area from 1st arg to 2nd arg)
 measure/1   (measure elapsed time)
