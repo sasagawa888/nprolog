@@ -63,7 +63,8 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "retract" }, { "clause" }, { "call" }, { "directory" }, { "select" },
 	{ "maplist" }, { "ground" }, { "compound" }, { "once" }, { "atom_codes" },{ "char_code" },
     { "between" }, { "bagof" }, { "setof" }, { "findall" }, { "succ" },
-    { "current_predicate" }, { "current_op" }, { "retrieveh" }, { "removeh" }
+    { "current_predicate" }, { "current_op" }, { "retrieveh" }, { "removeh" },
+    { "get_code" }, { "get_byte" }, { "put_char" },
 };
 
 //compiled predicate

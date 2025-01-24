@@ -27,6 +27,9 @@ findall/3
 existerrors/2
 write_canonical/1 /2
 atom_length/2
+get_char/1 2
+get_byte/1 2
+put_char/1 
 ```
 
 # String

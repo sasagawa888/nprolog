@@ -98,8 +98,6 @@ void initbuiltin(void)
     defbuiltin("get", b_get, list2(1, 2));
     defbuiltin("get0", b_get0, list2(1, 2));
     defbuiltin("get0_noecho", b_get0_noecho, 1);
-    defbuiltin("get_code", b_get_code, 1);
-    defbuiltin("get_byte", b_get_byte, 1);
     defbuiltin("halt", b_halt, 0);
     defbuiltin("heapd", b_heapdump, 2);
     defbuiltin("ifthen", b_ifthen, 2);
@@ -196,6 +194,9 @@ void initbuiltin(void)
 	defbuiltin("write_canonical", b_display, 1);
 	defbuiltin("atom_length", b_atom_length, 2);
 	defbuiltin("atom_concat", b_atom_concat, 3);
+	defbuiltin("get_code", b_get_code, 1);
+    defbuiltin("get_byte", b_get_byte, 1);
+	defbuiltin("put_char", b_put_char, 1);
     defbuiltin("existerrors", b_existerrors, 2);
     definfix("\\+", b_not, 900, FY);
 
@@ -849,121 +850,6 @@ int b_get0_noecho(int arglist, int rest, int th)
 	    return (NO);
     }
     error(ARITY_ERR, "get0_noecho ", arglist, th);
-    return (NO);
-}
-
-
-
-
-int b_get_code(int arglist, int rest, int th)
-{
-    int n, arg1, arg2, c, i, res;
-    char str[10];
-
-    n = length(arglist);
-    if (n == 1) {
-	arg1 = input_stream;
-	arg2 = car(arglist);
-	goto get_code;
-    } else if (n == 2) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
-
-      get_code:
-	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "get_code ", arg1, th);
-	if (!wide_variable_p(arg2) && !integerp(arg2))
-	    error(NOT_INT, "get_code ", arg2, th);
-	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "get_code ", arg1, th);
-
-	if (aliasp(arg1))
-	    arg1 = GET_CAR(arg1);
-	c = getc(GET_PORT(arg1));
-
-	if (isUni2(c)) {
-	    str[0] = c;
-	    str[1] = getc(GET_PORT(arg1));
-	    str[2] = NUL;
-	    i = utf8_to_ucs4(str);
-	} else if (isUni3(c)) {
-	    str[0] = c;
-	    str[1] = getc(GET_PORT(arg1));
-	    str[2] = getc(GET_PORT(arg1));
-	    str[3] = NUL;
-	    i = utf8_to_ucs4(str);
-	} else if (isUni4(c)) {
-	    str[0] = c;
-	    str[1] = getc(GET_PORT(arg1));
-	    str[2] = getc(GET_PORT(arg1));
-	    str[3] = getc(GET_PORT(arg1));
-	    str[4] = NUL;
-	    i = utf8_to_ucs4(str);
-	} else if (isUni5(c)) {
-	    str[0] = c;
-	    str[1] = getc(GET_PORT(arg1));
-	    str[2] = getc(GET_PORT(arg1));
-	    str[3] = getc(GET_PORT(arg1));
-	    str[4] = getc(GET_PORT(arg1));
-	    str[5] = NUL;
-	    i = utf8_to_ucs4(str);
-	} else if (isUni6(c)) {
-	    str[0] = c;
-	    str[1] = getc(GET_PORT(arg1));
-	    str[2] = getc(GET_PORT(arg1));
-	    str[3] = getc(GET_PORT(arg1));
-	    str[4] = getc(GET_PORT(arg1));
-	    str[5] = getc(GET_PORT(arg1));
-	    str[6] = NUL;
-	    i = utf8_to_ucs4(str);
-	} else {
-	    i = c;
-	}
-
-	res = NIL;
-
-	res = unify(arg2, makeint(i), th);
-	if (res == YES)
-	    return (prove_all(rest, sp[th], th));
-	else
-	    return (NO);
-    }
-    error(ARITY_ERR, "get_code ", arglist, th);
-    return (NO);
-}
-
-int b_get_byte(int arglist, int rest, int th)
-{
-    int n, arg1, arg2, c, res;
-
-    n = length(arglist);
-    if (n == 1) {
-	arg1 = input_stream;
-	arg2 = car(arglist);
-	goto get_byte;
-    } else if (n == 2) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
-
-      get_byte:
-	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "get_byte ", arg1, th);
-	if (!wide_variable_p(arg2) && !integerp(arg2))
-	    error(NOT_INT, "get_byte ", arg2, th);
-	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "get_byte ", arg1, th);
-
-	if (aliasp(arg1))
-	    arg1 = GET_CAR(arg1);
-	c = fgetc(GET_PORT(arg1));
-
-	res = unify(arg2, makeint(c), th);
-	if (res == YES)
-	    return (prove_all(rest, sp[th], th));
-	else
-	    return (NO);
-    }
-    error(ARITY_ERR, "get_byte ", arglist, th);
     return (NO);
 }
 

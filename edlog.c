@@ -4224,6 +4224,15 @@ static const char *predicates_data[] = {
 	"atom_length",
 	"atom_length(Atom,X)",
 	"Unify X and length of Atom",
+	"put_char",
+	"put_char(X)",
+	"Put char X to stream.",
+	"get_char",
+	"get_char(X)",
+	"Get char X from stream.",
+	"get_byte",
+	"get_byte(X)",
+	"Get byte X from stream.",
 };
 
 #define NELEM(X) (sizeof(X) / sizeof((X)[0]))

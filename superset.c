@@ -641,3 +641,143 @@ int b_atom_length(int arglist, int rest, int th)
 	error(ARITY_ERR, "atom_length ", arglist, th);
     return (NO);
 }
+
+
+int b_get_code(int arglist, int rest, int th)
+{
+    int n, arg1, arg2, c, i, res;
+    char str[10];
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = input_stream;
+	arg2 = car(arglist);
+	goto get_code;
+    } else if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+      get_code:
+	if (wide_variable_p(arg1))
+	    error(INSTANTATION_ERR, "get_code ", arg1, th);
+	if (!wide_variable_p(arg2) && !integerp(arg2))
+	    error(NOT_INT, "get_code ", arg2, th);
+	if (!streamp(arg1) && !aliasp(arg1))
+	    error(NOT_STREAM, "get_code ", arg1, th);
+
+	if (aliasp(arg1))
+	    arg1 = GET_CAR(arg1);
+	c = getc(GET_PORT(arg1));
+
+	if (isUni2(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+	    str[2] = NUL;
+	    i = utf8_to_ucs4(str);
+	} else if (isUni3(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+	    str[3] = NUL;
+	    i = utf8_to_ucs4(str);
+	} else if (isUni4(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+	    str[3] = getc(GET_PORT(arg1));
+	    str[4] = NUL;
+	    i = utf8_to_ucs4(str);
+	} else if (isUni5(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+	    str[3] = getc(GET_PORT(arg1));
+	    str[4] = getc(GET_PORT(arg1));
+	    str[5] = NUL;
+	    i = utf8_to_ucs4(str);
+	} else if (isUni6(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+	    str[3] = getc(GET_PORT(arg1));
+	    str[4] = getc(GET_PORT(arg1));
+	    str[5] = getc(GET_PORT(arg1));
+	    str[6] = NUL;
+	    i = utf8_to_ucs4(str);
+	} else {
+	    i = c;
+	}
+
+	res = NIL;
+
+	res = unify(arg2, makeint(i), th);
+	if (res == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    error(ARITY_ERR, "get_code ", arglist, th);
+    return (NO);
+}
+
+
+
+int b_get_byte(int arglist, int rest, int th)
+{
+    int n, arg1, arg2, c, res;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = input_stream;
+	arg2 = car(arglist);
+	goto get_byte;
+    } else if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+      get_byte:
+	if (wide_variable_p(arg1))
+	    error(INSTANTATION_ERR, "get_byte ", arg1, th);
+	if (!wide_variable_p(arg2) && !integerp(arg2))
+	    error(NOT_INT, "get_byte ", arg2, th);
+	if (!streamp(arg1) && !aliasp(arg1))
+	    error(NOT_STREAM, "get_byte ", arg1, th);
+
+	if (aliasp(arg1))
+	    arg1 = GET_CAR(arg1);
+	c = fgetc(GET_PORT(arg1));
+
+	res = unify(arg2, makeint(c), th);
+	if (res == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    error(ARITY_ERR, "get_byte ", arglist, th);
+    return (NO);
+}
+
+int b_put_char(int arglist, int rest, int th)
+{
+    int n, arg1, arg2;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = output_stream;
+	arg2 = car(arglist);
+	goto put;
+    } else if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+      put:
+	if (!integerp(arg2))
+	    error(NOT_INT, "put_char ", arg1, th);
+
+	fprintf(GET_PORT(arg1), "%c", (char) GET_INT(arg2));
+	return (prove_all(rest, sp[th], th));
+    }
+    error(ARITY_ERR, "put_char ", arglist, th);
+    return (NO);
+}
+
