@@ -189,7 +189,8 @@ void initbuiltin(void)
 	defbuiltin("compound", b_compound, 1);
 	defbuiltin("ground", b_ground, 1);
 	defbuiltin("once", b_once, 1);
-	defbuiltin("atom_codes", b_name, 2);
+	defbuiltin("atom_codes", b_atom_codes, 2);
+	defbuiltin("atom_chars", b_atom_chars, 2);
 	defbuiltin("char_code", b_char_code, 2);
 	defbuiltin("write_canonical", b_display, 1);
 	defbuiltin("atom_length", b_atom_length, 2);

@@ -18,6 +18,7 @@ compound/1
 ground/1
 once/1
 atom_codes/2
+atom_chars/2
 char_code/2
 predicate_property/2
 reverse/2 

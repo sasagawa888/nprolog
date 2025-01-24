@@ -24,7 +24,7 @@ char function[FUNCTION_NUMBER][12] = {
 
 
 //builtin token
-char builtin[BUILTIN_NUMBER][30] = {
+char builtin[BUILTIN_NUMBER][60] = {
     { "->" }, { "=.." }, { "==" }, { "\\==" }, { "@<" },
     { "@=<" }, { "@>" }, { "@>=" }, { "=:=" }, { "=/=" }, { "=\\=" },
     { "<" }, { "=<" }, { ">" }, { ">=" }, { "\\=" }, { "=" }, { "\\+" },
@@ -62,7 +62,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "replace" }, { "member" }, { "append" }, { "repeat" }, { "system" },
     { "retract" }, { "clause" }, { "call" }, { "directory" }, { "select" },
 	{ "maplist" }, { "ground" }, { "compound" }, { "once" }, { "atom_codes" },{ "char_code" },
-    { "between" }, { "bagof" }, { "setof" }, { "findall" }, { "succ" },
+    { "between" }, { "bagof" }, { "setof" }, { "findall" }, { "succ" }, { "atom_chars" },
     { "current_predicate" }, { "current_op" }, { "retrieveh" }, { "removeh" },
     { "get_code" }, { "get_byte" }, { "put_char" }, { "flush_output" },
 };
