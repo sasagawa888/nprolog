@@ -1228,3 +1228,41 @@ int b_unify_with_occurs_check(int arglist, int rest, int th)
 	error(ARITY_ERR,"unify_with_occurs_check ", arglist, th);
 	return(NO);
 }
+
+
+int b_set_input(int arglist, int rest, int th)
+{
+	int n,arg1;
+
+	n=length(arglist);
+	if(n==1){
+		arg1 = car(arglist);
+
+		if(!streamp(arg1))
+		error(NOT_STREAM, "set_input", arg1, th);
+
+		input_stream = arg1;
+		return(prove_all(rest,sp[th],th));
+	}
+	error(ARITY_ERR,"set_input ", arglist, th);
+	return(NO);
+}
+
+
+int b_set_output(int arglist, int rest, int th)
+{
+	int n,arg1;
+
+	n=length(arglist);
+	if(n==1){
+		arg1 = car(arglist);
+
+		if(!streamp(arg1))
+		error(NOT_STREAM, "set_output", arg1, th);
+
+		output_stream = arg1;
+		return(prove_all(rest,sp[th],th));
+	}
+	error(ARITY_ERR,"set_output ", arglist, th);
+	return(NO);
+}

@@ -70,6 +70,7 @@ char builtin[BUILTIN_NUMBER][60] = {
 	{ "removeh" }, { "unify_with_occurs_check" },
     { "get_code" }, { "get_byte" }, { "put_char" }, { "flush_output" },
     { "number_codes" }, { "number_chars" }, { "catch" }, { "throw" },
+    { "set_input" }, { "set_output" },
 };
 
 //compiled predicate

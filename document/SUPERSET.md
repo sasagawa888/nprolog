@@ -38,6 +38,8 @@ throw/1
 unify_with_occurs_check/2
 current_input/1
 current_output/1
+set_input/1
+set_output/1
 ```
 
 # String

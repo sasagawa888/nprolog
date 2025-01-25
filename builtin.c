@@ -204,6 +204,8 @@ void initbuiltin(void)
     defbuiltin("catch", b_catch, 3);
     defbuiltin("throw", b_throw, 1);
 	defbuiltin("unify_with_occurs_check", b_unify_with_occurs_check, 2);
+	defbuiltin("set_input", b_set_input, 1);
+	defbuiltin("set_output", b_set_output, 1);
     defbuiltin("existerrors", b_existerrors, 2);
     definfix("\\+", b_not, 900, FY);
 
