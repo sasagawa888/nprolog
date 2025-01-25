@@ -939,6 +939,7 @@ int b_trace(int arglist, int rest, int th);
 int b_true(int arglist, int rest, int th);
 int b_unify(int arglist, int rest, int th);
 int b_univ(int arglist, int rest, int th);
+int b_use_module(int arglist, int rest, int th);
 int b_var(int arglist, int rest, int th);
 int b_variable_convert(int arglist, int rest, int th);
 int b_unify_with_occurs_check(int arglist, int rest, int th);

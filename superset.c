@@ -2,6 +2,7 @@
 *     superset builtin predicates 
 */
 #include <string.h>
+#include <stdlib.h>
 #include "npl.h"
 
 int b_select(int arglist, int rest, int th)
@@ -1264,5 +1265,32 @@ int b_set_output(int arglist, int rest, int th)
 		return(prove_all(rest,sp[th],th));
 	}
 	error(ARITY_ERR,"set_output ", arglist, th);
+	return(NO);
+}
+
+int b_use_module(int arglist, int rest, int th)
+{
+	int n,arg1;
+	char *home,str[STRSIZE];
+	FILE *fp;
+
+	n=length(arglist);
+	if(n==1){
+		arg1 = car(arglist);
+		if(!atomp(arg1))
+		error(NOT_ATOM,"use_module ",arg1,th);
+
+		home = getenv("HOME");
+    	strcpy(str, home);
+    	strcat(str, "/nprolog/library/");
+	    strcat(str, GET_NAME(arg1));
+		strcat(str, "pl");
+    	fp = fopen(str, "r");
+    	if (fp != NULL) {
+		fclose(fp);
+		b_consult(list1(makeconst(str)), NIL, 0);
+		}
+	}
+	error(ARITY_ERR,"use_module ",arglist, th);
 	return(NO);
 }
