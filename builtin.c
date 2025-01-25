@@ -2998,39 +2998,6 @@ int b_list_text(int arglist, int rest, int th)
 }
 
 
-int b_atom_concat(int arglist, int rest, int th)
-{
-    int n, arg1, arg2, arg3, atom;
-    char str1[STRSIZE];
-
-    n = length(arglist);
-    if (n == 3) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
-	arg3 = caddr(arglist);
-
-	if (!wide_variable_p(arg1) && !atomp(arg1))
-	    error(NOT_ATOM, "atom_concat ", arg1, th);
-	if (!wide_variable_p(arg2) && !atomp(arg2))
-	    error(NOT_ATOM, "atom_concat ", arg2, th);
-	if (!wide_variable_p(arg3))
-	    error(NOT_VAR, "atom_concat ", arg3, th);
-	if (strlen(GET_NAME(arg1)) + strlen(GET_NAME(arg2)) > STRSIZE)
-	    error(RESOURCE_ERR, "atom_concat ", arglist, th);
-
-	strcpy(str1, GET_NAME(arg1));
-	strcat(str1, GET_NAME(arg2));
-	atom = makeconst(str1);
-
-	if (unify(arg3, atom, th) == YES)
-	    return (prove_all(rest, sp[th], th));
-	else
-	    return (NO);
-
-    }
-    error(ARITY_ERR, "atom_concat ", arglist, th);
-    return (NO);
-}
 
 int b_atom_string(int arglist, int rest, int th)
 {

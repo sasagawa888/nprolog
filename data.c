@@ -2154,6 +2154,24 @@ int copy_term(int x)
 }
 
 
+int add_prefix1(int x)
+{
+	char str[STRSIZE];
+
+	strcpy(str,GET_NAME(module_name));
+	strcat(str,"_");
+	strcat(str,GET_NAME(x));
+	return(makepred(str));
+}
+
+
+int add_prefix(int x)
+{
+	if (structurep(x))
+		return(cons(add_prefix1(car(x)),copy_heap(cdr(x))));
+	else 
+		return(add_prefix1(x));
+}
 
 int copy_heap(int x)
 {
@@ -2161,6 +2179,8 @@ int copy_heap(int x)
 	return (NIL);
     else if (IS_ALPHA(x))
 	return (alpha_to_variable(x));
+	else if (module_flag && predicatep(x))
+	return (add_prefix(x));
     else if (singlep(x))
 	return (x);
     else if (numberp(x))

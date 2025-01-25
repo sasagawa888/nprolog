@@ -42,6 +42,7 @@ set_input/1
 set_output/1
 use_module/1
 module/1
+copy_term/2
 ```
 
 # String
