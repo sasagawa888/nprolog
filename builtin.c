@@ -193,6 +193,7 @@ void initbuiltin(void)
 	defbuiltin("atom_chars", b_atom_chars, 2);
 	defbuiltin("char_code", b_char_code, 2);
 	defbuiltin("number_codes", b_number_codes, 2);
+	defbuiltin("number_chars", b_number_chars, 2);
 	defbuiltin("write_canonical", b_display, 1);
 	defbuiltin("atom_length", b_atom_length, 2);
 	defbuiltin("atom_concat", b_atom_concat, 3);
