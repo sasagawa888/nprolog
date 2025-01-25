@@ -208,6 +208,7 @@ void initbuiltin(void)
     defbuiltin("set_output", b_set_output, 1);
     defbuiltin("use_module", b_use_module, 1);
 	defbuiltin("module", b_module, 2);
+	defbuiltin("copy_term", b_copy_term, 2);
     defbuiltin("existerrors", b_existerrors, 2);
     definfix("\\+", b_not, 900, FY);
 

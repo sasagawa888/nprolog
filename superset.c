@@ -1323,3 +1323,22 @@ int b_module(int arglist, int rest, int th)
     error(ARITY_ERR, "module ", arglist, th);
     return (NO);
 }
+
+int b_copy_term(int arglist, int rest, int th)
+{
+	int n,arg1,arg2;
+
+	n=length(arglist);
+	if(n==2){
+		arg1 = car(arglist);
+		arg2 = cadr(arglist);
+
+		if(unify(arg2,copy_term(arg1),th) == YES)
+			return(prove_all(rest,sp[th],th));
+		else
+			return(NO);
+
+	}
+	error(ARITY_ERR,"copy_term ",arglist,th);
+	return(NO);
+}
