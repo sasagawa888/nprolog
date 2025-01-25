@@ -169,10 +169,10 @@ int b_once(int arglist, int rest, int th)
 	if (atom_constant_p(arg1))
 	    arg1 = makeatom(GET_NAME(arg1), PRED);
 
-	if(prove_all(arg1,sp[th],th) == YES)
-	return (prove_all(rest, sp[th], th));
-	else 
-	return(NO);
+	if (prove_all(arg1, sp[th], th) == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
     }
     error(ARITY_ERR, "once ", arglist, th);
     return (NO);
@@ -622,24 +622,24 @@ int takeoutbug(int key)
 
 int b_atom_length(int arglist, int rest, int th)
 {
-	int n,arg1,arg2;
+    int n, arg1, arg2;
 
-	n=length(arglist);
+    n = length(arglist);
 
-	if(n==2){
-		arg1 = car(arglist);
-		arg2 = cadr(arglist);
-		if(!atomp(arg1))
-		error(NOT_ATOM, "atom_length ",arg1, th);
-		if(!wide_variable_p(arg2) && !integerp(arg2))
-		error(NOT_INT, "atom_length ",arg2, th);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	if (!atomp(arg1))
+	    error(NOT_ATOM, "atom_length ", arg1, th);
+	if (!wide_variable_p(arg2) && !integerp(arg2))
+	    error(NOT_INT, "atom_length ", arg2, th);
 
-		if(unify(arg2,makeint(atom_length(arg1)),th) == YES)
-			return(prove_all(rest,sp[th],th));
-		else 
-			return(NO);
-	}
-	error(ARITY_ERR, "atom_length ", arglist, th);
+	if (unify(arg2, makeint(atom_length(arg1)), th) == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    error(ARITY_ERR, "atom_length ", arglist, th);
     return (NO);
 }
 
@@ -1021,19 +1021,19 @@ int b_number_codes(int arglist, int rest, int th)
 
 
 	if (!variablep(arg1)) {
-		if (integerp(arg1))
-			sprintf(str1,"%d",GET_INT(arg1));
-		else if(longnump(arg1))
-			sprintf(str1,"%lld",GET_LONG(arg1));
-		else if (floatp(arg1))
-			sprintf(str1,"%g",GET_FLT(arg1));
+	    if (integerp(arg1))
+		sprintf(str1, "%d", GET_INT(arg1));
+	    else if (longnump(arg1))
+		sprintf(str1, "%lld", GET_LONG(arg1));
+	    else if (floatp(arg1))
+		sprintf(str1, "%g", GET_FLT(arg1));
 	    ls = NIL;
 	    pos = 0;
 	    while (str1[pos] != NUL) {
-		    str2[0] = str1[pos++];
-		    str2[1] = NUL;
-		    code = makeint(utf8_to_ucs4(str2));
-			ls = cons(code, ls);
+		str2[0] = str1[pos++];
+		str2[1] = NUL;
+		code = makeint(utf8_to_ucs4(str2));
+		ls = cons(code, ls);
 	    }
 	    ls = listreverse(ls);
 	    res = unify(arg2, ls, th);
@@ -1047,14 +1047,14 @@ int b_number_codes(int arglist, int rest, int th)
 	    while (!nullp(ls)) {
 		if (GET_INT(car(ls)) < ' ')
 		    sprintf(str2, "\\x%c\\", GET_INT(car(ls)));
-		else 
-			sprintf(str2, "%c", GET_INT(car(ls)));
+		else
+		    sprintf(str2, "%c", GET_INT(car(ls)));
 		strcat(str1, str2);
 		ls = cdr(ls);
 	    }
-		strcat(str1,".");
-		strcpy(bridge,str1);
-		read_string_term(0);	//initilize 
+	    strcat(str1, ".");
+	    strcpy(bridge, str1);
+	    read_string_term(0);	//initilize 
 	    bridge_flag = 1;
 	    num = readparse(th);
 	    bridge_flag = 0;
@@ -1086,18 +1086,18 @@ int b_number_chars(int arglist, int rest, int th)
 
 
 	if (!variablep(arg1)) {
-		if (integerp(arg1))
-			sprintf(str1,"%d",GET_INT(arg1));
-		else if(longnump(arg1))
-			sprintf(str1,"%lld",GET_LONG(arg1));
-		else if (floatp(arg1))
-			sprintf(str1,"%g",GET_FLT(arg1));
+	    if (integerp(arg1))
+		sprintf(str1, "%d", GET_INT(arg1));
+	    else if (longnump(arg1))
+		sprintf(str1, "%lld", GET_LONG(arg1));
+	    else if (floatp(arg1))
+		sprintf(str1, "%g", GET_FLT(arg1));
 	    ls = NIL;
 	    pos = 0;
 	    while (str1[pos] != NUL) {
-		    str2[0] = str1[pos++];
-		    str2[1] = NUL;
-		    c = makeconst(str2);
+		str2[0] = str1[pos++];
+		str2[1] = NUL;
+		c = makeconst(str2);
 		ls = cons(c, ls);
 	    }
 	    ls = listreverse(ls);
@@ -1111,14 +1111,14 @@ int b_number_chars(int arglist, int rest, int th)
 	    str1[th] = NUL;
 	    while (!nullp(ls)) {
 		sprintf(str2, "%s", GET_NAME(car(ls)));
-		if(!(str2[0] >= 43  && str2[0] <= 57))
-			error(WRONG_ARGS,"number_chars ", arg2, th); 
+		if (!(str2[0] >= 43 && str2[0] <= 57))
+		    error(WRONG_ARGS, "number_chars ", arg2, th);
 		strcat(str1, str2);
 		ls = cdr(ls);
 	    }
-		strcat(str1,".");
-		strcpy(bridge,str1);
-		read_string_term(0);	//initilize 
+	    strcat(str1, ".");
+	    strcpy(bridge, str1);
+	    read_string_term(0);	//initilize 
 	    bridge_flag = 1;
 	    num = readparse(th);
 	    bridge_flag = 0;
@@ -1137,53 +1137,52 @@ int b_number_chars(int arglist, int rest, int th)
 
 int b_catch(int arglist, int rest, int th)
 {
-	int n,arg1,arg2,arg3,pt;
+    int n, arg1, arg2, arg3, pt;
 
-	n = length(arglist);
-	if(n==3){
-		arg1 = car(arglist);
-		arg2 = cadr(arglist);
-		arg3 = caddr(arglist);
+    n = length(arglist);
+    if (n == 3) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	arg3 = caddr(arglist);
 
-		catch_data[catch_pt][0] = arg2;
-		catch_data[catch_pt][1] = sp[th];
-		int ret = setjmp(catch_buf[catch_pt]);
-		pt = catch_pt;
-		catch_pt++;
 
-		if(ret == 0){
-			if(prove_all(arg1,sp[th],th) == YES)
-				return(prove_all(rest,sp[th],th));
-			else
-				return(NO);
-		}
-		else if(ret == 1){
-			sp[th] = catch_data[pt][1];
-			return(prove_all(arg3,sp[th],th));
-		}
-		return(NO);
+	catch_data[catch_pt][0] = arg2;
+	catch_data[catch_pt][1] = sp[th];
+	int ret = setjmp(catch_buf[catch_pt]);
+	pt = catch_pt;
+	catch_pt++;
+
+	if (ret == 0) {
+	    if (prove_all(arg1, sp[th], th) == YES)
+		return (prove_all(rest, sp[th], th));
+	    else
+		return (NO);
+	} else if (ret == 1) {
+	    sp[th] = catch_data[pt][1];
+	    return (prove_all(arg3, sp[th], th));
 	}
-	error(ARITY_ERR,"catch ", arglist, th);
-	return(NO);
+	return (NO);
+    }
+    error(ARITY_ERR, "catch ", arglist, th);
+    return (NO);
 }
 
 
 int b_throw(int arglist, int rest, int th)
 {
-	int n,arg1,i;
+    int n, arg1, i;
 
-	n=length(arglist);
-	if(n==1){
-		arg1 = car(arglist);
-
-		for(i=catch_pt-1;i>=0;i--){
-			if(eqlp(catch_data[i][0],arg1))
-				longjmp(catch_buf[i],1);
-		}
-		error(WRONG_ARGS,"throw ",arg1, th);
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
 	
+	for (i = catch_pt - 1; i >= 0; i--) {
+	    if (eqlp(catch_data[i][0], arg1))
+		longjmp(catch_buf[i], 1);
 	}
-	error(ARITY_ERR,"throw ", arglist, th);
-	return(NO);
-}
+	error(WRONG_ARGS, "throw ", arg1, th);
 
+    }
+    error(ARITY_ERR, "throw ", arglist, th);
+    return (NO);
+}

@@ -931,7 +931,7 @@ void gettoken(int th)
 	stok.ahead = c;
 	return;
     }
-	
+
     if (c == '`')
 	error(SYNTAX_ERR, "illegal token back quote ", NIL, th);
 
