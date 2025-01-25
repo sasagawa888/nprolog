@@ -37,6 +37,8 @@ flush_output/0
 catch/3
 throw/1
 unify_with_occurs_check/2
+current_input/1
+current_output/1
 ```
 
 # String
@@ -49,4 +51,15 @@ X = [97,98,99] .
 yes
 ?- 
 
+```
+
+# Function
+In ARITY/PROLOG, the ^ symbol is used for exponentiation. However, since ** is used for exponentiation in ISO-Prolog, we allow this as well.
+
+```
+N-Prolog Ver 3.80
+?- X is 2**3.
+X = 8 .
+yes
+?- 
 ```

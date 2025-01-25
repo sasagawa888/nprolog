@@ -450,6 +450,7 @@ void initoperator(void)
     defoperator("-", f_minus, 200, FY, 0);
     defoperator("*", f_mult, 400, YFX, 0);
     defoperator("^", f_expt, 200, XFY, 0);
+	defoperator("**", f_expt, 200, XFY, 0);
     defoperator("/", f_divide, 400, YFX, 0);
     defoperator("//", f_div, 400, YFX, 0);
     defoperator("mod", f_mod, 400, YFX, 0);

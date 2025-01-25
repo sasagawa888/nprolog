@@ -65,7 +65,7 @@ char builtin[BUILTIN_NUMBER][60] = {
     { "maplist" }, { "ground" }, { "compound" }, { "once" },
 	{ "atom_codes" }, { "char_code" },
     { "between" }, { "bagof" }, { "setof" }, { "findall" }, { "succ" },
-	{ "atom_chars" },
+	{ "atom_chars" }, { "atom_concat" },
     { "current_predicate" }, { "current_op" }, { "retrieveh" },
 	{ "removeh" }, { "unify_with_occurs_check" },
     { "get_code" }, { "get_byte" }, { "put_char" }, { "flush_output" },
