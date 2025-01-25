@@ -1030,48 +1030,10 @@ int b_number_codes(int arglist, int rest, int th)
 	    ls = NIL;
 	    pos = 0;
 	    while (str1[pos] != NUL) {
-		if (str1[pos] == '\\') {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		} else if (isUni2(str1[pos])) {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		    str2[2] = NUL;
-		} else if (isUni3(str1[pos])) {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		    str2[2] = str1[pos++];
-		    str2[3] = NUL;
-		} else if (isUni4(str1[pos])) {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		    str2[2] = str1[pos++];
-		    str2[3] = str1[pos++];
-		    str2[4] = NUL;
-		} else if (isUni5(str1[pos])) {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		    str2[2] = str1[pos++];
-		    str2[3] = str1[pos++];
-		    str2[4] = str1[pos++];
-		    str2[5] = NUL;
-		} else if (isUni6(str1[pos])) {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		    str2[2] = str1[pos++];
-		    str2[3] = str1[pos++];
-		    str2[4] = str1[pos++];
-		    str2[5] = str1[pos++];
-		    str2[6] = NUL;
-		} else {	//ascii code
 		    str2[0] = str1[pos++];
 		    str2[1] = NUL;
-		}
-		if (str2[0] == '\\')
-		    code = ctrl_to_number(str2[1]);
-		else		//unicode
 		    code = makeint(utf8_to_ucs4(str2));
-		ls = cons(code, ls);
+			ls = cons(code, ls);
 	    }
 	    ls = listreverse(ls);
 	    res = unify(arg2, ls, th);
@@ -1121,8 +1083,6 @@ int b_number_chars(int arglist, int rest, int th)
 	    error(NOT_ATOM, "number_chars ", arg1, th);
 	if (wide_variable_p(arg1) && !listp(arg2))
 	    error(NOT_LIST, "number_chars ", arg2, th);
-	//if (wide_variable_p(arg1) && !atom_codes_list_p(arg2))
-	//    error(NOT_CHAR_CODE, "number_chars ", arg2, th);
 
 
 	if (!variablep(arg1)) {
@@ -1135,46 +1095,8 @@ int b_number_chars(int arglist, int rest, int th)
 	    ls = NIL;
 	    pos = 0;
 	    while (str1[pos] != NUL) {
-		if (str1[pos] == '\\') {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		} else if (isUni2(str1[pos])) {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		    str2[2] = NUL;
-		} else if (isUni3(str1[pos])) {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		    str2[2] = str1[pos++];
-		    str2[3] = NUL;
-		} else if (isUni4(str1[pos])) {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		    str2[2] = str1[pos++];
-		    str2[3] = str1[pos++];
-		    str2[4] = NUL;
-		} else if (isUni5(str1[pos])) {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		    str2[2] = str1[pos++];
-		    str2[3] = str1[pos++];
-		    str2[4] = str1[pos++];
-		    str2[5] = NUL;
-		} else if (isUni6(str1[pos])) {
-		    str2[0] = str1[pos++];
-		    str2[1] = str1[pos++];
-		    str2[2] = str1[pos++];
-		    str2[3] = str1[pos++];
-		    str2[4] = str1[pos++];
-		    str2[5] = str1[pos++];
-		    str2[6] = NUL;
-		} else {	//ascii code
 		    str2[0] = str1[pos++];
 		    str2[1] = NUL;
-		}
-		if (str2[0] == '\\')
-		    c = ctrl_to_number(str2[1]);
-		else		//unicode
 		    c = makeconst(str2);
 		ls = cons(c, ls);
 	    }
@@ -1188,10 +1110,9 @@ int b_number_chars(int arglist, int rest, int th)
 	    ls = arg2;
 	    str1[th] = NUL;
 	    while (!nullp(ls)) {
-		if (GET_INT(car(ls)) < ' ')
-		    sprintf(str2, "\\x%c\\", GET_INT(car(ls)));
-		else 
-			sprintf(str2, "%s", GET_NAME(car(ls)));
+		sprintf(str2, "%s", GET_NAME(car(ls)));
+		if(!(str2[0] >= 43  && str2[0] <= 57))
+			error(WRONG_ARGS,"number_chars ", arg2, th); 
 		strcat(str1, str2);
 		ls = cdr(ls);
 	    }
