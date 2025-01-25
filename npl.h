@@ -29,6 +29,7 @@ address
 #define ATOMSIZE 1024
 #define BUFSIZE 1024
 #define STRSIZE 1024
+#define CTRLSTK 10
 #define PARASIZE 100
 #define THREADSIZE 10
 #define PROCSIZE 10
@@ -207,10 +208,13 @@ extern jmp_buf buf;
 extern jmp_buf buf1;
 extern jmp_buf buf2;
 extern __thread jmp_buf buf3;
+extern jmp_buf catch_buf[CTRLSTK];
 extern int cell_hash_table[HASHTBSIZE];
 extern int record_hash_table[HASHTBSIZE][RECORDMAX]; 
 extern int record_pt;       
 extern int counter[31]; 
+extern int catch_data[CTRLSTK][3]; 
+extern int catch_pt;
 extern char bridge[BUFSIZE];
 extern char transfer[BUFSIZE];
 extern int variables[THREADSIZE];
@@ -738,6 +742,7 @@ int b_between(int arglist, int rest, int th);
 int b_bignum(int arglist, int rest, int th);
 int b_break(int arglist, int rest, int th);
 int b_call(int arglist, int rest, int th);
+int b_catch(int arglist, int rest, int th);
 int b_chdir(int arglist , int rest, int th);
 int b_char_code(int arglist, int rest, int th);
 int b_char_conversion(int arglist, int rest, int th);
@@ -927,6 +932,7 @@ int b_tab(int arglist, int rest, int th);
 int b_tell(int arglist, int rest, int th);
 int b_telling(int arglist, int rest, int th);
 int b_term_variables(int arglist, int rest, int th);
+int b_throw(int arglist, int rest, int th);
 int b_time(int arglist, int rest, int th);
 int b_told(int arglist, int rest, int th);
 int b_trace(int arglist, int rest, int th);

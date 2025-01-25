@@ -30,10 +30,12 @@ int stack[STACKSIZE][THREADSIZE];
 int record_hash_table[HASHTBSIZE][RECORDMAX];	// for hash record database 
 int record_pt = 1;		// current index of record database
 int counter[31];		// counter str_set,str_dec ... 
+int catch_data[CTRLSTK][3]; //catch tag,sp,wp
+int catch_pt = 0;		/* catch counter */
 char bridge[BUFSIZE];		// for string_term/2 and parallel buffer
 char transfer[BUFSIZE];		// buffer for dp_transfer
 token stok = { GO, OTHER };
-
+jmp_buf catch_buf[CTRLSTK]; // catch jump buffer
 jmp_buf buf;			// for REPL halt and error handling.
 jmp_buf buf1;			// for n_error/2 error check.
 jmp_buf buf2;			// for break/0 end_of_file/0 exit break
@@ -395,6 +397,7 @@ void init_repl(void)
     leap_point = NIL;
     left_margin = 4;
     big_pt0 = 0;
+	catch_pt = 0;
     //initialize variant variable
     for (i = 0; i < VARIANTSIZE; i++) {
 	for (j = 0; j < THREADSIZE; j++) {

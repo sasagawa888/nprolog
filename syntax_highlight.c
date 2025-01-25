@@ -65,7 +65,7 @@ char builtin[BUILTIN_NUMBER][60] = {
     { "between" }, { "bagof" }, { "setof" }, { "findall" }, { "succ" }, { "atom_chars" },
     { "current_predicate" }, { "current_op" }, { "retrieveh" }, { "removeh" },
     { "get_code" }, { "get_byte" }, { "put_char" }, { "flush_output" },
-    { "number_codes" }, { "number_chars" },
+    { "number_codes" }, { "number_chars" }, { "catch" }, { "throw" },
 };
 
 //compiled predicate

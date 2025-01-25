@@ -1212,3 +1212,59 @@ int b_number_chars(int arglist, int rest, int th)
     error(ARITY_ERR, "number_chars ", arglist, th);
     return (NO);
 }
+
+
+int b_catch(int arglist, int rest, int th)
+{
+	int n,arg1,arg2,arg3,pt;
+
+	n = length(arglist);
+	if(n==3){
+		arg1 = car(arglist);
+		arg2 = cadr(arglist);
+		arg3 = caddr(arglist);
+
+		catch_data[catch_pt][0] = arg2;
+		catch_data[catch_pt][1] = sp[th];
+		catch_data[catch_pt][2] = wp[th];
+		int ret = setjmp(catch_buf[catch_pt]);
+		pt = catch_pt;
+		catch_pt++;
+
+		if(ret == 0){
+			if(prove_all(arg1,sp[th],th) == YES)
+				return(prove_all(rest,sp[th],th));
+			else
+				return(NO);
+		}
+		else if(ret == 1){
+			sp[th] = catch_data[pt][1];
+			//wp[th] = catch_data[pt][2];
+			return(prove_all(arg3,sp[th],th));
+		}
+		return(NO);
+	}
+	error(ARITY_ERR,"catch ", arglist, th);
+	return(NO);
+}
+
+
+int b_throw(int arglist, int rest, int th)
+{
+	int n,arg1,i;
+
+	n=length(arglist);
+	if(n==1){
+		arg1 = car(arglist);
+
+		for(i=catch_pt-1;i>=0;i--){
+			if(eqlp(catch_data[i][0],arg1))
+				longjmp(catch_buf[i],1);
+		}
+		error(WRONG_ARGS,"throw ",arg1, th);
+	
+	}
+	error(ARITY_ERR,"throw ", arglist, th);
+	return(NO);
+}
+

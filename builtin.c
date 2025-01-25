@@ -201,6 +201,8 @@ void initbuiltin(void)
     defbuiltin("get_byte", b_get_byte, 1);
 	defbuiltin("put_char", b_put_char, 1);
 	defbuiltin("flush_output", b_flush_output, 0);
+	defbuiltin("catch", b_catch, 3);
+	defbuiltin("throw", b_throw, 1);
     defbuiltin("existerrors", b_existerrors, 2);
     definfix("\\+", b_not, 900, FY);
 
