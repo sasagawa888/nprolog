@@ -1001,3 +1001,109 @@ int b_atom_chars(int arglist, int rest, int th)
     error(ARITY_ERR, "atom_chars ", arglist, th);
     return (NO);
 }
+
+
+int b_number_codes(int arglist, int rest, int th)
+{
+    int n, arg1, arg2, ls, num, pos, code, res;
+    char str1[STRSIZE], str2[10];
+
+    n = length(arglist);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	if (!wide_variable_p(arg1) && !numberp(arg1))
+	    error(NOT_ATOM, "atom_codes ", arg1, th);
+	if (wide_variable_p(arg1) && !listp(arg2))
+	    error(NOT_LIST, "atom_codes ", arg2, th);
+	if (wide_variable_p(arg1) && !atom_codes_list_p(arg2))
+	    error(NOT_CHAR_CODE, "atom_codes ", arg2, th);
+
+
+	if (!variablep(arg1)) {
+		if (integerp(arg1))
+			sprintf(str1,"%d",GET_INT(arg1));
+		else if(longnump(arg1))
+			sprintf(str1,"%lld",GET_LONG(arg1));
+		else if (floatp(arg1))
+			sprintf(str1,"%g",GET_FLT(arg1));
+	    ls = NIL;
+	    pos = 0;
+	    while (str1[pos] != NUL) {
+		if (str1[pos] == '\\') {
+		    str2[0] = str1[pos++];
+		    str2[1] = str1[pos++];
+		} else if (isUni2(str1[pos])) {
+		    str2[0] = str1[pos++];
+		    str2[1] = str1[pos++];
+		    str2[2] = NUL;
+		} else if (isUni3(str1[pos])) {
+		    str2[0] = str1[pos++];
+		    str2[1] = str1[pos++];
+		    str2[2] = str1[pos++];
+		    str2[3] = NUL;
+		} else if (isUni4(str1[pos])) {
+		    str2[0] = str1[pos++];
+		    str2[1] = str1[pos++];
+		    str2[2] = str1[pos++];
+		    str2[3] = str1[pos++];
+		    str2[4] = NUL;
+		} else if (isUni5(str1[pos])) {
+		    str2[0] = str1[pos++];
+		    str2[1] = str1[pos++];
+		    str2[2] = str1[pos++];
+		    str2[3] = str1[pos++];
+		    str2[4] = str1[pos++];
+		    str2[5] = NUL;
+		} else if (isUni6(str1[pos])) {
+		    str2[0] = str1[pos++];
+		    str2[1] = str1[pos++];
+		    str2[2] = str1[pos++];
+		    str2[3] = str1[pos++];
+		    str2[4] = str1[pos++];
+		    str2[5] = str1[pos++];
+		    str2[6] = NUL;
+		} else {	//ascii code
+		    str2[0] = str1[pos++];
+		    str2[1] = NUL;
+		}
+		if (str2[0] == '\\')
+		    code = ctrl_to_number(str2[1]);
+		else		//unicode
+		    code = makeint(utf8_to_ucs4(str2));
+		ls = cons(code, ls);
+	    }
+	    ls = listreverse(ls);
+	    res = unify(arg2, ls, th);
+	    if (res == YES)
+		return (prove_all(rest, sp[th], th));
+	    else
+		return (NO);
+	} else if (structurep(arg2)) {
+	    ls = arg2;
+	    str1[th] = NUL;
+	    while (!nullp(ls)) {
+		if (GET_INT(car(ls)) < ' ')
+		    sprintf(str2, "\\x%c\\", GET_INT(car(ls)));
+		else 
+			sprintf(str2, "%c", GET_INT(car(ls)));
+		strcat(str1, str2);
+		ls = cdr(ls);
+	    }
+		strcat(str1,".");
+		strcpy(bridge,str1);
+		read_string_term(0);	//initilize 
+	    bridge_flag = 1;
+	    num = readparse(th);
+	    bridge_flag = 0;
+	    res = unify(arg1, num, th);
+	    if (res == YES)
+		return (prove_all(rest, sp[th], th));
+	    else
+		return (NO);
+	} else
+	    return (NO);
+    }
+    error(ARITY_ERR, "number_codes ", arglist, th);
+    return (NO);
+}
