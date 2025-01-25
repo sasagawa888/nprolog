@@ -81,7 +81,7 @@ int wp[THREADSIZE];		//working pointer
 int gc;				//invoked GC count
 int wp_min[THREADSIZE];		// start wp point in each thread
 int wp_max[THREADSIZE];		// end wp point in each thread
-int cp[THREADSIZE];         // catch pointer
+int cp[THREADSIZE];		// catch pointer
 
 // bignum pointer
 int big_pt0 = 0;		// pointer of temporaly bignum
@@ -161,6 +161,12 @@ pthread_cond_t mt_cond_main;
 pthread_cond_t mt_cond_queue;
 pthread_attr_t mt_para_attr[PARASIZE];
 size_t mt_para_size[PARASIZE];
+
+/* module */
+int module_name;		// module name
+int export_data[10][2];		// export name,arity
+int module_flag;		// inner module 1, else 0
+int export_pt;			// export data pointer
 
 //-----editor-----
 char buffer[BUFSIZE][10];

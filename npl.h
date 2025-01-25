@@ -498,6 +498,12 @@ extern int wp_min[THREADSIZE];
 extern int wp_max[THREADSIZE];
 extern int cp[THREADSIZE];
 
+/* module */
+extern int module_name;
+extern int export_data[10][2];
+extern int module_flag;
+extern int export_pt;
+
 //-----editor-----
 extern int repl_flag;
 extern char buffer[BUFSIZE][10];
@@ -848,6 +854,7 @@ int b_mkdir(int arglist, int rest, int th);
 int b_member(int arglist, int rest, int th);
 int b_measure(int arglist, int rest, int th);
 int b_maplist(int arglist, int rest, int th);
+int b_module(int arglist, int rest, int th);
 int b_mt_create(int arglist, int rest, int th);
 int b_mt_close(int arglist, int rest, int th);
 int b_mt_and(int arglist, int rest, int th);

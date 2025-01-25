@@ -48,7 +48,7 @@ char builtin[BUILTIN_NUMBER][60] = {
     { "concat" }, { "substring" }, { "string_term" }, { "float_text" },
     { "inc" }, { "dec" }, { "compare" }, { "in" }, { "out" },
     { "mkdir" }, { "rmdir" }, { "chdir" }, { "string_length" },
-	{ "atom_length" },
+    { "atom_length" },
     { "sort" }, { "keysort" }, { "length" }, { "shell" }, { "measure" },
     { "syntaxerrors" }, { "fileerrors" }, { "statistics" }, { "eq" },
     { "ansi_cuu" }, { "ansi_cud" }, { "ansi_cuf" }, { "ansi_cub" },
@@ -63,14 +63,14 @@ char builtin[BUILTIN_NUMBER][60] = {
     { "replace" }, { "member" }, { "append" }, { "repeat" }, { "system" },
     { "retract" }, { "clause" }, { "call" }, { "directory" }, { "select" },
     { "maplist" }, { "ground" }, { "compound" }, { "once" },
-	{ "atom_codes" }, { "char_code" },
+    { "atom_codes" }, { "char_code" },
     { "between" }, { "bagof" }, { "setof" }, { "findall" }, { "succ" },
-	{ "atom_chars" }, { "atom_concat" },
+    { "atom_chars" }, { "atom_concat" },
     { "current_predicate" }, { "current_op" }, { "retrieveh" },
-	{ "removeh" }, { "unify_with_occurs_check" },
+    { "removeh" }, { "unify_with_occurs_check" },
     { "get_code" }, { "get_byte" }, { "put_char" }, { "flush_output" },
     { "number_codes" }, { "number_chars" }, { "catch" }, { "throw" },
-    { "set_input" }, { "set_output" }, { "use_module" },
+    { "set_input" }, { "set_output" }, { "use_module" }, { "module" },
 };
 
 //compiled predicate

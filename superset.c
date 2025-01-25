@@ -1152,8 +1152,8 @@ int b_catch(int arglist, int rest, int th)
 	int ret = setjmp(catch_buf[cp[th]][th]);
 	pt = cp[th];
 	cp[th]++;
-	if(cp[th] > THREADSIZE)
-	error(RESOURCE_ERR,"catch ", NIL, th);
+	if (cp[th] > THREADSIZE)
+	    error(RESOURCE_ERR, "catch ", NIL, th);
 
 	if (ret == 0) {
 	    if (prove_all(arg1, sp[th], th) == YES)
@@ -1178,7 +1178,7 @@ int b_throw(int arglist, int rest, int th)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	
+
 	for (i = cp[th] - 1; i >= 0; i--) {
 	    if (eqlp(catch_data[i][0][th], arg1))
 		longjmp(catch_buf[i][th], 1);
@@ -1194,103 +1194,132 @@ int b_throw(int arglist, int rest, int th)
 
 int occursp(int x, int y)
 {
-	if(nullp(y))
-		return(0);
-	else if(variablep(x) && variablep(y) && eqlp(x,y))
-		return(1);
-	else if(atomicp(x))
-		return(0);
-	else if (structurep(y)) {
-		if(occursp(x,car(y)) || occursp(x,cdr(y)))
-			return(1);
-		else 
-			return(0);
-	}
-	else return(0);
+    if (nullp(y))
+	return (0);
+    else if (variablep(x) && variablep(y) && eqlp(x, y))
+	return (1);
+    else if (atomicp(x))
+	return (0);
+    else if (structurep(y)) {
+	if (occursp(x, car(y)) || occursp(x, cdr(y)))
+	    return (1);
+	else
+	    return (0);
+    } else
+	return (0);
 }
 
 int b_unify_with_occurs_check(int arglist, int rest, int th)
 {
-	int n,arg1,arg2;
+    int n, arg1, arg2;
 
-	n=length(arglist);
-	if(n==2){
-		arg1 = car(arglist);
-		arg2 = cadr(arglist);
+    n = length(arglist);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
 
-		if(occursp(arg1,arg2))
-			return(NO);
-		
-		if(unify(arg1,arg2,th) == YES)
-			return(prove_all(rest,sp[th],th));
-		else 
-			return(NO);
-	}
-	error(ARITY_ERR,"unify_with_occurs_check ", arglist, th);
-	return(NO);
+	if (occursp(arg1, arg2))
+	    return (NO);
+
+	if (unify(arg1, arg2, th) == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    error(ARITY_ERR, "unify_with_occurs_check ", arglist, th);
+    return (NO);
 }
 
 
 int b_set_input(int arglist, int rest, int th)
 {
-	int n,arg1;
+    int n, arg1;
 
-	n=length(arglist);
-	if(n==1){
-		arg1 = car(arglist);
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
 
-		if(!streamp(arg1))
-		error(NOT_STREAM, "set_input", arg1, th);
+	if (!streamp(arg1))
+	    error(NOT_STREAM, "set_input", arg1, th);
 
-		input_stream = arg1;
-		return(prove_all(rest,sp[th],th));
-	}
-	error(ARITY_ERR,"set_input ", arglist, th);
-	return(NO);
+	input_stream = arg1;
+	return (prove_all(rest, sp[th], th));
+    }
+    error(ARITY_ERR, "set_input ", arglist, th);
+    return (NO);
 }
 
 
 int b_set_output(int arglist, int rest, int th)
 {
-	int n,arg1;
+    int n, arg1;
 
-	n=length(arglist);
-	if(n==1){
-		arg1 = car(arglist);
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
 
-		if(!streamp(arg1))
-		error(NOT_STREAM, "set_output", arg1, th);
+	if (!streamp(arg1))
+	    error(NOT_STREAM, "set_output", arg1, th);
 
-		output_stream = arg1;
-		return(prove_all(rest,sp[th],th));
-	}
-	error(ARITY_ERR,"set_output ", arglist, th);
-	return(NO);
+	output_stream = arg1;
+	return (prove_all(rest, sp[th], th));
+    }
+    error(ARITY_ERR, "set_output ", arglist, th);
+    return (NO);
 }
 
 int b_use_module(int arglist, int rest, int th)
 {
-	int n,arg1;
-	char *home,str[STRSIZE];
-	FILE *fp;
+    int n, arg1;
+    char *home, str[STRSIZE];
+    FILE *fp;
 
-	n=length(arglist);
-	if(n==1){
-		arg1 = car(arglist);
-		if(!atomp(arg1))
-		error(NOT_ATOM,"use_module ",arg1,th);
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if (!atomp(arg1))
+	    error(NOT_ATOM, "use_module ", arg1, th);
 
-		home = getenv("HOME");
-    	strcpy(str, home);
-    	strcat(str, "/nprolog/library/");
-	    strcat(str, GET_NAME(arg1));
-		strcat(str, "pl");
-    	fp = fopen(str, "r");
-    	if (fp != NULL) {
-		fclose(fp);
-		b_consult(list1(makeconst(str)), NIL, 0);
-		}
+	home = getenv("HOME");
+	strcpy(str, home);
+	strcat(str, "/nprolog/library/");
+	strcat(str, GET_NAME(arg1));
+	strcat(str, "pl");
+	fp = fopen(str, "r");
+	if (fp != NULL) {
+	    fclose(fp);
+	    b_consult(list1(makeconst(str)), NIL, 0);
 	}
-	error(ARITY_ERR,"use_module ",arglist, th);
-	return(NO);
+    }
+    error(ARITY_ERR, "use_module ", arglist, th);
+    return (NO);
+}
+
+int b_module(int arglist, int rest, int th)
+{
+    int n, arg1, arg2;
+
+    n = length(arglist);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+	if (!atomp(arg1))
+	    error(NOT_ATOM, "module ", arg1, th);
+	if (!listp(arg2) && !nullp(arg2))
+	    error(NOT_LIST, "module ", arg2, th);
+
+	module_flag = 1;
+	module_name = arg1;
+	export_pt = 0;
+	while (!nullp(arg2)) {
+	    export_data[export_pt][0] = cadr(car(arg2));
+	    export_data[export_pt][1] = GET_INT(caddr(car(arg2)));
+	    arg2 = cdr(arg2);
+	    export_pt++;
+	}
+	return (prove_all(rest, sp[th], th));
+    }
+    error(ARITY_ERR, "module ", arglist, th);
+    return (NO);
 }
