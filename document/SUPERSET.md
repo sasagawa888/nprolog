@@ -1,9 +1,8 @@
 # Superset
- under construction
-
  N-Prolog is compatible with ARITY/PROLOG. This is an old language specification from the 1980s. Some predicates have been added to run more modern code, primarily based on ISO-Prolog. However, please note that these may not necessarily conform to the ISO-Prolog specification.
 
  # Spec
+The following extension functions respect ISO-Prolog as much as possible, but they are provided primarily for the purpose of being a backward-compatible extension in N-Prolog. Please refrain from pointing out differences with ISO.
 
  ```
 \+ (not)
