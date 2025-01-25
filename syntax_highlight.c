@@ -67,7 +67,7 @@ char builtin[BUILTIN_NUMBER][60] = {
     { "between" }, { "bagof" }, { "setof" }, { "findall" }, { "succ" },
 	{ "atom_chars" },
     { "current_predicate" }, { "current_op" }, { "retrieveh" },
-	{ "removeh" },
+	{ "removeh" }, { "unify_with_occurs_check" },
     { "get_code" }, { "get_byte" }, { "put_char" }, { "flush_output" },
     { "number_codes" }, { "number_chars" }, { "catch" }, { "throw" },
 };

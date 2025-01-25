@@ -1186,3 +1186,43 @@ int b_throw(int arglist, int rest, int th)
     error(ARITY_ERR, "throw ", arglist, th);
     return (NO);
 }
+
+
+
+int occursp(int x, int y)
+{
+	if(nullp(y))
+		return(0);
+	else if(variablep(x) && variablep(y) && eqlp(x,y))
+		return(1);
+	else if(atomicp(x))
+		return(0);
+	else if (structurep(y)) {
+		if(occursp(x,car(y)) || occursp(x,cdr(y)))
+			return(1);
+		else 
+			return(0);
+	}
+	else return(0);
+}
+
+int b_unify_with_occurs_check(int arglist, int rest, int th)
+{
+	int n,arg1,arg2;
+
+	n=length(arglist);
+	if(n==2){
+		arg1 = car(arglist);
+		arg2 = cadr(arglist);
+
+		if(occursp(arg1,arg2))
+			return(NO);
+		
+		if(unify(arg1,arg2,th) == YES)
+			return(prove_all(rest,sp[th],th));
+		else 
+			return(NO);
+	}
+	error(ARITY_ERR,"unify_with_occurs_check ", arglist, th);
+	return(NO);
+}

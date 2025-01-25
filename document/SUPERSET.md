@@ -36,6 +36,7 @@ put_char/1
 flush_output/0
 catch/3
 throw/1
+unify_with_occurs_check/2
 ```
 
 # String

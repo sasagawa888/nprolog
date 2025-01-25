@@ -203,6 +203,7 @@ void initbuiltin(void)
     defbuiltin("flush_output", b_flush_output, 0);
     defbuiltin("catch", b_catch, 3);
     defbuiltin("throw", b_throw, 1);
+	defbuiltin("unify_with_occurs_check", b_unify_with_occurs_check, 2);
     defbuiltin("existerrors", b_existerrors, 2);
     definfix("\\+", b_not, 900, FY);
 
