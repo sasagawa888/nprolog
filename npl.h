@@ -208,13 +208,12 @@ extern jmp_buf buf;
 extern jmp_buf buf1;
 extern jmp_buf buf2;
 extern __thread jmp_buf buf3;
-extern jmp_buf catch_buf[CTRLSTK];
+extern jmp_buf catch_buf[CTRLSTK][THREADSIZE];
 extern int cell_hash_table[HASHTBSIZE];
 extern int record_hash_table[HASHTBSIZE][RECORDMAX]; 
 extern int record_pt;       
 extern int counter[31]; 
-extern int catch_data[CTRLSTK][2]; 
-extern int catch_pt;
+extern int catch_data[CTRLSTK][2][THREADSIZE]; 
 extern char bridge[BUFSIZE];
 extern char transfer[BUFSIZE];
 extern int variables[THREADSIZE];
@@ -497,6 +496,7 @@ extern int wp[THREADSIZE];
 extern int gc; 
 extern int wp_min[THREADSIZE];
 extern int wp_max[THREADSIZE];
+extern int cp[THREADSIZE];
 
 //-----editor-----
 extern int repl_flag;

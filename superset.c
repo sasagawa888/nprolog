@@ -1146,11 +1146,13 @@ int b_catch(int arglist, int rest, int th)
 	arg3 = caddr(arglist);
 
 
-	catch_data[catch_pt][0] = arg2;
-	catch_data[catch_pt][1] = sp[th];
-	int ret = setjmp(catch_buf[catch_pt]);
-	pt = catch_pt;
-	catch_pt++;
+	catch_data[cp[th]][0][th] = arg2;
+	catch_data[cp[th]][1][th] = sp[th];
+	int ret = setjmp(catch_buf[cp[th]][th]);
+	pt = cp[th];
+	cp[th]++;
+	if(cp[th] > THREADSIZE)
+	error(RESOURCE_ERR,"catch ", NIL, th);
 
 	if (ret == 0) {
 	    if (prove_all(arg1, sp[th], th) == YES)
@@ -1158,7 +1160,7 @@ int b_catch(int arglist, int rest, int th)
 	    else
 		return (NO);
 	} else if (ret == 1) {
-	    sp[th] = catch_data[pt][1];
+	    sp[th] = catch_data[pt][1][th];
 	    return (prove_all(arg3, sp[th], th));
 	}
 	return (NO);
@@ -1176,9 +1178,9 @@ int b_throw(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	
-	for (i = catch_pt - 1; i >= 0; i--) {
-	    if (eqlp(catch_data[i][0], arg1))
-		longjmp(catch_buf[i], 1);
+	for (i = cp[th] - 1; i >= 0; i--) {
+	    if (eqlp(catch_data[i][0][th], arg1))
+		longjmp(catch_buf[i][th], 1);
 	}
 	error(WRONG_ARGS, "throw ", arg1, th);
 

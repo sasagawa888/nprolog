@@ -30,13 +30,12 @@ int stack[STACKSIZE][THREADSIZE];
 int record_hash_table[HASHTBSIZE][RECORDMAX];	// for hash record database 
 int record_pt = 1;		// current index of record database
 int counter[31];		// counter str_set,str_dec ... 
-int catch_data[CTRLSTK][2];	//catch tag,sp,wp
-int catch_pt = 0;		/* catch counter */
+int catch_data[CTRLSTK][2][THREADSIZE];	//catch tag,sp,wp
 char bridge[BUFSIZE];		// for string_term/2 and parallel buffer
 char transfer[BUFSIZE];		// buffer for dp_transfer
 token stok = { GO, OTHER };
 
-jmp_buf catch_buf[CTRLSTK];	// catch jump buffer
+jmp_buf catch_buf[CTRLSTK][THREADSIZE];	// catch jump buffer
 jmp_buf buf;			// for REPL halt and error handling.
 jmp_buf buf1;			// for n_error/2 error check.
 jmp_buf buf2;			// for break/0 end_of_file/0 exit break
@@ -82,6 +81,7 @@ int wp[THREADSIZE];		//working pointer
 int gc;				//invoked GC count
 int wp_min[THREADSIZE];		// start wp point in each thread
 int wp_max[THREADSIZE];		// end wp point in each thread
+int cp[THREADSIZE];         // catch pointer
 
 // bignum pointer
 int big_pt0 = 0;		// pointer of temporaly bignum
@@ -386,6 +386,7 @@ void init_repl(void)
 	proof[i] = 0;
 	ac[i] = CELLSIZE + 1;
 	unbind(0, i);
+	cp[i] = 0;
     }
     for (i = 0; i <= thread_num; i++) {
 	wp[i] = wp_min[i];
@@ -398,7 +399,6 @@ void init_repl(void)
     leap_point = NIL;
     left_margin = 4;
     big_pt0 = 0;
-    catch_pt = 0;
     //initialize variant variable
     for (i = 0; i < VARIANTSIZE; i++) {
 	for (j = 0; j < THREADSIZE; j++) {
