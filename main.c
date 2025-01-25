@@ -30,7 +30,7 @@ int stack[STACKSIZE][THREADSIZE];
 int record_hash_table[HASHTBSIZE][RECORDMAX];	// for hash record database 
 int record_pt = 1;		// current index of record database
 int counter[31];		// counter str_set,str_dec ... 
-int catch_data[CTRLSTK][3]; //catch tag,sp,wp
+int catch_data[CTRLSTK][2]; //catch tag,sp,wp
 int catch_pt = 0;		/* catch counter */
 char bridge[BUFSIZE];		// for string_term/2 and parallel buffer
 char transfer[BUFSIZE];		// buffer for dp_transfer

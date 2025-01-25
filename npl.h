@@ -213,7 +213,7 @@ extern int cell_hash_table[HASHTBSIZE];
 extern int record_hash_table[HASHTBSIZE][RECORDMAX]; 
 extern int record_pt;       
 extern int counter[31]; 
-extern int catch_data[CTRLSTK][3]; 
+extern int catch_data[CTRLSTK][2]; 
 extern int catch_pt;
 extern char bridge[BUFSIZE];
 extern char transfer[BUFSIZE];

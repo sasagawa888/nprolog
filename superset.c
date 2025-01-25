@@ -1226,7 +1226,6 @@ int b_catch(int arglist, int rest, int th)
 
 		catch_data[catch_pt][0] = arg2;
 		catch_data[catch_pt][1] = sp[th];
-		catch_data[catch_pt][2] = wp[th];
 		int ret = setjmp(catch_buf[catch_pt]);
 		pt = catch_pt;
 		catch_pt++;
@@ -1239,7 +1238,6 @@ int b_catch(int arglist, int rest, int th)
 		}
 		else if(ret == 1){
 			sp[th] = catch_data[pt][1];
-			//wp[th] = catch_data[pt][2];
 			return(prove_all(arg3,sp[th],th));
 		}
 		return(NO);

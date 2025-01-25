@@ -34,6 +34,8 @@ get_char/1 2
 get_byte/1 2
 put_char/1 
 flush_output/0
+catch/3
+throw/1
 ```
 
 # String
