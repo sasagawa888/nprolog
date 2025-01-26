@@ -7,7 +7,7 @@ The following extension functions respect ISO-Prolog as much as possible, but th
  ```
 \+ (not)
 
-atom_concat/3  The first and second arguments are concatenated and unified with the third argument. The following cases are not supported. e.g. atom_concat(X,b,ab).
+atom_concat/3  The first and second arguments are concatenated and unified with the third argument. Now ,the following cases are not supported. e.g. atom_concat(X,b,ab).
 
 append/3
 
