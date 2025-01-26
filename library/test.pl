@@ -1,5 +1,5 @@
 
-:- module(foo,[bar/1]).
+:- module(asdf,[bar/1]).
 
 bar(X) :- boo(X).
 

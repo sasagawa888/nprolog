@@ -1323,7 +1323,7 @@ int b_use_module(int arglist, int rest, int th)
 	fp = fopen(str, "r");
 	if (fp != NULL) {
 	    fclose(fp);
-	    b_consult(list1(makeconst(str)), NIL, 0);
+	    b_reconsult(list1(makeconst(str)), NIL, 0);
 	}
 	return(prove_all(rest,sp[th],th));
     }
