@@ -2173,13 +2173,45 @@ int add_prefix(int x)
 		return(add_prefix1(x));
 }
 
+int exportp(int x)
+{
+	int i, name,arity;
+
+	//print(x);
+
+	if(atomp(x)){
+		name = x;
+		arity = 0;
+	}
+	else {
+		name = car(x);
+		arity = length(cdr(x));
+	}
+
+	
+	for(i=0;i<export_pt;i++){
+		//print(export_data[i][0]);
+		//printf("%d ",export_data[i][1]);
+		//print(name);
+		//printf("%d \n",arity);
+		if(eqlp(export_data[i][0],name) && export_data[i][1] == arity){
+			//print(x);
+			return(1);
+		}
+	}
+	return(0);
+}
+
 int copy_heap(int x)
 {
+
     if (nullp(x))
 	return (NIL);
     else if (IS_ALPHA(x))
 	return (alpha_to_variable(x));
-	else if (module_flag && predicatep(x))
+	else if (module_flag && predicatep(x) && exportp(x))
+	return(x);
+	else if (module_flag && predicatep(x) && !exportp(x))
 	return (add_prefix(x));
     else if (singlep(x))
 	return (x);
@@ -2189,9 +2221,9 @@ int copy_heap(int x)
 	return (x);
     else if (listp(x))
 	return (listcons(copy_heap(car(x)), copy_heap(cdr(x))));
-    else
-	return (cons(copy_heap(car(x)), copy_heap(cdr(x))));
-
+	else if (car(x) == NECK)
+	return (list3(car(x),copy_heap(cadr(x)),copy_heap(caddr(x))));
+	return (cons(copy_heap(car(x)),copy_heap(cdr(x))));
     return (x);
 }
 
