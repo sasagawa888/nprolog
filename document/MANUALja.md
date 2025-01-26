@@ -833,6 +833,8 @@ compile_file('tests/queens.pl').
 
 
 ## 多重世界機構
+:- use_module(mpworld).
+
 中島秀之先生のProlog/KRに実装されていたものと同様な多重世界機構を拡張してあります。with/2述語を使います。
 testsフォルダのmpw.plファイルに例題があります。参照　第7章　https://www.jstage.jst.go.jp/article/jjsai/2/3/2_367/_pdf
 

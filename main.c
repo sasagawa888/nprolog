@@ -248,14 +248,6 @@ int main(int argc, char *argv[])
 	predicates = NIL;
     }
     strcpy(str, home);
-    strcat(str, "/nprolog/library/multiplex.pl");
-    fp = fopen(str, "r");
-    if (fp != NULL) {
-	fclose(fp);
-	b_consult(list1(makeconst(str)), NIL, 0);
-	predicates = NIL;
-    }
-    strcpy(str, home);
     strcat(str, "/nprolog/library/startup.pl");
     fp = fopen(str, "r");
     if (fp != NULL) {

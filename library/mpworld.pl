@@ -19,6 +19,7 @@ with(w1,with(w2,with(w3,fly(canary))). -> yes
 
 */
 
+:- module(mpworld,[with/2]).
 
 with(W,assertz(X)) :-
     mp_add_world(X,W,Y),
