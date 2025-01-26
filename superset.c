@@ -1045,9 +1045,7 @@ int b_number_codes(int arglist, int rest, int th)
 	    error(NOT_ATOM, "atom_codes ", arg1, th);
 	if (wide_variable_p(arg1) && !listp(arg2))
 	    error(NOT_LIST, "atom_codes ", arg2, th);
-	if (wide_variable_p(arg1) && !atom_codes_list_p(arg2))
-	    error(NOT_CHAR_CODE, "atom_codes ", arg2, th);
-
+	
 
 	if (!variablep(arg1)) {
 	    if (integerp(arg1))

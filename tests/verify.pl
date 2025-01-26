@@ -490,5 +490,101 @@ test(atom_chars) :-
     atom_chars(Atom4, []),
     Atom4 = ''.
 
+test(number_codes) :-
+    number_codes(123, Codes1), 
+    Codes1 = [49, 50, 51],
 
+    number_codes(456, Codes2), 
+    Codes2 = [52, 53, 54],
+
+    number_codes(7890, Codes3),
+    Codes3 = [55, 56, 57, 48],
+
+    number_codes(0, Codes4),
+    Codes4 = [48],
+
+    number_codes(-123, Codes5), 
+    Codes5 = [45, 49, 50, 51],
+
+    number_codes(N1, [49, 50, 51]), 
+    N1 = 123,
+
+    number_codes(N2, [52, 53, 54]), 
+    N2 = 456,
+
+    number_codes(N3, [55, 56, 57, 48]),
+    N3 = 7890,
+
+    number_codes(N4, [48]), 
+    N4 = 0,
+
+    number_codes(N5, [45, 49, 50, 51]), 
+    N5 = -123.
+
+test(number_chars) :-
+    number_chars(123, Chars1),
+    Chars1 = ['1', '2', '3'],
+
+    number_chars(456, Chars2),
+    Chars2 = ['4', '5', '6'],
+
+    number_chars(7890, Chars3),
+    Chars3 = ['7', '8', '9', '0'],
+
+    number_chars(0, Chars4),
+    Chars4 = ['0'],
+
+    number_chars(-123, Chars5),
+    Chars5 = ['-', '1', '2', '3'],
+
+    number_chars(N1, ['1', '2', '3']),
+    N1 = 123,
+
+    number_chars(N2, ['4', '5', '6']), 
+    N2 = 456,
+
+    number_chars(N3, ['7', '8', '9', '0']),
+    N3 = 7890,
+
+    number_chars(N4, ['0']), 
+    N4 = 0,
+
+    number_chars(N5, ['-', '1', '2', '3']),
+    N5 = -123.
+
+test(atom_length) :-
+     atom_length('hello', Length1),
+     Length1 = 5,
+ 
+     atom_length('Prolog', Length2),
+     Length2 = 6,
+ 
+     atom_length('12345', Length3),
+     Length3 = 5,
+ 
+     atom_length('a', Length4),
+     Length4 = 1,
+ 
+     atom_length('abc!@#', Length5), 
+     Length5 = 6,
+ 
+     atom_length('', Length6),
+     Length6 = 0.
+
+test(copy_term) :-
+    copy_term(f(a, b), Copy1), 
+    Copy1 = f(a, b),       
+
+    copy_term(p(X, 1), Copy2),  
+    Copy2 = p(X, 1),           
+
+    copy_term([], Copy4),      
+    Copy4 = [],           
+    [] = Copy4,                
+
+    copy_term(f(X, Y), Copy5),  
+    Copy5 = f(X, Y).         
+                      
+
+     
 :- alltest,write('All tests are done'),nl.
