@@ -1324,8 +1324,9 @@ int b_use_module(int arglist, int rest, int th)
 	if (fp != NULL) {
 	    fclose(fp);
 	    b_reconsult(list1(makeconst(str)), NIL, 0);
+		return(prove_all(rest,sp[th],th));
 	}
-	return(prove_all(rest,sp[th],th));
+	error(CANT_OPEN, "use_module ", arglist, th);
     }
     error(ARITY_ERR, "use_module ", arglist, th);
     return (NO);
