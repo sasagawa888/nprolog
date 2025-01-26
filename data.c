@@ -2042,9 +2042,9 @@ void add_data(int pred, int data)
 	SET_CDR(clauses, cons(data, NIL));
     }
     if (!memq(pred, predicates))
-	if(!module_flag){
+	if(!module_flag)
 	predicates = cons(pred, predicates);
-	}
+	
 }
 
 
@@ -2055,9 +2055,9 @@ void insert_data(int pred, int data)
     memoize_arity(data, pred);
     SET_CAR(pred, cons(data, GET_CAR(pred)));
     if (!memq(pred, predicates))
-	if(!module_flag){
+	if(!module_flag)
 	predicates = cons(pred, predicates);
-	}
+	
 }
 
 
@@ -2181,8 +2181,6 @@ int exportp(int x)
 {
 	int i, name,arity;
 
-	//print(x);
-
 	if(atomp(x)){
 		name = x;
 		arity = 0;
@@ -2194,12 +2192,7 @@ int exportp(int x)
 
 	
 	for(i=0;i<export_pt;i++){
-		//print(export_data[i][0]);
-		//printf("%d ",export_data[i][1]);
-		//print(name);
-		//printf("%d \n",arity);
 		if(eqlp(export_data[i][0],name) && export_data[i][1] == arity){
-			//print(x);
 			return(1);
 		}
 	}
@@ -2225,7 +2218,7 @@ int copy_heap(int x)
 	return (x);
     else if (listp(x))
 	return (listcons(copy_heap(car(x)), copy_heap(cdr(x))));
-	else if (car(x) == NECK)
+	else if (car(x) == NECK || car(x) == AND || car(x) == OR)
 	return (list3(car(x),copy_heap(cadr(x)),copy_heap(caddr(x))));
 	return (cons(copy_heap(car(x)),copy_heap(cdr(x))));
     return (x);
