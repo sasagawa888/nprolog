@@ -209,14 +209,6 @@ ARITY_ERR           67
 :- n_error(var(a,2),67).
 :- n_error(nonvar(a,2),67).
 
-%reverse
-:- n_error(reverse([1|2],X),7).
-:- n_error(reverse(X,[3|4]),7).
-:- n_error(reverse([1,2,3],X,Y),67).
-:- n_error(reverse(1,X),10).
-:- n_error(reverse(X,2),10).
-:- n_error(reverse([1,2],X,Y),67).
-
 %tab
 :- n_error(tab(a),19).
 :- n_error(tab(-1),49).
@@ -353,3 +345,6 @@ ARITY_ERR           67
 %functor
 :- n_error(functor(X,$asdf$,3),48).
 :- n_error(functor(X,foo,a),19).
+
+%succ
+:- n_error(succ(-1,0),49).

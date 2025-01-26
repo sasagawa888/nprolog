@@ -128,6 +128,7 @@ int b_succ(int arglist, int rest, int th)
 		    return (NO);
 	    }
 	}
+	return(NO);
     }
     error(ARITY_ERR, "succ ", arglist, th);
     return (NO);

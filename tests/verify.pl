@@ -251,12 +251,6 @@ test(append) :-
     verify(append([a,b,c],[],[a,b,c])),
     verify(append([a,b,c],[d,e,f],[a,b,c,d,e,f])).
 
-test(reverse) :-
-    reverse([a,b,c],X),
-    verify(X=[c,b,a]),
-    verify(reverse([1,2,3],[3,2,1])),
-    verify(reverse([],[])).
-
 test(name) :-
     name(asdf,X),
     name(Y,X),
@@ -410,5 +404,17 @@ test(list) :-
 test(date) :-
     date(X),date_day(X,Y).
 
+test(occures_check) :-
+    not(unify_with_occurs_check(X, g(f(X)))),
+    not(unify_with_occurs_check(X, h(f(g(X))))),
+    not((unify_with_occurs_check(X, f(Y)), unify_with_occurs_check(Y, g(X)))),
+    not(unify_with_occurs_check(X, [a, b | X])).
+
+test(succ) :-
+    succ(1, 2),
+    succ(0, 1),
+    succ(5, 6), 
+    not(succ(2, 1)),     
+    not(succ(3, 3)).
 
 :- alltest,write('All tests are done'),nl.

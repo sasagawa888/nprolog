@@ -6,42 +6,79 @@ The following extension functions respect ISO-Prolog as much as possible, but th
 
  ```
 \+ (not)
-atom_concat/3
+
+atom_concat/3  The first and second arguments are concatenated and unified with the third argument. The following cases are not supported. e.g. atom_concat(X,b,ab).
+
 append/3
+
 member/2
+
 between/3
+
 select/3
+
 succ/2
+
 maplist/2
+
 compound/1
+
 ground/1
+
 once/1
+
 atom_codes/2
+
 atom_chars/2
+
 char_code/2
+
 number_codes/2
+
 number_chars/2
+
 predicate_property/2
+
 bagof/3
+
 setof/3
+
 findall/3
+
 existerrors/2
+
 write_canonical/1 /2
+
 atom_length/2
+
 get_char/1 2
+
 get_byte/1 2
+
 put_char/1 
+
 flush_output/0
+
 catch/3
+
 throw/1
+
 unify_with_occurs_check/2
+
 current_input/1
+
 current_output/1
+
 set_input/1
+
 set_output/1
+
 use_module/1
+
 module/1
-copy_term/2
+c
+opy_term/2
+
 ```
 
 # Module
