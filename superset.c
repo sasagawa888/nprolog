@@ -1319,12 +1319,13 @@ int b_use_module(int arglist, int rest, int th)
 	strcpy(str, home);
 	strcat(str, "/nprolog/library/");
 	strcat(str, GET_NAME(arg1));
-	strcat(str, "pl");
+	strcat(str, ".pl");
 	fp = fopen(str, "r");
 	if (fp != NULL) {
 	    fclose(fp);
 	    b_consult(list1(makeconst(str)), NIL, 0);
 	}
+	return(prove_all(rest,sp[th],th));
     }
     error(ARITY_ERR, "use_module ", arglist, th);
     return (NO);
