@@ -1,13 +1,16 @@
 /*
     exercize to remember prolog for me
+    module test
 */
 
-bubble_sort(X,X) :-
+:- module(sort,[bsort/2,msort/2,qsort/2]).
+
+bsort(X,X) :-
     bubble1(X,X1),
     X == X1.
-bubble_sort(X,X2) :-
+bsort(X,X2) :-
     bubble1(X,X1),
-    bubble_sort(X1,X2).
+    bsort(X1,X2).
 
 bubble1([],[]).
 bubble1([X],[X]).
@@ -19,17 +22,17 @@ bubble1([X1,X2|Xs],[X2|Y]) :-
     X1 > X2,
     bubble1([X1|Xs],Y).
 
-merge_sort([X],Z) :- 
+msort([X],Z) :- 
     merge([X],[],Z).
-merge_sort([X,Y],Z) :-
+msort([X,Y],Z) :-
     merge([X],[Y],Z).
-merge_sort(X,Z) :-
+msort(X,Z) :-
     length(X,N),
-    N1 is ceiling(N / 2),
+    N1 is N // 2,
     take(X,N1,X1),
     drop(X,N1,X2),
-    merge_sort(X1,Y1),
-    merge_sort(X2,Y2),
+    msort(X1,Y1),
+    msort(X2,Y2),
     merge(Y1,Y2,Z).
 
 take(X,0,[]).
@@ -53,12 +56,12 @@ merge([X|Xs],[Y|Ys],[Y|Z]) :-
 
 
 % tests code from M.Hiroi's page
-quick([X | Xs], Ys) :-
+qsort([X | Xs], Ys) :-
         partition(Xs, X, Littles, Bigs),
-        quick(Littles, Ls),
-        quick(Bigs, Bs),
+        qsort(Littles, Ls),
+        qsort(Bigs, Bs),
         append(Ls, [X | Bs], Ys).
-quick([], []).
+qsort([], []).
 
 
 partition([X | Xs], Y, [X | Ls], Bs) :-
