@@ -3,7 +3,7 @@
 
 bar(X) :- boo(X).
 
-boo(X) :- write(X).
+boo(X) :- fact(X,Y),write(Y).
 
 fact(0,1).
 fact(X,Y) :-

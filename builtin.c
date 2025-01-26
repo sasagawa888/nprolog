@@ -292,7 +292,7 @@ int b_length(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if (!listp(arg1) && !nullp(arg1) && !wide_variable_p(arg1))
+	if (!listp(arg1) && !wide_variable_p(arg1))
 	    error(NOT_LIST, "length ", arglist, th);
 	if (listp(arg1) && length(arg1) == -1
 	    && !wide_variable_p(improper_last(arg1)))
@@ -305,7 +305,7 @@ int b_length(int arglist, int rest, int th)
 	    error(WRONG_ARGS, "length ", arg1, th);
 
 	save1 = wp[th];
-	if ((listp(arg1) && length(arg1) != -1) || nullp(arg1)) {
+	if ((listp(arg1) && length(arg1) != -1)) {
 	    if (unify(arg2, makeint(length(arg1)), th) == YES)
 		return (prove_all(rest, sp[th], th));
 	} else if (listp(arg1) && length(arg1) == -1
@@ -2897,7 +2897,7 @@ int b_list_text(int arglist, int rest, int th)
 	arg2 = cadr(arglist);	//atomstring
 	if (listp(arg1) && length(arg1) == -1 && wide_variable_p(arg2))
 	    error(INSTANTATION_ERR, "list_text ", arg2, th);
-	if (!wide_variable_p(arg1) && !listp(arg1) && !nullp(arg1))
+	if (!wide_variable_p(arg1) && !listp(arg1))
 	    error(NOT_LIST, "list_text ", arg1, th);
 	if (wide_variable_p(arg1) && !atomp(arg2) && !stringp(arg2))
 	    error(NOT_ATOM, "list_text ", arg2, th);
@@ -3865,7 +3865,7 @@ int b_list(int arglist, int rest, int th)
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
-	if (listp(arg1) || nullp(arg1))
+	if (listp(arg1))
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
@@ -4756,9 +4756,9 @@ int b_sort(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if (!listp(arg1) && !nullp(arg1))
+	if (!listp(arg1))
 	    error(NOT_LIST, "sort ", arg1, th);
-	if (!wide_variable_p(arg2) && !listp(arg2) && !nullp(arg2))
+	if (!wide_variable_p(arg2) && !listp(arg2))
 	    error(NOT_VAR, "sort ", arg2, th);
 
 	if (unify(arg2, sort(arg1), th) == YES)
@@ -4779,9 +4779,9 @@ int b_keysort(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if (!listp(arg1) && !nullp(arg1))
+	if (!listp(arg1))
 	    error(NOT_LIST, "key_sort ", arg1, th);
-	if (!wide_variable_p(arg2) && !listp(arg2) && !nullp(arg2))
+	if (!wide_variable_p(arg2) && !listp(arg2))
 	    error(NOT_VAR, "key_sort ", arg2, th);
 
 	if (unify(arg2, keysort(arg1), th) == YES)

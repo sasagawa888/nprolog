@@ -835,10 +835,12 @@ int structurep(int addr)
 
 
 
-// [1,2,3]
+// [1,2,3] []
 int listp(int addr)
-{
-    if (structurep(addr) && GET_AUX(addr) == LIST)
+{	
+	if(nullp(addr))
+	return (1);
+    else if (structurep(addr) && GET_AUX(addr) == LIST)
 	return (1);
     else
 	return (0);
