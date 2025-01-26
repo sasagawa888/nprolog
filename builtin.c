@@ -204,6 +204,8 @@ void initbuiltin(void)
     defbuiltin("catch", b_catch, 3);
     defbuiltin("throw", b_throw, 1);
     defbuiltin("unify_with_occurs_check", b_unify_with_occurs_check, 2);
+	defbuiltin("current_input", b_current_input, 1);
+	defbuiltin("current_output", b_current_output, 1);
     defbuiltin("set_input", b_set_input, 1);
     defbuiltin("set_output", b_set_output, 1);
     defbuiltin("use_module", b_use_module, 1);
