@@ -1,4 +1,5 @@
+% test of module system
 
-test(X) :- X = 1; X = 2; X = 3.
+:- use_module(list).
 
-%?- once(test(X)).
+foo(X,Y) :- last(X,Y).
