@@ -22,7 +22,6 @@ char_code/2
 number_codes/2
 number_chars/2
 predicate_property/2
-reverse/2 
 bagof/3
 setof/3
 findall/3

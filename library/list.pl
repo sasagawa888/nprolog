@@ -1,0 +1,50 @@
+% list library (test of module system)
+:- module(list,[last/2,butlast/2,second/2,cons/3,
+                nth/3,iota/3,take/3,drop/3,make_list/3,reverse/2]).
+
+last([],[]).
+last([X],[X]).
+last([X|Xs],Y) :-
+    last(Xs,Y).
+
+butlast([],[]).
+butlast([X],[]).
+butlast([X|Xs],[X|Y]) :-
+    butlast(Xs,Y).
+
+cons(X,[],[X]).
+cons(X,Y,[X|Y]).
+
+second([],[]).
+second([_,X|_],X).
+
+nth(N,[],[]).
+nth(1,[X|Xs],X).
+nth(N,[X|Xs],Y) :-
+    N1 is N-1,
+    nth(N1,Xs,Y).
+
+iota(S,S,[S]).
+iota(S,E,[S|L]) :-
+    S1 is S+1,
+    iota(S1,E,L).
+
+take(0,L,[]).
+take(N,[L|Ls],[L|Y]) :-
+    N1 is N-1,
+    take(N1,Ls,Y).
+
+drop(0,L,L).
+drop(N,[L|Ls],Y) :-
+    N1 is N-1,
+    drop(N1,Ls,Y).
+
+make_list(0,X,[]).
+make_list(N,X,[X|Y]) :-
+    N1 is N-1,
+    make_list(N1,X,Y).
+
+reverse([],[]).
+reverse([X|Xs],Y) :-
+    reverse(Xs,Y1),
+    append(Y1,[X],Y).

@@ -56,7 +56,7 @@ char builtin[BUILTIN_NUMBER][60] = {
     { "ansi_ed" }, { "ansi_el" }, { "errcode" },
     { "recordh" }, { "recorda" }, { "recordz" }, { "recorded" },
     { "record_after" }, { "break" }, { "end_of_file" },
-    { "instance" }, { "reverse" }, { "removeallh" }, { "erase" },
+    { "instance" }, { "removeallh" }, { "erase" },
     { "eraseall" }, { "stdin" }, { "stdout" }, { "stdinout" },
     { "ctr_set" }, { "ctr_dec" }, { "ctr_inc" }, { "ctr_is" },
     { "heapd" }, { "list_text" }, { "nref" }, { "pref" }, { "nth_ref" },

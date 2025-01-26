@@ -147,7 +147,7 @@ void initbuiltin(void)
     defbuiltin("rename", b_rename, 2);
     defbuiltin("replace", b_replace, 2);
     defbuiltin("reset_op", b_reset_op, 0);
-    defbuiltin("reverse", b_reverse, 2);
+    //defbuiltin("reverse", b_reverse, 2);
     defbuiltin("rmdir", b_rmdir, 1);
     defbuiltin("save", b_save, list2(0, 1));
     defbuiltin("see", b_see, 1);

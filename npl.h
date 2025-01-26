@@ -904,7 +904,6 @@ int b_repeat(int arglist, int rest, int th);
 int b_reset_op(int arglist, int rest, int th);
 int b_retract(int arglist, int rest, int th);
 int b_retrieveh(int arglist, int rest, int th);
-int b_reverse(int arglist, int rest, int th);
 int b_reconsult_predicate(int arglist, int rest, int th);
 int b_reconsult_abolish(int arglist, int rest, int th);
 int b_rmdir(int arglist, int rest, int th);
