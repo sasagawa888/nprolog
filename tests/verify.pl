@@ -429,5 +429,15 @@ test(ground) :-
     not(ground(foo(bar, _))),  
     not(ground([1, Y | Z])).
 
+test(compound) :-
+    compound(foo(bar, baz)),
+    compound(a(1, 2, 3)),
+    compound(some_functor(a)),
+    compound(foo(bar(_))), 
+    \+ compound(42),        
+    \+ compound('hello'),  
+    \+ compound([]), 
+    compound([1, 2, 3]), 
+    \+ compound(_).
 
 :- alltest,write('All tests are done'),nl.
