@@ -465,5 +465,30 @@ test(atom_codes) :-
     atom_codes(Atom4, Codes4),
     Atom4 = ''.
 
+test(atom_chars) :-
+    atom_chars(hello, Chars1),
+    Chars1 = ['h', 'e', 'l', 'l', 'o'],
+
+    atom_chars(world, Chars2),
+    Chars2 = ['w', 'o', 'r', 'l', 'd'],
+
+    atom_chars(a, Chars3),
+    Chars3 = ['a'],
+
+    atom_chars('', Chars4),
+    Chars4 = [],
+
+    atom_chars(Atom1, ['h', 'e', 'l', 'l', 'o']), 
+    Atom1 = hello,
+
+    atom_chars(Atom2, ['w', 'o', 'r', 'l', 'd']),
+    Atom2 = world,
+
+    atom_chars(Atom3, ['a']), 
+    Atom3 = a,
+
+    atom_chars(Atom4, []),
+    Atom4 = ''.
+
 
 :- alltest,write('All tests are done'),nl.

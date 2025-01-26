@@ -955,8 +955,6 @@ int b_atom_chars(int arglist, int rest, int th)
 	    error(NOT_ATOM, "atom_chars ", arg1, th);
 	if (wide_variable_p(arg1) && !listp(arg2))
 	    error(NOT_LIST, "atom_chars ", arg2, th);
-	if (wide_variable_p(arg1) && !atom_codes_list_p(arg2))
-	    error(NOT_CHAR_CODE, "atom_chars ", arg2, th);
 
 
 	if (singlep(arg1) && !variablep(arg1)) {
@@ -1017,11 +1015,7 @@ int b_atom_chars(int arglist, int rest, int th)
 	    ls = arg2;
 	    str1[th] = NUL;
 	    while (!nullp(ls)) {
-		if (GET_INT(car(ls)) < ' ')
-		    sprintf(str2, "\\x%x\\", GET_INT(car(ls)));
-		else
-		    ucs4_to_utf8(GET_INT(car(ls)), str2);
-		strcat(str1, str2);
+		strcat(str1, GET_NAME(car(ls)));
 		ls = cdr(ls);
 	    }
 	    atom = makeconst(str1);
