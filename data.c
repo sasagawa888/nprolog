@@ -1212,6 +1212,8 @@ int groundp(int addr)
 	return (1);
     else if (numberp(addr))
 	return (1);
+	else if (listp(addr))
+	return (groundp(car(addr)) && groundp(cdr(addr)));
     else if (groundp(cadr(addr)) && groundp(caddr(addr)))
 	return (1);
     else

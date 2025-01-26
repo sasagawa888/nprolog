@@ -417,4 +417,17 @@ test(succ) :-
     not(succ(2, 1)),     
     not(succ(3, 3)).
 
+test(ground) :-
+    ground(42),
+    ground('hello'),
+    ground([1, 2, 3]),
+    ground(foo(bar, baz)),
+    ground([]),
+    ground([foo, bar, 42]),
+    not(ground(_)),          
+    not(ground([X, 2, 3])),    
+    not(ground(foo(bar, _))),  
+    not(ground([1, Y | Z])).
+
+
 :- alltest,write('All tests are done'),nl.
