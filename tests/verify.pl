@@ -440,4 +440,30 @@ test(compound) :-
     compound([1, 2, 3]), 
     \+ compound(_).
 
+test(atom_codes) :-
+    atom_codes('hello', Codes1), 
+    Codes1 = [104, 101, 108, 108, 111],
+
+    atom_codes('world', Codes2), 
+    Codes2 = [119, 111, 114, 108, 100],
+
+    atom_codes('a', Codes3),
+    Codes3 = [97],
+
+    atom_codes('', Codes4), 
+    Codes4 = [],
+
+    atom_codes(Atom1, Codes1),
+    Atom1 = 'hello',
+
+    atom_codes(Atom2, Codes2),
+    Atom2 = 'world',
+
+    atom_codes(Atom3, Codes3),
+    Atom3 = 'a',
+
+    atom_codes(Atom4, Codes4),
+    Atom4 = ''.
+
+
 :- alltest,write('All tests are done'),nl.
