@@ -1,6 +1,7 @@
 % list library (test of module system)
 :- module(list,[last/2,butlast/2,second/2,cons/3,
-                nth/3,iota/3,take/3,drop/3,make_list/3,reverse/2]).
+                nth/3,nth0/3,iota/3,take/3,drop/3,make_list/3,reverse/2,
+                remove_at/3,insert_at/4]).
 
 last([],[]).
 last([X],[X]).
@@ -23,6 +24,12 @@ nth(1,[X|Xs],X).
 nth(N,[X|Xs],Y) :-
     N1 is N-1,
     nth(N1,Xs,Y).
+
+nth0(N,[],[]).
+nth0(0,[X|Xs],X).
+nth0(N,[X|Xs],Y) :-
+    N1 is N-1,
+    nth0(N1,Xs,Y).
 
 iota(S,S,[S]).
 iota(S,E,[S|L]) :-
@@ -48,3 +55,13 @@ reverse([],[]).
 reverse([X|Xs],Y) :-
     reverse(Xs,Y1),
     append(Y1,[X],Y).
+
+remove_at(0,[X|Xs],Xs).
+remove_at(N,[X|Xs],[X|Y]) :-
+    N1 is N-1,
+    remove_at(N1,Xs,Y).
+
+insert_at(0,X,L,[X|L]).
+insert_at(N,X,[L|Ls],[L|Y]) :-
+    N1 is N-1,
+    insert_at(N1,X,Ls,Y).

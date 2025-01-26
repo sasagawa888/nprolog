@@ -145,7 +145,7 @@ yes
  Provide the port number to port. It ranges from 0 to 65536. ip-address is given as an atom. Example: '127.1.1.1' Returns yes is success.
 
 - send_socket(Socket,Atom) 
- Sends a string to the socket. Returns yes.
+ Sends an atom to the socket. Returns yes.
 
 - recv_socket(Socket,Atom) 
  Receives from the socket and returns yes.
