@@ -90,7 +90,7 @@ void initbuiltin(void)
     defbuiltin("fail", b_fail, 0);
     defbuiltin("fileerrors", b_fileerrors, 2);
     defbuiltin("findall", b_findall, 3);
-    defbuiltin("flush", b_flush_output, 0);
+    defbuiltin("flush", b_flush_output, list2(0,1));
     defbuiltin("float", b_real, 1);
     defbuiltin("float_text", b_float_text, 3);
     defbuiltin("functor", b_functor, 3);
@@ -194,13 +194,13 @@ void initbuiltin(void)
     defbuiltin("char_code", b_char_code, 2);
     defbuiltin("number_codes", b_number_codes, 2);
     defbuiltin("number_chars", b_number_chars, 2);
-    defbuiltin("write_canonical", b_display, 1);
+    defbuiltin("write_canonical", b_display, list2(1,2));
     defbuiltin("atom_length", b_atom_length, 2);
     defbuiltin("atom_concat", b_atom_concat, 3);
-    defbuiltin("get_code", b_get_code, 1);
-    defbuiltin("get_byte", b_get_byte, 1);
-    defbuiltin("put_char", b_put_char, 1);
-    defbuiltin("flush_output", b_flush_output, 0);
+    defbuiltin("get_code", b_get_code, list2(1,2));
+    defbuiltin("get_byte", b_get_byte, list2(1,2));
+    defbuiltin("put_char", b_put_char, list2(1,2));
+    defbuiltin("flush_output", b_flush_output, list2(0,1));
     defbuiltin("catch", b_catch, 3);
     defbuiltin("throw", b_throw, 1);
     defbuiltin("unify_with_occurs_check", b_unify_with_occurs_check, 2);

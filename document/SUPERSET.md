@@ -56,9 +56,9 @@ The following extension functions respect ISO-Prolog as much as possible, but th
 
 - get_byte/1 2
 
-- put_char/1 
+- put_char/1 2
 
-- flush_output/0
+- flush_output/0 1
 
 - catch/3
 
@@ -80,7 +80,7 @@ The following extension functions respect ISO-Prolog as much as possible, but th
 
 - copy_term/2
 
-- at_end_of_strewam/1
+- at_end_of_stream/1
 
 
 
