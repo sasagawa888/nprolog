@@ -47,7 +47,7 @@ $(EDLOG): $(EDLOG_OBJS)
 	$(CC) $(LDFLAGS) $^ -o $@ $(CURSES_LIBS)
 
 edlog.o: edlog.c edlog.h term.h
-	$(CC) $(CFLAGS) -c edlog.c
+	$(CC) $(CFLAGS) -c edlog.c $(CURSES_CFLAGS)
 
 install: $(NPL) $(EDLOG)
 	mkdir -p $(DEST)
