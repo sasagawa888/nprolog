@@ -211,6 +211,7 @@ void initbuiltin(void)
     defbuiltin("use_module", b_use_module, 1);
 	defbuiltin("module", b_module, 2);
 	defbuiltin("copy_term", b_copy_term, 2);
+	defbuiltin("at_end_of_stream", b_at_end_of_stream, 1);
     defbuiltin("existerrors", b_existerrors, 2);
     definfix("\\+", b_not, 900, FY);
 

@@ -80,12 +80,13 @@ The following extension functions respect ISO-Prolog as much as possible, but th
 
 - copy_term/2
 
+- at_end_of_strewam/1
+
 
 
 ### future task
 - sub_atom/5
 - stream_property/2
-- at_end_of_stream/1 2
 
 
 # Module

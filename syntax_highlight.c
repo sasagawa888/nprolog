@@ -71,7 +71,7 @@ char builtin[BUILTIN_NUMBER][60] = {
     { "get_code" }, { "get_byte" }, { "put_char" }, { "flush_output" },
     { "number_codes" }, { "number_chars" }, { "catch" }, { "throw" },
     { "set_input" }, { "set_output" }, { "use_module" }, { "module" }, { "copy_term" },
-    { "current_input" }, { "current_output" },
+    { "current_input" }, { "current_output" }, { "at_end_of_stream" },
 };
 
 //compiled predicate

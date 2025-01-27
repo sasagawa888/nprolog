@@ -1410,3 +1410,25 @@ int b_copy_term(int arglist, int rest, int th)
 	error(ARITY_ERR,"copy_term ",arglist,th);
 	return(NO);
 }
+
+int b_at_end_of_stream(int arglist, int rest, int th)
+{
+	int n,arg1;
+
+	n=length(arglist);
+	if(n==1){
+		arg1 = car(arglist);
+
+		if(!streamp(arg1))
+		error(NOT_STREAM,"at_end_of_stream ",arglist,th);
+
+		if(arg1 == standard_input || arg1 == standard_output)
+			return(NO);
+		else if(feof(GET_PORT(arg1)))
+			return(prove_all(rest,sp[th],th));
+		else 
+			return(NO);
+	}
+	error(ARITY_ERR,"at_end_ofstream ",arglist,th);
+	return(NO);
+}

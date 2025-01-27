@@ -741,6 +741,7 @@ int b_atom_chars(int arglist, int rest, int th);
 int b_atomic(int arglist, int rest, int th);
 int b_atom_convert(int arglist, int rest, int th);
 int b_atsmaller(int arglist, int rest, int th);
+int b_at_end_of_stream(int arglist, int rest, int th);
 int b_before_cut(int arglist, int rest, int th);
 int b_bagof(int arglist, int rest, int th);
 int b_bagofhelper(int arglist, int rest, int th);
