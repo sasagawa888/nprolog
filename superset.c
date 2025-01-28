@@ -819,6 +819,225 @@ int b_put_char(int arglist, int rest, int th)
     return (NO);
 }
 
+int b_peek_code(int arglist, int rest, int th)
+{
+    int n, arg1, arg2, c, i, res;
+    char str[10];
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = input_stream;
+	arg2 = car(arglist);
+	goto peek_code;
+    } else if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+      peek_code:
+	if (wide_variable_p(arg1))
+	    error(INSTANTATION_ERR, "peek_code ", arg1, th);
+	if (!wide_variable_p(arg2) && !integerp(arg2))
+	    error(NOT_INT, "peek_code ", arg2, th);
+	if (!streamp(arg1) && !aliasp(arg1))
+	    error(NOT_STREAM, "peek_code ", arg1, th);
+
+	if (aliasp(arg1))
+	    arg1 = GET_CAR(arg1);
+	c = getc(GET_PORT(arg1));
+	ungetc(c,GET_PORT(arg1));
+
+	if (isUni2(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+		ungetc(str[1],GET_PORT(arg1));
+	    str[2] = NUL;
+	    i = utf8_to_ucs4(str);
+	} else if (isUni3(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+		ungetc(str[1],GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+		ungetc(str[2],GET_PORT(arg1));
+	    str[3] = NUL;
+	    i = utf8_to_ucs4(str);
+	} else if (isUni4(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+		ungetc(str[1],GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+		ungetc(str[2],GET_PORT(arg1));
+	    str[3] = getc(GET_PORT(arg1));
+		ungetc(str[3],GET_PORT(arg1));
+	    str[4] = NUL;
+	    i = utf8_to_ucs4(str);
+	} else if (isUni5(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+		ungetc(str[1],GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+		ungetc(str[2],GET_PORT(arg1));
+	    str[3] = getc(GET_PORT(arg1));
+		ungetc(str[3],GET_PORT(arg1));
+	    str[4] = getc(GET_PORT(arg1));
+		ungetc(str[4],GET_PORT(arg1));
+	    str[5] = NUL;
+	    i = utf8_to_ucs4(str);
+	} else if (isUni6(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+		ungetc(str[1],GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+		ungetc(str[2],GET_PORT(arg1));
+	    str[3] = getc(GET_PORT(arg1));
+		ungetc(str[3],GET_PORT(arg1));
+	    str[4] = getc(GET_PORT(arg1));
+		ungetc(str[4],GET_PORT(arg1));
+	    str[5] = getc(GET_PORT(arg1));
+		ungetc(str[5],GET_PORT(arg1));
+	    str[6] = NUL;
+	    i = utf8_to_ucs4(str);
+	} else {
+	    i = c;
+	}
+
+	res = NIL;
+
+	res = unify(arg2, makeint(i), th);
+	if (res == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    error(ARITY_ERR, "peek_code ", arglist, th);
+    return (NO);
+}
+
+int b_peek_char(int arglist, int rest, int th)
+{
+    int n, arg1, arg2, c, res;
+    char str[10];
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = input_stream;
+	arg2 = car(arglist);
+	goto peek_char;
+    } else if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+      peek_char:
+	if (wide_variable_p(arg1))
+	    error(INSTANTATION_ERR, "peek_char ", arg1, th);
+	if (!wide_variable_p(arg2) && !integerp(arg2))
+	    error(NOT_INT, "peek_char ", arg2, th);
+	if (!streamp(arg1) && !aliasp(arg1))
+	    error(NOT_STREAM, "peek_char ", arg1, th);
+
+	if (aliasp(arg1))
+	    arg1 = GET_CAR(arg1);
+
+	c = getc(GET_PORT(arg1));
+	str[0] = c;
+	ungetc(c,GET_PORT(arg1));
+
+	if (isUni2(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+		ungetc(str[1],GET_PORT(arg1));
+	    str[2] = NUL;
+	} else if (isUni3(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+		ungetc(str[1],GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+		ungetc(str[2],GET_PORT(arg1));
+	    str[3] = NUL;
+	} else if (isUni4(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+		ungetc(str[1],GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+		ungetc(str[2],GET_PORT(arg1));
+	    str[3] = getc(GET_PORT(arg1));
+		ungetc(str[3],GET_PORT(arg1));
+	    str[4] = NUL;
+	} else if (isUni5(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+		ungetc(str[1],GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+		ungetc(str[2],GET_PORT(arg1));
+	    str[3] = getc(GET_PORT(arg1));
+		ungetc(str[3],GET_PORT(arg1));
+	    str[4] = getc(GET_PORT(arg1));
+		ungetc(str[4],GET_PORT(arg1));
+	    str[5] = NUL;
+	} else if (isUni6(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+		ungetc(str[1],GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+		ungetc(str[2],GET_PORT(arg1));
+	    str[3] = getc(GET_PORT(arg1));
+		ungetc(str[3],GET_PORT(arg1));
+	    str[4] = getc(GET_PORT(arg1));
+		ungetc(str[4],GET_PORT(arg1));
+	    str[5] = getc(GET_PORT(arg1));
+		ungetc(str[5],GET_PORT(arg1));
+	    str[6] = NUL;
+	} 
+	res = NIL;
+
+	res = unify(arg2, makeconst(str), th);
+	if (res == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    error(ARITY_ERR, "peek_char ", arglist, th);
+    return (NO);
+}
+
+
+int b_peek_byte(int arglist, int rest, int th)
+{
+    int n, arg1, arg2, c, res;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = input_stream;
+	arg2 = car(arglist);
+	goto peek_byte;
+    } else if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+      peek_byte:
+	if (wide_variable_p(arg1))
+	    error(INSTANTATION_ERR, "peek_byte ", arg1, th);
+	if (!wide_variable_p(arg2) && !integerp(arg2))
+	    error(NOT_INT, "peek_byte ", arg2, th);
+	if (!streamp(arg1) && !aliasp(arg1))
+	    error(NOT_STREAM, "peek_byte ", arg1, th);
+
+	if (aliasp(arg1))
+	    arg1 = GET_CAR(arg1);
+	c = fgetc(GET_PORT(arg1));
+	ungetc(c,GET_PORT(arg1));
+
+	res = unify(arg2, makeint(c), th);
+	if (res == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    error(ARITY_ERR, "peek_byte ", arglist, th);
+    return (NO);
+}
+
+
+
 int b_flush_output(int arglist, int rest, int th)
 {
     int n, arg1;

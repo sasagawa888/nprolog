@@ -58,6 +58,12 @@ The following extension functions respect ISO-Prolog as much as possible, but th
 
 - put_char/1 2
 
+- peek_code/1 2
+
+- peek_char/1 2
+
+- peek_byte/1 2
+
 - flush_output/0 1
 
 - catch/3

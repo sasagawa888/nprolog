@@ -200,6 +200,9 @@ void initbuiltin(void)
     defbuiltin("get_code", b_get_code, list2(1,2));
     defbuiltin("get_byte", b_get_byte, list2(1,2));
     defbuiltin("put_char", b_put_char, list2(1,2));
+	defbuiltin("peek_code", b_peek_code, list2(1,2));
+	defbuiltin("peek_char", b_peek_char, list2(1,2));
+	defbuiltin("peek_byte", b_peek_byte, list2(1,2));
     defbuiltin("flush_output", b_flush_output, list2(0,1));
     defbuiltin("catch", b_catch, 3);
     defbuiltin("throw", b_throw, 1);
