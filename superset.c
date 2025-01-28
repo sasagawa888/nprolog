@@ -881,10 +881,16 @@ int b_put_char(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
       put:
-	if (!integerp(arg2))
-	    error(NOT_INT, "put_char ", arg1, th);
+	if(wide_variable_p(arg1))
+	error(INSTANTATION_ERR,"put_char ",arg1,th);
+	if(wide_variable_p(arg2))
+	error(INSTANTATION_ERR,"put_char ",arg2,th);
+	if (!wide_variable_p(arg1) && !characterp(arg2))
+	    error(NOT_CHAR, "put_char ", arg2, th);
+	if(!streamp(arg1))
+	error(NOT_STREAM,"put_char ", arg1,th);
 
-	fprintf(GET_PORT(arg1), "%c", (char) GET_INT(arg2));
+	fprintf(GET_PORT(arg1), "%s", GET_NAME(arg2));
 	return (prove_all(rest, sp[th], th));
     }
     error(ARITY_ERR, "put_char ", arglist, th);
