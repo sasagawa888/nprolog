@@ -1,3 +1,5 @@
+:- use_module(mpworld).
+
 % World multiplex mechanism
 %example1
 :- with(a,assertz(p(a))).
