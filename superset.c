@@ -887,7 +887,7 @@ int b_put_char(int arglist, int rest, int th)
 	error(INSTANTATION_ERR,"put_char ",arg2,th);
 	if (!wide_variable_p(arg1) && !characterp(arg2))
 	    error(NOT_CHAR, "put_char ", arg2, th);
-	if(!streamp(arg1))
+	if(!streamp(arg1) && !aliasp(arg1))
 	error(NOT_STREAM,"put_char ", arg1,th);
 
 	fprintf(GET_PORT(arg1), "%s", GET_NAME(arg2));
