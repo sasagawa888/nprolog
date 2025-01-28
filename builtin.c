@@ -198,7 +198,7 @@ void initbuiltin(void)
     defbuiltin("atom_length", b_atom_length, 2);
     defbuiltin("atom_concat", b_atom_concat, 3);
     defbuiltin("get_code", b_get_code, list2(1,2));
-	defbuiltin("get_char", b_get_code, list2(1,2));
+	defbuiltin("get_char", b_get_char, list2(1,2));
     defbuiltin("get_byte", b_get_byte, list2(1,2));
     defbuiltin("put_char", b_put_char, list2(1,2));
 	defbuiltin("peek_code", b_peek_code, list2(1,2));

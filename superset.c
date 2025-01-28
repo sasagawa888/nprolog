@@ -775,7 +775,7 @@ int b_get_char(int arglist, int rest, int th)
       get_char:
 	if (wide_variable_p(arg1))
 	    error(INSTANTATION_ERR, "get_char ", arg1, th);
-	if (!wide_variable_p(arg2) && !integerp(arg2))
+	if (!wide_variable_p(arg2) && !atomp(arg2))
 	    error(NOT_INT, "get_char ", arg2, th);
 	if (!streamp(arg1) && !aliasp(arg1))
 	    error(NOT_STREAM, "get_char ", arg1, th);
@@ -815,7 +815,9 @@ int b_get_char(int arglist, int rest, int th)
 	    str[4] = getc(GET_PORT(arg1));
 	    str[5] = getc(GET_PORT(arg1));
 	    str[6] = NUL;
-	} 
+	} else {
+		str[1] = NUL;
+	}
 	res = NIL;
 
 	res = unify(arg2, makeconst(str), th);
