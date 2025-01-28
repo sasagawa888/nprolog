@@ -35,7 +35,7 @@ address
 #define PROCSIZE 10
 #define OPERATOR_NUMBER 24
 #define FUNCTION_NUMBER 22
-#define BUILTIN_NUMBER 200
+#define BUILTIN_NUMBER 220
 #define COMPILED_NUMBER 23
 #define EXTENDED_NUMBER 40
 #define NIL         0
@@ -248,7 +248,7 @@ extern int unread;
 extern int paren_nest;
 extern char operator[OPERATOR_NUMBER][5];
 extern char function[FUNCTION_NUMBER][12];
-extern char builtin[BUILTIN_NUMBER][60];
+extern char builtin[BUILTIN_NUMBER][30];
 extern char compiled[COMPILED_NUMBER][30];
 extern char extended[EXTENDED_NUMBER][30];
 extern double timer;

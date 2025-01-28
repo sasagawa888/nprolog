@@ -758,6 +758,76 @@ int b_get_code(int arglist, int rest, int th)
     return (NO);
 }
 
+int b_get_char(int arglist, int rest, int th)
+{
+    int n, arg1, arg2, c, res;
+    char str[10];
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = input_stream;
+	arg2 = car(arglist);
+	goto get_char;
+    } else if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+      get_char:
+	if (wide_variable_p(arg1))
+	    error(INSTANTATION_ERR, "get_char ", arg1, th);
+	if (!wide_variable_p(arg2) && !integerp(arg2))
+	    error(NOT_INT, "get_char ", arg2, th);
+	if (!streamp(arg1) && !aliasp(arg1))
+	    error(NOT_STREAM, "get_char ", arg1, th);
+
+	if (aliasp(arg1))
+	    arg1 = GET_CAR(arg1);
+	c = getc(GET_PORT(arg1));
+	str[0] = c;
+
+	if (isUni2(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+	    str[2] = NUL;
+	} else if (isUni3(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+	    str[3] = NUL;
+	} else if (isUni4(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+	    str[3] = getc(GET_PORT(arg1));
+	    str[4] = NUL;
+	} else if (isUni5(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+	    str[3] = getc(GET_PORT(arg1));
+	    str[4] = getc(GET_PORT(arg1));
+	    str[5] = NUL;
+	} else if (isUni6(c)) {
+	    str[0] = c;
+	    str[1] = getc(GET_PORT(arg1));
+	    str[2] = getc(GET_PORT(arg1));
+	    str[3] = getc(GET_PORT(arg1));
+	    str[4] = getc(GET_PORT(arg1));
+	    str[5] = getc(GET_PORT(arg1));
+	    str[6] = NUL;
+	} 
+	res = NIL;
+
+	res = unify(arg2, makeconst(str), th);
+	if (res == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    error(ARITY_ERR, "get_char ", arglist, th);
+    return (NO);
+}
+
 
 
 int b_get_byte(int arglist, int rest, int th)

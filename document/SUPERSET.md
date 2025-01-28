@@ -52,6 +52,8 @@ The following extension functions respect ISO-Prolog as much as possible, but th
 
 - atom_length/2
 
+- get_code/1 2
+
 - get_char/1 2
 
 - get_byte/1 2
