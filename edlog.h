@@ -2,14 +2,14 @@
 #define EDLIS_H
 
 #ifndef _XOPEN_SOURCE
-#define _XOPEN_SOURCE 700
+#define _XOPEN_SOURCE 600
 #endif	/* 
  */
     
 #define FULLSCREEN
 #include "term.h"
 
-static const float VERSION = 3.51;
+static const float VERSION = 3.88;
 
 #define ROW_SIZE 5000
 #define COL_SIZE 256
