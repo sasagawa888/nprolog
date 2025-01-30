@@ -256,6 +256,7 @@ extern double timer;
 
 //error_handler
 extern int instantation_tag;
+extern int uninstantation_tag;
 extern int type_tag;
 extern int domain_tag;
 extern int exsistence_tag;

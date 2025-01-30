@@ -94,7 +94,8 @@ void init_stream(void)
 void init_handler()
 {
 
-    instantation_tag = list2(makepred("instantiation_error"),list2(makevar("Goal"),makevar("ArgNo")));
+    instantation_tag = makepred("instantiation_error");
+    uninstantation_tag = list2(makepred("uninstantiation_error"),makevar("Term"));
     type_tag = list2(makepred("type_error"),list2(makevar("TypeName"),makevar("Culprit")));
     domain_tag = list2(makepred("domain_error"),list2(makevar("Domain"),makevar("Culprit")));
     exsistence_tag = list2(makepred("existence_error"),list2(makevar("ObjectType"),makevar("Culprit")));

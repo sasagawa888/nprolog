@@ -73,6 +73,7 @@ double timer;			// for timer_microseconds/1
 
 //error_handler
 int instantation_tag;
+int uninstantation_tag;
 int type_tag;
 int domain_tag;
 int exsistence_tag;
