@@ -434,7 +434,7 @@ void definfixcomp(char *name, int (*func)(int, int, int), int weight,
 }
 
 
-void initoperator(void)
+void init_operator(void)
 {
     defoperator(":-", o_define, 1200, XFX, 0);
     defoperator(":-", o_define, 1200, FX, 0);

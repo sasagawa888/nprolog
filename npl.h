@@ -254,6 +254,20 @@ extern char compiled[COMPILED_NUMBER][30];
 extern char extended[EXTENDED_NUMBER][30];
 extern double timer;
 
+//error_handler
+extern int instantation_tag;
+extern int type_tag;
+extern int domain_tag;
+extern int exsistence_tag;
+extern int permisson_tag;
+extern int context_tag;
+extern int syntax_tag;
+extern int evaluation_tag;
+extern int representation_tag;
+extern int consistency_tag;
+extern int resource_tag;
+extern int system_tag;
+
 // bignum pointer
 extern int big_pt0;
 extern int big_pt1;
@@ -1363,10 +1377,11 @@ void init_para(void);
 void init_parent(void);
 void init_receiver(void);
 void init_repl(void);
-void initbuiltin(void);
-void initcell(void);
-void initoperator(void);
-void initstream(void);
+void init_builtin(void);
+void init_cell(void);
+void init_operator(void);
+void init_stream(void);
+void init_handler(void);
 void insert_data(int pred, int data);
 void markcell(int addr);
 void markoblist(void);

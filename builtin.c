@@ -11,7 +11,7 @@
 #include <dirent.h>
 #include "npl.h"
 
-void initbuiltin(void)
+void init_builtin(void)
 {
     definfix(">", b_greater, 700, XFX);
     definfix("<", b_smaller, 700, XFX);
@@ -4400,7 +4400,7 @@ int b_reset_op(int arglist, int rest, int th)
 
     n = length(arglist);
     if (n == 0) {
-	initoperator();
+	init_operator();
 	return (prove_all(rest, sp[th], th));
     }
     error(ARITY_ERR, "reset_op ", arglist, th);

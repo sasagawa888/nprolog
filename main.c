@@ -71,8 +71,21 @@ int cursor_color_store = -1;	//for ansi_sgr
 int cursor_style_store = -1;	//for ansi_sgr
 double timer;			// for timer_microseconds/1
 
+//error_handler
+int instantation_tag;
+int type_tag;
+int domain_tag;
+int exsistence_tag;
+int permisson_tag;
+int context_tag;
+int syntax_tag;
+int evaluation_tag;
+int representation_tag;
+int consistency_tag;
+int resource_tag;
+int system_tag;
 
-
+    
 //------pointer----
 int hp;				//heap pointer
 int sp[THREADSIZE];		//stack pointer
@@ -213,10 +226,11 @@ int main(int argc, char *argv[])
     FILE *fp;
 
     signal(SIGINT, reset);
-    initcell();
-    initbuiltin();
-    initoperator();
-    initstream();
+    init_cell();
+    init_builtin();
+    init_operator();
+    init_stream();
+	init_handler();
     ioctl(0, TIOCGWINSZ, &w);
     ed_hight = w.ws_row;
     ed_width = w.ws_col;

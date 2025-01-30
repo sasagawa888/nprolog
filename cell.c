@@ -5,7 +5,7 @@
 
 
 //-----------------------------
-void initcell(void)
+void init_cell(void)
 {
     int addr, x, y;
 
@@ -75,7 +75,7 @@ int freshcell(void)
     return (res);
 }
 
-void initstream(void)
+void init_stream(void)
 {
     standard_input =
 	makestream(stdin, OPL_INPUT, OPL_TEXT, NIL,
@@ -89,6 +89,30 @@ void initstream(void)
     makealias("user_input", standard_input, STDIO);
     makealias("user_output", standard_output, STDIO);
     makealias("error", standard_error, STDIO);
+}
+
+void init_handler()
+{
+
+    instantation_tag = list2(makepred("instantiation_error"),list2(makevar("Goal"),makevar("ArgNo")));
+    type_tag = list2(makepred("type_error"),list2(makevar("TypeName"),makevar("Culprit")));
+    domain_tag = list2(makepred("domain_error"),list2(makevar("Domain"),makevar("Culprit")));
+    exsistence_tag = list2(makepred("existence_error"),list2(makevar("ObjectType"),makevar("Culprit")));
+    permisson_tag = list2(makepred("permission_error"),list3(makevar("Operation"),
+                                                               makevar("ObjectType"),
+                                                               makevar("Culprit")));
+    context_tag = list2(makepred("context_error"),list2(makevar("ContextType"),
+                                                        makevar("CommandType")));
+    syntax_tag = list2(makepred("syntax_error"),makevar("Message"));
+    evaluation_tag = list2(makepred("evaluation_error"),list2(makevar("ErrorType"),
+                                                              makevar("Culprit")));
+    representation_tag =  list2(makepred("representation_error"),makevar("ErrorType"));
+    consistency_tag = list2(makepred("consistency_error"),list3(makevar("Culprit1"),
+                                                                makevar("Culprit2"),
+                                                                makevar("Message")));
+    resource_tag = list2(makepred("resource_error"),makevar("ResourceType"));
+    system_tag = list2(makepred("system_error"),makevar("Message"));
+    
 }
 
 void bindsym(int x, int val, int th)
