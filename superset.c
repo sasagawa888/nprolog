@@ -1470,8 +1470,9 @@ int b_catch(int arglist, int rest, int th)
 	arg3 = caddr(arglist);
 
 
-	catch_data[cp[th]][0][th] = arg2;
-	catch_data[cp[th]][1][th] = sp[th];
+	catch_data[cp[th]][0][th] = arg2;   //tag
+	catch_data[cp[th]][1][th] = sp[th]; //sp for restore catch
+	catch_sp[cp[th]][th] = sp[th]; // for error handler
 	int ret = setjmp(catch_buf[cp[th]][th]);
 	pt = cp[th];
 	cp[th]++;
@@ -1479,11 +1480,13 @@ int b_catch(int arglist, int rest, int th)
 	    error(RESOURCE_ERR, "catch ", NIL, th);
 
 	if (ret == 0) {
+		cp[th]--;
 	    if (prove_all(arg1, sp[th], th) == YES)
 		return (prove_all(rest, sp[th], th));
 	    else
 		return (NO);
 	} else if (ret == 1) {
+		cp[th]--;
 	    sp[th] = catch_data[pt][1][th];
 	    return (prove_all(arg3, sp[th], th));
 	}
