@@ -1461,7 +1461,7 @@ int b_number_chars(int arglist, int rest, int th)
 
 int b_catch(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, arg3, pt;
+    int n, arg1, arg2, arg3, pt, res;
 
     n = length(arglist);
     if (n == 3) {
@@ -1480,13 +1480,18 @@ int b_catch(int arglist, int rest, int th)
 	    error(RESOURCE_ERR, "catch ", NIL, th);
 
 	if (ret == 0) {
-	    if (prove_all(arg1, sp[th], th) == YES)
-		return (prove_all(rest, sp[th], th));
+	    if (prove_all(arg1, sp[th], th) == YES){
+		res = prove_all(rest, sp[th], th);
+		cp[th]--;
+		return (res);
+		}
 	    else
 		return (NO);
 	} else if (ret == 1) {
 	    sp[th] = catch_data[pt][1][th];
-	    return (prove_all(arg3, sp[th], th));
+		res = prove_all(arg3, sp[th], th);
+		cp[th]--;
+	    return (res);
 	}
 	return (NO);
     }
@@ -1498,10 +1503,7 @@ void throw(int tag, int th)
 {
 	int i;
 
-	//print(tag);
-	//printf("%d",cp[th]);
 	for (i = cp[th] - 1; i >= 0; i--) {
-		//print(catch_data[i][0][th]);
 	    if (unify(catch_data[i][0][th], tag, th) == YES)
 		longjmp(catch_buf[i][th], 1);
 	}
