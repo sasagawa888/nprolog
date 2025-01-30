@@ -1489,9 +1489,12 @@ int b_catch(int arglist, int rest, int th)
 		return (NO);
 	} else if (ret == 1) {
 	    sp[th] = catch_data[pt][1][th];
-		res = prove_all(arg3, sp[th], th);
+		if(prove_all(arg3, sp[th], th) == YES){
+		res = prove_all(rest,sp[th],th);
 		cp[th]--;
-	    return (res);
+	    return (res);}
+		else 
+		return(NO);
 	}
 	return (NO);
     }

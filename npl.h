@@ -1426,9 +1426,11 @@ void send_to_parent_buffer(void);
 void sned_to_child(int n, int x);
 void set_sign(int x, int y);
 void sprint(int addr);
+void throw(int tag, int th);
 void prove_trace(int port, int goal, int bindings, int rest, int th);
 void ucs4_to_utf8(int n, char *p);
 void unbind(int x, int th);
+void unbindsym(int x);
 void unreadc(char c);
 char *prolog_file_name(char *name);
 

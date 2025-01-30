@@ -8,6 +8,34 @@
 #endif
 #include "npl.h"
 
+void init_handler()
+{
+
+    instantation_tag = makepred("instantiation_error");
+    uninstantation_tag = list2(makepred("uninstantiation_error"),makevar("%Term"));
+    type_tag = list3(makepred("error"),
+	                 list3(makepred("type_error"),makevar("%TypeName"),makevar("%Culprit")),
+	                 makevar("%Context"));
+    domain_tag = list2(makepred("domain_error"),list2(makevar("%Domain"),makevar("%Culprit")));
+    exsistence_tag = list2(makepred("existence_error"),list2(makevar("%ObjectType"),makevar("%Culprit")));
+    permisson_tag = list2(makepred("permission_error"),list3(makevar("%Operation"),
+                                                               makevar("%ObjectType"),
+                                                               makevar("%Culprit")));
+    context_tag = list2(makepred("context_error"),list2(makevar("%ContextType"),
+                                                        makevar("%CommandType")));
+    syntax_tag = list2(makepred("syntax_error"),makevar("%Message"));
+    evaluation_tag = list2(makepred("evaluation_error"),list2(makevar("%ErrorType"),
+                                                              makevar("%Culprit")));
+    representation_tag =  list2(makepred("representation_error"),makevar("%ErrorType"));
+    consistency_tag = list2(makepred("consistency_error"),list3(makevar("%Culprit1"),
+                                                                makevar("%Culprit2"),
+                                                                makevar("%Message")));
+    resource_tag = list2(makepred("resource_error"),makevar("%ResourceType"));
+    system_tag = list2(makepred("system_error"),makevar("%Message"));
+    
+}
+
+
 //------error for compier-----
 void errorcomp(int errnum, int name, int arg)
 {
@@ -24,9 +52,9 @@ void error(int errnum, char *fun, int arg, int th)
 	longjmp(buf1, 1);
     }
 
-    ESCFRED;
     switch (errnum) {
     case SYNTAX_ERR:
+	ESCFRED;
 	if (syntax_flag == YES) {
 	    printf("Syntax error %s ", fun);
 	    if (arg != NIL)
@@ -36,100 +64,128 @@ void error(int errnum, char *fun, int arg, int th)
 	break;
 
     case BUILTIN_EXIST:
+	ESCFRED;
 	printf("Permission error %s ", fun);
 	print(arg);
 	break;
 
     case ALIAS_EXIST:
+	ESCFRED;
 	printf("Permission error %s ", fun);
 	print(arg);
 	break;
 
     case STATIC_PROCEDURE:
+	ESCFRED;
 	printf("Static procedure %s ", fun);
 	print(arg);
 	break;
 
     case ILLEGAL_ARGS:
+	ESCFRED;
 	printf("Illegal argument %s ", fun);
 	print(arg);
 	break;
 
     case CANT_READ:
+	ESCFRED;
 	printf("Can't read of %s ", fun);
 	break;
 
     case NOT_NUM:
+	ESCFRED;
 	printf("Not a number %s ", fun);
 	print(arg);
 	break;
 
     case NOT_COMPUTABLE:
+	ESCFRED;
 	printf("Not computable %s ", fun);
 	print(arg);
 	break;
 
     case DIV_ZERO:
+	ESCFRED;
 	printf("Divide by zero %s ", fun);
 	break;
 
     case NOT_INT:
+	sp[th] = catch_sp[cp[th]-1][th];
+	unify(makevar("%TypeName"),makeconst("integer"),th);
+	unify(makevar("%Culprit"),arg,th);
+	unify(makevar("%Context"),makeconst(fun),th);
+	throw(type_tag,th);
+	unbindsym(makevar("%TypeName"));
+	unbindsym(makevar("%Culprit"));
+	unbindsym(makevar("%Context"));
+	ESCFRED;
 	printf("Not a small integer %s ", fun);
 	print(arg);
 	break;
 
     case NOT_FLT:
+	ESCFRED;
 	printf("Not a float number %s ", fun);
 	print(arg);
 	break;
 
     case NOT_STR:
+	ESCFRED;
 	printf("Not a string %s ", fun);
 	print(arg);
 	break;
 
     case NOT_ATOM:
+	ESCFRED;
 	printf("Not an atom %s ", fun);
 	print(arg);
 	break;
 
     case NOT_ATOMIC:
+	ESCFRED;
 	printf("Not an atomic %s ", fun);
 	print(arg);
 	break;
 
     case NOT_COMPOUND:
+	ESCFRED;
 	printf("Not a compound %s ", fun);
 	print(arg);
 	break;
 
     case WRONG_ARGS:
+	ESCFRED;
 	printf("Wrong arguments %s ", fun);
 	print(arg);
 	break;
 
     case PRED_INDICATOR:
+	ESCFRED;
 	printf("Not predicate indicator %s ", fun);
 	print(arg);
 	break;
 
 
     case UNCAUGHT_EXCEPTION:
+	ESCFRED;
 	printf("Uncaught exception %s ", fun);
 	print(arg);
 	break;
 
     case NOT_LIST:
+	ESCFRED;
 	printf("Not a list %s ", fun);
 	print(arg);
 	break;
 
     case NOT_VAR:
+	ESCFRED;
 	printf("Not a variable %s ", fun);
 	print(arg);
 	break;
 
     case CANT_OPEN:
+	ESCFRED;
 	if (fileerr_flag == YES) {
 	    printf("Can't open file %s ", fun);
 	    if (arg != NIL)
@@ -138,6 +194,7 @@ void error(int errnum, char *fun, int arg, int th)
 	break;
 
     case FILE_EXIST:
+	ESCFRED;
 	if (fileerr_flag == YES) {
 	    printf("File not exist %s ", fun);
 	    if (arg != NIL)
@@ -146,150 +203,183 @@ void error(int errnum, char *fun, int arg, int th)
 	break;
 
     case STACK_OVERF:
+	ESCFRED;
 	printf("Stack over flow ");
 	break;
 
     case VARIANT_OVERF:
+	ESCFRED;
 	printf("Variant over flow ");
 	break;
 
     case SYSTEM_ERROR:
+	ESCFRED;
 	printf("System error at %s ", fun);
 	break;
 
     case OUT_OF_RANGE:
+	ESCFRED;
 	printf("Out of range %s ", fun);
 	print(arg);
 	break;
 
     case UNDEF_PRED:
+	ESCFRED;
 	printf("Undefined predicate %s ", fun);
 	break;
 
 
     case EOF_ERROR:
+	ESCFRED;
 	printf("End of file error %s ", fun);
 	break;
 
     case INSTANTATION_ERR:
+	ESCFRED;
 	printf("Instantation error %s ", fun);
 	print(arg);
 	break;
     case EXPONENT_ERR:
+	ESCFRED;
 	printf("Exponentiation of a too big integer %s ", fun);
 	break;
 
     case RESOURCE_ERR:
+	ESCFRED;
 	printf("Resource error %s ", fun);
 	break;
 
     case NOT_CHAR:
+	ESCFRED;
 	printf("Not character %s ", fun);
 	print(arg);
 	break;
 
     case NOT_CALLABLE:
+	ESCFRED;
 	printf("Not callable %s ", fun);
 	print(arg);
 	break;
     case EXISTENCE_ERR:
+	ESCFRED;
 	printf("Existence error %s ", fun);
 	print(arg);
 	break;
     case ARITY_ERR:
+	ESCFRED;
 	printf("Arity error %s ", fun);
 	print(arg);
 	break;
     case NOT_SOURCE:
+	ESCFRED;
 	printf("Not source-sink %s ", fun);
 	print(arg);
 	break;
     case NOT_STREAM:
+	ESCFRED;
 	printf("Not stream or alias %s ", fun);
 	print(arg);
 	break;
     case NOT_CLOSE_OPTION:
+	ESCFRED;
 	printf("Not close option %s ", fun);
 	print(arg);
 	break;
     case NOT_IO_MODE:
+	ESCFRED;
 	printf("Not I/O mode %s ", fun);
 	print(arg);
 	break;
     case LESS_THAN_ZERO:
+	ESCFRED;
 	printf("Less than zero %s ", fun);
 	print(arg);
 	break;
 
     case NON_EMPTY_LIST:
+	ESCFRED;
 	printf("Not empty list %s ", fun);
 	print(arg);
 	break;
 
     case NOT_STREAM_OPTION:
+	ESCFRED;
 	printf("Not stream option %s ", fun);
 	print(arg);
 	break;
 
     case OPE_PRIORITY_ERR:
+	ESCFRED;
 	printf("Operator priority error %s ", fun);
 	print(arg);
 	break;
 
     case OPE_SPEC_ERR:
+	ESCFRED;
 	printf("Operator specifier error %s ", fun);
 	print(arg);
 	break;
 
     case NOT_ORDER:
+	ESCFRED;
 	printf("Not compare order %s ", fun);
 	print(arg);
 	break;
 
     case NOT_INPUT_STREAM:
+	ESCFRED;
 	printf("Not input stream %s ", fun);
 	print(arg);
 	break;
 
     case NOT_OUTPUT_STREAM:
+	ESCFRED;
 	printf("Not output stream %s ", fun);
 	print(arg);
 	break;
 
     case PAST_EOF_INPUT:
+	ESCFRED;
 	printf("Past EOF %s ", fun);
 	print(arg);
 	break;
 
     case MODIFY_OPE_ERR:
+	ESCFRED;
 	printf("Modify operator error %s ", fun);
 	print(arg);
 	break;
 
     case EVALUATION_ERR:
+	ESCFRED;
 	printf("Evaluation error %s ", fun);
 	print(arg);
 	break;
     case NOT_CHAR_CODE:
+	ESCFRED;
 	printf("Not charactor code %s ", fun);
 	print(arg);
 	break;
 
     case NOT_OPEN_OPTION:
+	ESCFRED;
 	printf("Not open option %s ", fun);
 	print(arg);
 	break;
 
     case NOT_TERM:
+	ESCFRED;
 	printf("Not term %s ", fun);
 	print(arg);
 	break;
 
     case RECORD_OVERF:
+	ESCFRED;
 	printf("recordh tables max over %s ", fun);
 	break;
 
     case NOT_RECORD:
+	ESCFRED;
 	printf("recordh tables has no record %s ", fun);
 	print(arg);
 	break;

@@ -245,7 +245,7 @@ int main(int argc, char *argv[])
     int ret = setjmp(buf);
     if (!init_flag)
 	goto repl;
-
+	
     home = getenv("HOME");
     strcpy(str, home);
     strcat(str, "/nprolog/library/dcg.pl");
@@ -319,7 +319,6 @@ int main(int argc, char *argv[])
 	    exit(EXIT_FAILURE);
 	}
     }
-
 
     if (init_flag) {
 	printf("N-Prolog Ver %1.2f\n", VERSION);
@@ -1132,6 +1131,7 @@ void debugger(int goal, int bindings, int rest)
 
 int varslist(int addr)
 {
+
     if (nullp(addr))
 	return (NIL);
     else if (variablep(addr))

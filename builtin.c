@@ -307,7 +307,7 @@ int b_length(int arglist, int rest, int th)
 	if (integerp(arg2) && GET_INT(arg2) < 0)
 	    error(LESS_THAN_ZERO, "length ", arg2, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
-	    error(NOT_INT, "length ", arg2, th);
+	    error(NOT_INT, "length/2", arg2, th);
 	if (variablep(arg1) && variablep(arg2) && eqp(arg1, arg2))
 	    error(WRONG_ARGS, "length ", arg1, th);
 
