@@ -1480,13 +1480,13 @@ int b_catch(int arglist, int rest, int th)
 	    error(RESOURCE_ERR, "catch ", NIL, th);
 
 	if (ret == 0) {
-		cp[th]--;
+		//cp[th]--;
 	    if (prove_all(arg1, sp[th], th) == YES)
 		return (prove_all(rest, sp[th], th));
 	    else
 		return (NO);
 	} else if (ret == 1) {
-		cp[th]--;
+		//cp[th]--;
 	    sp[th] = catch_data[pt][1][th];
 	    return (prove_all(arg3, sp[th], th));
 	}
@@ -1501,6 +1501,7 @@ void throw(int tag, int th)
 	int i;
 
 	print(tag);
+	printf("%d",cp[th]);
 	for (i = cp[th] - 1; i >= 0; i--) {
 		print(catch_data[i][0][th]);
 	    if (unify(catch_data[i][0][th], tag, th) == YES)
