@@ -109,7 +109,7 @@ void init_builtin(void)
     defbuiltin("key", b_key, list2(1, 2));
     defbuiltin("keysort", b_keysort, 2);
     defbuiltin("leash", b_leash, 1);
-    defbuiltin("length", b_length, 1);
+    defbuiltin("length", b_length, 2);
     defbuiltin("listing", b_listing, list3(0, 1, 2));
     defbuiltin("list", b_list, 1);
     defbuiltin("list_text", b_list_text, 2);
@@ -292,24 +292,25 @@ void init_builtin(void)
 
 int b_length(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, i, ls, res, save1, save2;
+    int n, arg1, arg2, ind, i, ls, res, save1, save2;
     save2 = sp[th];
     n = length(arglist);
+	ind = makeind("length",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (!listp(arg1) && !wide_variable_p(arg1))
-	    error(NOT_LIST, "length ", arglist, th);
+	    exception(NOT_LIST, ind, arglist, th);
 	if (listp(arg1) && length(arg1) == -1
 	    && !wide_variable_p(improper_last(arg1)))
-	    error(WRONG_ARGS, "length ", arg1, th);
+	    exception(WRONG_ARGS, ind, arg1, th);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
-	    error(LESS_THAN_ZERO, "length ", arg2, th);
+	    exception(LESS_THAN_ZERO, ind, arg2, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
-	    error(NOT_INT, "length/2", arg2, th);
+	    exception(NOT_INT, ind, arg2, th);
 	if (variablep(arg1) && variablep(arg2) && eqp(arg1, arg2))
-	    error(WRONG_ARGS, "length ", arg1, th);
+	    exception(WRONG_ARGS, ind, arg1, th);
 
 	save1 = wp[th];
 	if ((listp(arg1) && length(arg1) != -1)) {
@@ -348,7 +349,7 @@ int b_length(int arglist, int rest, int th)
 	unbind(save2, th);
 	return (NO);
     }
-    error(ARITY_ERR, "length ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 

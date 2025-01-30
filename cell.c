@@ -105,11 +105,6 @@ void bindsym(int x, int val, int th)
     push_stack(x, th);
 }
 
-void unbindsym(int x)
-{
-    SET_CAR(x,0);
-    SET_CDR(x,0);
-}
 
 
 int findvar(int x, int th)
@@ -387,6 +382,11 @@ int makeexspec(int old_spec, int spec)
 	return (NIL);
 
     return (NIL);
+}
+
+int makeind(char *pred, int arity, int th)
+{
+    return (wlist3(SLASH,makeconst(pred),makeint(arity),th));
 }
 
 //stack
