@@ -1496,20 +1496,29 @@ int b_catch(int arglist, int rest, int th)
     return (NO);
 }
 
+void throw(int tag, int th)
+{
+	int i;
+
+	print(tag);
+	for (i = cp[th] - 1; i >= 0; i--) {
+		print(catch_data[i][0][th]);
+	    if (unify(catch_data[i][0][th], tag, th) == YES)
+		longjmp(catch_buf[i][th], 1);
+	}
+}
 
 int b_throw(int arglist, int rest, int th)
 {
-    int n, arg1, i;
+    int n, arg1;
 
     n = length(arglist);
     if (n == 1) {
 	arg1 = car(arglist);
 
-	for (i = cp[th] - 1; i >= 0; i--) {
-	    if (eqlp(catch_data[i][0][th], arg1))
-		longjmp(catch_buf[i][th], 1);
-	}
-	error(WRONG_ARGS, "throw ", arg1, th);
+	throw(arg1,th);
+	//if not exist unified tag, execute rest
+	return(prove_all(rest,sp[th],th));
 
     }
     error(ARITY_ERR, "throw ", arglist, th);
