@@ -559,9 +559,10 @@ int b_ask(int arglist, int rest, int th)
 
 int b_unify(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, res;
+    int n, ind, arg1, arg2, res;
 
     n = length(arglist);
+	ind = makeind("=",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -571,15 +572,16 @@ int b_unify(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "= ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_notunify(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, res;
+    int n, ind, arg1, arg2, res;
 
     n = length(arglist);
+	ind = makeind("\\=",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -593,7 +595,7 @@ int b_notunify(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "\\= ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -603,9 +605,10 @@ int b_notunify(int arglist, int rest, int th)
 //input and output
 int b_write(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, save;
+    int n, ind, arg1, arg2, save;
 
     n = length(arglist);
+	ind = makeind("write",n,th);
     if (n == 1) {
 	arg1 = output_stream;
 	arg2 = car(arglist);
@@ -617,9 +620,9 @@ int b_write(int arglist, int rest, int th)
 
       write:
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "write ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "write ", arg1, th);
+	    exception(NOT_STREAM, ind, arg1, th);
 
 	save = output_stream;
 	if (aliasp(arg1))
@@ -633,16 +636,17 @@ int b_write(int arglist, int rest, int th)
 	output_stream = save;
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "write ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_display(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, save;
+    int n, ind, arg1, arg2, save;
 
     n = length(arglist);
+	ind = makeind("display",n,th);
     if (n == 1) {
 	arg1 = output_stream;
 	arg2 = car(arglist);
@@ -653,9 +657,9 @@ int b_display(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
       display:
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "display ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "display ", arg1, th);
+	    exception(NOT_STREAM, ind, arg1, th);
 
 	save = output_stream;
 	if (aliasp(arg1))
@@ -670,16 +674,17 @@ int b_display(int arglist, int rest, int th)
 	output_stream = save;
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "display ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_writeq(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, save;
+    int n, ind, arg1, arg2, save;
 
     n = length(arglist);
+	ind = makeind("writeq",n,th);
     if (n == 1) {
 	arg1 = output_stream;
 	arg2 = car(arglist);
@@ -690,9 +695,9 @@ int b_writeq(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
       writeq:
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "writeq ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "writeq ", arg1, th);
+	    exception(NOT_STREAM, ind, arg1, th);
 
 	save = output_stream;
 	if (aliasp(arg1))
@@ -705,7 +710,7 @@ int b_writeq(int arglist, int rest, int th)
 	output_stream = save;
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "writeq ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 

@@ -8,3 +8,12 @@
 :- catch(length(X,X),error(instantiation_error,length/2),true).
 
 :- catch(repeat(1),error(existence_error(predicate,repeat/1),repeat/1),true).
+:- catch(=(1,2,3),error(existence_error(predicate,(=)/3),(=)/3),true).
+:- catch(\=(1,2,3),error(existence_error(predicate,(\=)/3),(\=)/3),true).
+
+:- catch(write(X,1),error(instantiation_error,write/2),true).
+:- catch(write(1,1),error(domain_error(stream_or_alias,1),write/2),true).
+:- catch(display(X,1),error(instantiation_error,display/2),true).
+:- catch(display(1,1),error(domain_error(stream_or_alias,1),display/2),true).
+:- catch(writeq(X,1),error(instantiation_error,writeq/2),true).
+:- catch(writeq(1,1),error(domain_error(stream_or_alias,1),writeq/2),true).

@@ -174,11 +174,6 @@ void exception(int errnum, int ind, int arg, int th)
 	break;
 
 
-    case UNCAUGHT_EXCEPTION:
-	ESCFRED;
-	printf("Uncaught exception %s ", fun);
-	print(arg);
-	break;
 	*/
     case NOT_LIST:
 	bindsym(makevar("%TypeName"),makeconst("list"),th);
@@ -301,11 +296,18 @@ void exception(int errnum, int ind, int arg, int th)
 	printf("Not source-sink %s ", fun);
 	print(arg);
 	break;
+	*/
     case NOT_STREAM:
+	bindsym(makevar("%Domain"),makeconst("stream_or_alias"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(domain_tag,th);
 	ESCFRED;
-	printf("Not stream or alias %s ", fun);
+	printf("Not stream or alias ");
+	printf(" ");
 	print(arg);
 	break;
+	/*
     case NOT_CLOSE_OPTION:
 	ESCFRED;
 	printf("Not close option %s ", fun);

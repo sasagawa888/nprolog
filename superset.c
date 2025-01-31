@@ -1474,11 +1474,12 @@ int b_catch(int arglist, int rest, int th)
 	catch_data[cp[th]][1][th] = sp[th]; //sp for restore catch
 	int ret = setjmp(catch_buf[cp[th]][th]);
 	pt = cp[th];
-	cp[th]++;
-	if (cp[th] > THREADSIZE)
-	    error(RESOURCE_ERR, "catch ", NIL, th);
+	
+	if (cp[th] > CTRLSTK){
+	    error(RESOURCE_ERR, "catch ", NIL, th);}
 
 	if (ret == 0) {
+		cp[th]++;
 	    if (prove_all(arg1, sp[th], th) == YES){
 		res = prove_all(rest, sp[th], th);
 		cp[th]--;
