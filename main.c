@@ -518,7 +518,7 @@ void query_break(int x, int th)
 int list_to_ope(int x, int th)
 {
     if (nullp(x))
-	error(SYNTAX_ERR, "?-", x, 0);
+	exception(SYNTAX_ERR, makestr("?-"), x, 0);
     else if (nullp(cdr(x))) {
 	if (atomp(car(x)))
 	    return (list2(makeatom("consult", SYS), car(x)));

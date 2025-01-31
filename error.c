@@ -31,7 +31,8 @@ void init_handler()
 				          makevar("%Context"));
     context_tag = list2(makepred("context_error"),list2(makevar("%ContextType"),
                                                         makevar("%CommandType")));
-    syntax_tag = list2(makepred("syntax_error"),makevar("%Message"));
+    syntax_tag = list3(makepred("error"),list2(makepred("syntax_error"),makevar("%Message")),
+	                                     makevar("%Context"));
     evaluation_tag = list2(makepred("evaluation_error"),list2(makevar("%ErrorType"),
                                                               makevar("%Culprit")));
     representation_tag =  list2(makepred("representation_error"),makevar("%ErrorType"));
@@ -61,17 +62,19 @@ void exception(int errnum, int ind, int arg, int th)
     }
 
     switch (errnum) {
-	/*
+
     case SYNTAX_ERR:
+	bindsym(makevar("%Message"),ind,th);
+	bindsym(makevar("%Context"),arg,th);
+	throw(type_tag,th);
 	ESCFRED;
 	if (syntax_flag == YES) {
-	    printf("Syntax error %s ", fun);
+	    printf("Syntax error %s ", GET_NAME(ind));
 	    if (arg != NIL)
 		print(arg);
-
 	}
 	break;
-
+	/*
     case BUILTIN_EXIST:
 	ESCFRED;
 	printf("Permission error %s ", fun);
@@ -317,6 +320,7 @@ void exception(int errnum, int ind, int arg, int th)
 	throw(exsistence_tag,th);
 	ESCFRED;
 	printf("Arity error ");
+	print(ind);
 	printf(" ");
 	print(arg);
 	break;

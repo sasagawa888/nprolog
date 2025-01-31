@@ -20,3 +20,7 @@
 
 :- catch(nl(1),error(domain_error(stream_or_alias,1),nl/1),true).
 :- catch(nl(1,2),error(existence_error(predicate,nl/2),nl/2),true).
+
+:- catch(atom_length(1,X),error(type_error(atom,1),atom_length/2),true).
+:- catch(atom_length(abc,1.1),error(type_error(integer,1.1),atom_length/2),true).
+:- catch(atom_length,error(existence_error(predicate,atom_length/0),atom_length/0),true).

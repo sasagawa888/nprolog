@@ -659,24 +659,24 @@ int takeoutbug(int key)
 
 int b_atom_length(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
-
+	ind = makeind("atom_length",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (!atomp(arg1))
-	    error(NOT_ATOM, "atom_length ", arg1, th);
+	    exception(NOT_ATOM, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
-	    error(NOT_INT, "atom_length ", arg2, th);
+	    exception(NOT_INT, ind, arg2, th);
 
 	if (unify(arg2, makeint(atom_length(arg1)), th) == YES)
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "atom_length ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 

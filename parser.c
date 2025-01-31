@@ -21,10 +21,10 @@ int readparse(int th)
     paren_nest = 0;
     res = parser(NIL, NIL, NIL, NIL, 0, 0, th);
     if (paren_nest != 0) {
-	error(SYNTAX_ERR, "extra paren ", NIL, th);
+	exception(SYNTAX_ERR, makestr("extra paren"), NIL, th);
     }
     if (double_clause(res)) {
-	error(SYNTAX_ERR, "require period ", res, th);
+	exception(SYNTAX_ERR, makestr("require period"), res, th);
     }
     return (res);
 }
@@ -51,7 +51,7 @@ parser(int operand, int operator, int weight, int spec, int terminal,
     gettoken(th);
     if (stok.type == FILEEND) {	// end of file
 	if (operand != NIL || operator != NIL)
-	    error(SYNTAX_ERR, "expected period ", NIL, th);
+	    exception(SYNTAX_ERR, makestr("expected period"), NIL, th);
 	return (FEND);
     }
     if (terminal == 1
@@ -70,12 +70,12 @@ parser(int operand, int operator, int weight, int spec, int terminal,
       exit:
 	if (nullp(operator)) {
 	    if (length(operand) != 1)
-		error(SYNTAX_ERR, "expected operator ", NIL, th);
+		exception(SYNTAX_ERR, makestr("expected operator"), NIL, th);
 	    else
 		return (car(operand));
 	} else {
 	    if (length(operand) != 2)
-		error(SYNTAX_ERR, "expected two operand ", NIL, th);
+		exception(SYNTAX_ERR, makestr("expected two operand"), NIL, th);
 	    else
 		return (cons(car(operator), reverse(operand)));
 	}
@@ -461,7 +461,7 @@ parser(int operand, int operator, int weight, int spec, int terminal,
 		     terminal, parsemode, th));
 	} else {
 	    if (length(operand) >= 2)
-		error(SYNTAX_ERR, "expected operator ", temp, th);
+		exception(SYNTAX_ERR, makestr("expected operator"), temp, th);
 
 	    return (parser
 		    (cons(temp, operand), operator, weight, spec, terminal,
@@ -851,11 +851,11 @@ void gettoken(int th)
 	c = readc();
 	while (c != '\'') {
 	    if (c == EOL)
-		error(SYNTAX_ERR, "unexpected EOL in quoted atom ", NIL,
+		exception(SYNTAX_ERR, makestr("unexpected EOL in quoted atom"), NIL,
 		      th);
 
 	    if (c == EOF)
-		error(SYNTAX_ERR, "unexpected EOF in quoted atom ", NIL,
+		exception(SYNTAX_ERR, makestr("unexpected EOF in quoted atom"), NIL,
 		      th);
 
 	    if (c == '\\') {
@@ -869,7 +869,7 @@ void gettoken(int th)
 			 c == 'n' || c == 'r' || c == 't' || c == 'v') {
 		    stok.buf[pos++] = '\\';
 		} else {
-		    error(SYNTAX_ERR, "illegal token in quoted atom ",
+		    exception(SYNTAX_ERR, makestr("illegal token in quoted atom"),
 			  NIL, th);
 		}
 	    }
@@ -915,10 +915,10 @@ void gettoken(int th)
 	    if (c == '$') {
 		if (c1 == '$') {
 		SETBUF(c)} else
-		    error(SYNTAX_ERR, "double $ in string token ", NIL,
+		    exception(SYNTAX_ERR, makestr("double $ in string token"), NIL,
 			  th);
 	    } else if (c == EOF)
-		error(SYNTAX_ERR, "not exist right $ in file ", NIL, th);
+		exception(SYNTAX_ERR, makestr("not exist right $ in file"), NIL, th);
 	    else {
 		SETBUF(c) unreadc(c1);
 	    }
@@ -933,7 +933,7 @@ void gettoken(int th)
     }
 
     if (c == '`')
-	error(SYNTAX_ERR, "illegal token back quote ", NIL, th);
+	exception(SYNTAX_ERR, makestr("illegal token back quote"), NIL, th);
 
 
     //number octal ex 0o12345
@@ -1009,11 +1009,11 @@ void gettoken(int th)
 		    c = readc();
 		    while (c != '\\') {
 			if (!ishexch(c))
-			    error(SYNTAX_ERR, "illegal hex char", NIL, th);
+			    exception(SYNTAX_ERR, makestr("illegal hex char"), NIL, th);
 			stok.buf[i] = c;
 			c = readc();
 			if (c == EOL)
-			    error(SYNTAX_ERR, "unexpected EOL", NIL, th);
+			    exception(SYNTAX_ERR, makestr("unexpected EOL"), NIL, th);
 			i++;
 		    }
 		    stok.buf[i] = NUL;
@@ -1023,11 +1023,11 @@ void gettoken(int th)
 		    i = 0;
 		    while (c != '\\') {
 			if (!isoctch(c))
-			    error(SYNTAX_ERR, "illegal oct char", NIL, th);
+			    exception(SYNTAX_ERR, makestr("illegal oct char"), NIL, th);
 			stok.buf[i] = c;
 			c = readc();
 			if (c == EOL)
-			    error(SYNTAX_ERR, "unexpected EOL in oct char",
+			    exception(SYNTAX_ERR, makestr("unexpected EOL in oct char"),
 				  NIL, th);
 			i++;
 		    }
@@ -1035,7 +1035,7 @@ void gettoken(int th)
 		    stok.type = OCTNUM;
 		    return;
 		} else
-		    error(SYNTAX_ERR, "illegal number token", NIL, th);
+		    exception(SYNTAX_ERR, makestr("illegal number token"), NIL, th);
 	    }
 	} else {
 	    unreadc(c);
@@ -1053,7 +1053,7 @@ void gettoken(int th)
 	if (c == '.')
 	    goto float1;
 	if (c == 'E' || c == 'e')
-	    error(SYNTAX_ERR, "float number expected dot ", NIL, th);
+	    exception(SYNTAX_ERR, makestr("float number expected dot"), NIL, th);
 
 	SETBUFEND(NUL) if (strlen(stok.buf) <= 9)
 	    stok.type = INTEGER;
@@ -1091,7 +1091,8 @@ void gettoken(int th)
 	SETBUF(c) c = readc();
 	if (c != '+' && c != '-' && !isdigit(c)) {
 	    SETBUF(c)
-		SETBUFEND(NUL) error(SYNTAX_ERR, "illegal float token ",
+		SETBUFEND(NUL) 
+		exception(SYNTAX_ERR, makestr("illegal float token"),
 				     NIL, th);
 	}
 	SETBUF(c) c = readc();
@@ -1141,7 +1142,7 @@ void gettoken(int th)
 	return;
 
     }
-    error(SYNTAX_ERR, "illegal token ", makestr(stok.buf), th);
+    exception(SYNTAX_ERR, makestr("illegal token"), makestr(stok.buf), th);
 }
 
 
@@ -1307,7 +1308,7 @@ int readitem1(int th)
 	gettoken(th);
 	if (stok.type == LPAREN) {
 	    if (stok.space == SKIP)
-		error(SYNTAX_ERR, "illegal compiled predicate ", temp, th);
+		exception(SYNTAX_ERR, makestr("illegal compiled predicate"), temp, th);
 
 	    temp1 = readparen(th);
 	    return (cons(temp, temp1));
@@ -1320,7 +1321,7 @@ int readitem1(int th)
 	gettoken(th);
 	if (stok.type == LPAREN) {
 	    if (stok.space == SKIP)
-		error(SYNTAX_ERR, "illegal function ", temp, th);
+		exception(SYNTAX_ERR, makestr("illegal function"), temp, th);
 
 	    temp1 = readparen(th);
 	    return (cons(temp, temp1));
@@ -1375,8 +1376,7 @@ int readitem1(int th)
 		temp = makeatom(str, PRED);
 
 	    if (stok.space == SKIP)
-		error(SYNTAX_ERR, "illegal predicate ", temp, th);
-
+		exception(SYNTAX_ERR, makestr("illegal predicate"), temp, th);
 
 	    temp1 = readparen(th);
 	    prefix_flag = 1;
@@ -1478,7 +1478,7 @@ int readparen(int th)
 	gettoken(th);		//read-ahead
 
 	if (stok.type == PERIOD) {
-	    error(SYNTAX_ERR, "not enough right paren", NIL, th);
+	    exception(SYNTAX_ERR, makestr("not enough right paren"), NIL, th);
 	} else if (stok.type == COMMA || stok.type == RPAREN) {
 	    stok.flag = BACK;
 	} else {		// for example (*)=(*)
@@ -1493,14 +1493,14 @@ int readparen(int th)
 	car = parser(NIL, NIL, 1201, NIL, 1, 1, th);
 	if ((operationp(car) || user_operation_p(car)) &&
 	    heavy999p(GET_CAR(car)) && prefix_flag != 1)
-	    error(SYNTAX_ERR, "expected ( ) ", car, th);
+	    exception(SYNTAX_ERR, makestr("expected ( )"), car, th);
 
     }
 
   repeat:
     gettoken(th);
     if (stok.type == PERIOD) {
-	error(SYNTAX_ERR, "not enough right paren", NIL, th);
+	exception(SYNTAX_ERR, makestr("not enough right paren"), NIL, th);
     } else if (stok.type == COMMA) {
 	cdr = readparen(th);
 	return (cons(car, cdr));
@@ -1512,7 +1512,7 @@ int readparen(int th)
 	car = parser(list1(car), NIL, 1201, NIL, 1, 1, th);
 	goto repeat;
     } else {
-	error(SYNTAX_ERR, "illegal paren ", NIL, th);
+	exception(SYNTAX_ERR, makestr("illegal paren"), NIL, th);
     }
     return (NIL);
 }
@@ -1559,7 +1559,7 @@ int readlist(int th)
 
 	if ((operationp(car) || user_operation_p(car)) &&
 	    heavy999p(GET_CAR(car)) && prefix_flag != 1)
-	    error(SYNTAX_ERR, "expected ( ) ", car, th);
+	    exception(SYNTAX_ERR, makestr("expected ( )"), car, th);
 
     }
   repeat:
@@ -1570,7 +1570,7 @@ int readlist(int th)
 	cdr = parser(NIL, NIL, 1201, NIL, 1, 1, th);
 	gettoken(th);		//discard Rbracket
 	if (stok.type != RBRACKET)
-	    error(SYNTAX_ERR, "illegal partial list ", 21, th);
+	    exception(SYNTAX_ERR, makestr("illegal partial list"), 21, th);
 	temp = cons(car, cdr);
 	SET_AUX(temp, LIST);
 	return (temp);
@@ -1589,7 +1589,7 @@ int readlist(int th)
 	car = parser(list1(car), NIL, 1201, NIL, 1, 1, th);
 	goto repeat;
     } else {
-	error(SYNTAX_ERR, "illegal list ", NIL, th);
+	exception(SYNTAX_ERR, makestr("illegal list"), NIL, th);
     }
     return (NIL);
 }
@@ -1602,7 +1602,7 @@ int readdouble(int th)
     if (temp == '"')
 	return (NIL);
     else if (temp == EOF)
-	error(SYNTAX_ERR, "expected double quote", NIL, th);
+	exception(SYNTAX_ERR, makestr("expected double quote"), NIL, th);
     else
 	return (listcons(makeint(temp), readdouble(th)));
 
@@ -1627,13 +1627,13 @@ int readcurl(int th)
     gettoken(th);
     if (stok.type == COMMA) {
 	if (nullp(car))
-	    error(SYNTAX_ERR, "illeagal curl {} ", NIL, th);
+	    exception(SYNTAX_ERR, makestr("illeagal curl {}"), NIL, th);
 	else
 	    return (list3(AND, car, readcurl(th)));
     } else if (stok.type == RCURL) {
 	return (car);
     } else
-	error(SYNTAX_ERR, "illegal curl {} ", NIL, th);
+	exception(SYNTAX_ERR, makestr("illegal curl {}"), NIL, th);
     return (NIL);
 }
 
