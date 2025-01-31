@@ -686,14 +686,15 @@ int b_dp_report(int arglist, int rest, int th)
 
 int b_dp_and(int arglist, int rest, int th)
 {
-    int n, arg1, m, i, j, pred, res;
+    int n, ind, arg1, m, i, j, pred, res;
 
     n = length(arglist);
+	ind = makeind("dp_and",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	m = length(arg1);
 	if (m > child_num)
-	    error(ILLEGAL_ARGS, "dp_and ", arg1, th);
+	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
 
 	i = 0;
 	while (!nullp(arg1)) {
@@ -716,20 +717,21 @@ int b_dp_and(int arglist, int rest, int th)
 	}
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "dp_and ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_dp_or(int arglist, int rest, int th)
 {
-    int n, arg1, m, i, pred, res;
+    int n, ind, arg1, m, i, pred, res;
 
     n = length(arglist);
+	ind = makeind("do_or",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	m = length(arg1);
 	if (m > child_num)
-	    error(ILLEGAL_ARGS, "dp_or ", arg1, th);
+	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
 
 	i = 0;
 	while (!nullp(arg1)) {
@@ -743,30 +745,32 @@ int b_dp_or(int arglist, int rest, int th)
 	if (prove_all(res, sp[th], th) == YES)
 	    return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "dp_or ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_dp_countup(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("dp_countup",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 
 	proof[th] = proof[th] + GET_INT(arg1);
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "dp_countup ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_dp_parent(int arglist, int rest, int th)
 {
-    int n;
+    int n, ind;
 
     n = length(arglist);
+	ind = makeind("dp_parent",n,th);
     if (n == th) {
 
 	if (parent_flag)
@@ -774,15 +778,16 @@ int b_dp_parent(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "dp_parent ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_dp_child(int arglist, int rest, int th)
 {
-    int n;
+    int n,ind;
 
     n = length(arglist);
+	ind = makeind("dp_child",n,th);
     if (n == th) {
 
 	if (!parent_flag && child_flag)
@@ -790,45 +795,47 @@ int b_dp_child(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "dp_parent ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_dp_wait(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("dp_wait",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
-	    error(NOT_INT, "dp_wait ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (negativep(arg1))
-	    error(WRONG_ARGS, "dp_wait ", arg1, th);
+	    exception(LESS_THAN_ZERO, ind, arg1, th);
 	if (GET_INT(arg1) > 60)
-	    error(WRONG_ARGS, "dp_wait ", arg1, th);
+	    exception(RESOURCE_ERR, ind, makestr("over 60"), th);
 
 	sleep(GET_INT(arg1));
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "dp_wait ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_dp_pause(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
     char sub_buffer[256];
 
     n = length(arglist);
+	ind = makeind("dp_pause",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
-	    error(NOT_INT, "dp_pause ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (negativep(arg1))
-	    error(WRONG_ARGS, "dp_pause ", arg1, th);
+	    exception(LESS_THAN_ZERO, ind, arg1, th);
 	if (GET_INT(arg1) >= child_num)
-	    error(WRONG_ARGS, "dp_pause ", arg1, th);
+	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
 
 
 	memset(sub_buffer, 0, sizeof(sub_buffer));
@@ -836,31 +843,32 @@ int b_dp_pause(int arglist, int rest, int th)
 	send_to_child(GET_INT(arg1), makestr(sub_buffer));
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "dp_pause ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_dp_resume(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
     char sub_buffer[256];
 
     n = length(arglist);
+	ind = makeind("dp_resume",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
-	    error(NOT_INT, "dp_resume ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (negativep(arg1))
-	    error(WRONG_ARGS, "dp_resume ", arg1, th);
+	    exception(LESS_THAN_ZERO, ind, arg1, th);
 	if (GET_INT(arg1) >= child_num)
-	    error(WRONG_ARGS, "dp_resume ", arg1, th);
+	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
 
 	memset(sub_buffer, 0, sizeof(sub_buffer));
 	sub_buffer[0] = 0x11;
 	send_to_child(GET_INT(arg1), makestr(sub_buffer));
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "dp_resume ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -982,16 +990,17 @@ void exit_para(void)
 
 int b_mt_create(int arglist, int rest, int th)
 {
-    int n, arg1, i, m;
+    int n, ind, arg1, i, m;
 
     n = length(arglist);
+	ind = makeind("mt_create",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 
 	if (!integerp(arg1))
-	    error(NOT_INT, "mt-create", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (GET_INT(arg1) > THREADSIZE)
-	    error(WRONG_ARGS, "mt-create", arg1, th);
+	    exception(RESOURCE_ERR, ind, makestr("thread_size"), th);
 
 	if (thread_flag)
 	    return (YES);
@@ -1007,14 +1016,15 @@ int b_mt_create(int arglist, int rest, int th)
 	}
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "mt_create ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_mt_close(int arglist, int rest, int th)
 {
-    int n;
+    int n,ind;
     n = length(arglist);
+	ind = makeind("mt_close",n,th);
     if (n == 0) {
 
 	exit_para();
@@ -1023,20 +1033,21 @@ int b_mt_close(int arglist, int rest, int th)
 	thread_num = 1;
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "mt_close ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_mt_and(int arglist, int rest, int th)
 {
-    int n, arg1, i, j, pred;
+    int n, ind, arg1, i, j, pred;
 
     n = length(arglist);
+	ind = makeind("mt_and",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (length(arg1) > mt_queue_num)
-	    error(WRONG_ARGS, "mt_and", arg1, th);
+	    exception(RESOURCE_ERR, ind, makestr("mt_queue_num"), th);
 
 
 	i = 0;
@@ -1064,19 +1075,20 @@ int b_mt_and(int arglist, int rest, int th)
 
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "mt_and ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_mt_or(int arglist, int rest, int th)
 {
-    int n, arg1, i, j;
+    int n, ind, arg1, i, j;
 
     n = length(arglist);
+	ind = makeind("mt_or",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (length(arg1) > mt_queue_num)
-	    error(WRONG_ARGS, "mt_and", arg1, th);
+	    exception(RESOURCE_ERR, ind, makestr("mt_queue_num"), th);
 
 
 	i = 0;
@@ -1103,22 +1115,23 @@ int b_mt_or(int arglist, int rest, int th)
       succ:
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "mt_or ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_mt_prove(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind("mt_prove",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	return (prove_all(arg2, sp[GET_INT(arg1)], GET_INT(arg1)));
     }
-    error(ARITY_ERR, "mt_prove ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }

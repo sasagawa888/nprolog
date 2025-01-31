@@ -39,7 +39,9 @@ void init_handler()
     consistency_tag = list2(makepred("consistency_error"),list3(makevar("%Culprit1"),
                                                                 makevar("%Culprit2"),
                                                                 makevar("%Message")));
-    resource_tag = list2(makepred("resource_error"),makevar("%ResourceType"));
+    resource_tag = list3(makepred("error"),
+	                     list2(makepred("resource_error"),makevar("%ResourceType")),
+						 makevar("%Context"));
     system_tag = list2(makepred("system_error"),makevar("%Message"));
     
 }
@@ -290,12 +292,17 @@ void exception(int errnum, int ind, int arg, int th)
 	ESCFRED;
 	printf("Exponentiation of a too big integer %s ", fun);
 	break;
-
+	*/
     case RESOURCE_ERR:
+	bindsym(makevar("%ResourceType"),arg,th);
+	throw(resource_tag,th);
 	ESCFRED;
-	printf("Resource error %s ", fun);
+	printf("Resource error ");
+	print(ind);
+	printf(" ");
+	print(arg);
 	break;
-
+	/*
     case NOT_CHAR:
 	ESCFRED;
 	printf("Not character %s ", fun);
