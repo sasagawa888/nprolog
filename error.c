@@ -11,16 +11,24 @@
 void init_handler()
 {
 
-    instantation_tag = makepred("instantiation_error");
+    instantation_tag = list3(makepred("error"),
+	                         makepred("instantiation_error"),
+							 makevar("%Context"));
     uninstantation_tag = list2(makepred("uninstantiation_error"),makevar("%Term"));
     type_tag = list3(makepred("error"),
 	                 list3(makepred("type_error"),makevar("%TypeName"),makevar("%Culprit")),
 	                 makevar("%Context"));
-    domain_tag = list2(makepred("domain_error"),list2(makevar("%Domain"),makevar("%Culprit")));
-    exsistence_tag = list2(makepred("existence_error"),list2(makevar("%ObjectType"),makevar("%Culprit")));
-    permisson_tag = list2(makepred("permission_error"),list3(makevar("%Operation"),
-                                                               makevar("%ObjectType"),
-                                                               makevar("%Culprit")));
+    domain_tag = list3(makepred("error"),
+	                 list3(makepred("domain_error"),makevar("%Domain"),makevar("%Culprit")),
+					 makevar("%Context"));
+    exsistence_tag = list3(makepred("error"),
+	                      list3(makepred("existence_error"),makevar("%ObjectType"),makevar("%Culprit")),
+						  makevar("%Context"));
+    permisson_tag = list3(makepred("error"),
+	                     list4(makepred("permission_error"),makevar("%Operation"),
+                                                            makevar("%ObjectType"),
+                                                            makevar("%Culprit")),
+				          makevar("%Context"));
     context_tag = list2(makepred("context_error"),list2(makevar("%ContextType"),
                                                         makevar("%CommandType")));
     syntax_tag = list2(makepred("syntax_error"),makevar("%Message"));
@@ -111,7 +119,6 @@ void exception(int errnum, int ind, int arg, int th)
 	break;
 	*/
     case NOT_INT:
-	sp[th] = catch_sp[cp[th]-1][th];
 	bindsym(makevar("%TypeName"),makeconst("integer"),th);
 	bindsym(makevar("%Culprit"),arg,th);
 	bindsym(makevar("%Context"),ind,th);
@@ -121,7 +128,6 @@ void exception(int errnum, int ind, int arg, int th)
 	print(ind);
 	printf(" ");
 	print(arg);
-	printf("\n");
 	break;
 
 	/*
@@ -173,13 +179,19 @@ void exception(int errnum, int ind, int arg, int th)
 	printf("Uncaught exception %s ", fun);
 	print(arg);
 	break;
-
+	*/
     case NOT_LIST:
+	bindsym(makevar("%TypeName"),makeconst("list"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(type_tag,th);
 	ESCFRED;
-	printf("Not a list %s ", fun);
+	printf("Not a list ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
-
+	/*
     case NOT_VAR:
 	ESCFRED;
 	printf("Not a variable %s ", fun);
@@ -235,12 +247,17 @@ void exception(int errnum, int ind, int arg, int th)
 	ESCFRED;
 	printf("End of file error %s ", fun);
 	break;
-
+	*/
     case INSTANTATION_ERR:
+	bindsym(makevar("%Context"),ind,th);
+	throw(instantation_tag,th);
 	ESCFRED;
-	printf("Instantation error %s ", fun);
+	printf("Instantation error ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
+	/*
     case EXPONENT_ERR:
 	ESCFRED;
 	printf("Exponentiation of a too big integer %s ", fun);
@@ -267,11 +284,18 @@ void exception(int errnum, int ind, int arg, int th)
 	printf("Existence error %s ", fun);
 	print(arg);
 	break;
+	*/
     case ARITY_ERR:
+	bindsym(makevar("%ObjectType"),makeconst("predicate"),th);
+	bindsym(makevar("%Culprit"),ind,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(exsistence_tag,th);
 	ESCFRED;
-	printf("Arity error %s ", fun);
+	printf("Arity error ");
+	printf(" ");
 	print(arg);
 	break;
+	/*
     case NOT_SOURCE:
 	ESCFRED;
 	printf("Not source-sink %s ", fun);
@@ -292,12 +316,19 @@ void exception(int errnum, int ind, int arg, int th)
 	printf("Not I/O mode %s ", fun);
 	print(arg);
 	break;
+	*/
     case LESS_THAN_ZERO:
+	bindsym(makevar("%Domain"),makeconst("not_less_than_zero"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(domain_tag,th);
 	ESCFRED;
-	printf("Less than zero %s ", fun);
+	printf("Less than zero ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
-
+	/*
     case NON_EMPTY_LIST:
 	ESCFRED;
 	printf("Not empty list %s ", fun);
@@ -385,9 +416,8 @@ void exception(int errnum, int ind, int arg, int th)
 	printf("recordh tables has no record %s ", fun);
 	print(arg);
 	break;
-
-    }
 	*/
+    }
     printf("\n");
     stok.ch = NUL;
     stok.flag = GO;
@@ -424,7 +454,7 @@ void exception(int errnum, int ind, int arg, int th)
     } else
 	longjmp(buf, 1);
 }
-}
+
 
 void error(int errnum, char *fun, int arg, int th)
 {
@@ -492,7 +522,6 @@ void error(int errnum, char *fun, int arg, int th)
 	break;
 
     case NOT_INT:
-	sp[th] = catch_sp[cp[th]-1][th];
 	bindsym(makevar("%TypeName"),makeconst("integer"),th);
 	bindsym(makevar("%Culprit"),arg,th);
 	bindsym(makevar("%Context"),makeconst(fun),th);

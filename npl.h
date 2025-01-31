@@ -214,7 +214,6 @@ extern int record_hash_table[HASHTBSIZE][RECORDMAX];
 extern int record_pt;       
 extern int counter[31]; 
 extern int catch_data[CTRLSTK][2][THREADSIZE]; 
-extern int catch_sp[CTRLSTK][THREADSIZE]; 
 extern char bridge[BUFSIZE];
 extern char transfer[BUFSIZE];
 extern int variables[THREADSIZE];

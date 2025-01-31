@@ -1472,7 +1472,6 @@ int b_catch(int arglist, int rest, int th)
 
 	catch_data[cp[th]][0][th] = arg2;   //tag
 	catch_data[cp[th]][1][th] = sp[th]; //sp for restore catch
-	catch_sp[cp[th]][th] = sp[th]; // for error handler
 	int ret = setjmp(catch_buf[cp[th]][th]);
 	pt = cp[th];
 	cp[th]++;

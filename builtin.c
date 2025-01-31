@@ -292,7 +292,7 @@ void init_builtin(void)
 
 int b_length(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, ind, i, ls, res, save1, save2;
+    int n, ind, arg1, arg2, i, ls, res, save1, save2;
     save2 = sp[th];
     n = length(arglist);
 	ind = makeind("length",n,th);
@@ -301,16 +301,16 @@ int b_length(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
 	if (!listp(arg1) && !wide_variable_p(arg1))
-	    exception(NOT_LIST, ind, arglist, th);
+	    exception(NOT_LIST, ind, arg1, th);
 	if (listp(arg1) && length(arg1) == -1
 	    && !wide_variable_p(improper_last(arg1)))
-	    exception(WRONG_ARGS, ind, arg1, th);
+	    exception(NOT_LIST, ind, arg1, th);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
 	    exception(LESS_THAN_ZERO, ind, arg2, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    exception(NOT_INT, ind, arg2, th);
 	if (variablep(arg1) && variablep(arg2) && eqp(arg1, arg2))
-	    exception(WRONG_ARGS, ind, arg1, th);
+	    exception(INSTANTATION_ERR, ind, arglist, th);
 
 	save1 = wp[th];
 	if ((listp(arg1) && length(arg1) != -1)) {
@@ -357,12 +357,13 @@ int b_length(int arglist, int rest, int th)
 //compiled predicate
 int b_repeat(int arglist, int rest, int th)
 {
-    int n, save1, save2, save3;
+    int n, ind, save1, save2, save3;
 
     save1 = wp[th];
     save2 = sp[th];
     save3 = ac[th];
     n = length(arglist);
+	ind = makeind("repeat",n,th);
     if (n == 0) {
       loop:
 	if (prove_all(rest, sp[th], th) == YES) {
@@ -374,7 +375,7 @@ int b_repeat(int arglist, int rest, int th)
 	goto loop;
     }
 
-    error(ARITY_ERR, "repeat ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
