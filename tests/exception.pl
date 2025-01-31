@@ -17,3 +17,6 @@
 :- catch(display(1,1),error(domain_error(stream_or_alias,1),display/2),true).
 :- catch(writeq(X,1),error(instantiation_error,writeq/2),true).
 :- catch(writeq(1,1),error(domain_error(stream_or_alias,1),writeq/2),true).
+
+:- catch(nl(1),error(domain_error(stream_or_alias,1),nl/1),true).
+:- catch(nl(1,2),error(existence_error(predicate,nl/2),nl/2),true).

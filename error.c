@@ -130,37 +130,67 @@ void exception(int errnum, int ind, int arg, int th)
 	print(arg);
 	break;
 
-	/*
+	
     case NOT_FLT:
+	bindsym(makevar("%TypeName"),makeconst("float"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(type_tag,th);
 	ESCFRED;
-	printf("Not a float number %s ", fun);
+	printf("Not a float number ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
 
     case NOT_STR:
+	bindsym(makevar("%TypeName"),makeconst("string"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(type_tag,th);
 	ESCFRED;
-	printf("Not a string %s ", fun);
+	printf("Not a string ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
-
+	
     case NOT_ATOM:
+	bindsym(makevar("%TypeName"),makeconst("atom"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(type_tag,th);
 	ESCFRED;
-	printf("Not an atom %s ", fun);
+	printf("Not an atom ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
-
+	
     case NOT_ATOMIC:
+	bindsym(makevar("%TypeName"),makeconst("atomic"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(type_tag,th);
 	ESCFRED;
-	printf("Not an atomic %s ", fun);
+	printf("Not an atomic ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
 
     case NOT_COMPOUND:
+	bindsym(makevar("%TypeName"),makeconst("compound"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(type_tag,th);
 	ESCFRED;
-	printf("Not a compound %s ", fun);
+	printf("Not a compound ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
-
+	/*
     case WRONG_ARGS:
 	ESCFRED;
 	printf("Wrong arguments %s ", fun);
@@ -304,6 +334,7 @@ void exception(int errnum, int ind, int arg, int th)
 	throw(domain_tag,th);
 	ESCFRED;
 	printf("Not stream or alias ");
+	print(ind);
 	printf(" ");
 	print(arg);
 	break;

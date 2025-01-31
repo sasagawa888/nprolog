@@ -717,9 +717,10 @@ int b_writeq(int arglist, int rest, int th)
 
 int b_nl(int arglist, int rest, int th)
 {
-    int n, arg1, save;
+    int n, ind, arg1, save;
 
     n = length(arglist);
+	ind = makeind("nl",n,th);
     if (n == 0) {
 	fprintf(GET_PORT(output_stream), "\n");
 	fflush(GET_PORT(output_stream));
@@ -727,7 +728,7 @@ int b_nl(int arglist, int rest, int th)
     } else if (n == 1) {
 	arg1 = car(arglist);
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "nl ", arg1, th);
+	    exception(NOT_STREAM, ind, arg1, th);
 
 	save = output_stream;
 	if (aliasp(arg1))
@@ -739,15 +740,16 @@ int b_nl(int arglist, int rest, int th)
 	output_stream = save;
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "nl ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_put(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind("put",n,th);
     if (n == 1) {
 	arg1 = output_stream;
 	arg2 = car(arglist);
@@ -757,22 +759,26 @@ int b_put(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
       put:
+	
+	if (!streamp(arg1) && !aliasp(arg1))
+	    exception(NOT_STREAM, ind, arg1, th);
 	if (!integerp(arg2))
-	    error(NOT_INT, "put ", arg1, th);
+	    exception(NOT_INT, ind, arg2, th);
 
 	fprintf(GET_PORT(arg1), "%c", (char) GET_INT(arg2));
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "put ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_get0(int arglist, int rest, int th)
 {
-    int n, c, arg1, arg2, i, res;
+    int n,ind, c, arg1, arg2, i, res;
 
     n = length(arglist);
+	ind = makeind("get0",n,th);
     if (n == 1) {
 	arg1 = input_stream;
 	arg2 = car(arglist);
@@ -784,9 +790,9 @@ int b_get0(int arglist, int rest, int th)
 
       get0:
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "get0 ", arg1, th);
+	    exception(NOT_STREAM, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
-	    error(NOT_VAR, "get0 ", arg2, th);
+	    exception(NOT_INT, ind, arg2, th);
 
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
@@ -806,16 +812,17 @@ int b_get0(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "get0 ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_get(int arglist, int rest, int th)
 {
-    int n, c, arg1, arg2, i, res;
+    int n, ind, c, arg1, arg2, i, res;
 
     n = length(arglist);
+	ind = makeind("get",n,th);
     if (n == 1) {
 	arg1 = input_stream;
 	arg2 = car(arglist);
@@ -827,9 +834,9 @@ int b_get(int arglist, int rest, int th)
 
       get:
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "get ", arg1, th);
+	    exception(NOT_STREAM, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
-	    error(NOT_VAR, "get ", arg2, th);
+	    exception(NOT_INT, ind, arg2, th);
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
       loop:
@@ -855,7 +862,7 @@ int b_get(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "get ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -941,9 +948,10 @@ int singletonp(int x)
 
 int b_read(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, save1, save2, temp, res;
+    int n, ind, arg1, arg2, save1, save2, temp, res;
 
     n = length(arglist);
+	ind = makeind("read",n,th);
     if (n == 1) {
 	arg1 = input_stream;
 	arg2 = car(arglist);
@@ -954,12 +962,10 @@ int b_read(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
       read:
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "read ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "read", arg1, th);
-	if (streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
-	    error(NOT_INPUT_STREAM, "read ", arg1, th);
-
+	    exception(NOT_STREAM, ind, arg1, th);
+	
 	save1 = input_stream;
 	save2 = repl_flag;
 	input_stream = arg1;
@@ -976,16 +982,17 @@ int b_read(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "read ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_read_line(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, save1, save2, res, pos;
+    int n, ind, arg1, arg2, save1, save2, res, pos;
     char str[STRSIZE], c;
 
     n = length(arglist);
+	ind = makeind("read_line",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -994,13 +1001,11 @@ int b_read_line(int arglist, int rest, int th)
 	    arg1 = standard_input;
 
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "read_line ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "read_line ", arg1, th);
-	if (streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
-	    error(NOT_INPUT_STREAM, "read_line ", arg1, th);
+	    exception(NOT_STREAM, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !stringp(arg2))
-	    error(NOT_VAR, "read_line ", arg2, th);
+	    exception(NOT_STR, ind, arg2, th);
 
 	save1 = input_stream;
 	save2 = repl_flag;
@@ -1028,7 +1033,7 @@ int b_read_line(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "read_line ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -1060,7 +1065,7 @@ int b_read_string(int arglist, int rest, int th)
 	if (get_int(arg2) < 0 || get_int(arg2) > STRSIZE)
 	    error(WRONG_ARGS, "read_string ", arg2, th);
 	if (!wide_variable_p(arg3) && !stringp(arg3))
-	    error(NOT_VAR, "read_string ", arg3, th);
+	    error(NOT_STR, "read_string ", arg3, th);
 
 	save1 = input_stream;
 	save2 = repl_flag;
