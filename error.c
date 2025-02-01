@@ -78,13 +78,19 @@ void exception(int errnum, int ind, int arg, int th)
 		print(arg);
 	}
 	break;
-	/*
+	
     case BUILTIN_EXIST:
+	bindsym(makevar("%Operation"),makeconst("modify"),th);
+    bindsym(makevar("%ObjectType"),makeconst("static_procedure"),th);
+    bindsym(makevar("%Culprit"),arg,th);
+	throw(permisson_tag,th);
 	ESCFRED;
-	printf("Permission error %s ", fun);
+	printf("Can't modify builtin ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
-
+	/*
     case ALIAS_EXIST:
 	ESCFRED;
 	printf("Permission error %s ", fun);
@@ -96,13 +102,19 @@ void exception(int errnum, int ind, int arg, int th)
 	printf("Static procedure %s ", fun);
 	print(arg);
 	break;
-
+	*/
     case ILLEGAL_ARGS:
+	bindsym(makevar("%Domain"),makeconst("expected"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(domain_tag,th);
 	ESCFRED;
-	printf("Illegal argument %s ", fun);
+	printf("Illegal argument ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
-
+	/*
     case CANT_READ:
 	ESCFRED;
 	printf("Can't read of %s ", fun);

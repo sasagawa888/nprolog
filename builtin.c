@@ -2483,19 +2483,20 @@ int b_true(int arglist, int rest, int th)
 //database operation
 int b_assert(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("assertz",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "assertz ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (singlep(arg1)) {
 	    if (GET_AUX(arg1) == SIMP || GET_AUX(arg1) == NIL)
 		SET_AUX(arg1, PRED);
 	}
 	if (builtinp(arg1))
-	    error(BUILTIN_EXIST, "assertz ", arg1, th);
+	    exception(BUILTIN_EXIST, ind, arg1, th);
 	if (functionp(arg1)) {
 	    arg1 = cons(makeatom(GET_NAME(car(arg1)), PRED), cdr(arg1));
 	}
@@ -2513,9 +2514,9 @@ int b_assert(int arglist, int rest, int th)
 	    return (prove_all(rest, sp[th], th));
 	} else if (clausep(arg1)) {
 	    if (!callablep(cadr(arg1)))
-		error(NOT_CALLABLE, "assertz ", arg1, th);
+		exception(NOT_CALLABLE, ind, arg1, th);
 	    if (operationp(cadr(arg1)))
-		error(BUILTIN_EXIST, "assertz ", arg1, th);
+		exception(BUILTIN_EXIST, ind, arg1, th);
 
 
 
@@ -2524,27 +2525,28 @@ int b_assert(int arglist, int rest, int th)
 	    checkgbc();
 	    return (prove_all(rest, sp[th], th));
 	}
-	error(NOT_CALLABLE, "assertz ", arg1, th);
+	exception(NOT_CALLABLE, ind, arg1, th);
     }
-    error(ARITY_ERR, "assertz ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_asserta(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("asserta",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "asserta ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (singlep(arg1)) {
 	    if (GET_AUX(arg1) == SIMP || GET_AUX(arg1) == NIL)
 		SET_AUX(arg1, PRED);
 	}
 	if (builtinp(arg1))
-	    error(BUILTIN_EXIST, "asserta ", arg1, th);
+	    exception(BUILTIN_EXIST, ind, arg1, th);
 	if (functionp(arg1)) {
 	    arg1 = cons(makeatom(GET_NAME(car(arg1)), PRED), cdr(arg1));
 	}
@@ -2561,9 +2563,9 @@ int b_asserta(int arglist, int rest, int th)
 	    return (prove_all(rest, sp[th], th));
 	} else if (clausep(arg1)) {
 	    if (!callablep(cadr(arg1)))
-		error(NOT_CALLABLE, "asserta ", arg1, th);
+		exception(NOT_CALLABLE, ind, arg1, th);
 	    if (operationp(cadr(arg1)))
-		error(BUILTIN_EXIST, "asserta ", arg1, th);
+		exception(BUILTIN_EXIST, ind, arg1, th);
 
 	    SET_VAR(arg1, unique(varslist(arg1)));
 	    operate(arg1, th);
@@ -2571,31 +2573,32 @@ int b_asserta(int arglist, int rest, int th)
 	    checkgbc();
 	    return (prove_all(rest, sp[th], th));
 	}
-	error(NOT_CALLABLE, "asserta ", arg1, th);
+	exception(NOT_CALLABLE, ind, arg1, th);
     }
-    error(ARITY_ERR, "asserta ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_retract(int arglist, int rest, int th)
 {
-    int n, arg1, clause, head, clauses, new_clauses, save1, save2;
+    int n, ind, arg1, clause, head, clauses, new_clauses, save1, save2;
 
     save2 = sp[th];
     clause = clauses = head = NIL;
     n = length(arglist);
+	ind = makeind("retract",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "retract ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (operationp(arg1) && !predicatep(cadr(arg1)))
-	    error(NOT_CALLABLE, "retract ", arg1, th);
+	    exception(NOT_CALLABLE, ind, arg1, th);
 	if (!operationp(arg1) && !predicatep(arg1))
-	    error(NOT_CALLABLE, "retract ", arg1, th);
+	    exception(NOT_CALLABLE, ind, arg1, th);
 	if (operationp(arg1) && builtinp(cadr(arg1)))
-	    error(BUILTIN_EXIST, "retract ", arg1, th);
+	    exception(BUILTIN_EXIST, ind, arg1, th);
 	if (!operationp(arg1) && builtinp(arg1))
-	    error(BUILTIN_EXIST, "retract ", arg1, th);
+	    exception(BUILTIN_EXIST, ind, arg1, th);
 
 	if (singlep(arg1)) {
 	    arg1 = list1(arg1);
@@ -2643,7 +2646,7 @@ int b_retract(int arglist, int rest, int th)
 	sp[th] = save2;
 	return (NO);
     }
-    error(ARITY_ERR, "retract ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -2829,22 +2832,21 @@ int b_nth_char(int arglist, int rest, int th)
 //transform
 int b_name(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, ls, atom, pos, code, res;
+    int n, ind, arg1, arg2, ls, atom, pos, code, res;
     char str1[STRSIZE], str2[10];
 
     n = length(arglist);
+	ind = makeind("name",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (wide_variable_p(arg1) && listp(arg2) && length(arg2) == -1)
-	    error(INSTANTATION_ERR, "name ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!wide_variable_p(arg1) && !atomp(arg1))
-	    error(NOT_ATOM, "name ", arg1, th);
+	    exception(NOT_ATOM, ind, arg1, th);
 	if (wide_variable_p(arg1) && !listp(arg2))
-	    error(NOT_LIST, "name ", arg2, th);
-	if (wide_variable_p(arg1) && !atom_codes_list_p(arg2))
-	    error(NOT_CHAR_CODE, "name ", arg2, th);
-
+	    exception(NOT_LIST, ind, arg2, th);
+	
 
 	if (singlep(arg1) && !variablep(arg1)) {
 	    strcpy(str1, GET_NAME(arg1));
@@ -2920,25 +2922,26 @@ int b_name(int arglist, int rest, int th)
 	} else
 	    return (NO);
     }
-    error(ARITY_ERR, "name ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_list_text(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, ls, atom, pos, code, index, res;
+    int n, ind, arg1, arg2, ls, atom, pos, code, index, res;
     char str1[STRSIZE], str2[10];
 
     n = length(arglist);
+	ind = makeind("list_text",n,th);
     if (n == 2) {
 	arg1 = car(arglist);	//list
 	arg2 = cadr(arglist);	//atomstring
 	if (listp(arg1) && length(arg1) == -1 && wide_variable_p(arg2))
-	    error(INSTANTATION_ERR, "list_text ", arg2, th);
+	    exception(INSTANTATION_ERR, ind, arg2, th);
 	if (!wide_variable_p(arg1) && !listp(arg1))
-	    error(NOT_LIST, "list_text ", arg1, th);
+	    exception(NOT_LIST, ind, arg1, th);
 	if (wide_variable_p(arg1) && !atomp(arg2) && !stringp(arg2))
-	    error(NOT_ATOM, "list_text ", arg2, th);
+	    exception(NOT_ATOM, ind, arg2, th);
 
 
 	if (atomp(arg2) || stringp(arg2)) {
@@ -3031,7 +3034,7 @@ int b_list_text(int arglist, int rest, int th)
 	} else
 	    return (NO);
     }
-    error(ARITY_ERR, "list_text ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -3039,17 +3042,18 @@ int b_list_text(int arglist, int rest, int th)
 
 int b_atom_string(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, temp;
+    int n, ind, arg1, arg2, temp;
 
     n = length(arglist);
+	ind = makeind("atom_string",n,th);
     if (n == 2) {
 	arg1 = car(arglist);	//atom
 	arg2 = cadr(arglist);	//string
 
 	if (!wide_variable_p(arg1) && !atomp(arg1))
-	    error(NOT_ATOM, "atom_string ", arg1, th);
+	    exception(NOT_ATOM, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !stringp(arg2))
-	    error(NOT_STR, "atom_string ", arg2, th);
+	    exception(NOT_STR, ind, arg2, th);
 
 	if (atomp(arg1)) {
 	    temp = makestr(GET_NAME(arg1));
@@ -3065,26 +3069,27 @@ int b_atom_string(int arglist, int rest, int th)
 		return (NO);
 	}
     }
-    error(ARITY_ERR, "atom_string ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_char_code(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, code, res;
+    int n, ind, arg1, arg2, code, res;
     char str[2];
 
     n = length(arglist);
+	ind = makeind("char_code",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg1) && wide_variable_p(arg2))
-	    error(INSTANTATION_ERR, "char_code ", list2(arg1, arg2), th);
+	    exception(INSTANTATION_ERR, ind, list2(arg1, arg2), th);
 	if (!wide_variable_p(arg1) && !characterp(arg1))
-	    error(NOT_CHAR, "char_code ", arg1, th);
+	    exception(NOT_CHAR, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
-	    error(NOT_INT, "char_code ", arg2, th);
+	    exception(NOT_INT, ind, arg2, th);
 
 
 	if (atomp(arg1) && !variablep(arg1)) {
@@ -3105,7 +3110,7 @@ int b_char_code(int arglist, int rest, int th)
 		else if (str[1] == 'b')
 		    return (unify(arg2, makeint(BS), th));
 		else
-		    error(SYNTAX_ERR, "char_code ", NIL, th);
+		    exception(ILLEGAL_ARGS, ind, arg1, th);
 	    }
 	    //unicode
 	    code = makeint(utf8_to_ucs4(GET_NAME(arg1)));
@@ -3126,7 +3131,7 @@ int b_char_code(int arglist, int rest, int th)
 	} else
 	    return (NO);
     }
-    error(ARITY_ERR, "char_code ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -3136,28 +3141,29 @@ int b_char_code(int arglist, int rest, int th)
 
 int b_concat(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, arg3, str;
+    int n, ind, arg1, arg2, arg3, str;
     char str1[STRSIZE];
 
     n = length(arglist);
+	ind = makeind("concat",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (!listp(arg1))
-	    error(NOT_LIST, "concat ", arg1, th);
+	    exception(NOT_LIST, ind, arg1, th);
 	if (!wide_variable_p(arg2))
-	    error(NOT_VAR, "concat ", arg2, th);
+	    exception(NOT_VAR, ind, arg2, th);
 	if (!stringp(car(arg1)))
-	    error(NOT_STR, "concat ", car(arg1), th);
+	    exception(NOT_STR, ind, car(arg1), th);
 
 	strcpy(str1, GET_NAME(car(arg1)));
 	arg1 = cdr(arg1);
 	while (!nullp(arg1)) {
 	    if (!stringp(car(arg1)) && !atomp(car(arg1)))
-		error(NOT_STR, "concat ", car(arg1), th);
+		exception(NOT_STR, ind, car(arg1), th);
 	    if (strlen(str1) + strlen(GET_NAME(car(arg1))) > STRSIZE)
-		error(RESOURCE_ERR, "concat ", car(arg1), th);
+		exception(RESOURCE_ERR, ind, makestr("strsize"), th);
 
 	    strcat(str1, GET_NAME(car(arg1)));
 	    arg1 = cdr(arg1);
@@ -3174,13 +3180,13 @@ int b_concat(int arglist, int rest, int th)
 	arg3 = caddr(arglist);
 
 	if (!wide_variable_p(arg1) && !(atomp(arg1) || stringp(arg1)))
-	    error(NOT_STR, "concat ", arg1, th);
+	    exception(NOT_STR, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !(atomp(arg2) || stringp(arg2)))
-	    error(NOT_STR, "concat ", arg2, th);
+	    exception(NOT_STR, ind, arg2, th);
 	if (!wide_variable_p(arg3) && !stringp(arg3))
-	    error(NOT_VAR, "concat ", arg3, th);
+	    exception(NOT_VAR, ind, arg3, th);
 	if (strlen(GET_NAME(arg1)) + strlen(GET_NAME(arg2)) > STRSIZE)
-	    error(RESOURCE_ERR, "concat", arglist, th);
+	    exception(RESOURCE_ERR, ind, makestr("strsize"), th);
 
 	strcpy(str1, GET_NAME(arg1));
 	strcat(str1, GET_NAME(arg2));
@@ -3192,26 +3198,27 @@ int b_concat(int arglist, int rest, int th)
 	    return (NO);
 
     }
-    error(ARITY_ERR, "concat ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_string_length(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, val;
+    int n, ind, arg1, arg2, val;
 
     n = length(arglist);
+	ind = makeind("string_length",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "string_length ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!stringp(arg1))
-	    error(NOT_STR, "string_length ", arg1, th);
+	    exception(NOT_STR, ind, arg1, th);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
-	    error(LESS_THAN_ZERO, "string_length ", arg2, th);
+	    exception(LESS_THAN_ZERO, ind, arg2, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
-	    error(NOT_INT, "string_length ", arg2, th);
+	    exception(NOT_INT, ind, arg2, th);
 
 	val = makeint(string_length(arg1));
 	if (unify(arg2, val, th) == YES)
@@ -3219,25 +3226,26 @@ int b_string_length(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "string_length ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_string_term(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, l, i, res;
+    int n, ind, arg1, arg2, l, i, res;
     char str[STRSIZE];
 
     n = length(arglist);
+	ind = makeind("string_term",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (!wide_variable_p(arg1) && !stringp(arg1))
-	    error(NOT_STR, "string_term ", arg1, th);
+	    exception(NOT_STR, ind, arg1, th);
 
 	if (wide_variable_p(arg1) && wide_variable_p(arg2))
-	    error(WRONG_ARGS, "string_term ", arglist, th);
+	    exception(ILLEGAL_ARGS, ind, arglist, th);
 
 	if (wide_variable_p(arg2)) {
 	    l = strlen(GET_NAME(arg1));
@@ -3269,7 +3277,7 @@ int b_string_term(int arglist, int rest, int th)
 	} else
 	    return (NO);
     }
-    error(ARITY_ERR, "string_term ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -3291,10 +3299,11 @@ int read_string_term(int flag)
 
 int b_substring(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, arg3, arg4, i, j, k, start, len, str;
+    int n, ind, arg1, arg2, arg3, arg4, i, j, k, start, len, str;
     char str1[STRSIZE], str2[STRSIZE];
 
     n = length(arglist);
+	ind = makeind("substring",n,th);
     if (n == 4) {
 	arg1 = car(arglist);	//instring
 	arg2 = cadr(arglist);	//start
@@ -3302,19 +3311,19 @@ int b_substring(int arglist, int rest, int th)
 	arg4 = cadddr(arglist);	//outstring
 
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "substring ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!stringp(arg1))
-	    error(NOT_STR, "substring ", arg1, th);
+	    exception(NOT_STR, ind, arg1, th);
 	if (!wide_variable_p(arg4) && !stringp(arg4))
-	    error(NOT_STR, "substring ", arg4, th);
+	    exception(NOT_STR, ind, arg4, th);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
-	    error(LESS_THAN_ZERO, "substring ", arg2, th);
+	    exception(LESS_THAN_ZERO, ind, arg2, th);
 	if (integerp(arg3) && GET_INT(arg3) < 0)
-	    error(LESS_THAN_ZERO, "substring ", arg3, th);
+	    exception(LESS_THAN_ZERO, ind, arg3, th);
 	if (!wide_variable_p(arg2) && !wide_integer_p(arg2))
-	    error(NOT_INT, "substring ", arg2, th);
+	    exception(NOT_INT, ind, arg2, th);
 	if (!wide_variable_p(arg3) && !wide_integer_p(arg3))
-	    error(NOT_INT, "substring ", arg3, th);
+	    exception(NOT_INT, ind, arg3, th);
 
 
 
@@ -3322,7 +3331,7 @@ int b_substring(int arglist, int rest, int th)
 	start = GET_INT(arg2);
 	len = GET_INT(arg3);
 	if (string_length(arg1) < start + len - 1)
-	    error(OUT_OF_RANGE, "substring ", list2(arg2, arg3), th);
+	    exception(RESOURCE_ERR, ind, makestr("strsize"), th);
 	i = 0;
 	j = start - 1;
 	k = start + len - 1;
@@ -3338,27 +3347,28 @@ int b_substring(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "substring ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_float_text(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, arg3;
+    int n, ind, arg1, arg2, arg3;
     char str[STRSIZE], format[STRSIZE];
     double flt;
 
     n = length(arglist);
+	ind = makeind("float_text",n,th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
 	if (!wide_variable_p(arg1) && !floatp(arg1))
-	    error(NOT_FLT, "float_text ", arg1, th);
+	    exception(NOT_FLT, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !stringp(arg2))
-	    error(NOT_STR, "float_text ", arg2, th);
+	    exception(NOT_STR, ind, arg2, th);
 
 	if (floatp(arg1)) {
 	    int n, d;
@@ -3413,24 +3423,25 @@ int b_float_text(int arglist, int rest, int th)
 	}
 	return (NO);
     }
-    error(ARITY_ERR, "float_text ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_int_text(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, i;
+    int n, ind, arg1, arg2, i;
     char str[STRSIZE];
 
     n = length(arglist);
+	ind = makeind("int_text",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (!wide_variable_p(arg1) && !integerp(arg1))
-	    error(NOT_FLT, "int_text ", arg1, th);
+	    exception(NOT_FLT, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !stringp(arg2))
-	    error(NOT_STR, "int_text ", arg2, th);
+	    exception(NOT_STR, ind, arg2, th);
 
 	if (integerp(arg1)) {
 	    sprintf(str, "%d", get_int(arg1));
@@ -3447,7 +3458,7 @@ int b_int_text(int arglist, int rest, int th)
 	}
 	return (NO);
     }
-    error(ARITY_ERR, "int_text ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -3455,29 +3466,31 @@ int b_int_text(int arglist, int rest, int th)
 //controle
 int b_cut(int arglist, int rest, int th)
 {
-    int n;
+    int n,ind;
 
     n = length(arglist);
+	ind = makeind("!",n,th);
     if (n == 0) {
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "! ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_ifthen(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, save1;
+    int n, ind, arg1, arg2, save1;
 
     n = length(arglist);
+	ind = makeind("ifthen",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	save1 = sp[th];
 	if (variablep(arg1))
-	    error(INSTANTATION_ERR, "ifthen ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (variablep(arg2))
-	    error(INSTANTATION_ERR, "ifthen ", arg2, th);
+	    exception(INSTANTATION_ERR, ind, arg2, th);
 
 	if (prove_all(arg1, sp[th], th) == YES) {
 	    return (prove_all(addtail_body(rest, arg2, th), sp[th], th));
@@ -3489,26 +3502,27 @@ int b_ifthen(int arglist, int rest, int th)
 	unbind(save1, th);
 	return (NO);
     }
-    error(ARITY_ERR, "ifthen ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_ifthenelse(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, arg3, save;
+    int n, ind, arg1, arg2, arg3, save;
 
     n = length(arglist);
+	ind = makeind("ifthenelse",n,th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
 	if (variablep(arg1))
-	    error(INSTANTATION_ERR, "ifthenelse ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (variablep(arg2))
-	    error(INSTANTATION_ERR, "ifthenelse ", arg2, th);
+	    exception(INSTANTATION_ERR, ind, arg2, th);
 	if (variablep(arg3))
-	    error(INSTANTATION_ERR, "ifthenelse ", arg3, th);
+	    exception(INSTANTATION_ERR, ind, arg3, th);
 
 	save = sp[th];
 	if (prove_all(arg1, sp[th], th) == YES) {
@@ -3518,7 +3532,7 @@ int b_ifthenelse(int arglist, int rest, int th)
 	    return (prove_all(addtail_body(rest, arg3, th), sp[th], th));
 	}
     }
-    error(ARITY_ERR, "ifthenelse ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -3533,10 +3547,11 @@ double getETime()
 
 int b_measure(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
     double start_time, end_time, time, lips;
 
     n = length(arglist);
+	ind = makeind("measure",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	proof[th] = 0;
@@ -3550,42 +3565,45 @@ int b_measure(int arglist, int rest, int th)
 	ESCFORG;
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "measure ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_trace(int arglist, int rest, int th)
 {
-    int n;
+    int n,ind;
 
     n = length(arglist);
+	ind = makeind("trace",n,th);
     if (n == 0) {
 	debug_flag = ON;
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "trace ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_notrace(int arglist, int rest, int th)
 {
-    int n;
+    int n,ind;
 
     n = length(arglist);
+	ind = makeind("notrace",n,th);
     if (n == 0) {
 	debug_flag = OFF;
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "notrace ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_spy(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("spy",n,th);
     if (n == 0) {
 	print(spy_list);
 	return (prove_all(rest, sp[th], th));
@@ -3597,15 +3615,16 @@ int b_spy(int arglist, int rest, int th)
 	    spy_list = cons(arg1, spy_list);
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "spy ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_nospy(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("nospy",n,th);
     if (n == 0) {
 	while (!nullp(spy_list)) {
 	    spy_list = cdr(spy_list);
@@ -3617,15 +3636,16 @@ int b_nospy(int arglist, int rest, int th)
 	spy_list = listremove(arg1, spy_list);
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "nospy ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_leash(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("leash",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (arg1 == makeatom("full", SIMP)) {
@@ -3643,15 +3663,16 @@ int b_leash(int arglist, int rest, int th)
 	} else
 	    return (NO);
     }
-    error(ARITY_ERR, "leash ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_debug(int arglist, int rest, int th)
 {
-    int n;
+    int n,ind;
 
     n = length(arglist);
+	ind = makeind("debug",n,th);
     if (n == 0) {
 	printf("debug_flag=%d\n", debug_flag);
 	printf("trace_flag=%d\n", trace_flag);
@@ -3660,15 +3681,16 @@ int b_debug(int arglist, int rest, int th)
 	printf("\n");
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "debug ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_break(int arglist, int rest, int th)
 {
-    int n, ret, save1, save2;
+    int n, ind, ret, save1, save2;
 
     n = length(arglist);
+	ind = makeind("break",n,th);
     if (n == 0) {
 	break_flag = 1;
 	save1 = wp[th];
@@ -3691,15 +3713,16 @@ int b_break(int arglist, int rest, int th)
 	    goto repl;
 	}
     }
-    error(ARITY_ERR, "break ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_end_of_file(int arglist, int rest, int th)
 {
-    int n;
+    int n, ind;
 
     n = length(arglist);
+	ind = makeind("end_of_file",n,th);
     if (n == 0) {
 	if (break_flag) {
 	    variables[th] = variables_save[th];
@@ -3708,7 +3731,7 @@ int b_end_of_file(int arglist, int rest, int th)
 	} else
 	    return (YES);
     }
-    error(ARITY_ERR, "end_of_file ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
