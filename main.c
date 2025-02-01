@@ -52,6 +52,7 @@ int execute_list = NIL;
 int op_list = NIL;
 int key_list = NIL;
 int error_code = 0;
+int eval_context;
 int bag_list;
 int nonfree_list;
 int unread = NIL;		//for parse

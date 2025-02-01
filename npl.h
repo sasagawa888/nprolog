@@ -228,6 +228,7 @@ extern int execute_list;
 extern int op_list;
 extern int key_list;
 extern int error_code;
+extern int eval_context;
 extern int bag_list;
 extern int nonfree_list;
 extern int proof[THREADSIZE];
@@ -681,6 +682,7 @@ static const int BIGNUM_PARMA = BIGSIZE * 9 / 10; //from 90% to 100% of bigcell 
 #define NOT_RECORD          65
 #define VARIANT_OVERF       66
 #define ARITY_ERR           67
+#define NOT_FUNCTION        68
 
 
 double getETime(void);

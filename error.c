@@ -33,8 +33,10 @@ void init_handler()
                                                         makevar("%CommandType")));
     syntax_tag = list3(makepred("error"),list2(makepred("syntax_error"),makevar("%Message")),
 	                                     makevar("%Context"));
-    evaluation_tag = list2(makepred("evaluation_error"),list2(makevar("%ErrorType"),
-                                                              makevar("%Culprit")));
+    evaluation_tag = list3(makepred("error"),
+	                       list3(makepred("evaluation_error"),makevar("%ErrorType"),
+                                                              makevar("%Culprit")),
+					       makevar("%Context"));
     representation_tag =  list2(makepred("representation_error"),makevar("%ErrorType"));
     consistency_tag = list2(makepred("consistency_error"),list3(makevar("%Culprit1"),
                                                                 makevar("%Culprit2"),
@@ -387,6 +389,18 @@ void exception(int errnum, int ind, int arg, int th)
 	printf(" ");
 	print(arg);
 	break;
+
+	case NOT_FUNCTION:
+	bindsym(makevar("%Domain"),makeconst("evaluable"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(domain_tag,th);
+	ESCFRED;
+	printf("Not function ");
+	print(ind);
+	printf(" ");
+	print(arg);
+	break;
 	/*
     case NOT_CLOSE_OPTION:
 	ESCFRED;
@@ -470,13 +484,16 @@ void exception(int errnum, int ind, int arg, int th)
 	printf("Modify operator error %s ", fun);
 	print(arg);
 	break;
-
+	*/
     case EVALUATION_ERR:
 	ESCFRED;
-	printf("Evaluation error %s ", fun);
+	printf("Evaluation error ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
-    case NOT_CHAR_CODE:
+    /*
+	case NOT_CHAR_CODE:
 	ESCFRED;
 	printf("Not charactor code %s ", fun);
 	print(arg);

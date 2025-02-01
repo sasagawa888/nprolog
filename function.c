@@ -467,7 +467,7 @@ void init_operator(void)
 //function
 int eval(int x, int th)
 {
-    int function, arg1, arg2;
+    int function, arg1, arg2, ind,n;
     int result[3];
 
     if (nullp(x))
@@ -488,34 +488,44 @@ int eval(int x, int th)
 	else if (eqlp(x, makefunc("random")))
 	    return (f_random(NIL, th));
 	else
-	    error(EVALUATION_ERR, "eval ", x, th);
+	    exception(NOT_FUNCTION, eval_context, x, th);
     } else if (eqlp(car(x), makeatom("abs", FUNC))) {
-	if (length(x) != 2)
-	    error(ARITY_ERR, "abs ", x, th);
+	if ((n=length(x)) != 2){
+		ind = makeind("abs",n-1,th);
+	    exception(NOT_FUNCTION, eval_context, ind, th);
+	}
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_abs(arg1, th));
     } else if (eqlp(car(x), makeatom("sin", FUNC))) {
-	if (length(x) != 2)
-	    error(ARITY_ERR, "sin ", x, th);
+	if ((n=length(x)) != 2){
+		ind = makeind("sin",n-1,th);
+	    exception(NOT_FUNCTION, eval_context, ind, th);
+	}
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_sin(arg1, th));
     } else if (eqlp(car(x), makeatom("asin", FUNC))) {
-	if (length(x) != 2)
-	    error(ARITY_ERR, "asin ", x, th);
+	if ((n=length(x)) != 2){
+		ind = makeind("asin",n-1,th);
+	    exception(NOT_FUNCTION, eval_context, ind, th);
+	}
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_asin(arg1, th));
     } else if (eqlp(car(x), makeatom("cos", FUNC))) {
-	if (length(x) != 2)
-	    error(ARITY_ERR, "cos ", x, th);
+	if ((n=length(x)) != 2){
+		ind = makeind("cos",n-1,th);
+	    exception(NOT_FUNCTION, eval_context, ind, th);
+	}
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_cos(arg1, th));
     } else if (eqlp(car(x), makeatom("acos", FUNC))) {
-	if (length(x) != 2)
-	    error(ARITY_ERR, "acos ", x, th);
+	if ((n=length(x)) != 2){
+		ind = makeind("acos",n-1,th);
+	    exception(NOT_FUNCTION, eval_context, ind, th);
+	}
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_acos(arg1, th));
@@ -587,7 +597,7 @@ int eval(int x, int th)
 	arg2 = result[2];
 	return ((GET_SUBR(function)) (arg1, arg2, th));
     }
-    error(EVALUATION_ERR, "eval ", x, th);
+    exception(NOT_FUNCTION, eval_context, x, th);
     return (NIL);
 }
 

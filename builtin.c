@@ -1872,16 +1872,18 @@ int b_directory(int arglist, int rest, int th)
 
 int b_is(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, res;
+    int n, ind, arg1, arg2, res;
 
     n = length(arglist);
+	ind = makeind("is",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg2))
 	    error(INSTANTATION_ERR, "is ", arg2, th);
-
+	
+	eval_context = ind;
 	arg2 = eval(arg2, th);
 	res = unify(arg1, arg2, th);
 
@@ -2015,23 +2017,21 @@ int b_eqgreater(int arglist, int rest, int th)
 
 int b_numeq(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind("=:=",n,th);
     if (n == 2) {
+	eval_context = ind;
 	arg1 = eval(car(arglist), th);
 	arg2 = eval(cadr(arglist), th);
-	if (!numberp(arg1))
-	    error(NOT_NUM, "=:= ", arg1, th);
-	if (!numberp(arg2))
-	    error(NOT_NUM, "=:= ", arg2, th);
-
+	
 	if (numeqp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "=:= ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
