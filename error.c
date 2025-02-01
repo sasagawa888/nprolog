@@ -326,12 +326,20 @@ void exception(int errnum, int ind, int arg, int th)
 	printf("Not character %s ", fun);
 	print(arg);
 	break;
-
+	*/
     case NOT_CALLABLE:
+	bindsym(makevar("%TypeName"),makeconst("callable"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(type_tag,th);
 	ESCFRED;
-	printf("Not callable %s ", fun);
+	printf("Not callable ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
+
+	/*
     case EXISTENCE_ERR:
 	ESCFRED;
 	printf("Existence error %s ", fun);
@@ -392,7 +400,7 @@ void exception(int errnum, int ind, int arg, int th)
 	break;
 	
     case NON_EMPTY_LIST:
-	bindsym(makevar("%Domain"),makeconst("non_empty_list"),th);
+	bindsym(makevar("%Domain"),makeconst("empty_list"),th);
 	bindsym(makevar("%Culprit"),arg,th);
 	bindsym(makevar("%Context"),ind,th);
 	throw(domain_tag,th);
@@ -478,13 +486,19 @@ void exception(int errnum, int ind, int arg, int th)
 	ESCFRED;
 	printf("recordh tables max over %s ", fun);
 	break;
-
+	*/
     case NOT_RECORD:
+	bindsym(makevar("%Domain"),makeconst("record"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(domain_tag,th);
 	ESCFRED;
-	printf("recordh tables has no record %s ", fun);
+	printf("recordh tables has no record ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
-	*/
+	
     }
     printf("\n");
     stok.ch = NUL;

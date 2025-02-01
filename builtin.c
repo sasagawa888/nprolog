@@ -382,26 +382,27 @@ int b_repeat(int arglist, int rest, int th)
 
 int b_op(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, arg3, weight, type;
+    int n, ind, arg1, arg2, arg3, weight, type;
 
     n = length(arglist);
+	ind = makeind("op",n,th);
     if (n == 3) {
 	arg1 = car(arglist);	//priority
 	arg2 = cadr(arglist);	//specifier
 	arg3 = caddr(arglist);	//operator
 
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "op ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    error(INSTANTATION_ERR, "op ", arg2, th);
+	    exception(INSTANTATION_ERR, ind, arg2, th);
 	if (listp(arg3) && length(arg3) == -1)
-	    error(INSTANTATION_ERR, "op ", arg3, th);
+	    exception(INSTANTATION_ERR, ind, arg3, th);
 	if (!integerp(arg1))
-	    error(NOT_INT, "op ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (!atomp(arg2))
-	    error(NOT_ATOM, "op ", arg2, th);
+	    exception(NOT_ATOM, ind, arg2, th);
 	if (!atomp(arg3) && !listp(arg3))
-	    error(NOT_ATOM, "op ", arg3, th);
+	    exception(NOT_ATOM, ind, arg3, th);
 	weight = GET_INT(arg1);
 	if (!(weight > 0 && weight <= 1200))
 	    error(OPE_PRIORITY_ERR, "op ", arg1, th);
@@ -464,7 +465,7 @@ int b_op(int arglist, int rest, int th)
 	}
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "op ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -478,10 +479,11 @@ int o_cons(int x, int y, int th)
 
 int b_ask(int arglist, int rest, int th)
 {
-    int n, x1, x2, x3;
+    int n, ind, x1, x2, x3;
     char c;
 
     n = length(arglist);
+	ind = makeind("ask",n,th);
     if (n == 0) {
 	x1 = variables[th];
 	if (child_flag)
@@ -552,7 +554,7 @@ int b_ask(int arglist, int rest, int th)
 	    goto loop;
 	return (NO);
     }
-    error(ARITY_ERR, "ask ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -869,9 +871,10 @@ int b_get(int arglist, int rest, int th)
 
 int b_get0_noecho(int arglist, int rest, int th)
 {
-    int n, c, arg1, i, res;
+    int n, ind, c, arg1, i, res;
 
     n = length(arglist);
+	ind = makeind("get0_noecho",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	c = n_getch();
@@ -882,16 +885,17 @@ int b_get0_noecho(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "get0_noecho ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_tab(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, count;
+    int n, ind, arg1, arg2, count;
 
     n = length(arglist);
+	ind = makeind("tab",n,th);
     if (n == 1) {
 	arg1 = standard_output;
 	arg2 = car(arglist);
@@ -902,11 +906,11 @@ int b_tab(int arglist, int rest, int th)
 
       tab:
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "tab ", arg1, th);
+	    exception(NOT_STREAM, ind, arg1, th);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
-	    error(LESS_THAN_ZERO, "tab", arg2, th);
+	    exception(LESS_THAN_ZERO, ind, arg2, th);
 	if (!integerp(arg2))
-	    error(NOT_INT, "tab", arg2, th);
+	    exception(NOT_INT, ind, arg2, th);
 
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
@@ -917,7 +921,7 @@ int b_tab(int arglist, int rest, int th)
 	}
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "tab ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -1021,7 +1025,7 @@ int b_read_line(int arglist, int rest, int th)
 	    str[pos] = c;
 	    pos++;
 	    if (pos > STRSIZE - 1)
-		error(RESOURCE_ERR, "read_line ", NIL, th);
+		exception(RESOURCE_ERR, ind, makestr("strsize"), th);
 	    c = readc();
 	}
 	str[pos] = NUL;
@@ -1040,10 +1044,11 @@ int b_read_line(int arglist, int rest, int th)
 
 int b_read_string(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, arg3, save1, save2, res, pos, maxlen;
+    int n, ind, arg1, arg2, arg3, save1, save2, res, pos, maxlen;
     char str[STRSIZE], c;
 
     n = length(arglist);
+	ind = makeind("read_string",n,th);
     if (n == 2) {
 	arg1 = input_stream;
 	arg2 = car(arglist);	// maxlen
@@ -1055,17 +1060,15 @@ int b_read_string(int arglist, int rest, int th)
 	arg3 = caddr(arglist);	// string
       read_string:
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "read_string ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "read_string ", arg1, th);
-	if (streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
-	    error(NOT_INPUT_STREAM, "read_string ", arg1, th);
+	    exception(NOT_STREAM, ind, arg1, th);
 	if (!integerp(arg2))
-	    error(NOT_INT, "read_string ", arg2, th);
+	    exception(NOT_INT, ind, arg2, th);
 	if (get_int(arg2) < 0 || get_int(arg2) > STRSIZE)
-	    error(WRONG_ARGS, "read_string ", arg2, th);
+	    exception(RESOURCE_ERR, ind, makestr("strsize"), th);
 	if (!wide_variable_p(arg3) && !stringp(arg3))
-	    error(NOT_STR, "read_string ", arg3, th);
+	    exception(NOT_STR, ind, arg3, th);
 
 	save1 = input_stream;
 	save2 = repl_flag;
@@ -1081,7 +1084,7 @@ int b_read_string(int arglist, int rest, int th)
 	    str[pos] = c;
 	    pos++;
 	    if (pos > STRSIZE - 1)
-		error(RESOURCE_ERR, "read_string ", NIL, th);
+		exception(RESOURCE_ERR, ind, makestr("strsize"), th);
 	    c = readc();
 	}
 	str[pos] = NUL;
@@ -1093,7 +1096,7 @@ int b_read_string(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "read_string ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -1101,10 +1104,11 @@ int b_read_string(int arglist, int rest, int th)
 
 int b_skip(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, save;
+    int n, ind, arg1, arg2, save;
     char c, str[STRSIZE];
 
     n = length(arglist);
+	ind = makeind("skip",n,th);
     if (n == 1) {
 	arg1 = standard_input;
 	arg2 = car(arglist);
@@ -1114,12 +1118,10 @@ int b_skip(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
       skip:
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "skip ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "skip", arg1, th);
-	if (streamp(arg1) && GET_OPT(arg1) == OPL_OUTPUT)
-	    error(NOT_INPUT_STREAM, "skip ", arg1, th);
-
+	    exception(NOT_STREAM, ind, arg1, th);
+	
 	save = input_stream;
 	input_stream = arg1;
 
@@ -1133,24 +1135,25 @@ int b_skip(int arglist, int rest, int th)
 	input_stream = save;
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "skip ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_stdin(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, save1, save2;
+    int n, ind, arg1, arg2, save1, save2;
 
     n = length(arglist);
+	ind = makeind("stdin",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "stdin ", arg1, th);
+	    exception(NOT_STREAM, ind, arg1, th);
 	if (!callablep(arg2))
-	    error(NOT_CALLABLE, "stdin ", arg2, th);
+	    exception(NOT_CALLABLE, ind, arg2, th);
 
 	save1 = input_stream;
 	save2 = sp[th];
@@ -1162,23 +1165,24 @@ int b_stdin(int arglist, int rest, int th)
 	input_stream = save1;
 	return (NO);
     }
-    error(ARITY_ERR, "stdin ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_stdout(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, save1, save2;
+    int n, ind, arg1, arg2, save1, save2;
 
     n = length(arglist);
+	ind = makeind("stdout",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "stdout ", arg1, th);
+	    exception(NOT_STREAM, ind, arg1, th);
 	if (!callablep(arg2))
-	    error(NOT_CALLABLE, "stdout ", arg2, th);
+	    exception(NOT_CALLABLE, ind, arg2, th);
 
 	save1 = output_stream;
 	save2 = sp[th];
@@ -1190,26 +1194,27 @@ int b_stdout(int arglist, int rest, int th)
 	output_stream = save1;
 	return (NO);
     }
-    error(ARITY_ERR, "stdin ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_stdinout(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, arg3, save1, save2, save3;
+    int n, ind, arg1, arg2, arg3, save1, save2, save3;
 
     n = length(arglist);
+	ind = makeind("stdinout",n,th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "stdinout ", arg1, th);
+	    exception(NOT_STREAM, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg2))
-	    error(NOT_STREAM, "stdinout ", arg2, th);
+	    exception(NOT_STREAM, ind, arg2, th);
 	if (!callablep(arg3))
-	    error(NOT_CALLABLE, "stdinout ", arg3, th);
+	    exception(NOT_CALLABLE, ind, arg3, th);
 
 	save1 = input_stream;
 	save2 = output_stream;
@@ -1224,23 +1229,24 @@ int b_stdinout(int arglist, int rest, int th)
 	output_stream = save2;
 	return (NO);
     }
-    error(ARITY_ERR, "stdinout ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_create(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, stream;
+    int n, ind, arg1, arg2, stream;
 
     n = length(arglist);
+	ind = makeind("create",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (wide_variable_p(arg2))
-	    error(INSTANTATION_ERR, "create ", arg2, th);
+	    exception(INSTANTATION_ERR, ind, arg2, th);
 	if (!atomp(arg2))
-	    error(NOT_ATOM, "create ", arg2, th);
+	    exception(NOT_ATOM, ind, arg2, th);
 
 	if (eqp(arg1, makeconst("user"))) {
 	    output_stream = standard_output;
@@ -1256,7 +1262,7 @@ int b_create(int arglist, int rest, int th)
 	    return (prove_all(rest, sp[th], th));
 	}
     }
-    error(ARITY_ERR, "create ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -1265,18 +1271,19 @@ int b_create(int arglist, int rest, int th)
 
 int b_open(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, arg3, stream;
+    int n, ind, arg1, arg2, arg3, stream;
     FILE *fp;
 
     n = length(arglist);
+	ind = makeind("open",n,th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 	if (wide_variable_p(arg2))
-	    error(INSTANTATION_ERR, "open ", arg2, th);
+	    exception(INSTANTATION_ERR, ind, arg2, th);
 	if (!atomp(arg2))
-	    error(NOT_ATOM, "open ", arg2, th);
+	    exception(NOT_ATOM, ind, arg2, th);
 
 	if (eqp(arg1, makeconst("user"))) {
 	    output_stream = standard_output;
@@ -1328,21 +1335,22 @@ int b_open(int arglist, int rest, int th)
 	    error(NOT_OPEN_OPTION, "open ", arg3, th);
 	}
     }
-    error(ARITY_ERR, "open ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_dup(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, addr;
+    int n, ind, arg1, arg2, addr;
 
     n = length(arglist);
+	ind = makeind("dup",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (!streamp(arg1))
-	    error(NOT_STREAM, "dup ", arg1, th);
+	    exception(NOT_STREAM, ind, arg1, th);
 
 	addr = freshcell();
 	SET_TAG(addr, STREAM);
@@ -1354,37 +1362,39 @@ int b_dup(int arglist, int rest, int th)
 	if (unify(arg2, addr, th) == YES)
 	    return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "dup ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_close(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("clsoe",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	fclose(GET_PORT(arg1));
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "close ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_see(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("see",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "see ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
-	    error(NOT_ATOM, "see ", arg1, th);
+	    exception(NOT_ATOM, ind, arg1, th);
 
 	if (eqp(arg1, makeconst("user"))) {
 	    input_stream = standard_input;
@@ -1399,33 +1409,35 @@ int b_see(int arglist, int rest, int th)
 	    return (prove_all(rest, sp[th], th));
 	}
     }
-    error(ARITY_ERR, "see ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_seeing(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("seeing",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!wide_variable_p(arg1))
-	    error(NOT_VAR, "seeing ", arg1, th);
+	    exception(NOT_VAR, ind, arg1, th);
 	if (unify(arg1, GET_CDR(input_stream), th) == YES) {
 	    return (prove_all(rest, sp[th], th));
 	}
     }
-    error(ARITY_ERR, "seeing ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_seen(int arglist, int rest, int th)
 {
-    int n;
+    int n,ind;
 
     n = length(arglist);
+	ind = makeind("seen",n,th);
     if (n == 0) {
 	if (input_stream != standard_input) {
 	    fclose(GET_PORT(input_stream));
@@ -1433,22 +1445,23 @@ int b_seen(int arglist, int rest, int th)
 	}
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "seen ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_tell(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("tell",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "tell ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
-	    error(NOT_ATOM, "tell ", arg1, th);
+	    exception(NOT_ATOM, ind, arg1, th);
 
 	if (eqp(arg1, makeconst("user"))) {
 	    output_stream = standard_output;
@@ -1463,29 +1476,31 @@ int b_tell(int arglist, int rest, int th)
 	    return (prove_all(rest, sp[th], th));
 	}
     }
-    error(ARITY_ERR, "tell ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_telling(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("telling",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (unify(arg1, GET_CDR(output_stream), th) == YES)
 	    return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "telling ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_told(int arglist, int rest, int th)
 {
-    int n;
+    int n,ind;
 
     n = length(arglist);
+	ind = makeind("told",n,th);
     if (n == 0) {
 	if (output_stream != standard_output) {
 	    fclose(GET_PORT(output_stream));
@@ -1493,50 +1508,51 @@ int b_told(int arglist, int rest, int th)
 	}
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "told ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_flush(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("flush",n,th);
     if (n == 0) {
 	fflush(stdout);
 	return (prove_all(rest, sp[th], th));
     } else if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "flush ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
-	    error(NOT_STREAM, "flush ", arg1, th);
+	    exception(NOT_STREAM, ind, arg1, th);
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
-	if (GET_OPT(arg1) == OPL_INPUT)
-	    error(NOT_OUTPUT_STREAM, "flush ", arg1, th);
+	
 
 	fflush(GET_PORT(arg1));
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "flush ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_consult(int arglist, int rest, int th)
 {
-    int n, arg1, clause, save;
+    int n, ind, arg1, clause, save;
     char str[STRSIZE];
 
     n = length(arglist);
+	ind = makeind("consult",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "consult ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
-	    error(NOT_ATOM, "consult ", arg1, th);
+	    exception(NOT_ATOM, ind, arg1, th);
 
 	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	save = input_stream;
@@ -1592,25 +1608,26 @@ int b_consult(int arglist, int rest, int th)
       exit:
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "consult ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_reconsult(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, clause, head, atom, save;
+    int n, ind, arg1, arg2, clause, head, atom, save;
     char str[STRSIZE];
 
     n = length(arglist);
+	ind = makeind("reconsult",n,th);
     arg2 = NIL;
     if (n == 1) {
 	arg1 = car(arglist);
 
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "reconsult ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
-	    error(NOT_ATOM, "reconsult ", arg1, th);
+	    exception(NOT_ATOM, ind, arg1, th);
 
 	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	save = input_stream;
@@ -1685,7 +1702,7 @@ int b_reconsult(int arglist, int rest, int th)
       exit:
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "reconsult ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -1718,11 +1735,12 @@ void memoize_arity(int clause, int atom)
 
 int b_save(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
     static char str[STREAM];
     char *home, str1[STRSIZE];
 
     n = length(arglist);
+	ind = makeind("save",n,th);
     if (n == 0) {
 	arg1 = NIL;
 	home = getenv("HOME");
@@ -1761,7 +1779,7 @@ int b_save(int arglist, int rest, int th)
 	output_stream = standard_output;
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "save ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -5435,7 +5453,7 @@ int b_retrieveh(int arglist, int rest, int th)
 	save1 = sp[th];
 	record_id = GET_ARITY(arg1) - 1;	//id starts from 1
 	if (record_id < 0)
-	    error(NOT_RECORD, "retrieveh ", arg1, th);
+	    exception(NOT_RECORD, ind, arg1, th);
 	index = hash(GET_NAME(arg2));
 	lis = record_hash_table[index][record_id];
 	while (lis != NIL) {
@@ -5836,7 +5854,7 @@ int b_removeh(int arglist, int rest, int th)
 	save1 = sp[th];
 	record_id = GET_ARITY(arg1) - 1;	//id starts from 1
 	if (record_id < 0)
-	    error(NOT_RECORD, "removeh ", arg1, th);
+	    exception(NOT_RECORD, ind, arg1, th);
 	index = hash(GET_NAME(arg2));
       repeat:
 	lis = record_hash_table[index][record_id];
@@ -5897,7 +5915,7 @@ int b_ref(int arglist, int rest, int th)
 	arg1 = car(arglist);
 
 	if (!integerp(arg1))
-	    error(NOT_INT, "ref ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 
 	num = get_int(arg1);
 	list = key_list;
