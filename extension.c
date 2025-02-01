@@ -464,17 +464,18 @@ int variable_convert4(int x)
 
 int b_clause_with_arity(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, arg3, l, clause, clauses, res;
+    int n, ind, arg1, arg2, arg3, l, clause, clauses, res;
 
     n = length(arglist);
+	ind = makeind("clause_with_arity",n,th);
     if (n == 3) {
 	arg1 = deref(car(arglist), th);
 	arg2 = deref(cadr(arglist), th);
 	arg3 = deref(caddr(arglist), th);
 	if (!singlep(arg1))
-	    error(NOT_ATOM, "n_clause_with_arity", arg1, th);
+	    exception(NOT_ATOM, ind, arg1, th);
 	if (!integerp(arg2))
-	    error(NOT_INT, "n_clause_with_arity", arg2, th);
+	    exception(NOT_INT, ind, arg2, th);
 
 	clauses = GET_CAR(arg1);
 	l = GET_INT(arg2);
@@ -536,7 +537,6 @@ int b_error(int arglist, int rest, int th)
 	    }
 	}
     }
-    error(ARITY_ERR, "n_error ", arglist, th);
     return (NO);
 }
 
@@ -780,7 +780,6 @@ int b_existerrors(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "existerrors ", arglist, th);
     return (NO);
 }
 
@@ -796,7 +795,6 @@ int b_has_cut(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "n_has_cut ", arglist, th);
     return (NO);
 }
 
@@ -814,7 +812,6 @@ int b_before_cut(int arglist, int rest, int th)
 	} else
 	    return (NO);
     }
-    error(ARITY_ERR, "n_before_cut ", arglist, th);
     return (NO);
 }
 
@@ -832,7 +829,6 @@ int b_after_cut(int arglist, int rest, int th)
 	} else
 	    return (NO);
     }
-    error(ARITY_ERR, "n_after_cut ", arglist, th);
     return (NO);
 }
 
@@ -901,30 +897,32 @@ int exec(int goal, int bindings, int rest, int th)
 #ifdef __arm__
 int b_wiringpi_setup_gpio(int arglist, int rest, int th)
 {
-    int n;
+    int n,ind;
 
     n = length(arglist);
+	ind = makeind("wiringpi_setup_gpio"n,th);
     if (n == th) {
 	wiringPiSetupGpio();
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "wiringpi_setup_gpio ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_wiringpi_spi_setup_ch_speed(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, x, y;
+    int n, ind, arg1, arg2, x, y;
 
     n = length(arglist);
+	ind = makeind("wiringpi_spi_setup_ch_spee",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (!integerp(arg1))
-	    error(NOT_INT, "wiringpi_spi_setup_ch_speed ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (!integerp(arg2))
-	    error(NOT_INT, "wiringpi_spi_setup_ch_speed ", arg2, th);
+	    exception(NOT_INT, ind, arg2, th);
 
 
 	x = GET_INT(arg1);
@@ -932,15 +930,16 @@ int b_wiringpi_spi_setup_ch_speed(int arglist, int rest, int th)
 	wiringPiSPISetup(x, y);
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "wiringpi_spi_setup_ch_speed ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_pwm_set_mode(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("pwm_mode_ms",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -953,57 +952,60 @@ int b_pwm_set_mode(int arglist, int rest, int th)
 
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "pwm_set_mode ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_pwm_set_range(int arglist, int rest, int th)
 {
-    int n, arg1, x;
+    int n, ind, arg1, x;
 
     n = length(arglist);
+	ind = makeind("pwm_set_range",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
-	    error(NOT_INT, "pwm_set_range", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 
 	x = GET_INT(arg1);
 	pwmSetRange(x);
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "pwm_set_range ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_pwm_set_clock(int arglist, int rest, int th)
 {
-    int n, arg1, x;
+    int n, ind, arg1, x;
 
     n = length(arglist);
+	ind = makeind("pwm_set_clock",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
-	    error(NOT_INT, "pwm_set_clock", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 
 	x = GET_INT(arg1);
 	pwmSetClock(x);
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "pwm_set_clock ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_pin_mode(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, x;
+    int n, ind, arg1, arg2, x;
 
 
     n = length(arglist);
+	ind = makeind("pin_mode",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (!integerp(arg1))
-	    error(NOT_INT, "pin_mode ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 
 	x = GET_INT(arg1);
 	if (arg2 == makeconst("intput"))
@@ -1017,83 +1019,87 @@ int b_pin_mode(int arglist, int rest, int th)
 
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "pin_mode ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_digital_write(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, x, y;
+    int n, ind, arg1, arg2, x, y;
 
     n = length(arglist);
+	ind = makeind("digital_wri",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (!integerp(arg1))
-	    error(NOT_INT, "digital_write ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (!integerp(arg2))
-	    error(NOT_INT, "digital_write ", arg2, th);
+	    exception(NOT_INT, ind, arg2, th);
 
 	x = GET_INT(arg1);
 	y = GET_INT(arg2);
 	digitalWrite(x, y);
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "digital_write ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_digital_write_byte(int arglist, int rest, int th)
 {
-    int n, arg1, x;
+    int n, ind, arg1, x;
 
     n = length(arglist);
+	ind = makeind("digital_write_byte",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
-	    error(NOT_INT, "digital_write_byte ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 
 	x = GET_INT(arg1);
 	digitalWriteByte(x);
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "digital_write_byte ", arglist, th);
+    exception(ARITY_ERR,  ind, arglist, th);
     return (NO);
 }
 
 int b_pull_up_dn_control(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, x, y;
+    int n, ind, arg1, arg2, x, y;
 
 
     n = length(arglist);
+	ind = makeind("pull_up_dn_contr",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (!integerp(arg1))
-	    error(NOT_INT, "pull_up_dn_control ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (!integerp(arg2))
-	    error(NOT_INT, "pull_up_dn_control ", arg2, th);
+	    exception(NOT_INT, ind, arg2, th);
 
 	x = GET_INT(arg1);
 	y = GET_INT(arg2);
 	pullUpDnControl(x, y);
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "pull_up_dn_control ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_digital_read(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, x, res;
+    int n, ind, arg1, arg2, x, res;
 
     n = length(arglist);
+	ind = makeind("digital_read",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (!integerp(arg1))
-	    error(NOT_INT, "digital_read", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 
 	x = GET_INT(arg1);
 	res = digitalRead(x);
@@ -1102,51 +1108,54 @@ int b_digital_read(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "digital_read ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_delay(int arglist, int rest, int th)
 {
-    int n, arg1, x;
+    int n, ind, arg1, x;
 
     n = length(arglist);
+	ind = makeind("delay",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
-	    error(NOT_INT, "delay", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 
 	x = GET_INT(arg1);
 	delay(x);
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "delay ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_delay_microseconds(int arglist, int rest, int th)
 {
-    int n, arg1, x;
+    int n, ind, arg1, x;
 
     n = length(arglist);
+	ind = makeind("delay_microseconds",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
-	    error(NOT_INT, "delay_microseconds ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 
 	x = GET_INT(arg1);
 	delayMicroseconds(x);
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "delay_microseconds ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_timer_microseconds(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("timer_microseconds",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -1161,7 +1170,7 @@ int b_timer_microseconds(int arglist, int rest, int th)
 
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "timer_microseconds ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
