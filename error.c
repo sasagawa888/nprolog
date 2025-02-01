@@ -448,19 +448,43 @@ void exception(int errnum, int ind, int arg, int th)
 	printf("Not stream option %s ", fun);
 	print(arg);
 	break;
-
+	*/
     case OPE_PRIORITY_ERR:
+	bindsym(makevar("%Domain"),makeconst("operator_priority"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(domain_tag,th);
 	ESCFRED;
-	printf("Operator priority error %s ", fun);
+	printf("Operator priority error ");
+	print(ind);
+	printf(" ");
+	print(arg);
+	break;
+
+	case MODIFY_OPE_ERR:
+	bindsym(makevar("%Domain"),makeconst("operator_specifier"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(domain_tag,th);
+	ESCFRED;
+	printf("Modify operator error ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
 
     case OPE_SPEC_ERR:
+	bindsym(makevar("%Domain"),makeconst("operator_specifier"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(domain_tag,th);
 	ESCFRED;
-	printf("Operator specifier error %s ", fun);
+	printf("Operator specifier error ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
-
+	/*
     case NOT_ORDER:
 	ESCFRED;
 	printf("Not compare order %s ", fun);

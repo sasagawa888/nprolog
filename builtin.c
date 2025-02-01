@@ -405,13 +405,13 @@ int b_op(int arglist, int rest, int th)
 	    exception(NOT_ATOM, ind, arg3, th);
 	weight = GET_INT(arg1);
 	if (!(weight > 0 && weight <= 1200))
-	    error(OPE_PRIORITY_ERR, "op ", arg1, th);
+	    exception(OPE_PRIORITY_ERR, ind, arg1, th);
 	if (arg3 == DOTOBJ)
-	    error(MODIFY_OPE_ERR, "op ", arg3, th);
+	    exception(MODIFY_OPE_ERR, ind, arg3, th);
 	if (arg3 == AND)
-	    error(MODIFY_OPE_ERR, "op ", arg3, th);
+	    exception(MODIFY_OPE_ERR, ind, arg3, th);
 	if (arg3 == makeatom("op", OPE))
-	    error(MODIFY_OPE_ERR, "op ", arg3, th);
+	    exception(MODIFY_OPE_ERR, ind, arg3, th);
 
 	type = NIL;
 	if (arg2 == makeconst("xfx")) {
@@ -419,11 +419,11 @@ int b_op(int arglist, int rest, int th)
 
 	} else if (arg2 == makeconst("yfx")) {
 	    if (GET_OPT(arg3) == XF || GET_OPT(arg3) == YF)
-		error(OPE_SPEC_ERR, "op", arg2, th);
+		exception(OPE_SPEC_ERR, ind, arg2, th);
 	    type = YFX;
 	} else if (arg2 == makeconst("xfy")) {
 	    if (GET_OPT(arg3) == XF || GET_OPT(arg3) == YF)
-		error(OPE_SPEC_ERR, "op", arg2, th);
+		exception(OPE_SPEC_ERR, ind, arg2, th);
 	    type = XFY;
 	} else if (arg2 == makeconst("fx"))
 	    type = FX;
@@ -432,15 +432,15 @@ int b_op(int arglist, int rest, int th)
 	else if (arg2 == makeconst("xf")) {
 	    if (GET_OPT(arg3) == XFX || GET_OPT(arg3) == YFX ||
 		GET_OPT(arg3) == XFY)
-		error(OPE_SPEC_ERR, "op", arg2, th);
+		exception(OPE_SPEC_ERR, ind, arg2, th);
 	    type = XF;
 	} else if (arg2 == makeconst("yf")) {
 	    if (GET_OPT(arg3) == XFX || GET_OPT(arg3) == YFX ||
 		GET_OPT(arg3) == XFY)
-		error(OPE_SPEC_ERR, "op", arg2, th);
+		exception(OPE_SPEC_ERR, ind, arg2, th);
 	    type = YF;
 	} else
-	    error(OPE_SPEC_ERR, "op", arg2, th);
+	    exception(OPE_SPEC_ERR, ind, arg2, th);
 
 	if (singlep(arg3)) {
 	    if (operatorp(arg3))
@@ -1292,7 +1292,7 @@ int b_open(int arglist, int rest, int th)
 	    fp = fopen(GET_NAME(arg2), "r");
 	    if (fp == NULL) {
 		fclose(fp);
-		error(FILE_EXIST, "open ", arg2, th);
+		exception(CANT_OPEN, ind, arg2, th);
 	    }
 
 	    if (arg3 == makeconst("w")) {
@@ -4377,9 +4377,9 @@ int b_current_op(int arglist, int rest, int th)
 	if (!wide_variable_p(arg1) && !integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (integerp(arg1) && (GET_INT(arg1) < 0 || GET_INT(arg1) > 1200))
-	    error(OPE_PRIORITY_ERR, "current_op ", arg1, th);
+	    exception(OPE_PRIORITY_ERR, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !specp(arg2))
-	    error(OPE_SPEC_ERR, "current_op ", arg2, th);
+	    exception(OPE_SPEC_ERR, ind, arg2, th);
 	if (!wide_variable_p(arg3) && !atomp(arg3))
 	    exception(NOT_ATOM, ind, arg3, th);
 
