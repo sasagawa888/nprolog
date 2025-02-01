@@ -109,6 +109,7 @@ typedef struct __packed{
                 int     ( *subr) (int, int, int);
                 FILE    *port;
                 int record;
+                int socket;
             } car;
             union{
                 int intnum;
@@ -330,6 +331,13 @@ extern pthread_cond_t mt_cond_queue;
 extern pthread_attr_t mt_para_attr[PARASIZE];
 extern size_t mt_para_size[PARASIZE];
 
+/* -----TCPIP for server----------------*/
+extern socklen_t server_len;
+extern struct sockaddr_in server_addr, client_addr;
+
+
+
+
 
 #ifdef __APPLE__
 #define FLUSH               fpurge(stdin);
@@ -359,6 +367,7 @@ extern size_t mt_para_size[PARASIZE];
 #define GET_TR(addr)        heap[addr].trace
 #define GET_FLAG(addr)      heap[addr].flag
 #define GET_RECORD(addr)    heap[addr].val.car.record
+#define GET_SOCKET(addr)    heap[addr].val.car.socket
 #define SET_TAG(addr,x)     heap[addr].tag = x
 #define SET_CAR(addr,x)     heap[addr].val.car.intnum = x
 #define SET_CDR(addr,x)     heap[addr].val.cdr.intnum = x
@@ -375,6 +384,7 @@ extern size_t mt_para_size[PARASIZE];
 #define SET_CHAR(addr,x)    heap[addr].name[0] = x
 #define SET(addr,x)         heap[addr] = heap[x]
 #define SET_RECORD(addr,x)  heap[addr].val.car.record = x
+#define SET_SOCKET(addr,x)  heap[addr].val.car.socket = x
 #define IS_INCELL(addr)     (addr >= 0 && addr < CELLSIZE)
 #define IS_OUTCELL(addr)    (addr < 0 || addr >= CELLSIZE)
 #define IS_ALPHA(addr)      (addr < VARIANTMAX && addr > CELLSIZE)

@@ -183,6 +183,11 @@ int export_data[10][2];		// export name,arity
 int module_flag;		// inner module 1, else 0
 int export_pt;			// export data pointer
 
+/* -----TCPIP for server----------------*/
+socklen_t server_len;
+struct sockaddr_in server_addr, client_addr;
+
+
 //-----editor-----
 char buffer[BUFSIZE][10];
 int ed_tab = 4;
