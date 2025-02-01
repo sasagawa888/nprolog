@@ -105,6 +105,7 @@ void exception(int errnum, int ind, int arg, int th)
 	print(arg);
 	break;
 	
+	case EXPONENT_ERR:
     case DIV_ZERO:
 	bindsym(makevar("%ErrorType"),makeconst("evalution_error"),th);
     bindsym(makevar("%Culprit"),makeconst("zero_divisor"),th),

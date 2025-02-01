@@ -704,7 +704,7 @@ int f_expt(int x, int y, int th)
     if (floatp(x) && (fabs(GET_FLT(x)) <= DBL_MIN && GET_FLT(x) != 0))
 	exception(EVALUATION_ERR, eval_context, x, th);
     if (bignump(x) && (longnump(y) || bignump(y)))
-	exception(EXPONENT_ERR, eval_context, y, th);
+	exception(RESOURCE_ERR, eval_context, y, th);
 
     if ((integerp(x) || longnump(x) || bignump(x)) && integerp(y)
 	&& GET_INT(y) == 0)
