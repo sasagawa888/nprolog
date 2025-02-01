@@ -108,6 +108,7 @@ typedef struct __packed{
                 int intnum;
                 int     ( *subr) (int, int, int);
                 FILE    *port;
+                int record;
             } car;
             union{
                 int intnum;
@@ -122,7 +123,6 @@ typedef struct __packed{
     char    *name;
     unsigned char option;
     char    trace;
-    int     record;
 } cell;
 
 
@@ -358,7 +358,7 @@ extern size_t mt_para_size[PARASIZE];
 #define GET_OPT(addr)       heap[addr].option
 #define GET_TR(addr)        heap[addr].trace
 #define GET_FLAG(addr)      heap[addr].flag
-#define GET_RECORD(addr)    heap[addr].record
+#define GET_RECORD(addr)    heap[addr].val.car.record
 #define SET_TAG(addr,x)     heap[addr].tag = x
 #define SET_CAR(addr,x)     heap[addr].val.car.intnum = x
 #define SET_CDR(addr,x)     heap[addr].val.cdr.intnum = x
@@ -374,7 +374,7 @@ extern size_t mt_para_size[PARASIZE];
 #define SET_TR(addr,x)      heap[addr].trace = x
 #define SET_CHAR(addr,x)    heap[addr].name[0] = x
 #define SET(addr,x)         heap[addr] = heap[x]
-#define SET_RECORD(addr,x)  heap[addr].record = x
+#define SET_RECORD(addr,x)  heap[addr].val.car.record = x
 #define IS_INCELL(addr)     (addr >= 0 && addr < CELLSIZE)
 #define IS_OUTCELL(addr)    (addr < 0 || addr >= CELLSIZE)
 #define IS_ALPHA(addr)      (addr < VARIANTMAX && addr > CELLSIZE)
