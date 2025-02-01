@@ -203,15 +203,19 @@ void exception(int errnum, int ind, int arg, int th)
 	printf("Wrong arguments %s ", fun);
 	print(arg);
 	break;
-
+	*/
     case PRED_INDICATOR:
+	bindsym(makevar("%TypeName"),makeconst("predicate_indicator"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(type_tag,th);
 	ESCFRED;
-	printf("Not predicate indicator %s ", fun);
+	printf("Not predicate indicator ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
 
-
-	*/
     case NOT_LIST:
 	bindsym(makevar("%TypeName"),makeconst("list"),th);
 	bindsym(makevar("%Culprit"),arg,th);
@@ -386,13 +390,19 @@ void exception(int errnum, int ind, int arg, int th)
 	printf(" ");
 	print(arg);
 	break;
-	/*
+	
     case NON_EMPTY_LIST:
+	bindsym(makevar("%Domain"),makeconst("non_empty_list"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(domain_tag,th);
 	ESCFRED;
-	printf("Not empty list %s ", fun);
+	printf("Not empty list ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
-
+	/*
     case NOT_STREAM_OPTION:
 	ESCFRED;
 	printf("Not stream option %s ", fun);
