@@ -54,7 +54,7 @@ void init_handler()
 //------error for compier-----
 void errorcomp(int errnum, int name, int arg)
 {
-    error(GET_INT(errnum), GET_NAME(name), arg, 0);
+    exception(GET_INT(errnum), name, arg, 0);
 }
 
 
@@ -293,13 +293,16 @@ void exception(int errnum, int ind, int arg, int th)
 	print(arg);
 	break;
 
-	/*
     case EXISTENCE_ERR:
+	bindsym(makevar("%ObjectType"),makeconst("procedure"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),makestr("top_level"),th);
+	throw(exsistence_tag,th);
 	ESCFRED;
-	printf("Existence error %s ", fun);
+	printf("Existence error ");
 	print(arg);
 	break;
-	*/
+	
     case ARITY_ERR:
 	bindsym(makevar("%ObjectType"),makeconst("predicate"),th);
 	bindsym(makevar("%Culprit"),ind,th);

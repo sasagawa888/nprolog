@@ -11,14 +11,15 @@
 
 int b_reconsult_predicate(int arglist, int rest, int th)
 {
-    int n, arg1, lis, save1;
+    int n, ind,arg1, lis, save1;
 
     n = length(arglist);
+	ind = makeind("reconsult_predicate",n,th);
     if (n == 1) {
 	save1 = sp[th];
 	arg1 = deref(car(arglist), th);
 	if (!wide_variable_p(arg1))
-	    error(NOT_VAR, "n_reconsult_predicate ", arg1, th);
+	    exception(NOT_VAR, ind, arg1, th);
 
 	lis = reverse(reconsult_list);
 	while (!nullp(lis)) {
@@ -642,9 +643,10 @@ int b_longnum(int arglist, int rest, int th)
 
 int b_findatom(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, arg3, res;
+    int n, ind, arg1, arg2, arg3, res;
 
     n = length(arglist);
+	ind = makeind("findatom",n,th);
     if (n == 3) {
 	arg1 = deref(car(arglist), th);	//atom
 	arg2 = deref(cadr(arglist), th);	//property
@@ -664,7 +666,7 @@ int b_findatom(int arglist, int rest, int th)
 	else if (eqlp(arg2, makeconst("userop")))
 	    res = findatom(arg1, USER);
 	else
-	    error(ILLEGAL_ARGS, "findatom ", arg2, th);
+	    exception(ILLEGAL_ARGS, ind, arg2, th);
 
 	if (unify(arg3, makeint(res), th) == YES)
 	    return (prove_all(rest, sp[th], th));
@@ -740,19 +742,20 @@ int b_get_execute(int arglist, int rest, int th)
 
 int b_heapdump(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind("heapdump",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (!integerp(arg1))
-	    error(NOT_INT, "heapd ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (!integerp(arg2))
-	    error(NOT_INT, "heapd ", arg2, th);
+	    exception(NOT_INT, ind, arg2, th);
 	if (greaterp(arg1, arg2))
-	    error(WRONG_ARGS, "heapd ", wlist2(arg1, arg2, th), th);
+	    exception(ILLEGAL_ARGS, ind, wlist2(arg1, arg2, th), th);
 
 	heapdump(get_int(arg1), get_int(arg2));
 	return (prove_all(rest, sp[th], th));
@@ -762,16 +765,17 @@ int b_heapdump(int arglist, int rest, int th)
 
 int b_existerrors(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, res;
+    int n, ind, arg1, arg2, res;
 
     n = length(arglist);
+	ind = makeind("existerrors",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (arg1 != YES && arg1 != NO && !wide_variable_p(arg1))
-	    error(ILLEGAL_ARGS, "existerrors ", arg1, th);
+	    exception(ILLEGAL_ARGS, ind, arg1, th);
 	if (arg2 != YES && arg2 != NO && !wide_variable_p(arg2))
-	    error(ILLEGAL_ARGS, "existerrors ", arg1, th);
+	    exception(ILLEGAL_ARGS, ind, arg1, th);
 
 	res = unify(arg1, exist_flag, th);
 	exist_flag = arg2;
@@ -948,7 +952,7 @@ int b_pwm_set_mode(int arglist, int rest, int th)
 	else if (arg1 == makeconst("pwm_mode_bal"))
 	    pwmSetMode(PWM_MODE_BAL);
 	else
-	    error(WRONG_ARGS, "pwm_set_mode", arg1, th);
+	    exception(ILLEGAL_ARGS, ind, arg1, th);
 
 	return (prove_all(rest, sp[th], th));
     }
@@ -1015,7 +1019,7 @@ int b_pin_mode(int arglist, int rest, int th)
 	else if (arg2 == makeconst("pwm_output"))
 	    pinMode(x, PWM_OUTPUT);
 	else
-	    error(WRONG_ARGS, "pin_mode", arg2, th);
+		exception(ILLEGAL_ARGS, "pin_mode", arg2, th);
 
 	return (prove_all(rest, sp[th], th));
     }
@@ -1166,7 +1170,7 @@ int b_timer_microseconds(int arglist, int rest, int th)
 	else if (variablep(arg1))
 	    unify(arg1, makeflt(timer), th);
 	else
-	    error(ILLEGAL_ARGS, "timer_microseconds ", arg1, th);
+	    exception(ILLEGAL_ARGS, ind, arg1, th);
 
 	return (prove_all(rest, sp[th], th));
     }

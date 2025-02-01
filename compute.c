@@ -49,7 +49,7 @@ int exact_to_inexact(int x)
     default:
 	return (x);
     }
-    error(OUT_OF_RANGE, "exact_to_inexact", x, 0);
+    exception(SYSTEM_ERROR, makestr("exact_to_inexact"), x, 0);
     return (UNDEF);
 }
 
@@ -641,7 +641,7 @@ int divide(int arg1, int arg2, int th)
 
 	}
     }
-    error(NOT_COMPUTABLE, "/ ", list2(arg1, arg2), th);
+    
     return (UNDEF);
 }
 

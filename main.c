@@ -370,7 +370,7 @@ int main(int argc, char *argv[])
 	    printf("Shutting down the system...\n");
 	    int ret = system("sudo shutdown now");
 	    if (ret == -1)
-		error(SYSTEM_ERROR, "dp_close shatdown ", NIL, 0);
+		exception(SYSTEM_ERROR, makestr("dp_close shatdown"), NIL, 0);
 	}
 	return 0;
     }
@@ -452,10 +452,10 @@ void query(int x, int th)
 	x = makepred(GET_NAME(x));
 
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "?- ", x, th);
+	exception(INSTANTATION_ERR, makestr("?-"), x, th);
 
     if (!callablep(x))
-	error(NOT_CALLABLE, "?- ", x, th);
+	exception(NOT_CALLABLE, makestr("?-"), x, th);
 
     variables[th] = listreverse(unique(varslist(x)));
     res = prove_all(addask(x, th), sp[th], th);
@@ -499,10 +499,10 @@ void query_break(int x, int th)
 	x = makepred(GET_NAME(x));
 
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "?= ", x, th);
+	exception(INSTANTATION_ERR, makestr("?="), x, th);
 
     if (!callablep(x)) {
-	error(NOT_CALLABLE, "?= ", x, th);
+	exception(NOT_CALLABLE, makestr("?="), x, th);
     }
 
     variables_save[th] = variables[th];
@@ -604,7 +604,7 @@ int prove(int goal, int bindings, int rest, int th)
 
 
     if (nest > 40000)
-	error(RESOURCE_ERR, "prove recursion over max", NIL, th);
+	exception(RESOURCE_ERR, NIL, makestr("prove recursion over max"), th);
 
     goal = deref(goal, th);
 
@@ -646,7 +646,7 @@ int prove(int goal, int bindings, int rest, int th)
 
 	if (clauses == NIL) {
 	    if (exist_flag == YES)
-		error(EXISTENCE_ERR, "", goal, th);
+		exception(EXISTENCE_ERR, NIL, goal, th);
 	    else if (exist_flag == NO)
 		return (NO);
 

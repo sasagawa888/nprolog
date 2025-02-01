@@ -88,7 +88,7 @@ void init_parent(void)
     // create socket
     parent_sockfd[0] = socket(AF_INET, SOCK_STREAM, 0);
     if (parent_sockfd[0] < 0) {
-	error(SYSTEM_ERROR, "init parent", NIL, 0);
+	exception(SYSTEM_ERROR, makestr("init parent"), NIL, 0);
     }
     // initialize parent_addr
     memset((char *) &parent_addr, 0, sizeof(parent_addr));
@@ -100,7 +100,7 @@ void init_parent(void)
     if (bind
 	(parent_sockfd[0], (struct sockaddr *) &parent_addr,
 	 sizeof(parent_addr)) < 0) {
-	error(SYSTEM_ERROR, "init parent", NIL, 0);
+	exception(SYSTEM_ERROR, makestr("init parent"), NIL, 0);
     }
 
 }
@@ -111,7 +111,7 @@ void init_child(int n, int x)
     // create socket
     child_sockfd[n] = socket(AF_INET, SOCK_STREAM, 0);
     if (child_sockfd[n] < 0) {
-	error(SYSTEM_ERROR, "dp_create", makeint(n), 0);
+	exception(SYSTEM_ERROR, makestr("dp_create"), makeint(n), 0);
     }
     // initialize child_addr
     memset((char *) &child_addr[n], 0, sizeof(child_addr[n]));
@@ -119,13 +119,13 @@ void init_child(int n, int x)
     child_addr[n].sin_port = htons(PORT);
 
     if (inet_pton(AF_INET, GET_NAME(x), &child_addr[n].sin_addr) < 0)
-	error(SYSTEM_ERROR, "dp_create", x, 0);
+	exception(SYSTEM_ERROR, makestr("dp_create"), x, 0);
 
 
     if (connect
 	(child_sockfd[n], (struct sockaddr *) &child_addr[n],
 	 sizeof(child_addr[n])) < 0) {
-	error(SYSTEM_ERROR, "dp_create", makeint(n), 0);
+	exception(SYSTEM_ERROR, makestr("dp_create"), makeint(n), 0);
     }
 
 }
@@ -146,14 +146,14 @@ int receive_from_parent(void)
 	    accept(parent_sockfd[0], (struct sockaddr *) &parent_addr,
 		   &parent_len);
 	if (parent_sockfd[1] < 0) {
-	    error(SYSTEM_ERROR, "receive from parent", NIL, 0);
+	    exception(SYSTEM_ERROR, makestr("receive from parent"), NIL, 0);
 	}
     }
     // read message from parent
     memset(bridge, 0, sizeof(bridge));
     n = read(parent_sockfd[1], bridge, sizeof(bridge) - 1);
     if (n < 0) {
-	error(SYSTEM_ERROR, "receive from parent", NIL, 0);
+	exception(SYSTEM_ERROR, makestr("receive from parent"), NIL, 0);
     }
     return (makestr(bridge));
 }
@@ -168,7 +168,7 @@ void send_to_parent(int x)
     n = write(parent_sockfd[1], bridge, strlen(bridge));
     memset(bridge, 0, sizeof(bridge));
     if (n < 0) {
-	error(SYSTEM_ERROR, "send to parent", x, 0);
+	exception(SYSTEM_ERROR, makestr("send to parent"), x, 0);
     }
 }
 
@@ -178,7 +178,7 @@ void send_to_parent_buffer(void)
 
     n = write(parent_sockfd[1], bridge, strlen(bridge));
     if (n < 0) {
-	error(SYSTEM_ERROR, "send to parent buffer ", NIL, 0);
+	exception(SYSTEM_ERROR, makestr("send to parent buffer"), NIL, 0);
     }
     memset(bridge, 0, sizeof(bridge));
 }
@@ -192,7 +192,7 @@ void send_to_child(int n, int x)
     m = write(child_sockfd[n], bridge, strlen(bridge));
     memset(bridge, 0, sizeof(bridge));
     if (m < 0) {
-	error(SYSTEM_ERROR, "send to child", NIL, 0);
+	exception(SYSTEM_ERROR, makestr("send to child"), NIL, 0);
     }
 }
 
@@ -206,7 +206,7 @@ int receive_from_child(int n)
     memset(bridge, 0, sizeof(bridge));
     m = read(child_sockfd[n], bridge, sizeof(bridge) - 1);
     if (m < 0) {
-	error(SYSTEM_ERROR, "receive from child", makeint(n), 0);
+	exception(SYSTEM_ERROR, makestr("receive from child"), makeint(n), 0);
     }
 
   retry:
@@ -237,7 +237,7 @@ int receive_from_child(int n)
 	    goto retry;
     } else if (bridge[0] == '\x15') {
 	if (!(child_flag && parent_flag)) {
-	    error(SYSTEM_ERROR, "in child", makeint(n), 0);
+	    exception(SYSTEM_ERROR, makestr("in child"), makeint(n), 0);
 	} else {
 	    memset(sub_buffer1, 0, sizeof(sub_buffer1));
 	    sub_buffer1[0] = '\x15';
@@ -271,7 +271,7 @@ int receive_from_child_or(int n)
 	    bridge[0] = '\x11';
 	    m = write(child_sockfd[i], bridge, strlen(bridge));
 	    if (m < 0) {
-		error(SYSTEM_ERROR, "receive from child", NIL, 0);
+		exception(SYSTEM_ERROR, makestr("receive from child"), NIL, 0);
 	    }
 	    // receive result and ignore
 	    while ((m =
@@ -298,7 +298,7 @@ int receive_from_child_or1(int n)
 	    m = read(child_sockfd[i], bridge, sizeof(bridge));
 	}
 	if (m < 0) {
-	    error(SYSTEM_ERROR, "receive from child", makeint(i), 0);
+	    exception(SYSTEM_ERROR, makestr("receive from child"), makeint(i), 0);
 	} else if (m > 0) {
 	    child_result[i] = receive_from_child_or2(i);
 	}
@@ -356,7 +356,7 @@ int receive_from_child_or2(int n)
 
     } else if (bridge[0] == '\x15') {
 	if (!(child_flag && parent_flag)) {
-	    error(SYSTEM_ERROR, "in child", makeint(n), 0);
+	    exception(SYSTEM_ERROR, makestr("in child"), makeint(n), 0);
 	} else {
 	    memset(sub_buffer1, 0, sizeof(sub_buffer1));
 	    sub_buffer1[0] = '\x15';
@@ -443,17 +443,17 @@ void init_receiver(void)
 
 int b_dp_create(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
-
+	ind = makeind("dp_create",n,th);
     if (n == 1) {
 	parent_flag = 1;
 	child_num = 0;
 	arg1 = car(arglist);
 	while (!nullp(arg1)) {
 	    if (!atomp(car(arg1)))
-		error(NOT_ATOM, "dp_create", arg1, th);
+		exception(NOT_ATOM, ind, arg1, th);
 
 	    init_child(child_num, car(arg1));
 	    arg1 = cdr(arg1);
@@ -461,16 +461,17 @@ int b_dp_create(int arglist, int rest, int th)
 	}
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "dp_create ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 // close all distributed child 
 int b_dp_close(int arglist, int rest, int th)
 {
-    int n, i, exp;
+    int n, ind, i, exp;
 
     n = length(arglist);
+	ind = makeind("dp_close",n,th);
     if (n == 0) {
 
 	if (parent_flag) {
@@ -498,7 +499,7 @@ int b_dp_close(int arglist, int rest, int th)
 	parent_flag = 0;
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "dp_close ", arglist, 0);
+    exception(ARITY_ERR, ind, arglist, 0);
     return (NO);
 
 }
@@ -507,14 +508,15 @@ int b_dp_close(int arglist, int rest, int th)
 
 int b_dp_prove(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, res;
+    int n, ind,arg1, arg2, res;
 
     n = length(arglist);
+	ind = makeind("dp_prove",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (GET_INT(arg1) >= child_num || GET_INT(arg1) < 0)
-	    error(WRONG_ARGS, "dp_prove", arg1, th);
+	    exception(RESOURCE_ERR, makestr("dp_prove"), arg1, th);
 
 	send_to_child(GET_INT(arg1), pred_to_str(arg2));
 	res =
@@ -523,25 +525,26 @@ int b_dp_prove(int arglist, int rest, int th)
 	if (prove_all(res, sp[th], th) == YES)
 	    return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "dp_prove ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 // parent Prolog
 int b_dp_transfer(int arglist, int rest, int th)
 {
-    int n, arg1, pred1, pred2, i, m;
+    int n, ind,arg1, pred1, pred2, i, m;
     FILE *file;
 
     n = length(arglist);
+	ind = makeind("dp_transfer",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!atomp(arg1))
-	    error(NOT_STR, "dp_transfer", arg1, th);
+	    exception(NOT_ATOM, ind, arg1, th);
 
 	file = fopen(GET_NAME(arg1), "r");
 	if (!file) {
-	    error(CANT_OPEN, "dp_transfer", arg1, th);
+	    exception(CANT_OPEN, ind, arg1, th);
 	}
 
 	pred1 = list2(makeatom("dp_receive", SYS), arg1);
@@ -555,14 +558,14 @@ int b_dp_transfer(int arglist, int rest, int th)
 			  file)) > 0) {
 		m = write(child_sockfd[i], transfer, bytes_read);
 		if (m < 0) {
-		    error(SYSTEM_ERROR, "dp_transfer", NIL, th);
+		    exception(SYSTEM_ERROR, makestr("dp_transfer"), NIL, th);
 		}
 	    }
 	    memset(transfer, 0, sizeof(transfer));
 	    transfer[0] = 0x15;
 	    m = write(child_sockfd[i], transfer, 1);
 	    if (m < 0) {
-		error(SYSTEM_ERROR, "dp_transfer", NIL, th);
+		exception(SYSTEM_ERROR, makestr("dp_transfer"), NIL, th);
 	    }
 	    receive_from_child(i);
 	    fseek(file, 0, SEEK_SET);
@@ -575,17 +578,18 @@ int b_dp_transfer(int arglist, int rest, int th)
 	}
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "dp_transfer ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 // child Prolog
 int b_dp_receive(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n,ind, arg1;
     FILE *file;
 
     n = length(arglist);
+	ind = makeind("dp_recieve",n,th);
     if (n == 1) {
 	child_busy_flag = 0;
 	arg1 = car(arglist);
@@ -593,7 +597,7 @@ int b_dp_receive(int arglist, int rest, int th)
 
 	file = fopen(GET_NAME(arg1), "w");
 	if (!file) {
-	    error(CANT_OPEN, "dp_receive", arg1, th);
+	    exception(CANT_OPEN, ind, arg1, th);
 	}
 
 	int bytes_received;
@@ -610,17 +614,20 @@ int b_dp_receive(int arglist, int rest, int th)
 	fclose(file);
 	return (YES);
     }
-    error(ARITY_ERR, "dp_receive ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_dp_consult(int arglist, int rest, int th)
 {
-    int arg1, pred1, pred2, i;
+    int n,ind,arg1, pred1, pred2, i;
 
+	n = length(arglist);
+	ind = makeind("dp_consult",n,th);
+	if(n==1){
     arg1 = car(arglist);
     if (!atomp(arg1))
-	error(NOT_STR, "dp_consult", arg1, th);
+	exception(NOT_ATOM, ind, arg1, th);
 
     pred1 = list2(makeatom("reconsult", SYS), arg1);
     prove_all(pred1, sp[th], th);
@@ -633,19 +640,21 @@ int b_dp_consult(int arglist, int rest, int th)
 	}
     }
     return (YES);
-    error(ARITY_ERR, "dp_consult ", arglist, th);
+	}
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_dp_compile(int arglist, int rest, int th)
 {
-    int n, arg1, pred1, pred2, i;
+    int n, ind,arg1, pred1, pred2, i;
 
     n = length(arglist);
+	ind = makeind("dp_compile",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!atomp(arg1))
-	    error(NOT_STR, "dp_compile", arg1, th);
+	    exception(NOT_ATOM, ind, arg1, th);
 
 	pred1 = list2(makeatom("compile_file", PRED), arg1);
 	prove_all(pred1, sp[th], th);
@@ -659,28 +668,29 @@ int b_dp_compile(int arglist, int rest, int th)
 	}
 	return (YES);
     }
-    error(ARITY_ERR, "dp_compile ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_dp_report(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind,arg1;
     char sub_buffer[STRSIZE];
 
     n = length(arglist);
+	ind = makeind("dp_report",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!stringp(arg1))
-	    error(NOT_STR, "dp_report", arg1, th);
+	    exception(NOT_STR, ind, arg1, th);
 
 	memset(sub_buffer, 0, sizeof(sub_buffer));
 	sprintf(sub_buffer, "\x02%s\x03", GET_NAME(arg1));
 	send_to_parent(makestr(sub_buffer));
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "dp_report ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 

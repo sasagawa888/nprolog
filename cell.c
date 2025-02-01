@@ -100,7 +100,7 @@ void bindsym(int x, int val, int th)
     else if (atom_variable_p(x))
 	SET_CAR(x, val);
     else
-	error(ILLEGAL_ARGS, "bindsym", x, th);
+	exception(SYSTEM_ERROR, makestr("bindsym"), x, th);
 
     push_stack(x, th);
 }
@@ -115,7 +115,7 @@ int findvar(int x, int th)
     else if (atom_variable_p(x))
 	return (GET_CAR(x));
     else
-	error(ILLEGAL_ARGS, "findvar", x, th);
+	exception(SYSTEM_ERROR, makestr("findvar"), x, th);
     return (NIL);
 }
 
@@ -201,7 +201,7 @@ int makevariant(int th)
     addr = ac[th];
     ac[th]++;
     if (ac[th] >= VARIANTMAX)
-	error(VARIANT_OVERF, "makevariant", NIL, th);
+	exception(SYSTEM_ERROR, makestr("makevariant"), NIL, th);
     return (addr);
 }
 
@@ -271,7 +271,7 @@ int makestr(char *name)
     SET_TAG(res, STR);
     str = (char *) malloc(strlen(name) + 1);
     if (str == NULL)
-	error(MALLOC_OVERF, "makestr", NIL, 0);
+	exception(SYSTEM_ERROR, makestr("makestr"), NIL, 0);
     heap[res].name = str;
     strcpy(heap[res].name, name);
     SET_CAR(res, NIL);
@@ -394,7 +394,7 @@ void push_stack(int x, int th)
 {
     stack[sp[th]++][th] = x;
     if (sp[th] >= STACKSIZE)
-	error(STACK_OVERF, NIL, NIL, th);
+	exception(RESOURCE_ERR, NIL, makestr("stacksize"), th);
 }
 
 int pop_stack(int th)

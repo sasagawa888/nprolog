@@ -514,13 +514,13 @@ void unreadc(char c)
 
 #define SETBUF(c) {                        \
 	if(pos >= BUFSIZE-1)                     \
-	error(RESOURCE_ERR, "gettoken ", NIL,0); \
+	exception(RESOURCE_ERR, makestr("gettoken"), NIL,0); \
 	stok.buf[pos++] = c;                   \
 }
 
 #define SETBUFEND(c) {                        \
 	if(pos >= BUFSIZE-1)                     \
-	error(RESOURCE_ERR, "gettoken ", NIL,0); \
+	exception(RESOURCE_ERR, makestr("gettoken"), NIL,0); \
 	stok.buf[pos] = c;                   \
 }
 
@@ -1449,7 +1449,7 @@ int readitem1(int th)
     default:
 	break;
     }
-    error(CANT_READ, stok.buf, NIL, th);
+    exception(SYSTEM_ERROR, makestr(stok.buf), NIL, th);
     return (0);
 }
 
