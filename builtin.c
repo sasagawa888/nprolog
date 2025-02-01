@@ -1257,7 +1257,7 @@ int b_create(int arglist, int rest, int th)
 			   OPL_TEXT, NIL, arg2);
 
 	    if (GET_PORT(stream) == NULL)
-		error(CANT_OPEN, "create ", arg2, th);
+		exception(CANT_OPEN, ind, arg2, th);
 	    unify(arg1, stream, th);
 	    return (prove_all(rest, sp[th], th));
 	}
@@ -1301,7 +1301,7 @@ int b_open(int arglist, int rest, int th)
 			       OPL_TEXT, NIL, arg2);
 
 		if (GET_PORT(stream) == NULL)
-		    error(CANT_OPEN, "open ", arg2, th);
+		    exception(CANT_OPEN, ind, arg2, th);
 		unify(arg1, stream, th);
 		return (prove_all(rest, sp[th], th));
 	    } else if (arg3 == makeconst("r")) {
@@ -1310,7 +1310,7 @@ int b_open(int arglist, int rest, int th)
 			       OPL_TEXT, NIL, arg2);
 
 		if (GET_PORT(stream) == NULL)
-		    error(CANT_OPEN, "open ", arg2, th);
+		    exception(CANT_OPEN, ind, arg2, th);
 		unify(arg1, stream, th);
 		return (prove_all(rest, sp[th], th));
 	    } else if (arg3 == makeconst("rw")) {
@@ -1319,7 +1319,7 @@ int b_open(int arglist, int rest, int th)
 			       OPL_TEXT, NIL, arg2);
 
 		if (GET_PORT(stream) == NULL)
-		    error(CANT_OPEN, "open ", arg2, th);
+		    exception(CANT_OPEN, ind, arg2, th);
 		unify(arg1, stream, th);
 		return (prove_all(rest, sp[th], th));
 	    } else if (arg3 == makeconst("a") || arg3 == makeconst("ra")) {
@@ -1328,7 +1328,7 @@ int b_open(int arglist, int rest, int th)
 			       OPL_TEXT, NIL, arg2);
 
 		if (GET_PORT(stream) == NULL)
-		    error(CANT_OPEN, "open ", arg2, th);
+		    exception(CANT_OPEN, ind, arg2, th);
 		unify(arg1, stream, th);
 		return (prove_all(rest, sp[th], th));
 	    }
@@ -1405,7 +1405,7 @@ int b_see(int arglist, int rest, int th)
 			   NIL, arg1);
 
 	    if (GET_PORT(input_stream) == NULL)
-		error(CANT_OPEN, "see", arg1, th);
+		exception(CANT_OPEN, ind, arg1, th);
 	    return (prove_all(rest, sp[th], th));
 	}
     }
@@ -1472,7 +1472,7 @@ int b_tell(int arglist, int rest, int th)
 			   OPL_TEXT, NIL, arg1);
 
 	    if (GET_PORT(input_stream) == NULL)
-		error(CANT_OPEN, "tell ", arg1, th);
+		exception(CANT_OPEN, ind, arg1, th);
 	    return (prove_all(rest, sp[th], th));
 	}
     }
@@ -1561,7 +1561,7 @@ int b_consult(int arglist, int rest, int th)
 		       NIL, arg1);
 
 	if (GET_PORT(input_stream) == NULL)
-	    error(CANT_OPEN, "consult", arg1, th);
+	    exception(CANT_OPEN, ind, arg1, th);
 
 	//object file ex "foo.o"
 	n = strlen(GET_NAME(arg1));
@@ -1633,7 +1633,7 @@ int b_reconsult(int arglist, int rest, int th)
 		       NIL, arg1);
 
 	if (GET_PORT(input_stream) == NULL)
-	    error(CANT_OPEN, "reconsult", arg1, th);
+	    exception(CANT_OPEN, ind, arg1, th);
 
 	//object file ex "foo.o"
 	n = strlen(GET_NAME(arg1));
@@ -1756,7 +1756,7 @@ int b_save(int arglist, int rest, int th)
 
       save:
 	if (GET_PORT(output_stream) == NULL) {
-	    error(CANT_OPEN, "save ", arg1, th);
+	    exception(CANT_OPEN, ind, arg1, th);
 	}
 	b_listing(NIL, NIL, th);
 	fclose(GET_PORT(output_stream));
@@ -2318,7 +2318,7 @@ int b_ctr_set(int arglist, int rest, int th)
 	if (GET_INT(arg1) > 30 || GET_INT(arg1) < 0)
 	    exception(RESOURCE_ERR, ind, makestr("max_timer"), th);
 	if (!integerp(arg2))
-	    error(NOT_INT, "ctr_set ", arg2, th);
+	    exception(NOT_INT, ind, arg2, th);
 
 	counter[GET_INT(arg1)] = GET_INT(arg2);
 	return (prove_all(rest, sp[th], th));
@@ -2343,7 +2343,7 @@ int b_ctr_dec(int arglist, int rest, int th)
 	if (GET_INT(arg1) > 30 || GET_INT(arg1) < 0)
 	    exception(RESOURCE_ERR, ind, makestr("max_timer"), th);
 	if (!wide_variable_p(arg2))
-	    error(NOT_VAR, "ctr_dec ", arg2, th);
+	    exception(NOT_VAR, ind, arg2, th);
 
 	i = counter[GET_INT(arg1)];
 	counter[GET_INT(arg1)] = i - 1;
@@ -2370,7 +2370,7 @@ int b_ctr_inc(int arglist, int rest, int th)
 	if (GET_INT(arg1) > 30 || GET_INT(arg1) < 0)
 	    exception(RESOURCE_ERR, ind, makestr("max_timer"), th);
 	if (!wide_variable_p(arg2))
-	    error(NOT_VAR, "ctr_inc ", arg2, th);
+	    exception(NOT_VAR, ind, arg2, th);
 
 	i = counter[GET_INT(arg1)];
 	counter[GET_INT(arg1)] = i + 1;

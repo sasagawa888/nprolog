@@ -253,16 +253,22 @@ void exception(int errnum, int ind, int arg, int th)
 	printf(" ");
 	print(arg);
 	break;
-	/*
+
     case CANT_OPEN:
+	bindsym(makevar("%ObjectType"),makeconst("source_sink"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(exsistence_tag,th);
 	ESCFRED;
 	if (fileerr_flag == YES) {
-	    printf("Can't open file %s ", fun);
+	    printf("Can't open file ");
+		print(ind);
+		printf(" ");
 	    if (arg != NIL)
 		print(arg);
 	}
 	break;
-
+	/*
     case FILE_EXIST:
 	ESCFRED;
 	if (fileerr_flag == YES) {
