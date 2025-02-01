@@ -367,7 +367,7 @@ int plus(int arg1, int arg2, int th)
 
 	}
     }
-    error(NOT_COMPUTABLE, "+ ", list2(arg1, arg2), th);
+
     return (UNDEF);
 }
 
@@ -455,7 +455,7 @@ int minus(int arg1, int arg2, int th)
 	    return (minus(arg1, exact_to_inexact(arg2), th));
 	}
     }
-    error(NOT_COMPUTABLE, "- ", list2(arg1, arg2), th);
+    
     return (UNDEF);
 }
 
@@ -558,15 +558,9 @@ int mult(int arg1, int arg2, int th)
 	case BIGX:
 	    return (mult(arg1, exact_to_inexact(arg2), th));
 	}
-	/*
-	   case ARR:
-	   switch(tag2){
-	   case VEC:   return(mat_vec_mult(arg1,arg2));
-	   case ARR:   return(mat_mult(arg1,arg2));
-	   }
-	 */
+	
     }
-    error(NOT_COMPUTABLE, "* ", list2(arg1, arg2), th);
+
     return (UNDEF);
 }
 
@@ -674,7 +668,6 @@ int quotient(int x, int y, int th)
     else if (bignump(x) && bignump(y))
 	return (bigx_div(x, y));
     else
-	error(ILLEGAL_ARGS, "div ", list2(x, y), th);
 
     return (UNDEF);
 }
@@ -703,7 +696,6 @@ int s_remainder(int x, int y, int th)
     } else if (bignump(x) && bignump(y))
 	return (minus(x, mult(quotient(x, y, th), y, th), th));
 
-    error(ILLEGAL_ARGS, "remainder ", cons(x, y), th);
     return (UNDEF);
 }
 
@@ -780,6 +772,5 @@ int absolute(int x, int th)
     } else if (floatp(x)) {
 	return (makeflt(fabs(GET_FLT(x))));
     }
-    error(ILLEGAL_ARGS, "abs ", x, th);
     return (UNDEF);
 }

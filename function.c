@@ -652,15 +652,11 @@ int f_mult(int x, int y, int th)
 int f_divide(int x, int y, int th)
 {
     if (wide_variable_p(x))
-	error(INSTANTATION_ERR, "/ ", x, th);
+	exception(INSTANTATION_ERR, eval_context, x, th);
     if (wide_variable_p(y))
-	error(INSTANTATION_ERR, "/ ", y, th);
-    if (!numberp(x))
-	error(NOT_NUM, "/ ", x, th);
-    if (!numberp(y))
-	error(NOT_NUM, "/ ", y, th);
+	exception(INSTANTATION_ERR, eval_context, y, th);
     if (zerop(y))
-	error(DIV_ZERO, "/", NIL, th);
+	exception(DIV_ZERO, eval_context, NIL, th);
     return (exact_to_inexact(divide(x, y, th)));
 }
 

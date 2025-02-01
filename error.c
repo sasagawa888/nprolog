@@ -92,19 +92,7 @@ void exception(int errnum, int ind, int arg, int th)
 	printf(" ");
 	print(arg);
 	break;
-	/*
-    case ALIAS_EXIST:
-	ESCFRED;
-	printf("Permission error %s ", fun);
-	print(arg);
-	break;
-
-    case STATIC_PROCEDURE:
-	ESCFRED;
-	printf("Static procedure %s ", fun);
-	print(arg);
-	break;
-	*/
+	
     case ILLEGAL_ARGS:
 	bindsym(makevar("%Domain"),makeconst("expected"),th);
 	bindsym(makevar("%Culprit"),arg,th);
@@ -116,29 +104,17 @@ void exception(int errnum, int ind, int arg, int th)
 	printf(" ");
 	print(arg);
 	break;
-	/*
-    case CANT_READ:
-	ESCFRED;
-	printf("Can't read of %s ", fun);
-	break;
-
-    case NOT_NUM:
-	ESCFRED;
-	printf("Not a number %s ", fun);
-	print(arg);
-	break;
-
-    case NOT_COMPUTABLE:
-	ESCFRED;
-	printf("Not computable %s ", fun);
-	print(arg);
-	break;
-
+	
     case DIV_ZERO:
+	bindsym(makevar("%ErrorType"),makeconst("evalution_error"),th);
+    bindsym(makevar("%Culprit"),makeconst("zero_divisor"),th),
+	bindsym(makevar("%Context"),ind,th);
+	throw(evaluation_tag,th);
 	ESCFRED;
-	printf("Divide by zero %s ", fun);
+	printf("Divide by zero ");
+	print(ind);
 	break;
-	*/
+	
     case NOT_INT:
 	bindsym(makevar("%TypeName"),makeconst("integer"),th);
 	bindsym(makevar("%Culprit"),arg,th);
@@ -211,13 +187,7 @@ void exception(int errnum, int ind, int arg, int th)
 	printf(" ");
 	print(arg);
 	break;
-	/*
-    case WRONG_ARGS:
-	ESCFRED;
-	printf("Wrong arguments %s ", fun);
-	print(arg);
-	break;
-	*/
+	
     case PRED_INDICATOR:
 	bindsym(makevar("%TypeName"),makeconst("predicate_indicator"),th);
 	bindsym(makevar("%Culprit"),arg,th);
@@ -268,26 +238,7 @@ void exception(int errnum, int ind, int arg, int th)
 		print(arg);
 	}
 	break;
-	/*
-    case FILE_EXIST:
-	ESCFRED;
-	if (fileerr_flag == YES) {
-	    printf("File not exist %s ", fun);
-	    if (arg != NIL)
-		print(arg);
-	}
-	break;
-
-    case STACK_OVERF:
-	ESCFRED;
-	printf("Stack over flow ");
-	break;
-
-    case VARIANT_OVERF:
-	ESCFRED;
-	printf("Variant over flow ");
-	break;
-	*/
+	
     case SYSTEM_ERROR:
 	bindsym(makevar("%Message"),arg,th);
 	bindsym(makevar("%Context"),ind,th);
@@ -298,24 +249,7 @@ void exception(int errnum, int ind, int arg, int th)
 	printf(" ");
 	print(arg);
 	break;
-	/*
-    case OUT_OF_RANGE:
-	ESCFRED;
-	printf("Out of range %s ", fun);
-	print(arg);
-	break;
-
-    case UNDEF_PRED:
-	ESCFRED;
-	printf("Undefined predicate %s ", fun);
-	break;
-
-
-    case EOF_ERROR:
-	ESCFRED;
-	printf("End of file error %s ", fun);
-	break;
-	*/
+	
     case INSTANTATION_ERR:
 	bindsym(makevar("%Context"),ind,th);
 	throw(instantation_tag,th);
@@ -484,37 +418,7 @@ void exception(int errnum, int ind, int arg, int th)
 	printf(" ");
 	print(arg);
 	break;
-	/*
-    case NOT_ORDER:
-	ESCFRED;
-	printf("Not compare order %s ", fun);
-	print(arg);
-	break;
-
-    case NOT_INPUT_STREAM:
-	ESCFRED;
-	printf("Not input stream %s ", fun);
-	print(arg);
-	break;
-
-    case NOT_OUTPUT_STREAM:
-	ESCFRED;
-	printf("Not output stream %s ", fun);
-	print(arg);
-	break;
-
-    case PAST_EOF_INPUT:
-	ESCFRED;
-	printf("Past EOF %s ", fun);
-	print(arg);
-	break;
-
-    case MODIFY_OPE_ERR:
-	ESCFRED;
-	printf("Modify operator error %s ", fun);
-	print(arg);
-	break;
-	*/
+	
     case EVALUATION_ERR:
 	ESCFRED;
 	printf("Evaluation error ");
@@ -522,30 +426,8 @@ void exception(int errnum, int ind, int arg, int th)
 	printf(" ");
 	print(arg);
 	break;
-    /*
-	case NOT_CHAR_CODE:
-	ESCFRED;
-	printf("Not charactor code %s ", fun);
-	print(arg);
-	break;
-
-    case NOT_OPEN_OPTION:
-	ESCFRED;
-	printf("Not open option %s ", fun);
-	print(arg);
-	break;
-
-    case NOT_TERM:
-	ESCFRED;
-	printf("Not term %s ", fun);
-	print(arg);
-	break;
-
-    case RECORD_OVERF:
-	ESCFRED;
-	printf("recordh tables max over %s ", fun);
-	break;
-	*/
+    
+    
     case NOT_RECORD:
 	bindsym(makevar("%Domain"),makeconst("record"),th);
 	bindsym(makevar("%Culprit"),arg,th);
