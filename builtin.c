@@ -452,9 +452,9 @@ int b_op(int arglist, int rest, int th)
 	} else {
 	    while (!nullp(arg3)) {
 		if (wide_variable_p(car(arg3)))
-		    error(INSTANTATION_ERR, "ope ", car(arg3), th);
+		    exception(INSTANTATION_ERR, ind , car(arg3), th);
 		else if (!atomp(car(arg3)) && !operatorp(car(arg3)))
-		    error(NOT_ATOM, "ope ", car(arg3), th);
+		    exception(NOT_ATOM, ind, car(arg3), th);
 		else if (operatorp(car(arg3)))
 		    defoperator(GET_NAME(arg3), NIL, weight, type, 0);
 		else
@@ -1332,7 +1332,7 @@ int b_open(int arglist, int rest, int th)
 		unify(arg1, stream, th);
 		return (prove_all(rest, sp[th], th));
 	    }
-	    error(NOT_OPEN_OPTION, "open ", arg3, th);
+	    exception(ILLEGAL_ARGS, ind, arg3, th);
 	}
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -1587,9 +1587,6 @@ int b_consult(int arglist, int rest, int th)
 	    if (operationp(clause) && car(clause) == NECK
 		&& length(clause) == 2) {
 		clause = cadr(clause);
-		//if(!builtinp(clause) && !user_operation_p(clause)){
-		//  error(SYNTAX_ERR,"consult",clause);
-		//}
 		prove_all(clause, sp[th], th);
 		goto skip;
 	    }
@@ -1768,7 +1765,7 @@ int b_save(int arglist, int rest, int th)
 
     } else if (n == 0) {
 	if (str == NULL) {
-	    error(ILLEGAL_ARGS, "save ", NIL, th);
+	    exception(ILLEGAL_ARGS, ind, NIL, th);
 	}
 
 	output_stream =
@@ -1881,7 +1878,7 @@ int b_is(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg2))
-	    error(INSTANTATION_ERR, "is ", arg2, th);
+	    exception(INSTANTATION_ERR, ind, arg2, th);
 	
 	eval_context = ind;
 	arg2 = eval(arg2, th);
@@ -1892,126 +1889,119 @@ int b_is(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "is ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_greater(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind(">",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "> ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    error(INSTANTATION_ERR, "> ", arg2, th);
+	    exception(INSTANTATION_ERR, ind, arg2, th);
 
-
+	eval_context = ind;
 	arg1 = eval(arg1, th);
 	arg2 = eval(arg2, th);
-	if (!numberp(arg1))
-	    error(NOT_NUM, "> ", arg1, th);
-	if (!numberp(arg2))
-	    error(NOT_NUM, "> ", arg2, th);
-
+	
 	if (greaterp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "> ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_smaller(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind("<",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "< ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    error(INSTANTATION_ERR, "< ", arg2, th);
+	    exception(INSTANTATION_ERR, ind, arg2, th);
 
-
+	eval_context = ind;
 	arg1 = eval(arg1, th);
 	arg2 = eval(arg2, th);
-	if (!numberp(arg1))
-	    error(NOT_NUM, "< ", arg1, th);
-	if (!numberp(arg2))
-	    error(NOT_NUM, "< ", arg2, th);
+	
 	if (smallerp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "< ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_eqsmaller(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind("=<",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "=< ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    error(INSTANTATION_ERR, "=< ", arg2, th);
-
+	    exception(INSTANTATION_ERR, ind, arg2, th);
+	
+	eval_context = ind;
 	arg1 = eval(arg1, th);
 	arg2 = eval(arg2, th);
-	if (!numberp(arg1))
-	    error(NOT_NUM, "=< ", arg1, th);
-	if (!numberp(arg2))
-	    error(NOT_NUM, "=< ", arg2, th);
+	
 	if (eqsmallerp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "=< ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_eqgreater(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind(">=",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, ">= ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    error(INSTANTATION_ERR, ">= ", arg2, th);
-
+	    exception(INSTANTATION_ERR, ind, arg2, th);
+	
+	eval_context = ind;
 	arg1 = eval(arg1, th);
 	arg2 = eval(arg2, th);
-	if (!numberp(arg1))
-	    error(NOT_NUM, ">= ", arg1, th);
-	if (!numberp(arg2))
-	    error(NOT_NUM, ">= ", arg2, th);
+	
 	if (eqgreaterp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, ">= ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -2037,31 +2027,30 @@ int b_numeq(int arglist, int rest, int th)
 
 int b_notnumeq(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind("=\\=",n,th);
     if (n == 2) {
+	eval_context = ind;
 	arg1 = eval(car(arglist), th);
 	arg2 = eval(cadr(arglist), th);
-	if (!numberp(arg1))
-	    error(NOT_NUM, "=\\= ", arg1, th);
-	if (!numberp(arg2))
-	    error(NOT_NUM, "=\\= ", arg2, th);
-
+	
 	if (!numeqp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "=\\= ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_equalp(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind("==",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2073,15 +2062,16 @@ int b_equalp(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "== ", arglist, th);
+	exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_notequalp(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind("\\==",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2093,15 +2083,16 @@ int b_notequalp(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "\\== ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_eq(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind("eq",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2111,7 +2102,7 @@ int b_eq(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "eq ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -2119,20 +2110,21 @@ int b_eq(int arglist, int rest, int th)
 
 int b_compare(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, arg3;
+    int n, ind, arg1, arg2, arg3;
 
     n = length(arglist);
+	ind = makeind("compare",n,th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 	if (!wide_variable_p(arg1) && !atomp(arg1))
-	    error(NOT_ATOM, "compare ", arg1, th);
+	    exception(NOT_ATOM, ind, arg1, th);
 	if (!wide_variable_p(arg1) &&
 	    !(eqp(arg1, makeatom("<", SYS)) ||
 	      eqp(arg1, makeatom("=", SYS)) ||
 	      eqp(arg1, makeatom(">", SYS))))
-	    error(NOT_ORDER, "compare ", arg1, th);
+	    exception(ILLEGAL_ARGS, ind, arg1, th);
 
 	if (equalp(arg2, arg3)) {
 	    if (unify(arg1, makeatom("=", SYS), th) == YES)
@@ -2146,15 +2138,16 @@ int b_compare(int arglist, int rest, int th)
 	}
 
     }
-    error(ARITY_ERR, "compare ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_atsmaller(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind("@<",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2164,7 +2157,7 @@ int b_atsmaller(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "@< ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -2251,9 +2244,10 @@ int ateqsmaller(int x, int y)
 
 int b_ateqsmaller(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind("@=<",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2263,7 +2257,7 @@ int b_ateqsmaller(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "@=< ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -2271,9 +2265,10 @@ int b_ateqsmaller(int arglist, int rest, int th)
 
 int b_atgreater(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind("@>",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2283,16 +2278,17 @@ int b_atgreater(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "@> ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_ateqgreater(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind("@>=",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2302,24 +2298,25 @@ int b_ateqgreater(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "@>= ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 //timer
 int b_ctr_set(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, ind, arg1, arg2;
 
     n = length(arglist);
+	ind = makeind("ctr_set",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (!integerp(arg1))
-	    error(NOT_INT, "ctr_set ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (GET_INT(arg1) > 30 || GET_INT(arg1) < 0)
-	    error(WRONG_ARGS, "ctr_set ", arg1, th);
+	    exception(RESOURCE_ERR, ind, makestr("max_timer"), th);
 	if (!integerp(arg2))
 	    error(NOT_INT, "ctr_set ", arg2, th);
 
@@ -2327,23 +2324,24 @@ int b_ctr_set(int arglist, int rest, int th)
 	return (prove_all(rest, sp[th], th));
 
     }
-    error(ARITY_ERR, "ctr_set ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_ctr_dec(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, i;
+    int n, ind, arg1, arg2, i;
 
     n = length(arglist);
+	ind = makeind("ctr_dec",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (!integerp(arg1))
-	    error(NOT_INT, "ctr_dec ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (GET_INT(arg1) > 30 || GET_INT(arg1) < 0)
-	    error(WRONG_ARGS, "ctr_dec ", arg1, th);
+	    exception(RESOURCE_ERR, ind, makestr("max_timer"), th);
 	if (!wide_variable_p(arg2))
 	    error(NOT_VAR, "ctr_dec ", arg2, th);
 
@@ -2353,23 +2351,24 @@ int b_ctr_dec(int arglist, int rest, int th)
 	    return (prove_all(rest, sp[th], th));
 
     }
-    error(ARITY_ERR, "ctr_dec ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_ctr_inc(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, i;
+    int n, ind, arg1, arg2, i;
 
     n = length(arglist);
+	ind = makeind("ctr_inc",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (!integerp(arg1))
-	    error(NOT_INT, "ctr_inc ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (GET_INT(arg1) > 30 || GET_INT(arg1) < 0)
-	    error(WRONG_ARGS, "ctr_inc ", arg1, th);
+	    exception(RESOURCE_ERR, ind, makestr("max_timer"), th);
 	if (!wide_variable_p(arg2))
 	    error(NOT_VAR, "ctr_inc ", arg2, th);
 
@@ -2379,84 +2378,89 @@ int b_ctr_inc(int arglist, int rest, int th)
 	    return (prove_all(rest, sp[th], th));
 
     }
-    error(ARITY_ERR, "ctr_inc ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_ctr_is(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, i;
+    int n, ind, arg1, arg2, i;
 
     n = length(arglist);
+	ind = makeind("ctr_is",n,th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (!integerp(arg1))
-	    error(NOT_INT, "ctr_is ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (GET_INT(arg1) > 30 || GET_INT(arg1) < 0)
-	    error(WRONG_ARGS, "str_is ", arg1, th);
+	    exception(RESOURCE_ERR, ind, makestr("max_timer"), th);
 	if (!wide_variable_p(arg2))
-	    error(NOT_VAR, "ctr_is ", arg2, th);
+	    exception(NOT_VAR, ind, arg2, th);
 
 	i = counter[GET_INT(arg1)];
 	if (unify(arg2, makeint(i), th) == YES)
 	    return (prove_all(rest, sp[th], th));
 
     }
-    error(ARITY_ERR, "str_is ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 //true fail
 int b_fail(int arglist, int rest, int th)
 {
-    int n;
+    int n,ind;
 
     n = length(arglist);
+	ind = makeind("fail",n,th);
     if (n == 0) {
 	return (NO);
     }
+	exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_call(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("call",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "call ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 
 	if (!callablep(arg1))
-	    error(NOT_CALLABLE, "call ", arg1, th);
+	    exception(NOT_CALLABLE, ind, arg1, th);
 
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "call ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 
 	if (atom_constant_p(arg1))
 	    arg1 = makeatom(GET_NAME(arg1), PRED);
 
 	return (prove_all(addtail_body(rest, arg1, th), sp[th], th));
     }
-    error(ARITY_ERR, "call ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_not(int arglist, int rest, int th)
 {
-    int n, arg1, res;
+    int n, ind, arg1, res;
 
     n = length(arglist);
+	ind = makeind("not",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "not ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!callablep(arg1))
-	    error(NOT_CALLABLE, "not ", arg1, th);
+	    exception(NOT_CALLABLE, ind, arg1, th);
 
 	res = prove_all(arg1, sp[th], th);
 	if (res == YES)
@@ -2464,18 +2468,20 @@ int b_not(int arglist, int rest, int th)
 	else
 	    return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "not ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_true(int arglist, int rest, int th)
 {
-    int n;
+    int n,ind;
 
     n = length(arglist);
+	ind = makeind("true",n,th);
     if (n == 0) {
 	return (prove_all(rest, sp[th], th));
     }
+	exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -2653,29 +2659,30 @@ int b_retract(int arglist, int rest, int th)
 
 int b_abolish(int arglist, int rest, int th)
 {
-    int n, arg1, pred, clause, arity, clauses, new_clauses;
+    int n, ind, arg1, pred, clause, arity, clauses, new_clauses;
 
     clause = clauses = NIL;
     n = length(arglist);
+	ind = makeind("abolish",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "abolish ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (structurep(arg1) &&
 	    (wide_variable_p(cadr(arg1)) || wide_variable_p(caddr(arg1))))
-	    error(INSTANTATION_ERR, "abolish ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (car(arg1) != makeatom("/", OPE))
-	    error(PRED_INDICATOR, "abolish ", arg1, th);
+	    exception(PRED_INDICATOR, ind, arg1, th);
 	if (builtinp(cadr(arg1)))
-	    error(STATIC_PROCEDURE, "abolish ", arg1, th);
+	    exception(BUILTIN_EXIST, ind, arg1, th);
 	if (!atomp(cadr(arg1)))
-	    error(NOT_ATOM, "abolish ", arg1, th);
+	    exception(NOT_ATOM, ind, arg1, th);
 	if (integerp(eval(caddr(arg1), th))
 	    && GET_INT(eval(caddr(arg1), th)) < 0)
-	    error(LESS_THAN_ZERO, "abolish ", arg1, th);
+	    exception(LESS_THAN_ZERO, ind, arg1, th);
 	if (!integerp(caddr(arg1)))
-	    error(NOT_INT, "abolish ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 
 	pred = makepred(GET_NAME(cadr(arg1)));
 	clauses = GET_CAR(pred);
@@ -2705,27 +2712,28 @@ int b_abolish(int arglist, int rest, int th)
 	    listremove(cadr(arg1), predicates);
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "abolish ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_clause(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, clause, clauses, save1, save2;
+    int n, ind, arg1, arg2, clause, clauses, save1, save2;
 
     n = length(arglist);
+	ind = makeind("clause",n,th);
     if (n == 2) {
 	arg1 = car(arglist);	//head
 	arg2 = cadr(arglist);	//body
 
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "clause ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!atom_predicate_p(arg1) && !predicatep(arg1))
-	    error(NOT_CALLABLE, "clause ", arg1, th);
+	    exception(NOT_CALLABLE, ind, arg1, th);
 	if (builtinp(arg1) || compiledp(arg1))
-	    error(BUILTIN_EXIST, "clause ", arg1, th);
+	    exception(BUILTIN_EXIST, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !callablep(arg2))
-	    error(NOT_CALLABLE, "clause ", arg2, th);
+	    exception(NOT_CALLABLE, ind, arg2, th);
 
 
 	if (atom_predicate_p(arg1))
@@ -2754,26 +2762,27 @@ int b_clause(int arglist, int rest, int th)
 	unbind(save2, th);
 	return (NO);
     }
-    error(ARITY_ERR, "clause ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_nth_char(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, arg3, pos, code;
+    int n, ind, arg1, arg2, arg3, pos, code;
     char str1[STRSIZE], str2[10];
 
     n = length(arglist);
+	ind = makeind("nth_char",n,th);
     if (n == 3) {
 	arg1 = car(arglist);	// Nth
 	arg2 = cadr(arglist);	//string
 	arg3 = caddr(arglist);	//Char
 	if (!integerp(arg1))
-	    error(NOT_INT, "nth_char ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (!stringp(arg2))
-	    error(NOT_STR, "nth_char ", arg2, th);
+	    exception(NOT_STR, ind, arg2, th);
 	if (!wide_variable_p(arg3))
-	    error(NOT_VAR, "nth_char ", arg3, th);
+	    exception(NOT_VAR, ind, arg3, th);
 
 	pos = GET_INT(arg1);
 	strcpy(str1, GET_NAME(arg2));
@@ -2824,7 +2833,7 @@ int b_nth_char(int arglist, int rest, int th)
 	unify(arg3, makeint(code), th);
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "nth_char ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -4356,22 +4365,23 @@ int specp(int x)
 
 int b_current_op(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, arg3, save1, save2, lis, weight, spec, op, w, s, o;
+    int n, ind, arg1, arg2, arg3, save1, save2, lis, weight, spec, op, w, s, o;
 
     n = length(arglist);
+	ind = makeind("current_op",n,th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
 	if (!wide_variable_p(arg1) && !integerp(arg1))
-	    error(NOT_INT, "current_op ", arg1, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (integerp(arg1) && (GET_INT(arg1) < 0 || GET_INT(arg1) > 1200))
 	    error(OPE_PRIORITY_ERR, "current_op ", arg1, th);
 	if (!wide_variable_p(arg2) && !specp(arg2))
 	    error(OPE_SPEC_ERR, "current_op ", arg2, th);
 	if (!wide_variable_p(arg3) && !atomp(arg3))
-	    error(NOT_ATOM, "current_op ", arg3, th);
+	    exception(NOT_ATOM, ind, arg3, th);
 
 
 	/*
@@ -4404,7 +4414,7 @@ int b_current_op(int arglist, int rest, int th)
 	unbind(save2, th);
 	return (NO);
     }
-    error(ARITY_ERR, "current_op ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -4478,11 +4488,12 @@ int b_reset_op(int arglist, int rest, int th)
 
 int o_define(int x, int y, int th)
 {
-    int clause;
-
+    int clause,ind;
+	
+	ind = makeind("assertz",1,th);
     if (!nullp(y)) {
 	if (builtinp(x))
-	    error(BUILTIN_EXIST, "assertz", x, th);
+	    exception(BUILTIN_EXIST, ind, x, th);
 	if (atomp(x))
 	    SET_AUX(x, PRED);
 	clause = list3(NECK, x, y);
@@ -4535,7 +4546,7 @@ int b_gbc(int arglist, int rest, int th)
 	    gbc();
 	    return (prove_all(rest, sp[th], th));
 	} else {
-	    error(WRONG_ARGS, "gc ", arglist, th);
+	    exception(ILLEGAL_ARGS, ind, arglist, th);
 	}
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -4699,7 +4710,7 @@ int b_edit(int arglist, int rest, int th)
 	if (!singlep(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 	if (arg2 != makeatom("r", SIMP) && arg2 != makeatom("c", SIMP))
-	    error(WRONG_ARGS, "edit ", arg2, th);
+	    exception(ILLEGAL_ARGS, ind, arg2, th);
 
 
 	editor = getenv("EDITOR");
@@ -4713,7 +4724,7 @@ int b_edit(int arglist, int rest, int th)
 	}
 	res = system(str);
 	if (res == -1)
-	    error(SYSTEM_ERROR, "edit ", arg1, th);
+	    exception(SYSTEM_ERROR, ind, arg1, th);
 
 	if (arg2 == makeatom("r", SIMP))
 	    b_reconsult(list1(arg1), NIL, th);
@@ -4761,9 +4772,9 @@ int b_syntaxerrors(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (arg1 != YES && arg1 != NO && !wide_variable_p(arg1))
-	    error(ILLEGAL_ARGS, "syntaxerrors ", arg1, th);
+	    exception(ILLEGAL_ARGS, ind, arg1, th);
 	if (arg2 != YES && arg2 != NO && !wide_variable_p(arg2))
-	    error(ILLEGAL_ARGS, "syntaxerrors ", arg1, th);
+	    exception(ILLEGAL_ARGS, ind, arg1, th);
 
 	res = unify(arg1, syntax_flag, th);
 	syntax_flag = arg2;
@@ -4786,9 +4797,9 @@ int b_fileerrors(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (arg1 != YES && arg1 != NO && !wide_variable_p(arg1))
-	    error(ILLEGAL_ARGS, "fileerrors ", arg1, th);
+	    exception(ILLEGAL_ARGS, ind, arg1, th);
 	if (arg2 != YES && arg2 != NO && !wide_variable_p(arg2))
-	    error(ILLEGAL_ARGS, "fileerrors ", arg1, th);
+	    exception(ILLEGAL_ARGS, ind, arg1, th);
 
 	res = unify(arg1, syntax_flag, th);
 	fileerr_flag = arg2;
@@ -5052,7 +5063,7 @@ cursor get_cursor(void)
     buf[i] = '\0';
 
     if (sscanf(buf, "\033[%d;%dR", &row, &col) != 2) {
-	error(SYSTEM_ERROR, "ansi_cpr ", NIL, 0);
+	exception(SYSTEM_ERROR, NIL, makestr("get_cursol"), 0);
     }
     // restore original setting
     reset_input_mode(&original);
@@ -5097,10 +5108,11 @@ int b_ansi_cpr(int arglist, int rest, int th)
 
 int b_ansi_scp(int arglist, int rest, int th)
 {
-    int n;
+    int n,ind;
     cursor position;
 
     n = length(arglist);
+	ind = makeind("ansi_scp",n,th);
     if (n == 0) {
 	position = get_cursor();
 
@@ -5110,7 +5122,7 @@ int b_ansi_scp(int arglist, int rest, int th)
 	cursor_style_store = cursor_style;
 	return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "ansi_scp ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 

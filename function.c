@@ -467,7 +467,7 @@ void init_operator(void)
 //function
 int eval(int x, int th)
 {
-    int function, arg1, arg2, ind,n;
+    int function, arg1, arg2;
     int result[3];
 
     if (nullp(x))
@@ -490,103 +490,93 @@ int eval(int x, int th)
 	else
 	    exception(NOT_FUNCTION, eval_context, x, th);
     } else if (eqlp(car(x), makeatom("abs", FUNC))) {
-	if ((n=length(x)) != 2){
-		ind = makeind("abs",n-1,th);
-	    exception(NOT_FUNCTION, eval_context, ind, th);
-	}
+	if (length(x) != 2)
+	    exception(NOT_FUNCTION, eval_context, x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_abs(arg1, th));
     } else if (eqlp(car(x), makeatom("sin", FUNC))) {
-	if ((n=length(x)) != 2){
-		ind = makeind("sin",n-1,th);
-	    exception(NOT_FUNCTION, eval_context, ind, th);
-	}
+	if (length(x) != 2)
+	    exception(NOT_FUNCTION, eval_context, x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_sin(arg1, th));
     } else if (eqlp(car(x), makeatom("asin", FUNC))) {
-	if ((n=length(x)) != 2){
-		ind = makeind("asin",n-1,th);
-	    exception(NOT_FUNCTION, eval_context, ind, th);
-	}
+	if (length(x) != 2)
+	    exception(NOT_FUNCTION, eval_context, x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_asin(arg1, th));
     } else if (eqlp(car(x), makeatom("cos", FUNC))) {
-	if ((n=length(x)) != 2){
-		ind = makeind("cos",n-1,th);
-	    exception(NOT_FUNCTION, eval_context, ind, th);
-	}
+	if (length(x) != 2)
+	    exception(NOT_FUNCTION, eval_context, x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_cos(arg1, th));
     } else if (eqlp(car(x), makeatom("acos", FUNC))) {
-	if ((n=length(x)) != 2){
-		ind = makeind("acos",n-1,th);
-	    exception(NOT_FUNCTION, eval_context, ind, th);
-	}
+	if (length(x) != 2)
+	    exception(NOT_FUNCTION, eval_context, x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_acos(arg1, th));
     } else if (eqlp(car(x), makeatom("tan", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "tan ", x, th);
+	    exception(NOT_FUNCTION, eval_context, x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_tan(arg1, th));
     } else if (eqlp(car(x), makeatom("atan", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "atan ", x, th);
+	    exception(NOT_FUNCTION, eval_context, x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_atan(arg1, th));
     } else if (eqlp(car(x), makeatom("exp", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "exp ", x, th);
+	    exception(NOT_FUNCTION, eval_context, x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_exp(arg1, th));
     } else if (eqlp(car(x), makeatom("ln", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "ln ", x, th);
+	    exception(NOT_FUNCTION, eval_context, x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_ln(arg1, th));
     } else if (eqlp(car(x), makeatom("log", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "log ", x, th);
+	    exception(NOT_FUNCTION, eval_context, x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_log(arg1, th));
     } else if (eqlp(car(x), makeatom("sqrt", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "sqrt ", x, th);
+	    exception(NOT_FUNCTION, eval_context, x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_sqrt(arg1, th));
     } else if (eqlp(car(x), makeatom("round", FUNC))) {
 	if (length(x) != 3)
-	    error(ARITY_ERR, "round ", x, th);
+	    exception(NOT_FUNCTION, eval_context, x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	arg2 = result[2];
 	return (f_round(arg1, arg2, th));
     } else if (eqlp(car(x), makeatom("integer", SYS))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "integer ", x, th);
+	    exception(NOT_FUNCTION, eval_context, x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_integer(arg1, th));
     } else if (eqlp(car(x), makeatom("float", SYS))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "float ", x, th);
+	    exception(NOT_FUNCTION, eval_context, x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_float(arg1, th));
     } else if (eqlp(car(x), makeatom("randi", FUNC))) {
 	if (length(x) != 2)
-	    error(ARITY_ERR, "randi ", x, th);
+	    exception(NOT_FUNCTION, eval_context, x, th);
 	evalterm(x, result, th);
 	arg1 = result[1];
 	return (f_randi(arg1, th));
