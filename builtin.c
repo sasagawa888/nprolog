@@ -1768,13 +1768,14 @@ int b_save(int arglist, int rest, int th)
 
 int b_directory(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, arg3, arg4, arg5, arg6, save, mode, date, time;
+    int n, ind, arg1, arg2, arg3, arg4, arg5, arg6, save, mode, date, time;
     DIR *dir;
     struct dirent *dp;
     struct stat stat_buf;
     struct tm *t_st;
 
     n = length(arglist);
+	ind = makeind("directory",n,th);
     if (n == 6) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1784,24 +1785,24 @@ int b_directory(int arglist, int rest, int th)
 	arg6 = cadddddr(arglist);
 
 	if (wide_variable_p(arg1))
-	    error(INSTANTATION_ERR, "directory ", arg1, th);
+	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
-	    error(NOT_ATOM, "directory ", arg1, th);
-	if (!wide_variable_p(arg2))
-	    error(NOT_VAR, "directory ", arg2, th);
-	if (!wide_variable_p(arg3))
-	    error(NOT_VAR, "directory ", arg3, th);
+	    exception(NOT_ATOM, ind, arg1, th);
+	if (!wide_variable_p(arg2) && !atomp(arg2))
+	    exception(NOT_ATOM, ind, arg2, th);
+	if (!wide_variable_p(arg3) && !atomp(arg3))
+	    exception(NOT_ATOM, ind, arg3, th);
 	if (!wide_variable_p(arg4))
-	    error(NOT_VAR, "directory ", arg4, th);
+	    exception(NOT_VAR, ind, arg4, th);
 	if (!wide_variable_p(arg5))
-	    error(NOT_VAR, "directory ", arg5, th);
+	    exception(NOT_VAR, ind, arg5, th);
 	if (!wide_variable_p(arg6))
-	    error(NOT_VAR, "directory ", arg6, th);
+	    exception(NOT_VAR, ind, arg6, th);
 
 	save = sp[th];
 	dir = opendir(GET_NAME(arg1));
 	if (dir == NULL)
-	    error(SYSTEM_ERROR, "directory ", NIL, th);
+	    exception(SYSTEM_ERROR, ind, makestr("opendir"), th);
 
 	dp = readdir(dir);
 	while (dp != NULL) {
@@ -1833,7 +1834,7 @@ int b_directory(int arglist, int rest, int th)
 		unify(arg6, makeint(stat_buf.st_size), th);
 		return (prove_all(rest, sp[th], th));
 	    } else
-		error(SYSTEM_ERROR, "directory ", NIL, th);
+		exception(SYSTEM_ERROR, ind, makestr("readdir"), th);
 
 	    unbind(save, th);
 	    dp = readdir(dir);
@@ -1844,7 +1845,7 @@ int b_directory(int arglist, int rest, int th)
 	unbind(save, th);
 	return (NO);
     }
-    error(ARITY_ERR, "directory ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -3695,30 +3696,32 @@ int b_end_of_file(int arglist, int rest, int th)
 
 int b_halt(int arglist, int rest, int th)
 {
-    int n;
+    int n, ind;
 
     n = length(arglist);
+	ind = makeind("halt",n,th);
     if (n == 0) {
 	if (parent_flag)
-	    error(SYSTEM_ERROR, "Execute dp_close before halting. ", NIL,
+	    exception(SYSTEM_ERROR, ind, makestr("Execute dp_close before halting."),
 		  th);
 
 	printf("- good bye -\n");
 	longjmp(buf, 2);
     }
-    error(ARITY_ERR, "halt ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_abort(int arglist, int rest, int th)
 {
-    int n;
+    int n, ind;
 
     n = length(arglist);
+	ind = makeind("abort",n,th);
     if (n == 0) {
 	longjmp(buf, 1);
     }
-    error(ARITY_ERR, "abort ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -3726,9 +3729,10 @@ int b_abort(int arglist, int rest, int th)
 //check data type
 int b_atom(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("atom",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -3737,15 +3741,16 @@ int b_atom(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "atom ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_integer(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("integer",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (integerp(arg1) || longnump(arg1) || bignump(arg1))
@@ -3753,15 +3758,16 @@ int b_integer(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "integer ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_real(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("real",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (floatp(arg1))
@@ -3769,15 +3775,16 @@ int b_real(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "real ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_number(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("number",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (numberp(arg1))
@@ -3785,21 +3792,22 @@ int b_number(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "number ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_system(int arglist, int rest, int th)
 {
-    int n, arg1, save1, save2, syslist, pred;
+    int n, ind, arg1, save1, save2, syslist, pred;
 
     n = length(arglist);
+	ind = makeind("system",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 
 	if (!wide_variable_p(arg1) && !structurep(arg1))
-	    error(WRONG_ARGS, "system", arg1, th);
+	    exception(NOT_COMPOUND, ind, arg1, th);
 
 	syslist = reverse(builtins);
 	save1 = wp[th];
@@ -3819,15 +3827,16 @@ int b_system(int arglist, int rest, int th)
 	return (NO);
     }
 
-    error(ARITY_ERR, "system ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_var(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("var",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (variablep(arg1))
@@ -3837,15 +3846,16 @@ int b_var(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "var ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_nonvar(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("nonvar",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -3856,15 +3866,16 @@ int b_nonvar(int arglist, int rest, int th)
 	else
 	    return (prove_all(rest, sp[th], th));
     }
-    error(ARITY_ERR, "nonvar ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_atomic(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("atomic",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -3873,15 +3884,16 @@ int b_atomic(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "atomic ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_list(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("list",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (listp(arg1))
@@ -3889,15 +3901,16 @@ int b_list(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "list ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_string(int arglist, int rest, int th)
 {
-    int n, arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
+	ind = makeind("string",n,th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -3906,7 +3919,7 @@ int b_string(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-    error(ARITY_ERR, "string ", arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 

@@ -42,7 +42,9 @@ void init_handler()
     resource_tag = list3(makepred("error"),
 	                     list2(makepred("resource_error"),makevar("%ResourceType")),
 						 makevar("%Context"));
-    system_tag = list2(makepred("system_error"),makevar("%Message"));
+    system_tag = list3(makepred("error"),
+	                  list2(makepred("system_error"),makevar("%Message")),
+					  makevar("%Context"));
     
 }
 
@@ -221,13 +223,19 @@ void exception(int errnum, int ind, int arg, int th)
 	printf(" ");
 	print(arg);
 	break;
-	/*
+	
     case NOT_VAR:
+	bindsym(makevar("%TypeName"),makeconst("variable"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(type_tag,th);
 	ESCFRED;
-	printf("Not a variable %s ", fun);
+	printf("Not a variable ");
+	print(ind);
+	printf(" ");
 	print(arg);
 	break;
-
+	/*
     case CANT_OPEN:
 	ESCFRED;
 	if (fileerr_flag == YES) {
@@ -255,12 +263,18 @@ void exception(int errnum, int ind, int arg, int th)
 	ESCFRED;
 	printf("Variant over flow ");
 	break;
-
+	*/
     case SYSTEM_ERROR:
+	bindsym(makevar("%Message"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(system_tag,th);
 	ESCFRED;
-	printf("System error at %s ", fun);
+	printf("System error at ");
+	print(ind);
+	printf(" ");
+	print(arg);
 	break;
-
+	/*
     case OUT_OF_RANGE:
 	ESCFRED;
 	printf("Out of range %s ", fun);
