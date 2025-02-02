@@ -942,16 +942,15 @@ int f_complement(int x, int y, int th)
     return (makeint(~x));
 }
 
+/* The following function ensures that each argument is a number in eval when executed
+* in the interpreter. However, the function is also called when tail recursion optimization 
+* is applied by the compiler. In that case, eval is not involved, so the check must be
+*  performed dynamically. This is why exception is included.
+*/
 
 int f_abs(int x, int th)
-{
-    return (absolute(x, th));
-}
-
-/* for compiler */
-int c_abs(int x, int th) 
-{
-    if (wide_variable_p(x))
+{	
+	if (wide_variable_p(x))
 	exception(INSTANTATION_ERR, makeind("abs",1,th), x, th);
     if (!numberp(x))
 	exception(NOT_NUM, makeind("abs",1,th), x, th);
@@ -962,12 +961,7 @@ int c_abs(int x, int th)
 
 int f_sin(int x, int th)
 {
-    return (makeflt(sin(GET_FLT(exact_to_inexact(x)))));
-}
-
-int c_sin(int x, int th)
-{
-    if (wide_variable_p(x))
+	if (wide_variable_p(x))
 	exception(INSTANTATION_ERR, makeind("sin",1,th), x, th);
     if (!numberp(x))
 	exception(NOT_NUM, makeind("sin",1,th), x, th);
@@ -978,9 +972,9 @@ int c_sin(int x, int th)
 int f_asin(int x, int th)
 {
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, eval_context, x, th);
+	exception(INSTANTATION_ERR, makeind("asin",1,th), x, th);
     if (!numberp(x))
-	exception(NOT_NUM, eval_context, x, th);
+	exception(NOT_NUM, makeind("asin",1,th), x, th);
 
     return (makeflt(asin(GET_FLT(exact_to_inexact(x)))));
 }
@@ -988,9 +982,9 @@ int f_asin(int x, int th)
 int f_cos(int x, int th)
 {
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, eval_context, x, th);
+	exception(INSTANTATION_ERR, makeind("cos",1,th), x, th);
     if (!numberp(x))
-	exception(NOT_NUM, eval_context, x, th);
+	exception(NOT_NUM, makeind("cos",1,th), x, th);
 
     return (makeflt(cos(GET_FLT(exact_to_inexact(x)))));
 }
@@ -998,9 +992,9 @@ int f_cos(int x, int th)
 int f_acos(int x, int th)
 {
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, eval_context, x, th);
+	exception(INSTANTATION_ERR, makeind("asoc",1,th), x, th);
     if (!numberp(x))
-	exception(NOT_NUM, eval_context, x, th);
+	exception(NOT_NUM, makeind("acos",1,th), x, th);
 
     return (makeflt(acos(GET_FLT(exact_to_inexact(x)))));
 }
@@ -1008,9 +1002,9 @@ int f_acos(int x, int th)
 int f_tan(int x, int th)
 {
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, eval_context, x, th);
+	exception(INSTANTATION_ERR, makeind("tan",1,th), x, th);
     if (!numberp(x))
-	exception(NOT_NUM, eval_context, x, th);
+	exception(NOT_NUM, makeind("tan",1,th), x, th);
 
     return (makeflt(tan(GET_FLT(exact_to_inexact(x)))));
 }
@@ -1018,9 +1012,9 @@ int f_tan(int x, int th)
 int f_atan(int x, int th)
 {
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, eval_context, x, th);
+	exception(INSTANTATION_ERR, makeind("atan",1,th), x, th);
     if (!numberp(x))
-	exception(NOT_NUM, eval_context, x, th);
+	exception(NOT_NUM, makeind("atan",1,th), x, th);
 
     return (makeflt(atan(GET_FLT(exact_to_inexact(x)))));
 }
@@ -1028,9 +1022,9 @@ int f_atan(int x, int th)
 int f_exp(int x, int th)
 {
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, eval_context, x, th);
+	exception(INSTANTATION_ERR, makeind("exp",1,th), x, th);
     if (!numberp(x))
-	exception(NOT_NUM, eval_context, x, th);
+	exception(NOT_NUM, makeind("exp",1,th), x, th);
 
     return (makeflt(exp(GET_FLT(exact_to_inexact(x)))));
 }
@@ -1038,11 +1032,11 @@ int f_exp(int x, int th)
 int f_ln(int x, int th)
 {
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, eval_context, x, th);
+	exception(INSTANTATION_ERR, makeind("ln",1,th), x, th);
     if (!numberp(x))
-	exception(NOT_NUM, eval_context, x, th);
+	exception(NOT_NUM, makeind("ln",1,th), x, th);
     if (zerop(x) || negativep(x))
-	exception(EVALUATION_ERR, eval_context, x, th);
+	exception(EVALUATION_ERR, makeind("ln",1,th), x, th);
 
     return (makeflt(log(GET_FLT(exact_to_inexact(x)))));
 }
@@ -1051,11 +1045,11 @@ int f_ln(int x, int th)
 int f_log(int x, int th)
 {
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, eval_context, x, th);
+	exception(INSTANTATION_ERR, makeind("ln",1,th), x, th);
     if (!numberp(x))
-	exception(NOT_NUM, eval_context, x, th);
+	exception(NOT_NUM, makeind("ln",1,th), x, th);
     if (zerop(x) || negativep(x))
-	exception(EVALUATION_ERR, eval_context, x, th);
+	exception(EVALUATION_ERR, makeind("ln",1,th), x, th);
 
     return (makeflt(log10(GET_FLT(exact_to_inexact(x)))));
 }
@@ -1066,9 +1060,9 @@ int f_integer(int x, int th)
     double flt;
 
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, eval_context, x, th);
+	exception(INSTANTATION_ERR, makeind("integer",1,th), x, th);
     if (!numberp(x)) {
-	exception(NOT_NUM, eval_context, x, th);
+	exception(NOT_NUM, makeind("integer",1,th), x, th);
     }
 
 
@@ -1089,9 +1083,9 @@ int f_integer(int x, int th)
 int f_float(int x, int th)
 {
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, eval_context, x, th);
+	exception(INSTANTATION_ERR, makeind("float",1,th), x, th);
     if (!numberp(x)) {
-	exception(NOT_NUM, eval_context, x, th);
+	exception(NOT_NUM, makeind("float",1,th), x, th);
     }
 
     if (integerp(x))
@@ -1104,9 +1098,9 @@ int f_float(int x, int th)
 int f_randi(int x, int th)
 {
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, eval_context, x, th);
+	exception(INSTANTATION_ERR, makeind("randi",1,th), x, th);
     if (!integerp(x))
-	exception(NOT_INT, eval_context, x, th);
+	exception(NOT_INT, makeind("randi",1,th), x, th);
 
     x = GET_INT(x);
     return (makeint(rand() & x));
@@ -1117,7 +1111,7 @@ int f_random(int x, int th)
     double d;
 
     if (!nullp(x))
-	exception(WRONG_ARGS, eval_context, x, th);
+	exception(WRONG_ARGS, makeind("random",1,th), x, th);
 
     d = (double) rand() / RAND_MAX;
     return (makeflt(d));
