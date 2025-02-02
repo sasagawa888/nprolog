@@ -1454,7 +1454,7 @@ int b_seen(int arglist, int rest, int th)
 
 int b_tell(int arglist, int rest, int th)
 {
-    int n, ind, arg1;
+    int n, ind, arg1,save;
 
     n = length(arglist);
 	ind = makeind("tell",n,th);
@@ -1470,12 +1470,15 @@ int b_tell(int arglist, int rest, int th)
 	    output_stream = standard_output;
 	    return (prove_all(rest, sp[th], th));
 	} else {
+		save = output_stream;
 	    output_stream =
 		makestream(fopen(GET_NAME(arg1), "w"), NPL_OUTPUT,
 			   NPL_TEXT, NIL, arg1);
 
-	    if (GET_PORT(input_stream) == NULL)
-		exception(CANT_OPEN, ind, arg1, th);
+	    if (GET_PORT(input_stream) == NULL){
+			output_stream = save;
+			exception(CANT_OPEN, ind, arg1, th);
+		}
 	    return (prove_all(rest, sp[th], th));
 	}
     }
