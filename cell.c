@@ -78,13 +78,13 @@ int freshcell(void)
 void init_stream(void)
 {
     standard_input =
-	makestream(stdin, OPL_INPUT, OPL_TEXT, NIL,
+	makestream(stdin, NPL_INPUT, NPL_TEXT, NIL,
 		   makeatom("user_input", SIMP));
     standard_output =
-	makestream(stdout, OPL_OUTPUT, OPL_TEXT, NIL,
+	makestream(stdout, NPL_OUTPUT, NPL_TEXT, NIL,
 		   makeatom("user_output", SIMP));
     standard_error =
-	makestream(stderr, OPL_OUTPUT, OPL_TEXT, NIL,
+	makestream(stderr, NPL_OUTPUT, NPL_TEXT, NIL,
 		   makeatom("error", SIMP));
     makealias("user_input", standard_input, STDIO);
     makealias("user_output", standard_output, STDIO);
@@ -406,7 +406,7 @@ int makesocket(int sockfd, int type, const char *name, int listenfd)
 	exception(SYSTEM_ERR, makestr("makesocket"), NIL, 0);
     heap[addr].name = str;
     strcpy(heap[addr].name, name); /* ip address */
-    SET_AUX(addr, NPL_OPEN);	/* EISL_OPEN/EISL_CLOSE initial value is EISL_OPEN */
+    SET_AUX(addr, NPL_OPEN);	/* NPL_OPEN/NPL_CLOSE initial value is NPL_OPEN */
     return (addr);
 }
 

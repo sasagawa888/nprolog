@@ -1253,8 +1253,8 @@ int b_create(int arglist, int rest, int th)
 	    return (prove_all(rest, sp[th], th));
 	} else {
 	    stream =
-		makestream(fopen(GET_NAME(arg2), "w"), OPL_OUTPUT,
-			   OPL_TEXT, NIL, arg2);
+		makestream(fopen(GET_NAME(arg2), "w"), NPL_OUTPUT,
+			   NPL_TEXT, NIL, arg2);
 
 	    if (GET_PORT(stream) == NULL)
 		exception(CANT_OPEN, ind, arg2, th);
@@ -1297,8 +1297,8 @@ int b_open(int arglist, int rest, int th)
 
 	    if (arg3 == makeconst("w")) {
 		stream =
-		    makestream(fopen(GET_NAME(arg2), "w"), OPL_OUTPUT,
-			       OPL_TEXT, NIL, arg2);
+		    makestream(fopen(GET_NAME(arg2), "w"), NPL_OUTPUT,
+			       NPL_TEXT, NIL, arg2);
 
 		if (GET_PORT(stream) == NULL)
 		    exception(CANT_OPEN, ind, arg2, th);
@@ -1306,8 +1306,8 @@ int b_open(int arglist, int rest, int th)
 		return (prove_all(rest, sp[th], th));
 	    } else if (arg3 == makeconst("r")) {
 		stream =
-		    makestream(fopen(GET_NAME(arg2), "r"), OPL_INPUT,
-			       OPL_TEXT, NIL, arg2);
+		    makestream(fopen(GET_NAME(arg2), "r"), NPL_INPUT,
+			       NPL_TEXT, NIL, arg2);
 
 		if (GET_PORT(stream) == NULL)
 		    exception(CANT_OPEN, ind, arg2, th);
@@ -1315,8 +1315,8 @@ int b_open(int arglist, int rest, int th)
 		return (prove_all(rest, sp[th], th));
 	    } else if (arg3 == makeconst("rw")) {
 		stream =
-		    makestream(fopen(GET_NAME(arg2), "r+"), OPL_INPUT,
-			       OPL_TEXT, NIL, arg2);
+		    makestream(fopen(GET_NAME(arg2), "r+"), NPL_INPUT,
+			       NPL_TEXT, NIL, arg2);
 
 		if (GET_PORT(stream) == NULL)
 		    exception(CANT_OPEN, ind, arg2, th);
@@ -1324,8 +1324,8 @@ int b_open(int arglist, int rest, int th)
 		return (prove_all(rest, sp[th], th));
 	    } else if (arg3 == makeconst("a") || arg3 == makeconst("ra")) {
 		stream =
-		    makestream(fopen(GET_NAME(arg2), "a+"), OPL_INPUT,
-			       OPL_TEXT, NIL, arg2);
+		    makestream(fopen(GET_NAME(arg2), "a+"), NPL_INPUT,
+			       NPL_TEXT, NIL, arg2);
 
 		if (GET_PORT(stream) == NULL)
 		    exception(CANT_OPEN, ind, arg2, th);
@@ -1401,7 +1401,7 @@ int b_see(int arglist, int rest, int th)
 	    return (prove_all(rest, sp[th], th));
 	} else {
 	    input_stream =
-		makestream(fopen(GET_NAME(arg1), "r"), OPL_INPUT, OPL_TEXT,
+		makestream(fopen(GET_NAME(arg1), "r"), NPL_INPUT, NPL_TEXT,
 			   NIL, arg1);
 
 	    if (GET_PORT(input_stream) == NULL)
@@ -1468,8 +1468,8 @@ int b_tell(int arglist, int rest, int th)
 	    return (prove_all(rest, sp[th], th));
 	} else {
 	    output_stream =
-		makestream(fopen(GET_NAME(arg1), "w"), OPL_OUTPUT,
-			   OPL_TEXT, NIL, arg1);
+		makestream(fopen(GET_NAME(arg1), "w"), NPL_OUTPUT,
+			   NPL_TEXT, NIL, arg1);
 
 	    if (GET_PORT(input_stream) == NULL)
 		exception(CANT_OPEN, ind, arg1, th);
@@ -1557,7 +1557,7 @@ int b_consult(int arglist, int rest, int th)
 	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	save = input_stream;
 	input_stream =
-	    makestream(fopen(GET_NAME(arg1), "r"), OPL_INPUT, OPL_TEXT,
+	    makestream(fopen(GET_NAME(arg1), "r"), NPL_INPUT, NPL_TEXT,
 		       NIL, arg1);
 
 	if (GET_PORT(input_stream) == NULL)
@@ -1629,7 +1629,7 @@ int b_reconsult(int arglist, int rest, int th)
 	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	save = input_stream;
 	input_stream =
-	    makestream(fopen(GET_NAME(arg1), "r"), OPL_INPUT, OPL_TEXT,
+	    makestream(fopen(GET_NAME(arg1), "r"), NPL_INPUT, NPL_TEXT,
 		       NIL, arg1);
 
 	if (GET_PORT(input_stream) == NULL)
@@ -1744,15 +1744,15 @@ int b_save(int arglist, int rest, int th)
 	strcpy(str1, home);
 	strcat(str1, "/nprolog/library/startup.pl");
 	output_stream =
-	    makestream(fopen(str1, "w"), OPL_OUTPUT, OPL_TEXT, NIL, arg1);
+	    makestream(fopen(str1, "w"), NPL_OUTPUT, NPL_TEXT, NIL, arg1);
 	goto save;
     } else if (n == 1) {
 	arg1 = car(arglist);
 	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	strcpy(str, GET_NAME(arg1));
 	output_stream =
-	    makestream(fopen(GET_NAME(arg1), "w"), OPL_OUTPUT,
-		       OPL_TEXT, NIL, arg1);
+	    makestream(fopen(GET_NAME(arg1), "w"), NPL_OUTPUT,
+		       NPL_TEXT, NIL, arg1);
 
       save:
 	if (GET_PORT(output_stream) == NULL) {
@@ -1769,8 +1769,8 @@ int b_save(int arglist, int rest, int th)
 	}
 
 	output_stream =
-	    makestream(fopen(str, "w"), OPL_OUTPUT,
-		       OPL_TEXT, NIL, makeatom(str, SIMP));
+	    makestream(fopen(str, "w"), NPL_OUTPUT,
+		       NPL_TEXT, NIL, makeatom(str, SIMP));
 	b_listing(NIL, NIL, th);
 	fclose(GET_PORT(output_stream));
 	output_stream = standard_output;

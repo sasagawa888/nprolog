@@ -282,12 +282,16 @@ extern int input_stream;
 extern int output_stream;
 extern int error_stream;
 
-//stream type
-#define OPL_OPEN    21
-#define OPL_INPUT   22
-#define OPL_OUTPUT  23
-#define OPL_TEXT    24
-#define OPL_BINARY  25
+
+enum Type {
+    NPL_OPEN,
+    NPL_INPUT,
+    NPL_OUTPUT,
+    NPL_TEXT,  
+    NPL_BINARY,
+	NPL_SOCKET, 
+};
+
 
 //trace mode
 #define OFF     0
@@ -665,9 +669,6 @@ enum Error {
     ARITY_ERR,
 };
 
-enum Option {
-	NPL_OUTPUT_BIN, NPL_OPEN, NPL_CLOSE, NPL_SOCKET, 
-};
 
 double getETime(void);
 int readc(void);
