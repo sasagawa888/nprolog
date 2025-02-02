@@ -1019,7 +1019,7 @@ int b_pin_mode(int arglist, int rest, int th)
 	else if (arg2 == makeconst("pwm_output"))
 	    pinMode(x, PWM_OUTPUT);
 	else
-	    exception(ILLEGAL_ARGS, "pin_mode", arg2, th);
+	    exception(ILLEGAL_ARGS, ind, arg2, th);
 
 	return (prove_all(rest, sp[th], th));
     }
