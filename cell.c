@@ -389,6 +389,28 @@ int makeind(char *pred, int arity, int th)
     return (wlist3(SLASH,makeconst(pred),makeint(arity),th));
 }
 
+
+int makesocket(int sockfd, int type, const char *name, int listenfd)
+{
+    int addr;
+    char *str;
+
+
+    addr = freshcell();
+    SET_TAG(addr, STREAM);
+    SET_SOCKET(addr, sockfd);	/* socket fd */
+    SET_CDR(addr, listenfd);	/* socket when linten */
+    SET_OPT(addr, type);	/* EISL_SOCKET */
+    str = (char *) malloc(strlen(name) + 1);
+    if (str == NULL)
+	exception(SYSTEM_ERROR, makestr("makesocket"), NIL, 0);
+    heap[addr].name = str;
+    strcpy(heap[addr].name, name); /* ip address */
+    SET_AUX(addr, NPL_OPEN);	/* EISL_OPEN/EISL_CLOSE initial value is EISL_OPEN */
+    return (addr);
+}
+
+
 //stack
 void push_stack(int x, int th)
 {

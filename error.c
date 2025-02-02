@@ -334,6 +334,18 @@ void exception(int errnum, int ind, int arg, int th)
 	print(arg);
 	break;
 
+	case NOT_SOCKET:
+	bindsym(makevar("%Domain"),makeconst("socket"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(domain_tag,th);
+	ESCFRED;
+	printf("Not socket ");
+	print(ind);
+	printf(" ");
+	print(arg);
+	break;
+
 	case NOT_FUNCTION:
 	bindsym(makevar("%Domain"),makeconst("evaluable"),th);
 	bindsym(makevar("%Culprit"),arg,th);

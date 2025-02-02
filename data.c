@@ -834,6 +834,14 @@ int structurep(int addr)
 }
 
 
+int socketp(int addr)
+{
+    if (streamp(addr) && GET_AUX(addr) == NPL_SOCKET)
+	return (1);
+    else
+	return (0);
+}
+
 
 // [1,2,3] []
 int listp(int addr)

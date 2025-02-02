@@ -693,7 +693,13 @@ static const int BIGNUM_PARMA = BIGSIZE * 9 / 10; //from 90% to 100% of bigcell 
 #define VARIANT_OVERF       66
 #define ARITY_ERR           67
 #define NOT_FUNCTION        68
+#define NOT_SOCKET          69
 
+enum Option {
+    // *** WARNING: THE FOLLOWING ARE INTERNAL VALUES THAT CLIENTS SHOULD
+    // NOT USE ***
+	NPL_OUTPUT_BIN, NPL_OPEN, NPL_CLOSE, NPL_SOCKET, 
+};
 
 double getETime(void);
 int readc(void);
@@ -784,6 +790,7 @@ int b_char_set(int arglist, int rest, int th);
 int b_clause(int arglist, int rest, int th);
 int b_clause_with_arity(int arglist, int rest, int th);
 int b_close(int arglist, int rest, int th);
+int b_close_socket(int arglist, int rest, int th);
 int b_compare(int arglist, int rest, int th);
 int b_compiler_anoymous(int arglist, int rest, int th);
 int b_compiler_variable(int arglist, int rest, int th);
@@ -793,6 +800,7 @@ int b_consult(int arglist, int rest, int th);
 int b_constant(int arglist, int rest, int th);
 int b_copy_term(int arglist, int rest, int th);
 int b_create(int arglist, int rest, int th);
+int b_create_server_socket(int arglist, int rest, int th);
 int b_ctr_set(int arglist, int rest, int th);
 int b_ctr_dec(int arglist, int rest, int th);
 int b_ctr_inc(int arglist, int rest, int th);
@@ -935,6 +943,7 @@ int b_repeat(int arglist, int rest, int th);
 int b_reset_op(int arglist, int rest, int th);
 int b_retract(int arglist, int rest, int th);
 int b_retrieveh(int arglist, int rest, int th);
+int b_recv_socket(int arglist, int rest, int th);
 int b_reconsult_predicate(int arglist, int rest, int th);
 int b_reconsult_abolish(int arglist, int rest, int th);
 int b_rmdir(int arglist, int rest, int th);
@@ -946,6 +955,7 @@ int b_see(int arglist, int rest, int th);
 int b_seeing(int arglist, int rest, int th);
 int b_seen(int arglist, int rest, int th);
 int b_select(int arglist, int rest, int th);
+int b_send_socket(int arglist, int rest, int th);
 int b_setof(int arglist, int rest, int th);
 int b_set_input(int arglist, int rest, int th);
 int b_set_output(int arglist, int rest, int th);
@@ -1212,6 +1222,7 @@ int makespec(int spec);
 int makestr(char *name);
 int makesys(char *name);
 int makestream(FILE *port, int i_o, int type, int action ,int fname);
+int makesocket(int sockfd, int type, const char *name, int listenfd);
 int makeuser(char *name);
 int makevariant(int th);
 int makevar(char *name);
@@ -1294,6 +1305,7 @@ int singletonp(int x);
 int singleton_list(void);
 int single_operation_p(int x);
 int smallerp(int x1, int x2);
+int socketp(int addr);
 int sort(int x);
 int sortsmaller(int x, int y);
 int sorteqlp(int x, int y);
