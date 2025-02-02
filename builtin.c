@@ -1385,7 +1385,7 @@ int b_close(int arglist, int rest, int th)
 
 int b_see(int arglist, int rest, int th)
 {
-    int n, ind, arg1;
+    int n, ind, arg1,save;
 
     n = length(arglist);
 	ind = makeind("see",n,th);
@@ -1400,12 +1400,15 @@ int b_see(int arglist, int rest, int th)
 	    input_stream = standard_input;
 	    return (prove_all(rest, sp[th], th));
 	} else {
+		save = input_stream;
 	    input_stream =
 		makestream(fopen(GET_NAME(arg1), "r"), NPL_INPUT, NPL_TEXT,
 			   NIL, arg1);
 
-	    if (GET_PORT(input_stream) == NULL)
-		exception(CANT_OPEN, ind, arg1, th);
+	    if (GET_PORT(input_stream) == NULL){
+			input_stream = save;
+			exception(CANT_OPEN, ind, arg1, th);
+		}
 	    return (prove_all(rest, sp[th], th));
 	}
     }

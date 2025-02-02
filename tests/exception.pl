@@ -27,6 +27,10 @@
 
 :- catch(catch(1,2,3),error(type_error(callable,1),catch/3),true).
 
+:- catch(call(1),error(type_error(callable,1),call/1),true).
+
+:- catch(see(foo),error(existence_error(source_sink,foo),see/1),true).
+
 :- catch((X is a),error(type_error(number,a),is/2),true).
 :- catch((X is Y),error(instantiation_error,is/2),true).
 :- catch((X is 1/0),error(evaluation_error(evalution_error,zero_divisor),is/2),true).
