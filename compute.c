@@ -455,7 +455,7 @@ int minus(int arg1, int arg2, int th)
 	    return (minus(arg1, exact_to_inexact(arg2), th));
 	}
     }
-    
+
     return (UNDEF);
 }
 
@@ -558,7 +558,7 @@ int mult(int arg1, int arg2, int th)
 	case BIGX:
 	    return (mult(arg1, exact_to_inexact(arg2), th));
 	}
-	
+
     }
 
     return (UNDEF);
@@ -641,7 +641,7 @@ int divide(int arg1, int arg2, int th)
 
 	}
     }
-    
+
     return (UNDEF);
 }
 
@@ -668,8 +668,7 @@ int quotient(int x, int y, int th)
     else if (bignump(x) && bignump(y))
 	return (bigx_div(x, y));
     else
-
-    return (UNDEF);
+	return (UNDEF);
 }
 
 int s_remainder(int x, int y, int th)

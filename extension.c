@@ -11,10 +11,10 @@
 
 int b_reconsult_predicate(int arglist, int rest, int th)
 {
-    int n, ind,arg1, lis, save1;
+    int n, ind, arg1, lis, save1;
 
     n = length(arglist);
-	ind = makeind("reconsult_predicate",n,th);
+    ind = makeind("reconsult_predicate", n, th);
     if (n == 1) {
 	save1 = sp[th];
 	arg1 = deref(car(arglist), th);
@@ -468,7 +468,7 @@ int b_clause_with_arity(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, l, clause, clauses, res;
 
     n = length(arglist);
-	ind = makeind("clause_with_arity",n,th);
+    ind = makeind("clause_with_arity", n, th);
     if (n == 3) {
 	arg1 = deref(car(arglist), th);
 	arg2 = deref(cadr(arglist), th);
@@ -646,7 +646,7 @@ int b_findatom(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, res;
 
     n = length(arglist);
-	ind = makeind("findatom",n,th);
+    ind = makeind("findatom", n, th);
     if (n == 3) {
 	arg1 = deref(car(arglist), th);	//atom
 	arg2 = deref(cadr(arglist), th);	//property
@@ -745,7 +745,7 @@ int b_heapdump(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("heapdump",n,th);
+    ind = makeind("heapdump", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -768,7 +768,7 @@ int b_existerrors(int arglist, int rest, int th)
     int n, ind, arg1, arg2, res;
 
     n = length(arglist);
-	ind = makeind("existerrors",n,th);
+    ind = makeind("existerrors", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -901,10 +901,10 @@ int exec(int goal, int bindings, int rest, int th)
 #ifdef __arm__
 int b_wiringpi_setup_gpio(int arglist, int rest, int th)
 {
-    int n,ind;
+    int n, ind;
 
     n = length(arglist);
-	ind = makeind("wiringpi_setup_gpio"n,th);
+    ind = makeind("wiringpi_setup_gpio" n, th);
     if (n == th) {
 	wiringPiSetupGpio();
 	return (prove_all(rest, sp[th], th));
@@ -918,7 +918,7 @@ int b_wiringpi_spi_setup_ch_speed(int arglist, int rest, int th)
     int n, ind, arg1, arg2, x, y;
 
     n = length(arglist);
-	ind = makeind("wiringpi_spi_setup_ch_spee",n,th);
+    ind = makeind("wiringpi_spi_setup_ch_spee", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -943,7 +943,7 @@ int b_pwm_set_mode(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("pwm_mode_ms",n,th);
+    ind = makeind("pwm_mode_ms", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -965,7 +965,7 @@ int b_pwm_set_range(int arglist, int rest, int th)
     int n, ind, arg1, x;
 
     n = length(arglist);
-	ind = makeind("pwm_set_range",n,th);
+    ind = makeind("pwm_set_range", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
@@ -984,7 +984,7 @@ int b_pwm_set_clock(int arglist, int rest, int th)
     int n, ind, arg1, x;
 
     n = length(arglist);
-	ind = makeind("pwm_set_clock",n,th);
+    ind = makeind("pwm_set_clock", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
@@ -1004,7 +1004,7 @@ int b_pin_mode(int arglist, int rest, int th)
 
 
     n = length(arglist);
-	ind = makeind("pin_mode",n,th);
+    ind = makeind("pin_mode", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1019,7 +1019,7 @@ int b_pin_mode(int arglist, int rest, int th)
 	else if (arg2 == makeconst("pwm_output"))
 	    pinMode(x, PWM_OUTPUT);
 	else
-		exception(ILLEGAL_ARGS, "pin_mode", arg2, th);
+	    exception(ILLEGAL_ARGS, "pin_mode", arg2, th);
 
 	return (prove_all(rest, sp[th], th));
     }
@@ -1032,7 +1032,7 @@ int b_digital_write(int arglist, int rest, int th)
     int n, ind, arg1, arg2, x, y;
 
     n = length(arglist);
-	ind = makeind("digital_wri",n,th);
+    ind = makeind("digital_wri", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1055,7 +1055,7 @@ int b_digital_write_byte(int arglist, int rest, int th)
     int n, ind, arg1, x;
 
     n = length(arglist);
-	ind = makeind("digital_write_byte",n,th);
+    ind = makeind("digital_write_byte", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
@@ -1065,7 +1065,7 @@ int b_digital_write_byte(int arglist, int rest, int th)
 	digitalWriteByte(x);
 	return (prove_all(rest, sp[th], th));
     }
-    exception(ARITY_ERR,  ind, arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -1075,7 +1075,7 @@ int b_pull_up_dn_control(int arglist, int rest, int th)
 
 
     n = length(arglist);
-	ind = makeind("pull_up_dn_contr",n,th);
+    ind = makeind("pull_up_dn_contr", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1098,7 +1098,7 @@ int b_digital_read(int arglist, int rest, int th)
     int n, ind, arg1, arg2, x, res;
 
     n = length(arglist);
-	ind = makeind("digital_read",n,th);
+    ind = makeind("digital_read", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1121,7 +1121,7 @@ int b_delay(int arglist, int rest, int th)
     int n, ind, arg1, x;
 
     n = length(arglist);
-	ind = makeind("delay",n,th);
+    ind = makeind("delay", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
@@ -1140,7 +1140,7 @@ int b_delay_microseconds(int arglist, int rest, int th)
     int n, ind, arg1, x;
 
     n = length(arglist);
-	ind = makeind("delay_microseconds",n,th);
+    ind = makeind("delay_microseconds", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
@@ -1159,7 +1159,7 @@ int b_timer_microseconds(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("timer_microseconds",n,th);
+    ind = makeind("timer_microseconds", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 

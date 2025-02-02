@@ -86,7 +86,7 @@ int consistency_tag;
 int resource_tag;
 int system_tag;
 
-    
+
 //------pointer----
 int hp;				//heap pointer
 int sp[THREADSIZE];		//stack pointer
@@ -236,7 +236,7 @@ int main(int argc, char *argv[])
     init_builtin();
     init_operator();
     init_stream();
-	init_handler();
+    init_handler();
     ioctl(0, TIOCGWINSZ, &w);
     ed_hight = w.ws_row;
     ed_width = w.ws_col;
@@ -250,7 +250,7 @@ int main(int argc, char *argv[])
     int ret = setjmp(buf);
     if (!init_flag)
 	goto repl;
-	
+
     home = getenv("HOME");
     strcpy(str, home);
     strcat(str, "/nprolog/library/dcg.pl");
@@ -375,7 +375,8 @@ int main(int argc, char *argv[])
 	    printf("Shutting down the system...\n");
 	    int ret = system("sudo shutdown now");
 	    if (ret == -1)
-		exception(SYSTEM_ERR, makestr("dp_close shatdown"), NIL, 0);
+		exception(SYSTEM_ERR, makestr("dp_close shatdown"), NIL,
+			  0);
 	}
 	return 0;
     }
@@ -609,7 +610,8 @@ int prove(int goal, int bindings, int rest, int th)
 
 
     if (nest > 40000)
-	exception(RESOURCE_ERR, NIL, makestr("prove recursion over max"), th);
+	exception(RESOURCE_ERR, NIL, makestr("prove recursion over max"),
+		  th);
 
     goal = deref(goal, th);
 

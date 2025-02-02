@@ -18,7 +18,7 @@ int b_atom_concat(int arglist, int rest, int th)
     char str1[STRSIZE];
 
     n = length(arglist);
-	ind = makeind("atom_concat",n,th);
+    ind = makeind("atom_concat", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -50,11 +50,11 @@ int b_atom_concat(int arglist, int rest, int th)
 
 int b_select(int arglist, int rest, int th)
 {
-    int arg1, arg2, arg3, varYs, varY, varZs, varX, varXs, n, ind, body, save1,
-	save2;
+    int arg1, arg2, arg3, varYs, varY, varZs, varX, varXs, n, ind, body,
+	save1, save2;
     save2 = sp[th];
     n = length(arglist);
-	ind = makeind("select",n,th);
+    ind = makeind("select", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -107,7 +107,7 @@ int b_succ(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("succ",n,th);
+    ind = makeind("succ", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -138,7 +138,7 @@ int b_succ(int arglist, int rest, int th)
 		    return (NO);
 	    }
 	}
-	return(NO);
+	return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -147,11 +147,12 @@ int b_succ(int arglist, int rest, int th)
 
 int b_maplist(int arglist, int rest, int th)
 {
-    int arg1, arg2, varE, varEs, varP, n,ind, pred, arg, body, save1, save2;
+    int arg1, arg2, varE, varEs, varP, n, ind, pred, arg, body, save1,
+	save2;
     save2 = sp[th];
     pred = NIL;
     n = length(arglist);
-	ind = makeind("maplist",n,th);
+    ind = makeind("maplist", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -205,7 +206,7 @@ int b_once(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("once",n,th);
+    ind = makeind("once", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -233,7 +234,7 @@ int b_compound(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("compound",n,th);
+    ind = makeind("compound", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (compoundp(arg1))
@@ -250,7 +251,7 @@ int b_ground(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("ground",n,th);
+    ind = makeind("ground", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -270,7 +271,7 @@ int b_member(int arglist, int rest, int th)
     save2 = sp[th];
     res = NIL;
     n = length(arglist);
-	ind = makeind("member",n,th);
+    ind = makeind("member", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -315,12 +316,12 @@ int b_member(int arglist, int rest, int th)
 
 int b_append(int arglist, int rest, int th)
 {
-    int n,ind, arg1, arg2, arg3, x, ls, ys, zs, save1, save2, body;
+    int n, ind, arg1, arg2, arg3, x, ls, ys, zs, save1, save2, body;
 
     save2 = sp[th];
     body = NIL;
     n = length(arglist);
-	ind = makeind("append",n,th);
+    ind = makeind("append", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -364,10 +365,11 @@ int b_append(int arglist, int rest, int th)
 
 int b_between(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2, arg3, save1, save2, save3, low, high, betweenval;
+    int n, ind, arg1, arg2, arg3, save1, save2, save3, low, high,
+	betweenval;
 
     n = length(arglist);
-	ind = makeind("between",n,th);
+    ind = makeind("between", n, th);
     if (n == 3) {
 	arg1 = car(arglist);	//low
 	arg2 = cadr(arglist);	//high
@@ -421,10 +423,11 @@ int b_between(int arglist, int rest, int th)
 
 int b_bagof(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2, arg3, save1, save2, free, vars, nonfree, goal, lis;
+    int n, ind, arg1, arg2, arg3, save1, save2, free, vars, nonfree, goal,
+	lis;
 
     n = length(arglist);
-	ind = makeind("bagof",n,th);
+    ind = makeind("bagof", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -462,10 +465,11 @@ int b_bagof(int arglist, int rest, int th)
 
 int b_setof(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2, arg3, save1, save2, free, vars, nonfree, goal, lis;
+    int n, ind, arg1, arg2, arg3, save1, save2, free, vars, nonfree, goal,
+	lis;
 
     n = length(arglist);
-	ind = makeind("setof",n,th);
+    ind = makeind("setof", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -505,7 +509,7 @@ int b_findall(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, save1, save2, goal;
 
     n = length(arglist);
-	ind = makeind("findall",n,th);
+    ind = makeind("findall", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -646,7 +650,7 @@ int b_atom_length(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("atom_length",n,th);
+    ind = makeind("atom_length", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -671,7 +675,7 @@ int b_get_code(int arglist, int rest, int th)
     char str[10];
 
     n = length(arglist);
-	ind = makeind("get_code",n,th);
+    ind = makeind("get_code", n, th);
     if (n == 1) {
 	arg1 = input_stream;
 	arg2 = car(arglist);
@@ -749,7 +753,7 @@ int b_get_char(int arglist, int rest, int th)
     char str[10];
 
     n = length(arglist);
-	ind = makeind("get_char",n,th);
+    ind = makeind("get_char", n, th);
     if (n == 1) {
 	arg1 = input_stream;
 	arg2 = car(arglist);
@@ -802,7 +806,7 @@ int b_get_char(int arglist, int rest, int th)
 	    str[5] = getc(GET_PORT(arg1));
 	    str[6] = NUL;
 	} else {
-		str[1] = NUL;
+	    str[1] = NUL;
 	}
 	res = NIL;
 
@@ -823,7 +827,7 @@ int b_get_byte(int arglist, int rest, int th)
     int n, ind, arg1, arg2, c, res;
 
     n = length(arglist);
-	ind = makeind("get_byte",n,th);
+    ind = makeind("get_byte", n, th);
     if (n == 1) {
 	arg1 = input_stream;
 	arg2 = car(arglist);
@@ -859,7 +863,7 @@ int b_put_char(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("put_char",n,th);
+    ind = makeind("put_char", n, th);
     if (n == 1) {
 	arg1 = output_stream;
 	arg2 = car(arglist);
@@ -869,14 +873,14 @@ int b_put_char(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
       put:
-	if(wide_variable_p(arg1))
-	exception(INSTANTATION_ERR, ind,arg1,th);
-	if(wide_variable_p(arg2))
-	exception(INSTANTATION_ERR,ind,arg2,th);
+	if (wide_variable_p(arg1))
+	    exception(INSTANTATION_ERR, ind, arg1, th);
+	if (wide_variable_p(arg2))
+	    exception(INSTANTATION_ERR, ind, arg2, th);
 	if (!wide_variable_p(arg1) && !characterp(arg2))
 	    exception(NOT_CHAR, ind, arg2, th);
-	if(!streamp(arg1) && !aliasp(arg1))
-	exception(NOT_STREAM,ind, arg1,th);
+	if (!streamp(arg1) && !aliasp(arg1))
+	    exception(NOT_STREAM, ind, arg1, th);
 
 	fprintf(GET_PORT(arg1), "%s", GET_NAME(arg2));
 	return (prove_all(rest, sp[th], th));
@@ -891,7 +895,7 @@ int b_peek_code(int arglist, int rest, int th)
     char str[10];
 
     n = length(arglist);
-	ind = makeind("peek_code",n,th);
+    ind = makeind("peek_code", n, th);
     if (n == 1) {
 	arg1 = input_stream;
 	arg2 = car(arglist);
@@ -911,56 +915,56 @@ int b_peek_code(int arglist, int rest, int th)
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
 	c = getc(GET_PORT(arg1));
-	ungetc(c,GET_PORT(arg1));
+	ungetc(c, GET_PORT(arg1));
 
 	if (isUni2(c)) {
 	    str[0] = c;
 	    str[1] = getc(GET_PORT(arg1));
-		ungetc(str[1],GET_PORT(arg1));
+	    ungetc(str[1], GET_PORT(arg1));
 	    str[2] = NUL;
 	    i = utf8_to_ucs4(str);
 	} else if (isUni3(c)) {
 	    str[0] = c;
 	    str[1] = getc(GET_PORT(arg1));
-		ungetc(str[1],GET_PORT(arg1));
+	    ungetc(str[1], GET_PORT(arg1));
 	    str[2] = getc(GET_PORT(arg1));
-		ungetc(str[2],GET_PORT(arg1));
+	    ungetc(str[2], GET_PORT(arg1));
 	    str[3] = NUL;
 	    i = utf8_to_ucs4(str);
 	} else if (isUni4(c)) {
 	    str[0] = c;
 	    str[1] = getc(GET_PORT(arg1));
-		ungetc(str[1],GET_PORT(arg1));
+	    ungetc(str[1], GET_PORT(arg1));
 	    str[2] = getc(GET_PORT(arg1));
-		ungetc(str[2],GET_PORT(arg1));
+	    ungetc(str[2], GET_PORT(arg1));
 	    str[3] = getc(GET_PORT(arg1));
-		ungetc(str[3],GET_PORT(arg1));
+	    ungetc(str[3], GET_PORT(arg1));
 	    str[4] = NUL;
 	    i = utf8_to_ucs4(str);
 	} else if (isUni5(c)) {
 	    str[0] = c;
 	    str[1] = getc(GET_PORT(arg1));
-		ungetc(str[1],GET_PORT(arg1));
+	    ungetc(str[1], GET_PORT(arg1));
 	    str[2] = getc(GET_PORT(arg1));
-		ungetc(str[2],GET_PORT(arg1));
+	    ungetc(str[2], GET_PORT(arg1));
 	    str[3] = getc(GET_PORT(arg1));
-		ungetc(str[3],GET_PORT(arg1));
+	    ungetc(str[3], GET_PORT(arg1));
 	    str[4] = getc(GET_PORT(arg1));
-		ungetc(str[4],GET_PORT(arg1));
+	    ungetc(str[4], GET_PORT(arg1));
 	    str[5] = NUL;
 	    i = utf8_to_ucs4(str);
 	} else if (isUni6(c)) {
 	    str[0] = c;
 	    str[1] = getc(GET_PORT(arg1));
-		ungetc(str[1],GET_PORT(arg1));
+	    ungetc(str[1], GET_PORT(arg1));
 	    str[2] = getc(GET_PORT(arg1));
-		ungetc(str[2],GET_PORT(arg1));
+	    ungetc(str[2], GET_PORT(arg1));
 	    str[3] = getc(GET_PORT(arg1));
-		ungetc(str[3],GET_PORT(arg1));
+	    ungetc(str[3], GET_PORT(arg1));
 	    str[4] = getc(GET_PORT(arg1));
-		ungetc(str[4],GET_PORT(arg1));
+	    ungetc(str[4], GET_PORT(arg1));
 	    str[5] = getc(GET_PORT(arg1));
-		ungetc(str[5],GET_PORT(arg1));
+	    ungetc(str[5], GET_PORT(arg1));
 	    str[6] = NUL;
 	    i = utf8_to_ucs4(str);
 	} else {
@@ -985,7 +989,7 @@ int b_peek_char(int arglist, int rest, int th)
     char str[10];
 
     n = length(arglist);
-	ind = makeind("peek_char",n,th);
+    ind = makeind("peek_char", n, th);
     if (n == 1) {
 	arg1 = input_stream;
 	arg2 = car(arglist);
@@ -1007,54 +1011,54 @@ int b_peek_char(int arglist, int rest, int th)
 
 	c = getc(GET_PORT(arg1));
 	str[0] = c;
-	ungetc(c,GET_PORT(arg1));
+	ungetc(c, GET_PORT(arg1));
 
 	if (isUni2(c)) {
 	    str[0] = c;
 	    str[1] = getc(GET_PORT(arg1));
-		ungetc(str[1],GET_PORT(arg1));
+	    ungetc(str[1], GET_PORT(arg1));
 	    str[2] = NUL;
 	} else if (isUni3(c)) {
 	    str[0] = c;
 	    str[1] = getc(GET_PORT(arg1));
-		ungetc(str[1],GET_PORT(arg1));
+	    ungetc(str[1], GET_PORT(arg1));
 	    str[2] = getc(GET_PORT(arg1));
-		ungetc(str[2],GET_PORT(arg1));
+	    ungetc(str[2], GET_PORT(arg1));
 	    str[3] = NUL;
 	} else if (isUni4(c)) {
 	    str[0] = c;
 	    str[1] = getc(GET_PORT(arg1));
-		ungetc(str[1],GET_PORT(arg1));
+	    ungetc(str[1], GET_PORT(arg1));
 	    str[2] = getc(GET_PORT(arg1));
-		ungetc(str[2],GET_PORT(arg1));
+	    ungetc(str[2], GET_PORT(arg1));
 	    str[3] = getc(GET_PORT(arg1));
-		ungetc(str[3],GET_PORT(arg1));
+	    ungetc(str[3], GET_PORT(arg1));
 	    str[4] = NUL;
 	} else if (isUni5(c)) {
 	    str[0] = c;
 	    str[1] = getc(GET_PORT(arg1));
-		ungetc(str[1],GET_PORT(arg1));
+	    ungetc(str[1], GET_PORT(arg1));
 	    str[2] = getc(GET_PORT(arg1));
-		ungetc(str[2],GET_PORT(arg1));
+	    ungetc(str[2], GET_PORT(arg1));
 	    str[3] = getc(GET_PORT(arg1));
-		ungetc(str[3],GET_PORT(arg1));
+	    ungetc(str[3], GET_PORT(arg1));
 	    str[4] = getc(GET_PORT(arg1));
-		ungetc(str[4],GET_PORT(arg1));
+	    ungetc(str[4], GET_PORT(arg1));
 	    str[5] = NUL;
 	} else if (isUni6(c)) {
 	    str[0] = c;
 	    str[1] = getc(GET_PORT(arg1));
-		ungetc(str[1],GET_PORT(arg1));
+	    ungetc(str[1], GET_PORT(arg1));
 	    str[2] = getc(GET_PORT(arg1));
-		ungetc(str[2],GET_PORT(arg1));
+	    ungetc(str[2], GET_PORT(arg1));
 	    str[3] = getc(GET_PORT(arg1));
-		ungetc(str[3],GET_PORT(arg1));
+	    ungetc(str[3], GET_PORT(arg1));
 	    str[4] = getc(GET_PORT(arg1));
-		ungetc(str[4],GET_PORT(arg1));
+	    ungetc(str[4], GET_PORT(arg1));
 	    str[5] = getc(GET_PORT(arg1));
-		ungetc(str[5],GET_PORT(arg1));
+	    ungetc(str[5], GET_PORT(arg1));
 	    str[6] = NUL;
-	} 
+	}
 	res = NIL;
 
 	res = unify(arg2, makeconst(str), th);
@@ -1073,7 +1077,7 @@ int b_peek_byte(int arglist, int rest, int th)
     int n, ind, arg1, arg2, c, res;
 
     n = length(arglist);
-	ind = makeind("peek_byte",n,th);
+    ind = makeind("peek_byte", n, th);
     if (n == 1) {
 	arg1 = input_stream;
 	arg2 = car(arglist);
@@ -1093,7 +1097,7 @@ int b_peek_byte(int arglist, int rest, int th)
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
 	c = fgetc(GET_PORT(arg1));
-	ungetc(c,GET_PORT(arg1));
+	ungetc(c, GET_PORT(arg1));
 
 	res = unify(arg2, makeint(c), th);
 	if (res == YES)
@@ -1112,7 +1116,7 @@ int b_flush_output(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("flush_output",n,th);
+    ind = makeind("flush_output", n, th);
     if (n == 0) {
 	fflush(stdout);
 	return (prove_all(rest, sp[th], th));
@@ -1124,7 +1128,7 @@ int b_flush_output(int arglist, int rest, int th)
 	    exception(NOT_STREAM, ind, arg1, th);
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
-	
+
 	fflush(GET_PORT(arg1));
 	return (prove_all(rest, sp[th], th));
     }
@@ -1138,7 +1142,7 @@ int b_atom_codes(int arglist, int rest, int th)
     char str1[STRSIZE], str2[10];
 
     n = length(arglist);
-	ind = makeind("atom_codes",n,th);
+    ind = makeind("atom_codes", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1234,7 +1238,7 @@ int b_atom_chars(int arglist, int rest, int th)
     char str1[STRSIZE], str2[10];
 
     n = length(arglist);
-	ind = makeind("atom_chars",n,th);
+    ind = makeind("atom_chars", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1327,7 +1331,7 @@ int b_number_codes(int arglist, int rest, int th)
     char str1[STRSIZE], str2[10];
 
     n = length(arglist);
-	ind = makeind("number_codes",n,th);
+    ind = makeind("number_codes", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1335,7 +1339,7 @@ int b_number_codes(int arglist, int rest, int th)
 	    exception(NOT_ATOM, ind, arg1, th);
 	if (wide_variable_p(arg1) && !listp(arg2))
 	    exception(NOT_LIST, ind, arg2, th);
-	
+
 
 	if (!variablep(arg1)) {
 	    if (integerp(arg1))
@@ -1393,7 +1397,7 @@ int b_number_chars(int arglist, int rest, int th)
     char str1[STRSIZE], str2[10];
 
     n = length(arglist);
-	ind = makeind("number_chars",n,th);
+    ind = makeind("number_chars", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1458,40 +1462,40 @@ int b_catch(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, pt, res;
 
     n = length(arglist);
-	ind = makeind("catch",n,th);
+    ind = makeind("catch", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
-	if(!callablep(arg1))
-		exception(NOT_CALLABLE,ind,arg1,th);
+	if (!callablep(arg1))
+	    exception(NOT_CALLABLE, ind, arg1, th);
 
-	catch_data[cp[th]][0][th] = arg2;   //tag
-	catch_data[cp[th]][1][th] = sp[th]; //sp for restore catch
+	catch_data[cp[th]][0][th] = arg2;	//tag
+	catch_data[cp[th]][1][th] = sp[th];	//sp for restore catch
 	int ret = setjmp(catch_buf[cp[th]][th]);
 	pt = cp[th];
-	
-	if (cp[th] > CTRLSTK){
-	    exception(RESOURCE_ERR, ind, makestr("ctrlstk"), th);}
+
+	if (cp[th] > CTRLSTK) {
+	    exception(RESOURCE_ERR, ind, makestr("ctrlstk"), th);
+	}
 
 	if (ret == 0) {
-		cp[th]++;
-	    if (prove_all(arg1, sp[th], th) == YES){
+	    cp[th]++;
+	    if (prove_all(arg1, sp[th], th) == YES) {
 		res = prove_all(rest, sp[th], th);
 		cp[th]--;
 		return (res);
-		}
-	    else
+	    } else
 		return (NO);
 	} else if (ret == 1) {
 	    sp[th] = catch_data[pt][1][th];
-		if(prove_all(arg3, sp[th], th) == YES){
-		res = prove_all(rest,sp[th],th);
+	    if (prove_all(arg3, sp[th], th) == YES) {
+		res = prove_all(rest, sp[th], th);
 		cp[th]--;
-	    return (res);}
-		else 
-		return(NO);
+		return (res);
+	    } else
+		return (NO);
 	}
 	return (NO);
     }
@@ -1501,12 +1505,12 @@ int b_catch(int arglist, int rest, int th)
 
 void throw(int tag, int th)
 {
-	int i;
+    int i;
 
-	for (i = cp[th] - 1; i >= 0; i--) {
-	    if (unify(catch_data[i][0][th], tag, th) == YES)
-		longjmp(catch_buf[i][th], 1);
-	}
+    for (i = cp[th] - 1; i >= 0; i--) {
+	if (unify(catch_data[i][0][th], tag, th) == YES)
+	    longjmp(catch_buf[i][th], 1);
+    }
 }
 
 int b_throw(int arglist, int rest, int th)
@@ -1514,13 +1518,13 @@ int b_throw(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("throw",n,th);
+    ind = makeind("throw", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
-	throw(arg1,th);
+	throw(arg1, th);
 	//if not exist unified tag, execute rest
-	return(prove_all(rest,sp[th],th));
+	return (prove_all(rest, sp[th], th));
 
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -1551,7 +1555,7 @@ int b_unify_with_occurs_check(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("unify_with_occurs_check",n,th);
+    ind = makeind("unify_with_occurs_check", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1573,17 +1577,17 @@ int b_current_input(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("current_input",n,th);
+    ind = makeind("current_input", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
 	if (!wide_variable_p(arg1) && !streamp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
 
-	if(unify(arg1,input_stream,th) == YES)
-		return (prove_all(rest, sp[th], th));
-	else 
-		return(NO);
+	if (unify(arg1, input_stream, th) == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -1591,20 +1595,20 @@ int b_current_input(int arglist, int rest, int th)
 
 int b_current_output(int arglist, int rest, int th)
 {
-    int n, ind,arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("current_output",n,th);
+    ind = makeind("current_output", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
 	if (!wide_variable_p(arg1) && !streamp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
 
-	if(unify(arg1,output_stream,th) == YES)
-		return (prove_all(rest, sp[th], th));
-	else 
-		return(NO);
+	if (unify(arg1, output_stream, th) == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -1616,7 +1620,7 @@ int b_set_input(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("set_input",n,th);
+    ind = makeind("set_input", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -1633,10 +1637,10 @@ int b_set_input(int arglist, int rest, int th)
 
 int b_set_output(int arglist, int rest, int th)
 {
-    int n, ind,arg1;
+    int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("set_output",n,th);
+    ind = makeind("set_output", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -1657,7 +1661,7 @@ int b_use_module(int arglist, int rest, int th)
     FILE *fp;
 
     n = length(arglist);
-	ind = makeind("use_mdule",n,th);
+    ind = makeind("use_mdule", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!atomp(arg1))
@@ -1672,7 +1676,7 @@ int b_use_module(int arglist, int rest, int th)
 	if (fp != NULL) {
 	    fclose(fp);
 	    b_reconsult(list1(makeconst(str)), NIL, 0);
-		return(prove_all(rest,sp[th],th));
+	    return (prove_all(rest, sp[th], th));
 	}
 	exception(CANT_OPEN, ind, arglist, th);
     }
@@ -1685,7 +1689,7 @@ int b_module(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("module",n,th);
+    ind = makeind("module", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1712,77 +1716,77 @@ int b_module(int arglist, int rest, int th)
 
 int b_copy_term(int arglist, int rest, int th)
 {
-	int n,ind,arg1,arg2;
+    int n, ind, arg1, arg2;
 
-	n=length(arglist);
-	ind = makeind("copy_term",n,th);
-	if(n==2){
-		arg1 = car(arglist);
-		arg2 = cadr(arglist);
+    n = length(arglist);
+    ind = makeind("copy_term", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
 
-		if(unify(arg2,copy_term(arg1),th) == YES)
-			return(prove_all(rest,sp[th],th));
-		else
-			return(NO);
+	if (unify(arg2, copy_term(arg1), th) == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
 
-	}
-	exception(ARITY_ERR,ind,arglist,th);
-	return(NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
 int b_at_end_of_stream(int arglist, int rest, int th)
 {
-	int n,ind,arg1;
+    int n, ind, arg1;
 
-	n=length(arglist);
-	ind = makeind("at_end_of_stream",n,th);
-	if(n==1){
-		arg1 = car(arglist);
+    n = length(arglist);
+    ind = makeind("at_end_of_stream", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
 
-		if(!streamp(arg1))
-		exception(NOT_STREAM,ind,arglist,th);
+	if (!streamp(arg1))
+	    exception(NOT_STREAM, ind, arglist, th);
 
-		if(arg1 == standard_input || arg1 == standard_output)
-			return(NO);
-		else if(feof(GET_PORT(arg1)))
-			return(prove_all(rest,sp[th],th));
-		else 
-			return(NO);
-	}
-	exception(ARITY_ERR,ind,arglist,th);
-	return(NO);
+	if (arg1 == standard_input || arg1 == standard_output)
+	    return (NO);
+	else if (feof(GET_PORT(arg1)))
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
 int b_stream_property(int arglist, int rest, int th)
 {
-	int n,ind,arg1,arg2,prop;
+    int n, ind, arg1, arg2, prop;
 
-	n=length(arglist);
-	ind = makeind("stream_property",n,th);
-	if(n==2){
-		arg1 = car(arglist);
-		arg2 = cadr(arglist);
+    n = length(arglist);
+    ind = makeind("stream_property", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
 
-		if(!streamp(arg1))
-		exception(NOT_STREAM,ind,arglist,th);
+	if (!streamp(arg1))
+	    exception(NOT_STREAM, ind, arglist, th);
 
-		if(GET_OPT(arg1) == NPL_INPUT)
-			prop = list2(makepred("mode"),makeconst("input"));
-		else if(GET_OPT(arg1) == NPL_OUTPUT)
-			prop = list2(makepred("mode"),makeconst("output"));
-		else if(GET_OPT(arg1) == NPL_INPUT)
-			prop = list2(makepred("mode"),makeconst("output"));
-		else 
-			prop = NIL;
+	if (GET_OPT(arg1) == NPL_INPUT)
+	    prop = list2(makepred("mode"), makeconst("input"));
+	else if (GET_OPT(arg1) == NPL_OUTPUT)
+	    prop = list2(makepred("mode"), makeconst("output"));
+	else if (GET_OPT(arg1) == NPL_INPUT)
+	    prop = list2(makepred("mode"), makeconst("output"));
+	else
+	    prop = NIL;
 
-		if(unify(arg2,prop,th)==YES){
-			return(prove_all(rest,sp[th],th));
-		}
-		
-			return(NO);
+	if (unify(arg2, prop, th) == YES) {
+	    return (prove_all(rest, sp[th], th));
 	}
-	exception(ARITY_ERR,ind,arglist,th);
-	return(NO);
+
+	return (NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
 
@@ -1791,178 +1795,179 @@ int b_stream_property(int arglist, int rest, int th)
 
 int b_create_client_socket(int arglist, int rest, int th)
 {
-    int n,ind,arg1, arg2, arg3, res, sock;
+    int n, ind, arg1, arg2, arg3, res, sock;
 
-	n = length(arglist);
-	ind = makeind("create_client_socket",n,th);
-	if(n==2){
-    arg1 = car(arglist);	//port number
-    arg2 = cadr(arglist);	//IP address
-	arg3 = caddr(arglist);  //socket var
-    
-    if (!integerp(arg1))
-		exception(NOT_INT, ind, arg1, th);
-    if (!atomp(arg2))
-		exception(NOT_ATOM, ind, arg2, th);
+    n = length(arglist);
+    ind = makeind("create_client_socket", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);	//port number
+	arg2 = cadr(arglist);	//IP address
+	arg3 = caddr(arglist);	//socket var
+
+	if (!integerp(arg1))
+	    exception(NOT_INT, ind, arg1, th);
+	if (!atomp(arg2))
+	    exception(NOT_ATOM, ind, arg2, th);
 	if (!wide_variable_p(arg3) && !socketp(arg2))
-		exception(NOT_SOCKET, ind, arg3, th);
+	    exception(NOT_SOCKET, ind, arg3, th);
 
 
-    sock = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock < 0) {
-	exception(SYSTEM_ERR, ind, NIL, th);
-    }
-
-    memset((char *) &client_addr, 0, sizeof(client_addr));
-    client_addr.sin_family = AF_INET;
-    client_addr.sin_port = htons(GET_INT(arg1));
-
-    if (inet_pton(AF_INET, GET_NAME(arg2), &client_addr.sin_addr) < 0)
-	exception(SYSTEM_ERR, ind, NIL, 0);
-
-
-    if (connect
-	(sock, (struct sockaddr *) &client_addr,
-	 sizeof(client_addr)) < 0) {
-	exception(SYSTEM_ERR, ind, NIL, 0);
-    }
-
-    res = makesocket(sock, NPL_SOCKET, "client", NIL);
-    if(unify(arg3,res,th)==YES)
-		return(prove_all(rest,sp[th],th));
-	else 
-		return(NO);
+	sock = socket(AF_INET, SOCK_STREAM, 0);
+	if (sock < 0) {
+	    exception(SYSTEM_ERR, ind, NIL, th);
 	}
-	exception(ARITY_ERR,ind,arglist,th);
-	return(NO);
+
+	memset((char *) &client_addr, 0, sizeof(client_addr));
+	client_addr.sin_family = AF_INET;
+	client_addr.sin_port = htons(GET_INT(arg1));
+
+	if (inet_pton(AF_INET, GET_NAME(arg2), &client_addr.sin_addr) < 0)
+	    exception(SYSTEM_ERR, ind, NIL, 0);
+
+
+	if (connect
+	    (sock, (struct sockaddr *) &client_addr,
+	     sizeof(client_addr)) < 0) {
+	    exception(SYSTEM_ERR, ind, NIL, 0);
+	}
+
+	res = makesocket(sock, NPL_SOCKET, "client", NIL);
+	if (unify(arg3, res, th) == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
 int b_create_server_socket(int arglist, int rest, int th)
 {
-    int n,ind,arg1,arg2, sock0, sock1, res;
+    int n, ind, arg1, arg2, sock0, sock1, res;
 
-	n = length(arglist);
-	ind = makeind("create_server_socket",n,th);
-	if(n==2){
-    arg1 = car(arglist);	// port number
-	arg2 = cadr(arglist);   // socket var
-   
-    if (!integerp(arg1))
-		exception(NOT_INT, ind, arg1, th);
+    n = length(arglist);
+    ind = makeind("create_server_socket", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);	// port number
+	arg2 = cadr(arglist);	// socket var
+
+	if (!integerp(arg1))
+	    exception(NOT_INT, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !socketp(arg2))
-		exception(NOT_SOCKET, ind, arg2, th);
+	    exception(NOT_SOCKET, ind, arg2, th);
 
-    sock0 = socket(AF_INET, SOCK_STREAM, 0);
-    if (sock0 < 0) {
-	exception(SYSTEM_ERR, ind, NIL, th);
-    }
-
-    memset((char *) &server_addr, 0, sizeof(server_addr));
-    server_addr.sin_family = AF_INET;
-    server_addr.sin_addr.s_addr = INADDR_ANY;
-    server_addr.sin_port = htons(GET_INT(arg1));
-
-    if (bind
-	(sock0, (struct sockaddr *) &server_addr,
-	 sizeof(server_addr)) < 0) {
-	exception(SYSTEM_ERR, ind, NIL, th);
-    }
-
-    listen(sock0, 5);
-    parent_len = sizeof(server_addr);
-    sock1 = accept(sock0, (struct sockaddr *) &server_addr, &parent_len);
-    if (sock1 < 0) {
-	exception(SYSTEM_ERR, ind, NIL, th);
-    }
-
-    res = makesocket(sock1, NPL_SOCKET, "server", sock0);
-    if(unify(arg2,res,th)==YES)
-		return(prove_all(rest,sp[th],th));
-	else 
-		return(NO);
+	sock0 = socket(AF_INET, SOCK_STREAM, 0);
+	if (sock0 < 0) {
+	    exception(SYSTEM_ERR, ind, NIL, th);
 	}
-	exception(ARITY_ERR,ind,arglist,th);
-	return(NO);
+
+	memset((char *) &server_addr, 0, sizeof(server_addr));
+	server_addr.sin_family = AF_INET;
+	server_addr.sin_addr.s_addr = INADDR_ANY;
+	server_addr.sin_port = htons(GET_INT(arg1));
+
+	if (bind
+	    (sock0, (struct sockaddr *) &server_addr,
+	     sizeof(server_addr)) < 0) {
+	    exception(SYSTEM_ERR, ind, NIL, th);
+	}
+
+	listen(sock0, 5);
+	parent_len = sizeof(server_addr);
+	sock1 =
+	    accept(sock0, (struct sockaddr *) &server_addr, &parent_len);
+	if (sock1 < 0) {
+	    exception(SYSTEM_ERR, ind, NIL, th);
+	}
+
+	res = makesocket(sock1, NPL_SOCKET, "server", sock0);
+	if (unify(arg2, res, th) == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
 int b_send_socket(int arglist, int rest, int th)
 {
-    int n,ind,arg1, arg2, m;
+    int n, ind, arg1, arg2, m;
     char buf[256];
 
-	n = length(arglist);
-	ind = makeind("send_socket",n,th);
-	if(n==2){
-    arg1 = car(arglist);	//socket
-    arg2 = cadr(arglist);	//message atom
+    n = length(arglist);
+    ind = makeind("send_socket", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);	//socket
+	arg2 = cadr(arglist);	//message atom
 
-    if (!socketp(arg1))
-		exception(NOT_SOCKET, ind, arg1, th);
-    if (!atomp(arg2))
-		exception(NOT_ATOM, ind, arg2, th);
+	if (!socketp(arg1))
+	    exception(NOT_SOCKET, ind, arg1, th);
+	if (!atomp(arg2))
+	    exception(NOT_ATOM, ind, arg2, th);
 
-    strcpy(buf, GET_NAME(arg2));
-    m = write(GET_SOCKET(arg1), buf, 256);
-    if (m < 0)
-		exception(SYSTEM_ERR, ind, NIL, th);
+	strcpy(buf, GET_NAME(arg2));
+	m = write(GET_SOCKET(arg1), buf, 256);
+	if (m < 0)
+	    exception(SYSTEM_ERR, ind, NIL, th);
 
-	return(prove_all(rest,sp[th],th));
-	}
-	exception(ARITY_ERR,ind,arglist,th);
-	return(NO);
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
 int b_recv_socket(int arglist, int rest, int th)
 {
-    int n,ind,arg1,arg2, sock, m;
+    int n, ind, arg1, arg2, sock, m;
     char buf[STRSIZE];
 
-	n = length(arglist);
-	ind = makeind("recv_socket",n,th);
-	if(n==2){
-    arg1 = car(arglist);	//socket
-	arg2 = cadr(arglist);   //receive var
+    n = length(arglist);
+    ind = makeind("recv_socket", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);	//socket
+	arg2 = cadr(arglist);	//receive var
 
-    if (!socketp(arg1))
-		exception(NOT_SOCKET, ind, arg1, th);
+	if (!socketp(arg1))
+	    exception(NOT_SOCKET, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !atomp(arg2))
-		exception(NOT_ATOM, ind, arg1, th);
+	    exception(NOT_ATOM, ind, arg1, th);
 
-    sock = GET_SOCKET(arg1);
-    memset(buf, 0, sizeof(buf));
-    m = read(sock, buf, sizeof(buf) - 1);
-    if (m < 0) {
-	exception(SYSTEM_ERR, ind, NIL, 0);
+	sock = GET_SOCKET(arg1);
+	memset(buf, 0, sizeof(buf));
+	m = read(sock, buf, sizeof(buf) - 1);
+	if (m < 0) {
+	    exception(SYSTEM_ERR, ind, NIL, 0);
+	}
+	if (unify(arg2, makeconst(buf), th) == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
     }
-	if(unify(arg2,makeconst(buf),th) == YES)
-		return(prove_all(rest,sp[th],th));
-	else 
-		return(NO);
-	} 
-	exception(ARITY_ERR,ind,arglist,th);
-	return(NO);
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
 int b_close_socket(int arglist, int rest, int th)
 {
-    int n,ind,arg1, sock0, sock1;
+    int n, ind, arg1, sock0, sock1;
 
-	n = length(arglist);
-	ind = makeind("close_socket",n,th);
-	if(n==1){
-    arg1 = car(arglist);	//socket
-    if (!socketp(arg1))
-		exception(NOT_SOCKET, ind, arg1, th);
+    n = length(arglist);
+    ind = makeind("close_socket", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);	//socket
+	if (!socketp(arg1))
+	    exception(NOT_SOCKET, ind, arg1, th);
 
-    sock0 = GET_SOCKET(arg1);
-    sock1 = GET_CDR(arg1);
-    close(sock0);
-    if (!nullp(sock1)){
-	close(sock1);
+	sock0 = GET_SOCKET(arg1);
+	sock1 = GET_CDR(arg1);
+	close(sock0);
+	if (!nullp(sock1)) {
+	    close(sock1);
 	}
 
-	return(prove_all(rest,sp[th],th));
-	}
-	exception(ARITY_ERR,ind,arglist,th);
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }

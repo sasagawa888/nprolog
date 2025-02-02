@@ -845,8 +845,8 @@ int socketp(int addr)
 
 // [1,2,3] []
 int listp(int addr)
-{	
-	if(nullp(addr))
+{
+    if (nullp(addr))
 	return (1);
     else if (structurep(addr) && GET_AUX(addr) == LIST)
 	return (1);
@@ -1220,7 +1220,7 @@ int groundp(int addr)
 	return (1);
     else if (numberp(addr))
 	return (1);
-	else if (listp(addr))
+    else if (listp(addr))
 	return (groundp(car(addr)) && groundp(cdr(addr)));
     else if (groundp(cadr(addr)) && groundp(caddr(addr)))
 	return (1);
@@ -1971,7 +1971,7 @@ int keyinsert(int x, int y)
     if (nullp(x))
 	return (list1(y));
     else if (!(length(car(x)) == 3 && eqlp(caar(x), makeope("-"))))
-	exception(ILLEGAL_ARGS, makeind("keysort",2,0), car(x), 0);
+	exception(ILLEGAL_ARGS, makeind("keysort", 2, 0), car(x), 0);
     else if (sortsmaller(cadr(y), cadr(car(x))))
 	return (listcons(y, x));
     else
@@ -2054,9 +2054,9 @@ void add_data(int pred, int data)
 	SET_CDR(clauses, cons(data, NIL));
     }
     if (!memq(pred, predicates))
-	if(!module_flag)
-	predicates = cons(pred, predicates);
-	
+	if (!module_flag)
+	    predicates = cons(pred, predicates);
+
 }
 
 
@@ -2067,9 +2067,9 @@ void insert_data(int pred, int data)
     memoize_arity(data, pred);
     SET_CAR(pred, cons(data, GET_CAR(pred)));
     if (!memq(pred, predicates))
-	if(!module_flag)
-	predicates = cons(pred, predicates);
-	
+	if (!module_flag)
+	    predicates = cons(pred, predicates);
+
 }
 
 
@@ -2172,43 +2172,42 @@ int copy_term(int x)
 
 int add_prefix1(int x)
 {
-	char str[STRSIZE];
+    char str[STRSIZE];
 
-	strcpy(str,GET_NAME(module_name));
-	strcat(str,"_");
-	strcat(str,GET_NAME(x));
-	return(makepred(str));
+    strcpy(str, GET_NAME(module_name));
+    strcat(str, "_");
+    strcat(str, GET_NAME(x));
+    return (makepred(str));
 }
 
 
 int add_prefix(int x)
 {
-	if (structurep(x))
-		return(cons(add_prefix1(car(x)),copy_heap(cdr(x))));
-	else 
-		return(add_prefix1(x));
+    if (structurep(x))
+	return (cons(add_prefix1(car(x)), copy_heap(cdr(x))));
+    else
+	return (add_prefix1(x));
 }
 
 int exportp(int x)
 {
-	int i, name,arity;
+    int i, name, arity;
 
-	if(atomp(x)){
-		name = x;
-		arity = 0;
-	}
-	else {
-		name = car(x);
-		arity = length(cdr(x));
-	}
+    if (atomp(x)) {
+	name = x;
+	arity = 0;
+    } else {
+	name = car(x);
+	arity = length(cdr(x));
+    }
 
-	
-	for(i=0;i<export_pt;i++){
-		if(eqlp(export_data[i][0],name) && export_data[i][1] == arity){
-			return(1);
-		}
+
+    for (i = 0; i < export_pt; i++) {
+	if (eqlp(export_data[i][0], name) && export_data[i][1] == arity) {
+	    return (1);
 	}
-	return(0);
+    }
+    return (0);
 }
 
 int copy_heap(int x)
@@ -2218,9 +2217,9 @@ int copy_heap(int x)
 	return (NIL);
     else if (IS_ALPHA(x))
 	return (alpha_to_variable(x));
-	else if (module_flag && predicatep(x) && exportp(x))
-	return(x);
-	else if (module_flag && predicatep(x) && !exportp(x))
+    else if (module_flag && predicatep(x) && exportp(x))
+	return (x);
+    else if (module_flag && predicatep(x) && !exportp(x))
 	return (add_prefix(x));
     else if (singlep(x))
 	return (x);
@@ -2230,9 +2229,9 @@ int copy_heap(int x)
 	return (x);
     else if (listp(x))
 	return (listcons(copy_heap(car(x)), copy_heap(cdr(x))));
-	else if (car(x) == NECK || car(x) == AND || car(x) == OR)
-	return (list3(car(x),copy_heap(cadr(x)),copy_heap(caddr(x))));
-	return (cons(copy_heap(car(x)),copy_heap(cdr(x))));
+    else if (car(x) == NECK || car(x) == AND || car(x) == OR)
+	return (list3(car(x), copy_heap(cadr(x)), copy_heap(caddr(x))));
+    return (cons(copy_heap(car(x)), copy_heap(cdr(x))));
     return (x);
 }
 

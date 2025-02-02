@@ -206,7 +206,8 @@ int receive_from_child(int n)
     memset(bridge, 0, sizeof(bridge));
     m = read(child_sockfd[n], bridge, sizeof(bridge) - 1);
     if (m < 0) {
-	exception(SYSTEM_ERR, makestr("receive from child"), makeint(n), 0);
+	exception(SYSTEM_ERR, makestr("receive from child"), makeint(n),
+		  0);
     }
 
   retry:
@@ -271,7 +272,8 @@ int receive_from_child_or(int n)
 	    bridge[0] = '\x11';
 	    m = write(child_sockfd[i], bridge, strlen(bridge));
 	    if (m < 0) {
-		exception(SYSTEM_ERR, makestr("receive from child"), NIL, 0);
+		exception(SYSTEM_ERR, makestr("receive from child"), NIL,
+			  0);
 	    }
 	    // receive result and ignore
 	    while ((m =
@@ -298,7 +300,8 @@ int receive_from_child_or1(int n)
 	    m = read(child_sockfd[i], bridge, sizeof(bridge));
 	}
 	if (m < 0) {
-	    exception(SYSTEM_ERR, makestr("receive from child"), makeint(i), 0);
+	    exception(SYSTEM_ERR, makestr("receive from child"),
+		      makeint(i), 0);
 	} else if (m > 0) {
 	    child_result[i] = receive_from_child_or2(i);
 	}
@@ -446,15 +449,15 @@ int b_dp_create(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("dp_create",n,th);
+    ind = makeind("dp_create", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
-	
-	if(!listp(arg1))
-		exception(NOT_LIST,ind,arg1,th);
-	if(length(arg1) > PARASIZE)
-		exception(RESOURCE_ERR,ind,arg1,th);
-	
+
+	if (!listp(arg1))
+	    exception(NOT_LIST, ind, arg1, th);
+	if (length(arg1) > PARASIZE)
+	    exception(RESOURCE_ERR, ind, arg1, th);
+
 	parent_flag = 1;
 	child_num = 0;
 	while (!nullp(arg1)) {
@@ -477,7 +480,7 @@ int b_dp_close(int arglist, int rest, int th)
     int n, ind, i, exp;
 
     n = length(arglist);
-	ind = makeind("dp_close",n,th);
+    ind = makeind("dp_close", n, th);
     if (n == 0) {
 
 	if (parent_flag) {
@@ -514,17 +517,17 @@ int b_dp_close(int arglist, int rest, int th)
 
 int b_dp_prove(int arglist, int rest, int th)
 {
-    int n, ind,arg1, arg2, res;
+    int n, ind, arg1, arg2, res;
 
     n = length(arglist);
-	ind = makeind("dp_prove",n,th);
+    ind = makeind("dp_prove", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (GET_INT(arg1) >= child_num || GET_INT(arg1) < 0)
 	    exception(RESOURCE_ERR, ind, arg1, th);
 	if (!callablep(arg2))
-		exception(NOT_CALLABLE,ind,arg2,th);
+	    exception(NOT_CALLABLE, ind, arg2, th);
 
 	send_to_child(GET_INT(arg1), pred_to_str(arg2));
 	res =
@@ -540,11 +543,11 @@ int b_dp_prove(int arglist, int rest, int th)
 // parent Prolog
 int b_dp_transfer(int arglist, int rest, int th)
 {
-    int n, ind,arg1, pred1, pred2, i, m;
+    int n, ind, arg1, pred1, pred2, i, m;
     FILE *file;
 
     n = length(arglist);
-	ind = makeind("dp_transfer",n,th);
+    ind = makeind("dp_transfer", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!atomp(arg1))
@@ -593,11 +596,11 @@ int b_dp_transfer(int arglist, int rest, int th)
 // child Prolog
 int b_dp_receive(int arglist, int rest, int th)
 {
-    int n,ind, arg1;
+    int n, ind, arg1;
     FILE *file;
 
     n = length(arglist);
-	ind = makeind("dp_recieve",n,th);
+    ind = makeind("dp_recieve", n, th);
     if (n == 1) {
 	child_busy_flag = 0;
 	arg1 = car(arglist);
@@ -628,37 +631,37 @@ int b_dp_receive(int arglist, int rest, int th)
 
 int b_dp_consult(int arglist, int rest, int th)
 {
-    int n,ind,arg1, pred1, pred2, i;
+    int n, ind, arg1, pred1, pred2, i;
 
-	n = length(arglist);
-	ind = makeind("dp_consult",n,th);
-	if(n==1){
-    arg1 = car(arglist);
-    if (!atomp(arg1))
-	exception(NOT_ATOM, ind, arg1, th);
+    n = length(arglist);
+    ind = makeind("dp_consult", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if (!atomp(arg1))
+	    exception(NOT_ATOM, ind, arg1, th);
 
-    pred1 = list2(makeatom("reconsult", SYS), arg1);
-    prove_all(pred1, sp[th], th);
+	pred1 = list2(makeatom("reconsult", SYS), arg1);
+	prove_all(pred1, sp[th], th);
 
-    if (parent_flag) {
-	pred2 = list2(makeatom("dp_consult", SYS), arg1);
-	for (i = 0; i < child_num; i++) {
-	    send_to_child(i, pred_to_str(pred2));
-	    receive_from_child(i);
+	if (parent_flag) {
+	    pred2 = list2(makeatom("dp_consult", SYS), arg1);
+	    for (i = 0; i < child_num; i++) {
+		send_to_child(i, pred_to_str(pred2));
+		receive_from_child(i);
+	    }
 	}
+	return (YES);
     }
-    return (YES);
-	}
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_dp_compile(int arglist, int rest, int th)
 {
-    int n, ind,arg1, pred1, pred2, i;
+    int n, ind, arg1, pred1, pred2, i;
 
     n = length(arglist);
-	ind = makeind("dp_compile",n,th);
+    ind = makeind("dp_compile", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!atomp(arg1))
@@ -683,11 +686,11 @@ int b_dp_compile(int arglist, int rest, int th)
 
 int b_dp_report(int arglist, int rest, int th)
 {
-    int n, ind,arg1;
+    int n, ind, arg1;
     char sub_buffer[STRSIZE];
 
     n = length(arglist);
-	ind = makeind("dp_report",n,th);
+    ind = makeind("dp_report", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!stringp(arg1))
@@ -707,7 +710,7 @@ int b_dp_and(int arglist, int rest, int th)
     int n, ind, arg1, m, i, j, pred, res;
 
     n = length(arglist);
-	ind = makeind("dp_and",n,th);
+    ind = makeind("dp_and", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	m = length(arg1);
@@ -744,7 +747,7 @@ int b_dp_or(int arglist, int rest, int th)
     int n, ind, arg1, m, i, pred, res;
 
     n = length(arglist);
-	ind = makeind("do_or",n,th);
+    ind = makeind("do_or", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	m = length(arg1);
@@ -772,7 +775,7 @@ int b_dp_countup(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("dp_countup",n,th);
+    ind = makeind("dp_countup", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -788,7 +791,7 @@ int b_dp_parent(int arglist, int rest, int th)
     int n, ind;
 
     n = length(arglist);
-	ind = makeind("dp_parent",n,th);
+    ind = makeind("dp_parent", n, th);
     if (n == th) {
 
 	if (parent_flag)
@@ -802,10 +805,10 @@ int b_dp_parent(int arglist, int rest, int th)
 
 int b_dp_child(int arglist, int rest, int th)
 {
-    int n,ind;
+    int n, ind;
 
     n = length(arglist);
-	ind = makeind("dp_child",n,th);
+    ind = makeind("dp_child", n, th);
     if (n == th) {
 
 	if (!parent_flag && child_flag)
@@ -822,7 +825,7 @@ int b_dp_wait(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("dp_wait",n,th);
+    ind = makeind("dp_wait", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
@@ -845,7 +848,7 @@ int b_dp_pause(int arglist, int rest, int th)
     char sub_buffer[256];
 
     n = length(arglist);
-	ind = makeind("dp_pause",n,th);
+    ind = makeind("dp_pause", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
@@ -871,7 +874,7 @@ int b_dp_resume(int arglist, int rest, int th)
     char sub_buffer[256];
 
     n = length(arglist);
-	ind = makeind("dp_resume",n,th);
+    ind = makeind("dp_resume", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!integerp(arg1))
@@ -1011,7 +1014,7 @@ int b_mt_create(int arglist, int rest, int th)
     int n, ind, arg1, i, m;
 
     n = length(arglist);
-	ind = makeind("mt_create",n,th);
+    ind = makeind("mt_create", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -1040,9 +1043,9 @@ int b_mt_create(int arglist, int rest, int th)
 
 int b_mt_close(int arglist, int rest, int th)
 {
-    int n,ind;
+    int n, ind;
     n = length(arglist);
-	ind = makeind("mt_close",n,th);
+    ind = makeind("mt_close", n, th);
     if (n == 0) {
 
 	exit_para();
@@ -1061,7 +1064,7 @@ int b_mt_and(int arglist, int rest, int th)
     int n, ind, arg1, i, j, pred;
 
     n = length(arglist);
-	ind = makeind("mt_and",n,th);
+    ind = makeind("mt_and", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (length(arg1) > mt_queue_num)
@@ -1102,7 +1105,7 @@ int b_mt_or(int arglist, int rest, int th)
     int n, ind, arg1, i, j;
 
     n = length(arglist);
-	ind = makeind("mt_or",n,th);
+    ind = makeind("mt_or", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (length(arg1) > mt_queue_num)
@@ -1143,7 +1146,7 @@ int b_mt_prove(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("mt_prove",n,th);
+    ind = makeind("mt_prove", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);

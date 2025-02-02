@@ -90,7 +90,7 @@ void init_builtin(void)
     defbuiltin("fail", b_fail, 0);
     defbuiltin("fileerrors", b_fileerrors, 2);
     defbuiltin("findall", b_findall, 3);
-    defbuiltin("flush", b_flush_output, list2(0,1));
+    defbuiltin("flush", b_flush_output, list2(0, 1));
     defbuiltin("float", b_real, 1);
     defbuiltin("float_text", b_float_text, 3);
     defbuiltin("functor", b_functor, 3);
@@ -193,34 +193,34 @@ void init_builtin(void)
     defbuiltin("char_code", b_char_code, 2);
     defbuiltin("number_codes", b_number_codes, 2);
     defbuiltin("number_chars", b_number_chars, 2);
-    defbuiltin("write_canonical", b_display, list2(1,2));
+    defbuiltin("write_canonical", b_display, list2(1, 2));
     defbuiltin("atom_length", b_atom_length, 2);
     defbuiltin("atom_concat", b_atom_concat, 3);
-    defbuiltin("get_code", b_get_code, list2(1,2));
-	defbuiltin("get_char", b_get_char, list2(1,2));
-    defbuiltin("get_byte", b_get_byte, list2(1,2));
-    defbuiltin("put_char", b_put_char, list2(1,2));
-	defbuiltin("peek_code", b_peek_code, list2(1,2));
-	defbuiltin("peek_char", b_peek_char, list2(1,2));
-	defbuiltin("peek_byte", b_peek_byte, list2(1,2));
-    defbuiltin("flush_output", b_flush_output, list2(0,1));
+    defbuiltin("get_code", b_get_code, list2(1, 2));
+    defbuiltin("get_char", b_get_char, list2(1, 2));
+    defbuiltin("get_byte", b_get_byte, list2(1, 2));
+    defbuiltin("put_char", b_put_char, list2(1, 2));
+    defbuiltin("peek_code", b_peek_code, list2(1, 2));
+    defbuiltin("peek_char", b_peek_char, list2(1, 2));
+    defbuiltin("peek_byte", b_peek_byte, list2(1, 2));
+    defbuiltin("flush_output", b_flush_output, list2(0, 1));
     defbuiltin("catch", b_catch, 3);
     defbuiltin("throw", b_throw, 1);
     defbuiltin("unify_with_occurs_check", b_unify_with_occurs_check, 2);
-	defbuiltin("current_input", b_current_input, 1);
-	defbuiltin("current_output", b_current_output, 1);
+    defbuiltin("current_input", b_current_input, 1);
+    defbuiltin("current_output", b_current_output, 1);
     defbuiltin("set_input", b_set_input, 1);
     defbuiltin("set_output", b_set_output, 1);
     defbuiltin("use_module", b_use_module, 1);
-	defbuiltin("module", b_module, 2);
-	defbuiltin("copy_term", b_copy_term, 2);
-	defbuiltin("at_end_of_stream", b_at_end_of_stream, 1);
-	defbuiltin("stream_property", b_stream_property, 2);
-	defbuiltin("create_client_socket", b_create_client_socket, 3);
-	defbuiltin("create_server_socket", b_create_server_socket, 2);
-	defbuiltin("send_socket", b_send_socket, 2);
-	defbuiltin("recv_socket", b_recv_socket, 2);
-	defbuiltin("close_socket", b_close_socket, 1);
+    defbuiltin("module", b_module, 2);
+    defbuiltin("copy_term", b_copy_term, 2);
+    defbuiltin("at_end_of_stream", b_at_end_of_stream, 1);
+    defbuiltin("stream_property", b_stream_property, 2);
+    defbuiltin("create_client_socket", b_create_client_socket, 3);
+    defbuiltin("create_server_socket", b_create_server_socket, 2);
+    defbuiltin("send_socket", b_send_socket, 2);
+    defbuiltin("recv_socket", b_recv_socket, 2);
+    defbuiltin("close_socket", b_close_socket, 1);
     defbuiltin("existerrors", b_existerrors, 2);
     definfix("\\+", b_not, 900, FY);
 
@@ -300,7 +300,7 @@ int b_length(int arglist, int rest, int th)
     int n, ind, arg1, arg2, i, ls, res, save1, save2;
     save2 = sp[th];
     n = length(arglist);
-	ind = makeind("length",n,th);
+    ind = makeind("length", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -368,7 +368,7 @@ int b_repeat(int arglist, int rest, int th)
     save2 = sp[th];
     save3 = ac[th];
     n = length(arglist);
-	ind = makeind("repeat",n,th);
+    ind = makeind("repeat", n, th);
     if (n == 0) {
       loop:
 	if (prove_all(rest, sp[th], th) == YES) {
@@ -390,7 +390,7 @@ int b_op(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, weight, type;
 
     n = length(arglist);
-	ind = makeind("op",n,th);
+    ind = makeind("op", n, th);
     if (n == 3) {
 	arg1 = car(arglist);	//priority
 	arg2 = cadr(arglist);	//specifier
@@ -457,7 +457,7 @@ int b_op(int arglist, int rest, int th)
 	} else {
 	    while (!nullp(arg3)) {
 		if (wide_variable_p(car(arg3)))
-		    exception(INSTANTATION_ERR, ind , car(arg3), th);
+		    exception(INSTANTATION_ERR, ind, car(arg3), th);
 		else if (!atomp(car(arg3)) && !operatorp(car(arg3)))
 		    exception(NOT_ATOM, ind, car(arg3), th);
 		else if (operatorp(car(arg3)))
@@ -488,7 +488,7 @@ int b_ask(int arglist, int rest, int th)
     char c;
 
     n = length(arglist);
-	ind = makeind("ask",n,th);
+    ind = makeind("ask", n, th);
     if (n == 0) {
 	x1 = variables[th];
 	if (child_flag)
@@ -569,7 +569,7 @@ int b_unify(int arglist, int rest, int th)
     int n, ind, arg1, arg2, res;
 
     n = length(arglist);
-	ind = makeind("=",n,th);
+    ind = makeind("=", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -588,7 +588,7 @@ int b_notunify(int arglist, int rest, int th)
     int n, ind, arg1, arg2, res;
 
     n = length(arglist);
-	ind = makeind("\\=",n,th);
+    ind = makeind("\\=", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -615,7 +615,7 @@ int b_write(int arglist, int rest, int th)
     int n, ind, arg1, arg2, save;
 
     n = length(arglist);
-	ind = makeind("write",n,th);
+    ind = makeind("write", n, th);
     if (n == 1) {
 	arg1 = output_stream;
 	arg2 = car(arglist);
@@ -653,7 +653,7 @@ int b_display(int arglist, int rest, int th)
     int n, ind, arg1, arg2, save;
 
     n = length(arglist);
-	ind = makeind("display",n,th);
+    ind = makeind("display", n, th);
     if (n == 1) {
 	arg1 = output_stream;
 	arg2 = car(arglist);
@@ -691,7 +691,7 @@ int b_writeq(int arglist, int rest, int th)
     int n, ind, arg1, arg2, save;
 
     n = length(arglist);
-	ind = makeind("writeq",n,th);
+    ind = makeind("writeq", n, th);
     if (n == 1) {
 	arg1 = output_stream;
 	arg2 = car(arglist);
@@ -727,7 +727,7 @@ int b_nl(int arglist, int rest, int th)
     int n, ind, arg1, save;
 
     n = length(arglist);
-	ind = makeind("nl",n,th);
+    ind = makeind("nl", n, th);
     if (n == 0) {
 	fprintf(GET_PORT(output_stream), "\n");
 	fflush(GET_PORT(output_stream));
@@ -756,7 +756,7 @@ int b_put(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("put",n,th);
+    ind = makeind("put", n, th);
     if (n == 1) {
 	arg1 = output_stream;
 	arg2 = car(arglist);
@@ -766,7 +766,7 @@ int b_put(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
       put:
-	
+
 	if (!streamp(arg1) && !aliasp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
 	if (!integerp(arg2))
@@ -782,10 +782,10 @@ int b_put(int arglist, int rest, int th)
 
 int b_get0(int arglist, int rest, int th)
 {
-    int n,ind, c, arg1, arg2, i, res;
+    int n, ind, c, arg1, arg2, i, res;
 
     n = length(arglist);
-	ind = makeind("get0",n,th);
+    ind = makeind("get0", n, th);
     if (n == 1) {
 	arg1 = input_stream;
 	arg2 = car(arglist);
@@ -829,7 +829,7 @@ int b_get(int arglist, int rest, int th)
     int n, ind, c, arg1, arg2, i, res;
 
     n = length(arglist);
-	ind = makeind("get",n,th);
+    ind = makeind("get", n, th);
     if (n == 1) {
 	arg1 = input_stream;
 	arg2 = car(arglist);
@@ -879,7 +879,7 @@ int b_get0_noecho(int arglist, int rest, int th)
     int n, ind, c, arg1, i, res;
 
     n = length(arglist);
-	ind = makeind("get0_noecho",n,th);
+    ind = makeind("get0_noecho", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	c = n_getch();
@@ -900,7 +900,7 @@ int b_tab(int arglist, int rest, int th)
     int n, ind, arg1, arg2, count;
 
     n = length(arglist);
-	ind = makeind("tab",n,th);
+    ind = makeind("tab", n, th);
     if (n == 1) {
 	arg1 = standard_output;
 	arg2 = car(arglist);
@@ -960,7 +960,7 @@ int b_read(int arglist, int rest, int th)
     int n, ind, arg1, arg2, save1, save2, temp, res;
 
     n = length(arglist);
-	ind = makeind("read",n,th);
+    ind = makeind("read", n, th);
     if (n == 1) {
 	arg1 = input_stream;
 	arg2 = car(arglist);
@@ -974,7 +974,7 @@ int b_read(int arglist, int rest, int th)
 	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
-	
+
 	save1 = input_stream;
 	save2 = repl_flag;
 	input_stream = arg1;
@@ -1001,7 +1001,7 @@ int b_read_line(int arglist, int rest, int th)
     char str[STRSIZE], c;
 
     n = length(arglist);
-	ind = makeind("read_line",n,th);
+    ind = makeind("read_line", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1053,7 +1053,7 @@ int b_read_string(int arglist, int rest, int th)
     char str[STRSIZE], c;
 
     n = length(arglist);
-	ind = makeind("read_string",n,th);
+    ind = makeind("read_string", n, th);
     if (n == 2) {
 	arg1 = input_stream;
 	arg2 = car(arglist);	// maxlen
@@ -1113,7 +1113,7 @@ int b_skip(int arglist, int rest, int th)
     char c, str[STRSIZE];
 
     n = length(arglist);
-	ind = makeind("skip",n,th);
+    ind = makeind("skip", n, th);
     if (n == 1) {
 	arg1 = standard_input;
 	arg2 = car(arglist);
@@ -1126,7 +1126,7 @@ int b_skip(int arglist, int rest, int th)
 	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
-	
+
 	save = input_stream;
 	input_stream = arg1;
 
@@ -1150,7 +1150,7 @@ int b_stdin(int arglist, int rest, int th)
     int n, ind, arg1, arg2, save1, save2;
 
     n = length(arglist);
-	ind = makeind("stdin",n,th);
+    ind = makeind("stdin", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1179,7 +1179,7 @@ int b_stdout(int arglist, int rest, int th)
     int n, ind, arg1, arg2, save1, save2;
 
     n = length(arglist);
-	ind = makeind("stdout",n,th);
+    ind = makeind("stdout", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1208,7 +1208,7 @@ int b_stdinout(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, save1, save2, save3;
 
     n = length(arglist);
-	ind = makeind("stdinout",n,th);
+    ind = makeind("stdinout", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1244,7 +1244,7 @@ int b_create(int arglist, int rest, int th)
     int n, ind, arg1, arg2, stream;
 
     n = length(arglist);
-	ind = makeind("create",n,th);
+    ind = makeind("create", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1280,7 +1280,7 @@ int b_open(int arglist, int rest, int th)
     FILE *fp;
 
     n = length(arglist);
-	ind = makeind("open",n,th);
+    ind = makeind("open", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1349,7 +1349,7 @@ int b_dup(int arglist, int rest, int th)
     int n, ind, arg1, arg2, addr;
 
     n = length(arglist);
-	ind = makeind("dup",n,th);
+    ind = makeind("dup", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1377,7 +1377,7 @@ int b_close(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("clsoe",n,th);
+    ind = makeind("clsoe", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	fclose(GET_PORT(arg1));
@@ -1390,10 +1390,10 @@ int b_close(int arglist, int rest, int th)
 
 int b_see(int arglist, int rest, int th)
 {
-    int n, ind, arg1,save;
+    int n, ind, arg1, save;
 
     n = length(arglist);
-	ind = makeind("see",n,th);
+    ind = makeind("see", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -1405,15 +1405,15 @@ int b_see(int arglist, int rest, int th)
 	    input_stream = standard_input;
 	    return (prove_all(rest, sp[th], th));
 	} else {
-		save = input_stream;
+	    save = input_stream;
 	    input_stream =
 		makestream(fopen(GET_NAME(arg1), "r"), NPL_INPUT, NPL_TEXT,
 			   NIL, arg1);
 
-	    if (GET_PORT(input_stream) == NULL){
-			input_stream = save;
-			exception(CANT_OPEN, ind, arg1, th);
-		}
+	    if (GET_PORT(input_stream) == NULL) {
+		input_stream = save;
+		exception(CANT_OPEN, ind, arg1, th);
+	    }
 	    return (prove_all(rest, sp[th], th));
 	}
     }
@@ -1426,7 +1426,7 @@ int b_seeing(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("seeing",n,th);
+    ind = makeind("seeing", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!wide_variable_p(arg1))
@@ -1442,10 +1442,10 @@ int b_seeing(int arglist, int rest, int th)
 
 int b_seen(int arglist, int rest, int th)
 {
-    int n,ind;
+    int n, ind;
 
     n = length(arglist);
-	ind = makeind("seen",n,th);
+    ind = makeind("seen", n, th);
     if (n == 0) {
 	if (input_stream != standard_input) {
 	    fclose(GET_PORT(input_stream));
@@ -1459,10 +1459,10 @@ int b_seen(int arglist, int rest, int th)
 
 int b_tell(int arglist, int rest, int th)
 {
-    int n, ind, arg1,save;
+    int n, ind, arg1, save;
 
     n = length(arglist);
-	ind = makeind("tell",n,th);
+    ind = makeind("tell", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
@@ -1475,15 +1475,15 @@ int b_tell(int arglist, int rest, int th)
 	    output_stream = standard_output;
 	    return (prove_all(rest, sp[th], th));
 	} else {
-		save = output_stream;
+	    save = output_stream;
 	    output_stream =
 		makestream(fopen(GET_NAME(arg1), "w"), NPL_OUTPUT,
 			   NPL_TEXT, NIL, arg1);
 
-	    if (GET_PORT(input_stream) == NULL){
-			output_stream = save;
-			exception(CANT_OPEN, ind, arg1, th);
-		}
+	    if (GET_PORT(input_stream) == NULL) {
+		output_stream = save;
+		exception(CANT_OPEN, ind, arg1, th);
+	    }
 	    return (prove_all(rest, sp[th], th));
 	}
     }
@@ -1496,7 +1496,7 @@ int b_telling(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("telling",n,th);
+    ind = makeind("telling", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (unify(arg1, GET_CDR(output_stream), th) == YES)
@@ -1508,10 +1508,10 @@ int b_telling(int arglist, int rest, int th)
 
 int b_told(int arglist, int rest, int th)
 {
-    int n,ind;
+    int n, ind;
 
     n = length(arglist);
-	ind = makeind("told",n,th);
+    ind = makeind("told", n, th);
     if (n == 0) {
 	if (output_stream != standard_output) {
 	    fclose(GET_PORT(output_stream));
@@ -1529,7 +1529,7 @@ int b_flush(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("flush",n,th);
+    ind = makeind("flush", n, th);
     if (n == 0) {
 	fflush(stdout);
 	return (prove_all(rest, sp[th], th));
@@ -1541,7 +1541,7 @@ int b_flush(int arglist, int rest, int th)
 	    exception(NOT_STREAM, ind, arg1, th);
 	if (aliasp(arg1))
 	    arg1 = GET_CAR(arg1);
-	
+
 
 	fflush(GET_PORT(arg1));
 	return (prove_all(rest, sp[th], th));
@@ -1557,7 +1557,7 @@ int b_consult(int arglist, int rest, int th)
     char str[STRSIZE];
 
     n = length(arglist);
-	ind = makeind("consult",n,th);
+    ind = makeind("consult", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -1627,7 +1627,7 @@ int b_reconsult(int arglist, int rest, int th)
     char str[STRSIZE];
 
     n = length(arglist);
-	ind = makeind("reconsult",n,th);
+    ind = makeind("reconsult", n, th);
     arg2 = NIL;
     if (n == 1) {
 	arg1 = car(arglist);
@@ -1748,7 +1748,7 @@ int b_save(int arglist, int rest, int th)
     char *home, str1[STRSIZE];
 
     n = length(arglist);
-	ind = makeind("save",n,th);
+    ind = makeind("save", n, th);
     if (n == 0) {
 	arg1 = NIL;
 	home = getenv("HOME");
@@ -1801,7 +1801,7 @@ int b_directory(int arglist, int rest, int th)
     struct tm *t_st;
 
     n = length(arglist);
-	ind = makeind("directory",n,th);
+    ind = makeind("directory", n, th);
     if (n == 6) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1883,14 +1883,14 @@ int b_is(int arglist, int rest, int th)
     int n, ind, arg1, arg2, res;
 
     n = length(arglist);
-	ind = makeind("is",n,th);
+    ind = makeind("is", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg2))
 	    exception(INSTANTATION_ERR, ind, arg2, th);
-	
+
 	eval_context = ind;
 	arg2 = eval(arg2, th);
 	res = unify(arg1, arg2, th);
@@ -1910,7 +1910,7 @@ int b_greater(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind(">",n,th);
+    ind = makeind(">", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1923,7 +1923,7 @@ int b_greater(int arglist, int rest, int th)
 	eval_context = ind;
 	arg1 = eval(arg1, th);
 	arg2 = eval(arg2, th);
-	
+
 	if (greaterp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
 	else
@@ -1938,7 +1938,7 @@ int b_smaller(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("<",n,th);
+    ind = makeind("<", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1951,7 +1951,7 @@ int b_smaller(int arglist, int rest, int th)
 	eval_context = ind;
 	arg1 = eval(arg1, th);
 	arg2 = eval(arg2, th);
-	
+
 	if (smallerp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
 	else
@@ -1966,7 +1966,7 @@ int b_eqsmaller(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("=<",n,th);
+    ind = makeind("=<", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -1974,11 +1974,11 @@ int b_eqsmaller(int arglist, int rest, int th)
 	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
 	    exception(INSTANTATION_ERR, ind, arg2, th);
-	
+
 	eval_context = ind;
 	arg1 = eval(arg1, th);
 	arg2 = eval(arg2, th);
-	
+
 	if (eqsmallerp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
 	else
@@ -1993,7 +1993,7 @@ int b_eqgreater(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind(">=",n,th);
+    ind = makeind(">=", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2002,11 +2002,11 @@ int b_eqgreater(int arglist, int rest, int th)
 	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
 	    exception(INSTANTATION_ERR, ind, arg2, th);
-	
+
 	eval_context = ind;
 	arg1 = eval(arg1, th);
 	arg2 = eval(arg2, th);
-	
+
 	if (eqgreaterp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
 	else
@@ -2021,12 +2021,12 @@ int b_numeq(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("=:=",n,th);
+    ind = makeind("=:=", n, th);
     if (n == 2) {
 	eval_context = ind;
 	arg1 = eval(car(arglist), th);
 	arg2 = eval(cadr(arglist), th);
-	
+
 	if (numeqp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
 	else
@@ -2041,12 +2041,12 @@ int b_notnumeq(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("=\\=",n,th);
+    ind = makeind("=\\=", n, th);
     if (n == 2) {
 	eval_context = ind;
 	arg1 = eval(car(arglist), th);
 	arg2 = eval(cadr(arglist), th);
-	
+
 	if (!numeqp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
 	else
@@ -2061,7 +2061,7 @@ int b_equalp(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("==",n,th);
+    ind = makeind("==", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2073,7 +2073,7 @@ int b_equalp(int arglist, int rest, int th)
 	else
 	    return (NO);
     }
-	exception(ARITY_ERR, ind, arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -2082,7 +2082,7 @@ int b_notequalp(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("\\==",n,th);
+    ind = makeind("\\==", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2103,7 +2103,7 @@ int b_eq(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("eq",n,th);
+    ind = makeind("eq", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2124,7 +2124,7 @@ int b_compare(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3;
 
     n = length(arglist);
-	ind = makeind("compare",n,th);
+    ind = makeind("compare", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2133,8 +2133,7 @@ int b_compare(int arglist, int rest, int th)
 	    exception(NOT_ATOM, ind, arg1, th);
 	if (!wide_variable_p(arg1) &&
 	    !(eqlp(arg1, makeconst("<")) ||
-	      eqlp(arg1, makeconst("=")) ||
-	      eqlp(arg1, makeconst(">"))))
+	      eqlp(arg1, makeconst("=")) || eqlp(arg1, makeconst(">"))))
 	    exception(NOT_ORDER, ind, arg1, th);
 
 	if (equalp(arg2, arg3)) {
@@ -2148,7 +2147,7 @@ int b_compare(int arglist, int rest, int th)
 		return (prove_all(rest, sp[th], th));
 	}
 
-	return(NO);
+	return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -2159,7 +2158,7 @@ int b_atsmaller(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("@<",n,th);
+    ind = makeind("@<", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2259,7 +2258,7 @@ int b_ateqsmaller(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("@=<",n,th);
+    ind = makeind("@=<", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2280,7 +2279,7 @@ int b_atgreater(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("@>",n,th);
+    ind = makeind("@>", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2300,7 +2299,7 @@ int b_ateqgreater(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("@>=",n,th);
+    ind = makeind("@>=", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2320,7 +2319,7 @@ int b_ctr_set(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("ctr_set",n,th);
+    ind = makeind("ctr_set", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2345,7 +2344,7 @@ int b_ctr_dec(int arglist, int rest, int th)
     int n, ind, arg1, arg2, i;
 
     n = length(arglist);
-	ind = makeind("ctr_dec",n,th);
+    ind = makeind("ctr_dec", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2372,7 +2371,7 @@ int b_ctr_inc(int arglist, int rest, int th)
     int n, ind, arg1, arg2, i;
 
     n = length(arglist);
-	ind = makeind("ctr_inc",n,th);
+    ind = makeind("ctr_inc", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2399,7 +2398,7 @@ int b_ctr_is(int arglist, int rest, int th)
     int n, ind, arg1, arg2, i;
 
     n = length(arglist);
-	ind = makeind("ctr_is",n,th);
+    ind = makeind("ctr_is", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2423,14 +2422,14 @@ int b_ctr_is(int arglist, int rest, int th)
 //true fail
 int b_fail(int arglist, int rest, int th)
 {
-    int n,ind;
+    int n, ind;
 
     n = length(arglist);
-	ind = makeind("fail",n,th);
+    ind = makeind("fail", n, th);
     if (n == 0) {
 	return (NO);
     }
-	exception(ARITY_ERR, ind, arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -2439,7 +2438,7 @@ int b_call(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("call",n,th);
+    ind = makeind("call", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -2466,7 +2465,7 @@ int b_not(int arglist, int rest, int th)
     int n, ind, arg1, res;
 
     n = length(arglist);
-	ind = makeind("not",n,th);
+    ind = makeind("not", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -2486,14 +2485,14 @@ int b_not(int arglist, int rest, int th)
 
 int b_true(int arglist, int rest, int th)
 {
-    int n,ind;
+    int n, ind;
 
     n = length(arglist);
-	ind = makeind("true",n,th);
+    ind = makeind("true", n, th);
     if (n == 0) {
 	return (prove_all(rest, sp[th], th));
     }
-	exception(ARITY_ERR, ind, arglist, th);
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -2504,7 +2503,7 @@ int b_assert(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("assertz",n,th);
+    ind = makeind("assertz", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -2554,7 +2553,7 @@ int b_asserta(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("asserta",n,th);
+    ind = makeind("asserta", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -2604,7 +2603,7 @@ int b_retract(int arglist, int rest, int th)
     save2 = sp[th];
     clause = clauses = head = NIL;
     n = length(arglist);
-	ind = makeind("retract",n,th);
+    ind = makeind("retract", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -2675,7 +2674,7 @@ int b_abolish(int arglist, int rest, int th)
 
     clause = clauses = NIL;
     n = length(arglist);
-	ind = makeind("abolish",n,th);
+    ind = makeind("abolish", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -2733,7 +2732,7 @@ int b_clause(int arglist, int rest, int th)
     int n, ind, arg1, arg2, clause, clauses, save1, save2;
 
     n = length(arglist);
-	ind = makeind("clause",n,th);
+    ind = makeind("clause", n, th);
     if (n == 2) {
 	arg1 = car(arglist);	//head
 	arg2 = cadr(arglist);	//body
@@ -2784,7 +2783,7 @@ int b_nth_char(int arglist, int rest, int th)
     char str1[STRSIZE], str2[10];
 
     n = length(arglist);
-	ind = makeind("nth_char",n,th);
+    ind = makeind("nth_char", n, th);
     if (n == 3) {
 	arg1 = car(arglist);	// Nth
 	arg2 = cadr(arglist);	//string
@@ -2857,7 +2856,7 @@ int b_name(int arglist, int rest, int th)
     char str1[STRSIZE], str2[10];
 
     n = length(arglist);
-	ind = makeind("name",n,th);
+    ind = makeind("name", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2867,7 +2866,7 @@ int b_name(int arglist, int rest, int th)
 	    exception(NOT_ATOM, ind, arg1, th);
 	if (wide_variable_p(arg1) && !listp(arg2))
 	    exception(NOT_LIST, ind, arg2, th);
-	
+
 
 	if (singlep(arg1) && !variablep(arg1)) {
 	    strcpy(str1, GET_NAME(arg1));
@@ -2953,7 +2952,7 @@ int b_list_text(int arglist, int rest, int th)
     char str1[STRSIZE], str2[10];
 
     n = length(arglist);
-	ind = makeind("list_text",n,th);
+    ind = makeind("list_text", n, th);
     if (n == 2) {
 	arg1 = car(arglist);	//list
 	arg2 = cadr(arglist);	//atomstring
@@ -3066,7 +3065,7 @@ int b_atom_string(int arglist, int rest, int th)
     int n, ind, arg1, arg2, temp;
 
     n = length(arglist);
-	ind = makeind("atom_string",n,th);
+    ind = makeind("atom_string", n, th);
     if (n == 2) {
 	arg1 = car(arglist);	//atom
 	arg2 = cadr(arglist);	//string
@@ -3100,7 +3099,7 @@ int b_char_code(int arglist, int rest, int th)
     char str[2];
 
     n = length(arglist);
-	ind = makeind("char_code",n,th);
+    ind = makeind("char_code", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -3166,7 +3165,7 @@ int b_concat(int arglist, int rest, int th)
     char str1[STRSIZE];
 
     n = length(arglist);
-	ind = makeind("concat",n,th);
+    ind = makeind("concat", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -3228,7 +3227,7 @@ int b_string_length(int arglist, int rest, int th)
     int n, ind, arg1, arg2, val;
 
     n = length(arglist);
-	ind = makeind("string_length",n,th);
+    ind = makeind("string_length", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -3257,7 +3256,7 @@ int b_string_term(int arglist, int rest, int th)
     char str[STRSIZE];
 
     n = length(arglist);
-	ind = makeind("string_term",n,th);
+    ind = makeind("string_term", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -3324,7 +3323,7 @@ int b_substring(int arglist, int rest, int th)
     char str1[STRSIZE], str2[STRSIZE];
 
     n = length(arglist);
-	ind = makeind("substring",n,th);
+    ind = makeind("substring", n, th);
     if (n == 4) {
 	arg1 = car(arglist);	//instring
 	arg2 = cadr(arglist);	//start
@@ -3380,7 +3379,7 @@ int b_float_text(int arglist, int rest, int th)
     double flt;
 
     n = length(arglist);
-	ind = makeind("float_text",n,th);
+    ind = makeind("float_text", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -3454,7 +3453,7 @@ int b_int_text(int arglist, int rest, int th)
     char str[STRSIZE];
 
     n = length(arglist);
-	ind = makeind("int_text",n,th);
+    ind = makeind("int_text", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -3487,10 +3486,10 @@ int b_int_text(int arglist, int rest, int th)
 //controle
 int b_cut(int arglist, int rest, int th)
 {
-    int n,ind;
+    int n, ind;
 
     n = length(arglist);
-	ind = makeind("!",n,th);
+    ind = makeind("!", n, th);
     if (n == 0) {
 	return (prove_all(rest, sp[th], th));
     }
@@ -3503,7 +3502,7 @@ int b_ifthen(int arglist, int rest, int th)
     int n, ind, arg1, arg2, save1;
 
     n = length(arglist);
-	ind = makeind("ifthen",n,th);
+    ind = makeind("ifthen", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -3532,7 +3531,7 @@ int b_ifthenelse(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, save;
 
     n = length(arglist);
-	ind = makeind("ifthenelse",n,th);
+    ind = makeind("ifthenelse", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -3572,7 +3571,7 @@ int b_measure(int arglist, int rest, int th)
     double start_time, end_time, time, lips;
 
     n = length(arglist);
-	ind = makeind("measure",n,th);
+    ind = makeind("measure", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	proof[th] = 0;
@@ -3593,10 +3592,10 @@ int b_measure(int arglist, int rest, int th)
 
 int b_trace(int arglist, int rest, int th)
 {
-    int n,ind;
+    int n, ind;
 
     n = length(arglist);
-	ind = makeind("trace",n,th);
+    ind = makeind("trace", n, th);
     if (n == 0) {
 	debug_flag = ON;
 	return (prove_all(rest, sp[th], th));
@@ -3607,10 +3606,10 @@ int b_trace(int arglist, int rest, int th)
 
 int b_notrace(int arglist, int rest, int th)
 {
-    int n,ind;
+    int n, ind;
 
     n = length(arglist);
-	ind = makeind("notrace",n,th);
+    ind = makeind("notrace", n, th);
     if (n == 0) {
 	debug_flag = OFF;
 	return (prove_all(rest, sp[th], th));
@@ -3624,7 +3623,7 @@ int b_spy(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("spy",n,th);
+    ind = makeind("spy", n, th);
     if (n == 0) {
 	print(spy_list);
 	return (prove_all(rest, sp[th], th));
@@ -3645,7 +3644,7 @@ int b_nospy(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("nospy",n,th);
+    ind = makeind("nospy", n, th);
     if (n == 0) {
 	while (!nullp(spy_list)) {
 	    spy_list = cdr(spy_list);
@@ -3666,7 +3665,7 @@ int b_leash(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("leash",n,th);
+    ind = makeind("leash", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (arg1 == makeatom("full", SIMP)) {
@@ -3690,10 +3689,10 @@ int b_leash(int arglist, int rest, int th)
 
 int b_debug(int arglist, int rest, int th)
 {
-    int n,ind;
+    int n, ind;
 
     n = length(arglist);
-	ind = makeind("debug",n,th);
+    ind = makeind("debug", n, th);
     if (n == 0) {
 	printf("debug_flag=%d\n", debug_flag);
 	printf("trace_flag=%d\n", trace_flag);
@@ -3711,7 +3710,7 @@ int b_break(int arglist, int rest, int th)
     int n, ind, ret, save1, save2;
 
     n = length(arglist);
-	ind = makeind("break",n,th);
+    ind = makeind("break", n, th);
     if (n == 0) {
 	break_flag = 1;
 	save1 = wp[th];
@@ -3743,7 +3742,7 @@ int b_end_of_file(int arglist, int rest, int th)
     int n, ind;
 
     n = length(arglist);
-	ind = makeind("end_of_file",n,th);
+    ind = makeind("end_of_file", n, th);
     if (n == 0) {
 	if (break_flag) {
 	    variables[th] = variables_save[th];
@@ -3761,11 +3760,11 @@ int b_halt(int arglist, int rest, int th)
     int n, ind;
 
     n = length(arglist);
-	ind = makeind("halt",n,th);
+    ind = makeind("halt", n, th);
     if (n == 0) {
 	if (parent_flag)
-	    exception(SYSTEM_ERR, ind, makestr("Execute dp_close before halting."),
-		  th);
+	    exception(SYSTEM_ERR, ind,
+		      makestr("Execute dp_close before halting."), th);
 
 	printf("- good bye -\n");
 	longjmp(buf, 2);
@@ -3779,7 +3778,7 @@ int b_abort(int arglist, int rest, int th)
     int n, ind;
 
     n = length(arglist);
-	ind = makeind("abort",n,th);
+    ind = makeind("abort", n, th);
     if (n == 0) {
 	longjmp(buf, 1);
     }
@@ -3794,7 +3793,7 @@ int b_atom(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("atom",n,th);
+    ind = makeind("atom", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -3812,7 +3811,7 @@ int b_integer(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("integer",n,th);
+    ind = makeind("integer", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (integerp(arg1) || longnump(arg1) || bignump(arg1))
@@ -3829,7 +3828,7 @@ int b_real(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("real",n,th);
+    ind = makeind("real", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (floatp(arg1))
@@ -3846,7 +3845,7 @@ int b_number(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("number",n,th);
+    ind = makeind("number", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (numberp(arg1))
@@ -3864,7 +3863,7 @@ int b_system(int arglist, int rest, int th)
     int n, ind, arg1, save1, save2, syslist, pred;
 
     n = length(arglist);
-	ind = makeind("system",n,th);
+    ind = makeind("system", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -3898,7 +3897,7 @@ int b_var(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("var",n,th);
+    ind = makeind("var", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (variablep(arg1))
@@ -3917,7 +3916,7 @@ int b_nonvar(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("nonvar",n,th);
+    ind = makeind("nonvar", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -3937,7 +3936,7 @@ int b_atomic(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("atomic",n,th);
+    ind = makeind("atomic", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -3955,7 +3954,7 @@ int b_list(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("list",n,th);
+    ind = makeind("list", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (listp(arg1))
@@ -3972,7 +3971,7 @@ int b_string(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("string",n,th);
+    ind = makeind("string", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -3993,7 +3992,7 @@ int b_functor(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, res, i;
 
     n = length(arglist);
-	ind = makeind("functor",n,th);
+    ind = makeind("functor", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -4082,7 +4081,7 @@ int b_arg(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, elt, i;
 
     n = length(arglist);
-	ind = makeind("arg",n,th);
+    ind = makeind("arg", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -4119,7 +4118,7 @@ int b_arg0(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, elt, i;
 
     n = length(arglist);
-	ind = makeind("arg0",n,th);
+    ind = makeind("arg0", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -4158,7 +4157,7 @@ int b_listing(int arglist, int rest, int th)
     int n, ind, arg1, clauses, pred, list, temp;
 
     n = length(arglist);
-	ind = makeind("listing",n,th);
+    ind = makeind("listing", n, th);
     if (n == 0) {
 	list = listreverse(predicates);
 	listing_flag = 1;
@@ -4177,7 +4176,7 @@ int b_listing(int arglist, int rest, int th)
     }
     if (n == 1) {
 	arg1 = car(arglist);
-	
+
 	if (atomp(arg1)) {
 	    clauses = GET_CAR(arg1);
 	    listing_flag = 1;
@@ -4223,7 +4222,7 @@ int b_univ(int arglist, int rest, int th)
     int n, ind, arg1, arg2, res;
 
     n = length(arglist);
-	ind = makeind("=..",n,th);
+    ind = makeind("=..", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -4321,7 +4320,7 @@ int b_current_predicate(int arglist, int rest, int th)
     int n, ind, arg1, save1, save2, predlist, pred, aritylist, arity;
 
     n = length(arglist);
-	ind = makeind("current_predicate",n,th);
+    ind = makeind("current_predicate", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!atomp(arg1) && !wide_variable_p(arg1) && !structurep(arg1))
@@ -4377,10 +4376,11 @@ int specp(int x)
 
 int b_current_op(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2, arg3, save1, save2, lis, weight, spec, op, w, s, o;
+    int n, ind, arg1, arg2, arg3, save1, save2, lis, weight, spec, op, w,
+	s, o;
 
     n = length(arglist);
-	ind = makeind("current_op",n,th);
+    ind = makeind("current_op", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -4435,7 +4435,7 @@ int b_predicate_property(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("predicate_property",n,th);
+    ind = makeind("predicate_property", n, th);
     if (n == 2) {
 	arg1 = car(arglist);	//term
 	arg2 = cadr(arglist);	//prop
@@ -4489,7 +4489,7 @@ int b_reset_op(int arglist, int rest, int th)
     int n, ind;
 
     n = length(arglist);
-	ind = makeind("reset_op",n,th);
+    ind = makeind("reset_op", n, th);
     if (n == 0) {
 	init_operator();
 	return (prove_all(rest, sp[th], th));
@@ -4500,9 +4500,9 @@ int b_reset_op(int arglist, int rest, int th)
 
 int o_define(int x, int y, int th)
 {
-    int clause,ind;
-	
-	ind = makeind("assertz",1,th);
+    int clause, ind;
+
+    ind = makeind("assertz", 1, th);
     if (!nullp(y)) {
 	if (builtinp(x))
 	    exception(BUILTIN_EXIST, ind, x, th);
@@ -4551,7 +4551,7 @@ int b_gbc(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("gc",n,th);
+    ind = makeind("gc", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (arg1 == makeconst("full")) {
@@ -4579,7 +4579,7 @@ int b_mkdir(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("mkdir",n,th);
+    ind = makeind("mkdir", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -4600,7 +4600,7 @@ int b_rmdir(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("rmdir",n,th);
+    ind = makeind("rmdir", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -4621,7 +4621,7 @@ int b_chdir(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("chdir",n,th);
+    ind = makeind("chdir", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -4643,7 +4643,7 @@ int b_delete(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("delete",n,th);
+    ind = makeind("delete", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -4664,7 +4664,7 @@ int b_rename(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("rename",n,th);
+    ind = makeind("rename", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -4709,7 +4709,7 @@ int b_edit(int arglist, int rest, int th)
     char *editor;
 
     n = length(arglist);
-	ind = makeind("edit",n,th);
+    ind = makeind("edit", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	arg2 = makeatom("r", SIMP);
@@ -4757,7 +4757,7 @@ int b_shell(int arglist, int rest, int th)
     char str1[STRSIZE];
 
     n = length(arglist);
-	ind = makeind("shell",n,th);
+    ind = makeind("shell", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!singlep(arg1))
@@ -4779,7 +4779,7 @@ int b_syntaxerrors(int arglist, int rest, int th)
     int n, ind, arg1, arg2, res;
 
     n = length(arglist);
-	ind = makeind("syntaxerrors",n,th);
+    ind = makeind("syntaxerrors", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -4804,7 +4804,7 @@ int b_fileerrors(int arglist, int rest, int th)
     int n, ind, arg1, arg2, res;
 
     n = length(arglist);
-	ind = makeind("fileerrors",n,th);
+    ind = makeind("fileerrors", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -4829,7 +4829,7 @@ int b_statistics(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("statistics",n,th);
+    ind = makeind("statistics", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -4862,7 +4862,7 @@ int b_sort(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("sort",n,th);
+    ind = makeind("sort", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -4886,7 +4886,7 @@ int b_keysort(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("keysort",n,th);
+    ind = makeind("keysort", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -4912,7 +4912,7 @@ int b_inc(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("inc",n,th);
+    ind = makeind("inc", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -4959,7 +4959,7 @@ int b_dec(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("dec",n,th);
+    ind = makeind("dec", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -5006,7 +5006,7 @@ int b_ansi_cup(int arglist, int rest, int th)
     int n, ind, arg1, arg2, r, c;
 
     n = length(arglist);
-	ind = makeind("ansi_cup",n,th);
+    ind = makeind("ansi_cup", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -5094,7 +5094,7 @@ int b_ansi_cpr(int arglist, int rest, int th)
     cursor position;
 
     n = length(arglist);
-	ind = makeind("ansi_cpr",n,th);
+    ind = makeind("ansi_cpr", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -5120,11 +5120,11 @@ int b_ansi_cpr(int arglist, int rest, int th)
 
 int b_ansi_scp(int arglist, int rest, int th)
 {
-    int n,ind;
+    int n, ind;
     cursor position;
 
     n = length(arglist);
-	ind = makeind("ansi_scp",n,th);
+    ind = makeind("ansi_scp", n, th);
     if (n == 0) {
 	position = get_cursor();
 
@@ -5140,10 +5140,10 @@ int b_ansi_scp(int arglist, int rest, int th)
 
 int b_ansi_rcp(int arglist, int rest, int th)
 {
-    int n,ind;
+    int n, ind;
 
     n = length(arglist);
-	ind = makeind("ansi_rcp",n,th);
+    ind = makeind("ansi_rcp", n, th);
     if (n == 0) {
 	ESCMOVE(cursor_row_store, cursor_col_store);
 	ESCCOLOR(cursor_color_store);
@@ -5156,10 +5156,10 @@ int b_ansi_rcp(int arglist, int rest, int th)
 
 int b_ansi_ed(int arglist, int rest, int th)
 {
-    int n,ind;
+    int n, ind;
 
     n = length(arglist);
-	ind = makeind("ansi_ed",n,th);
+    ind = makeind("ansi_ed", n, th);
     if (n == 0) {
 	ESCCLS;
 	ESCTOP;
@@ -5171,10 +5171,10 @@ int b_ansi_ed(int arglist, int rest, int th)
 
 int b_ansi_el(int arglist, int rest, int th)
 {
-    int n,ind;
+    int n, ind;
 
     n = length(arglist);
-	ind = makeind("ansi_el",n,th);
+    ind = makeind("ansi_el", n, th);
     if (n == 0) {
 	ESCCLSL1;
 	return (prove_all(rest, sp[th], th));
@@ -5189,7 +5189,7 @@ int b_ansi_cuu(int arglist, int rest, int th)
     int n, ind, arg1, m;
 
     n = length(arglist);
-	ind = makeind("ansi_cuu",n,th);
+    ind = makeind("ansi_cuu", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -5214,7 +5214,7 @@ int b_ansi_cud(int arglist, int rest, int th)
     int n, ind, arg1, m;
 
     n = length(arglist);
-	ind = makeind("ansi_cud",n,th);
+    ind = makeind("ansi_cud", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -5239,7 +5239,7 @@ int b_ansi_cuf(int arglist, int rest, int th)
     int n, ind, arg1, m;
 
     n = length(arglist);
-	ind = makeind("ansi_cuf",n,th);
+    ind = makeind("ansi_cuf", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -5264,7 +5264,7 @@ int b_ansi_cub(int arglist, int rest, int th)
     int n, ind, arg1, m;
 
     n = length(arglist);
-	ind = makeind("ansi_cub",n,th);
+    ind = makeind("ansi_cub", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -5289,7 +5289,7 @@ int b_ansi_sgr(int arglist, int rest, int th)
     int n, ind, arg1, m;
 
     n = length(arglist);
-	ind = makeind("ansi_sgr",n,th);
+    ind = makeind("ansi_sgr", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -5322,7 +5322,7 @@ int b_date(int arglist, int rest, int th)
     time_t t;
 
     n = length(arglist);
-	ind = makeind("data",n,th);
+    ind = makeind("data", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!wide_variable_p(arg1))
@@ -5347,7 +5347,7 @@ int b_date_day(int arglist, int rest, int th)
     int n, ind, arg1, arg2, y, m, d, w;
 
     n = length(arglist);
-	ind = makeind("data_day",n,th);
+    ind = makeind("data_day", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -5380,7 +5380,7 @@ int b_time(int arglist, int rest, int th)
     time_t t;
 
     n = length(arglist);
-	ind = makeind("time",n,th);
+    ind = makeind("time", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -5403,7 +5403,7 @@ int b_errcode(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("errcode",n,th);
+    ind = makeind("errcode", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (unify(arg1, makeint(error_code), th) == YES)
@@ -5441,7 +5441,7 @@ int b_recordh(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, data, record_id, index;
 
     n = length(arglist);
-	ind = makeind("recordh",n,th);
+    ind = makeind("recordh", n, th);
     if (n == 3) {
 	arg1 = car(arglist);	//table_name
 	arg2 = cadr(arglist);	//sort_key
@@ -5482,7 +5482,7 @@ int b_retrieveh(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, save1, record_id, index, lis, term;
 
     n = length(arglist);
-	ind = makeind("retrieveh",n,th);
+    ind = makeind("retrieveh", n, th);
     if (n == 3) {
 	arg1 = car(arglist);	//table name
 	arg2 = cadr(arglist);	//sort key
@@ -5528,7 +5528,7 @@ int b_instance(int arglist, int rest, int th)
     int n, ind, arg1, arg2;
 
     n = length(arglist);
-	ind = makeind("instance",n,th);
+    ind = makeind("instance", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -5553,7 +5553,7 @@ int b_recordz(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, temp, chain, next;
 
     n = length(arglist);
-	ind = makeind("recordz",n,th);
+    ind = makeind("recordz", n, th);
     if (n == 3) {
 	arg1 = car(arglist);	//key
 	arg2 = cadr(arglist);	//term
@@ -5605,7 +5605,7 @@ int b_record_after(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, chain, chain1;
 
     n = length(arglist);
-	ind = makeind("record_after",n,th);
+    ind = makeind("record_after", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -5642,7 +5642,7 @@ int b_recorda(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, chain;
 
     n = length(arglist);
-	ind = makeind("recorda",n,th);
+    ind = makeind("recorda", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -5682,7 +5682,7 @@ int b_recorded(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, chain, save1, save2;
 
     n = length(arglist);
-	ind = makeind("recorded",n,th);
+    ind = makeind("recorded", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -5715,7 +5715,7 @@ int b_nref(int arglist, int rest, int th)
     int n, ind, arg1, arg2, chain;
 
     n = length(arglist);
-	ind = makeind("nref",n,th);
+    ind = makeind("nref", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -5743,13 +5743,13 @@ int b_pref(int arglist, int rest, int th)
     int n, ind, arg1, arg2, chain;
 
     n = length(arglist);
-	ind = makeind("pref",n,th);
+    ind = makeind("pref", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if(!integerp(arg1))
-		exception(NOT_INT, ind, arg1, th);
+	if (!integerp(arg1))
+	    exception(NOT_INT, ind, arg1, th);
 	if (!wide_variable_p(arg1) && !integerp(arg1))
 	    exception(NOT_INT, ind, arg2, th);
 
@@ -5772,7 +5772,7 @@ int b_nth_ref(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, chain, i;
 
     n = length(arglist);
-	ind = makeind("nth_ref",n,th);
+    ind = makeind("nth_ref", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -5811,7 +5811,7 @@ int b_replace(int arglist, int rest, int th)
     int n, ind, arg1, arg2, chain;
 
     n = length(arglist);
-	ind = makeind("replace",n,th);
+    ind = makeind("replace", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -5836,9 +5836,9 @@ int b_replace(int arglist, int rest, int th)
 int b_erase(int arglist, int rest, int th)
 {
     int n, ind, arg1, addr;
-	
+
     n = length(arglist);
-	ind = makeind("erase",th,n);
+    ind = makeind("erase", th, n);
     if (n == 1) {
 	arg1 = car(arglist);
 	arg1 = deref(arg1, th);
@@ -5858,7 +5858,7 @@ int b_eraseall(int arglist, int rest, int th)
     int n, ind, arg1;
 
     n = length(arglist);
-	ind = makeind("eraseall",n,th);
+    ind = makeind("eraseall", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	arg1 = deref(arg1, th);
@@ -5883,7 +5883,7 @@ int b_removeh(int arglist, int rest, int th)
     int n, ind, arg1, arg2, arg3, save1, record_id, index, lis, prev, term;
 
     n = length(arglist);
-	ind = makeind("removeh",n,th);
+    ind = makeind("removeh", n, th);
     if (n == 3) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -5935,10 +5935,10 @@ int b_removeh(int arglist, int rest, int th)
 
 int b_removeallh(int arglist, int rest, int th)
 {
-    int n, ind ,arg1, record_id, i;
+    int n, ind, arg1, record_id, i;
 
     n = length(arglist);
-	ind = makeind("removeallh",n,th);
+    ind = makeind("removeallh", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	record_id = GET_ARITY(arg1) - 1;
@@ -5957,7 +5957,7 @@ int b_ref(int arglist, int rest, int th)
     int n, ind, arg1, list, key, num, chain;
 
     n = length(arglist);
-	ind = makeind("ref",n,th);
+    ind = makeind("ref", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -5991,10 +5991,11 @@ int b_ref(int arglist, int rest, int th)
 
 int b_key(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2, save1, save2, list, key, chain, arity, keyarity;
+    int n, ind, arg1, arg2, save1, save2, list, key, chain, arity,
+	keyarity;
 
     n = length(arglist);
-	ind = makeind("key",n,th);
+    ind = makeind("key", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 
