@@ -90,10 +90,6 @@ The following extension functions respect ISO-Prolog as much as possible, but th
 
 - at_end_of_stream/1
 
-
-
-### future task
-- sub_atom/5
 - stream_property/2
 
 

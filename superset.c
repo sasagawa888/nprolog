@@ -1753,6 +1753,39 @@ int b_at_end_of_stream(int arglist, int rest, int th)
 	return(NO);
 }
 
+int b_stream_property(int arglist, int rest, int th)
+{
+	int n,ind,arg1,arg2,prop;
+
+	n=length(arglist);
+	ind = makeind("stream_property",n,th);
+	if(n==2){
+		arg1 = car(arglist);
+		arg2 = cadr(arglist);
+
+		if(!streamp(arg1))
+		exception(NOT_STREAM,ind,arglist,th);
+
+		if(GET_OPT(arg1) == NPL_INPUT)
+			prop = list2(makepred("mode"),makeconst("input"));
+		else if(GET_OPT(arg1) == NPL_OUTPUT)
+			prop = list2(makepred("mode"),makeconst("output"));
+		else if(GET_OPT(arg1) == NPL_INPUT)
+			prop = list2(makepred("mode"),makeconst("output"));
+		else 
+			prop = NIL;
+
+		if(unify(arg2,prop,th)==YES){
+			return(prove_all(rest,sp[th],th));
+		}
+		
+			return(NO);
+	}
+	exception(ARITY_ERR,ind,arglist,th);
+	return(NO);
+}
+
+
 
 //-----------TCP/IP--------------------
 

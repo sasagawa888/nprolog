@@ -147,7 +147,6 @@ void init_builtin(void)
     defbuiltin("rename", b_rename, 2);
     defbuiltin("replace", b_replace, 2);
     defbuiltin("reset_op", b_reset_op, 0);
-    //defbuiltin("reverse", b_reverse, 2);
     defbuiltin("rmdir", b_rmdir, 1);
     defbuiltin("save", b_save, list2(0, 1));
     defbuiltin("see", b_see, 1);
@@ -216,6 +215,7 @@ void init_builtin(void)
 	defbuiltin("module", b_module, 2);
 	defbuiltin("copy_term", b_copy_term, 2);
 	defbuiltin("at_end_of_stream", b_at_end_of_stream, 1);
+	defbuiltin("stream_property", b_stream_property, 2);
     defbuiltin("existerrors", b_existerrors, 2);
     definfix("\\+", b_not, 900, FY);
 
@@ -1315,7 +1315,7 @@ int b_open(int arglist, int rest, int th)
 		return (prove_all(rest, sp[th], th));
 	    } else if (arg3 == makeconst("rw")) {
 		stream =
-		    makestream(fopen(GET_NAME(arg2), "r+"), NPL_INPUT,
+		    makestream(fopen(GET_NAME(arg2), "r+"), NPL_INOUT,
 			       NPL_TEXT, NIL, arg2);
 
 		if (GET_PORT(stream) == NULL)
