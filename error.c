@@ -114,6 +114,19 @@ void exception(int errnum, int ind, int arg, int th)
 	printf("Divide by zero ");
 	print(ind);
 	break;
+
+	case NOT_NUM:
+	bindsym(makevar("%TypeName"),makeconst("number"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(type_tag,th);
+	ESCFRED;
+	printf("Not a number ");
+	print(ind);
+	printf(" ");
+	print(arg);
+	break;
+
 	
     case NOT_INT:
 	bindsym(makevar("%TypeName"),makeconst("integer"),th);

@@ -480,15 +480,20 @@ int eval(int x, int th)
 	return (x);
     else if (bignump(x))
 	return (x);
-    else if (variablep(x))
-	return (deref(x, th));
+    else if (variablep(x)){
+		int res;
+		res = deref(x,th);
+		if(wide_variable_p(res))
+			exception(INSTANTATION_ERR,eval_context, x, th);
+		return (res);
+	}
     else if (!structurep(x)) {
 	if (eqp(x, makefunc("pi")))
 	    return (makeflt(3.14159265358979323846));
 	else if (eqlp(x, makefunc("random")))
 	    return (f_random(NIL, th));
 	else
-	    exception(NOT_FUNCTION, eval_context, x, th);
+	    exception(NOT_NUM, eval_context, x, th);
     } else if (eqlp(car(x), makeatom("abs", FUNC))) {
 	if (length(x) != 2)
 	    exception(NOT_FUNCTION, eval_context, x, th);
@@ -940,20 +945,32 @@ int f_complement(int x, int y, int th)
 
 int f_abs(int x, int th)
 {
+    return (absolute(x, th));
+}
+
+/* for compiler */
+int c_abs(int x, int th) 
+{
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, eval_context, x, th);
+	exception(INSTANTATION_ERR, makeind("abs",1,th), x, th);
     if (!numberp(x))
-	exception(NOT_NUM, eval_context, x, th);
+	exception(NOT_NUM, makeind("abs",1,th), x, th);
 
     return (absolute(x, th));
 }
 
+
 int f_sin(int x, int th)
 {
+    return (makeflt(sin(GET_FLT(exact_to_inexact(x)))));
+}
+
+int c_sin(int x, int th)
+{
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, eval_context, x, th);
+	exception(INSTANTATION_ERR, makeind("sin",1,th), x, th);
     if (!numberp(x))
-	exception(NOT_NUM, eval_context, x, th);
+	exception(NOT_NUM, makeind("sin",1,th), x, th);
 
     return (makeflt(sin(GET_FLT(exact_to_inexact(x)))));
 }

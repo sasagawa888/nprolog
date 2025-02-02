@@ -1,5 +1,5 @@
 
-
+test0(X,Y,Z) :- Z is X+Y.
 test1(X,Y,Z) :- Z is X << Y. 
 test2(X,Y,Z) :- Z is X >> Y.
 test3(X,Y)  :- Y is randi(X).
