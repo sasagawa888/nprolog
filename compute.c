@@ -49,7 +49,7 @@ int exact_to_inexact(int x)
     default:
 	return (x);
     }
-    exception(SYSTEM_ERROR, makestr("exact_to_inexact"), x, 0);
+    exception(SYSTEM_ERR, makestr("exact_to_inexact"), x, 0);
     return (UNDEF);
 }
 

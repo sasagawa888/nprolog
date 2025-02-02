@@ -1817,7 +1817,7 @@ int b_directory(int arglist, int rest, int th)
 	save = sp[th];
 	dir = opendir(GET_NAME(arg1));
 	if (dir == NULL)
-	    exception(SYSTEM_ERROR, ind, makestr("opendir"), th);
+	    exception(SYSTEM_ERR, ind, makestr("opendir"), th);
 
 	dp = readdir(dir);
 	while (dp != NULL) {
@@ -1849,7 +1849,7 @@ int b_directory(int arglist, int rest, int th)
 		unify(arg6, makeint(stat_buf.st_size), th);
 		return (prove_all(rest, sp[th], th));
 	    } else
-		exception(SYSTEM_ERROR, ind, makestr("readdir"), th);
+		exception(SYSTEM_ERR, ind, makestr("readdir"), th);
 
 	    unbind(save, th);
 	    dp = readdir(dir);
@@ -3752,7 +3752,7 @@ int b_halt(int arglist, int rest, int th)
 	ind = makeind("halt",n,th);
     if (n == 0) {
 	if (parent_flag)
-	    exception(SYSTEM_ERROR, ind, makestr("Execute dp_close before halting."),
+	    exception(SYSTEM_ERR, ind, makestr("Execute dp_close before halting."),
 		  th);
 
 	printf("- good bye -\n");
@@ -4724,7 +4724,7 @@ int b_edit(int arglist, int rest, int th)
 	}
 	res = system(str);
 	if (res == -1)
-	    exception(SYSTEM_ERROR, ind, arg1, th);
+	    exception(SYSTEM_ERR, ind, arg1, th);
 
 	if (arg2 == makeatom("r", SIMP))
 	    b_reconsult(list1(arg1), NIL, th);
@@ -4754,7 +4754,7 @@ int b_shell(int arglist, int rest, int th)
 	strcpy(str1, GET_NAME(arg1));
 	res = system(str1);
 	if (res == -1)
-	    exception(SYSTEM_ERROR, ind, arg1, th);
+	    exception(SYSTEM_ERR, ind, arg1, th);
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -5063,7 +5063,7 @@ cursor get_cursor(void)
     buf[i] = '\0';
 
     if (sscanf(buf, "\033[%d;%dR", &row, &col) != 2) {
-	exception(SYSTEM_ERROR, NIL, makestr("get_cursol"), 0);
+	exception(SYSTEM_ERR, NIL, makestr("get_cursol"), 0);
     }
     // restore original setting
     reset_input_mode(&original);

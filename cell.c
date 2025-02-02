@@ -100,7 +100,7 @@ void bindsym(int x, int val, int th)
     else if (atom_variable_p(x))
 	SET_CAR(x, val);
     else
-	exception(SYSTEM_ERROR, makestr("bindsym"), x, th);
+	exception(SYSTEM_ERR, makestr("bindsym"), x, th);
 
     push_stack(x, th);
 }
@@ -115,7 +115,7 @@ int findvar(int x, int th)
     else if (atom_variable_p(x))
 	return (GET_CAR(x));
     else
-	exception(SYSTEM_ERROR, makestr("findvar"), x, th);
+	exception(SYSTEM_ERR, makestr("findvar"), x, th);
     return (NIL);
 }
 
@@ -201,7 +201,7 @@ int makevariant(int th)
     addr = ac[th];
     ac[th]++;
     if (ac[th] >= VARIANTMAX)
-	exception(SYSTEM_ERROR, makestr("makevariant"), NIL, th);
+	exception(SYSTEM_ERR, makestr("makevariant"), NIL, th);
     return (addr);
 }
 
@@ -271,7 +271,7 @@ int makestr(char *name)
     SET_TAG(res, STR);
     str = (char *) malloc(strlen(name) + 1);
     if (str == NULL)
-	exception(SYSTEM_ERROR, makestr("makestr"), NIL, 0);
+	exception(SYSTEM_ERR, makestr("makestr"), NIL, 0);
     heap[res].name = str;
     strcpy(heap[res].name, name);
     SET_CAR(res, NIL);
@@ -403,7 +403,7 @@ int makesocket(int sockfd, int type, const char *name, int listenfd)
     SET_OPT(addr, type);	/* EISL_SOCKET */
     str = (char *) malloc(strlen(name) + 1);
     if (str == NULL)
-	exception(SYSTEM_ERROR, makestr("makesocket"), NIL, 0);
+	exception(SYSTEM_ERR, makestr("makesocket"), NIL, 0);
     heap[addr].name = str;
     strcpy(heap[addr].name, name); /* ip address */
     SET_AUX(addr, NPL_OPEN);	/* EISL_OPEN/EISL_CLOSE initial value is EISL_OPEN */

@@ -375,7 +375,7 @@ int main(int argc, char *argv[])
 	    printf("Shutting down the system...\n");
 	    int ret = system("sudo shutdown now");
 	    if (ret == -1)
-		exception(SYSTEM_ERROR, makestr("dp_close shatdown"), NIL, 0);
+		exception(SYSTEM_ERR, makestr("dp_close shatdown"), NIL, 0);
 	}
 	return 0;
     }

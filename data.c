@@ -1896,7 +1896,7 @@ void unbind(int x, int th)
 	    SET_CAR(stack[i][th], UNBIND);
 	    SET_CDR(stack[i][th], UNBIND);
 	} else
-	    exception(SYSTEM_ERROR, makestr("unbind"), x, th);
+	    exception(SYSTEM_ERR, makestr("unbind"), x, th);
     }
     sp[th] = x;
 }
@@ -2375,7 +2375,7 @@ void ucs4_to_utf8(int n, char *p)
 	p++;
 	*p = (char) z;
     } else {
-	exception(SYSTEM_ERROR, makestr("Unicode->UTF-8"), NIL, 0);
+	exception(SYSTEM_ERR, makestr("Unicode->UTF-8"), NIL, 0);
     }
     p++;
     *p = NUL;

@@ -1775,7 +1775,7 @@ int b_create_client_socket(int arglist, int rest, int th)
 
     sock = socket(AF_INET, SOCK_STREAM, 0);
     if (sock < 0) {
-	exception(SYSTEM_ERROR, ind, NIL, th);
+	exception(SYSTEM_ERR, ind, NIL, th);
     }
 
     memset((char *) &client_addr, 0, sizeof(client_addr));
@@ -1783,13 +1783,13 @@ int b_create_client_socket(int arglist, int rest, int th)
     client_addr.sin_port = htons(GET_INT(arg1));
 
     if (inet_pton(AF_INET, GET_NAME(arg2), &client_addr.sin_addr) < 0)
-	exception(SYSTEM_ERROR, ind, NIL, 0);
+	exception(SYSTEM_ERR, ind, NIL, 0);
 
 
     if (connect
 	(sock, (struct sockaddr *) &client_addr,
 	 sizeof(client_addr)) < 0) {
-	exception(SYSTEM_ERROR, ind, NIL, 0);
+	exception(SYSTEM_ERR, ind, NIL, 0);
     }
 
     res = makesocket(sock, NPL_SOCKET, "client", NIL);
@@ -1819,7 +1819,7 @@ int b_create_server_socket(int arglist, int rest, int th)
 
     sock0 = socket(AF_INET, SOCK_STREAM, 0);
     if (sock0 < 0) {
-	exception(SYSTEM_ERROR, ind, NIL, th);
+	exception(SYSTEM_ERR, ind, NIL, th);
     }
 
     memset((char *) &server_addr, 0, sizeof(server_addr));
@@ -1830,14 +1830,14 @@ int b_create_server_socket(int arglist, int rest, int th)
     if (bind
 	(sock0, (struct sockaddr *) &server_addr,
 	 sizeof(server_addr)) < 0) {
-	exception(SYSTEM_ERROR, ind, NIL, th);
+	exception(SYSTEM_ERR, ind, NIL, th);
     }
 
     listen(sock0, 5);
     parent_len = sizeof(server_addr);
     sock1 = accept(sock0, (struct sockaddr *) &server_addr, &parent_len);
     if (sock1 < 0) {
-	exception(SYSTEM_ERROR, ind, NIL, th);
+	exception(SYSTEM_ERR, ind, NIL, th);
     }
 
     res = makesocket(sock1, NPL_SOCKET, "server", sock0);
@@ -1869,7 +1869,7 @@ int b_send_socket(int arglist, int rest, int th)
     strcpy(buf, GET_NAME(arg2));
     m = write(GET_SOCKET(arg1), buf, 256);
     if (m < 0)
-		exception(SYSTEM_ERROR, ind, NIL, th);
+		exception(SYSTEM_ERR, ind, NIL, th);
 
 	return(prove_all(rest,sp[th],th));
 	}
@@ -1897,7 +1897,7 @@ int b_recv_socket(int arglist, int rest, int th)
     memset(buf, 0, sizeof(buf));
     m = read(sock, buf, sizeof(buf) - 1);
     if (m < 0) {
-	exception(SYSTEM_ERROR, ind, NIL, 0);
+	exception(SYSTEM_ERR, ind, NIL, 0);
     }
 	if(unify(arg2,makeconst(buf),th) == YES)
 		return(prove_all(rest,sp[th],th));

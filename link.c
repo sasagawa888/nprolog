@@ -30,7 +30,7 @@ void dynamic_link(int x)
 
     hmod = dlopen(str, RTLD_LAZY);
     if (hmod == NULL)
-	exception(SYSTEM_ERROR, makestr("load"), x, 0);
+	exception(SYSTEM_ERR, makestr("load"), x, 0);
 
     init_f0 = dlsym(hmod, "init0");
     init_f1 = dlsym(hmod, "init1");

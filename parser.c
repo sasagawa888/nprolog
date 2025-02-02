@@ -1449,7 +1449,7 @@ int readitem1(int th)
     default:
 	break;
     }
-    exception(SYSTEM_ERROR, makestr(stok.buf), NIL, th);
+    exception(SYSTEM_ERR, makestr(stok.buf), NIL, th);
     return (0);
 }
 
