@@ -585,6 +585,11 @@ test(copy_term) :-
     copy_term(f(X, Y), Copy5),  
     Copy5 = f(X, Y).         
                       
-
+test(compare) :-
+    compare(=,1,1),
+    not(compare(=,1,2)),
+    compare(>,banana,apple),
+    compare(=,apple,apple),
+    compare(<,foo(a),foo(b)).
      
 :- alltest,write('All tests are done'),nl.
