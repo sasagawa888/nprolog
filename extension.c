@@ -904,7 +904,7 @@ int b_wiringpi_setup_gpio(int arglist, int rest, int th)
     int n, ind;
 
     n = length(arglist);
-    ind = makeind("wiringpi_setup_gpio" n, th);
+    ind = makeind("wiringpi_setup_gpio", n, th);
     if (n == th) {
 	wiringPiSetupGpio();
 	return (prove_all(rest, sp[th], th));
