@@ -73,6 +73,8 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "set_input" }, { "set_output" }, { "use_module" }, { "module" }, { "copy_term" },
     { "current_input" }, { "current_output" }, { "at_end_of_stream" },
     { "peek_code" }, { "peek_char" }, { "peek_byte" }, { "stream_property" },
+    { "create_client_socket" }, { "create_server_socket" }, { "b_send_socket" },
+    { "recv_socket" }, { "close_socket" },
 };
 
 //compiled predicate

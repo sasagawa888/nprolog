@@ -216,6 +216,11 @@ void init_builtin(void)
 	defbuiltin("copy_term", b_copy_term, 2);
 	defbuiltin("at_end_of_stream", b_at_end_of_stream, 1);
 	defbuiltin("stream_property", b_stream_property, 2);
+	defbuiltin("create_client_socket", b_create_client_socket, 3);
+	defbuiltin("create_server_socket", b_create_server_socket, 2);
+	defbuiltin("send_socket", b_send_socket, 2);
+	defbuiltin("recv_socket", b_recv_socket, 2);
+	defbuiltin("close_socket", b_close_socket, 1);
     defbuiltin("existerrors", b_existerrors, 2);
     definfix("\\+", b_not, 900, FY);
 

@@ -761,6 +761,7 @@ int b_char_conversion(int arglist, int rest, int th);
 int b_char_set(int arglist, int rest, int th);
 int b_clause(int arglist, int rest, int th);
 int b_clause_with_arity(int arglist, int rest, int th);
+int b_create_client_socket(int arglist, int rest, int th);
 int b_close(int arglist, int rest, int th);
 int b_close_socket(int arglist, int rest, int th);
 int b_compare(int arglist, int rest, int th);
