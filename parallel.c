@@ -448,9 +448,15 @@ int b_dp_create(int arglist, int rest, int th)
     n = length(arglist);
 	ind = makeind("dp_create",n,th);
     if (n == 1) {
+	arg1 = car(arglist);
+	
+	if(!listp(arg1))
+		exception(NOT_LIST,ind,arg1,th);
+	if(length(arg1) > PARASIZE)
+		exception(RESOURCE_ERR,ind,arg1,th);
+	
 	parent_flag = 1;
 	child_num = 0;
-	arg1 = car(arglist);
 	while (!nullp(arg1)) {
 	    if (!atomp(car(arg1)))
 		exception(NOT_ATOM, ind, arg1, th);
@@ -516,7 +522,9 @@ int b_dp_prove(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (GET_INT(arg1) >= child_num || GET_INT(arg1) < 0)
-	    exception(RESOURCE_ERR, makestr("dp_prove"), arg1, th);
+	    exception(RESOURCE_ERR, ind, arg1, th);
+	if (!callablep(arg2))
+		exception(NOT_CALLABLE,ind,arg2,th);
 
 	send_to_child(GET_INT(arg1), pred_to_str(arg2));
 	res =
