@@ -24,3 +24,11 @@
 :- catch(atom_length(1,X),error(type_error(atom,1),atom_length/2),true).
 :- catch(atom_length(abc,1.1),error(type_error(integer,1.1),atom_length/2),true).
 :- catch(atom_length,error(existence_error(predicate,atom_length/0),atom_length/0),true).
+
+:- catch(catch(1,2,3),error(type_error(callable,1),catch/3),true).
+
+:- catch((X is a),error(type_error(number,a),is/2),true).
+:- catch((X is Y),error(instantiation_error,is/2),true).
+:- catch((X is 1/0),error(evaluation_error(evalution_error,zero_divisor),is/2),true).
+:- catch((X is log(0)),error(evaluation_error(float_overflow,0),log/1),true).
+:- catch((X is ln(0)),error(evaluation_error(float_overflow,0),ln/1),true).

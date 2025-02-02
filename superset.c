@@ -1464,6 +1464,8 @@ int b_catch(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 
+	if(!callablep(arg1))
+		exception(NOT_CALLABLE,ind,arg1,th);
 
 	catch_data[cp[th]][0][th] = arg2;   //tag
 	catch_data[cp[th]][1][th] = sp[th]; //sp for restore catch

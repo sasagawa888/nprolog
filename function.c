@@ -1036,7 +1036,7 @@ int f_ln(int x, int th)
     if (!numberp(x))
 	exception(NOT_NUM, makeind("ln",1,th), x, th);
     if (zerop(x) || negativep(x))
-	exception(EVALUATION_ERR, makeind("ln",1,th), x, th);
+	exception(FLOAT_OVERF, makeind("ln",1,th), x, th);
 
     return (makeflt(log(GET_FLT(exact_to_inexact(x)))));
 }
@@ -1045,11 +1045,11 @@ int f_ln(int x, int th)
 int f_log(int x, int th)
 {
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, makeind("ln",1,th), x, th);
+	exception(INSTANTATION_ERR, makeind("log",1,th), x, th);
     if (!numberp(x))
-	exception(NOT_NUM, makeind("ln",1,th), x, th);
+	exception(NOT_NUM, makeind("log",1,th), x, th);
     if (zerop(x) || negativep(x))
-	exception(EVALUATION_ERR, makeind("ln",1,th), x, th);
+	exception(FLOAT_OVERF, makeind("log",1,th), x, th);
 
     return (makeflt(log10(GET_FLT(exact_to_inexact(x)))));
 }

@@ -413,9 +413,13 @@ void exception(int errnum, int ind, int arg, int th)
 	print(arg);
 	break;
 	
-    case EVALUATION_ERR:
+    case FLOAT_OVERF:
+	bindsym(makevar("%ErrorType"),makeconst("float_overflow"),th);
+    bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(evaluation_tag,th);
 	ESCFRED;
-	printf("Evaluation error ");
+	printf("Float overflow ");
 	print(ind);
 	printf(" ");
 	print(arg);
