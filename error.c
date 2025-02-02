@@ -438,6 +438,19 @@ void exception(int errnum, int ind, int arg, int th)
 	print(arg);
 	break;
 	
+	case NOT_ORDER:
+	bindsym(makevar("%Domain"),makeconst("order"),th);
+	bindsym(makevar("%Culprit"),arg,th);
+	bindsym(makevar("%Context"),ind,th);
+	throw(domain_tag,th);
+	ESCFRED;
+	printf("Not order ");
+	print(ind);
+	printf(" ");
+	print(arg);
+	break;
+	
+
     }
     printf("\n");
     stok.ch = NUL;

@@ -32,3 +32,5 @@
 :- catch((X is 1/0),error(evaluation_error(evalution_error,zero_divisor),is/2),true).
 :- catch((X is log(0)),error(evaluation_error(float_overflow,0),log/1),true).
 :- catch((X is ln(0)),error(evaluation_error(float_overflow,0),ln/1),true).
+
+:- catch(compare(~,1,2),error(domain_error(order,'~'),compare/3),true).

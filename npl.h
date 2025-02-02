@@ -651,6 +651,7 @@ enum Error {
     NOT_CALLABLE,
     NOT_VAR,
     NOT_COMPOUND,
+    NOT_ORDER,
     CANT_OPEN,
     ILLEGAL_ARGS,
     DIV_ZERO,

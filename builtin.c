@@ -2121,22 +2121,23 @@ int b_compare(int arglist, int rest, int th)
 	if (!wide_variable_p(arg1) && !atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 	if (!wide_variable_p(arg1) &&
-	    !(eqp(arg1, makeatom("<", SYS)) ||
-	      eqp(arg1, makeatom("=", SYS)) ||
-	      eqp(arg1, makeatom(">", SYS))))
-	    exception(ILLEGAL_ARGS, ind, arg1, th);
+	    !(eqlp(arg1, makeconst("<")) ||
+	      eqlp(arg1, makeconst("=")) ||
+	      eqlp(arg1, makeconst(">"))))
+	    exception(NOT_ORDER, ind, arg1, th);
 
 	if (equalp(arg2, arg3)) {
-	    if (unify(arg1, makeatom("=", SYS), th) == YES)
+	    if (unify(arg1, makeconst("="), th) == YES)
 		return (prove_all(rest, sp[th], th));
 	} else if (atsmaller(arg2, arg3)) {
-	    if (unify(arg1, makeatom("<", SYS), th) == YES)
+	    if (unify(arg1, makeconst("<"), th) == YES)
 		return (prove_all(rest, sp[th], th));
 	} else if (atsmaller(arg3, arg2)) {
-	    if (unify(arg1, makeatom(">", SYS), th) == YES)
+	    if (unify(arg1, makeconst(">"), th) == YES)
 		return (prove_all(rest, sp[th], th));
 	}
 
+	return(NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
