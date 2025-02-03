@@ -96,7 +96,7 @@ address
 #define UTFOMSKO    127        //#b01111111
 
 
-typedef enum tag {EMP,INTN,FLTN,LONGN,BIGX,STRUCT,SINGLE,STREAM,STR} tag;
+typedef enum tag {EMP,INTN,FLTN,LONGN,BIGX,STRUCT,SINGLE,STREAM,SOCKET,STR} tag;
 typedef enum flag {FRE,USE} flag;
 
 typedef struct __packed{

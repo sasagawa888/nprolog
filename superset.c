@@ -59,7 +59,7 @@ int b_select(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
-	
+
 	varX = makevariant(th);
 	varXs = makevariant(th);
 	save1 = get_wp(th);
@@ -174,7 +174,7 @@ int b_maplist(int arglist, int rest, int th)
 	    pred = wlist2(pred, arg, th);
 	pred = list_to_structure(pred);
 	if (!callablep(pred))
-		exception(NOT_CALLABLE,ind,pred,th);
+	    exception(NOT_CALLABLE, ind, pred, th);
 	if (prove_all(pred, sp[th], th) == NO) {
 	    unbind(save2, th);
 	    wp[th] = save1;
