@@ -165,6 +165,7 @@ yes
 
 # TCP/IP (future task)
  plan to port the TCP/IP functionality of the Easy-ISLisp I developed.
+ I have implemented the TCP/IP predicates, but they have not been thoroughly tested yet. They will be officially supported with the release of version 3.90.
 
 - create_server_socket(Soket,port) 
  Creates and returns a socket as a server based on the port number. Provide the port number to port. It ranges from 0 to 65536.
