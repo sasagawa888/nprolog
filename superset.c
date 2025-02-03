@@ -1791,17 +1791,17 @@ int b_create_client_socket(int arglist, int rest, int th)
 
     n = length(arglist);
     ind = makeind("create_client_socket", n, th);
-    if (n == 2) {
-	arg1 = car(arglist);	//port number
-	arg2 = cadr(arglist);	//IP address
-	arg3 = caddr(arglist);	//socket var
+    if (n == 3) {
+	arg1 = car(arglist);	//socket
+	arg2 = cadr(arglist);	//port number
+	arg3 = caddr(arglist);	//IP address
 
-	if (!integerp(arg1))
-	    exception(NOT_INT, ind, arg1, th);
-	if (!atomp(arg2))
-	    exception(NOT_ATOM, ind, arg2, th);
-	if (!wide_variable_p(arg3) && !socketp(arg2))
-	    exception(NOT_SOCKET, ind, arg3, th);
+	if (!integerp(arg2))
+	    exception(NOT_INT, ind, arg2, th);
+	if (!atomp(arg3))
+	    exception(NOT_ATOM, ind, arg3, th);
+	if (!wide_variable_p(arg1) && !socketp(arg1))
+	    exception(NOT_SOCKET, ind, arg1, th);
 
 
 	sock = socket(AF_INET, SOCK_STREAM, 0);
@@ -1811,9 +1811,9 @@ int b_create_client_socket(int arglist, int rest, int th)
 
 	memset((char *) &client_addr, 0, sizeof(client_addr));
 	client_addr.sin_family = AF_INET;
-	client_addr.sin_port = htons(GET_INT(arg1));
+	client_addr.sin_port = htons(GET_INT(arg2));
 
-	if (inet_pton(AF_INET, GET_NAME(arg2), &client_addr.sin_addr) < 0)
+	if (inet_pton(AF_INET, GET_NAME(arg3), &client_addr.sin_addr) < 0)
 	    exception(SYSTEM_ERR, ind, NIL, 0);
 
 
@@ -1824,7 +1824,7 @@ int b_create_client_socket(int arglist, int rest, int th)
 	}
 
 	res = makesocket(sock, NPL_SOCKET, "client", NIL);
-	if (unify(arg3, res, th) == YES)
+	if (unify(arg1, res, th) == YES)
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
@@ -1840,13 +1840,13 @@ int b_create_server_socket(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("create_server_socket", n, th);
     if (n == 2) {
-	arg1 = car(arglist);	// port number
-	arg2 = cadr(arglist);	// socket var
+	arg1 = car(arglist);	// socket
+	arg2 = cadr(arglist);	// port number
 
-	if (!integerp(arg1))
-	    exception(NOT_INT, ind, arg1, th);
-	if (!wide_variable_p(arg2) && !socketp(arg2))
-	    exception(NOT_SOCKET, ind, arg2, th);
+	if (!integerp(arg2))
+	    exception(NOT_INT, ind, arg2, th);
+	if (!wide_variable_p(arg1) && !socketp(arg1))
+	    exception(NOT_SOCKET, ind, arg1, th);
 
 	sock0 = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock0 < 0) {
@@ -1856,7 +1856,7 @@ int b_create_server_socket(int arglist, int rest, int th)
 	memset((char *) &server_addr, 0, sizeof(server_addr));
 	server_addr.sin_family = AF_INET;
 	server_addr.sin_addr.s_addr = INADDR_ANY;
-	server_addr.sin_port = htons(GET_INT(arg1));
+	server_addr.sin_port = htons(GET_INT(arg2));
 
 	if (bind
 	    (sock0, (struct sockaddr *) &server_addr,
@@ -1873,7 +1873,7 @@ int b_create_server_socket(int arglist, int rest, int th)
 	}
 
 	res = makesocket(sock1, NPL_SOCKET, "server", sock0);
-	if (unify(arg2, res, th) == YES)
+	if (unify(arg1, res, th) == YES)
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);

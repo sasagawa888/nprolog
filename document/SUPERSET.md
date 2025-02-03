@@ -143,10 +143,10 @@ yes
 # TCP/IP (future task)
  plan to port the TCP/IP functionality of the Easy-ISLisp I developed.
 
-- create_server_socket(port,Socket) 
+- create_server_socket(Soket,port) 
  Creates and returns a socket as a server based on the port number. Provide the port number to port. It ranges from 0 to 65536.
 
-- create_client-socket(port,ip-address,Socket)
+- create_client-socket(Soket,port,ip-address)
  Provide the port number to port. It ranges from 0 to 65536. ip-address is given as an atom. Example: '127.1.1.1' Returns yes is success.
 
 - send_socket(Socket,Atom) 
