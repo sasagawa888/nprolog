@@ -38,3 +38,6 @@
 :- catch((X is ln(0)),error(evaluation_error(float_overflow,0),ln/1),true).
 
 :- catch(compare(~,1,2),error(domain_error(order,'~'),compare/3),true).
+
+:- catch(succ(a,X),error(type_error(integer,a),succ/2),true).
+:- catch(succ(X,b),error(type_error(integer,b),succ/2),true).

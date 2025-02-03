@@ -107,11 +107,9 @@ int b_succ(int arglist, int rest, int th)
 	if (wide_variable_p(arg1) && wide_variable_p(arg2))
 	    exception(INSTANTATION_ERR, ind, arglist, th);
 	if (!wide_integer_p(arg1) && !wide_variable_p(arg1))
-	    exception(NOT_INT, ind, arglist, th);
+	    exception(NOT_INT, ind, arg1, th);
 	if (!wide_integer_p(arg2) && !wide_variable_p(arg2))
-	    exception(NOT_INT, ind, arglist, th);
-	if (wide_variable_p(arg1) && wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arglist, th);
+	    exception(NOT_INT, ind, arg2, th);
 	if (negativep(arg1) || negativep(arg2))
 	    exception(LESS_THAN_ZERO, ind, arglist, th);
 
