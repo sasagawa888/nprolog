@@ -46,3 +46,4 @@
 
 :- catch(maplist(1,[1,2,3]),error(type_error(callable,1),maplist/2),true).
 :- catch(maplist(sin,[1,2,3]),error(type_error(callable,sin(1)),maplist/2),true).
+:- catch(maplist(length,[1,2,3]),error(existence_error(predicate,length/1),length/1),true).
