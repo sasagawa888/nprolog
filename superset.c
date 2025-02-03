@@ -59,15 +59,7 @@ int b_select(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
-	if (!wide_variable_p(arg1) && !atomicp(arg1))
-	    exception(NOT_ATOMIC, ind, arg1, th);
-	if (!listp(arg2))
-	    exception(NOT_LIST, ind, arg2, th);
-	if (listp(arg2) && length(arg2 == -1))
-	    exception(NOT_LIST, ind, arg2, th);
-	if (!wide_variable_p(arg3) && !atomicp(arg3))
-	    exception(NOT_ATOMIC, ind, arg3, th);
-
+	
 	varX = makevariant(th);
 	varXs = makevariant(th);
 	save1 = get_wp(th);
