@@ -593,6 +593,7 @@ test(compare) :-
     compare(<,foo(a),foo(b)).
 
 test(select) :-
-    select(1,[1|2],2).
+    select(1,[1|2],2),
+    not(select(X,a,Y)).
      
 :- alltest,write('All tests are done'),nl.

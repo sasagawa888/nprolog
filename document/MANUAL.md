@@ -564,9 +564,6 @@ Enclose the atom and function in quotation marks.
 - `predicate_property(E, X)`  
   Unifies `X` with the properties of the predicate `E`.
 
-- `reverse(L, X)`  
-  Unifies `X` with the list that results from reversing the list `L`.
-
 - `bagof(X, Pred, Bag)`  
   Collects all `X` that unify with the predicate `Pred` into the list `Bag`.
 
