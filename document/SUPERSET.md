@@ -96,13 +96,16 @@ The following extension functions respect ISO-Prolog as much as possible, but th
 - dynamic/1
 
 # Not ISO-Prolog
-- sub_atom/5
+N-Prolog is specialized for experimenting with and playing around with small-scale code. Therefore, the following features are not included.
+
+- sub_atom/5  
 - open/3
 - multifile/1
 - initialization/1
 - include/1
 - ensure_loaded/1
 - set_prolog_flag/2
+- current_prolog_flag/2
 - long atom with '\\'
 
 
