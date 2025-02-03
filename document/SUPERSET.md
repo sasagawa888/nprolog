@@ -99,14 +99,20 @@ The following extension functions respect ISO-Prolog as much as possible, but th
 N-Prolog is specialized for experimenting with and playing around with small-scale code. Therefore, the following features are not included.
 
 - sub_atom/5  
-- open/3
-- multifile/1
-- initialization/1
+ Reverse computation is too complex.
+- open/3  
+ Please use open/3 compatible with Arity/Prolog.
+- multifile/1 
+ For now, we are not considering complex libraries.
+- initialization/1 
 - include/1
 - ensure_loaded/1
+
 - set_prolog_flag/2
+ I cannot agree with dynamically changing specifications that are fundamental to the language, such as those related to strings.
 - current_prolog_flag/2
-- long atom with '\\'
+- long atom with '\\' 
+ Excessively long atoms hinder code readability.
 
 
 
