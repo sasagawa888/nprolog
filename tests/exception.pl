@@ -43,3 +43,6 @@
 :- catch(succ(X,b),error(type_error(integer,b),succ/2),true).
 :- catch(succ(-1,X),error(domain_error(not_less_than_zero,-1),succ/2),true).
 :- catch(succ(X,-2),error(domain_error(not_less_than_zero,-2),succ/2),true).
+
+:- catch(maplist(1,[1,2,3]),error(type_error(callable,1),maplist/2),true).
+:- catch(maplist(sin,[1,2,3]),error(type_error(callable,sin(1)),maplist/2),true).

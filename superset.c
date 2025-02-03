@@ -148,8 +148,6 @@ int b_maplist(int arglist, int rest, int th)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-	if (!structurep(arg1) && !atomp(arg1))
-	    exception(NOT_COMPOUND, ind, arg1, th);
 	if (!listp(arg2) && !nullp(arg2))
 	    exception(NOT_LIST, ind, arg2, th);
 	if (listp(arg2) && length(arg2) == -1)
@@ -175,6 +173,8 @@ int b_maplist(int arglist, int rest, int th)
 	else
 	    pred = wlist2(pred, arg, th);
 	pred = list_to_structure(pred);
+	if (!callablep(pred))
+		exception(NOT_CALLABLE,ind,pred,th);
 	if (prove_all(pred, sp[th], th) == NO) {
 	    unbind(save2, th);
 	    wp[th] = save1;
