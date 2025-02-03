@@ -41,3 +41,5 @@
 
 :- catch(succ(a,X),error(type_error(integer,a),succ/2),true).
 :- catch(succ(X,b),error(type_error(integer,b),succ/2),true).
+:- catch(succ(-1,X),error(domain_error(not_less_than_zero,-1),succ/2),true).
+:- catch(succ(X,-2),error(domain_error(not_less_than_zero,-2),succ/2),true).

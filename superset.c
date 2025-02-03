@@ -110,8 +110,10 @@ int b_succ(int arglist, int rest, int th)
 	    exception(NOT_INT, ind, arg1, th);
 	if (!wide_integer_p(arg2) && !wide_variable_p(arg2))
 	    exception(NOT_INT, ind, arg2, th);
-	if (negativep(arg1) || negativep(arg2))
-	    exception(LESS_THAN_ZERO, ind, arglist, th);
+	if (negativep(arg1))
+	    exception(LESS_THAN_ZERO, ind, arg1, th);
+	if (negativep(arg2))
+	    exception(LESS_THAN_ZERO, ind, arg2, th);
 
 	if (wide_integer_p(arg1)) {
 	    if (unify(arg2, plus(arg1, makeint(1), th), th) == YES) {
