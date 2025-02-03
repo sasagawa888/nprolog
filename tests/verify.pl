@@ -591,5 +591,8 @@ test(compare) :-
     compare(>,banana,apple),
     compare(=,apple,apple),
     compare(<,foo(a),foo(b)).
+
+test(select) :-
+    select(1,[1|2],2).
      
 :- alltest,write('All tests are done'),nl.
