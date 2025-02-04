@@ -221,6 +221,7 @@ void init_builtin(void)
     defbuiltin("send_socket", b_send_socket, 2);
     defbuiltin("recv_socket", b_recv_socket, 2);
     defbuiltin("close_socket", b_close_socket, 1);
+	defbuiltin("dynamic", b_dynamic,1);
     defbuiltin("existerrors", b_existerrors, 2);
     definfix("\\+", b_not, 900, FY);
 
@@ -2683,8 +2684,8 @@ int b_abolish(int arglist, int rest, int th)
 	if (structurep(arg1) &&
 	    (wide_variable_p(cadr(arg1)) || wide_variable_p(caddr(arg1))))
 	    exception(INSTANTATION_ERR, ind, arg1, th);
-	if (car(arg1) != makeatom("/", OPE))
-	    exception(PRED_INDICATOR, ind, arg1, th);
+	if (!indicatorp(arg1))
+	    exception(NOT_INDICATOR, ind, arg1, th);
 	if (builtinp(cadr(arg1)))
 	    exception(BUILTIN_EXIST, ind, arg1, th);
 	if (!atomp(cadr(arg1)))
@@ -4208,7 +4209,7 @@ int b_listing(int arglist, int rest, int th)
 	    listing_flag = 0;
 	    return (prove_all(rest, sp[th], th));
 	} else {
-	    exception(PRED_INDICATOR, ind, arglist, th);
+	    exception(NOT_INDICATOR, ind, arglist, th);
 	}
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -4323,8 +4324,8 @@ int b_current_predicate(int arglist, int rest, int th)
     ind = makeind("current_predicate", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
-	if (!atomp(arg1) && !wide_variable_p(arg1) && !structurep(arg1))
-	    exception(PRED_INDICATOR, ind, arg1, th);
+	if (!indicatorp(arg1))
+	    exception(NOT_INDICATOR, ind, arg1, th);
 
 	predlist = reverse(predicates);
 	save1 = wp[th];

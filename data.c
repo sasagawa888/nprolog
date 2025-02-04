@@ -1366,6 +1366,15 @@ int mixturep(int addr)
 	return (0);
 }
 
+int indicatorp(int addr)
+{
+	if (structurep(addr) && length(addr) == 3 && eqlp(car(addr),SLASH) &&
+	     (atomp(cadr(addr)) || variablep(cadr(addr))) &&
+		 (atomp(caddr(addr)) || variablep(caddr(addr))))
+		return(1);
+	else 
+		return(NO);
+}
 
 
 int get_1st_weight(int addr)

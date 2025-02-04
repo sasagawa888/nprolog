@@ -45,6 +45,7 @@ int variables_save[THREADSIZE];
 int end_of_file_answer = NIL;
 int end_of_file_rest = NIL;
 int predicates = NIL;
+int dynamics = NIL;
 int builtins = NIL;
 int spy_list = NIL;
 int reconsult_list = NIL;
@@ -418,6 +419,7 @@ void init_repl(void)
     leap_point = NIL;
     left_margin = 4;
     big_pt0 = 0;
+	dynamics = NIL;
     //initialize variant variable
     for (i = 0; i < VARIANTSIZE; i++) {
 	for (j = 0; j < THREADSIZE; j++) {

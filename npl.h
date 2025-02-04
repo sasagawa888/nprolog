@@ -222,6 +222,7 @@ extern int variables_save[THREADSIZE];
 extern int end_of_file_answer;
 extern int end_of_file_rest;
 extern int predicates;
+extern int dynamics;
 extern int builtins;
 extern int spy_list;
 extern int reconsult_list;
@@ -653,6 +654,7 @@ enum Error {
     NOT_VAR,
     NOT_COMPOUND,
     NOT_ORDER,
+    NOT_INDICATOR,
     CANT_OPEN,
     ILLEGAL_ARGS,
     DIV_ZERO,
@@ -663,7 +665,6 @@ enum Error {
     EXISTENCE_ERR,
     NON_EMPTY_LIST,
     EVALUATION_ERR,
-    PRED_INDICATOR,
     OPE_SPEC_ERR,
     OPE_PRIORITY_ERR,
     MODIFY_OPE_ERR,
@@ -810,6 +811,7 @@ int b_dp_wait(int arglist, int rest, int th);
 int b_dp_pause(int arglist, int rest, int th);
 int b_dp_resume(int arglist, int rest, int th);
 int b_dup(int arglist, int rest, int th);
+int b_dynamic(int arglist, int rest, int th);
 int b_edit(int arglist, int rest, int th);
 int b_end_of_file(int arglist, int rest, int th);
 int b_eq(int arglist, int rest, int th);
@@ -1131,6 +1133,7 @@ int ignore_optin_p(int x);
 int improper_last(int x);
 int improper_butlast(int x);
 int inc_proof(int th);
+int indicatorp(int addr);
 int infixp(int addr);
 int infix_operator_p(int addr);
 int insert(int x, int y);
