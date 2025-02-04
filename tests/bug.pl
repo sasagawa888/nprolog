@@ -3,6 +3,10 @@
 foo(X) :- boo(X).
 foo(X) :- bar(X).
 
+:- dynamic(foo/1).
+:- dynamic(bar/1).
+:- n_dynamic_list(X),write(X).
+
 test :- 
     n_clause_with_arity(foo,1,C),
     n_variable_convert(C,X),

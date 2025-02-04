@@ -54,6 +54,19 @@ int b_reconsult_abolish(int arglist, int rest, int th)
     return (NO);
 }
 
+int b_dynamic_list(int arglist, int rest, int th)
+{
+	int n, arg1;
+
+	n = length(arglist);
+	if(n==1){
+		arg1 = car(arglist);
+		unify(arg1,dynamics,th);
+		return(prove_all(rest,sp[th],th));
+	}
+	return(NO);
+}
+
 int b_filename(int arglist, int rest, int th)
 {
     int n, arg1, arg2, pos, len;

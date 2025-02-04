@@ -812,6 +812,7 @@ int b_dp_pause(int arglist, int rest, int th);
 int b_dp_resume(int arglist, int rest, int th);
 int b_dup(int arglist, int rest, int th);
 int b_dynamic(int arglist, int rest, int th);
+int b_dynamic_list(int arglist, int rest, int th);
 int b_edit(int arglist, int rest, int th);
 int b_end_of_file(int arglist, int rest, int th);
 int b_eq(int arglist, int rest, int th);
