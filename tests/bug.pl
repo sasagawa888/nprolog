@@ -77,7 +77,6 @@ jump_gen_dynamic(X) :-
     write('Jmakeuser("'),
     write(P),
     write('")').
-
 jump_gen_dynamic(X) :-
     n_property(X,userop),
     X =.. [P|L],
@@ -92,8 +91,36 @@ jump_gen_dynamic(X) :-
     write(X),
     write('")').
 jump_gen_dynamic(X) :-
+    n_bignum(X),
+    write('Jmakebig("'),
+    write(X),
+    write('")').
+jump_gen_dynamic(X) :-
+    n_longnum(X),
+    write('Jmakestrlong("'),
+    write(X),
+    write('")').
+jump_gen_dynamic(X) :-
+    integer(X),
+    write('Jmakeint('),
+    write(X),
+    write(')').
+jump_gen_dynamic(X) :-
+    float(X),
+    write('Jmakestrflt("'),
+    write(X),
+    write('")').
+jump_gen_dynamic(X) :-
+    list(X),
+    jump_gen_dynamic_list(X).
+jump_gen_dynamic(X) :-
     atom(X),
 	write('Jmakepred("'),
+    write(X),
+    write('")').
+jump_gen_dynamic(X) :-
+    string(X),
+	write('Jmakestr("'),
     write(X),
     write('")').
 jump_gen_dynamic(X) :-
@@ -107,3 +134,12 @@ jump_gen_dynamic_argument([X|Xs]) :-
     write(','),
     jump_gen_dynamic_argument(Xs),
     write(',th)').
+
+jump_gen_dynamic_list([]) :-
+    write('NIL').
+jump_gen_dynamic_list([L|Ls]) :-
+    write('Jcons('),
+    jump_gen_dynamic(L),
+    write(','),
+    jump_gen_dynamic_list(Ls),
+    write(')').
