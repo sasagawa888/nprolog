@@ -5,8 +5,7 @@ foo(X) :- bar(X).
 
 :- dynamic(foo/1).
 :- dynamic(bar/1).
-:- n_dynamic_list(X),write(X).
-:- n_dynamic_list(X),member(foo/1,X),write('foo/1 is dynamic').
+:- n_dynamic_predicate(foo/1),write('foo/1 is dynamic').
 
 test :- 
     n_clause_with_arity(foo,1,C),

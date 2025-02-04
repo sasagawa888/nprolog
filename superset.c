@@ -1975,7 +1975,7 @@ int b_dynamic(int arglist, int rest, int th)
 		if(!indicatorp(arg1))
 			exception(NOT_INDICATOR,ind,arg1,th);
 
-		dynamics = listcons(arg1,dynamics);
+		dynamics = cons(arg1,dynamics);
 		return(prove_all(rest,sp[th],th));
 	}
 	exception(ARITY_ERR,ind,arglist,th);

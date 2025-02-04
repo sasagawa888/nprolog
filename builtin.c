@@ -253,7 +253,7 @@ void init_builtin(void)
     //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_reconsult_predicate, -1);
     defbuiltin("n_reconsult_abolish", b_reconsult_abolish, -1);
-	defbuiltin("n_dynamic_list", b_dynamic_list, -1);
+	defbuiltin("n_dynamic_predicate", b_dynamic_predicate, -1);
     defbuiltin("n_filename", b_filename, -1);
     defbuiltin("n_atom_convert", b_atom_convert, -1);
     defbuiltin("n_arity_count", b_arity_count, -1);
