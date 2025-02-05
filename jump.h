@@ -23,6 +23,7 @@ tuser deftinfix;
 tpred deftsys;
 
 static dp[10]; // disjunction pointer
+static int dynamic_clause;
 
 void init0(int n, tpred x){
     f0[n] = (fn0)x;

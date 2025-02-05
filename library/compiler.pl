@@ -168,7 +168,13 @@ jump_gen_c_pred :-
 % generate all predicate code
 jump_gen_pred :-
     n_reconsult_predicate(P),
+    not(n_dynamic_predicate(P)),
     jump_gen_pred1(P),
+    fail.
+jump_gen_pred :-
+    n_reconsult_predicate(P),
+    n_dynamic_predicate(P),
+    jump_gen_dyn(P),
     fail.
 jump_gen_pred.
 
@@ -190,6 +196,7 @@ jump_gen_c_def :-
 
 jump_gen_c_def1 :-
     n_reconsult_predicate(P),
+    not(n_dynamic_predicate(P)),
 	jump_gen_def(P),
     fail.
 jump_gen_c_def1.
@@ -1093,6 +1100,16 @@ jump_gen_argument_list([X|Xs]) :-
     write(th),
     write(')').
 
+/*
+assert dynamic predicate
+:- dynamic(foo/1)
+foo(X) :- ...
+dyn = Jcons(Jmakesys(":-"),...;
+Jadd_data(dyn); 
+*/
+
+jump_gen_dyn(P).
+   
 /*
 invoke error
 display error message and error code.
