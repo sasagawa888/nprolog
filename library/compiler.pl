@@ -174,7 +174,7 @@ jump_gen_pred :-
 jump_gen_pred :-
     n_reconsult_predicate(P),
     n_dynamic_predicate(P),
-    jump_gen_dyn(P),
+    jump_gen_dynamic(P),
     fail.
 jump_gen_pred.
 

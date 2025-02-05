@@ -1,18 +1,29 @@
 %compile dynamic idea memo
 
+
 foo(X) :- boo([X]).
 foo(X) :- bar(X).
 
 :- dynamic(foo/1).
 :- dynamic(bar/1).
-:- n_dynamic_predicate(foo/1),write('foo/1 is dynamic').
+
 
 test :- 
     n_clause_with_arity(foo,1,C),
     n_variable_convert(C,X),
     jump_gen_dyn2s(X).
 
-jump_gen_dyn(P/A) :-
+jump_gen_dynamic(P) :-
+    n_arity_count(P,L),
+    jump_gen_dynamics(P,L),!.
+
+jump_gen_dynamics(P,[]).
+jump_gen_dynamics(P,[L|Ls]) :-
+    write('dynamic_predicate = ')
+    jump_gen_dyn(P,L),
+    jump_gen_dynamics(P,Ls).
+
+jump_gen_dyn(P,A) :-
     n_clause_with_arity(P,A,C),
     n_variable_convert(C,X),
     write('void '),
@@ -56,7 +67,7 @@ jump_gen_dyn2(X) :-
     write(P),
     write('"),'),
     jump_gen_dyn2_argument(L),
-    write(',th)').
+    write(')').
 
 jump_gen_dyn2(X) :-
     n_property(X,builtin),
@@ -71,7 +82,7 @@ jump_gen_dyn2(X) :-
     write(A),
     write(','),
     jump_gen_dyn2_argument(L),
-    write(',th)').
+    write(')').
 jump_gen_dyn2(X) :-
     n_property(X,operation),
     X =.. [P|L],
@@ -80,7 +91,7 @@ jump_gen_dyn2(X) :-
     write(A),
     write(','),
     jump_gen_dyn2_argument(L),
-    write(',th)').
+    write(')').
 jump_gen_dyn2(X) :-
     n_property(X,userop),
     functor(X,P,0),
@@ -94,7 +105,7 @@ jump_gen_dyn2(X) :-
     write(P),
     write('"),'),
     jump_gen_dyn2_argument(L),
-    write(',th)').
+    write(')').
 jump_gen_dyn2(X) :-
     n_compiler_variable(X),
     write('Jmakevar("'),
@@ -143,7 +154,7 @@ jump_gen_dyn2_argument([X|Xs]) :-
     jump_gen_dyn2(X),
     write(','),
     jump_gen_dyn2_argument(Xs),
-    write(',th)').
+    write(')').
 
 jump_gen_dyn2_list([]) :-
     write('NIL').
