@@ -15,22 +15,23 @@ test :-
 
 jump_gen_dynamic(P) :-
     n_arity_count(P,L),
-    jump_gen_dynamics(P,L),!.
+    write('void '),
+    write(P),
+    write('(void){'),
+    jump_gen_dynamics(P,L),
+    write('}'),!.
 
 jump_gen_dynamics(P,[]).
 jump_gen_dynamics(P,[L|Ls]) :-
-    write('dynamic_predicate = ')
+    write('dynamic_clause = '),
     jump_gen_dyn(P,L),
     jump_gen_dynamics(P,Ls).
 
 jump_gen_dyn(P,A) :-
     n_clause_with_arity(P,A,C),
     n_variable_convert(C,X),
-    write('void '),
-    write(P),
-    write('(void){'),
-    jump_gen_dyn1(X),
-    write('}').
+    jump_gen_dyn1(X).
+
 
 jump_gen_dyn1([]).
 jump_gen_dyn1([X|Xs]) :-
