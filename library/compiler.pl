@@ -258,6 +258,7 @@ void init_declare(void){
 */
 jump_gen_c_exec :-
 	write('void init_declare(void){'),
+    jump_gen_dyn_exec,
     jump_gen_exec,
     write('}').
 
@@ -1120,6 +1121,7 @@ jump_gen_dynamics(P,[]).
 jump_gen_dynamics(P,[L|Ls]) :-
     write('dynamic_clause = '),
     jump_gen_dyn(P,L),
+    write('Jadd_dynamic(dynamic_clause);'),nl,
     jump_gen_dynamics(P,Ls).
 
 jump_gen_dyn(P,A) :-
@@ -1135,7 +1137,7 @@ jump_gen_dyn1([X|Xs]) :-
 
 jump_gen_dyn2([]).
 jump_gen_dyn2((X :- Y)) :-
-    write('Jlist3(Jmakesys(":-"),'),
+    write('Jlist3(Jmakeope(":-"),'),
     jump_gen_dyn2(X),
     write(','),
     jump_gen_dyn2(Y),
@@ -1271,13 +1273,26 @@ jump_invoke_error(Message,Code) :-
     told,
     abort.
 
+/* generate execute definition of dynamic clause*/
+jump_gen_dyn_exec :-
+    write('int body,th; th=0;'),nl,
+    n_get_dynamic(X),
+    jump_gen_dyn_exec1(X).
+
+jump_gen_dyn_exec1([]).
+jump_gen_dyn_exec1([L|Ls]) :-
+    write(L),
+    write('();'),nl,
+    jump_gen_dyn_exec1(Ls).
+
+
+
 /*
 e.g. :- op(...)
 generate execution 
 */
 jump_gen_exec :-
     n_get_execute(X),
-    write('int body,th; th=0;'),nl,
     jump_gen_exec1(X).
 
 jump_gen_exec1([]).

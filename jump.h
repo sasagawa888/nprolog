@@ -167,7 +167,9 @@ static inline int Jmakevariant(int x) {
     return f1[MAKEVARIANT_IDX](x);
 }
 
-
+static inline int Jadd_dynamic(int x) {
+    return f1[ADD_DYNAMIC_IDX](x);
+}
 
 static inline int Jcons(int x, int y) {
     return f2[CONS_IDX](x, y);

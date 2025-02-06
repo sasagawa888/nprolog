@@ -165,7 +165,7 @@ enum { CHECKGBC_IDX, GBC_IDX, FRESHCELL_IDX,
 enum { CAR_IDX, CDR_IDX, CADR_IDX, CADDR_IDX, CAAR_IDX, CADAR_IDX, PRINT_IDX, MAKEINT_IDX,
        LENGTH_IDX,  GET_INT_IDX, 
        LISTP_IDX,  STRUCTUREP_IDX, VARIABLEP_IDX, GET_SP_IDX, GET_WP_IDX, INC_PROOF_IDX,
-       MAKEVARIANT_IDX, 
+       MAKEVARIANT_IDX, ADD_DYNAMIC_IDX,
        NUM_FN1S
 };
 
@@ -222,11 +222,11 @@ extern int variables_save[THREADSIZE];
 extern int end_of_file_answer;
 extern int end_of_file_rest;
 extern int predicates;
-extern int dynamics;
 extern int builtins;
 extern int spy_list;
 extern int reconsult_list;
 extern int execute_list;
+extern int dynamic_list;
 extern int op_list;
 extern int key_list;
 extern int error_code;
@@ -683,6 +683,7 @@ int addatom(char *name, int property, int index);
 int addtail(int x, int y);
 int addtail_body(int x, int y,int th);
 int addtail_operation(int x, int y);
+int add_dynamic(int x);
 int after_cut(int x);
 int after_c_lang(int x);
 int alias_option_p(int x);

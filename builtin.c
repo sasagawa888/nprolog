@@ -270,6 +270,7 @@ void init_builtin(void)
     defbuiltin("n_defined_predicate", b_defined_predicate, -1);
     defbuiltin("n_defined_userop", b_defined_userop, -1);
     defbuiltin("n_get_execute", b_get_execute, -1);
+	defbuiltin("n_get_dynamic",b_get_dynamic, -1);
     defbuiltin("n_error", b_error, -1);
     defbuiltin("n_has_cut", b_has_cut, -1);
     defbuiltin("n_before_cut", b_before_cut, -1);
@@ -1590,6 +1591,7 @@ int b_consult(int arglist, int rest, int th)
 	column = 0;
 	reconsult_list = NIL;
 	execute_list = NIL;
+	dynamic_list = NIL;
 	while (1) {
 	  skip:
 	    clause = readparse(th);
@@ -1662,6 +1664,7 @@ int b_reconsult(int arglist, int rest, int th)
 	column = 0;
 	reconsult_list = NIL;
 	execute_list = NIL;
+	dynamic_list = NIL;
 	while (1) {
 	  skip:
 	    clause = readparse(th);
@@ -1676,7 +1679,9 @@ int b_reconsult(int arglist, int rest, int th)
 		    prove_all(clause, sp[th], th);
 		else if (arg2 != NIL && !predicatep(cadr(clause)))
 		    prove_all(clause, sp[th], th);
-		execute_list = listcons(clause, execute_list);
+		else if (structurep(cadr(clause) && !eqlp(car(cadr(clause)),makesys("dynamic"))))
+			/* if execute predicate is dynamic not add to execute_list */
+			execute_list = listcons(clause, execute_list);
 		goto skip;
 	    }
 	    // DCG syntax e.g. a-->b.

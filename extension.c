@@ -61,7 +61,7 @@ int b_dynamic_predicate(int arglist, int rest, int th)
 	n = length(arglist);
 	if(n==1){
 		arg1 = car(arglist);
-		if(memberp(arg1,dynamics))
+		if(memberp(arg1,dynamic_list))
 			return(prove_all(rest,sp[th],th));
 		else 
 			return(NO);
@@ -754,6 +754,39 @@ int b_get_execute(int arglist, int rest, int th)
     }
     return (NO);
 }
+
+int b_get_dynamic(int arglist, int rest, int th)
+{
+    int n, arg1, pos, res;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+
+	res = NIL;
+	pos = dynamic_list;
+	while (!nullp(pos)) {
+		if(memberp(car(pos),reconsult_list))
+	    	res = listcons(car(pos), res);
+	    pos = cdr(pos);
+	}
+	if (unify(arg1, res, th) == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    return (NO);
+}
+
+int add_dynamic(int x)
+{
+	int pred;
+
+	pred = list2(makesys("assert"),x);
+	prove(pred,sp[0],NIL,0);
+	return(0);
+}
+
 
 int b_heapdump(int arglist, int rest, int th)
 {

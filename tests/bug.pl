@@ -1,7 +1,9 @@
 
 :- dynamic(foo/1).
-:- dynamic(boo/1).
+:- dynamic(baa/1).
 
 foo(X) :- write(X).
 
-boo(Y) :- write(Y).
+foo(Y,X) :- write(Y).
+
+boo(X) :- write(X).
