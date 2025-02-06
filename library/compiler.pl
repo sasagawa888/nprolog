@@ -408,16 +408,39 @@ jump_gen_a_pred5((Head :- Body)) :-
 jump_gen_a_pred5(P) :-
 	n_property(P,predicate),
     functor(P,_,0),
+    not(n_dynamic_predicate(P)),
     write('return(Jexec_all(rest,Jget_sp(th),th));'),nl.
+
+jump_gen_a_pred5(P) :-
+    n_property(P,predicate),
+    functor(P,_,0),
+    n_dynamic_predicate(P),
+    write('Jmakepred("'),
+    write(P),
+    write(')'),nl.
 
 % predicate
 jump_gen_a_pred5(P) :-
 	n_property(P,predicate),
+    P =.. [P1|_],
+    not(n_dynamic_predicate(P1)),
     write('save1 = Jget_wp(th);'),nl,
 	jump_gen_head(P),
     write('if(Jexec_all(rest,Jget_sp(th),th) == YES) return(YES);'),nl,
     write('Junbind(save2,th);'),nl,
     write('Jset_wp(save1,th);'),nl.
+
+jump_gen_a_pred5(P) :-
+    n_property(P,predicate),
+    P =.. [P1|_],
+    n_dynamic_predicate(P),
+    write('Jwcons(Jmakepred("'),
+    write(P1),
+    write('"),'),
+    jump_gen_argument(L),
+    write(')').
+
+
 
 % user ope
 jump_gen_a_pred5(P) :-
@@ -614,13 +637,24 @@ jump_gen_a_body((X;Xs)) :-
 jump_gen_a_body(X) :-
     n_defined_predicate(X),
     functor(X,P,0),
+    not(n_dynamic_predicate(P)),
     write('Jmakecomp("'),
     write(P),
     write('")').
+
+jump_gen_a_body(X) :-
+    n_defined_predicate(X),
+    functor(X,P,0),
+    n_dynamic_predicate(P),
+    write('Jmakepred("'),
+    write(P),
+    write('")').
+
 % defined predicate will become compiled predicate
 jump_gen_a_body(X) :-
     n_defined_predicate(X),
     X =.. [P|L],
+    not(n_dynamic_predicate(P)),
     write('Jwcons(Jmakecomp("'),
     write(P),
     write('"),'),
@@ -684,6 +718,7 @@ jump_gen_a_body(X) :-
     write(',th)').
 jump_gen_a_body(X) :-
     atom(X),
+    n_dynamic_predicate(X),
 	write('Jmakepred("'),
     write(X),
     write('")').
@@ -1158,6 +1193,7 @@ jump_gen_dyn2((X;Y)) :-
     write(');').
     
 jump_gen_dyn2(X) :-
+    compound(X),
     n_property(X,predicate),
     X =.. [P|L],
     write('Jcons(Jmakepred("'),
@@ -1165,6 +1201,13 @@ jump_gen_dyn2(X) :-
     write('"),'),
     jump_gen_dyn2_argument(L),
     write(')').
+
+jump_gen_dyn2(X) :-
+    atom(X),
+    n_dynamic_predicate(X),
+    write('Jmakepred("'),
+    write(X),
+    write('")').
 
 jump_gen_dyn2(X) :-
     n_property(X,builtin),

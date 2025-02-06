@@ -2,10 +2,12 @@
 
 
 :- dynamic(foo/1).
-:- dynamic(baa/1).
+:- dynamic(baa/1). %ignore
+
+foo :- write(1).
 
 foo(X) :- write(X).
 
-foo(Y,X) :- write(Y).
+boo(X) :- foo(X).
 
-boo(X) :- write(X).
+bar(X) :- foo.

@@ -915,7 +915,9 @@ int exec(int goal, int bindings, int rest, int th)
 
     if (nullp(goal)) {
 	return (exec_all(rest, bindings, th));
-    } else if (builtinp(goal)) {
+    } else if (predicatep(goal)){
+		return(prove(goal,sp[th],NIL,th));
+	} else if (builtinp(goal)) {
 	if (atomp(goal)) {
 	    if ((res = (GET_SUBR(goal)) (NIL, rest, th)) == YES)
 		return (YES);
