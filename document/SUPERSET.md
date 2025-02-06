@@ -92,7 +92,6 @@ The following extension functions respect ISO-Prolog as much as possible, but th
 
 - stream_property/2
 
-# (future task)
 - dynamic/1
 In N-Prolog, when foo/1 is given, the entire foo predicate is defined as dynamic.
 
@@ -182,3 +181,7 @@ yes
 
 - close_socket(Socket) 
  Closes the socket. Returns yes.
+
+
+# My Personal Thoughts on ISO-Prolog
+I believe ISO-Prolog has excessively high requirements. It sets overly detailed specifications regarding syntax and imposes high standards on op/3. The appeal of Prolog, in my opinion, lies in the astonishing realization that first-order predicate logic can be applied to programming. I think overly detailed syntax rules hinder the widespread adoption of Prolog. I would like to emphasize that this is my personal opinion.
