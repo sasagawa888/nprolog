@@ -1679,9 +1679,9 @@ int b_reconsult(int arglist, int rest, int th)
 		    prove_all(clause, sp[th], th);
 		else if (arg2 != NIL && !predicatep(cadr(clause)))
 		    prove_all(clause, sp[th], th);
-		else if (structurep
-			 (cadr(clause)
-			  && !eqlp(car(cadr(clause)), makesys("dynamic"))))
+		else if (structurep(cadr(clause)
+				    && !eqlp(car(cadr(clause)),
+					     makesys("dynamic"))))
 		    /* if execute predicate is dynamic not add to execute_list */
 		    execute_list = listcons(clause, execute_list);
 		goto skip;
