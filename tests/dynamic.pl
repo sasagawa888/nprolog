@@ -1,3 +1,5 @@
+% test of dynamic/1. see SUPERSET.md
+
 
 :- dynamic(foo/1).
 :- dynamic(baa/1).
