@@ -1,7 +1,7 @@
 % list library (test of module system)
 :- module(list,[last/2,butlast/2,second/2,cons/3,
                 nth/3,nth0/3,iota/3,take/3,drop/3,make_list/3,reverse/2,
-                remove_at/3,insert_at/4]).
+                remove_at/3,insert_at/4,qsort/2]).
 
 last([],[]).
 last([X],[X]).
@@ -65,3 +65,18 @@ insert_at(0,X,L,[X|L]).
 insert_at(N,X,[L|Ls],[L|Y]) :-
     N1 is N-1,
     insert_at(N1,X,Ls,Y).
+
+qsort([], []).
+qsort([Pivot|Rest], Sorted) :-
+    partition(Pivot, Rest, Left, Right), 
+    qsort(Left, SortedLeft),          
+    qsort(Right, SortedRight),       
+    append(SortedLeft, [Pivot|SortedRight], Sorted). 
+
+partition(_, [], [], []). 
+partition(Pivot, [H|T], [H|Left], Right) :-
+    H =< Pivot,  
+    partition(Pivot, T, Left, Right).
+partition(Pivot, [H|T], Left, [H|Right]) :-
+    H > Pivot,  
+    partition(Pivot, T, Left, Right).
