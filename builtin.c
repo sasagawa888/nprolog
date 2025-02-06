@@ -221,7 +221,7 @@ void init_builtin(void)
     defbuiltin("send_socket", b_send_socket, 2);
     defbuiltin("recv_socket", b_recv_socket, 2);
     defbuiltin("close_socket", b_close_socket, 1);
-	defbuiltin("dynamic", b_dynamic,1);
+    defbuiltin("dynamic", b_dynamic, 1);
     defbuiltin("existerrors", b_existerrors, 2);
     definfix("\\+", b_not, 900, FY);
 
@@ -253,7 +253,7 @@ void init_builtin(void)
     //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_reconsult_predicate, -1);
     defbuiltin("n_reconsult_abolish", b_reconsult_abolish, -1);
-	defbuiltin("n_dynamic_predicate", b_dynamic_predicate, -1);
+    defbuiltin("n_dynamic_predicate", b_dynamic_predicate, -1);
     defbuiltin("n_filename", b_filename, -1);
     defbuiltin("n_atom_convert", b_atom_convert, -1);
     defbuiltin("n_arity_count", b_arity_count, -1);
@@ -270,7 +270,7 @@ void init_builtin(void)
     defbuiltin("n_defined_predicate", b_defined_predicate, -1);
     defbuiltin("n_defined_userop", b_defined_userop, -1);
     defbuiltin("n_get_execute", b_get_execute, -1);
-	defbuiltin("n_get_dynamic",b_get_dynamic, -1);
+    defbuiltin("n_get_dynamic", b_get_dynamic, -1);
     defbuiltin("n_error", b_error, -1);
     defbuiltin("n_has_cut", b_has_cut, -1);
     defbuiltin("n_before_cut", b_before_cut, -1);
@@ -1679,9 +1679,11 @@ int b_reconsult(int arglist, int rest, int th)
 		    prove_all(clause, sp[th], th);
 		else if (arg2 != NIL && !predicatep(cadr(clause)))
 		    prove_all(clause, sp[th], th);
-		else if (structurep(cadr(clause) && !eqlp(car(cadr(clause)),makesys("dynamic"))))
-			/* if execute predicate is dynamic not add to execute_list */
-			execute_list = listcons(clause, execute_list);
+		else if (structurep
+			 (cadr(clause)
+			  && !eqlp(car(cadr(clause)), makesys("dynamic"))))
+		    /* if execute predicate is dynamic not add to execute_list */
+		    execute_list = listcons(clause, execute_list);
 		goto skip;
 	    }
 	    // DCG syntax e.g. a-->b.

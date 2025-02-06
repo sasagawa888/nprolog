@@ -148,6 +148,8 @@ int b_maplist(int arglist, int rest, int th)
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
+	if (!callablep(arg1))
+	    exception(NOT_CALLABLE, ind, arg1, th);
 	if (!listp(arg2) && !nullp(arg2))
 	    exception(NOT_LIST, ind, arg2, th);
 	if (listp(arg2) && length(arg2) == -1)
@@ -1966,18 +1968,18 @@ int b_close_socket(int arglist, int rest, int th)
 
 int b_dynamic(int arglist, int rest, int th)
 {
-	int n,ind,arg1;
+    int n, ind, arg1;
 
-	n=length(arglist);
-	ind = makeind("dynamic",n,th);
-	if(n==1){
-		arg1 = car(arglist);
-		if(!indicatorp(arg1))
-			exception(NOT_INDICATOR,ind,arg1,th);
+    n = length(arglist);
+    ind = makeind("dynamic", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if (!indicatorp(arg1))
+	    exception(NOT_INDICATOR, ind, arg1, th);
 
-		dynamic_list = cons(cadr(arg1),dynamic_list);
-		return(prove_all(rest,sp[th],th));
-	}
-	exception(ARITY_ERR,ind,arglist,th);
-	return(NO);
+	dynamic_list = cons(cadr(arg1), dynamic_list);
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }

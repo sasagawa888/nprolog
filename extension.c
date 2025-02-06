@@ -56,17 +56,17 @@ int b_reconsult_abolish(int arglist, int rest, int th)
 
 int b_dynamic_predicate(int arglist, int rest, int th)
 {
-	int n, arg1;
+    int n, arg1;
 
-	n = length(arglist);
-	if(n==1){
-		arg1 = car(arglist);
-		if(memberp(arg1,dynamic_list))
-			return(prove_all(rest,sp[th],th));
-		else 
-			return(NO);
-	}
-	return(NO);
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if (memberp(arg1, dynamic_list))
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    return (NO);
 }
 
 int b_filename(int arglist, int rest, int th)
@@ -766,8 +766,8 @@ int b_get_dynamic(int arglist, int rest, int th)
 	res = NIL;
 	pos = dynamic_list;
 	while (!nullp(pos)) {
-		if(memberp(car(pos),reconsult_list))
-	    	res = listcons(car(pos), res);
+	    if (memberp(car(pos), reconsult_list))
+		res = listcons(car(pos), res);
 	    pos = cdr(pos);
 	}
 	if (unify(arg1, res, th) == YES)
@@ -780,11 +780,11 @@ int b_get_dynamic(int arglist, int rest, int th)
 
 int add_dynamic(int x)
 {
-	int pred;
+    int pred;
 
-	pred = list2(makesys("assert"),x);
-	prove(pred,sp[0],NIL,0);
-	return(0);
+    pred = list2(makesys("assert"), x);
+    prove(pred, sp[0], NIL, 0);
+    return (0);
 }
 
 

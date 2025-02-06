@@ -212,7 +212,7 @@ void exception(int errnum, int ind, int arg, int th)
 	print(arg);
 	break;
 
-	case NOT_INDICATOR:
+    case NOT_INDICATOR:
 	bindsym(makevar("%TypeName"), makeconst("predicate_indicator"),
 		th);
 	bindsym(makevar("%Culprit"), arg, th);
