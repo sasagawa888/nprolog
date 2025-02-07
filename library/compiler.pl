@@ -1154,9 +1154,7 @@ jump_gen_dynamic(P) :-
 
 jump_gen_dynamics(P,[]).
 jump_gen_dynamics(P,[L|Ls]) :-
-    write('dynamic_clause = '),
     jump_gen_dyn(P,L),
-    write('Jadd_dynamic(dynamic_clause);'),nl,
     jump_gen_dynamics(P,Ls).
 
 jump_gen_dyn(P,A) :-
@@ -1167,7 +1165,18 @@ jump_gen_dyn(P,A) :-
 
 jump_gen_dyn1([]).
 jump_gen_dyn1([X|Xs]) :-
-    jump_gen_dyn2(X),nl,
+    n_property(X,operation),
+    write('dynamic_clause = '),
+    jump_gen_dyn2(X),
+    write(';'),nl,
+    write('Jadd_dynamic(dynamic_clause);'),nl,
+    jump_gen_dyn1(Xs).
+jump_gen_dyn1([X|Xs]) :-
+    n_property(X,predicate),
+    write('dynamic_clause = '),
+    jump_gen_dyn2(X),
+    write(';'),nl,
+    write('Jadd_dynamic(dynamic_clause);'),nl,
     jump_gen_dyn1(Xs).
 
 jump_gen_dyn2([]).
@@ -1176,7 +1185,7 @@ jump_gen_dyn2((X :- Y)) :-
     jump_gen_dyn2(X),
     write(','),
     jump_gen_dyn2(Y),
-    write(');').
+    write(')').
 
 jump_gen_dyn2((X,Y)) :-
     write('Jlist3(Jmakeope(","),'),

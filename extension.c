@@ -940,7 +940,7 @@ int exec(int goal, int bindings, int rest, int th)
 	    return (NO);
 	}
     } else if (predicatep(goal)) {
-	return (prove(goal, sp[th], NIL, th));
+	return (prove(goal, sp[th], rest, th));
     }
 
     return (NO);
