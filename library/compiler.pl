@@ -1179,18 +1179,18 @@ jump_gen_dyn2((X :- Y)) :-
     write(');').
 
 jump_gen_dyn2((X,Y)) :-
-    write('Jlist3(Jmakesys(","),'),
+    write('Jlist3(Jmakeope(","),'),
     jump_gen_dyn2(X),
     write(','),
     jump_gen_dyn2(Y),
-    write(');').
+    write(')').
 
 jump_gen_dyn2((X;Y)) :-
-    write('Jlist3(Jmakesys(";")),'),
+    write('Jlist3(Jmakeope(";")),'),
     jump_gen_dyn2(X),
     write(','),
     jump_gen_dyn2(Y),
-    write(');').
+    write(')').
     
 jump_gen_dyn2(X) :-
     compound(X),
