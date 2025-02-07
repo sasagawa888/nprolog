@@ -4182,9 +4182,9 @@ static const char *predicates_data[] = {
     "predicate_property",
     "predicate_property(E, X)",
     "Unifies X with the properties of the predicate E.",
-    "reverse",
-    "reverse(L, X)",
-    "Unifies X with the list that results from reversing the list L.",
+};
+
+static const char *predicates_data1[] = {
     "bagof",
     "bagof(X, Pred, Bag)",
     "Collects all X that unify with the predicate Pred into the list Bag.",
@@ -4225,14 +4225,71 @@ static const char *predicates_data[] = {
     "atom_length(Atom,X)",
     "Unify X and length of Atom",
     "put_char",
-    "put_char(X)",
+    "put_char(X)/put_char(Stream,X)",
     "Put char X to stream.",
     "get_char",
-    "get_char(X)",
+    "get_char(X)/get_char(Stream,X)",
     "Get char X from stream.",
     "get_byte",
-    "get_byte(X)",
+    "get_byte(X)/get_byte(Stream,X)",
     "Get byte X from stream.",
+	"put_char/",
+	"put_char(X)/put_char(Stream,X)",
+    "Get byte X from stream.",
+	"get_byte(X)/get_byte(Stream,X)",
+	"Get byte X from stream",
+	"peek_code",
+	"peek_code(X)/peek_code(Stream,X)",
+	"Peek code X from stream",
+	"peek_char",
+	"peek_char(X)/peek_char(Stream,X)",
+	"Peek char X from stream",
+	"peek_byte",
+	"peek_byte(X)/peek_byte(Stream,X)",
+	"Peek byte X from stream",
+	"flush_output",
+	"flush_output/flush_output(Stream)",
+	"flush output stream",
+	"catch",
+	"catch(Goal,Tag,Cont)",
+	"Call Goal ,catch data from throw and call Cont",
+	"throw",
+	"Throw to tag point",
+	"throw(Tag)",
+	"Throw to tag point",
+	"unify_with_occurs_check",
+	"unify_with_occurs_check(X,Y)",
+	"Before unify(X,Y) check occurs",
+	"current_input",
+	"current_input(Stream)",
+	"Unify Stream and current input stream",
+	"current_output",
+	"current_output(Stream)",
+	"Unify Stream and current output stream",
+	"set_input",
+	"set_input(Stream)",
+	"Set Stream to current input",
+	"set_output",
+	"set_output(Stream)",
+	"Set Stream to current output",
+	"use_module",
+	"use_module(ModuleName)",
+	"Import module from library",
+	"module",
+	"module(ModuleName,ExceptList)",
+	"In library add prefix ModuleName to each predicate without predicate in ExceptList",
+	"copy_term",
+	"copy_term(Term,Copy)",
+	"Copy term Term to Copy",
+	"at_end_of_stream",
+	"at_end_of_stream(Stream)",
+	"If Stream is end return Yes, else return NO",
+	"stream_property",
+	"stream_property(Stream,Prop)",
+	"Prop is mode(input) or mode(output)",
+	"dynamic",
+	"dynamic(PredInd)",
+	"Set dynamic PredInd predicate",
 };
 
 #define NELEM(X) (sizeof(X) / sizeof((X)[0]))
@@ -4249,6 +4306,17 @@ int find_predicate_data(const char *str)
     return -1;
 }
 
+int find_predicate_data1(const char *str)
+{
+    int i;
+
+    for (i = 0; i < (int) NELEM(predicates_data1); i = i + 3) {
+	if (strcmp(predicates_data1[i], str) == 0) {
+	    return i;
+	}
+    }
+    return -1;
+}
 
 static const char *functions_data[] = {
     "pi",
@@ -4362,6 +4430,19 @@ void information(void)
 	CHECK(addstr, "\n");
 	ESCRST();
 	CHECK(addstr, predicates_data[i + 2]);
+	CHECK(addstr, " --- enter any key to exit ---");
+	CHECK(refresh);
+	CHECK(getch);
+	display_header();
+	display_screen();
+	goto exit;
+    }
+	i = find_predicate_data1(get_fragment());
+    if (i != -1) {
+	CHECK(addstr, predicates_data1[i + 1]);
+	CHECK(addstr, "\n");
+	ESCRST();
+	CHECK(addstr, predicates_data1[i + 2]);
 	CHECK(addstr, " --- enter any key to exit ---");
 	CHECK(refresh);
 	CHECK(getch);

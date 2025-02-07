@@ -9,7 +9,7 @@
 #define FULLSCREEN
 #include "term.h"
 
-static const float VERSION = 3.88;
+static const float VERSION = 3.90;
 
 #define ROW_SIZE 5000
 #define COL_SIZE 256
@@ -38,6 +38,7 @@ int find_eol(int row);
 int find_eol1(int row);
 int find_function_data(const char *str);
 int find_predicate_data(const char *str);
+int find_predicate_data1(const char *str);
 int getch1(void);
 char *get_fragment(void);
 char *getname(void);
