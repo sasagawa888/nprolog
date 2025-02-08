@@ -14,7 +14,7 @@ memory map
 address 
 0          -  5,000,000  heap area
  5,000,001 - 30,000,000  working area 
-30,000,001 - 50,000,000  variant area
+30,000,001 - 35,000,000  variant area
 */
 #define VERSION     3.90
 #define CELLSIZE    30000000  // if raspberry PI set smaller size.

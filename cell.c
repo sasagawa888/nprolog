@@ -201,7 +201,7 @@ int makevariant(int th)
     addr = ac[th];
     ac[th]++;
     if (ac[th] >= VARIANTMAX)
-	exception(SYSTEM_ERR, makestr("makevariant"), NIL, th);
+	exception(RESOURCE_ERR, makestr("lack of variant"), NIL, th);
     return (addr);
 }
 
