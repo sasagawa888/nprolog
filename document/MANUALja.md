@@ -730,6 +730,9 @@ EXITポートで使用され、デバッガに現在のゴールのREDOポート
 
 
 ## DCG：限定節文法
+DCGを使うためにはモジュールを呼び出してください。
+use_module(dcg).
+
 以下は中島秀之先生の「Prolog」（産業図書）にある例です。
 
 A dog bites a postman.

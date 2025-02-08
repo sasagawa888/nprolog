@@ -717,6 +717,9 @@ At the EXIT port, this command causes the debugger to proceed to the REDO port o
 
 
 ## DCG
+To use DCG call module.
+use_module(dcg).
+
 The following is an example from Professor Hideyuki Nakashima's "Prolog".
 
 A dog bites a postman.
@@ -798,8 +801,10 @@ The meaning is strange, but it follows the grammatical rules.
 
 
 ## compiler
-It's still incomplete, but it also comes with a compiler. Loading the compiler at startup.
+To use compiler call module.
+use_module(compiler).
 
+and...
 compile_file(filename)
 
 Make a file with the Prolog code to compile in this way.
