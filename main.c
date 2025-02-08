@@ -144,6 +144,7 @@ int parent_flag = 0;		/* while comunicating child, parent_flag = 1 */
 int pause_flag = 0;		/* while pause in child, pause_flag = 1 */
 int shutdown_flag = 0;		/* when receive dp_close, shutdown_flag = 1 */
 int active_thread = 0;		/* for mt_and/1 mt_or/1 */
+int dynamic_flag = 0;       /* for dynamic predicate. while assertz dynamic flag = 1 */
 
 //stream
 int standard_input;

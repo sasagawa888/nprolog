@@ -2063,7 +2063,7 @@ void add_data(int pred, int data)
 	SET_CDR(clauses, cons(data, NIL));
     }
     if (!memq(pred, predicates))
-	if (!module_flag)
+	if (!module_flag && !dynamic_flag)
 	    predicates = cons(pred, predicates);
 
 }

@@ -518,6 +518,7 @@ extern int parent_flag;
 extern int pause_flag;
 extern int shutdown_flag;
 extern int active_thread;
+extern int dynamic_flag;
 
 //------pointer----
 extern int hp; 
