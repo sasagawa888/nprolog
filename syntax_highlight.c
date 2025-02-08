@@ -69,7 +69,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "current_predicate" }, { "current_op" }, { "retrieveh" },
     { "removeh" }, { "unify_with_occurs_check" },
     { "get_code" }, { "get_char" }, { "get_byte" }, { "put_char" },
-    { "flush_output" },
+    { "flush_output" }, { "put_code" }, {"put_byte"},
     { "number_codes" }, { "number_chars" }, { "catch" }, { "throw" },
     { "set_input" }, { "set_output" }, { "use_module" }, { "module" },
     { "copy_term" },

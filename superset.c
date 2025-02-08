@@ -883,6 +883,70 @@ int b_put_char(int arglist, int rest, int th)
     return (NO);
 }
 
+
+int b_put_code(int arglist, int rest, int th)
+{
+    int n, ind, arg1, arg2;
+
+    n = length(arglist);
+    ind = makeind("put_code", n, th);
+    if (n == 1) {
+	arg1 = output_stream;
+	arg2 = car(arglist);
+	goto put;
+    } else if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+      put:
+	if (wide_variable_p(arg1))
+	    exception(INSTANTATION_ERR, ind, arg1, th);
+	if (wide_variable_p(arg2))
+	    exception(INSTANTATION_ERR, ind, arg2, th);
+	if (!wide_variable_p(arg1) && !integerp(arg2))
+	    exception(NOT_INT, ind, arg2, th);
+	if (!streamp(arg1) && !aliasp(arg1))
+	    exception(NOT_STREAM, ind, arg1, th);
+
+	fprintf(GET_PORT(arg1), "%d", GET_INT(arg2));
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+int b_put_byte(int arglist, int rest, int th)
+{
+    int n, ind, arg1, arg2;
+
+    n = length(arglist);
+    ind = makeind("put_byte", n, th);
+    if (n == 1) {
+	arg1 = output_stream;
+	arg2 = car(arglist);
+	goto put;
+    } else if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+      put:
+	if (wide_variable_p(arg1))
+	    exception(INSTANTATION_ERR, ind, arg1, th);
+	if (wide_variable_p(arg2))
+	    exception(INSTANTATION_ERR, ind, arg2, th);
+	if (!wide_variable_p(arg1) && !integerp(arg2))
+	    exception(NOT_INT, ind, arg2, th);
+	if (!streamp(arg1) && !aliasp(arg1))
+	    exception(NOT_STREAM, ind, arg1, th);
+
+	fprintf(GET_PORT(arg1), "%d", GET_INT(arg2));
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+
 int b_peek_code(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, c, i, res;
