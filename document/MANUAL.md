@@ -372,11 +372,13 @@ Open an existing file.
 Access is one of the following 
 
 ```
-r read
-w write
-rw read and write
-a append
-ra read and append
+r read (text)
+w write (text)
+rw read and write (text)
+a append (text)
+ra read and append (text)
+rb read (binary)
+wb write (binary)
 ```
 
 ### □ read(Term)

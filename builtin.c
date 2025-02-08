@@ -200,8 +200,8 @@ void init_builtin(void)
     defbuiltin("get_char", b_get_char, list2(1, 2));
     defbuiltin("get_byte", b_get_byte, list2(1, 2));
     defbuiltin("put_char", b_put_char, list2(1, 2));
-	defbuiltin("put_code", b_put_code, list2(1, 2));
-	defbuiltin("put_byte", b_put_byte, list2(1, 2));
+    defbuiltin("put_code", b_put_code, list2(1, 2));
+    defbuiltin("put_byte", b_put_byte, list2(1, 2));
     defbuiltin("peek_code", b_peek_code, list2(1, 2));
     defbuiltin("peek_char", b_peek_char, list2(1, 2));
     defbuiltin("peek_byte", b_peek_byte, list2(1, 2));
@@ -1314,10 +1314,28 @@ int b_open(int arglist, int rest, int th)
 		    exception(CANT_OPEN, ind, arg2, th);
 		unify(arg1, stream, th);
 		return (prove_all(rest, sp[th], th));
+	    } else if (arg3 == makeconst("wb")) {
+		stream =
+		    makestream(fopen(GET_NAME(arg2), "wb"), NPL_OUTPUT,
+			       NPL_BINARY, NIL, arg2);
+
+		if (GET_PORT(stream) == NULL)
+		    exception(CANT_OPEN, ind, arg2, th);
+		unify(arg1, stream, th);
+		return (prove_all(rest, sp[th], th));
 	    } else if (arg3 == makeconst("r")) {
 		stream =
 		    makestream(fopen(GET_NAME(arg2), "r"), NPL_INPUT,
 			       NPL_TEXT, NIL, arg2);
+
+		if (GET_PORT(stream) == NULL)
+		    exception(CANT_OPEN, ind, arg2, th);
+		unify(arg1, stream, th);
+		return (prove_all(rest, sp[th], th));
+	    } else if (arg3 == makeconst("rb")) {
+		stream =
+		    makestream(fopen(GET_NAME(arg2), "rb"), NPL_INPUT,
+			       NPL_BINARY, NIL, arg2);
 
 		if (GET_PORT(stream) == NULL)
 		    exception(CANT_OPEN, ind, arg2, th);
@@ -1336,6 +1354,7 @@ int b_open(int arglist, int rest, int th)
 		stream =
 		    makestream(fopen(GET_NAME(arg2), "a+"), NPL_INPUT,
 			       NPL_TEXT, NIL, arg2);
+
 
 		if (GET_PORT(stream) == NULL)
 		    exception(CANT_OPEN, ind, arg2, th);

@@ -360,11 +360,13 @@ Eを評価し、その値をXにユニフィケーションする
 Accessは次のいずれか
 
 ```
-r read
-w write
-rw read and write
-a append
-ra read and append
+r read (text)
+w write (text)
+rw read and write (text)
+a append (text)
+ra read and append (text)
+rb read (binary)
+wb write (binary)
 ```
 
 ### □ read(Term)
