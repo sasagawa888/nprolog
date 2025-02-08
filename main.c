@@ -251,14 +251,13 @@ int main(int argc, char *argv[])
     int ret = setjmp(buf);
     if (!init_flag)
 	goto repl;
-
     home = getenv("HOME");
     strcpy(str, home);
     strcat(str, "/nprolog/library/dcg.pl");
     fp = fopen(str, "r");
     if (fp != NULL) {
 	fclose(fp);
-	b_consult(list1(makeconst(str)), NIL, 0);
+	b_reconsult(list1(makeconst(str)), NIL, 0);
 	predicates = NIL;
     }
     strcpy(str, home);
@@ -266,7 +265,7 @@ int main(int argc, char *argv[])
     fp = fopen(str, "r");
     if (fp != NULL) {
 	fclose(fp);
-	b_consult(list1(makeconst(str)), NIL, 0);
+	b_reconsult(list1(makeconst(str)), NIL, 0);
 	predicates = NIL;
     }
     strcpy(str, home);
