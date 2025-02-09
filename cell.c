@@ -184,8 +184,8 @@ int makeatom1(char *pname, int property)
     addr = freshcell();
     SET_TAG(addr, SINGLE);
     str = (char *) malloc(strlen(pname) + 1);
-    //if(str == NULL)
-    //    error(MALLOC_OVERF,"makeatom",NIL);
+    if(str == NULL)
+        exception(SYSTEM_ERR,makestr("makeatom"),NIL,0);
     heap[addr].name = str;
     strcpy(heap[addr].name, pname);
     SET_CAR(addr, NIL);
