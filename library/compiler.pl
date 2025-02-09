@@ -94,7 +94,7 @@ for tail recursive optimize code
 now ignore
 */
 pass1(X) :-
-	write(user_output,'pass1'),
+	write(user_output,'phase pass1'),
     nl(user_output),
     abolish(pred_data/2),
     assert(pred_data(dummy,-1)),
@@ -113,7 +113,7 @@ and write to <filename>.c
 when all code is generated, close file and abolish optimizable/1
 */
 pass2(X) :-
-	write(user_output,'pass2'),
+	write(user_output,'phase pass2'),
     nl(user_output),
 	n_filename(X,F),
     atom_concat(F,'.c',Cfile),
@@ -1142,8 +1142,8 @@ gen_argument_list([X|Xs]) :-
 assert dynamic predicate
 :- dynamic(foo/1)
 foo(X) :- ...
-dyn = Jcons(Jmakesys(":-"),...;
-Jadd_data(dyn); 
+dynamic_clause = Jcons(Jmakesys(":-"),...;
+Jadd_dynamic(dyn); 
 */
 
 gen_dynamic(P) :-

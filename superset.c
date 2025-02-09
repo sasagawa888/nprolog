@@ -730,7 +730,10 @@ int b_get_code(int arglist, int rest, int th)
 	}
 
 	res = NIL;
-	res = unify(arg2, makeint(i), th);
+	if(c == EOF)
+		res = unify(arg2, makeconst("end_of_file"), th);
+	else
+		res = unify(arg2, makeint(i), th);
 	if (res == YES)
 	    return (prove_all(rest, sp[th], th));
 	else
@@ -803,7 +806,10 @@ int b_get_char(int arglist, int rest, int th)
 	}
 	res = NIL;
 
-	res = unify(arg2, makeconst(str), th);
+	if(c == EOF)
+		res = unify(arg2, makeconst("end_of_file"), th);
+	else
+		res = unify(arg2, makeconst(str), th);
 	if (res == YES)
 	    return (prove_all(rest, sp[th], th));
 	else
@@ -841,7 +847,11 @@ int b_get_byte(int arglist, int rest, int th)
 	    arg1 = GET_CAR(arg1);
 	c = fgetc(GET_PORT(arg1));
 
-	res = unify(arg2, makeint(c), th);
+	if(c == EOF)
+		res = unify(arg2, makeconst("end_of_file"), th);
+	else
+		res = unify(arg2, makeint(c), th);
+
 	if (res == YES)
 	    return (prove_all(rest, sp[th], th));
 	else

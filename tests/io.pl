@@ -41,4 +41,22 @@ test7 :-
     peek_byte(Stream, Code),
     close(Stream),
     write('First byte code in file: '), write(Code), nl.
+
+test8 :- 
+    copy_file('./tests/test.txt', './tests/test1.txt').
+
+copy_file(InputFile, OutputFile) :-
+    open(InStream, InputFile, r),
+    open(OutStream, OutputFile, w),
+    copy_stream_data(InStream, OutStream),
+    close(InStream),
+    close(OutStream).
+    
+copy_stream_data(InStream, OutStream) :-
+    get_char(InStream, Char),
+    (   Char \= end_of_file
+    ->  put_char(OutStream, Char),
+        copy_stream_data(InStream, OutStream)
+    ;   true
+    ).
             
