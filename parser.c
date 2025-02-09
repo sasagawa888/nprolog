@@ -1073,8 +1073,11 @@ void gettoken(int th)
 	    exception(SYNTAX_ERR, makestr("float number expected dot"),
 		      NIL, th);
 
-	SETBUFEND(NUL) if (strlen(stok.buf) <= 9)
+	SETBUFEND(NUL) 
+	if (strlen(stok.buf) <= 9)
 	    stok.type = INTEGER;
+	else if(strlen(stok.buf) <= 19)
+		stok.type = LONGNUM;
 	else
 	    stok.type = BIGNUM;
 	stok.ch = c;
@@ -1084,8 +1087,11 @@ void gettoken(int th)
 	SETBUF(c) c = readc();
 	if (!isdigit(c)) {	//2. -> 2(integer) + .DOT
 	    pos--;
-	    SETBUFEND(NUL) if (strlen(stok.buf) <= 9)
+	    SETBUFEND(NUL)
+		if (strlen(stok.buf) <= 9)
 		stok.type = INTEGER;
+		else if(strlen(stok.buf) <= 19)
+		stok.type = LONGNUM;
 	    else
 		stok.type = BIGNUM;
 	    unreadc(c);
@@ -1370,6 +1376,10 @@ int readitem1(int th)
 	    return (makehexbigx(stok.buf));
     case FLOATN:
 	return (makeflt(atof(stok.buf)));
+	case LONGNUM:
+	char *longptr;
+	long longnum = strtol(stok.buf,&longptr,10);
+	return (makelong(longnum));
     case BIGNUM:
 	if (open_flag)
 	    return (bigx_to_parmanent(makebigx(stok.buf)));

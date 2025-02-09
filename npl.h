@@ -130,7 +130,7 @@ typedef struct __packed{
 typedef enum toktype {LPAREN,RPAREN,LBRACKET,RBRACKET,VERTICAL,LCURL,RCURL,SHARP,
                       STRING,INTEGER,FLOATN,CHARCODE,ATOMOBJ,BUILTIN,FUNCTION,
                       COMPILED,OPERATOR,VARIABLE,ANOYMOUS,VARIANT,QUOTE,DOT,BACKQUOTE,DBLQUOTE,
-                      COMMA,SEMICOLON,BIGNUM,BINNUM,OCTNUM,HEXNUM,
+                      COMMA,SEMICOLON,LONGNUM,BIGNUM,BINNUM,OCTNUM,HEXNUM,
                       PERIOD,FILEEND,OTHER} toktype;
 typedef enum backtrack {GO,BACK} backtrack;
 typedef enum spaceskip {SKIP,NOTSKIP} spaceskip;

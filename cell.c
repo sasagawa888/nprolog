@@ -555,8 +555,10 @@ int makestrflt(char *str)
 }
 
 int makestrlong(char *str)
-{
-    return (makelong(atoi(str)));
+{   
+    char *longptr;
+    long longnum = strtol(str,&longptr,10);
+    return (makelong(longnum));
 }
 
 void debug(void)
