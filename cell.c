@@ -557,7 +557,8 @@ int makestrflt(char *str)
 int makestrlong(char *str)
 {   
     char *longptr;
-    long longnum = strtol(str,&longptr,10);
+    long longnum;
+    longnum = strtol(str,&longptr,10);
     return (makelong(longnum));
 }
 

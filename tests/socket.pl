@@ -11,7 +11,7 @@ start_server :-
     close_socket(ServerSocket).
 
 start_client :-
-    create_client_socket(ClientSocket, 5000, '168.1.1.1'),
+    create_client_socket(ClientSocket, 5000, '192.168.1.1'),
     send_socket(ClientSocket, hello),
     writeln('Client sent: hello'),
     close_socket(ClientSocket).

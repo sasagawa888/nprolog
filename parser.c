@@ -1378,7 +1378,8 @@ int readitem1(int th)
 	return (makeflt(atof(stok.buf)));
 	case LONGNUM:
 	char *longptr;
-	long longnum = strtol(stok.buf,&longptr,10);
+	long longnum;
+	longnum = strtol(stok.buf,&longptr,10);
 	return (makelong(longnum));
     case BIGNUM:
 	if (open_flag)
