@@ -400,7 +400,7 @@ int makesocket(int sockfd, int type, const char *name, int listenfd)
     SET_TAG(addr, STREAM);
     SET_SOCKET(addr, sockfd);	/* socket fd */
     SET_CDR(addr, listenfd);	/* socket when linten */
-    SET_OPT(addr, type);	/* EISL_SOCKET */
+    SET_OPT(addr, type);	/* NPL_SOCKET */
     str = (char *) malloc(strlen(name) + 1);
     if (str == NULL)
 	exception(SYSTEM_ERR, makestr("makesocket"), NIL, 0);
