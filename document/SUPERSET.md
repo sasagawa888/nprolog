@@ -46,8 +46,6 @@ The following extension functions respect ISO-Prolog as much as possible, but th
 
 - findall/3
 
-- existerrors/2
-
 - write_canonical/1 /2
 
 - atom_length/2
