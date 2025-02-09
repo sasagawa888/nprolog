@@ -1,7 +1,7 @@
 % list library (test of module system)
 :- module(list,[last/2,butlast/2,second/2,cons/3,
                 nth/3,nth0/3,iota/3,take/3,drop/3,make_list/3,reverse/2,
-                remove_at/3,insert_at/4,qsort/2]).
+                remove_at/3,insert_at/4,qsort/2,permutation/2]).
 
 last([],[]).
 last([X],[X]).
@@ -80,3 +80,12 @@ partition(Pivot, [H|T], [H|Left], Right) :-
 partition(Pivot, [H|T], Left, [H|Right]) :-
     H > Pivot,  
     partition(Pivot, T, Left, Right).
+
+permutation([], []).
+permutation(L, [X|L2]) :-
+    del(X, L, L1),
+    permutation(L1, L2).
+
+del(X, [X|L], L).
+del(X, [Y|L], [Y|L1]) :-
+    del(X, L, L1).
