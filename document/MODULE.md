@@ -13,7 +13,7 @@ N-Prolog has several modularized libraries.
  use_module(mpworld).
  Starting from version 3.9, mpworld must be loaded from a module when used.
  see https://www.ipsj.or.jp/10jigyo/taikai/67kai/67program/html/event/ts10.pdf
- 
+
 - List
  use_module(list).
  It includes basic predicates for list processing. Please refer to the following.
@@ -21,4 +21,11 @@ N-Prolog has several modularized libraries.
 ```
  last/2,butlast/2,second/2,cons/3,nth/3,nth0/3,iota/3,take/3,drop/3,make_list/3,reverse/2,
  remove_at/3,insert_at/4,qsort/2
+```
+
+- Sets
+use_module(sets).
+
+```
+make_set/2,union/3,intersection/3,difference/3,subset/2,equal/2
 ```
