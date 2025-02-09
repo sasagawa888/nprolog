@@ -1282,7 +1282,6 @@ int b_create(int arglist, int rest, int th)
 int b_open(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, arg3, stream;
-    FILE *fp;
 
     n = length(arglist);
     ind = makeind("open", n, th);
@@ -1299,12 +1298,6 @@ int b_open(int arglist, int rest, int th)
 	    output_stream = standard_output;
 	    return (prove_all(rest, sp[th], th));
 	} else {
-	    fp = fopen(GET_NAME(arg2), "r");
-	    if (fp == NULL) {
-		fclose(fp);
-		exception(CANT_OPEN, ind, arg2, th);
-	    }
-
 	    if (arg3 == makeconst("w")) {
 		stream =
 		    makestream(fopen(GET_NAME(arg2), "w"), NPL_OUTPUT,

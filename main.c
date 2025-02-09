@@ -1381,6 +1381,7 @@ void print(int addr)
 		strcat(bridge, str1);
 	    }
 	}
+	break;
     case SOCKET:
 	if (!bridge_flag)
 	    fprintf(GET_PORT(output_stream), "<socket%d>", addr);
