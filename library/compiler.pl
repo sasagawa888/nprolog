@@ -1264,9 +1264,9 @@ gen_dyn2(X) :-
     write('")').
 gen_dyn2(X) :-
     n_bignum(X),
-    write('Jmakebig("'),
+    write('Jbigx_to_parmanent(Jmakebig("'),
     write(X),
-    write('")').
+    write('"))').
 gen_dyn2(X) :-
     n_longnum(X),
     write('Jmakestrlong("'),

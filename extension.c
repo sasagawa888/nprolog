@@ -783,9 +783,9 @@ int add_dynamic(int x)
     int pred;
 
     pred = list2(makesys("assert"), x);
-	dynamic_flag = 1;
+	//dynamic_flag = 1;
     prove(pred, sp[0], NIL, 0);
-	dynamic_flag = 0;
+	//dynamic_flag = 0;
     return (0);
 }
 

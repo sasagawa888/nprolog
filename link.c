@@ -70,6 +70,7 @@ void dynamic_link(int x)
     init_f1(MAKEVARIANT_IDX, (tpred) makevariant);
     init_f1(RANDOM_IDX, (tpred) f_random);
     init_f1(ADD_DYNAMIC_IDX, (tpred) add_dynamic);
+    init_f1(BIGX_TO_PARMANENT_IDX, (tpred) bigx_to_parmanent);
 
     //argument-2 type
     init_f2(CONS_IDX, (tpred) cons);
