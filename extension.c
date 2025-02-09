@@ -784,6 +784,7 @@ int add_dynamic(int x)
 
     pred = list2(makesys("assert"), x);
 	dynamic_flag = 1;
+	/* not display dynamic predicate */
     prove(pred, sp[0], NIL, 0);
 	dynamic_flag = 0;
     return (0);
