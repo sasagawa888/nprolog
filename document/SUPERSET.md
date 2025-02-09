@@ -165,9 +165,8 @@ yes
 ?- 
 ```
 
-# TCP/IP (future task)
- plan to port the TCP/IP functionality of the Easy-ISLisp I developed.
- I have implemented the TCP/IP predicates, but they have not been thoroughly tested yet. They will be officially supported with the release of version 3.90.
+# TCP/IP 
+ I have implemented the TCP/IP predicates. see ./tests/socket.pl
 
 - create_server_socket(Soket,port) 
  Creates and returns a socket as a server based on the port number. Provide the port number to port. It ranges from 0 to 65536.
@@ -183,6 +182,27 @@ yes
 
 - close_socket(Socket) 
  Closes the socket. Returns yes.
+
+ ```
+ start_server :-
+    create_server_socket(ServerSocket, 5000),
+    write('Server started on port 5000'),nl,
+    recv_socket(ServerSocket, Message),
+    write('Server received: '),
+    write(Message),nl,
+    send_socket(ServerSocket, Message),
+    close_socket(ServerSocket).
+
+start_client :-
+    create_client_socket(ClientSocket, 5000, '127.1.1.1'),
+    send_socket(ClientSocket, hello),
+    write('Client sent: hello'),nl,
+    recv_socket(ClientSocket, Message),
+    write('Client recv: '),
+    write(Message),nl,
+    close_socket(ClientSocket).
+
+ ```
 
 
 # My Personal Thoughts on ISO-Prolog
