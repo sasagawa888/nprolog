@@ -3,7 +3,7 @@
 #include "jump.h"
 int b_<name>(int arglist, int rest, int th);
 int b_<name>(int arglist, int rest, int th){
-int arg1,arg2,arg4,varX,varY,varZ,...,save1,save2,goal,cont;
+int arg1,arg2,arg4,varX,varY,varZ,...,save1,save2,save3,goal,cont;
 save2 = Jget_sp(th);
 if(n == 2){
     arg1 = Jnth(arglist,1);
@@ -19,6 +19,7 @@ if(n == 2){
         if(Jexec_all(Jaddtail_body(rest,body,th),save2,th) == YES)
             return(YES);
     }
+    Jset_ac(save3,th);
     Junbind(save2,th);
     Jset_wp(save1,th);}
 
@@ -33,6 +34,7 @@ if(n == 2){
         if(Jexec_all(Jaddtail_body(rest,body,th),save2,th) == YES)
             return(YES);
     }
+    Jset_ac(save3,th);
     Junbind(save2,th);
     Jset_wp(save1,th);
 
@@ -289,7 +291,7 @@ gen_var_declare(P) :-
     gen_var_declare1(1,E),
     n_generate_all_variable(P,V),
     gen_all_var(V),
-    write('n,body,save1,save2,goal,cont,res;'),nl,!.
+    write('n,body,save1,save2,save3,goal,cont,res;'),nl,!.
 
 max_list([N],N).
 max_list([X|Xs],X) :-
@@ -315,6 +317,7 @@ generate predicate for not tail recursive
 int b_<name>(int arglist, int rest){
 int varX,varY,...
 save2 = Jget_sp(th);
+save3 = Jget_ac(th);
 if(n == N){
     ...main code...
 }
@@ -332,6 +335,7 @@ gen_a_pred(P) :-
     write('(int arglist, int rest, int th){'),nl,
     gen_var_declare(P),
     write('save2 = Jget_sp(th);'),nl,
+    write('save3 = Jget_ac(th);'),nl,
     write('n = Jlength(arglist);'),nl,
     n_arity_count(P,L),
     gen_a_pred1(P,L),
@@ -391,6 +395,7 @@ gen_a_pred4([C|Cs]) :-
 /*
 save1 = Jget_wp(th);
 save2 = jget_sp(th);
+save3 = Jget_ac(th);
 if( )... head
 {body = }
 ...
@@ -429,6 +434,7 @@ gen_a_pred5(P) :-
     write('save1 = Jget_wp(th);'),nl,
 	gen_head(P),
     write('if(Jexec_all(rest,Jget_sp(th),th) == YES) return(YES);'),nl,
+    write('Jset_ac(save3,th);'),nl,
     write('Junbind(save2,th);'),nl,
     write('Jset_wp(save1,th);'),nl.
 
@@ -450,6 +456,7 @@ gen_a_pred5(P) :-
     write('save1 = Jget_wp(th);'),nl,
 	gen_head(P),
     write('if(Jexec_all(rest,Jget_sp(th),th) == YES) return(YES);'),nl,
+    write('Jset_ac(save3,th);'),nl,
     write('Junbind(save2,th);'),nl,
     write('Jset_wp(save1,th);'),nl.
 
@@ -556,6 +563,7 @@ gen_body(X,N) :-
     write('if((res=Jexec_all(body,Jget_sp(th),th)) == YES)'),nl,
     gen_after_body(X2,N),
     write('}'),nl,
+    write('Jset_ac(save3,th);'),nl,
     write('Junbind(save2,th);'),nl,
     write('Jset_wp(save1,th);'),nl.
 
@@ -571,6 +579,7 @@ gen_body(X,N) :-
     write('if(Jexec_all(body,Jget_sp(th),th) == YES)'),nl,
     gen_body(X2,N),
     write('}'),nl,
+    write('Jset_ac(save3,th);'),nl,
     write('Junbind(save2,th);'),nl,
     write('Jset_wp(save1,th);'),nl.
     
@@ -582,6 +591,7 @@ gen_body(X,N) :-
     write(';'),nl,
     write('if((res=Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th)) == YES)'),nl,
     write('return(YES);'),nl,
+    write('Jset_ac(save3,th);'),nl,
     write('Junbind(save2,th);'),nl,
     write('Jset_wp(save1,th);}'),nl.
     
@@ -591,6 +601,7 @@ gen_after_body(X,N) :-
     write(';'),nl,
     write('if((Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th)) == YES)'),nl,
     write('return(YES);'),nl,
+    write('Jset_ac(save3,th);'),nl,
     write('Junbind(save2,th);'),nl,
     write('Jset_wp(save1,th);'),nl,
     write('return(NO);}'),nl.
