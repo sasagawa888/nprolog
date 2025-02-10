@@ -462,6 +462,7 @@ free -> The number of free cells in the heap area
 wp -> The value of the working pointer
 sp -> The value of the stack pointer
 gc -> The number of times the garbage collector (GC) has been triggered
+ac -> The value of th variant pointer
 
 ### □ stdin(FileHandle,Goal)
 Change standard input during that goal.

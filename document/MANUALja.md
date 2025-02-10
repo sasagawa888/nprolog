@@ -444,7 +444,7 @@ BASHコマンドを実行し、成功する。
 ### □ spy(Name/Arity)
 デバッグ用のスパイポイントとして述語を指定する。
 
-### □ statistics(Atom/Val)
+### □ statistics(Atom,Val)
 Prologシステムの使用状況の情報を戻す。
 
 Atom -> Val
@@ -452,6 +452,7 @@ free -> ヒープ領域の空セルの数
 wp   -> working-pointerの値
 sp   -> stack-pointerの値
 gc   -> GCが起動した回数
+ac   -> variant-pointerの値
 
 ### □ stdin(FileHandle,Goal)
 そのゴールの間、標準入力を変更する。

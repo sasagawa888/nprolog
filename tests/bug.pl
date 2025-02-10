@@ -1,14 +1,6 @@
-
-%BIGNUM test
-:- dynamic(foo/2).
-:- dynamic(boo/2).
-
-foo(X,Y) :- Y is X + 111111111111111111111111111111111111111111111111111111111111111111111.
-boo(X,Y) :- Y is X + 111111111111111111.
-fact(0,1).
-fact(N,A) :-
-    N1 is N-1,
-    fact(N1,A1),
-    A is N*A1.
- 
- % fact(1000,X). 
+% Repeat a procedure
+repeat_for(0) :- !, fail.
+repeat_for(N).
+repeat_for(N) :-
+    M is N - 1,
+    repeat_for(M).
