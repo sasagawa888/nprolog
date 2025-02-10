@@ -454,6 +454,17 @@ int set_wp(int x, int th)
     return (0);
 }
 
+int get_ac(int th)
+{
+    return (ac[th]);
+}
+
+int set_ac(int x, int th)
+{
+    ac[th] = x;
+    return (0);
+}
+
 
 int inc_proof(int th)
 {

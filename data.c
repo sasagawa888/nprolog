@@ -1922,7 +1922,7 @@ void assign_variant(int x, int th)
 }
 
 
-// release link variable and ariant
+// release link variable and variant
 void release_variant(int x)
 {
     while (!nullp(x)) {

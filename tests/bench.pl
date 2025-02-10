@@ -46,6 +46,11 @@ run(qsort, N) :-
     repeat_for(N), 
     qsort(X, _, []), 
     fail.
+run(sort, N) :-
+    list50(X),
+    between(1,N,M), 
+    qsort(X, _, []), 
+    fail.
 run(reverse, N) :-
     list30(X),
     repeat_for(N),

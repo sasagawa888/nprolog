@@ -164,7 +164,7 @@ enum { CHECKGBC_IDX, GBC_IDX, FRESHCELL_IDX,
 
 enum { CAR_IDX, CDR_IDX, CADR_IDX, CADDR_IDX, CAAR_IDX, CADAR_IDX, PRINT_IDX, MAKEINT_IDX,
        LENGTH_IDX,  GET_INT_IDX, 
-       LISTP_IDX,  STRUCTUREP_IDX, VARIABLEP_IDX, GET_SP_IDX, GET_WP_IDX, INC_PROOF_IDX,
+       LISTP_IDX,  STRUCTUREP_IDX, VARIABLEP_IDX, GET_SP_IDX, GET_WP_IDX, GET_AC_IDX, INC_PROOF_IDX,
        MAKEVARIANT_IDX, ADD_DYNAMIC_IDX, BIGX_TO_PARMANENT_IDX,
        NUM_FN1S
 };
@@ -173,7 +173,7 @@ enum { CONS_IDX, EQP_IDX, EQUALP_IDX, NUMEQP_IDX, SMALLERP_IDX, EQSMALLERP_IDX,
        GREATERP_IDX, EQGREATERP_IDX, LISTCONS_IDX,
        LIST2_IDX, SET_CAR_IDX, SET_CDR_IDX, SET_AUX_IDX,
        NOT_NUMEQP_IDX, SET_VAR_IDX, NTH_IDX, 
-       UNBIND_IDX, SET_SP_IDX, SET_WP_IDX, DEREF_IDX, WLIST1_IDX, 
+       UNBIND_IDX, SET_SP_IDX, SET_WP_IDX, SET_AC_IDX, DEREF_IDX, WLIST1_IDX, 
        SIN_IDX, ASIN_IDX, COS_IDX, ACOS_IDX, TAN_IDX, ATAN_IDX, EXP_IDX, LOG_IDX,
        LN_IDX, LIST1_IDX, RANDOM_IDX, RANDI_IDX, UNIFY_NIL_IDX,
        NUM_FN2S
@@ -1109,6 +1109,7 @@ int get_2nd_weight(int addr);
 int get_msb(int x);
 int get_nth(int x, int n);
 int get_sign(int x);
+int get_ac(int th);
 int get_sp(int th);
 int get_wp(int);
 int get_up(void);
@@ -1274,6 +1275,7 @@ int reposition_option_p(int x);
 int resolve_all(int end, int bindings, int n);
 int resolve(int end, int bindings, int trail, int n);
 int reverse(int x);
+int set_ac(int x, int th);
 int set_sp(int x, int th);
 int set_wp(int x, int th);
 int set_up(int x);

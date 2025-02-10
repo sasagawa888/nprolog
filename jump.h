@@ -158,6 +158,10 @@ static inline int Jget_wp(int x) {
     return f1[GET_WP_IDX](x);
 }
 
+static inline int Jget_ac(int x) {
+    return f1[GET_AC_IDX](x);
+}
+
 static inline int Jinc_proof(int x) {
     return f1[INC_PROOF_IDX](x);
 }
@@ -253,6 +257,9 @@ static inline int Jset_wp(int x, int th) {
     return f2[SET_WP_IDX](x,th);
 }
 
+static inline int Jset_ac(int x, int th) {
+    return f2[SET_AC_IDX](x,th);
+}
 
 static inline int Jderef(int x, int th) {
     return f2[DEREF_IDX](x,th);

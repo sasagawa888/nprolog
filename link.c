@@ -66,6 +66,7 @@ void dynamic_link(int x)
     init_f1(VARIABLEP_IDX, (tpred) variablep);
     init_f1(GET_SP_IDX, (tpred) get_sp);
     init_f1(GET_WP_IDX, (tpred) get_wp);
+    init_f1(GET_AC_IDX, (tpred) get_ac);
     init_f1(INC_PROOF_IDX, (tpred) inc_proof);
     init_f1(MAKEVARIANT_IDX, (tpred) makevariant);
     init_f1(RANDOM_IDX, (tpred) f_random);
@@ -92,6 +93,7 @@ void dynamic_link(int x)
     init_f2(UNBIND_IDX, (tpred) unbind);
     init_f2(SET_SP_IDX, (tpred) set_sp);
     init_f2(SET_WP_IDX, (tpred) set_wp);
+    init_f2(SET_AC_IDX, (tpred) set_ac);
     init_f2(DEREF_IDX, (tpred) deref);
     init_f2(WLIST1_IDX, (tpred) wlist1);
     init_f2(SIN_IDX, (tpred) f_sin);
