@@ -430,7 +430,7 @@ int variable_convert2(int x)
 
     if (nullp(x))
 	return (NIL);
-    else if (anoymousp(x))
+    else if (anonymousp(x))
 	return (variable_convert4(x));
     else if (variablep(x))
 	return (variable_convert3(x));

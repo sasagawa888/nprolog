@@ -1168,7 +1168,7 @@ int walpha_conversion(int x, int th)
 	return (NIL);
     else if (alpha_variable_p(x))
 	return (x);
-    else if (anoymousp(x))
+    else if (anonymousp(x))
 	return (makevariant(th));
     else if (variablep(x))
 	return (GET_CDR(x));

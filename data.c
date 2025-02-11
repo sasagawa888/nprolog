@@ -629,7 +629,7 @@ int atom_quote_p(int addr)
 	return (0);
     else if (GET_AUX(addr) == SYS)
 	return (0);
-    else if (anoymousp(addr))
+    else if (anonymousp(addr))
 	return (0);
     else if (variablep(addr))
 	return (0);
@@ -1061,7 +1061,7 @@ int wide_variable_p(int addr)
 {
     if (variablep(addr))
 	return (1);
-    else if (anoymousp(addr))
+    else if (anonymousp(addr))
 	return (1);
     else
 	return (0);
@@ -1087,7 +1087,7 @@ int atom_variable_p(int addr)
 
 
 
-int anoymousp(int addr)
+int anonymousp(int addr)
 {
     if (IS_INCELL(addr) && singlep(addr) && GET_AUX(addr) == ANOY)
 	return (1);
@@ -1765,7 +1765,7 @@ int unify(int x, int y, int th)
 	} else {
 	    return (unify(x1, y1, th));
 	}
-    } else if (anoymousp(x) || anoymousp(y)) {
+    } else if (anonymousp(x) || anonymousp(y)) {
 	return (YES);
     } else if (constantp(x) && constantp(y)) {
 	if (eqlp(x, y))
@@ -2000,7 +2000,7 @@ int unify_var(int x, int y, int th)
 {
     int x1, y1;
 
-    if (anoymousp(x)) {
+    if (anonymousp(x)) {
 	return (YES);
     } else if (!variablep(y)) {
 	x1 = deref1(x, th);
@@ -2053,7 +2053,7 @@ int unify_const(int x, int y, int th)
 	} else {
 	    return (eqlp(x, y1));
 	}
-    } else if (anoymousp(y)) {
+    } else if (anonymousp(y)) {
 	return (YES);
     }
 

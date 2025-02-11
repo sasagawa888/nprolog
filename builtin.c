@@ -2091,7 +2091,7 @@ int b_equalp(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if (anoymousp(arg1) && anoymousp(arg2))
+	if (anonymousp(arg1) && anonymousp(arg2))
 	    return (NO);
 	else if (equalp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
@@ -2112,7 +2112,7 @@ int b_notequalp(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if (anoymousp(arg1) && anoymousp(arg2))
+	if (anonymousp(arg1) && anonymousp(arg2))
 	    return (prove_all(rest, sp[th], th));
 	else if (!equalp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
@@ -3927,7 +3927,7 @@ int b_var(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	if (variablep(arg1))
 	    return (prove_all(rest, sp[th], th));
-	else if (anoymousp(arg1))
+	else if (anonymousp(arg1))
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
@@ -3947,7 +3947,7 @@ int b_nonvar(int arglist, int rest, int th)
 
 	if (variablep(arg1))
 	    return (NO);
-	else if (anoymousp(arg1))
+	else if (anonymousp(arg1))
 	    return (NO);
 	else
 	    return (prove_all(rest, sp[th], th));

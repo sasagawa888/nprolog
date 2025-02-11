@@ -693,7 +693,7 @@ int alpha_variable_p(int addr);
 int alpha_to_variable(int x);
 int alphabeticalp(int addr);
 int already_checked_p(int x);
-int anoymousp(int x);
+int anonymousp(int x);
 int anoymous_conversion(int x);
 int append(int x, int y);
 int append1(int x, int y);
