@@ -331,14 +331,14 @@ int generate_variable1(int x, int y)
 	return (generate_variable1(car(x), generate_variable1(cdr(x), y)));
 }
 
-int b_compiler_anoymous(int arglist, int rest, int th)
+int b_compiler_anonymous(int arglist, int rest, int th)
 {
     int n, arg1;
 
     n = length(arglist);
     if (n == 1) {
 	arg1 = deref(car(arglist), th);
-	if (compiler_anoymous_p(arg1))
+	if (compiler_anonymous_p(arg1))
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
@@ -346,7 +346,7 @@ int b_compiler_anoymous(int arglist, int rest, int th)
     return (NO);
 }
 
-int compiler_anoymous_p(int x)
+int compiler_anonymous_p(int x)
 {
     char str[256];
 
@@ -415,7 +415,7 @@ int b_variable_convert(int arglist, int rest, int th)
 int variable_convert1(int x)
 {
     int y;
-    variable_convert4(NIL);	//initialize anoymous N
+    variable_convert4(NIL);	//initialize anonymous N
     y = variable_convert2(x);
     if (clausep(x)) {
 	SET_AUX(y, CLAUSE);
@@ -457,7 +457,7 @@ int variable_convert3(int x)
     return (res);
 }
 
-//anoymous variable _ -> varN (N=1...)
+//anonymous variable _ -> varN (N=1...)
 int variable_convert4(int x)
 {
     int res;

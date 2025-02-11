@@ -742,7 +742,7 @@ gen_a_body(X) :-
 /*
 generate_unify of head
 e.g.  foo(X) -> if(Junify(arg1,varX,th) == YES)
-anoymous variable generate 1 as true.
+anonymous variable generate 1 as true.
 e.g   foo(_) -> if(1)
 */
 
@@ -768,7 +768,7 @@ gen_head1([[]|Xs],N) :-
     gen_head1(Xs,N1).
 
 gen_head1([X|Xs],N) :-
-    n_compiler_anoymous(X),
+    n_compiler_anonymous(X),
     N1 is N + 1,
     gen_head1(Xs,N1).  
 
@@ -1511,9 +1511,9 @@ gen_tail_var(X) :-
     gen_tail_var1(Y,[]).
 
 gen_tail_var1([],L).
-% anoymous variable ignore
+% anonymous variable ignore
 gen_tail_var1(X,L) :-
-    n_compiler_anoymous(X).
+    n_compiler_anonymous(X).
 % normal variable
 gen_tail_var1(X,L) :-
     n_compiler_variable(X),
@@ -1581,9 +1581,9 @@ gen_tail_head2([],L) :-
     gen_tail_head3(X,L),
     write(' == NIL && ').
 
-% ignore anoymous
+% ignore anonymous
 gen_tail_head2(X,L) :-
-    n_compiler_anoymous(X).
+    n_compiler_anonymous(X).
 % ignore variable
 gen_tail_head2(X,L) :-
     n_compiler_variable(X).

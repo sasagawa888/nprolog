@@ -259,7 +259,7 @@ void init_builtin(void)
     defbuiltin("n_filename", b_filename, -1);
     defbuiltin("n_atom_convert", b_atom_convert, -1);
     defbuiltin("n_arity_count", b_arity_count, -1);
-    defbuiltin("n_compiler_anoymous", b_compiler_anoymous, -1);
+    defbuiltin("n_compiler_anonymous", b_compiler_anonymous, -1);
     defbuiltin("n_compiler_variable", b_compiler_variable, -1);
     defbuiltin("n_variable_convert", b_variable_convert, -1);
     defbuiltin("n_generate_all_variable", b_generate_all_variable, -1);

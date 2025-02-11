@@ -1056,7 +1056,7 @@ int narrow_variable_p(int addr)
 	return (0);
 }
 
-// variable + anoymous_variable
+// variable + anonymous_variable
 int wide_variable_p(int addr)
 {
     if (variablep(addr))
