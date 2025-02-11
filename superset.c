@@ -677,7 +677,7 @@ int b_get_code(int arglist, int rest, int th)
     } else if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-	
+
       get_code:
 	if (wide_variable_p(arg1))
 	    exception(INSTANTATION_ERR, ind, arg1, th);
@@ -730,10 +730,10 @@ int b_get_code(int arglist, int rest, int th)
 	}
 
 	res = NIL;
-	if(c == EOF)
-		res = unify(arg2, makeconst("end_of_file"), th);
+	if (c == EOF)
+	    res = unify(arg2, makeconst("end_of_file"), th);
 	else
-		res = unify(arg2, makeint(i), th);
+	    res = unify(arg2, makeint(i), th);
 	if (res == YES)
 	    return (prove_all(rest, sp[th], th));
 	else
@@ -806,10 +806,10 @@ int b_get_char(int arglist, int rest, int th)
 	}
 	res = NIL;
 
-	if(c == EOF)
-		res = unify(arg2, makeconst("end_of_file"), th);
+	if (c == EOF)
+	    res = unify(arg2, makeconst("end_of_file"), th);
 	else
-		res = unify(arg2, makeconst(str), th);
+	    res = unify(arg2, makeconst(str), th);
 	if (res == YES)
 	    return (prove_all(rest, sp[th], th));
 	else
@@ -847,10 +847,10 @@ int b_get_byte(int arglist, int rest, int th)
 	    arg1 = GET_CAR(arg1);
 	c = fgetc(GET_PORT(arg1));
 
-	if(c == EOF)
-		res = unify(arg2, makeconst("end_of_file"), th);
+	if (c == EOF)
+	    res = unify(arg2, makeconst("end_of_file"), th);
 	else
-		res = unify(arg2, makeint(c), th);
+	    res = unify(arg2, makeint(c), th);
 
 	if (res == YES)
 	    return (prove_all(rest, sp[th], th));

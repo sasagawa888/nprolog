@@ -1811,10 +1811,9 @@ int unify_proper_list(int x, int y, int th)
 	    return (YES);
 	} else
 	    return (unify_proper_list(x1, y, th));
-	}
-	else if (!listp(x))
+    } else if (!listp(x))
 	return (NO);
-	else if (nullp(x) && !nullp(y))
+    else if (nullp(x) && !nullp(y))
 	return (NO);
     else if (nullp(x) && nullp(y))
 	return (YES);
@@ -1839,16 +1838,14 @@ int unify_improper_list(int x, int y, int th)
 	    return (YES);
 	} else
 	    return (unify_improper_list(x1, y, th));
-	}
-	else if(atomicp(x)){
-		if (eqlp(x,y))
-			return(YES);
-		else 
-			return (NO);
-	}
-	else if (!listp(x))
+    } else if (atomicp(x)) {
+	if (eqlp(x, y))
+	    return (YES);
+	else
+	    return (NO);
+    } else if (!listp(x))
 	return (NO);
-	else if (nullp(x) && !nullp(y))
+    else if (nullp(x) && !nullp(y))
 	return (NO);
     else if (nullp(x) && nullp(y))
 	return (YES);
@@ -1874,10 +1871,9 @@ int unify_int(int x, int y, int th)
 	    return (YES);
 	} else
 	    return (unify_int(x1, y, th));
-	}
-	else if (!integerp(x))
+    } else if (!integerp(x))
 	return (NO);
-	else if (eqp(x,y))
+    else if (eqp(x, y))
 	return (YES);
     else
 	return (NO);
@@ -1897,10 +1893,9 @@ int unify_flt(int x, int y, int th)
 	    return (YES);
 	} else
 	    return (unify_flt(x1, y, th));
-	}
-	else if (!floatp(x))
+    } else if (!floatp(x))
 	return (NO);
-	else if (numeqp(x,y))
+    else if (numeqp(x, y))
 	return (YES);
     else
 	return (NO);
@@ -1921,10 +1916,9 @@ int unify_long(int x, int y, int th)
 	    return (YES);
 	} else
 	    return (unify_long(x1, y, th));
-	}
-	else if (!longnump(x))
+    } else if (!longnump(x))
 	return (NO);
-	else if (numeqp(x,y))
+    else if (numeqp(x, y))
 	return (YES);
     else
 	return (NO);
@@ -1944,10 +1938,9 @@ int unify_big(int x, int y, int th)
 	    return (YES);
 	} else
 	    return (unify_big(x1, y, th));
-	}
-	else if (!bignump(x))
+    } else if (!bignump(x))
 	return (NO);
-	else if (bigx_eqp(x,y))
+    else if (bigx_eqp(x, y))
 	return (YES);
     else
 	return (NO);
@@ -1967,10 +1960,9 @@ int unify_atom(int x, int y, int th)
 	    return (YES);
 	} else
 	    return (unify_atom(x1, y, th));
-	}
-	else if (!atomp(x))
+    } else if (!atomp(x))
 	return (NO);
-	else if (eqlp(x,y))
+    else if (eqlp(x, y))
 	return (YES);
     else
 	return (NO);
@@ -1990,10 +1982,9 @@ int unify_str(int x, int y, int th)
 	    return (YES);
 	} else
 	    return (unify_str(x1, y, th));
-	}
-	else if (!stringp(x))
+    } else if (!stringp(x))
 	return (NO);
-	else if (streqp(x,y))
+    else if (streqp(x, y))
 	return (YES);
     else
 	return (NO);

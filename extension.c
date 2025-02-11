@@ -783,10 +783,10 @@ int add_dynamic(int x)
     int pred;
 
     pred = list2(makesys("assert"), x);
-	dynamic_flag = 1;
-	/* not display dynamic predicate */
+    dynamic_flag = 1;
+    /* not display dynamic predicate */
     prove(pred, sp[0], NIL, 0);
-	dynamic_flag = 0;
+    dynamic_flag = 0;
     return (0);
 }
 
@@ -886,6 +886,39 @@ int b_after_cut(int arglist, int rest, int th)
     }
     return (NO);
 }
+
+int b_proper_list(int arglist, int rest, int th)
+{
+    int n, arg1;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+
+	if (listp(arg1) && length(arg1) != -1)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    return (NO);
+}
+
+int b_improper_list(int arglist, int rest, int th)
+{
+    int n, arg1;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+
+	if (listp(arg1) && length(arg1) == -1)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    return (NO);
+}
+
 
 int exec_all(int goals, int bindings, int th)
 {

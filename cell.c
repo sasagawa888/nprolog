@@ -184,8 +184,8 @@ int makeatom1(char *pname, int property)
     addr = freshcell();
     SET_TAG(addr, SINGLE);
     str = (char *) malloc(strlen(pname) + 1);
-    if(str == NULL)
-        exception(SYSTEM_ERR,makestr("makeatom"),NIL,0);
+    if (str == NULL)
+	exception(SYSTEM_ERR, makestr("makeatom"), NIL, 0);
     heap[addr].name = str;
     strcpy(heap[addr].name, pname);
     SET_CAR(addr, NIL);
@@ -201,7 +201,8 @@ int makevariant(int th)
     addr = ac[th];
     ac[th]++;
     if (ac[th] >= VARIANTMAX)
-	exception(RESOURCE_ERR, makestr("lack of variant"), makeint(ac[th]), th);
+	exception(RESOURCE_ERR, makestr("lack of variant"),
+		  makeint(ac[th]), th);
     return (addr);
 }
 
@@ -566,7 +567,7 @@ int makestrflt(char *str)
 }
 
 int makestrlong(char *str)
-{   
+{
     return (makelong(atol(str)));
 }
 
