@@ -854,6 +854,14 @@ int listp(int addr)
 	return (0);
 }
 
+// [L|Ls]
+int pairp(int addr)
+{
+	if(listp(addr) && addr != NIL && (atomicp(cdr(addr)) || wide_variable_p(cdr(addr))))
+		return(1);
+	else 
+		return(0);
+}
 
 // (1,2,3).
 int argumentsp(int addr)
@@ -1851,6 +1859,21 @@ int unify_improper_list(int x, int y, int th)
 	return (YES);
     else if (unify(car(x), car(y), th) == YES
 	     && unify_improper_list(cdr(x), cdr(y), th) == YES)
+	return (YES);
+    else
+	return (NO);
+
+    return (NO);
+}
+
+
+//typed unify. x is a pair list e.g. [L|Ls]
+int unify_pair(int x, int y, int th)
+{   
+    if (!pairp(x))
+	return (NO);
+    else if (unify(car(x), car(y), th) == YES
+	     && unify(cdr(x), cdr(y), th) == YES)
 	return (YES);
     else
 	return (NO);

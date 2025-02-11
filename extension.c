@@ -911,13 +911,30 @@ int b_improper_list(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 
-	if (listp(arg1) && length(arg1) == -1)
+	if (listp(arg1) && length(arg1) == -1 && !pairp(arg1))
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
     }
     return (NO);
 }
+
+int b_pair_list(int arglist, int rest, int th)
+{
+    int n, arg1;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+
+	if (listp(arg1) && pairp(arg1))
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    return (NO);
+}
+
 
 
 int exec_all(int goals, int bindings, int th)

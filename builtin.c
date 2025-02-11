@@ -279,6 +279,7 @@ void init_builtin(void)
     defbuiltin("n_after_cut", b_after_cut, -1);
     defbuiltin("n_proper_list", b_proper_list, -1);
     defbuiltin("n_improper_list", b_improper_list, -1);
+	defbuiltin("n_pair_list", b_pair_list, -1);
 
 
 #ifdef __arm__
