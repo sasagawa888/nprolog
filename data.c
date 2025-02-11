@@ -1804,13 +1804,7 @@ int unify_list(int x, int y, int th)
 {
     int x1;
 
-	if (!listp(x))
-	return (NO);
-	else if (nullp(x) && !nullp(y))
-	return (NO);
-    else if (nullp(x) && nullp(y))
-	return (YES);
-    else if (variablep(x)) {
+    if (variablep(x)) {
 	x1 = deref1(x, th);
 	if (x1 == x) {
 	    bindsym(x, y, th);
@@ -1818,8 +1812,130 @@ int unify_list(int x, int y, int th)
 	} else
 	    return (unify_list(x1, y, th));
 	}
+	else if (!listp(x))
+	return (NO);
+	else if (nullp(x) && !nullp(y))
+	return (NO);
+    else if (nullp(x) && nullp(y))
+	return (YES);
     else if (unify(car(x), car(y), th) == YES
 	     && unify_list(cdr(x), cdr(y), th) == YES)
+	return (YES);
+    else
+	return (NO);
+
+    return (NO);
+}
+
+//typed unify. x is a small integer
+int unify_int(int x, int y, int th)
+{
+    int x1;
+
+    if (variablep(x)) {
+	x1 = deref1(x, th);
+	if (x1 == x) {
+	    bindsym(x, y, th);
+	    return (YES);
+	} else
+	    return (unify_int(x1, y, th));
+	}
+	else if (!integerp(x))
+	return (NO);
+	else if (eqp(x,y))
+	return (YES);
+    else
+	return (NO);
+
+    return (NO);
+}
+
+//typed unify. x is a float
+int unify_float(int x, int y, int th)
+{
+    int x1;
+
+    if (variablep(x)) {
+	x1 = deref1(x, th);
+	if (x1 == x) {
+	    bindsym(x, y, th);
+	    return (YES);
+	} else
+	    return (unify_float(x1, y, th));
+	}
+	else if (!floatp(x))
+	return (NO);
+	else if (numeqp(x,y))
+	return (YES);
+    else
+	return (NO);
+
+    return (NO);
+}
+
+
+//typed unify. x is a long integer
+int unify_long(int x, int y, int th)
+{
+    int x1;
+
+    if (variablep(x)) {
+	x1 = deref1(x, th);
+	if (x1 == x) {
+	    bindsym(x, y, th);
+	    return (YES);
+	} else
+	    return (unify_long(x1, y, th));
+	}
+	else if (!longnump(x))
+	return (NO);
+	else if (numeqp(x,y))
+	return (YES);
+    else
+	return (NO);
+
+    return (NO);
+}
+
+//typed unify. x is a long integer
+int unify_big(int x, int y, int th)
+{
+    int x1;
+
+    if (variablep(x)) {
+	x1 = deref1(x, th);
+	if (x1 == x) {
+	    bindsym(x, y, th);
+	    return (YES);
+	} else
+	    return (unify_big(x1, y, th));
+	}
+	else if (!bignump(x))
+	return (NO);
+	else if (bigx_eqp(x,y))
+	return (YES);
+    else
+	return (NO);
+
+    return (NO);
+}
+
+//typed unify. x is an atom
+int unify_atom(int x, int y, int th)
+{
+    int x1;
+
+    if (variablep(x)) {
+	x1 = deref1(x, th);
+	if (x1 == x) {
+	    bindsym(x, y, th);
+	    return (YES);
+	} else
+	    return (unify_atom(x1, y, th));
+	}
+	else if (!atomp(x))
+	return (NO);
+	else if (eqlp(x,y))
 	return (YES);
     else
 	return (NO);
