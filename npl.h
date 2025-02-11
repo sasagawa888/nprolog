@@ -1317,6 +1317,7 @@ int unify_float(int x, int y, int th);
 int unify_long(int x, int y, int th);
 int unify_big(int x, int y, int th);
 int unify_atom(int x, int y, int th);
+int unify_str(int x, int y, int th);
 int unique(int x);
 int user_operation_p(int addr);
 int user_operator_p(int addr);

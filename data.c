@@ -1943,6 +1943,30 @@ int unify_atom(int x, int y, int th)
     return (NO);
 }
 
+//typed unify. x is a string
+int unify_str(int x, int y, int th)
+{
+    int x1;
+
+    if (variablep(x)) {
+	x1 = deref1(x, th);
+	if (x1 == x) {
+	    bindsym(x, y, th);
+	    return (YES);
+	} else
+	    return (unify_str(x1, y, th));
+	}
+	else if (!stringp(x))
+	return (NO);
+	else if (streqp(x,y))
+	return (YES);
+    else
+	return (NO);
+
+    return (NO);
+}
+
+
 
 
 //typed unify. x is a variable;
