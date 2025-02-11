@@ -1311,7 +1311,7 @@ int unify(int x, int y, int th);
 int unify_const(int x, int y, int th);
 int unify_var(int x, int y, int th);
 int unify_nil(int x, int th);
-int unify_list(int x, int y, int th);
+int unify_proper_list(int x, int y, int th);
 int unify_int(int x, int y, int th);
 int unify_flt(int x, int y, int th);
 int unify_long(int x, int y, int th);

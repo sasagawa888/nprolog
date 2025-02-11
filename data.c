@@ -1799,8 +1799,8 @@ int unify(int x, int y, int th)
 }
 
 
-//typed unify. x is a list
-int unify_list(int x, int y, int th)
+//typed unify. x is a proper list
+int unify_proper_list(int x, int y, int th)
 {
     int x1;
 
@@ -1810,7 +1810,7 @@ int unify_list(int x, int y, int th)
 	    bindsym(x, y, th);
 	    return (YES);
 	} else
-	    return (unify_list(x1, y, th));
+	    return (unify_proper_list(x1, y, th));
 	}
 	else if (!listp(x))
 	return (NO);
@@ -1819,13 +1819,48 @@ int unify_list(int x, int y, int th)
     else if (nullp(x) && nullp(y))
 	return (YES);
     else if (unify(car(x), car(y), th) == YES
-	     && unify_list(cdr(x), cdr(y), th) == YES)
+	     && unify_proper_list(cdr(x), cdr(y), th) == YES)
 	return (YES);
     else
 	return (NO);
 
     return (NO);
 }
+
+//typed unify. x is a proper list
+int unify_improper_list(int x, int y, int th)
+{
+    int x1;
+
+    if (variablep(x)) {
+	x1 = deref1(x, th);
+	if (x1 == x) {
+	    bindsym(x, y, th);
+	    return (YES);
+	} else
+	    return (unify_improper_list(x1, y, th));
+	}
+	else if(atomicp(x)){
+		if (eqlp(x,y))
+			return(YES);
+		else 
+			return (NO);
+	}
+	else if (!listp(x))
+	return (NO);
+	else if (nullp(x) && !nullp(y))
+	return (NO);
+    else if (nullp(x) && nullp(y))
+	return (YES);
+    else if (unify(car(x), car(y), th) == YES
+	     && unify_improper_list(cdr(x), cdr(y), th) == YES)
+	return (YES);
+    else
+	return (NO);
+
+    return (NO);
+}
+
 
 //typed unify. x is a small integer
 int unify_int(int x, int y, int th)
