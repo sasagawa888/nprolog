@@ -1799,6 +1799,35 @@ int unify(int x, int y, int th)
 }
 
 
+//typed unify. x is a list
+int unify_list(int x, int y, int th)
+{
+    int x1, y1;
+
+	if (!listp(x))
+	return (NO);
+	else if (nullp(x) && !nullp(y))
+	return (NO);
+    else if (nullp(x) && nullp(y))
+	return (YES);
+    else if (variablep(x)) {
+	x1 = deref1(x, th);
+	if (x1 == x) {
+	    bindsym(x, y, th);
+	    return (YES);
+	} else
+	    return (unify_list(x1, y, th));
+	}
+    else if (unify(car(x), car(y), th) == YES
+	     && unify_list(cdr(x), cdr(y), th) == YES)
+	return (YES);
+    else
+	return (NO);
+
+    return (NO);
+}
+
+
 
 //typed unify. x is a variable;
 int unify_var(int x, int y, int th)
