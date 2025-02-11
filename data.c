@@ -1802,7 +1802,7 @@ int unify(int x, int y, int th)
 //typed unify. x is a list
 int unify_list(int x, int y, int th)
 {
-    int x1, y1;
+    int x1;
 
 	if (!listp(x))
 	return (NO);

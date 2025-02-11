@@ -1270,8 +1270,7 @@ int readitem(int th)
 int readitem1(int th)
 {
     int temp, temp1;
-    char *e, str[ATOMSIZE], *longptr;
-	long long int longnum;
+    char *e, str[ATOMSIZE];
 
     if (unread != NIL) {
 	temp = unread;
@@ -1378,8 +1377,7 @@ int readitem1(int th)
     case FLOATN:
 	return (makeflt(atof(stok.buf)));
 	case LONGNUM:
-	longnum = strtol(stok.buf,&longptr,10);
-	return (makelong(longnum));
+	return (makelong(atol(stok.buf)));
     case BIGNUM:
 	if (open_flag)
 	    return (bigx_to_parmanent(makebigx(stok.buf)));
