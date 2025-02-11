@@ -1313,7 +1313,7 @@ int unify_var(int x, int y, int th);
 int unify_nil(int x, int th);
 int unify_list(int x, int y, int th);
 int unify_int(int x, int y, int th);
-int unify_float(int x, int y, int th);
+int unify_flt(int x, int y, int th);
 int unify_long(int x, int y, int th);
 int unify_big(int x, int y, int th);
 int unify_atom(int x, int y, int th);

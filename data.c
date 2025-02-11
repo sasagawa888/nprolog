@@ -1851,7 +1851,7 @@ int unify_int(int x, int y, int th)
 }
 
 //typed unify. x is a float
-int unify_float(int x, int y, int th)
+int unify_flt(int x, int y, int th)
 {
     int x1;
 
@@ -1861,7 +1861,7 @@ int unify_float(int x, int y, int th)
 	    bindsym(x, y, th);
 	    return (YES);
 	} else
-	    return (unify_float(x1, y, th));
+	    return (unify_flt(x1, y, th));
 	}
 	else if (!floatp(x))
 	return (NO);
