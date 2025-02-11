@@ -1,5 +1,8 @@
 % test for robustness 
 
+:- dynamic(ack/3).
+% association computation
+
 ack(0,N,A) :- 
     A is N+1,asserta(ack(0,N,A)).
 ack(M,0,A) :- 
