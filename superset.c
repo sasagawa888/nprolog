@@ -329,9 +329,11 @@ int b_append(int arglist, int rest, int th)
 	    exception(NOT_LIST, ind, arg3, th);
 
 	save1 = wp[th];
-	if (unify(arg1, NIL, th) == YES && unify(arg2, arg3, th) == YES) {
+	if (unify_nil(arg1, th) == YES && unify_var(arg2, arg3, th) == YES) {
 	    if (prove(NIL, sp[th], rest, th) == YES)
 		return (YES);
+		else 
+		return(NO);
 	}
 	wp[th] = save1;
 	unbind(save2, th);
@@ -341,9 +343,9 @@ int b_append(int arglist, int rest, int th)
 	ls = makevariant(th);
 	ys = makevariant(th);
 	zs = makevariant(th);
-	if (unify(arg1, wlistcons(x, ls, th), th) == YES &&
-	    unify(arg2, ys, th) == YES
-	    && unify(arg3, wlistcons(x, zs, th), th) == YES) {
+	if (unify_pair(arg1, wlistcons(x, ls, th), th) == YES &&
+	    unify_var(arg2, ys, th) == YES
+	    && unify_pair(arg3, wlistcons(x, zs, th), th) == YES) {
 	    body = wlist4(makeatom("append", SYS), ls, ys, zs, th);
 	    if (prove(body, sp[th], rest, th) == YES)
 		return (YES);
