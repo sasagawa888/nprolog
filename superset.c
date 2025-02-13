@@ -63,9 +63,9 @@ int b_select(int arglist, int rest, int th)
 	varX = makevariant(th);
 	varXs = makevariant(th);
 	save1 = get_wp(th);
-	if (unify_var(varX, arg1, th) == YES
+	if (unify_var(arg1, varX, th) == YES
 	    && unify(wlistcons(varX, varXs, th), arg2, th) == YES
-	    && unify_var(varXs, arg3, th) == YES)
+	    && unify_var(arg3, varXs, th) == YES)
 	    if (prove_all(rest, sp[th], th) == YES)
 		return (YES);
 	unbind(save2, th);
@@ -75,7 +75,7 @@ int b_select(int arglist, int rest, int th)
 	varY = makevariant(th);
 	varZs = makevariant(th);
 	save1 = wp[th];
-	if (unify_var(varX, arg1, th) == YES
+	if (unify_var(arg1, varX, th) == YES
 	    && unify(wlistcons(varY, varYs, th), arg2, th) == YES
 	    && unify(wlistcons(varY, varZs, th), arg3, th) == YES) {
 	    body =
@@ -345,7 +345,7 @@ int b_append(int arglist, int rest, int th)
 	zs = makevariant(th);
 	if (unify_pair(arg1, wlistcons(x, ls, th), th) == YES &&
 	    unify_var(arg2, ys, th) == YES
-	    && unify(arg3, wlistcons(x, zs, th), th) == YES) {
+	    && unify_pair(arg3, wlistcons(x, zs, th), th) == YES) {
 	    body = wlist4(makeatom("append", SYS), ls, ys, zs, th);
 	    if (prove(body, sp[th], rest, th) == YES)
 		return (YES);
