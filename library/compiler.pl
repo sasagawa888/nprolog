@@ -782,7 +782,7 @@ gen_head1([X|Xs],N) :-
     N1 is N + 1,
     gen_head1(Xs,N1). 
 
-/*
+
 gen_head1([X|Xs],N) :-
     n_pair_list(X),
     write('Junify_pair(arg'),
@@ -792,7 +792,7 @@ gen_head1([X|Xs],N) :-
     write(',th) == YES && '),
     N1 is N + 1,
     gen_head1(Xs,N1). 
-*/  
+
 
 gen_head1([X|Xs],N) :-
     atomic(X),

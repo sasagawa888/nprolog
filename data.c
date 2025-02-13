@@ -1824,7 +1824,7 @@ int unify_pair(int x, int y, int th)
 	}
     else if (!listp(x))
 	return (NO);
-    else if (listp(x) && unify_var(car(x), car(y), th) == YES
+    else if (listp(x) && x != NIL && unify_var(car(x), car(y), th) == YES
 	     && unify_var(cdr(x), cdr(y), th) == YES)
 	return (YES);
     else
