@@ -1808,67 +1808,8 @@ int unify(int x, int y, int th)
 }
 
 
-//typed unify. x is a proper list
-int unify_proper_list(int x, int y, int th)
-{
-    int x1;
 
-    if (variablep(x)) {
-	x1 = deref1(x, th);
-	if (x1 == x) {
-	    bindsym(x, y, th);
-	    return (YES);
-	} else
-	    return (unify_proper_list(x1, y, th));
-    } else if (!listp(x))
-	return (NO);
-    else if (nullp(x) && !nullp(y))
-	return (NO);
-    else if (nullp(x) && nullp(y))
-	return (YES);
-    else if (unify(car(x), car(y), th) == YES
-	     && unify_proper_list(cdr(x), cdr(y), th) == YES)
-	return (YES);
-    else
-	return (NO);
-
-    return (NO);
-}
-
-//typed unify. x is a proper list
-int unify_improper_list(int x, int y, int th)
-{
-    int x1;
-
-    if (variablep(x)) {
-	x1 = deref1(x, th);
-	if (x1 == x) {
-	    bindsym(x, y, th);
-	    return (YES);
-	} else
-	    return (unify_improper_list(x1, y, th));
-    } else if (atomicp(x)) {
-	if (eqlp(x, y))
-	    return (YES);
-	else
-	    return (NO);
-    } else if (!listp(x))
-	return (NO);
-    else if (nullp(x) && !nullp(y))
-	return (NO);
-    else if (nullp(x) && nullp(y))
-	return (YES);
-    else if (unify(car(x), car(y), th) == YES
-	     && unify_improper_list(cdr(x), cdr(y), th) == YES)
-	return (YES);
-    else
-	return (NO);
-
-    return (NO);
-}
-
-
-//typed unify. x is a pair list e.g. [L|Ls]
+//typed unify. y is a pair list e.g. [L|Ls]
 int unify_pair(int x, int y, int th)
 {   
 	int x1;
@@ -1893,7 +1834,7 @@ int unify_pair(int x, int y, int th)
 }
 
 
-//typed unify. x is a small integer
+//typed unify. y is a small integer
 int unify_int(int x, int y, int th)
 {
     int x1;
@@ -1915,7 +1856,7 @@ int unify_int(int x, int y, int th)
     return (NO);
 }
 
-//typed unify. x is a float
+//typed unify. y is a float
 int unify_flt(int x, int y, int th)
 {
     int x1;
@@ -1938,7 +1879,7 @@ int unify_flt(int x, int y, int th)
 }
 
 
-//typed unify. x is a long integer
+//typed unify. y is a long integer
 int unify_long(int x, int y, int th)
 {
     int x1;
@@ -1960,7 +1901,7 @@ int unify_long(int x, int y, int th)
     return (NO);
 }
 
-//typed unify. x is a long integer
+//typed unify. y is a long integer
 int unify_big(int x, int y, int th)
 {
     int x1;
@@ -1982,7 +1923,7 @@ int unify_big(int x, int y, int th)
     return (NO);
 }
 
-//typed unify. x is an atom
+//typed unify. y is an atom
 int unify_atom(int x, int y, int th)
 {
     int x1;
@@ -2004,7 +1945,7 @@ int unify_atom(int x, int y, int th)
     return (NO);
 }
 
-//typed unify. x is a string
+//typed unify. y is a string
 int unify_str(int x, int y, int th)
 {
     int x1;
@@ -2026,75 +1967,50 @@ int unify_str(int x, int y, int th)
     return (NO);
 }
 
-
-
-
-//typed unify. x is a variable;
+//typed unify. y is a variable
 int unify_var(int x, int y, int th)
 {
-    int x1, y1;
+    int x1;
 
-    if (anonymousp(x)) {
-	return (YES);
-    } else if (!variablep(y)) {
+    if (variablep(x)) {
 	x1 = deref1(x, th);
 	if (x1 == x) {
 	    bindsym(x, y, th);
 	    return (YES);
 	} else
-	    return (unify(x1, y, th));
-    } else if (variablep(y)) {
-	x1 = deref1(x, th);
-	y1 = deref1(y, th);
-	if (variablep(x1) && variablep(y1)) {
-	    if (x != y) {	//ordinaly case
-		bindsym(x1, y1, th);
-	    } else {
-		bindsym(x1, makevariant(th), th);	// ex ?- X = X
-	    }
-	    return (YES);
-	} else if (variablep(x1) && !variablep(y1)) {
-	    bindsym(x1, y1, th);
-	    return (YES);
-	} else if (!variablep(x1) && variablep(y1)) {
-	    bindsym(y1, x1, th);
-	    return (YES);
-	} else {
-	    return (unify(x1, y1, th));
+	    return (unify_var(x1, y, th));
+    } else {
+	bindsym(y,x,th);
+	return (YES);
 	}
-    }
 
     return (NO);
 }
 
 
 
-// typed unify. x is constant
+
+// typed unify. y is constant
 int unify_const(int x, int y, int th)
 {
-    int y1;
+    int x1;
 
-    if (constantp(x) && constantp(y)) {
-	if (eqlp(x, y))
+    if (variablep(x)) {
+	x1 = deref1(x, th);
+	if (x1 == x) {
+	    bindsym(x, y, th);
 	    return (YES);
-	else
-	    return (NO);
-    } else if (variablep(y)) {
-	y1 = deref1(y, th);
-	if (variablep(y1)) {
-	    bindsym(y1, x, th);
-	    return (YES);
-	} else {
-	    return (eqlp(x, y1));
-	}
-    } else if (anonymousp(y)) {
+	} else
+	    return (unify_const(x1, y, th));
+    } else if (!constantp(x))
+	return (NO);
+    else if (eqlp(x, y))
 	return (YES);
-    }
+    else
+	return (NO);
 
     return (NO);
 }
-
-
 
 // typed unify. x is [] ?  (empty list)
 int unify_nil(int x, int th)
