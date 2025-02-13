@@ -389,7 +389,6 @@ void init_repl(void)
 	sp[i] = 0;
 	proof[i] = 0;
 	ac[i] = CELLSIZE + 1;
-	unbind(0, i);
 	cp[i] = 0;
     }
     for (i = 0; i <= thread_num; i++) {
