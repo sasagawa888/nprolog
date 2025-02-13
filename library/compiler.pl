@@ -805,13 +805,11 @@ gen_head1([X|Xs],N) :-
     gen_head1(Xs,N1). 
 
 gen_head1([X|Xs],N) :-
-    write('Junify('),
-    gen_a_argument(X),
-    write(',arg'),
+    write('Junify(arg'),
     write(N),
     write(','),
-    write(th),
-    write(') == YES && '),
+    gen_a_argument(X),
+    write(',th) == YES && '),
     N1 is N + 1,
     gen_head1(Xs,N1).
 
