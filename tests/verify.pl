@@ -246,6 +246,7 @@ test(member) :-
     verify(not(member(a,[3,2,1]))),
     verify(not(member(a,[]))).
 
+
 test(append) :-
     verify(append([],[a,b,c],[a,b,c])),
     verify(append([a,b,c],[],[a,b,c])),
