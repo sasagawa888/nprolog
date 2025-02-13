@@ -1812,15 +1812,10 @@ int unify(int x, int y, int th)
 //typed unify. y is a pair list e.g. [L|Ls]
 int unify_pair(int x, int y, int th)
 {   
-	int x1;
 
 	if (variablep(x)) {
-		x1 = deref1(x, th);
-		if (x1 == x) {
 			bindsym(x, y, th);
 			return (YES);
-		} else
-			return (unify_pair(x1, y, th));
 	}
     else if (!listp(x))
 	return (NO);
@@ -1970,15 +1965,10 @@ int unify_str(int x, int y, int th)
 //typed unify. y is a variable
 int unify_var(int x, int y, int th)
 {
-    int x1;
 
     if (variablep(x)) {
-	x1 = deref1(x, th);
-	if (x1 == x) {
 	    bindsym(x, y, th);
 	    return (YES);
-	} else
-	    return (unify_var(x1, y, th));
     } else {
 	bindsym(y,x,th);
 	return (YES);
