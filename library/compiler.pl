@@ -58,7 +58,7 @@ Junify_var(head,arg,th)    for variable term
 Junify_nil(arg,th)    for [] check.
 */
 
-:- module(jump,[compile_file/1,compile_file1/1,compile_file2/1]).
+:- module(jump,[compile_file/1,compile_file1/1,compile_file2/1,compile_file3/1]).
 
 % optimize flag
 optimize(on).
