@@ -329,6 +329,11 @@ static inline int Junify(int x, int y, int th) {
     return f3[UNIFY_IDX](x, y, th);
 }
 
+static inline int Junify_pair(int x, int y, int th) {
+    return f3[UNIFY_PAIR_IDX](x, y, th);
+}
+
+
 static inline int Junify_var(int x, int y, int th) {
     return f3[UNIFY_VAR_IDX](x, y, th);
 }
