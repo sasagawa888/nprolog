@@ -489,6 +489,12 @@ Jset_wp(save1,th);
 
 
 */
+% inline C language
+gen_body(cinline(X),_) :-
+    write('{'),
+    n_write_string(X),
+    write('}'),
+    nl.
 
 
 % disjunction
