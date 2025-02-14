@@ -887,7 +887,7 @@ int b_after_cut(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_proper_list(int arglist, int rest, int th)
+int b_write_string(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -895,29 +895,13 @@ int b_proper_list(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 
-	if (listp(arg1) && length(arg1) != -1)
-	    return (prove_all(rest, sp[th], th));
-	else
-	    return (NO);
+	fprintf(GET_PORT(output_stream), "%s", GET_NAME(arg1));
+	return (prove_all(rest, sp[th], th));
     }
     return (NO);
 }
 
-int b_improper_list(int arglist, int rest, int th)
-{
-    int n, arg1;
 
-    n = length(arglist);
-    if (n == 1) {
-	arg1 = car(arglist);
-
-	if (listp(arg1) && length(arg1) == -1 && !pairp(arg1))
-	    return (prove_all(rest, sp[th], th));
-	else
-	    return (NO);
-    }
-    return (NO);
-}
 
 int b_pair_list(int arglist, int rest, int th)
 {
@@ -937,23 +921,22 @@ int b_pair_list(int arglist, int rest, int th)
 
 int b_test(int arglist, int rest, int th)
 {
-	int n,ind,arg1,arg2,res;
-	n= length(arglist);
-	ind = makeind("test",n,th);
-	if(n==2){
-		arg1 = car(arglist);
-		arg2 = cadr(arglist);
+    int n, ind, arg1, arg2, res;
+    n = length(arglist);
+    ind = makeind("test", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
 
-		int test_plus(int a, int b)
-		{
-			return (a + b);
-		}
-		res = test_plus(get_int(arg1),get_int(arg2));
-		printf("%d", res);
-		return(YES);
+	int test_plus(int a, int b) {
+	    return (a + b);
 	}
-	exception(ARITY_ERR,ind,arglist,th);
-	return(NO);
+	res = test_plus(get_int(arg1), get_int(arg2));
+	printf("%d", res);
+	return (YES);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
 

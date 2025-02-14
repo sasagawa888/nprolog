@@ -857,11 +857,11 @@ int listp(int addr)
 // [L|Ls]
 int pairp(int addr)
 {
-	if(listp(addr) && addr != NIL && 
-	     (compiler_variable_p(car(addr)) && compiler_variable_p(cdr(addr))))
-		return(1);
-	else 
-		return(0);
+    if (listp(addr) && addr != NIL &&
+	(compiler_variable_p(car(addr)) && compiler_variable_p(cdr(addr))))
+	return (1);
+    else
+	return (0);
 }
 
 // (1,2,3).
@@ -1811,12 +1811,11 @@ int unify(int x, int y, int th)
 
 //typed unify. y is a pair list e.g. [L|Ls]
 int unify_pair(int x, int y, int th)
-{   
-	if (variablep(x)) {
-			bindsym(x, y, th);
-			return (YES);
-	}
-    else if (!listp(x))
+{
+    if (variablep(x)) {
+	bindsym(x, y, th);
+	return (YES);
+    } else if (!listp(x))
 	return (NO);
     else if (listp(x) && x != NIL && unify_var(car(x), car(y), th) == YES
 	     && unify_var(cdr(x), cdr(y), th) == YES)
@@ -1832,8 +1831,8 @@ int unify_pair(int x, int y, int th)
 int unify_int(int x, int y, int th)
 {
     if (variablep(x)) {
-	    bindsym(x, y, th);
-	    return (YES);
+	bindsym(x, y, th);
+	return (YES);
     } else if (!integerp(x))
 	return (NO);
     else if (eqp(x, y))
@@ -1848,8 +1847,8 @@ int unify_int(int x, int y, int th)
 int unify_flt(int x, int y, int th)
 {
     if (variablep(x)) {
-	    bindsym(x, y, th);
-	    return (YES);
+	bindsym(x, y, th);
+	return (YES);
     } else if (!floatp(x))
 	return (NO);
     else if (numeqp(x, y))
@@ -1865,8 +1864,8 @@ int unify_flt(int x, int y, int th)
 int unify_long(int x, int y, int th)
 {
     if (variablep(x)) {
-	    bindsym(x, y, th);
-	    return (YES);
+	bindsym(x, y, th);
+	return (YES);
     } else if (!longnump(x))
 	return (NO);
     else if (numeqp(x, y))
@@ -1881,8 +1880,8 @@ int unify_long(int x, int y, int th)
 int unify_big(int x, int y, int th)
 {
     if (variablep(x)) {
-	    bindsym(x, y, th);
-	    return (YES);
+	bindsym(x, y, th);
+	return (YES);
     } else if (!bignump(x))
 	return (NO);
     else if (bigx_eqp(x, y))
@@ -1897,8 +1896,8 @@ int unify_big(int x, int y, int th)
 int unify_atom(int x, int y, int th)
 {
     if (variablep(x)) {
-	    bindsym(x, y, th);
-	    return (YES);
+	bindsym(x, y, th);
+	return (YES);
     } else if (!atomp(x))
 	return (NO);
     else if (eqlp(x, y))
@@ -1913,8 +1912,8 @@ int unify_atom(int x, int y, int th)
 int unify_str(int x, int y, int th)
 {
     if (variablep(x)) {
-	    bindsym(x, y, th);
-	    return (YES);
+	bindsym(x, y, th);
+	return (YES);
     } else if (!stringp(x))
 	return (NO);
     else if (streqp(x, y))
@@ -1930,12 +1929,12 @@ int unify_var(int x, int y, int th)
 {
 
     if (variablep(x)) {
-	    bindsym(x, y, th);
-	    return (YES);
-    } else {
-	bindsym(y,x,th);
+	bindsym(x, y, th);
 	return (YES);
-	}
+    } else {
+	bindsym(y, x, th);
+	return (YES);
+    }
 
     return (NO);
 }
@@ -1948,11 +1947,10 @@ int unify_nil(int x, int th)
     if (x == NIL)
 	return (YES);
     else if (variablep(x)) {
-	    bindsym(x, NIL, th);
-	    return (YES);
-	}
-	else
-	    return (NO);
+	bindsym(x, NIL, th);
+	return (YES);
+    } else
+	return (NO);
 
     return (NO);
 }

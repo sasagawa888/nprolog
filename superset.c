@@ -332,8 +332,8 @@ int b_append(int arglist, int rest, int th)
 	if (unify_nil(arg1, th) == YES && unify(arg2, arg3, th) == YES) {
 	    if (prove(NIL, sp[th], rest, th) == YES)
 		return (YES);
-		else 
-		return(NO);
+	    else
+		return (NO);
 	}
 	wp[th] = save1;
 	unbind(save2, th);
@@ -2062,14 +2062,17 @@ int b_dynamic(int arglist, int rest, int th)
 
 int b_cinline(int arglist, int rest, int th)
 {
-    int n, ind;
+    int n, arg1, ind;
 
     n = length(arglist);
     ind = makeind("cinline", n, th);
     if (n == 1) {
+	arg1 = car(arglist);
+	if (!stringp(arg1))
+	    exception(NOT_STR, ind, arg1, th);
+
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
-

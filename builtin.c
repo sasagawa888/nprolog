@@ -225,7 +225,7 @@ void init_builtin(void)
     defbuiltin("close_socket", b_close_socket, 1);
     defbuiltin("dynamic", b_dynamic, 1);
     defbuiltin("existerrors", b_existerrors, 2);
-	defbuiltin("cinline", b_cinline,1);
+    defbuiltin("cinline", b_cinline, 1);
     definfix("\\+", b_not, 900, FY);
 
     //-----Distributed parallel
@@ -278,10 +278,9 @@ void init_builtin(void)
     defbuiltin("n_has_cut", b_has_cut, -1);
     defbuiltin("n_before_cut", b_before_cut, -1);
     defbuiltin("n_after_cut", b_after_cut, -1);
-    defbuiltin("n_proper_list", b_proper_list, -1);
-    defbuiltin("n_improper_list", b_improper_list, -1);
-	defbuiltin("n_pair_list", b_pair_list, -1);
-	defbuiltin("n_test", b_test, -1);
+    defbuiltin("n_pair_list", b_pair_list, -1);
+	defbuiltin("n_write_string", b_write_string, -1);
+    defbuiltin("n_test", b_test, -1);
 
 #ifdef __arm__
     defbuiltin("wiringpi_setup_gpio", b_wiringpi_setup_gpio, 2);
