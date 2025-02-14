@@ -2058,3 +2058,18 @@ int b_dynamic(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
+
+
+int b_cinline(int arglist, int rest, int th)
+{
+    int n, ind;
+
+    n = length(arglist);
+    ind = makeind("cinline", n, th);
+    if (n == 1) {
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+

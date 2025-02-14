@@ -47,19 +47,6 @@ run(qsort, N) :-
     qsort(X, _, []), 
     fail.
 
-
-run(append, N) :-
-    list50(X),
-    repeat_for(N), 
-    append(X, X, Y), 
-    fail.
-
-run(fact, N) :-
-    repeat_for(N),
-    fact(14,Y),
-    fail.
-
-
 run(reverse, N) :-
     list30(X),
     repeat_for(N),

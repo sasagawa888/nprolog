@@ -935,6 +935,26 @@ int b_pair_list(int arglist, int rest, int th)
     return (NO);
 }
 
+int b_test(int arglist, int rest, int th)
+{
+	int n,ind,arg1,arg2,res;
+	n= length(arglist);
+	ind = makeind("test",n,th);
+	if(n==2){
+		arg1 = car(arglist);
+		arg2 = cadr(arglist);
+
+		int test_plus(int a, int b)
+		{
+			return (a + b);
+		}
+		res = test_plus(get_int(arg1),get_int(arg2));
+		printf("%d", res);
+		return(YES);
+	}
+	exception(ARITY_ERR,ind,arglist,th);
+	return(NO);
+}
 
 
 int exec_all(int goals, int bindings, int th)

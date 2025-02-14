@@ -9,3 +9,8 @@ foo(4,$abcd$).
 
 foo(5,bar).
 
+
+bar($asfsafakjflakjflkdj
+     asdfadfasdfasdfadfasdf
+     sdfasdfa sdfasdfa asdfadfasdfasdfadfasdf $).
+
