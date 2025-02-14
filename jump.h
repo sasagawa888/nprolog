@@ -338,8 +338,24 @@ static inline int Junify_var(int x, int y, int th) {
     return f3[UNIFY_VAR_IDX](x, y, th);
 }
 
-static inline int Junify_const(int x, int y, int th) {
-    return f3[UNIFY_CONST_IDX](x, y, th);
+static inline int Junify_int(int x, int y, int th) {
+    return f3[UNIFY_INT_IDX](x, y, th);
+}
+
+static inline int Junify_long(int x, int y, int th) {
+    return f3[UNIFY_LONG_IDX](x, y, th);
+}
+
+static inline int Junify_big(int x, int y, int th) {
+    return f3[UNIFY_BIG_IDX](x, y, th);
+}
+
+static inline int Junify_str(int x, int y, int th) {
+    return f3[UNIFY_STR_IDX](x, y, th);
+}
+
+static inline int Junify_atom(int x, int y, int th) {
+    return f3[UNIFY_ATOM_IDX](x, y, th);
 }
 
 

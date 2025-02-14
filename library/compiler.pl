@@ -790,8 +790,52 @@ gen_head1([X|Xs],N) :-
 
 
 gen_head1([X|Xs],N) :-
-    atomic(X),
-    write('Junify_const(arg'),
+    atom(X),
+    write('Junify_atom(arg'),
+    write(N),
+    write(','),
+    gen_a_argument(X),
+    write(',th) == YES && '),
+    N1 is N + 1,
+    gen_head1(Xs,N1). 
+
+
+gen_head1([X|Xs],N) :-
+    integer(X),
+    write('Junify_int(arg'),
+    write(N),
+    write(','),
+    gen_a_argument(X),
+    write(',th) == YES && '),
+    N1 is N + 1,
+    gen_head1(Xs,N1). 
+
+
+gen_head1([X|Xs],N) :-
+    n_longnum(X),
+    write('Junify_long(arg'),
+    write(N),
+    write(','),
+    gen_a_argument(X),
+    write(',th) == YES && '),
+    N1 is N + 1,
+    gen_head1(Xs,N1). 
+
+
+gen_head1([X|Xs],N) :-
+    n_bignum(X),
+    write('Junify_big(arg'),
+    write(N),
+    write(','),
+    gen_a_argument(X),
+    write(',th) == YES && '),
+    N1 is N + 1,
+    gen_head1(Xs,N1). 
+
+
+gen_head1([X|Xs],N) :-
+    string(X),
+    write('Junify_str(arg'),
     write(N),
     write(','),
     gen_a_argument(X),

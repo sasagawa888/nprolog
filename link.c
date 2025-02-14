@@ -116,7 +116,11 @@ void dynamic_link(int x)
     init_f3(UNIFY_IDX, (tpred) unify);
     init_f3(UNIFY_PAIR_IDX, (tpred) unify_pair);
     init_f3(UNIFY_VAR_IDX, (tpred) unify_var);
-    init_f3(UNIFY_CONST_IDX, (tpred) unify_const);
+    init_f3(UNIFY_INT_IDX, (tpred) unify_int);
+    init_f3(UNIFY_FLT_IDX, (tpred) unify_flt);
+    init_f3(UNIFY_BIG_IDX, (tpred) unify_big);
+    init_f3(UNIFY_STR_IDX, (tpred) unify_str);
+    init_f3(UNIFY_ATOM_IDX, (tpred) unify_atom);
     init_f3(EXEC_ALL_IDX, (tpred) exec_all);
     init_f3(WCONS_IDX, (tpred) wcons);
     init_f3(WLIST2_IDX, (tpred) wlist2);
