@@ -1238,7 +1238,7 @@ void printanswer(int addr)
 void print(int addr)
 {
     double x;
-    char str1[256];
+    char str1[STRSIZE];
 
     if (IS_ALPHA(addr)) {
 	if (!bridge_flag)
@@ -1517,7 +1517,7 @@ void print_not_quoted(int addr)
 
 void printc(char c)
 {
-    char str1[256];
+    char str1[STRSIZE];
 
     if (!bridge_flag)
 	fprintf(GET_PORT(output_stream), "%c", c);
@@ -1529,7 +1529,7 @@ void printc(char c)
 
 void printstr(char *s)
 {
-    char str1[256];
+    char str1[STRSIZE];
 
     if (!bridge_flag)
 	fprintf(GET_PORT(output_stream), "%s", s);
@@ -1541,7 +1541,7 @@ void printstr(char *s)
 
 void printint(int n)
 {
-    char str1[256];
+    char str1[STRSIZE];
 
     if (!bridge_flag)
 	fprintf(GET_PORT(output_stream), "%d", n);
@@ -1554,7 +1554,7 @@ void printint(int n)
 
 void printlong(int addr)
 {
-    char str1[256];
+    char str1[STRSIZE];
 
     if (!bridge_flag)
 	fprintf(GET_PORT(output_stream), "%lld", GET_LONG(addr));
