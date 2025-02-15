@@ -348,7 +348,7 @@ int b_compiler_anonymous(int arglist, int rest, int th)
 
 int compiler_anonymous_p(int x)
 {
-    char str[256];
+    char str[ATOMSIZE];
 
     if (numberp(x))
 	return (0);
@@ -381,7 +381,7 @@ int b_compiler_variable(int arglist, int rest, int th)
 
 int compiler_variable_p(int x)
 {
-    char str[256];
+    char str[ATOMSIZE];
 
     if (numberp(x))
 	return (0);

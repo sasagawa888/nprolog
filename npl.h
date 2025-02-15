@@ -26,9 +26,9 @@ address
 #define BIGSIZE 20000000
 #define NTTBASE 1000
 #define RECORDMAX 12
-#define ATOMSIZE 1024
-#define BUFSIZE 1024
-#define STRSIZE 1024
+#define ATOMSIZE 4096
+#define BUFSIZE 4096
+#define STRSIZE 4096
 #define CTRLSTK 10
 #define PARASIZE 100
 #define THREADSIZE 10
