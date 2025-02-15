@@ -46,6 +46,9 @@ cinline($ int a(int m, int n){
 
 ```
 
+## C inline variable
+In compiled Prolog, variable names have 'var' prefixed to them at compile time. When retrieving a value, deref is called first, and then the value is converted to a C value using an API corresponding to its type.
+
 ## C inline API
 The publicly available APIs that can be used for embedding in this context are as follows.
 
