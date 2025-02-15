@@ -17,6 +17,14 @@ yes
 
 ```
 
+# Option
+
+- compile_file(F,c)
+If you provide c as the second argument, the converted C code will be retained. You can check what kind of code is being generated.
+
+- compile_file(F,o)
+If you provide o as the second argument, it simply compiles the C source code and generates the object code. This is useful when you need to manually modify the compiled code.
+
 
 # C inline
 N-Prolog allows embedding C code in the body section. When a string is passed to cinline/1, it is directly embedded into the compiled code as is.
