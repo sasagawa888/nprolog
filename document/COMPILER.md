@@ -21,6 +21,23 @@ yes
 # C inline
 N-Prolog allows embedding C code in the body section. When a string is passed to cinline/1, it is directly embedded into the compiled code as is.
 
+e.g.
+
+```
+ack(M,N,X) :-
+cinline($ int a(int m, int n){
+              if(m==0) return(n+1);
+              else if(n==0) return(a(m-1,1));
+              else return(a(m-1,a(m,n-1)));
+          }
+          int m = Jget_int(Jderef(varM,th));
+          int n = Jget_int(Jderef(varN,th));
+          int res = a(m,n);
+          Junify(varX,Jmakeint(res),th);
+          return(Jexec_all(rest,Jget_sp(th),th)); $).
+
+```
+
 ## C inline API
 The publicly available APIs that can be used for embedding in this context are as follows.
 
