@@ -1,20 +1,23 @@
 % idea for new compiler opimizer
 
 % test data
-foo(X) :- write(1)
+foo(X) :- write(1).
+bar(X) :- write(X),bar(X).
 
 analize(P) :-
     n_arity_count(P,[N]),
 	n_clause_with_arity(P,N,C),
-    n_variable_convert(C,C1),
-    analize1(P,C1).
+    n_variable_convert(C,C1),!,
+    analize1(P,C1),
+    fail.
+
 
 analize1(P,C) :-
     deterministic(C,0),
     assert(pred_data(P,det)).
 analize1(P,C) :-
     tail_recursive(C,0),
-    assert(pred_data(P,tail)).
+    assert(pred_data(P,tail)),!.
 
 
 deterministic([],_).
@@ -44,7 +47,7 @@ det_body1((X,Y)) :-
     det_builtin(X),
     det_body1(Y).
 det_body1(X) :-
-    det_buitlint(X).
+    det_buitlin(X).
 
 det_builtin(write(_)).
 det_builtin(write(_,_)).
