@@ -1,3 +1,12 @@
+
+
+diterministic_body(!).
+diterministic_body((X,(!,Y))) :-
+    diterministic_body(Y).
+
+
+
+
 % new compiler  
 % type1 non deterministic predicate
 % type2 deterministic non tail reursive predicate
