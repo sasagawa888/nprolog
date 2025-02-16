@@ -9,10 +9,12 @@ if(n == 1){
 arg1 = Jnth(arglist,1);
 varX = Jmakevariant(th);
 save1 = Jget_wp(th);
-if(Junify_var(arg1,varX,th) == YES && 1)
-{body = Jwcons(Jmakecomp("bar"),Jwcons(varX,NIL,th),th);
-if((res=Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th)) == YES)
-return(YES);
+if(Junify_var(arg1,varX,th) == YES && 1){
+    printf("asdf");
+if(Jcall(Jmakecomp("bar"),Jwcons(varX,NIL,th),th) == YES){
+Jprint(rest);
+return(Jexec_all(rest,Jget_sp(th),th));
+}
 Jset_ac(save3,th);
 Junbind(save2,th);
 Jset_wp(save1,th);}
@@ -29,9 +31,9 @@ if(n == 1){
 arg1 = Jnth(arglist,1);
 varX = Jmakevariant(th);
 save1 = Jget_wp(th);
-if(Junify_var(arg1,varX,th) == YES && 1)
-{body = Jwcons(1159,Jwcons(varX,NIL,th),th);
-if((res=Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th)) == YES)
+if(Junify_var(arg1,varX,th) == YES && 1){
+Jcall(1159,Jwcons(varX,NIL,th),th);
+Jexec_all(rest,Jget_sp(th),th);
 return(YES);
 Jset_ac(save3,th);
 Junbind(save2,th);
