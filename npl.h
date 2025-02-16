@@ -967,7 +967,6 @@ int b_time(int arglist, int rest, int th);
 int b_told(int arglist, int rest, int th);
 int b_trace(int arglist, int rest, int th);
 int b_true(int arglist, int rest, int th);
-int b_test(int arglist, int rest, int th);
 int b_unify(int arglist, int rest, int th);
 int b_univ(int arglist, int rest, int th);
 int b_use_module(int arglist, int rest, int th);

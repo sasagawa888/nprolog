@@ -280,7 +280,6 @@ void init_builtin(void)
     defbuiltin("n_after_cut", b_after_cut, -1);
     defbuiltin("n_pair_list", b_pair_list, -1);
 	defbuiltin("n_write_string", b_write_string, -1);
-    defbuiltin("n_test", b_test, -1);
 
 #ifdef __arm__
     defbuiltin("wiringpi_setup_gpio", b_wiringpi_setup_gpio, 2);
