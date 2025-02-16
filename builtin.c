@@ -4860,16 +4860,16 @@ int b_statistics(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
 	if (arg1 == makeatom("free", SIMP)) {
-	    if (unify(arg2, makeint(fc), th) == YES);
+	    if (unify(arg2, makeint(fc), th) == YES)
 	    return (prove_all(rest, sp[th], th));
 	} else if (arg1 == makeatom("wp", SIMP)) {
-	    if (unify(arg2, makeint(wp[th]), th) == YES);
+	    if (unify(arg2, makeint(wp[th]), th) == YES)
 	    return (prove_all(rest, sp[th], th));
 	} else if (arg1 == makeatom("sp", SIMP)) {
-	    if (unify(arg2, makeint(sp[th]), th) == YES);
+	    if (unify(arg2, makeint(sp[th]), th) == YES)
 	    return (prove_all(rest, sp[th], th));
 	} else if (arg1 == makeatom("gc", SYS)) {
-	    if (unify(arg2, makeint(gc), th) == YES);
+	    if (unify(arg2, makeint(gc), th) == YES)
 	    return (prove_all(rest, sp[th], th));
 	} else {
 	    return (NO);
