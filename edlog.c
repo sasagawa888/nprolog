@@ -9,6 +9,8 @@
 #define NCURSES_OPAQUE 1
 #ifdef __linux__
 #include <ncurses.h>
+#elif defined(__APPLE__) 
+#include <ncurses.h> 
 #else
 #include <curses.h>
 #endif
