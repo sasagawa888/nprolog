@@ -441,6 +441,11 @@ static inline int Jdiv(int x, int y, int th) {
     return f3[DIV_IDX](x, y, th);
 }
 
+static inline int Jcall(int x, int y, int th) {
+    return f3[CALL_IDX](x, y, th);
+}
+
+
 
 static inline int Jmakeconst(char* x) {
     return f4[MAKECONST_IDX](x);

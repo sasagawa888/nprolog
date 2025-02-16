@@ -141,6 +141,7 @@ void dynamic_link(int x)
     init_f3(COMPLEMENT_IDX, (tpred) f_complement);
     init_f3(ROUND_IDX, (tpred) f_round);
     init_f3(DIV_IDX, (tpred) f_div);
+    init_f3(CALL_IDX, (tpred) call);
 
     //argument-1 string type
     init_f4(MAKECONST_IDX, (tpred) makeconst);
