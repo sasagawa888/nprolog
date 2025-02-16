@@ -141,6 +141,8 @@ The publicly available APIs that can be used for embedding in this context are a
 - static inline int Jcomplement(int x, int y, int th) 
 - static inline int Jround(int x, int y, int th) 
 - static inline int Jdiv(int x, int y, int th) 
+- static inline int Jcall(int pred, int arglist, int th)
+  call predicate without continuation.
 - static inline int Jmakeconst(char* x) 
 - static inline int Jmakepred(char* x) 
 - static inline int Jmakevar(char* x) 
