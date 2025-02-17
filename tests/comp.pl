@@ -39,6 +39,7 @@ deterministic([X|Cs],D,P,A) :-
 % arguments = [clauses],tail_count,pred_count,all_count
 tail_recursive([],T,P,A) :-
     P =< 1,
+    T > 0,
     A =:= T+P.
 tail_recursive([(Head :- Body)|Cs],T,P,A) :-
     tail_body(Head,Body),
@@ -51,6 +52,7 @@ tail_recursive([X|Cs],D,P,A) :-
 
 
 % deterministic body case !
+det((X;Y)) :- fail.
 det_body(!).
 det_body((X,!)).
 det_body((X,(!,Y))) :-
@@ -76,14 +78,6 @@ det_builtin(X) :-
     n_property(X,builtin).
 
 
-% about bodies 
-/*
-this is not deterministic
-e.g.
-how prove exclusive?
-foo(X) :- X is 1.
-foo(X) :- X is 2.
-*/
 
 % tail recursive
 tail_body(Head,Body) :-
@@ -96,3 +90,21 @@ tail_body(Head,Body) :-
 last_body((_,Body),Last) :-
     last_body(Body,Last).
 last_body(Body,Body).
+
+/*
+ a,b,c ->  if(a==YES) if(b==YES) if(c==YES) return(Jexec_all(rest,Jget_sp(th),th));
+*/
+gen_det_body((X,Y)) :-
+    gen_a_det_body(X),
+    gen_det_body(Y).
+gen_get_body(X) :-
+    gen_a_det_body(X),
+    write('return(Jexec_all(rest,Jget_sp(th),th));').
+
+gen_a_det_body(X) :-
+    X =.. [P|A],
+    write('if (Jall('),
+    gen_a_body(P),
+    write(','),
+    gen_a_argument(A),
+    write(',th) == YES)').
