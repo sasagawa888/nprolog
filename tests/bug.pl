@@ -4,3 +4,5 @@
 foo(X) :- bar(X).
 
 bar(X) :- write(X).
+
+uoo(X) :- write(X),uoo(X).

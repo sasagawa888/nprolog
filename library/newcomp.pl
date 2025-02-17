@@ -58,7 +58,7 @@ Junify_var(head,arg,th)    for variable term
 Junify_nil(arg,th)    for [] check.
 */
 
-:- module(jump,[compile_file/1,compile_file1/1,compile_file/2]).
+%:- module(jump,[compile_file/1,compile_file1/1,compile_file/2]).
 
 % main
 compile_file(X) :-
@@ -99,8 +99,8 @@ now ignore
 pass1(X) :-
 	write(user_output,'phase pass1'),
     nl(user_output),
-    abolish(pred_data/2),
-    assert(pred_data(dummy,-1)),
+    abolish(pred_data/3),
+    assert(pred_data(dummy,-1,-1)),
     reconsult(X),
     pass1_analize.
 
@@ -125,7 +125,7 @@ pass2(X) :-
 	write('#include "jump.h"'),nl,
     gen_c_pred,
     gen_c_exec,
-    abolish(pred_data/2),
+    %abolish(pred_data/2),
     n_reconsult_abolish,
     told.
 
@@ -1436,18 +1436,18 @@ analize(P) :-
     n_arity_count(P,[N]),
 	n_clause_with_arity(P,N,C),
     n_variable_convert(C,C1),!,
-    analize1(P,C1),
+    analize1(P,N,C1),
     fail.
 
 
-analize1(P,C) :-
+analize1(P,N,C) :-
     length(C,M),
     deterministic(C,0,0,M),
-    assert(pred_data(P,det)).
-analize1(P,C) :-
+    assert(pred_data(P,N,det)).
+analize1(P,N,C) :-
     length(C,M),
     tail_recursive(C,0,0,M),
-    assert(pred_data(P,tail)),!.
+    assert(pred_data(P,N,tail)),!.
 
 % arguments = [clauses],det_count,pred_count,all_count
 deterministic([],D,P,A) :-
