@@ -3,7 +3,9 @@
 % test data
 foo(X) :- write(1).
 bar(X) :- write(X),bar(X).
-
+boo(1).
+boo(2).
+uoo(a).
 analize(P) :-
     n_arity_count(P,[N]),
 	n_clause_with_arity(P,N,C),
@@ -13,28 +15,40 @@ analize(P) :-
 
 
 analize1(P,C) :-
-    deterministic(C,0),
+    length(C,M),
+    deterministic(C,0,0,M),
     assert(pred_data(P,det)).
 analize1(P,C) :-
-    tail_recursive(C,0),
+    length(C,M),
+    tail_recursive(C,0,0,M),
     assert(pred_data(P,tail)),!.
 
-
-deterministic([],_).
-deterministic([],0) :- fail.
-deterministic([(Head :- Body)|Cs],_) :-
+% arguments = [clauses],det_count,pred_count,all_count
+deterministic([],D,P,A) :-
+    P =< 1,
+    A =:= D+P.
+deterministic([(Head :- Body)|Cs],D,P,A) :-
     det_body(Body),
-    deterministic(Cs,1).
+    D1 is D+1,
+    deterministic(Cs,D1,P,A).
+deterministic([X|Cs],D,P,A) :-
+    n_property(X,predicate),
+    P1 is P+1,
+    deterministic(Cs,D,P1,A).
 
-tail_recursive([],_).
-tail_recursive([],0) :- fail.
-tail_recursive([(Head :- Body)|Cs],_) :-
+% arguments = [clauses],tail_count,pred_count,all_count
+tail_recursive([],T,P,A) :-
+    P =< 1,
+    A =:= T+P.
+tail_recursive([(Head :- Body)|Cs],T,P,A) :-
     tail_body(Head,Body),
-    tail_recursive(Cs,1).
+    T1 is T+1,
+    tail_recursive(Cs,T1,P,A).
+tail_recursive([X|Cs],D,P,A) :-
+    n_property(X,predicate),
+    P1 is P+1,
+    tail_recursive(Cs,D,P1,A).
 
-
-unidirectory(Head,Body) :-
-    det_body(Body).
 
 % deterministic body case !
 det_body(!).
@@ -49,12 +63,18 @@ det_body1((X,Y)) :-
 det_body1(X) :-
     det_buitlin(X).
 
-det_builtin(write(_)).
-det_builtin(write(_,_)).
-det_builtin(true).
-det_builtin(fail).
-det_builtin((_<_)).
-det_builtin((_>_)).
+% generaly builtin is deterministic. but some cases is non deterministic.
+det_builtin(length(X,Y)) :-
+    n_compiler_variable(X),
+    n_compiler_variable(Y),!,fail.
+
+det_builtin(append(X,Y,_)) :-
+    n_compiler_variable(X),
+    n_compiler_variable(Y),!,fail.
+
+det_builtin(X) :-
+    n_property(X,builtin).
+
 
 % about bodies 
 /*
