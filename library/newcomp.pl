@@ -1439,15 +1439,15 @@ analize(P) :-
     analize1(P,N,C1),
     fail.
 
-
-analize1(P,N,C) :-
-    length(C,M),
-    deterministic(C,0,0,M),
-    assert(pred_data(P,N,det)).
 analize1(P,N,C) :-
     length(C,M),
     tail_recursive(C,0,0,M),
     assert(pred_data(P,N,tail)),!.
+analize1(P,N,C) :-
+    length(C,M),
+    deterministic(C,0,0,M),
+    assert(pred_data(P,N,det)),!.
+
 
 % arguments = [clauses],det_count,pred_count,all_count
 deterministic([],D,P,A) :-
@@ -1468,6 +1468,8 @@ tail_recursive([],T,P,A) :-
     T > 0,
     A =:= T+P.
 tail_recursive([(Head :- Body)|Cs],T,P,A) :-
+    butlast_body(Body,Body1),
+    det_body(Body1),
     tail_body(Head,Body),
     T1 is T+1,
     tail_recursive(Cs,T1,P,A).
@@ -1516,6 +1518,14 @@ tail_body(Head,Body) :-
 last_body((_,Body),Last) :-
     last_body(Body,Last).
 last_body(Body,Body).
+
+butlast_body((Body,Bs),Body) :-
+    n_property(Bs,predicate).
+butlast_body((Body,Bs),Body) :-
+    n_property(Bs,builtin).
+butlast_body((Body,Bs),(Body,Butlast)) :-
+    butlast_body(Bs,Butlast).
+
 
 /*
  a,b,c ->  if(a==YES) if(b==YES) if(c==YES) return(Jexec_all(rest,Jget_sp(th),th));
