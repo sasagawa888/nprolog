@@ -99,8 +99,8 @@ now ignore
 pass1(X) :-
 	write(user_output,'phase pass1'),
     nl(user_output),
-    abolish(pred_data/2),
-    assert(pred_data(dummy,-1)),
+    abolish(pred_data/3),
+    assert(pred_data(dummy,-1,-1)),
     reconsult(X),
     pass1_analize.
 
@@ -110,8 +110,6 @@ pass1_analize :-
     fail.
 pass1_analize.
 
-% for now ignore analize/1
-analize(P).
 
 /*
 pass2 generate each clause or predicate code.
@@ -121,13 +119,16 @@ when all code is generated, close file and abolish optimizable/1
 pass2(X) :-
 	write(user_output,'phase pass2'),
     nl(user_output),
+    abolish(optimize/1),
+    assert(optimize(dummy)),
 	n_filename(X,F),
     atom_concat(F,'.c',Cfile),
 	tell(Cfile),
 	write('#include "jump.h"'),nl,
     gen_c_pred,
     gen_c_exec,
-    abolish(pred_data/2),
+    %abolish(pred_data/3),
+    abolish(optimize/1),
     n_reconsult_abolish,
     told.
 
@@ -187,13 +188,6 @@ gen_pred :-
 gen_pred.
 
 gen_pred1(P) :-
-    pred_data(P,type1),
-    gen_tail_pred(P),!.
-gen_pred1(P) :-
-    pred_data(P,type2),
-    gen_tail_pred(P),!.    
-gen_pred1(P) :-
-    not(pred_data(P,type1)),
     gen_a_pred(P),!.
 
 % define compiled predicate
@@ -345,7 +339,7 @@ gen_a_pred(P) :-
     gen_a_pred1(P,L),
     write('}'),nl.
 
-% pred1,pred2,...,predN
+% pred_arity1,pred_arity2,...,pred_arityN
 gen_a_pred1(P,[]) :-
     nl,
     write('Jerrorcomp(Jmakeint(ARITY_ERR),Jmakecomp("'),
@@ -353,8 +347,17 @@ gen_a_pred1(P,[]) :-
     write('"),arglist);'),nl,
 	write('return(NO);').
 
+% when tail recursive or deterministic
 gen_a_pred1(P,[L|Ls]) :-
+    pred_data(P,L,O),
+    assert(optimize(O)), % det or tail
 	gen_a_pred2(P,L),
+    retract(optimize(O)), % delete optimize data
+    gen_a_pred1(P,Ls).
+
+%when normal predicate
+gen_a_pred1(P,[L|Ls]) :-
+    gen_a_pred2(P,L),
     gen_a_pred1(P,Ls).
 
 % if(n == N){...}
@@ -504,6 +507,10 @@ gen_body(cinline(X),_) :-
     n_write_string(X),
     write('}'),
     nl.
+
+gen_body(X,_) :-
+    (optimize(det);optimize(tail)),
+    gen_det_body(X).
 
 
 % disjunction
@@ -1432,4 +1439,132 @@ gen_exec2(X) :-
     gen_body1(X,0),
     write(';'),nl,
     write('Jexec_all(body,Jget_sp(th),th);'),!.
+
+
+analize(P) :-
+    n_arity_count(P,[N]),
+	n_clause_with_arity(P,N,C),
+    n_variable_convert(C,C1),!,
+    analize1(P,N,C1),
+    fail.
+
+analize1(P,N,C) :-
+    length(C,M),
+    tail_recursive(C,0,0,0,M,N),
+    assert(pred_data(P,N,tail)),!.
+analize1(P,N,C) :-
+    length(C,M),
+    deterministic(C,0,0,M),
+    assert(pred_data(P,N,det)),!.
+
+
+% arguments = [clauses],det_count,pred_count,all_count
+deterministic([],D,P,A) :-
+    P =< 1,
+    A =:= D+P.
+deterministic([(Head :- Body)|Cs],D,P,A) :-
+    det_body(Body),
+    D1 is D+1,
+    deterministic(Cs,D1,P,A).
+deterministic([X|Cs],D,P,A) :-
+    n_property(X,predicate),
+    P1 is P+1,
+    deterministic(Cs,D,P1,A).
+
+% arguments = [clauses],tail_count,pred_count, halt_base_count,all_count, arity
+tail_recursive([],T,P,H,A,N) :-
+   write(T),write(P),write(H),write(A),nl,
+    T > 0,
+    P == 0,
+    A =:= T+P+H,!.
+tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
+    butlast_body(Body,Body1),
+    (det_body(Body1);det_body1(Body1)),
+    tail_body(Head,Body),
+    T1 is T+1,
+    tail_recursive(Cs,T1,P,H,A,N).
+tail_recursive([(Head :- !)|Cs],T,P,H,A,N) :-
+    H1 is H+1,
+    tail_recursive(Cs,T,P,H1,A,N).
+tail_recursive([X|Cs],D,P,H,A,N) :-
+    n_property(X,predicate),
+    X =.. [_|Args],
+    member([],Args),
+    H1 = H+1,
+    tail_recursive(Cs,D,P,H1,A,N).
+tail_recursive([X|Cs],D,P,H,A,N) :-
+    n_property(X,predicate),
+    P1 is P+1,
+    tail_recursive(Cs,D,P1,H,A,N).
+
+
+% deterministic body case !
+det((X;Y)) :- fail.
+det_body(!).
+det_body((X,!)).
+det_body((X,(!,Y))) :-
+    det_body(Y).
+det_body(X) :-
+    det_builtin(X).
+% deterministic body case builtin
+det_body1((X,Y)) :-
+    det_builtin(X),
+    det_body1(Y).
+det_body1(X) :-
+    det_builtin(X).
+
+% generaly builtin is deterministic. but some cases is non deterministic.
+det_builtin(length(X,Y)) :-
+    n_compiler_variable(X),
+    n_compiler_variable(Y),!,fail.
+
+det_builtin(append(X,Y,_)) :-
+    n_compiler_variable(X),
+    n_compiler_variable(Y),!,fail.
+
+det_builtin(X) :-
+    n_property(X,builtin).
+
+
+
+% tail recursive
+tail_body(Head,Body) :-
+    last_body(Body,Last),
+    functor(Head,Pred1,Arity1),
+    functor(Last,Pred2,Arity2),
+    Pred1 == Pred2,
+    Arity1 == Arity2.
+
+last_body((_,Body),Last) :-
+    last_body(Body,Last).
+last_body(Body,Body).
+
+butlast_body((Body,Bs),Body) :-
+    n_property(Bs,predicate).
+butlast_body((Body,Bs),Body) :-
+    n_property(Bs,builtin).
+butlast_body((Body,Bs),(Body,Butlast)) :-
+    butlast_body(Bs,Butlast).
+
+
+/*
+ a,b,c ->  if(a==YES) if(b==YES) if(c==YES) return(Jexec_all(rest,Jget_sp(th),th));
+*/
+gen_det_body((X,Y)) :-
+    gen_a_det_body(X),
+    nl,
+    gen_det_body(Y).
+gen_det_body(X) :-
+    gen_a_det_body(X),
+    nl,
+    write('return(Jexec_all(rest,Jget_sp(th),th));').
+
+gen_a_det_body(X) :-
+    X =.. [P|A],
+    write('if (Jcall('),
+    gen_a_body(P),
+    write(','),
+    gen_a_argument(A),
+    write(',th) == YES)').
+
 
