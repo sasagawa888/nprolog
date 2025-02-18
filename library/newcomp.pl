@@ -1473,13 +1473,13 @@ deterministic([X|Cs],D,P,A) :-
 
 % arguments = [clauses],tail_count,pred_count, halt_base_count,all_count, arity
 tail_recursive([],T,P,H,A,N) :-
-   %write(T),write(P),write(H),write(A),nl,
+   write(T),write(P),write(H),write(A),nl,
     T > 0,
     P == 0,
     A =:= T+P+H,!.
 tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
     butlast_body(Body,Body1),
-    det_body(Body1),
+    (det_body(Body1);det_body1(Body1)),
     tail_body(Head,Body),
     T1 is T+1,
     tail_recursive(Cs,T1,P,H,A,N).
@@ -1504,13 +1504,14 @@ det_body(!).
 det_body((X,!)).
 det_body((X,(!,Y))) :-
     det_body(Y).
-det_body(_).
+det_body(X) :-
+    det_builtin(X).
 % deterministic body case builtin
 det_body1((X,Y)) :-
     det_builtin(X),
     det_body1(Y).
 det_body1(X) :-
-    det_buitlin(X).
+    det_builtin(X).
 
 % generaly builtin is deterministic. but some cases is non deterministic.
 det_builtin(length(X,Y)) :-

@@ -1,18 +1,20 @@
 % testing compile code for diterministic predicate
 
-
-foo(X) :- bar(X).
-
-bar(X) :- write(X).
-
-uoo(X) :- write(X),uoo(X).
-
 nodiag([], _, _).
 nodiag([N|L], B, D) :-
     D =\= N - B,
     D =\= B - N,
     D1 is D + 1,
     nodiag(L, B, D1).
+
+
+/*
+foo(X) :- bar(X).
+
+bar(X) :- write(X).
+
+uoo(X) :- write(X),uoo(X).
+
 
 % Quicksort
 qsort([X|L], R, R0) :-
@@ -47,3 +49,4 @@ qdelete(X, A, [H|T], [A|R]) :-
 list50([27, 74, 17, 33, 94, 18, 46, 83, 65, 2, 32, 53, 28, 85, 99, 47, 28, 82, 6, 11,
         55, 29, 39, 81, 90, 37, 10, 0, 66, 51, 7, 21, 85, 27, 31, 63, 75, 4, 95, 99, 11, 28, 61,
         74, 18, 92, 40, 55, 59, 8]).
+*/
