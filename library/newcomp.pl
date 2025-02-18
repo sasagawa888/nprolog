@@ -119,13 +119,16 @@ when all code is generated, close file and abolish optimizable/1
 pass2(X) :-
 	write(user_output,'phase pass2'),
     nl(user_output),
+    abolish(optimize/1),
+    assert(optimize(dummy)),
 	n_filename(X,F),
     atom_concat(F,'.c',Cfile),
 	tell(Cfile),
 	write('#include "jump.h"'),nl,
     gen_c_pred,
     gen_c_exec,
-    %abolish(pred_data/2),
+    %abolish(pred_data/3),
+    abolish(optimize/1),
     n_reconsult_abolish,
     told.
 
@@ -185,13 +188,6 @@ gen_pred :-
 gen_pred.
 
 gen_pred1(P) :-
-    pred_data(P,type1),
-    gen_tail_pred(P),!.
-gen_pred1(P) :-
-    pred_data(P,type2),
-    gen_tail_pred(P),!.    
-gen_pred1(P) :-
-    not(pred_data(P,type1)),
     gen_a_pred(P),!.
 
 % define compiled predicate
@@ -343,7 +339,7 @@ gen_a_pred(P) :-
     gen_a_pred1(P,L),
     write('}'),nl.
 
-% pred1,pred2,...,predN
+% pred_arity1,pred_arity2,...,pred_arityN
 gen_a_pred1(P,[]) :-
     nl,
     write('Jerrorcomp(Jmakeint(ARITY_ERR),Jmakecomp("'),
@@ -351,8 +347,17 @@ gen_a_pred1(P,[]) :-
     write('"),arglist);'),nl,
 	write('return(NO);').
 
+% when tail recursive or deterministic
 gen_a_pred1(P,[L|Ls]) :-
+    pred_data(P,L,O),
+    assert(optimize(O)), % det or tail
 	gen_a_pred2(P,L),
+    retract(optimize(O)), % delete optimize data
+    gen_a_pred1(P,Ls).
+
+%when normal predicate
+gen_a_pred1(P,[L|Ls]) :-
+    gen_a_pred2(P,L),
     gen_a_pred1(P,Ls).
 
 % if(n == N){...}
@@ -502,6 +507,10 @@ gen_body(cinline(X),_) :-
     n_write_string(X),
     write('}'),
     nl.
+
+gen_body(X,_) :-
+    (optimize(det);optimize(tail)),
+    gen_det_body(X).
 
 
 % disjunction
@@ -1543,7 +1552,7 @@ butlast_body((Body,Bs),(Body,Butlast)) :-
 gen_det_body((X,Y)) :-
     gen_a_det_body(X),
     gen_det_body(Y).
-gen_get_body(X) :-
+gen_det_body(X) :-
     gen_a_det_body(X),
     write('return(Jexec_all(rest,Jget_sp(th),th));').
 

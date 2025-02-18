@@ -4,7 +4,7 @@
 foo(X) :- bar(X).
 
 bar(X) :- write(X).
-
+/*
 uoo(X) :- write(X),uoo(X).
 
 nodiag([], _, _).
@@ -38,3 +38,4 @@ fact(N,X) :-
         N1 is N-1,
         fact(N1,X1),
         X is N*X1.
+*/
