@@ -1441,7 +1441,7 @@ analize(P) :-
 
 analize1(P,N,C) :-
     length(C,M),
-    tail_recursive(C,0,0,M),
+    tail_recursive(C,0,0,0,M,N),
     assert(pred_data(P,N,tail)),!.
 analize1(P,N,C) :-
     length(C,M),
@@ -1462,21 +1462,31 @@ deterministic([X|Cs],D,P,A) :-
     P1 is P+1,
     deterministic(Cs,D,P1,A).
 
-% arguments = [clauses],tail_count,pred_count,all_count
-tail_recursive([],T,P,A) :-
-    P =< 1,
+% arguments = [clauses],tail_count,pred_count, halt_base_count,all_count, arity
+tail_recursive([],T,P,H,A,N) :-
+   %write(T),write(P),write(H),write(A),nl,
     T > 0,
-    A =:= T+P.
-tail_recursive([(Head :- Body)|Cs],T,P,A) :-
+    P == 0,
+    A =:= T+P+H,!.
+tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
     butlast_body(Body,Body1),
     det_body(Body1),
     tail_body(Head,Body),
     T1 is T+1,
-    tail_recursive(Cs,T1,P,A).
-tail_recursive([X|Cs],D,P,A) :-
+    tail_recursive(Cs,T1,P,H,A,N).
+tail_recursive([(Head :- !)|Cs],T,P,H,A,N) :-
+    H1 is H+1,
+    tail_recursive(Cs,T,P,H1,A,N).
+tail_recursive([X|Cs],D,P,H,A,N) :-
+    n_property(X,predicate),
+    X =.. [_|Args],
+    member([],Args),
+    H1 = H+1,
+    tail_recursive(Cs,D,P,H1,A,N).
+tail_recursive([X|Cs],D,P,H,A,N) :-
     n_property(X,predicate),
     P1 is P+1,
-    tail_recursive(Cs,D,P1,A).
+    tail_recursive(Cs,D,P1,H,A,N).
 
 
 % deterministic body case !

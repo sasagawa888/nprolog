@@ -27,3 +27,8 @@ partition([X|L], Y, [X|L1], L2) :-
 partition([X|L], Y, L1, [X|L2]) :-
     !,partition(L, Y, L1, L2).
 partition([], _ , [], []) :- !.
+
+reverse([],[]).
+reverse([X|Xs],Y) :-
+    reverse(Xs,Y1),
+    append(Y1,[X],Y).
