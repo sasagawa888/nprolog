@@ -16,6 +16,7 @@ MANUAL.mdにユーザーズマニュアルがあります。ご参照くださ�
 - Ubuntu
 - Linux MINT
 - RaspberryPI Raspbian
+- macOS
 - OpenBSD
 - FreeBSD
 
