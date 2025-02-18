@@ -157,3 +157,12 @@ The publicly available APIs that can be used for embedding in this context are a
 - static inline int Jmakefun(char* x) 
 - static inline int Jcallsubr(int x, int y, int z, int th) 
 - static inline int Jwlist3(int x, int y, int z, int th) 
+
+# Internal compiler
+Since version 3.92, I have been rewriting the compiler. The previous compiler could optimize only a very limited subset of tail-recursive predicates. I am generalizing this optimization to cover a broader range of cases and improve execution efficiency.
+
+Specifically, the compiler classifies predicates into the following three categories through static analysis: predicates eligible for tail-recursion optimization, deterministic predicates, and all other predicates.
+
+The predicate analyze/1 in the compiler is responsible for this classification. The analysis results are stored in pred_data/3 in the form pred_data(PredName, Arity, TailOrDet). The code generation predicates refer to this data to generate the corresponding C code.
+
+There is still plenty of room for improvement in code generation. When calling built-in predicates, especially simple ones like numerical comparisons, efficiency can be improved by directly calling C functions instead of invoking predicates. I have many more ideas and plan to implement them gradually.
