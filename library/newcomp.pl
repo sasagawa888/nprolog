@@ -1551,14 +1551,16 @@ butlast_body((Body,Bs),(Body,Butlast)) :-
 */
 gen_det_body((X,Y)) :-
     gen_a_det_body(X),
+    nl,
     gen_det_body(Y).
 gen_det_body(X) :-
     gen_a_det_body(X),
+    nl,
     write('return(Jexec_all(rest,Jget_sp(th),th));').
 
 gen_a_det_body(X) :-
     X =.. [P|A],
-    write('if (Jall('),
+    write('if (Jcall('),
     gen_a_body(P),
     write(','),
     gen_a_argument(A),
