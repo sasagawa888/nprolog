@@ -887,21 +887,6 @@ int b_after_cut(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_write_string(int arglist, int rest, int th)
-{
-    int n, arg1;
-
-    n = length(arglist);
-    if (n == 1) {
-	arg1 = car(arglist);
-
-	fprintf(GET_PORT(output_stream), "%s", GET_NAME(arg1));
-	return (prove_all(rest, sp[th], th));
-    }
-    return (NO);
-}
-
-
 
 int b_pair_list(int arglist, int rest, int th)
 {

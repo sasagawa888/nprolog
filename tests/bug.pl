@@ -1,5 +1,14 @@
 % testing compile code for diterministic predicate
 
+
+% Quicksort
+qsort([X|L], R, R0) :-
+    partition(L, X, L1, L2),
+    qsort(L2, R1, R0),
+    qsort(L1, R, [X|R1]).
+qsort([], R, R) :- !.
+
+/*
 nodiag([], _, _).
 nodiag([N|L], B, D) :-
     D =\= N - B,
@@ -8,7 +17,6 @@ nodiag([N|L], B, D) :-
     nodiag(L, B, D1).
 
 
-/*
 foo(X) :- bar(X).
 
 bar(X) :- write(X).

@@ -127,7 +127,7 @@ pass2(X) :-
 	write('#include "jump.h"'),nl,
     gen_c_pred,
     gen_c_exec,
-    %abolish(pred_data/3),
+    abolish(pred_data/3),
     abolish(optimize/1),
     n_reconsult_abolish,
     told.
@@ -325,7 +325,6 @@ return(NO);
 gen_a_pred(P) :-
 	atom_concat('compiling ',P,M),
     write(user_output,M),
-    nl(user_output),
     gen_type_declare(P),
 	write('int b_'),
     n_atom_convert(P,P1),
@@ -350,6 +349,8 @@ gen_a_pred1(P,[]) :-
 % when tail recursive or deterministic
 gen_a_pred1(P,[L|Ls]) :-
     pred_data(P,L,O),
+    write(user_output,$/$),write(user_output,L),
+    write(user_output,' '),write(user_output,O),
     assert(optimize(O)), % det or tail
 	gen_a_pred2(P,L),
     retract(optimize(O)), % delete optimize data
@@ -357,6 +358,7 @@ gen_a_pred1(P,[L|Ls]) :-
 
 %when normal predicate
 gen_a_pred1(P,[L|Ls]) :-
+    write(user_output,$/$),write(user_output,L),write(user_output,' nondet'),
     gen_a_pred2(P,L),
     gen_a_pred1(P,Ls).
 
@@ -366,7 +368,8 @@ gen_a_pred2(P,N) :-
     write(N),
     write('){\n'),
     gen_a_pred3(P,N),
-    write('return(NO);}'),!.
+    write('return(NO);}'),
+    nl(user_output),!.
 
 % select all clauses that arity is N
 gen_a_pred3(P,N) :-
@@ -504,7 +507,7 @@ Jset_wp(save1,th);
 % inline C language
 gen_body(cinline(X),_) :-
     write('{'),
-    n_write_string(X),
+    write(X),
     write('}'),
     nl.
 
@@ -1479,7 +1482,7 @@ tail_recursive([],T,P,H,A,N) :-
     A =:= T+P+H,!.
 tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
     butlast_body(Body,Body1),
-    (det_body(Body1);det_body1(Body1)),
+    det_body(Head,Body1),
     tail_body(Head,Body),
     T1 is T+1,
     tail_recursive(Cs,T1,P,H,A,N).
@@ -1498,20 +1501,29 @@ tail_recursive([X|Cs],D,P,H,A,N) :-
     tail_recursive(Cs,D,P1,H,A,N).
 
 
-% deterministic body case !
-det((X;Y)) :- fail.
-det_body(!).
-det_body((X,!)).
-det_body((X,(!,Y))) :-
-    det_body(Y).
-det_body(X) :-
-    det_builtin(X).
-% deterministic body case builtin
-det_body1((X,Y)) :-
+% deterministic body case. Each has cut or each is builtin or each is recur 
+det_body(Head,(X;Y)) :- fail.
+det_body(Head,!).
+det_body(Head,(X,!)).
+det_body(Head,(X,(!,Y))) :-
+    det_body(Head,Y).
+det_body(Head,(X,Y)) :-
     det_builtin(X),
-    det_body1(Y).
-det_body1(X) :-
+    det_body(Head,Y).
+det_body(Head,(X,Y)) :-
+    functor(Head,Pred1,Arity1),
+    functor(X,Pred2,Arity2),
+    Pred1 == Pred2,
+    Arity1 == Arity2,
+    det_body(Y).
+det_body(Head,X) :-
     det_builtin(X).
+det_body(Head,X) :-
+    functor(Head,Pred1,Arity1),
+    functor(X,Pred2,Arity2),
+    Pred1 == Pred2,
+    Arity1 == Arity2.
+
 
 % generaly builtin is deterministic. but some cases is non deterministic.
 det_builtin(length(X,Y)) :-

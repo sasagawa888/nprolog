@@ -976,7 +976,6 @@ int b_unify_with_occurs_check(int arglist, int rest, int th);
 int b_write(int arglist, int rest, int th);
 int b_writeln(int arglist, int rest, int th);
 int b_writeq(int arglist, int rest, int th);
-int b_write_string(int arglist, int rest, int th);
 int before_cut(int x);
 int before_cut1(int x, int y);
 int before_c_lang(int x);
