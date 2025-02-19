@@ -64,6 +64,7 @@ Junify_nil(arg,th)    for [] check.
 compile_file(X) :-
     pass1(X),
     pass2(X),
+    pass3(X),
     invoke_gcc(X).
 
 compile_file(X,co) :-
@@ -79,13 +80,15 @@ compile_file(X,o) :-
 compile_file1(X) :-
     pass1(X),
     pass2(X),
+    pass3(X),
     invoke_gcc_not_remove(X).
 
 
 % genrate only c code 
 compile_file2(X) :-
     pass1(X),
-    pass2(X).
+    pass2(X),
+    pass3(X).
 
 % generate object from c code
 compile_file3(X) :-
@@ -104,6 +107,12 @@ pass1(X) :-
     reconsult(X),
     pass1_analize.
 
+pass2(X) :-
+    write(user_output,'phase pass2'),
+    nl(user_output),
+    reconsult(X),
+    pass1_analize.
+
 pass1_analize :-
     n_reconsult_predicate(P),
     analize(P),
@@ -112,12 +121,12 @@ pass1_analize.
 
 
 /*
-pass2 generate each clause or predicate code.
+pass3 generate each clause or predicate code.
 and write to <filename>.c
 when all code is generated, close file and abolish optimizable/1
 */
-pass2(X) :-
-	write(user_output,'phase pass2'),
+pass3(X) :-
+	write(user_output,'phase pass3'),
     nl(user_output),
     abolish(optimize/1),
     assert(optimize(dummy)),
@@ -1454,10 +1463,12 @@ analize(P) :-
 analize1(P,N,C) :-
     length(C,M),
     tail_recursive(C,0,0,0,M,N),
+    not(pred_data(P,N,tail)),
     assert(pred_data(P,N,tail)),!.
 analize1(P,N,C) :-
     length(C,M),
     deterministic(C,0,0,M),
+    not(pred_data(P,N,det)),
     assert(pred_data(P,N,det)),!.
 
 
@@ -1479,6 +1490,7 @@ tail_recursive([],T,P,H,A,N) :-
     %write(T),write(P),write(H),write(A),nl,
     T > 0,
     P == 0,
+    H >= 1,
     A =:= T+P+H,!.
 tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
     butlast_body(Body,Body1),
@@ -1511,6 +1523,9 @@ det_body(Head,(X,Y)) :-
     det_builtin(X),
     det_body(Head,Y).
 det_body(Head,(X,Y)) :-
+    det_pass1(X),
+    det_body(Head,Y).
+det_body(Head,(X,Y)) :-
     functor(Head,Pred1,Arity1),
     functor(X,Pred2,Arity2),
     Pred1 == Pred2,
@@ -1519,10 +1534,19 @@ det_body(Head,(X,Y)) :-
 det_body(Head,X) :-
     det_builtin(X).
 det_body(Head,X) :-
+    det_pass1(X).
+det_body(Head,X) :-
     functor(Head,Pred1,Arity1),
     functor(X,Pred2,Arity2),
     Pred1 == Pred2,
     Arity1 == Arity2.
+
+det_pass1(X) :-
+    functor(X,P,A),
+    pred_data(P,A,det).
+det_pass1(X) :-
+    functor(X,P,A),
+    pred_data(P,A,tail).
 
 
 % generaly builtin is deterministic. but some cases is non deterministic.
