@@ -1474,16 +1474,19 @@ analize1(P,N,C) :-
 
 % arguments = [clauses],det_count,pred_count,all_count
 deterministic([],D,P,A) :-
+    %write(user_output,D),write(user_output,P),write(user_output,A),
     P =< 1,
     A =:= D+P.
 deterministic([(Head :- Body)|Cs],D,P,A) :-
-    det_body(Body),
+    det_body(Head,Body),
     D1 is D+1,
     deterministic(Cs,D1,P,A).
 deterministic([X|Cs],D,P,A) :-
     n_property(X,predicate),
     P1 is P+1,
     deterministic(Cs,D,P1,A).
+dterministic([C|Cs],D,P,A) :-
+    deterministic(Cs,D,P,A).
 
 % arguments = [clauses],tail_count,pred_count, halt_base_count,all_count, arity
 tail_recursive([],T,P,H,A,N) :-
@@ -1511,6 +1514,8 @@ tail_recursive([X|Cs],D,P,H,A,N) :-
     n_property(X,predicate),
     P1 is P+1,
     tail_recursive(Cs,D,P1,H,A,N).
+tail_recursive([C|Cs],D,P,H,A,N) :-
+    tail_recursive(Cs,D,P,H,A,N).
 
 
 % deterministic body case. Each has cut or each is builtin or each is recur 
@@ -1525,22 +1530,25 @@ det_body(Head,(X,Y)) :-
 det_body(Head,(X,Y)) :-
     det_pass1(X),
     det_body(Head,Y).
+/*
 det_body(Head,(X,Y)) :-
     functor(Head,Pred1,Arity1),
     functor(X,Pred2,Arity2),
     Pred1 == Pred2,
     Arity1 == Arity2,
     det_body(Y).
+*/
 det_body(Head,X) :-
     det_builtin(X).
 det_body(Head,X) :-
     det_pass1(X).
+/*
 det_body(Head,X) :-
     functor(Head,Pred1,Arity1),
     functor(X,Pred2,Arity2),
     Pred1 == Pred2,
     Arity1 == Arity2.
-
+*/
 det_pass1(X) :-
     functor(X,P,A),
     pred_data(P,A,det).
@@ -1595,6 +1603,66 @@ gen_det_body(X) :-
     nl,
     write('return(Jexec_all(rest,Jget_sp(th),th));').
 
+gen_a_det_body(X is Y) :-
+    write('if(Junify('),
+    gen_a_argument(X),
+    write(','),
+    eval_form(Y),
+    write(','),
+    write(th),
+    write(')==YES)').
+
+gen_a_det_body(X = Y) :-
+    write('if(Junify('),
+    gen_a_argument(X),
+    write(','),
+    gen_a_argument(Y),
+    write(','),
+    write(th),
+    write(')==YES)').
+
+gen_a_det_body(X =:= Y) :-
+    write('if(Jnumeqp('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write('))').
+
+gen_a_det_body(X =\= Y) :-
+    write('if(Jnot_numeqp('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write('))').
+
+gen_a_det_body(X < Y) :-
+    write('if(Jsmallerp('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write('))').
+
+gen_a_det_body(X =< Y) :-
+    write('if(Jeqsmallerp('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write('))').
+
+gen_a_det_body(X > Y) :-
+    write('if(Jgreaterp('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write('))').
+
+gen_a_det_body(X >= Y) :-
+    write('if(Jeqgreaterp('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write('))').
+
 gen_a_det_body(X) :-
     X =.. [P|A],
     write('if (Jcall('),
@@ -1602,5 +1670,175 @@ gen_a_det_body(X) :-
     write(','),
     gen_a_argument(A),
     write(',th) == YES)').
+
+
+/*
+generate evauation code
+e.g.  X is 1+2.  X == 3*4.
+*/
+eval_form([]) :-
+	write('NIL').
+eval_form([X]) :-
+	write('Jmakeconst("'),
+    write(X),
+    write('")').
+eval_form(pi) :-
+	write('Jmakestrflt("3.14159265358979")').
+eval_form(random) :-
+	write('Jrandom()').    
+eval_form(X) :-
+	n_bignum(X),
+    write('Jmakebig("'),
+    write(X),
+    write('")').
+eval_form(X) :-
+	n_longnum(X),
+    write('Jmakestrlong("'),
+    write(X),
+    write('")').
+eval_form(X) :-
+	integer(X),
+    write('Jmakeint('),
+    write(X),
+    write(')').
+eval_form(X) :-
+	float(X),
+    write('Jmakestrflt("'),
+    write(X),
+    write('")').
+eval_form(X) :-
+	atom(X),
+    n_compiler_variable(X),
+    n_atom_convert(X,X1),
+    write('Jderef('),
+    write(X1),
+    write(','),
+    write(th),
+    write(')').
+eval_form(X) :-
+	atom(X),
+    write('Jmakeconst("'),
+    write(X),
+    write('")').
+eval_form(X) :-
+    list(X),
+    gen_a_argument(X).
+eval_form(X + Y) :-
+	write('Jplus('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th)').
+eval_form(X - Y) :-
+	write('Jminus('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th)').
+eval_form(X * Y) :-
+	write('Jmult('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th)').
+eval_form(X / Y) :-
+	write('Jdivide('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th)').
+eval_form(X//Y) :-
+	write('Jdiv('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th)').
+eval_form(X ^ Y) :-
+	write('Jexpt('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th)').
+eval_form(X mod Y) :-
+	write('Jmod('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th)').
+eval_form(sin(X)) :-
+	write('Jsin('),
+    eval_form(X),
+    write(',th)').
+eval_form(asin(X)) :-
+	write('Jasin('),
+    eval_form(X),
+    write(',th)').
+eval_form(cos(X)) :-
+	write('Jcos('),
+    eval_form(X),
+    write(',th)').
+eval_form(acos(X)) :-
+	write('Jacos('),
+    eval_form(X),
+    write(',th)').
+eval_form(tan(X)) :-
+	write('Jtan('),
+    eval_form(X),
+    write(',th)').
+eval_form(atan(X)) :-
+	write('Jatan('),
+    eval_form(X),
+    write(',th)').
+eval_form(exp(X)) :-
+	write('Jexp('),
+    eval_form(X),
+    write(',th)').
+eval_form(log(X)) :-
+	write('Jlog('),
+    eval_form(X),
+    write(',th)').
+eval_form(ln(X)) :-
+	write('Jln('),
+    eval_form(X),
+    write(',th)').
+eval_form(X << Y) :-
+	write('Jleftshift('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th)').
+eval_form(X >> Y) :-
+	write('Jrightshift('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th)').
+eval_form(X /\ Y) :-
+	write('Jlogicaland('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th)').
+eval_form(X \/ Y) :-
+	  write('Jlogicalor('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th)').
+eval_form(\ X) :-
+	write('Jcomplement('),
+    eval_form(X),
+    write(',th)').
+eval_form(randi(X)) :-
+	write('Jrandi('),
+    eval_form(X),
+    write(',th)').
+eval_form(round(X,Y)) :-
+	  write('Jround('),
+    eval_form(X),
+    eval_form(Y),
+    write(',th)').
+
+
 
 
