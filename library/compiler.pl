@@ -1632,6 +1632,7 @@ gen_det_body(X) :-
     nl,
     write('return(Jexec_all(rest,Jget_sp(th),th));').
 
+gen_a_det_body(!).
 gen_a_det_body(X is Y) :-
     write('if(Junify('),
     gen_a_argument(X),
@@ -1698,7 +1699,7 @@ gen_a_det_body(X) :-
     gen_a_body(P),
     write(','),
     gen_a_argument(A),
-    write(',th) == YES && Jinc_proof(th))').
+    write(',th) == YES)').
 
 
 /*
