@@ -1470,6 +1470,10 @@ analize1(P,N,C) :-
     deterministic(C,0,0,M),
     not(pred_data(P,N,det)),
     assert(pred_data(P,N,det)),!.
+analize1(P,N,C) :-
+    length(C,M),
+    halt_check(C,0,0,M),
+    assert(pred_data(P,N,halt)),!.
 
 
 % arguments = [clauses],det_count,pred_count,all_count
@@ -1517,6 +1521,29 @@ tail_recursive([X|Cs],D,P,H,A,N) :-
 tail_recursive([C|Cs],D,P,H,A,N) :-
     tail_recursive(Cs,D,P,H,A,N).
 
+% arguments = [clauses],det_count,pred_count,all_count
+halt_check([],H,P,A) :-
+    %write(user_output,H),write(user_output,P),write(user_output,A),
+    P == 0,
+    H == 1.
+halt_check([(Head :- !)|Cs],H,P,A) :-
+    H1 is H+1,
+    halt_check(Cs,H1,P,A).
+halt_check([(Head :- Body)|Cs],H,P,A) :-
+    halt_check(Cs,H,P,A).
+halt_check([X|Cs],H,P,A) :-
+    X =.. [_|Args],
+    member([],Args),
+    H1 is H+1,
+    halt_check(Cs,H1,P,A).
+halt_check([X|Cs],D,P,A) :-
+    n_property(X,predicate),
+    P1 is P+1,
+    halt_check(Cs,D,P1,A).
+halt_check([C|Cs],D,P,A) :-
+    halt_check(Cs,D,P,A).
+
+
 
 % deterministic body case. Each has cut or each is builtin or each is recur 
 det_body(Head,(X;Y)) :- fail.
@@ -1530,25 +1557,27 @@ det_body(Head,(X,Y)) :-
 det_body(Head,(X,Y)) :-
     det_pass1(X),
     det_body(Head,Y).
-/*
 det_body(Head,(X,Y)) :-
     functor(Head,Pred1,Arity1),
     functor(X,Pred2,Arity2),
     Pred1 == Pred2,
     Arity1 == Arity2,
-    det_body(Y).
-*/
+    pred_data(Pred1,Arity1,halt),
+    retract(pred_data(Pred1,Arity1,halt)),
+    assert(pred_data(Pred1,Arity1,det)),
+    det_body(Head,Y).
 det_body(Head,X) :-
     det_builtin(X).
 det_body(Head,X) :-
     det_pass1(X).
-/*
 det_body(Head,X) :-
     functor(Head,Pred1,Arity1),
     functor(X,Pred2,Arity2),
     Pred1 == Pred2,
-    Arity1 == Arity2.
-*/
+    Arity1 == Arity2,
+    pred_data(Pred1,Arity1,det),
+    retract(pred_data(Pred1,Arity1,det)),
+    assert(pred_data(Pred1,Arity1,tail)).
 det_pass1(X) :-
     functor(X,P,A),
     pred_data(P,A,det).
@@ -1610,7 +1639,7 @@ gen_a_det_body(X is Y) :-
     eval_form(Y),
     write(','),
     write(th),
-    write(')==YES)').
+    write(')==YES && Jinc_proof(th))').
 
 gen_a_det_body(X = Y) :-
     write('if(Junify('),
@@ -1619,49 +1648,49 @@ gen_a_det_body(X = Y) :-
     gen_a_argument(Y),
     write(','),
     write(th),
-    write(')==YES)').
+    write(')==YES && Jinc_proof(th))').
 
 gen_a_det_body(X =:= Y) :-
     write('if(Jnumeqp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write('))').
+    write(') && Jinc_proof(th))').
 
 gen_a_det_body(X =\= Y) :-
     write('if(Jnot_numeqp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write('))').
+    write(') && Jinc_proof(th))').
 
 gen_a_det_body(X < Y) :-
     write('if(Jsmallerp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write('))').
+    write(') && Jinc_proof(th))').
 
 gen_a_det_body(X =< Y) :-
     write('if(Jeqsmallerp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write('))').
+    write(') && Jinc_proof(th))').
 
 gen_a_det_body(X > Y) :-
     write('if(Jgreaterp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write('))').
+    write(') && Jinc_proof(th))').
 
 gen_a_det_body(X >= Y) :-
     write('if(Jeqgreaterp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write('))').
+    write(') && Jinc_proof(th))').
 
 gen_a_det_body(X) :-
     X =.. [P|A],
@@ -1669,7 +1698,7 @@ gen_a_det_body(X) :-
     gen_a_body(P),
     write(','),
     gen_a_argument(A),
-    write(',th) == YES)').
+    write(',th) == YES && Jinc_proof(th))').
 
 
 /*
