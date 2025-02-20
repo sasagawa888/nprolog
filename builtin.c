@@ -1722,6 +1722,7 @@ int b_reconsult(int arglist, int rest, int th)
 	    if (!memberp(atom, reconsult_list)) {
 		reconsult_list = cons(atom, reconsult_list);
 		SET_CAR(atom, NIL);
+		SET_ARITY(atom,NIL);
 	    }
 	    //assert
 	    b_assert(list1(clause), NIL, th);
