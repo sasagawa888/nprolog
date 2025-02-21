@@ -131,9 +131,6 @@ static inline int Jrandom(int th) {
     return f1[RANDOM_IDX](th);
 }
 
-static inline int Jrandi(int x) {
-    return f1[RANDI_IDX](x);
-}
 
 
 static inline int Jlistp(int x) {
@@ -271,39 +268,43 @@ static inline int Jwlist1(int x, int th) {
 
 
 static inline int Jsin(int x, int th) {
-    return f2[SIN_IDX](x,th);
+    return f2[SIN_IDX](x, th);
 }
 
 static inline int Jasin(int x, int th) {
-    return f2[ASIN_IDX](x,th);
+    return f2[ASIN_IDX](x, th);
 }
 
 static inline int Jcos(int x, int th) {
-    return f2[COS_IDX](x,th);
+    return f2[COS_IDX](x, th);
 }
 
 static inline int Jacos(int x, int th) {
-    return f2[ACOS_IDX](x,th);
+    return f2[ACOS_IDX](x, th);
 }
 
 static inline int Jtan(int x, int th) {
-    return f2[TAN_IDX](x,th);
+    return f2[TAN_IDX](x, th);
 }
 
 static inline int Jatan(int x, int th) {
-    return f2[ATAN_IDX](x,th);
+    return f2[ATAN_IDX](x, th);
 }
 
 static inline int Jexp(int x, int th) {
-    return f2[EXP_IDX](x,th);
+    return f2[EXP_IDX](x, th);
 }
 
 static inline int Jlog(int x, int th) {
-    return f2[LOG_IDX](x,th);
+    return f2[LOG_IDX](x, th);
 }
 
 static inline int Jln(int x, int th) {
-    return f2[LN_IDX](x,th);
+    return f2[LN_IDX](x, th);
+}
+
+static inline int Jrandi(int x, int th) {
+    return f2[RANDI_IDX](x, th);
 }
 
 
