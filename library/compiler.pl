@@ -900,7 +900,7 @@ eval_form([X]) :-
 eval_form(pi) :-
 	write('Jmakestrflt("3.14159265358979")').
 eval_form(random) :-
-	write('Jrandom()').    
+	write('Jrandom(th)').    
 eval_form(X) :-
 	n_bignum(X),
     write('Jmakebig("'),
