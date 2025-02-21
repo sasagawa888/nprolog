@@ -321,6 +321,9 @@ static inline int Jabs(int x, int th) {
     return f2[ABS_IDX](x, th);
 }
 
+static inline int Jcomplement(int x, int th) {
+    return f2[COMPLEMENT_IDX](x, th);
+}
 
 static inline int Junify_nil(int x, int th) {
     return f2[UNIFY_NIL_IDX](x, th);
@@ -438,10 +441,6 @@ static inline int Jlogicaland(int x, int y, int th) {
 
 static inline int Jlogicalor(int x, int y, int th) {
     return f3[LOGICALOR_IDX](x, y, th);
-}
-
-static inline int Jcomplement(int x, int y, int th) {
-    return f3[COMPLEMENT_IDX](x, y, th);
 }
 
 static inline int Jround(int x, int y, int th) {

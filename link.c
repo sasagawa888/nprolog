@@ -110,6 +110,7 @@ void dynamic_link(int x)
     init_f2(SQRT_IDX, (tpred) f_sqrt);
     init_f2(INTEGER_IDX, (tpred) f_integer);
     init_f2(ABS_IDX, (tpred) f_abs);
+    init_f2(COMPLEMENT_IDX, (tpred) f_complement);
     init_f2(UNIFY_NIL_IDX, (tpred) unify_nil);
 
     //argument-3
@@ -140,7 +141,6 @@ void dynamic_link(int x)
     init_f3(RIGHTSHIFT_IDX, (tpred) f_rightshift);
     init_f3(LOGICALAND_IDX, (tpred) f_logicaland);
     init_f3(LOGICALOR_IDX, (tpred) f_logicalor);
-    init_f3(COMPLEMENT_IDX, (tpred) f_complement);
     init_f3(ROUND_IDX, (tpred) f_round);
     init_f3(DIV_IDX, (tpred) f_div);
     init_f3(CALL_IDX, (tpred) call);
