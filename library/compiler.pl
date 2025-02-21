@@ -1016,7 +1016,10 @@ eval_form(ln(X)) :-
 	write('Jln('),
     eval_form(X),
     write(',th)').
-
+eval_form(integer(X)) :-
+	write('Jinteger('),
+    eval_form(X),
+    write(',th)').
 eval_form(X << Y) :-
 	write('Jleftshift('),
     eval_form(X),

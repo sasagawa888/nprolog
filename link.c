@@ -108,6 +108,7 @@ void dynamic_link(int x)
     init_f2(LIST1_IDX, (tpred) list1);
     init_f2(RANDI_IDX, (tpred) f_randi);
     init_f2(SQRT_IDX, (tpred) f_sqrt);
+    init_f2(INTEGER_IDX, (tpred) f_integer);
     init_f2(UNIFY_NIL_IDX, (tpred) unify_nil);
 
     //argument-3
