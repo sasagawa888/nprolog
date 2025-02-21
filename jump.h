@@ -317,6 +317,9 @@ static inline int Jinteger(int x, int th) {
     return f2[INTEGER_IDX](x, th);
 }
 
+static inline int Jabs(int x, int th) {
+    return f2[ABS_IDX](x, th);
+}
 
 
 static inline int Junify_nil(int x, int th) {
