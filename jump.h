@@ -308,6 +308,12 @@ static inline int Jrandi(int x, int th) {
 }
 
 
+static inline int Jsqrt(int x, int th) {
+    return f2[SQRT_IDX](x, th);
+}
+
+
+
 static inline int Junify_nil(int x, int th) {
     return f2[UNIFY_NIL_IDX](x, th);
 }
@@ -408,10 +414,6 @@ static inline int Jmod(int x, int y, int th) {
 
 static inline int Jexpt(int x, int y, int th) {
     return f3[EXPT_IDX](x, y, th);
-}
-
-static inline int Jsqrt(int x, int y, int th) {
-    return f3[SQRT_IDX](x, y, th);
 }
 
 static inline int Jleftshift(int x, int y, int th) {

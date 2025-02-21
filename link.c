@@ -107,6 +107,7 @@ void dynamic_link(int x)
     init_f2(LN_IDX, (tpred) f_ln);
     init_f2(LIST1_IDX, (tpred) list1);
     init_f2(RANDI_IDX, (tpred) f_randi);
+    init_f2(SQRT_IDX, (tpred) f_sqrt);
     init_f2(UNIFY_NIL_IDX, (tpred) unify_nil);
 
     //argument-3
@@ -133,7 +134,6 @@ void dynamic_link(int x)
     init_f3(QUOTIENT_IDX, (tpred) quotient);
     init_f3(MOD_IDX, (tpred) f_mod);
     init_f3(EXPT_IDX, (tpred) f_expt);
-    init_f3(SQRT_IDX, (tpred) f_sqrt);
     init_f3(LEFTSHIFT_IDX, (tpred) f_leftshift);
     init_f3(RIGHTSHIFT_IDX, (tpred) f_rightshift);
     init_f3(LOGICALAND_IDX, (tpred) f_logicaland);

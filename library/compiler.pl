@@ -1831,6 +1831,10 @@ eval_form(ln(X)) :-
 	write('Jln('),
     eval_form(X),
     write(',th)').
+eval_form(sqrt(X)) :-
+	write('Jsqrt('),
+    eval_form(X),
+    write(',th)').
 eval_form(X << Y) :-
 	write('Jleftshift('),
     eval_form(X),
