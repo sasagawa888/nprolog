@@ -167,5 +167,3 @@ Since version 3.92, I have been rewriting the compiler. The previous compiler co
 Specifically, the compiler classifies predicates into the following three categories through static analysis: predicates eligible for tail-recursion optimization, deterministic predicates, and all other predicates.
 
 The predicate analyze/1 in the compiler is responsible for this classification. The analysis results are stored in pred_data/3 in the form pred_data(PredName, Arity, TailOrDetOrHalt). The code generation predicates refer to this data to generate the corresponding C code.
-
-There is still plenty of room for improvement in code generation. When calling built-in predicates, especially simple ones like numerical comparisons, efficiency can be improved by directly calling C functions instead of invoking predicates. I have many more ideas and plan to implement them gradually.
