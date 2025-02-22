@@ -330,6 +330,10 @@ static inline int Junify_nil(int x, int th) {
 }
 
 
+static inline int Jsave_work(int x, int th) {
+    return f2[SAVE_WORK_IDX](x, th);
+}
+
 
 static inline int Jlist3(int x, int y, int z) {
     return f3[LIST3_IDX](x, y, z);

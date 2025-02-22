@@ -112,6 +112,7 @@ void dynamic_link(int x)
     init_f2(ABS_IDX, (tpred) f_abs);
     init_f2(COMPLEMENT_IDX, (tpred) f_complement);
     init_f2(UNIFY_NIL_IDX, (tpred) unify_nil);
+    init_f2(SAVE_WORK_IDX, (tpred) save_work);
 
     //argument-3
     init_f3(LIST3_IDX, (tpred) list3);
