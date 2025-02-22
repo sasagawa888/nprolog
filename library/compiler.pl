@@ -383,6 +383,7 @@ gen_a_pred2(P,N) :-
 % select all clauses that arity is N
 gen_a_pred3(P,N) :-
     gen_var_assign(1,N),
+    write(loop),write(N),write(':'),nl,
 	n_clause_with_arity(P,N,C),
     gen_a_pred4(C,N).
 
