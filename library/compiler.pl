@@ -384,7 +384,7 @@ gen_a_pred2(P,N) :-
 gen_a_pred3(P,N) :-
     gen_var_assign(1,N),
 	n_clause_with_arity(P,N,C),
-    gen_a_pred4(C).
+    gen_a_pred4(C,N).
 
 % arg1 = Jnth(arglist,1);
 % arg2 = Jnth(arglist,2);
@@ -402,13 +402,13 @@ gen_var_assign(S,E) :-
 
 
 % generate each clause in CPS
-gen_a_pred4([]).
-gen_a_pred4([C|Cs]) :-
+gen_a_pred4([],N).
+gen_a_pred4([C|Cs],N) :-
 	n_variable_convert(C,X),
     n_generate_variable(X,V),
     gen_var(V),
-    gen_a_pred5(X),
-    gen_a_pred4(Cs).
+    gen_a_pred5(X,N),
+    gen_a_pred4(Cs,N).
 
 
 /*
@@ -425,19 +425,19 @@ if( )... head
    
 */
 % clause
-gen_a_pred5((Head :- Body)) :-
+gen_a_pred5((Head :- Body),N) :-
     write('save1 = Jget_wp(th);'),nl,
 	gen_head(Head),
     gen_body(Body,0).
 
 % predicate with no arity
-gen_a_pred5(P) :-
+gen_a_pred5(P,N) :-
 	n_property(P,predicate),
     functor(P,_,0),
     not(n_dynamic_predicate(P)),
     write('return(Jexec_all(rest,Jget_sp(th),th));'),nl.
 
-gen_a_pred5(P) :-
+gen_a_pred5(P,N) :-
     n_property(P,predicate),
     functor(P,_,0),
     n_dynamic_predicate(P),
@@ -446,7 +446,7 @@ gen_a_pred5(P) :-
     write(')'),nl.
 
 % predicate
-gen_a_pred5(P) :-
+gen_a_pred5(P,N) :-
 	n_property(P,predicate),
     P =.. [P1|_],
     not(n_dynamic_predicate(P1)),
@@ -457,7 +457,7 @@ gen_a_pred5(P) :-
     write('Junbind(save2,th);'),nl,
     write('Jset_wp(save1,th);'),nl.
 
-gen_a_pred5(P) :-
+gen_a_pred5(P,N) :-
     n_property(P,predicate),
     P =.. [P1|_],
     n_dynamic_predicate(P),
@@ -470,7 +470,7 @@ gen_a_pred5(P) :-
 
 
 % user ope
-gen_a_pred5(P) :-
+gen_a_pred5(P,N) :-
 	n_property(P,userop),
     write('save1 = Jget_wp(th);'),nl,
 	gen_head(P),
