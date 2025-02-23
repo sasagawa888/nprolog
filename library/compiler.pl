@@ -422,9 +422,17 @@ if( )... head
 */
 
 
-/*
-   
-*/
+% clause as tail recursive
+gen_a_pred5((Head :- Body),N) :-
+    tail_body(Head,Body),
+    Head =.. [P|Args],
+    length(Args,L),
+    pred_data(P,L,tail),
+    write('save1 = Jget_wp(th);'),nl,
+	gen_head(Head),
+    gen_tail_body(Body,N).
+
+
 % clause
 gen_a_pred5((Head :- Body),N) :-
     write('save1 = Jget_wp(th);'),nl,
@@ -1639,6 +1647,30 @@ gen_det_body(X) :-
     gen_a_det_body(X),
     nl,
     write('return(Jexec_all(rest,Jget_sp(th),th));').
+
+gen_tail_body((X,Y),N) :-
+    gen_a_det_body(X),
+    gen_tail_body(Y,N).
+gen_tail_body(X,N) :-
+    X =.. [_|A],
+    write('{'),nl,
+    gen_tail_args(A,1),
+    write('Jset_wp(save1,th);'),nl,
+    write('Junbind(save2,th);'),nl,
+    write('Jset_ac(save3,th);'),nl,
+    write('goto loop'),write(N),write(';'),nl,
+    write('}'),nl.
+
+gen_tail_args([],N).
+gen_tail_args([A|As],N) :-
+    write('arg'),write(N),write(' = '),
+    write('Jsave_work(Jderef('),
+    gen_a_argument(A),
+    write(',th),th);'),nl,
+    N1 is N+1,
+    gen_tail_args(As,N1).
+
+    
 
 gen_a_det_body(!).
 gen_a_det_body(X is Y) :-
