@@ -10,7 +10,7 @@ setup :-
     digital_write(23,0),
     delay(1000).
 
-measure(X) :-
+nmeasure(X) :-
     digital_write(23,1),
     delay_microseconds(11),
     digital_write(23,0),

@@ -46,8 +46,8 @@ show_cursor_position :-
     nl.
 
 game :-
-    write('simple cursor game\n'),
-    write('input command（e.g.: ansi_cud(3), ansi_cuf(5), ansi_ed, halt）:\n'),
+    write('simple cursor game'),nl,
+    write('input command（e.g.: ansi_cud(3), ansi_cuf(5), ansi_ed, halt）:'),nl,
     repeat,
     write('> '),
     read(Command),
