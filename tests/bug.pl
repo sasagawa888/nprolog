@@ -5,7 +5,7 @@ foo(X) :- write(X),X1 is X-1,foo(X1).
 
 bar([]).
 bar([X|Xs]) :-
-    write(X),
+    foo(X),
     bar(Xs).
 
 
