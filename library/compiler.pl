@@ -1487,15 +1487,18 @@ analize(P) :-
     fail.
 
 analize1(P,N,C) :-
+    not(n_dynamic_predicate(P)),
     length(C,M),
     tail_recursive(C,0,0,0,M,N),
     asserta(pred_data(P,N,tail)),!.
 analize1(P,N,C) :-
+    not(n_dynamic_predicate(P)),
     length(C,M),
     deterministic(C,0,0,M),
     not(pred_data(P,N,det)),
     asserta(pred_data(P,N,det)),!.
 analize1(P,N,C) :-
+    not(n_dynamic_predicate(P)),
     length(C,M),
     halt_check(C,0,0,M),
     assertz(pred_data(P,N,halt)),!.
