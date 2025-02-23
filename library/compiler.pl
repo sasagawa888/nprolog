@@ -1516,6 +1516,9 @@ tail_recursive([],T,P,H,A,N) :-
     P == 0,
     H >= 1,
     A =:= T+P+H,!.
+tail_recursive([(Head :- !)|Cs],T,P,H,A,N) :-
+    H1 is H+1,
+    tail_recursive(Cs,T,P,H1,A,N).
 tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
     independ(Head),
     butlast_body(Body,Body1),
@@ -1523,9 +1526,6 @@ tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
     tail_body(Head,Body),
     T1 is T+1,
     tail_recursive(Cs,T1,P,H,A,N).
-tail_recursive([(Head :- !)|Cs],T,P,H,A,N) :-
-    H1 is H+1,
-    tail_recursive(Cs,T,P,H1,A,N).
 tail_recursive([X|Cs],D,P,H,A,N) :-
     n_property(X,predicate),
     X =.. [_|Args],
@@ -1559,7 +1559,6 @@ independ1(X).
 independ2([],F).
 independ2([X|Xs],F) :-
     n_compiler_variable(X),
-    write(X), write(F),
     member(X,F),
     !,fail.
 independ2([X|Xs],F) :-
