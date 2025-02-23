@@ -108,22 +108,19 @@ pass1(X) :-
     abolish(pred_data/3),
     assert(pred_data(dummy,-1,-1)),
     reconsult(X),
-    pass1_analize,
-    listing(pred_data).
+    pass1_analize.
 
 pass2(X) :-
     write(user_output,'phase pass2'),
     nl(user_output),
     reconsult(X),
-    pass1_analize,
-    listing(pred_data).
+    pass1_analize.
 
 pass3(X) :-
     write(user_output,'phase pass3'),
     nl(user_output),
     reconsult(X),
-    pass1_analize,
-    listing(pred_data).
+    pass1_analize.
 
 
 pass1_analize :-
@@ -543,7 +540,7 @@ gen_body(cinline(X),_) :-
     nl.
 
 gen_body(X,_) :-
-    (optimize(det);optimize(tail)),
+    optimize(det),
     gen_det_body(X).
 
 
