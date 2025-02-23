@@ -2335,13 +2335,13 @@ int copy_work(int x, int th)
 
 int save_work(int x, int th)
 {
-	int save;
+	int save,res;
 
 	save = wp[th];
 	wp[th] = wp_max[th] - 100;
-	copy_work(x,th);
+	res = copy_work(x,th);
 	wp[th] = save;
-	return(1);
+	return(res);
 }
 
 
