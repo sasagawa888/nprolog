@@ -1490,18 +1490,23 @@ analize1(P,N,C) :-
     not(n_dynamic_predicate(P)),
     length(C,M),
     tail_recursive(C,0,0,0,M,N),
+    P1 =.. [pred_data,P,A1,A2],
+    (retract(P1);true),
     asserta(pred_data(P,N,tail)),!.
 analize1(P,N,C) :-
     not(n_dynamic_predicate(P)),
     length(C,M),
     deterministic(C,0,0,M),
-    not(pred_data(P,N,det)),
+    P1 =.. [pred_data,P,A1,A2],
+    (retract(P1);true),
     asserta(pred_data(P,N,det)),!.
 analize1(P,N,C) :-
     not(n_dynamic_predicate(P)),
     length(C,M),
     halt_check(C,0,0,M),
-    assertz(pred_data(P,N,halt)),!.
+    P1 =.. [pred_data,P,A1,A2],
+    (retract(P1);true),
+    asserta(pred_data(P,N,halt)),!.
 
 
 % arguments = [clauses],det_count,pred_count,all_count
@@ -1638,6 +1643,8 @@ det_body(Head,(X,Y)) :-
     functor(X,Pred2,Arity2),
     Pred1 == Pred2,
     Arity1 == Arity2,
+    P =.. [pred_data,Pred1,A1,A2],
+    (retract(P);true),
     asserta(pred_data(Pred1,Arity1,det)),
     det_body(Head,Y).
 det_body(Head,X) :-
@@ -1650,7 +1657,8 @@ det_body(Head,X) :-
     Pred1 == Pred2,
     Arity1 == Arity2,
     pred_data(Pred1,Arity1,halt),
-    retract(pred_data(Pred1,Arity1,halt)),
+    P =.. [pred_data,Pred1,A1,A2],
+    (retract(P);true),
     asserta(pred_data(Pred1,Arity1,det)).
 det_pass1(X) :-
     functor(X,P,A),

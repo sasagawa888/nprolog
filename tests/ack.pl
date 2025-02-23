@@ -1,6 +1,6 @@
 % test for robustness 
 
-:- dynamic(ack/3).
+%:- dynamic(ack/3).
 % association computation
 
 ack(0,N,A) :- 
