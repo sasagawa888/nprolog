@@ -63,8 +63,11 @@ Junify_nil(arg,th)    for [] check.
 % main
 compile_file(X) :-
     pass1(X),
+    %listing(pred_data),
     pass2(X),
+    %listing(pred_data),
     pass3(X),
+    %listing(pred_data),
     pass4(X),
     invoke_gcc(X).
 
@@ -1496,7 +1499,7 @@ analize1(P,N,C) :-
 analize1(P,N,C) :-
     not(n_dynamic_predicate(P)),
     length(C,M),
-    deterministic(C,0,0,M),
+    deterministic(C,0,0,0,M),
     P1 =.. [pred_data,P,A1,A2],
     (retract(P1);true),
     asserta(pred_data(P,N,det)),!.
@@ -1509,21 +1512,25 @@ analize1(P,N,C) :-
     asserta(pred_data(P,N,halt)),!.
 
 
-% arguments = [clauses],det_count,pred_count,all_count
-deterministic([],D,P,A) :-
-    %write(user_output,D),write(user_output,P),write(user_output,A),
+% arguments = [clauses],det_count,pred_count,halt_count,all_count
+deterministic([],D,P,H,A) :-
+    %write(user_output,D),write(user_output,P),write(user_output,H),write(user_output,A),
     P =< 1,
-    A =:= D+P.
-deterministic([(Head :- Body)|Cs],D,P,A) :-
+    H == 1,
+    A =:= D+P+H,!.
+deterministic([(Head :- !)|Cs],D,P,H,A) :-
+    H1 is H+1,
+    deterministic(Cs,D,P,H1,A).
+deterministic([(Head :- Body)|Cs],D,P,H,A) :-
     det_body(Head,Body),
     D1 is D+1,
-    deterministic(Cs,D1,P,A).
-deterministic([X|Cs],D,P,A) :-
+    deterministic(Cs,D1,P,H,A).
+deterministic([X|Cs],D,P,H,A) :-
     n_property(X,predicate),
     P1 is P+1,
-    deterministic(Cs,D,P1,A).
-dterministic([C|Cs],D,P,A) :-
-    deterministic(Cs,D,P,A).
+    deterministic(Cs,D,P1,H,A).
+dterministic([C|Cs],D,P,H,A) :-
+    deterministic(Cs,D,P,H,A).
 
 % arguments = [clauses],tail_count,pred_count, halt_base_count,all_count, arity
 tail_recursive([],T,P,H,A,N) :-
@@ -1643,6 +1650,7 @@ det_body(Head,(X,Y)) :-
     functor(X,Pred2,Arity2),
     Pred1 == Pred2,
     Arity1 == Arity2,
+    pred_data(Pred1,Arity1,halt),
     P =.. [pred_data,Pred1,A1,A2],
     (retract(P);true),
     asserta(pred_data(Pred1,Arity1,det)),
