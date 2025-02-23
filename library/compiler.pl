@@ -1537,6 +1537,38 @@ tail_recursive([X|Cs],D,P,H,A,N) :-
 tail_recursive([C|Cs],D,P,H,A,N) :-
     tail_recursive(Cs,D,P,H,A,N).
 
+independ(Head) :-
+    Head =.. [_|Args],
+    flatten(Args,Args1),
+    independ1(Args1).
+        
+independ1([]).
+independ1([X|Xs]) :-
+    n_compiler_variable(X),
+    member(X,Xs),
+    !,fail.
+independ1([X|Xs]) :-
+    n_compiler_variable(X),
+    not(member(X,Xs)),
+    independ1(Xs).
+independ1([X|Xs]) :-
+    independ1(Xs).
+        
+            
+flatten([],[]).
+flatten([L|Ls],[L,Ls]) :-
+    atomic(L),
+    atomic(Ls).
+flatten([L|Ls],[L|Y]) :-
+    atomic(L),
+    flatten(Ls,Y).
+flatten([L|Ls],Z) :-
+    list(L),
+    flatten(L,Y1),
+    flatten(Ls,Y2),
+    append(Y1,Y2,Z).
+        
+
 % arguments = [clauses],det_count,pred_count,all_count
 halt_check([],H,P,A) :-
     %write(user_output,H),write(user_output,P),write(user_output,A),
