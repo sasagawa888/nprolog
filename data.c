@@ -2318,6 +2318,8 @@ int copy_work(int x, int th)
 	return (NIL);
     else if (IS_ALPHA(x))
 	return (alpha_to_variable(x));
+	else if (variablep(x))
+	return (x);
     else if (singlep(x))
 	return (x);
     else if (numberp(x))

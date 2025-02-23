@@ -1547,7 +1547,7 @@ tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
     butlast_body(Body,Body1),
     det_body(Head,Body1),
     tail_body(Head,Body),
-    not(tail_body(Head,Body1)),
+    not(tail_body(Head,Body1)), % ...,qsort(),qsort(). not tco
     T1 is T+1,
     tail_recursive(Cs,T1,P,H,A,N).
 tail_recursive([X|Cs],D,P,H,A,N) :-
