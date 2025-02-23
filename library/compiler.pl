@@ -1710,7 +1710,7 @@ gen_tail_body(X,N) :-
     X =.. [_|A],
     write('{'),nl,
     gen_tail_args(A,1),
-    write('Jset_wp(save1,th);'),nl,
+    %write('Jset_wp(save1,th);'),nl,
     write('Junbind(save2,th);'),nl,
     write('Jset_ac(save3,th);'),nl,
     write('goto loop'),write(N),write(';'),nl,
