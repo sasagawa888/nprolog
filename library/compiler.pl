@@ -65,6 +65,7 @@ compile_file(X) :-
     pass1(X),
     pass2(X),
     pass3(X),
+    pass4(X),
     invoke_gcc(X).
 
 compile_file(X,co) :-
@@ -81,6 +82,7 @@ compile_file1(X) :-
     pass1(X),
     pass2(X),
     pass3(X),
+    pass4(X),
     invoke_gcc_not_remove(X).
 
 
@@ -88,7 +90,8 @@ compile_file1(X) :-
 compile_file2(X) :-
     pass1(X),
     pass2(X),
-    pass3(X).
+    pass3(X),
+    pass4(X).
 
 % generate object from c code
 compile_file3(X) :-
@@ -113,6 +116,12 @@ pass2(X) :-
     reconsult(X),
     pass1_analize.
 
+pass3(X) :-
+    write(user_output,'phase pass3'),
+    nl(user_output),
+    reconsult(X),
+    pass1_analize.
+
 
 pass1_analize :-
     n_reconsult_predicate(P),
@@ -126,8 +135,8 @@ pass3 generate each clause or predicate code.
 and write to <filename>.c
 when all code is generated, close file and abolish optimizable/1
 */
-pass3(X) :-
-	write(user_output,'phase pass3'),
+pass4(X) :-
+	write(user_output,'phase pass4'),
     nl(user_output),
     abolish(optimize/1),
     assert(optimize(dummy)),
@@ -1474,23 +1483,24 @@ analize(P) :-
     n_arity_count(P,[N]),
 	n_clause_with_arity(P,N,C),
     n_variable_convert(C,C1),!,
-    analize1(P,N,C1),
+    analize1(P,N,C1),!,
     fail.
 
 analize1(P,N,C) :-
     length(C,M),
     tail_recursive(C,0,0,0,M,N),
+    pred_data(P,N,halt),
     not(pred_data(P,N,tail)),
-    assert(pred_data(P,N,tail)),!.
+    asserta(pred_data(P,N,tail)),!.
 analize1(P,N,C) :-
     length(C,M),
     deterministic(C,0,0,M),
     not(pred_data(P,N,det)),
-    assert(pred_data(P,N,det)),!.
+    asserta(pred_data(P,N,det)),!.
 analize1(P,N,C) :-
     length(C,M),
     halt_check(C,0,0,M),
-    assert(pred_data(P,N,halt)),!.
+    assertz(pred_data(P,N,halt)),!.
 
 
 % arguments = [clauses],det_count,pred_count,all_count
@@ -1511,7 +1521,7 @@ dterministic([C|Cs],D,P,A) :-
 
 % arguments = [clauses],tail_count,pred_count, halt_base_count,all_count, arity
 tail_recursive([],T,P,H,A,N) :-
-    %write(T),write(P),write(H),write(A),nl,
+    %write(user_output,T),write(user_output,P),write(user_output,H),write(user_output,A),nl,
     T > 0,
     P == 0,
     H >= 1,
@@ -1628,7 +1638,7 @@ det_body(Head,(X,Y)) :-
     Arity1 == Arity2,
     pred_data(Pred1,Arity1,halt),
     retract(pred_data(Pred1,Arity1,halt)),
-    assert(pred_data(Pred1,Arity1,det)),
+    asserta(pred_data(Pred1,Arity1,det)),
     det_body(Head,Y).
 det_body(Head,X) :-
     det_builtin(X).
@@ -1641,7 +1651,7 @@ det_body(Head,X) :-
     Arity1 == Arity2,
     pred_data(Pred1,Arity1,halt),
     retract(pred_data(Pred1,Arity1,halt)),
-    assert(pred_data(Pred1,Arity1,det)).
+    asserta(pred_data(Pred1,Arity1,det)).
 det_pass1(X) :-
     functor(X,P,A),
     pred_data(P,A,det).
