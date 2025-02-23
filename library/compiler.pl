@@ -108,19 +108,22 @@ pass1(X) :-
     abolish(pred_data/3),
     assert(pred_data(dummy,-1,-1)),
     reconsult(X),
-    pass1_analize.
+    pass1_analize,
+    listing(pred_data).
 
 pass2(X) :-
     write(user_output,'phase pass2'),
     nl(user_output),
     reconsult(X),
-    pass1_analize.
+    pass1_analize,
+    listing(pred_data).
 
 pass3(X) :-
     write(user_output,'phase pass3'),
     nl(user_output),
     reconsult(X),
-    pass1_analize.
+    pass1_analize,
+    listing(pred_data).
 
 
 pass1_analize :-
@@ -1489,8 +1492,6 @@ analize(P) :-
 analize1(P,N,C) :-
     length(C,M),
     tail_recursive(C,0,0,0,M,N),
-    pred_data(P,N,halt),
-    not(pred_data(P,N,tail)),
     asserta(pred_data(P,N,tail)),!.
 analize1(P,N,C) :-
     length(C,M),
@@ -1637,8 +1638,6 @@ det_body(Head,(X,Y)) :-
     functor(X,Pred2,Arity2),
     Pred1 == Pred2,
     Arity1 == Arity2,
-    pred_data(Pred1,Arity1,halt),
-    retract(pred_data(Pred1,Arity1,halt)),
     asserta(pred_data(Pred1,Arity1,det)),
     det_body(Head,Y).
 det_body(Head,X) :-
