@@ -113,6 +113,7 @@ pass2(X) :-
     reconsult(X),
     pass1_analize.
 
+
 pass1_analize :-
     n_reconsult_predicate(P),
     analize(P),
@@ -1624,9 +1625,9 @@ det_body(Head,X) :-
     functor(X,Pred2,Arity2),
     Pred1 == Pred2,
     Arity1 == Arity2,
-    pred_data(Pred1,Arity1,det),
-    retract(pred_data(Pred1,Arity1,det)),
-    assert(pred_data(Pred1,Arity1,tail)).
+    pred_data(Pred1,Arity1,halt),
+    retract(pred_data(Pred1,Arity1,halt)),
+    assert(pred_data(Pred1,Arity1,det)).
 det_pass1(X) :-
     functor(X,P,A),
     pred_data(P,A,det).
