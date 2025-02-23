@@ -1540,23 +1540,38 @@ tail_recursive([C|Cs],D,P,H,A,N) :-
     tail_recursive(Cs,D,P,H,A,N).
 
 independ(Head) :-
-    Head =.. [_|Args],
-    flatten(Args,Args1),
-    independ1(Args1).
-        
-independ1([]).
+    Head =.. [_|A],
+    independ1(A).
+    
 independ1([X|Xs]) :-
+    list(X),
+    flatten(Xs,F),
+    not(independ2(X,F)),!,fail.
+independ1([X|Xs]) :-
+    list(X),
+    flatten(Xs,F),
+    independ2(X,F),
+    independ1(Xs).
+independ1([X|Xs]) :-
+    independ1(Xs).
+independ1(X).        
+    
+independ2([],F).
+independ2([X|Xs],F) :-
     n_compiler_variable(X),
-    member(X,Xs),
+    write(X), write(F),
+    member(X,F),
     !,fail.
-independ1([X|Xs]) :-
+independ2([X|Xs],F) :-
+    independ2(Xs,F).
+independ2(X,F) :-
     n_compiler_variable(X),
-    not(member(X,Xs)),
-    independ1(Xs).
-independ1([X|Xs]) :-
-    independ1(Xs).
-        
+    member(X,F),
+    !,fail.
+independ2(X,F) :-
+    atomic(X).
             
+                
 flatten([],[]).
 flatten([L|Ls],[L,Ls]) :-
     atomic(L),
@@ -1569,8 +1584,8 @@ flatten([L|Ls],Z) :-
     flatten(L,Y1),
     flatten(Ls,Y2),
     append(Y1,Y2,Z).
-        
-
+            
+    
 % arguments = [clauses],det_count,pred_count,all_count
 halt_check([],H,P,A) :-
     %write(user_output,H),write(user_output,P),write(user_output,A),
