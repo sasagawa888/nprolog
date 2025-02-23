@@ -330,8 +330,8 @@ static inline int Junify_nil(int x, int th) {
 }
 
 
-static inline int Jsave_work(int x, int th) {
-    return f2[SAVE_WORK_IDX](x, th);
+static inline int Jcopy_work(int x, int th) {
+    return f2[COPY_WORK_IDX](x, th);
 }
 
 

@@ -2333,16 +2333,6 @@ int copy_work(int x, int th)
     return (x);
 }
 
-int save_work(int x, int th)
-{
-	int save,res;
-
-	save = wp[th];
-	wp[th] = wp_max[th] - 100;
-	res = copy_work(x,th);
-	wp[th] = save;
-	return(res);
-}
 
 
 // v_001(vairant) -> _v001(atom-variable)

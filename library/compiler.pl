@@ -1719,7 +1719,7 @@ gen_tail_body(X,N) :-
 gen_tail_args([],N).
 gen_tail_args([A|As],N) :-
     write('arg'),write(N),write(' = '),
-    write('Jsave_work(Jderef('),
+    write('Jcopy_work(Jderef('),
     gen_a_argument(A),
     write(',th),th);'),nl,
     N1 is N+1,

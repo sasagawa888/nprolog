@@ -176,7 +176,7 @@ enum { CONS_IDX, EQP_IDX, EQUALP_IDX, NUMEQP_IDX, SMALLERP_IDX, EQSMALLERP_IDX,
        UNBIND_IDX, SET_SP_IDX, SET_WP_IDX, SET_AC_IDX, DEREF_IDX, WLIST1_IDX, 
        SIN_IDX, ASIN_IDX, COS_IDX, ACOS_IDX, TAN_IDX, ATAN_IDX, EXP_IDX, LOG_IDX,
        LN_IDX, LIST1_IDX, RANDOM_IDX, RANDI_IDX, UNIFY_NIL_IDX, SQRT_IDX, COMPLEMENT_IDX,
-       SAVE_WORK_IDX,
+       COPY_WORK_IDX,
        NUM_FN2S
 };
 
@@ -1282,7 +1282,6 @@ int reposition_option_p(int x);
 int resolve_all(int end, int bindings, int n);
 int resolve(int end, int bindings, int trail, int n);
 int reverse(int x);
-int save_work(int x, int th);
 int set_ac(int x, int th);
 int set_sp(int x, int th);
 int set_wp(int x, int th);
