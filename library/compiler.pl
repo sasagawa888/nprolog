@@ -1516,6 +1516,7 @@ tail_recursive([],T,P,H,A,N) :-
     H >= 1,
     A =:= T+P+H,!.
 tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
+    independ(Head),
     butlast_body(Body,Body1),
     det_body(Head,Body1),
     tail_body(Head,Body),
