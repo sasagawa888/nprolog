@@ -149,3 +149,18 @@ single_variable(Xs, X) :-
     select(X, Xs, Rest),
     \+ member(X, Rest).
 
+        
+flatten([],[]).
+flatten([L|Ls],[L,Ls]) :-
+    atomic(L),
+    atomic(Ls).
+flatten([L|Ls],[L|Y]) :-
+    atomic(L),
+    flatten(Ls,Y).
+flatten([L|Ls],Z) :-
+    list(L),
+    flatten(L,Y1),
+    flatten(Ls,Y2),
+    append(Y1,Y2,Z).
+            
+    
