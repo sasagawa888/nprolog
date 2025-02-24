@@ -5,6 +5,8 @@ foo(X) :- write(X),X1 is X-1,foo(X1,2).
 
 bar(X).
 
+uoo(X,Y) :- Z is 3.
+
 fact(N, X) :- fact_(N, 1, X).
 fact_(N, P, X) :- N > 0,
     N1 is N - 1,
