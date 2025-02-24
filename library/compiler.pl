@@ -1518,6 +1518,9 @@ deterministic([],D,P,H,A) :-
     P =< 1,
     H == 1,
     A =:= D+P+H,!.
+deterministic(_,D,P,H,A) :-
+    P > 1,
+    !,fail.
 deterministic([(Head :- !)|Cs],D,P,H,A) :-
     H1 is H+1,
     deterministic(Cs,D,P,H1,A).
@@ -1539,6 +1542,9 @@ tail_recursive([],T,P,H,A,N) :-
     P == 0,
     H >= 1,
     A =:= T+P+H,!.
+tail_recursive(_,T,P,H,A,N) :-
+    P > 1,
+    !,fail.
 tail_recursive([(Head :- !)|Cs],T,P,H,A,N) :-
     H1 is H+1,
     tail_recursive(Cs,T,P,H1,A,N).
@@ -1614,6 +1620,9 @@ halt_check([],H,P,A) :-
     %write(user_output,H),write(user_output,P),write(user_output,A),
     P == 0,
     H == 1.
+halt_check(_,H,P,A) :-
+    P > 1,
+    !,fail.
 halt_check([(Head :- !)|Cs],H,P,A) :-
     H1 is H+1,
     halt_check(Cs,H1,P,A).
