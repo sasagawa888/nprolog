@@ -126,6 +126,12 @@ get_pred_variable(X,V) :-
 
 get_pred_variable1([],[]).
 get_pred_variable1([A|As],V3) :-
+    list(A),
+    flatten(A,A1),
+    get_pred_variable1(A1,V1),
+    get_pred_variable1(As,V2),
+    append(V1,V2,V3).
+get_pred_variable1([A|As],V3) :-
     compound(A),
     A =.. [_|A1],
     get_pred_variable1(A1,V1),

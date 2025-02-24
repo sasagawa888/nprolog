@@ -10,6 +10,6 @@ uoo(X,Y) :- Z is 3.
 fact(N, X) :- fact_(N, 1, X).
 fact_(N, P, X) :- N > 0,
     N1 is N - 1,
-    P1 is P * N,
+    P1 is P * N3,
     fact_(N1, P1, X).
 fact_(0, X, X) :- !.
