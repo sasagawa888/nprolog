@@ -94,7 +94,7 @@ detect_singleton([(Head :- Body)|Cs]) :-
 detect_singleton([X|Cs]) :-
     n_property(X,predicate),
     X =.. [P|A],
-    detect_pred_singleton(P,A),
+    detect_pred_singleton(X,A),
     detect_singleton(Cs).
 detect_singleton(X) :-
     n_property(X,operation).
@@ -112,15 +112,13 @@ detect_pred_singleton(P,[A|As]) :-
 detect_clause_singleton(P,Head,Body) :-
     get_pred_variable(Head,V1),
     get_body_variable(Body,V2),
-    append(V1,V2,V3),
-    single_variable(V3,V3,V),
-    detect_clause_singleton1(P,V).
+    append(V1,V2,V3),!,
+    single_variable(V3,Y),
+    detect_clause_singleton1(Head,Y),fail.
 
-detect_clause_singleton1(P,[]).
-detect_clause_singleton1(P,[V|Vs]) :-
-    write('detect singleton '),write(V),
-    write(' in '),write(P),nl,
-    detect_clause_singleton1(P,Vs).
+detect_clause_singleton1(P,Y) :-
+    write('detect singleton '),write(Y),
+    write(' in '),write(P),nl.
 
 get_pred_variable(X,V) :-
     X =.. [_|A],
@@ -147,14 +145,7 @@ get_body_variable((X,Y),V) :-
 get_body_variable(X,V) :-
     get_pred_variable(X,V).
 
-single_variable([],Y,[]).
-single_variable([X|Xs],Y,V) :-
-    member(X,Y),
-    single_variable(Xs,Y,V).
-single_variable([X|Xs],Y,[X|V]) :-
-    not(member(X,Y)),
-    single_variable(Xs,Y,V).
-
-
-
+single_variable(Xs, X) :-
+    select(X, Xs, Rest),
+    \+ member(X, Rest).
 
