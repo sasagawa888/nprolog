@@ -1336,6 +1336,11 @@ int callablep(int addr)
 	return (1);
     else if (compiledp(addr))
 	return (1);
+	else if (operationp(addr) && car(addr) == NECK){
+		if (callablep(cadr(addr)) && callablep(caddr(addr)))
+	    return (1);
+		return(0);
+	}
     else if (conjunctionp(addr)) {
 	if (callablep(cadr(addr)) && callablep(caddr(addr)))
 	    return (1);
