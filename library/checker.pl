@@ -20,9 +20,25 @@ check :-
 check_arity(P) :-
     check_arity1(P),!.
 
-check_singleton(P).
+check_singleton(P) :-
+    check_singleton1(P),!.
 
+check_singleton1(P) :-
+    n_arity_count(P,L),
+    check_singleton2(P,L).
 
+check_singleton2(P,[]).
+check_singleton2(P,[L|Ls]) :-
+    n_clause_with_arity(P,L,C),
+    n_variable_convert(C,C1),
+    detect_singleton(C1).
+    
+check_arity2(P,[]).
+check_arity2(P,[L|Ls]) :-
+    n_clause_with_arity(P,L,C),
+    n_variable_convert(C,C1),
+    detect_arity(C1).
+    
 
 check_arity1(P) :-
     n_arity_count(P,L),
@@ -68,3 +84,25 @@ detect_body_arity(Head,X) :-
 detect_body_arity(Head,X) :-
     write('detect arity '),write(X),
     write(' in '),write(Head),nl.
+
+
+detect_singleton([]).
+detect_singleton([(Head :- Body)|Cs]) :-
+    detect_singleton(Cs).
+detect_singleton([X|Cs]) :-
+    n_property(X,predicate),
+    X =.. [P|A],
+    detect_pred_singleton(P,A),
+    detect_singleton(Cs).
+detect_singleton(X) :-
+    n_property(X,operation).
+detect_singleton(X) :-
+    n_property(X,predicate),
+    X =.. [P|A],
+    detect_pred_singleton(P,A).
+
+detect_pred_singleton([]).
+detect_pred_singleton(P,[A|As]) :-
+    n_compiler_variable(A),
+    write('detect singleton '),write(A),
+    write(' in '),write(P),nl.
