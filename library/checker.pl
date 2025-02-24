@@ -14,7 +14,6 @@ check :-
     n_reconsult_predicate(P),
     check_arity(P),
     check_singleton(P),
-    check_callable(P),
     fail.
 
 
@@ -23,7 +22,6 @@ check_arity(P) :-
 
 check_singleton(P).
 
-check_callable(P).
 
 
 check_arity1(P) :-
