@@ -391,7 +391,7 @@ void defbuiltin(char *name, int (*func)(int, int, int), int arity)
 
     atom = makeatom(name, SYS);
     SET_SUBR(atom, func);
-    if (listp(arity))
+    if (structurep(arity) && length(arity) >= 2)
 	while (!nullp(arity)) {
 	    builtins =
 		cons(list3(SLASH, atom, makeint(car(arity))), builtins);
