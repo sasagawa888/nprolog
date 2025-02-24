@@ -236,7 +236,7 @@ int b_arity_count(int arglist, int rest, int th)
 
     n = length(arglist);
     if (n == 2) {
-	arg1 = deref(car(arglist), th);
+	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (unify(arg2, listreverse(GET_ARITY(arg1)), th) == YES)
