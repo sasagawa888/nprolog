@@ -1485,7 +1485,7 @@ gen_exec2(X) :-
 analize(P) :-
     n_arity_count(P,[N]),
 	n_clause_with_arity(P,N,C),
-    n_variable_convert(C,C1),!,
+    n_variable_convert(C,C1),
     analize1(P,N,C1),!,
     fail.
 
@@ -1522,15 +1522,15 @@ deterministic(_,D,P,H,A) :-
     P > 1,
     !,fail.
 deterministic([(Head :- !)|Cs],D,P,H,A) :-
-    H1 is H+1,
+    H1 is H+1,!,
     deterministic(Cs,D,P,H1,A).
 deterministic([(Head :- Body)|Cs],D,P,H,A) :-
     det_body(Head,Body),
-    D1 is D+1,
+    D1 is D+1,!,
     deterministic(Cs,D1,P,H,A).
 deterministic([X|Cs],D,P,H,A) :-
     n_property(X,predicate),
-    P1 is P+1,
+    P1 is P+1,!,
     deterministic(Cs,D,P1,H,A).
 dterministic([C|Cs],D,P,H,A) :-
     deterministic(Cs,D,P,H,A).
@@ -1546,7 +1546,7 @@ tail_recursive(_,T,P,H,A,N) :-
     P > 1,
     !,fail.
 tail_recursive([(Head :- !)|Cs],T,P,H,A,N) :-
-    H1 is H+1,
+    H1 is H+1,!,
     tail_recursive(Cs,T,P,H1,A,N).
 tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
     independ(Head),
@@ -1554,17 +1554,17 @@ tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
     det_body(Head,Body1),
     tail_body(Head,Body),
     not(tail_body(Head,Body1)), % ...,qsort(),qsort(). not tco
-    T1 is T+1,
+    T1 is T+1,!,
     tail_recursive(Cs,T1,P,H,A,N).
 tail_recursive([X|Cs],D,P,H,A,N) :-
     n_property(X,predicate),
     X =.. [_|Args],
     member([],Args),
-    H1 = H+1,
+    H1 = H+1,!,
     tail_recursive(Cs,D,P,H1,A,N).
 tail_recursive([X|Cs],D,P,H,A,N) :-
     n_property(X,predicate),
-    P1 is P+1,
+    P1 is P+1,!,
     tail_recursive(Cs,D,P1,H,A,N).
 tail_recursive([C|Cs],D,P,H,A,N) :-
     tail_recursive(Cs,D,P,H,A,N).
@@ -1619,23 +1619,23 @@ flatten([L|Ls],Z) :-
 halt_check([],H,P,A) :-
     %write(user_output,H),write(user_output,P),write(user_output,A),
     P == 0,
-    H == 1.
+    H == 1,!.
 halt_check(_,H,P,A) :-
     P > 1,
     !,fail.
 halt_check([(Head :- !)|Cs],H,P,A) :-
-    H1 is H+1,
+    H1 is H+1,!,
     halt_check(Cs,H1,P,A).
 halt_check([(Head :- Body)|Cs],H,P,A) :-
     halt_check(Cs,H,P,A).
 halt_check([X|Cs],H,P,A) :-
     X =.. [_|Args],
     member([],Args),
-    H1 is H+1,
+    H1 is H+1,!,
     halt_check(Cs,H1,P,A).
 halt_check([X|Cs],D,P,A) :-
     n_property(X,predicate),
-    P1 is P+1,
+    P1 is P+1,!,
     halt_check(Cs,D,P1,A).
 halt_check([C|Cs],D,P,A) :-
     halt_check(Cs,D,P,A).
