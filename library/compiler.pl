@@ -434,6 +434,11 @@ if( )... head
 ...
 */
 
+% clause sa tail recursive base
+gen_a_pred5((Head :- !),N) :-
+    optimize(tail),
+    gen_head(Head),
+    write('return(Jexec_all(rest,Jget_sp(th),th));'),nl.
 
 % clause as tail recursive
 gen_a_pred5((Head :- Body),N) :-
