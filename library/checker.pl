@@ -60,6 +60,9 @@ detect_arity([(Head :- Body)|Cs]) :-
 detect_arity([C|Cs]) :-
     detect_arity(Cs).
 
+detect_body_arity(Head,(X;Y)) :-
+    detect_body_arity(Head,X),
+    detect_body_arity(Head,Y).
 detect_body_arity(Head,(X,Y)) :-
     n_property(X,predicate),
     functor(X,P,N),
@@ -96,21 +99,18 @@ detect_singleton([(Head :- Body)|Cs]) :-
     detect_singleton(Cs).
 detect_singleton([X|Cs]) :-
     n_property(X,predicate),
-    X =.. [P|A],
-    detect_pred_singleton(X,A),
+    detect_pred_singleton(X),
     detect_singleton(Cs).
 detect_singleton(X) :-
     n_property(X,operation).
 detect_singleton(X) :-
     n_property(X,predicate),
-    X =.. [P|A],
-    detect_pred_singleton(P,A).
+    detect_pred_singleton(X).
 
-detect_pred_singleton(P,[]).
-detect_pred_singleton(P,[A|As]) :-
-    n_compiler_variable(A),
-    write('detect singleton '),write(A),
-    write(' in '),write(P),nl.
+detect_pred_singleton(Pred) :-
+    get_pred_variable(Pred,V1),!,
+    single_variable(V1,Y),
+    detect_clause_singleton1(Pred,Y),fail.
 
 detect_clause_singleton(P,Head,Body) :-
     get_pred_variable(Head,V1),
@@ -142,6 +142,7 @@ get_pred_variable1([A|As],V3) :-
     append(V1,V2,V3).
 get_pred_variable1([A|As],[A|V]) :-
     n_compiler_variable(A),
+    not(n_compiler_anonymous(A)),
     get_pred_variable1(As,V).
 get_pred_variable1([A|As],V) :-
     not(n_compiler_variable(A)),

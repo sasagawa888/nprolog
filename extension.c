@@ -337,7 +337,7 @@ int b_compiler_anonymous(int arglist, int rest, int th)
 
     n = length(arglist);
     if (n == 1) {
-	arg1 = deref(car(arglist), th);
+	arg1 = car(arglist);
 	if (compiler_anonymous_p(arg1))
 	    return (prove_all(rest, sp[th], th));
 	else
