@@ -52,6 +52,9 @@ check_arity2(P,[L|Ls]) :-
 
 detect_arity([]).
 detect_arity([(Head :- Body)|Cs]) :-
+    n_property(Head,userop), % ignore user operation
+    detect_arity(Cs).
+detect_arity([(Head :- Body)|Cs]) :-
     detect_body_arity(Head,Body),
     detect_arity(Cs).
 detect_arity([C|Cs]) :-
