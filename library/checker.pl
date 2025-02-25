@@ -167,6 +167,9 @@ flatten([L|Ls],[L,Ls]) :-
 flatten([L|Ls],[L|Y]) :-
     atomic(L),
     flatten(Ls,Y).
+flatten([L|Ls],[L|Y]) :-
+    n_property(L,predicate),
+    flatten(Ls,Y).
 flatten([L|Ls],Z) :-
     list(L),
     flatten(L,Y1),
