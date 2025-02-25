@@ -439,19 +439,26 @@ if( )... head
 ...
 */
 
-gen_tail_restore_args(A,A).
-gen_tail_restore_args(N,A) :-
-    write('Junify(arg'),write(N),write(','),
-    write('targ'),write(N),write(',th);'),nl,
+gen_tail_restore_args([],_).
+gen_tail_restore_args([A|As],N) :-
+    n_compiler_variable(A),
+    write('Junify(targ'),write(N),write(','),
+    gen_a_argument(A),
+    write(',th);'),nl,
     N1 is N+1,
-    gen_tail_restore_args(N1,A).
+    gen_tail_restore_args(As,N1).
+gen_tail_restore_args([A|As],N) :-
+    N1 is N+1,
+    gen_tail_restore_args(As,N1).
+
 
 
 % clause sa tail recursive base
 gen_a_pred5((Head :- !),N) :-
     optimize(tail),
     gen_head(Head),
-    gen_tail_restore_args(1,N),
+    Head =.. [_|A],
+    gen_tail_restore_args(A,1),
     write('return(Jexec_all(rest,Jget_sp(th),th));'),nl.
 
 % clause as tail recursive
