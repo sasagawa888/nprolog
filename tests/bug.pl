@@ -1,15 +1,8 @@
 % testing compile code for diterministic predicate
 
-foo(0) :- !.
-foo(X) :- write(X),X1 is X-1,foo(X1,2).
+:- op(700,xfx,isl).
 
-bar(X).
+Y isl [] + Y :- !.
+Z isl [A|X] + Y :- member(A,Y),!,Z isl X + Y.
+[A|Z] isl [A|X] + Y :- Z isl X + Y.
 
-uoo(X,Y) :- Z is 3.
-
-fact(N, X) :- fact_(N, 1, X).
-fact_(N, P, X) :- N > 0,
-    N1 is N - 1,
-    P1 is P * N3,
-    fact_(N1, P1, X).
-fact_(0, X, X) :- !.
