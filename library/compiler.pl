@@ -442,7 +442,7 @@ if( )... head
 gen_tail_restore_args(A,A).
 gen_tail_restore_args(N,A) :-
     write('Junify(arg'),write(N),write(','),
-    write('targ'),write(N),write(',th)'),nl,
+    write('targ'),write(N),write(',th);'),nl,
     N1 is N+1,
     gen_tail_restore_args(N1,A).
 
@@ -1572,7 +1572,7 @@ tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
     butlast_body(Body,Body1),
     det_body(Head,Body1),
     tail_body(Head,Body),
-    not(tail_body(Head,Body1)), % ...,qsort(),qsort(). not tco
+    %not(tail_body(Head,Body1)), % ...,qsort(),qsort(). not tco
     T1 is T+1,!,
     tail_recursive(Cs,T1,P,H,A,N).
 tail_recursive([X|Cs],D,P,H,A,N) :-
