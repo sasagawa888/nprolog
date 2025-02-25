@@ -95,17 +95,20 @@ detect_body_arity(Head,X) :-
 detect_singleton([]).
 detect_singleton([(Head :- Body)|Cs]) :-
     functor(Head,P,_),
-    detect_clause_singleton(P,Head,Body),
+    (detect_clause_singleton(P,Head,Body);true),
     detect_singleton(Cs).
 detect_singleton([X|Cs]) :-
     n_property(X,predicate),
-    detect_pred_singleton(X),
+    (detect_pred_singleton(X);true),
     detect_singleton(Cs).
+detect_singleton((Head :- Body)) :-
+    functor(Head,P,_),
+    (detect_clause_singleton(P,Head,Body);true).
 detect_singleton(X) :-
     n_property(X,operation).
 detect_singleton(X) :-
     n_property(X,predicate),
-    detect_pred_singleton(X).
+    (detect_pred_singleton(X);true).
 
 detect_pred_singleton(Pred) :-
     get_pred_variable(Pred,V1),!,
