@@ -136,20 +136,20 @@ get_pred_variable1([A|As],V3) :-
     flatten(A,A1),
     get_pred_variable1(A1,V1),
     get_pred_variable1(As,V2),
-    append(V1,V2,V3).
+    append(V1,V2,V3),!.
 get_pred_variable1([A|As],V3) :-
     compound(A),
     A =.. [_|A1],
     get_pred_variable1(A1,V1),
     get_pred_variable1(As,V2),
-    append(V1,V2,V3).
+    append(V1,V2,V3),!.
 get_pred_variable1([A|As],[A|V]) :-
     n_compiler_variable(A),
     not(n_compiler_anonymous(A)),
-    get_pred_variable1(As,V).
+    get_pred_variable1(As,V),!.
 get_pred_variable1([A|As],V) :-
     not(n_compiler_variable(A)),
-    get_pred_variable1(As,V).
+    get_pred_variable1(As,V),!.
 
 get_body_variable((X,Y),V) :-
     get_pred_variable(X,V1),
