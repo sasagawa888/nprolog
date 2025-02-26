@@ -63,11 +63,8 @@ Junify_nil(arg,th)    for [] check.
 % main
 compile_file(X) :-
     pass1(X),
-    %listing(pred_data),
     pass2(X),
-    %listing(pred_data),
     pass3(X),
-    %listing(pred_data),
     pass4(X),
     invoke_gcc(X).
 
