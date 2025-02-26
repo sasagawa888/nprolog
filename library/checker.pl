@@ -150,13 +150,16 @@ get_pred_variable1([A|As],[A|V]) :-
 get_pred_variable1([A|As],V) :-
     not(n_compiler_variable(A)),
     get_pred_variable1(As,V),!.
+get_pred_variable1([A|As],V) :-
+    n_compiler_anonymous(A),
+    get_pred_variable1(As,V),!.
 
 get_body_variable((X,Y),V) :-
     get_pred_variable(X,V1),
     get_body_variable(Y,V2),
-    append(V1,V2,V).
+    append(V1,V2,V),!.
 get_body_variable(X,V) :-
-    get_pred_variable(X,V).
+    get_pred_variable(X,V),!.
 
 single_variable(Xs, X) :-
     select(X, Xs, Rest),
