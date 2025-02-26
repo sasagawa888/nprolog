@@ -930,7 +930,7 @@ int prefixp(int addr)
     int opt;
 
     if (structurep(addr) && infix_operator_p(car(addr)) &&
-	((opt = GET_OPT(car(addr))) == FX || opt == FY))
+	((opt = GET_OPT(car(addr))) == XF || opt == YF))
 	return (1);
     else
 	return (0);
@@ -943,7 +943,7 @@ int postfixp(int addr)
     int opt;
 
     if (structurep(addr) && infix_operator_p(car(addr)) &&
-	((opt = GET_OPT(car(addr))) == XF || opt == YF))
+	((opt = GET_OPT(car(addr))) == FX || opt == FY))
 	return (1);
     else
 	return (0);
@@ -2123,7 +2123,7 @@ void add_data(int pred, int data)
 {
     int clauses;
 
-    //set arity. e.g. GET_CDR(pred) == #[2,3]
+    //set arity. e.g. GET_ARITY(pred) == #[2,3]
     memoize_arity(data, pred);
     clauses = GET_CAR(pred);
     if (nullp(clauses)) {
@@ -2144,7 +2144,7 @@ void add_data(int pred, int data)
 
 void insert_data(int pred, int data)
 {
-    //set arity. e.g. GET_CDR(pred) == #[2,3]
+    //set arity. e.g. GET_ARITY(pred) == #[2,3]
     memoize_arity(data, pred);
     SET_CAR(pred, cons(data, GET_CAR(pred)));
     if (!memq(pred, predicates))

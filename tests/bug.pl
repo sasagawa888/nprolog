@@ -2,3 +2,4 @@
 
 foo(X,Y) :- write(1,2,X).
 
+foo(Y) :- not(Y).

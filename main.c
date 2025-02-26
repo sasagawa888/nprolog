@@ -1628,7 +1628,7 @@ void printinfix(int addr)
 
 
 
-void printprefix(int addr)
+void printpostfix(int addr)
 {
     if (alphabeticalp(car(addr))) {
 	print(car(addr));
@@ -1640,7 +1640,7 @@ void printprefix(int addr)
     }
 }
 
-void printpostfix(int addr)
+void printprefix(int addr)
 {
     if (alphabeticalp(car(addr))) {
 	print(cadr(addr));
