@@ -14,6 +14,7 @@ check :-
     n_reconsult_predicate(P),
     check_arity(P),
     check_singleton(P),
+    check_single_clause(P),
     fail.
 
 
@@ -23,6 +24,9 @@ check_arity(P) :-
 check_singleton(P) :-
     check_singleton1(P),!.
 
+check_single_clause(P) :-
+    check_single_clause1(P),!.
+
 check_singleton1(P) :-
     n_arity_count(P,L),
     check_singleton2(P,L).
@@ -31,13 +35,15 @@ check_singleton2(P,[]).
 check_singleton2(P,[L|Ls]) :-
     n_clause_with_arity(P,L,C),
     n_variable_convert(C,C1),
-    detect_singleton(C1).
+    detect_singleton(C1),
+    check_singleton2(P,Ls).
     
 check_arity2(P,[]).
 check_arity2(P,[L|Ls]) :-
     n_clause_with_arity(P,L,C),
     n_variable_convert(C,C1),
-    detect_arity(C1).
+    detect_arity(C1),
+    check_arity2(P,Ls).
     
 
 check_arity1(P) :-
@@ -182,4 +188,21 @@ flatten([L|Ls],Z) :-
     flatten(Ls,Y2),
     append(Y1,Y2,Z).
             
-    
+
+check_single_clause1(P) :-
+    n_arity_count(P,L),
+    check_single_clause2(P,L).
+
+check_single_clause2(P,[]).
+check_single_clause2(P,[L|Ls]) :-
+    n_clause_with_arity(P,L,C),
+    n_variable_convert(C,C1),
+    detect_single_clause3(C1).
+    check_single_clause2(P,Ls).
+
+detect_single_clause3(X) :-
+    length(X,1),
+    X = [(Head :- Body)],
+    X = [Y],
+    write('detect single clause '),write(Y),nl.
+detect_single_clause3(X). 
