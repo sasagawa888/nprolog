@@ -442,8 +442,7 @@ if( )... head
 gen_tail_restore_args([],_).
 gen_tail_restore_args([A|As],N) :-
     n_compiler_variable(A),
-    write('Junify(targ'),write(N),write(','),
-    gen_a_argument(A),
+    write('Junify(targ'),write(N),write(',arg'),write(N),
     write(',th);'),nl,
     N1 is N+1,
     gen_tail_restore_args(As,N1).
