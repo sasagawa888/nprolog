@@ -97,11 +97,6 @@ compile_file2(X) :-
 compile_file3(X) :-
     invoke_gcc_not_remove(X).
  
-
-/*
-for tail recursive optimize code 
-now ignore
-*/
 pass1(X) :-
 	write(user_output,'phase pass1'),
     nl(user_output),
@@ -133,7 +128,7 @@ pass1_analize.
 /*
 pass3 generate each clause or predicate code.
 and write to <filename>.c
-when all code is generated, close file and abolish optimizable/1
+when all code is generated, close file and abolish optimize/1
 */
 pass4(X) :-
 	write(user_output,'phase pass4'),
