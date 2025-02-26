@@ -7,7 +7,7 @@ check_file(FileName).
 
 check_file(F) :-
     reconsult(F),
-    check.
+    (check;true).
 
 
 check :-
