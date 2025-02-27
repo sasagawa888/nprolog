@@ -370,18 +370,50 @@ defoperator(char *name, int (*func)(int, int, int), int weight, int spec,
     }
 }
 
+int op_arity(int x)
+{
+	switch(x){
+		case FX:
+		case FY:
+		case XF:
+		case YF:
+		case FX_XF:
+		case FX_YF:
+		case FY_XF:
+		case FY_YF:
+		return(cons(makeint(1),NIL));
+
+		case XFX:
+		case XFY:
+		case YFX:
+		return(cons(makeint(2),NIL));
+
+		case FY_XFX:
+		case FX_XFY:
+		case FX_YFX:
+		case FY_YFX:
+		return(cons(makeint(2),cons(makeint(1),NIL)));
+	}
+	return(NIL);
+}
+
+
 void definfix(char *name, int (*func)(int, int, int), int weight, int spec)
 {
-    int atom;
+    int atom,arity;
 
     atom = makeatom(name, SYS);
+	arity = op_arity(spec);
     SET_SUBR(atom, func);
     SET_CDR(atom, weight);
     SET_OPT(atom, spec);
     weight = makeint(weight);
     spec = makespec(spec);
     op_list = cons(list3(weight, spec, atom), op_list);
-    builtins = cons(list3(SLASH, atom, makeint(2)), builtins);
+	while(!nullp(arity)){
+    	builtins = cons(list3(SLASH, atom, car(arity)), builtins);
+		arity = cdr(arity);
+	}
     return;
 }
 
