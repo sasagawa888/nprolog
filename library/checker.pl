@@ -3,18 +3,27 @@
 use_module(checker).
 check_file(FileName).
 */
-:- module(checker,[check_file/1]).
+:- module(checker,[check_file/1,check_file/2]).
 
-check_file(F) :-
+check_file(F,full) :-
     reconsult(F),
     (check;true).
 
+check_file(F) :-
+    reconsult(F),
+    (check_without_single_clause;true).
 
 check :-
     n_reconsult_predicate(P),
     check_arity(P),
     check_singleton(P),
     check_single_clause(P),
+    fail.
+
+check_without_single_clause :-
+    n_reconsult_predicate(P),
+    check_arity(P),
+    check_singleton(P),
     fail.
 
 

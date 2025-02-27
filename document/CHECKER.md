@@ -6,7 +6,8 @@ The checker is a library that performs static analysis of Prolog code to detect 
 ```
 use_module(checker).
 
-check_file(file_name).
+check_file(file_name). -> check arity and singleton
+check_file(file_name,full) -> check arity, singleton and single clause
 ```
 
 # Example
@@ -24,7 +25,7 @@ facT(N,X) :-
         N1 is N-1,
         fact(N1,X1),
         X is N*X1.
-?- check_file('./tests/fact.pl').
+?- check_file('./tests/fact.pl',full).
 detect single clause facT(varN,varX):-varN1 is varN-1,(fact(varN1,varX1),varX is varN*varX1)
 yes
 
