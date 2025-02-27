@@ -1,4 +1,3 @@
-
 fact(0,1).
 facT(N,X) :-
         N1 is N-1,
