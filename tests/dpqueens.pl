@@ -6,25 +6,25 @@ para :- dp_and([test1,test2]).
 test1 :- queens1,queens2,queens3,queens4,queens5.
 test2 :- queens6,queens7,queens8,queens9,queens10.  
 
-queens1 :- pqueen(1,[2,3,4,5,6,7,8,9,10],X),fail.  
+queens1 :- pqueen(1,[2,3,4,5,6,7,8,9,10],_),fail.  
 queens1.
-queens2 :- pqueen(2,[1,3,4,5,6,7,8,9,10],X),fail.  
+queens2 :- pqueen(2,[1,3,4,5,6,7,8,9,10],_),fail.  
 queens2.
-queens3 :- pqueen(3,[1,2,4,5,6,7,8,9,10],X),fail.  
+queens3 :- pqueen(3,[1,2,4,5,6,7,8,9,10],_),fail.  
 queens3.
-queens4 :- pqueen(4,[1,2,3,5,6,7,8,9,10],X),fail.  
+queens4 :- pqueen(4,[1,2,3,5,6,7,8,9,10],_),fail.  
 queens4.
-queens5 :- pqueen(5,[1,2,3,4,6,7,8,9,10],X),fail.
+queens5 :- pqueen(5,[1,2,3,4,6,7,8,9,10],_),fail.
 queens5. 
-queens6 :- pqueen(6,[1,2,3,4,5,7,8,9,10],X),fail.  
+queens6 :- pqueen(6,[1,2,3,4,5,7,8,9,10],_),fail.  
 queens6.
-queens7 :- pqueen(7,[1,2,3,4,5,6,8,9,10],X),fail.  
+queens7 :- pqueen(7,[1,2,3,4,5,6,8,9,10],_),fail.  
 queens7.
-queens8 :- pqueen(8,[1,2,3,4,5,6,7,9,10],X),fail.  
+queens8 :- pqueen(8,[1,2,3,4,5,6,7,9,10],_),fail.  
 queens8.
-queens9 :- pqueen(9,[1,2,3,4,5,6,7,8,10],X),fail.  
+queens9 :- pqueen(9,[1,2,3,4,5,6,7,8,10],_),fail.  
 queens9.
-queens10 :- pqueen(10,[1,2,3,4,5,6,7,8,9],X),fail.  
+queens10 :- pqueen(10,[1,2,3,4,5,6,7,8,9],_),fail.  
 queens10.
 
 pqueen(N, Data, [N|Out]) :-  
@@ -38,7 +38,7 @@ pqueen(N, Data, [N|Out]) :-
   pqueen_2(N, L1, [Q|History], M).  
  
 % sequential 10queens
-seq :- queen([1,2,3,4,5,6,7,8,9,10],X),fail.
+seq :- queen([1,2,3,4,5,6,7,8,9,10],_),fail.
 
 queen(Data, Out) :-
      queen_2(Data, [], Out).
