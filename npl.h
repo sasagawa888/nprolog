@@ -99,7 +99,7 @@ address
 typedef enum tag {EMP,INTN,FLTN,LONGN,BIGX,STRUCT,SINGLE,STREAM,SOCKET,STR} tag;
 typedef enum flag {FRE,USE} flag;
 
-typedef struct __packed{
+typedef struct {
     union{
         double fltnum;
         long long int lngnum;
