@@ -1968,14 +1968,17 @@ void unbind(int x, int th)
     int i;
 
     for (i = x; i < sp[th]; i++) {
-	if (alpha_variable_p(stack[i][th])) {
-	    variant[stack[i][th] - CELLSIZE][th] = UNBIND;
-	} else if (atom_variable_p(stack[i][th])) {
-	    if (alpha_variable_p(GET_CAR(stack[i][th]))) {
-		variant[GET_CAR(stack[i][th]) - CELLSIZE][th] = UNBIND;
+	int stack_index = stack[i][th];
+	if (alpha_variable_p(stack_index)) {
+		int variant_index = stack_index - CELLSIZE;
+	    variant[variant_index][th] = UNBIND;
+	} else if (atom_variable_p(stack_index)) {
+	    if (alpha_variable_p(GET_CAR(stack_index))) {
+		int variant_index = GET_CAR(stack_index) - CELLSIZE;	
+		variant[variant_index][th] = UNBIND;
 	    }
-	    SET_CAR(stack[i][th], UNBIND);
-	    SET_CDR(stack[i][th], UNBIND);
+	    SET_CAR(stack_index, UNBIND);
+	    SET_CDR(stack_index, UNBIND);
 	} else
 	    exception(SYSTEM_ERR, makestr("unbind"), x, th);
     }
