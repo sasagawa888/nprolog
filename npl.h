@@ -100,9 +100,15 @@ typedef enum tag {EMP,INTN,FLTN,LONGN,BIGX,STRUCT,SINGLE,STREAM,SOCKET,STR} tag;
 typedef enum flag {FRE,USE} flag;
 
 typedef struct {
+    int     aux;
+    int     var;
+    int     arity;
+    char    tag;
+    flag    flag;
+    char    *name;
+    unsigned char option;
+    char    trace;
     union{
-        double fltnum;
-        long long int lngnum;
         struct{
             union{
                 int intnum;
@@ -115,15 +121,9 @@ typedef struct {
                 int intnum;
             } cdr;
         };
+        double fltnum;
+        long long int lngnum;
     } val;
-    int     aux;
-    int     var;
-    int     arity;
-    char    tag;
-    flag    flag;
-    char    *name;
-    unsigned char option;
-    char    trace;
 } cell;
 
 
