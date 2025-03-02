@@ -1815,6 +1815,7 @@ int unify(int x, int y, int th)
 
 
 //typed unify. y is a pair list e.g. [L|Ls]
+// restore
 int unify_pair(int x, int y, int th)
 {
     if (variablep(x)) {
