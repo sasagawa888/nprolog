@@ -848,7 +848,7 @@ int listp(int addr)
 {
     if (nullp(addr))
 	return (1);
-    else if (structurep(addr) && GET_AUX(addr) == LIST)
+    else if (GET_AUX(addr) == LIST && structurep(addr))
 	return (1);
     else
 	return (0);
@@ -1817,12 +1817,17 @@ int unify(int x, int y, int th)
 int unify_pair(int x, int y, int th)
 {
     if (variablep(x)) {
+		// bindsym(x,y);
 		if (alpha_variable_p(x))
-		variant[x - CELLSIZE][th] = y;
+			variant[x - CELLSIZE][th] = y;
     	else if (atom_variable_p(x))
-		SET_CAR(x, y);
+			SET_CAR(x, y);
 
-    	push_stack(x, th);
+		// push_stack(x,th);
+		stack[sp[th]++][th] = x;
+    	if (sp[th] >= STACKSIZE)
+			exception(RESOURCE_ERR, NIL, makestr("stacksize"), th);
+
 		return (YES);
     } else if (!listp(x))
 	return (NO);
@@ -1938,20 +1943,30 @@ int unify_var(int x, int y, int th)
 {
 
     if (variablep(x)) {
+	// bindsym(x,y);
 	if (alpha_variable_p(x))
 	    variant[x - CELLSIZE][th] = y;
 	else if (atom_variable_p(x))
 	    SET_CAR(x, y);
-
-	push_stack(x, th);
+	
+	//push_stack(x,th);
+	stack[sp[th]++][th] = x;
+    if (sp[th] >= STACKSIZE)
+		exception(RESOURCE_ERR, NIL, makestr("stacksize"), th);
+	
 	return (YES);
     } else {
+	// bindsym(y,x);
 	if (alpha_variable_p(y))
 	    variant[y - CELLSIZE][th] = x;
 	else if (atom_variable_p(y))
 	    SET_CAR(y, x);
 
-	push_stack(y, th);
+	// push_stack(y,th);
+	stack[sp[th]++][th] = y;
+    if (sp[th] >= STACKSIZE)
+		exception(RESOURCE_ERR, NIL, makestr("stacksize"), th);
+	
 	return (YES);
     }
 
