@@ -1336,12 +1336,11 @@ int callablep(int addr)
 	return (1);
     else if (compiledp(addr))
 	return (1);
-	else if (operationp(addr) && car(addr) == NECK){
-		if (callablep(cadr(addr)) && callablep(caddr(addr)))
+    else if (operationp(addr) && car(addr) == NECK) {
+	if (callablep(cadr(addr)) && callablep(caddr(addr)))
 	    return (1);
-		return(0);
-	}
-    else if (conjunctionp(addr)) {
+	return (0);
+    } else if (conjunctionp(addr)) {
 	if (callablep(cadr(addr)) && callablep(caddr(addr)))
 	    return (1);
 	else
@@ -1818,8 +1817,13 @@ int unify(int x, int y, int th)
 int unify_pair(int x, int y, int th)
 {
     if (variablep(x)) {
-	bindsym(x, y, th);
-	return (YES);
+		if (alpha_variable_p(x))
+		variant[x - CELLSIZE][th] = y;
+    	else if (atom_variable_p(x))
+		SET_CAR(x, y);
+
+    	push_stack(x, th);
+		return (YES);
     } else if (!listp(x))
 	return (NO);
     else if (listp(x) && x != NIL && unify_var(car(x), car(y), th) == YES
@@ -1934,10 +1938,20 @@ int unify_var(int x, int y, int th)
 {
 
     if (variablep(x)) {
-	bindsym(x, y, th);
+	if (alpha_variable_p(x))
+	    variant[x - CELLSIZE][th] = y;
+	else if (atom_variable_p(x))
+	    SET_CAR(x, y);
+
+	push_stack(x, th);
 	return (YES);
     } else {
-	bindsym(y, x, th);
+	if (alpha_variable_p(y))
+	    variant[y - CELLSIZE][th] = x;
+	else if (atom_variable_p(y))
+	    SET_CAR(y, x);
+
+	push_stack(y, th);
 	return (YES);
     }
 
@@ -1970,11 +1984,11 @@ void unbind(int x, int th)
     for (i = x; i < sp[th]; i++) {
 	int stack_index = stack[i][th];
 	if (alpha_variable_p(stack_index)) {
-		int variant_index = stack_index - CELLSIZE;
+	    int variant_index = stack_index - CELLSIZE;
 	    variant[variant_index][th] = UNBIND;
 	} else if (atom_variable_p(stack_index)) {
 	    if (alpha_variable_p(GET_CAR(stack_index))) {
-		int variant_index = GET_CAR(stack_index) - CELLSIZE;	
+		int variant_index = GET_CAR(stack_index) - CELLSIZE;
 		variant[variant_index][th] = UNBIND;
 	    }
 	    SET_CAR(stack_index, UNBIND);
@@ -2326,7 +2340,7 @@ int copy_work(int x, int th)
 	return (NIL);
     else if (IS_ALPHA(x))
 	return (alpha_to_variable(x));
-	else if (variablep(x))
+    else if (variablep(x))
 	return (x);
     else if (singlep(x))
 	return (x);

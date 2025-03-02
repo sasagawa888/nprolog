@@ -1722,7 +1722,7 @@ int b_reconsult(int arglist, int rest, int th)
 	    if (!memberp(atom, reconsult_list)) {
 		reconsult_list = cons(atom, reconsult_list);
 		SET_CAR(atom, NIL);
-		SET_ARITY(atom,NIL);
+		SET_ARITY(atom, NIL);
 	    }
 	    //assert
 	    b_assert(list1(clause), NIL, th);
@@ -2531,7 +2531,7 @@ int b_assert(int arglist, int rest, int th)
     ind = makeind("assertz", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
-	
+
 	if (wide_variable_p(arg1))
 	    exception(INSTANTATION_ERR, ind, arg1, th);
 	if (singlep(arg1)) {
@@ -2547,7 +2547,7 @@ int b_assert(int arglist, int rest, int th)
 
 	arg1 = variable_to_call(arg1);	//P -> call(P)
 	if (!callablep(arg1))
-		exception(NOT_CALLABLE, ind, arg1, th);
+	    exception(NOT_CALLABLE, ind, arg1, th);
 	arg1 = copy_heap(arg1);	//copy arg1 to heap area
 	if (predicatep(arg1) || user_operation_p(arg1)) {
 	    SET_VAR(arg1, unique(varslist(arg1)));
@@ -2598,7 +2598,7 @@ int b_asserta(int arglist, int rest, int th)
 
 	arg1 = variable_to_call(arg1);	//P -> call(P)
 	if (!callablep(arg1))
-		exception(NOT_CALLABLE, ind, arg1, th);
+	    exception(NOT_CALLABLE, ind, arg1, th);
 	arg1 = copy_heap(arg1);	//copy arg1 to heap area
 	if (predicatep(arg1) || user_operation_p(arg1)) {
 	    SET_VAR(arg1, unique(varslist(arg1)));
@@ -4866,16 +4866,16 @@ int b_statistics(int arglist, int rest, int th)
 
 	if (arg1 == makeatom("free", SIMP)) {
 	    if (unify(arg2, makeint(fc), th) == YES)
-	    return (prove_all(rest, sp[th], th));
+		return (prove_all(rest, sp[th], th));
 	} else if (arg1 == makeatom("wp", SIMP)) {
 	    if (unify(arg2, makeint(wp[th]), th) == YES)
-	    return (prove_all(rest, sp[th], th));
+		return (prove_all(rest, sp[th], th));
 	} else if (arg1 == makeatom("sp", SIMP)) {
 	    if (unify(arg2, makeint(sp[th]), th) == YES)
-	    return (prove_all(rest, sp[th], th));
+		return (prove_all(rest, sp[th], th));
 	} else if (arg1 == makeatom("gc", SYS)) {
 	    if (unify(arg2, makeint(gc), th) == YES)
-	    return (prove_all(rest, sp[th], th));
+		return (prove_all(rest, sp[th], th));
 	} else {
 	    return (NO);
 	}
