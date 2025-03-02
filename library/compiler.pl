@@ -281,10 +281,10 @@ gen_c_exec :-
 /*
 parts for gen_predicate
 C type declare.
-int_b_foo(int arglist, int rest);
+int b_foo(int arglist, int rest);
 */
 gen_type_declare(P) :-
-	write('int b_'),
+	write('static int b_'),
     n_atom_convert(P,P1),
     write(P1),
     write('(int arglist, int rest, int th);'),
@@ -343,7 +343,7 @@ gen_a_pred(P) :-
 	atom_concat('compiling ',P,M),
     write(user_output,M),
     gen_type_declare(P),
-	write('int b_'),
+	write('static int b_'),
     n_atom_convert(P,P1),
     write(P1),
     write('(int arglist, int rest, int th){'),nl,
@@ -434,6 +434,7 @@ if( )... head
 gen_tail_restore_args([],_).
 gen_tail_restore_args([A|As],N) :-
     n_compiler_variable(A),
+    not(n_compiler_anonymous(A)),
     write('Junify(targ'),write(N),write(',arg'),write(N),
     write(',th);'),nl,
     N1 is N+1,

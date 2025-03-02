@@ -5,6 +5,12 @@ N-Prolog has several modularized libraries.
  use_module(compiler).
  Until version 3.89, the compiler was loaded at startup. However, as the compiler grew larger, it began to occupy the heap area. Therefore, starting from version 3.9, it has been changed to be called as a module only when needed.
 
+ - Checker
+ use_module(checker).
+ The checker is a library that performs static analysis of Prolog code to detect ARITY errors ,singleton variable issues and single clause issues.
+ see CHECKER.md
+
+
 - DCG
  use_module(dcg).
  Starting from version 3.9, DCG must be loaded from a module when used.
