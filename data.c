@@ -1825,9 +1825,6 @@ int unify_pair(int x, int y, int th)
 	    variant[x - CELLSIZE][th] = y;
 	else if (atom_variable_p(x))
 	    SET_CAR(x, y);
-	else
-	    exception(SYSTEM_ERR, makestr("bindsym"), x, th);
-
 	push_stack(x, th);
 	return (YES);
     } else if (!listp(x))
@@ -1944,10 +1941,20 @@ int unify_var(int x, int y, int th)
 {
 
     if (variablep(x)) {
-	bindsym(x, y, th);
+	//bindsym(x, y, th);
+	if (alpha_variable_p(x))
+	    variant[x - CELLSIZE][th] = y;
+	else if (atom_variable_p(x))
+	    SET_CAR(x, y);
+	push_stack(x, th);
 	return (YES);
     } else {
-	bindsym(y, x, th);
+	//bindsym(y, x, th);
+	if (alpha_variable_p(y))
+	    variant[y - CELLSIZE][th] = x;
+	else if (atom_variable_p(y))
+	    SET_CAR(y, x);
+	push_stack(y, th);
 	return (YES);
     }
 
