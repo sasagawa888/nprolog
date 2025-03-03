@@ -1718,7 +1718,11 @@ int deref1(int x, int th)
 
     if (variablep(x)) {
       loop:
-	res = findvar(x, th);
+	  // findvar(x);
+	  if (alpha_variable_p(x))
+	  res = variant[x - CELLSIZE][th];
+	  else if (atom_variable_p(x))
+	  res = GET_CAR(x);
 	if (res == UNBIND)
 	    return (x);
 	else if (variablep(res)) {
@@ -1814,7 +1818,6 @@ int unify(int x, int y, int th)
 
 
 //typed unify. y is a pair list e.g. [L|Ls]
-// restore
 int unify_pair(int x, int y, int th)
 {
     if (variablep(x)) {
