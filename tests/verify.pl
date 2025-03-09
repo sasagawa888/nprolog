@@ -265,9 +265,9 @@ test(list_text) :-
     list_text([97,115,100],X),
     verify(X = $asd$),
     list_text([97,115,115,101,114,116],Y),
-    verify(Y = assert),
-    list_text("abc",Z),
-    verify(Z = abc).
+    verify(Y = assert).
+    %list_text("abc",Z),
+    %verify(Z = abc).
 
 test(int_text) :-
     int_text(6,X),

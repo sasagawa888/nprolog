@@ -142,17 +142,7 @@ asdf_boo(X) :-
 ```
 
 
-# String
-In ARITY/PROLOG, strings were enclosed in $ symbols. In N-Prolog, this convention is maintained, but strings enclosed in double quotes (") are also recognized as strings. However, similar to ISO-Prolog, these are treated as lists.
 
-```
-N-Prolog Ver 3.80
-?- X = "abc".
-X = [97,98,99] .
-yes
-?- 
-
-```
 
 # Function
 In ARITY/PROLOG, the ^ symbol is used for exponentiation. However, since ** is used for exponentiation in ISO-Prolog, we allow this as well.

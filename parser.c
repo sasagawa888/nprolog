@@ -1468,11 +1468,13 @@ int readitem1(int th)
 	if (!nullp(temp))
 	    SET_AUX(temp, LIST);
 	return (temp);
+	/*
     case DBLQUOTE:
 	temp = readdouble(th);
 	if (!nullp(temp))
 	    SET_AUX(temp, LIST);
 	return (temp);
+	*/
     case FILEEND:
 	return (FEND);
     default:
