@@ -1234,7 +1234,7 @@ int isatomch(char c)
 {
     switch (c) {
     case '#':
-    case '$':
+    //case '$':
     case '&':
     case '*':
     case '+':

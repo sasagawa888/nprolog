@@ -23,7 +23,7 @@ test(atom) :-
     verify(not(atom(1.1))),
     verify(atom('a*b')),
     verify(atom('123abc')),
-    verify(atom(=$)),
+    %verify(atom(=$)),
     verify(atom(true)),
     verify(atom(動物)).
 
