@@ -1,17 +1,17 @@
 % JSON
 
+:- op(500,xfy,':').
 
-term_to_json_str(X,S) :-
-    term_to_json(X,Y),
-    string_term(S,Y).
+:- set_prolog_flag(string,iso).
+
+reset_json :- set_prolog_flag(string,arity).
 
 term_to_json(X,J) :-
-    string(X),
-    string_term(X,Y).
+    string(X).
 
 term_to_json(X,J) :-
     atom(X),
-    string_term(X,Y).
+    string_term(J,X).
 
 term_to_json(X,X) :-
     number(X).
