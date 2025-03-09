@@ -145,6 +145,7 @@ int pause_flag = 0;		/* while pause in child, pause_flag = 1 */
 int shutdown_flag = 0;		/* when receive dp_close, shutdown_flag = 1 */
 int active_thread = 0;		/* for mt_and/1 mt_or/1 */
 int dynamic_flag = 0;		/* for dynamic predicate. while assertz dynamic flag = 1 */
+int string_flag = 0;		/* ARITY/PROLOG mode 0, ISO mode 1 */
 
 //stream
 int standard_input;
@@ -1396,10 +1397,17 @@ void print(int addr)
 	break;
     case STR:
 	if (quoted_flag) {
-	    if (!bridge_flag)
-		fprintf(GET_PORT(output_stream), "$%s$", GET_NAME(addr));
+	    if (!bridge_flag){
+		if(!string_flag)
+			fprintf(GET_PORT(output_stream), "$%s$", GET_NAME(addr));
+		else
+			fprintf(GET_PORT(output_stream), "\"%s\"", GET_NAME(addr));
+		}
 	    else {
-		sprintf(str1, "$%s$", GET_NAME(addr));
+		if(!string_flag)
+			sprintf(str1, "$%s$", GET_NAME(addr));
+		else
+			sprintf(str1, "\"%s\"", GET_NAME(addr));
 		strcat(bridge, str1);
 	    }
 	} else {

@@ -111,11 +111,35 @@ N-Prolog is specialized for experimenting with and playing around with small-sca
 - ensure_loaded/1
 
 - set_prolog_flag/2
- I cannot agree with dynamically changing specifications that are fundamental to the language, such as those related to strings.
-- current_prolog_flag/2
+The set_prolog_flag exists, but it is different from ISO. It is only effective when changing the handling of strings.
+ 
+- current_prolog_flag/2 
+not exist.
+
 - long atom with '\\' 
  Excessively long atoms hinder code readability.
 
+# String
+Strings are enclosed in dollar signs, similar to ARITY/PROLOG. However, they can be changed to double quotes using set_prolog_flag.
+
+```
+N-Prolog Ver 4.01
+?- X = $hello$.
+X = $hello$ .
+yes
+?- set_prolog_flag(string,iso).
+yes
+?- X = "hello".
+X = "hello" .
+yes
+?- set_prolog_flag(string,arity).
+yes
+?- X = $hello$.
+X = $hello$ .
+yes
+?- 
+
+```
 
 
 # Module

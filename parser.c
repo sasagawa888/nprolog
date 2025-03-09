@@ -698,9 +698,9 @@ void gettoken(int th)
     case '#':
 	stok.type = SHARP;
 	return;
-    case '"':
-	stok.type = DBLQUOTE;
-	return;
+    //case '"':
+	//stok.type = DBLQUOTE;
+	//return;
     }
     //variant
     if (c == 'v') {
@@ -913,7 +913,8 @@ void gettoken(int th)
 	return;
     }
     //string
-    if (c == '$') {
+    //ARITY/PROLOG mode
+    if (c == '$' && !string_flag) {
 	pos = 0;
 	c = readc();
 	c1 = readc();
@@ -927,6 +928,33 @@ void gettoken(int th)
 	    } else if (c == EOF)
 		exception(SYNTAX_ERR, makestr("not exist right $ in file"),
 			  NIL, th);
+	    else {
+		SETBUF(c) unreadc(c1);
+	    }
+	    c = readc();
+	    c1 = readc();
+	}
+	unreadc(c1);
+	SETBUFEND(NUL) stok.type = STRING;
+	stok.ch = NUL;
+	stok.ahead = c;
+	return;
+    }
+    //ISO-Prolog mode
+    if (c == '"' && string_flag) {
+	pos = 0;
+	c = readc();
+	c1 = readc();
+	while (!(c == '"' && c1 != '"')) {
+	    if (c == '"') {
+		if (c1 == '"') {
+		SETBUF(c)} else
+		    exception(SYNTAX_ERR,
+			      makestr("double \" in string token"), NIL,
+			      th);
+	    } else if (c == EOF)
+		exception(SYNTAX_ERR,
+			  makestr("not exist right \" in file"), NIL, th);
 	    else {
 		SETBUF(c) unreadc(c1);
 	    }
@@ -1234,7 +1262,7 @@ int isatomch(char c)
 {
     switch (c) {
     case '#':
-    //case '$':
+	//case '$':
     case '&':
     case '*':
     case '+':
@@ -1469,12 +1497,12 @@ int readitem1(int th)
 	    SET_AUX(temp, LIST);
 	return (temp);
 	/*
-    case DBLQUOTE:
-	temp = readdouble(th);
-	if (!nullp(temp))
-	    SET_AUX(temp, LIST);
-	return (temp);
-	*/
+	   case DBLQUOTE:
+	   temp = readdouble(th);
+	   if (!nullp(temp))
+	   SET_AUX(temp, LIST);
+	   return (temp);
+	 */
     case FILEEND:
 	return (FEND);
     default:

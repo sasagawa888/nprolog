@@ -522,6 +522,7 @@ extern int pause_flag;
 extern int shutdown_flag;
 extern int active_thread;
 extern int dynamic_flag;
+extern int string_flag;
 
 //------pointer----
 extern int hp; 
@@ -942,6 +943,7 @@ int b_send_socket(int arglist, int rest, int th);
 int b_setof(int arglist, int rest, int th);
 int b_set_input(int arglist, int rest, int th);
 int b_set_output(int arglist, int rest, int th);
+int b_set_prolog_flag(int arglist, int rest, int th);
 int b_shell(int arglist, int rest, int th);
 int b_skip(int arglist, int rest, int th);
 int b_smaller(int arglist, int rest, int th);

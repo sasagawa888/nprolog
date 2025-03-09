@@ -1718,11 +1718,11 @@ int deref1(int x, int th)
 
     if (variablep(x)) {
       loop:
-	  // findvar(x);
-	  if (alpha_variable_p(x))
-	  res = variant[x - CELLSIZE][th];
-	  else if (atom_variable_p(x))
-	  res = GET_CAR(x);
+	// findvar(x);
+	if (alpha_variable_p(x))
+	    res = variant[x - CELLSIZE][th];
+	else if (atom_variable_p(x))
+	    res = GET_CAR(x);
 	if (res == UNBIND)
 	    return (x);
 	else if (variablep(res)) {
