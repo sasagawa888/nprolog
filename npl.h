@@ -1338,6 +1338,7 @@ int variable_convert1(int x);
 int variable_convert2(int x);
 int variable_convert3(int x);
 int variable_convert4(int x);
+int variable_convert5(int x);
 int variable_name_list(void);
 int variable_name_p(int x);
 int variable_to_call(int x);

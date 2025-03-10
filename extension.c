@@ -389,7 +389,7 @@ int compiler_variable_p(int x)
 	return (0);
     strcpy(str, GET_NAME(x));
     str[3] = NUL;
-    if (strcmp(str, "var") == 0)
+    if (strcmp(str, "var") == 0 || strcmp(str, "ano") == 0)
 	return (1);
     else
 	return (0);
@@ -401,7 +401,7 @@ int b_variable_convert(int arglist, int rest, int th)
 
     n = length(arglist);
     if (n == 2) {
-	arg1 = deref(car(arglist), th);
+	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
 	if (unify(arg2, variable_convert1(arg1), th) == YES)
@@ -430,6 +430,8 @@ int variable_convert2(int x)
 
     if (nullp(x))
 	return (NIL);
+	else if (IS_ALPHA(x))
+	return (variable_convert5(x));
     else if (anonymousp(x))
 	return (variable_convert4(x));
     else if (variablep(x))
@@ -457,7 +459,7 @@ int variable_convert3(int x)
     return (res);
 }
 
-//anonymous variable _ -> varN (N=1...)
+//anonymous variable _ -> anony_N (N=1...)
 int variable_convert4(int x)
 {
     int res;
@@ -470,13 +472,27 @@ int variable_convert4(int x)
 	return (0);
     }
 
-    strcpy(str1, "var_");
+    strcpy(str1, "ano_");
     sprintf(str2, "%d", n);
     strcat(str1, str2);
     res = makeconst(str1);
     n++;
     return (res);
 }
+
+//aplpha variable v_1 -> var_1
+int variable_convert5(int x)
+{
+    int res;
+    char str1[STRSIZE],str2[STRSIZE];
+
+    strcpy(str1, "var_");
+	sprintf(str2, "%d", x - CELLSIZE);
+    strcat(str1, str2);
+    res = makeconst(str1);
+    return (res);
+}
+
 
 int b_clause_with_arity(int arglist, int rest, int th)
 {
