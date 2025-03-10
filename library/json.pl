@@ -54,7 +54,21 @@ term_to_json(X,J) :-
     term_to_json_list(A,A1),
     J = {"predicate" : P1,"argument" : A1}.
 
-    
+term_to_json((X,Y),J) :-
+    term_to_json(X,X1),
+    term_to_json(Y,Y1),
+    J = (X1,Y1).
+
+term_to_json((H :- B),J) :-
+    term_to_json(H,H1),
+    term_to_json(B,B1),
+    J = {"head":H1,"body":B1}.
+
+
+json_to_term('@true',"true").
+
+json_to_term('@null',"null").
+
 json_to_term(X,T) :-
     string(X),
     string_term(X,T).
