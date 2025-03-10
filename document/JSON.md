@@ -1,5 +1,5 @@
 # JSON
-
+JSON library for using API of ChatGPT.
 
 # usage
 
