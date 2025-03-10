@@ -19,6 +19,10 @@ term_json(T,J) :-
 term_to_json(X,J) :-
     string(X).
 
+term_to_json('@true',"true").
+
+term_to_json('@null',"null").
+
 term_to_json(X,J) :-
     atom(X),
     string_term(J,X).
@@ -65,9 +69,9 @@ term_to_json((H :- B),J) :-
     J = {"head":H1,"body":B1}.
 
 
-json_to_term('@true',"true").
+json_to_term("true",'@true').
 
-json_to_term('@null',"null").
+json_to_term("null",'@null').
 
 json_to_term(X,T) :-
     string(X),
