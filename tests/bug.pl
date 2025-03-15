@@ -1,6 +1,7 @@
 % testing checker
 
 cdeclare($#define a 1$).
+cdeclare($#define b 2$).
 
 clibrary($-ltcl -ltk$).
 

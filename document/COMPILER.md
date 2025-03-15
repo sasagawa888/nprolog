@@ -55,6 +55,7 @@ e.g.
 
 ```
 cdeclare($#define a 1$).
+cdeclare($#define b 2$).
 cdeclare($#include <stdio.h>$).
 ```
 
