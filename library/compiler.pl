@@ -62,11 +62,14 @@ Junify_nil(arg,th)    for [] check.
 
 % main
 compile_file(X) :-
+    abolish(option/2),
+    assert(option(dummy,-1)),
     pass1(X),
     pass2(X),
     pass3(X),
     pass4(X),
-    invoke_gcc(X).
+    invoke_gcc(X),
+    abolish(option/1).
 
 compile_file(X,co) :-
     compile_file1(X).
@@ -158,7 +161,8 @@ invoke_gcc(X) :-
     atom_concat(F,'.c ',Cfile),
     atom_concat(F,'.o ',Ofile),
     atom_concat(Ofile,Cfile,Files),
-    atom_concat('gcc -O3 -flto -w -shared -fPIC -I$HOME/nprolog -o ',Files,Gen),
+    atom_concat('gcc -O3 -flto -w -shared -fPIC -I$HOME/nprolog -o ',Files,Gen1),
+    (option(library,Opt1),atom_string(Opt,Opt1),atom_concat(Gen1,Opt,Gen) ; Gen = Gen1),
     shell(Gen),
     atom_concat('rm ',Cfile,Del),
     shell(Del).
@@ -196,13 +200,20 @@ gen_pred :-
     fail.
 gen_pred :-
     n_reconsult_predicate(P),
+    P = clibrary,
+    gen_clibrary(P),
+    fail.
+gen_pred :-
+    n_reconsult_predicate(P),
     P \= cdeclare,
+    P \= clibrary,
     not(n_dynamic_predicate(P)),
     gen_pred1(P),
     fail.
 gen_pred :-
     n_reconsult_predicate(P),
-    p \= cdeclare,
+    P \= cdeclare,
+    P \= clibrary,
     n_dynamic_predicate(P),
     gen_dynamic(P),
     fail.
@@ -222,6 +233,7 @@ gen_c_def1 :-
     n_reconsult_predicate(P),
     not(n_dynamic_predicate(P)),
     P \= cdeclare,
+    P \= clibrary,
 	gen_def(P),
     fail.
 gen_c_def1.
@@ -1472,6 +1484,15 @@ gen_cdeclare1([X|Cs]) :-
     write(Y),nl,
     gen_cdeclare1(Cs).
     
+gen_clibrary(P) :-
+    n_clause_with_arity(P,1,X),
+    gen_clibrary1(X),!.
+    
+gen_clibrary1([]).
+gen_clibrary1([X|Cs]) :-
+    X =.. [_,Y],
+    asserta(option(library,Y)),
+    gen_clibrary1(Cs).
 
 /*
 invoke error
