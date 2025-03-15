@@ -191,11 +191,18 @@ gen_c_pred :-
 % generate all predicate code
 gen_pred :-
     n_reconsult_predicate(P),
+    P = cdeclare,
+    gen_cdeclare(P),
+    fail.
+gen_pred :-
+    n_reconsult_predicate(P),
+    P \= cdeclare,
     not(n_dynamic_predicate(P)),
     gen_pred1(P),
     fail.
 gen_pred :-
     n_reconsult_predicate(P),
+    p \= cdeclare,
     n_dynamic_predicate(P),
     gen_dynamic(P),
     fail.
@@ -203,6 +210,7 @@ gen_pred.
 
 gen_pred1(P) :-
     gen_a_pred(P),!.
+
 
 % define compiled predicate
 gen_c_def :-
@@ -213,6 +221,7 @@ gen_c_def :-
 gen_c_def1 :-
     n_reconsult_predicate(P),
     not(n_dynamic_predicate(P)),
+    P \= cdeclare,
 	gen_def(P),
     fail.
 gen_c_def1.
@@ -1452,6 +1461,17 @@ gen_dyn2_list([L|Ls]) :-
     write(','),
     gen_dyn2_list(Ls),
     write(')').
+
+gen_cdeclare(P) :-
+    n_clause_with_arity(P,1,X),
+    gen_cdeclare1(X),!.
+
+gen_cdeclare1([]).
+gen_cdeclare1([X|Cs]) :-
+    X =.. [_,Y],
+    write(Y),nl,
+    gen_cdeclare1(Cs).
+    
 
 /*
 invoke error
