@@ -49,6 +49,23 @@ cinline($ int a(int m, int n){
 
 ```
 
+## C inline declare
+To embed C code such as #include and #define, use cdeclate/1.
+e.g. 
+
+```
+cdeclare($#define a 1$).
+cdeclare($#include <stdio.h>$).
+```
+
+## C inline library option
+To add compilation options, use clibrary/1.
+e.g. 
+
+```
+clibrary($-ltcl -ltk$).
+```
+
 ## C inline variable
 In compiled Prolog, variable names have 'var' prefixed to them at compile time. When retrieving a value, deref is called first, and then the value is converted to a C value using an API corresponding to its type.
 
