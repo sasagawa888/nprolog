@@ -1716,6 +1716,7 @@ int deref1(int x, int th)
 
     int res;
 
+	res = NIL;
     if (variablep(x)) {
       loop:
 	// findvar(x);
