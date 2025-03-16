@@ -23,7 +23,14 @@ cdeclare($static int proc_eval(ClientData clientData, Tcl_Interp *interp, int ar
            }
          }$).
 
+tk_exit :-
+    cinline($Tcl_DeleteInterp(interp);$).
 
+tk_init :-
+    cinline($interp = Tcl_CreateInterp();
+             Tcl_Init(interp);               
+             Tk_Init(interp); 
+             Tcl_CreateObjCommand(interp, "eisl_eval", proc_eval, NULL, NULL);$).
 
 /*
 
