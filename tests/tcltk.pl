@@ -32,43 +32,36 @@ tk_init :-
              Tk_Init(interp); 
              Tcl_CreateObjCommand(interp, "eisl_eval", proc_eval, NULL, NULL);$).
 
+tk_function(X,S) :-
+  tk_function1(X,X1),
+  concat(${eisl_eval$,X1,S).
+tk_function1([],$}$).
+tk_function1([X|Xs],S) :-
+  concat($ $,X,X1),
+  tk_function1(Xs,S1),
+  concat(X1,S1,S).
+
+tk_bind(Obj,Ovent,Func) :-
+  cinline($strcpy(buff,"bind .";$),
+  concat($strcat(buff,)$,Obj,X1),
+  cinline(X1),cinline($;$),
+  concat($strcat(buff," "$,Event,X2),
+  cinline(X2),cinline($;$),
+  tk_function(Func,Cmd),
+  concat($strcat(buff," "$,Cmd,X3),
+  cinline($strcat(buff,"\n");$),
+  cinline($Tcl_Eval(interp,buff);$).
+
+tk_command_option(X,Y) :-
+  list(X),
+  tk_function(X,Y).
+tk_command_option(X,Y) :-
+  concat($"$,X,X1),
+  concat(X1,$"$,Y).
+
+
+
 /*
-
-(defun tk:bind (obj event func)
-  (let ((cmd (tk:function func)))
-    (c-lang 
-      "strcpy(buff,''bind .'');
-       strcat(buff,str_to_lower(Fgetname(OBJ)));
-       strcat(buff,''  '');
-       strcat(buff,Fgetname(EVENT));
-       strcat(buff,''  '');
-       strcat(buff,Fgetname(CMD));
-       strcat(buff,''\n'');
-       Tcl_Eval(interp,buff);")))
-
-(defun tk:command-option (x)
-    (if (consp x)
-        (tk:function x) 
-        (string-append "\"" x "\"")))
-
-(defun tk:function (s)
-  (labels ((iter (x) 
-            (if (null x)
-                "}"
-                (string-append (convert (car x) <string>) " " (iter (cdr x))))))
-          (string-append "{eisl_eval " (iter s))))
-
-(defun tk:exit ()
-  (c-lang "Tcl_DeleteInterp(interp);"))
-
-
-(defun tk:init ()
- (c-lang 
- "interp = Tcl_CreateInterp();
-  Tcl_Init(interp);               
-  Tk_Init(interp); 
-  Tcl_CreateObjCommand(interp, \"eisl_eval\", proc_eval, NULL, NULL);
-  "))
 
 (defun tk:label (obj :rest l)
   (let ((opt (tk:option l)))
