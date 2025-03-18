@@ -41,25 +41,24 @@ tk_function1([X|Xs],S) :-
   tk_function1(Xs,S1),
   concat(X1,S1,S).
 
+list_string([],$$).
+list_string([X|Xs],S) :-
+  list_string(Xs,S1),
+  concat(X,S1,S).
+
 tk_bind(Obj,Ovent,Func) :-
-  cinline($strcpy(buff,"bind .";$),
-  concat($strcat(buff,)$,Obj,X1),
-  cinline(X1),cinline($;$),
-  concat($strcat(buff," "$,Event,X2),
-  cinline(X2),cinline($;$),
-  tk_function(Func,Cmd),
-  concat($strcat(buff," "$,Cmd,X3),
-  cinline($strcat(buff,"\n");$),
+  %tk_function(Func,Cmd),
+  cinline($strcpy(buff,"bind ."$),
+  cinline(Obj),cinline($ $),
+  cinline(Event),cinline($ $),
+  cinline(Cmd),cinline($\n);$),
   cinline($Tcl_Eval(interp,buff);$).
 
 tk_command_option(X,Y) :-
   list(X),
   tk_function(X,Y).
 tk_command_option(X,Y) :-
-  concat($"$,X,X1),
-  concat(X1,$"$,Y).
-
-
+  list_string([$"$,X,$"$],Y).
 
 /*
 
