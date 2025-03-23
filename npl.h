@@ -16,7 +16,7 @@ address
  5,000,001 - 30,000,000  working area 
 30,000,001 - 32,000,000  variant area
 */
-#define VERSION     4.05
+#define VERSION     4.06
 #define CELLSIZE    30000000  // if raspberry PI set smaller size.
 #define HEAPSIZE     5000000
 #define FREESIZE         500
@@ -839,6 +839,7 @@ int b_filename(int arglist, int rest, int th);
 int b_float_text(int arglist, int rest, int th);
 int b_flush(int arglist, int rest, int th);
 int b_flush_output(int arglist, int rest, int th);
+int b_format(int arglist, int rest, int th);
 int b_functor(int arglist, int rest, int th);
 int b_gbc(int arglist, int rest, int th);
 int b_generate_all_variable(int arglist, int rest, int th);

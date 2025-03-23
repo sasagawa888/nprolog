@@ -227,6 +227,7 @@ void init_builtin(void)
     defbuiltin("existerrors", b_existerrors, 2);
 	defbuiltin("set_prolog_flag", b_set_prolog_flag, 2);
     defbuiltin("cinline", b_cinline, 1);
+	defbuiltin("format", b_format, 3);
     definfix("\\+", b_not, 900, FY);
 
     //-----Distributed parallel

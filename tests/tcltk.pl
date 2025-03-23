@@ -47,9 +47,9 @@ list_string([X|Xs],S) :-
   concat(X,S1,S).
 
 tk_bind(Obj,Ovent,Func) :-
-  %tk_function(Func,Cmd),
+  tk_function(Func,Cmd),
   cinline($strcpy(buff,"bind ."$),
-  cinline(Obj),cinline($ $),
+  cinline(varObj),cinline($ $),
   cinline(Event),cinline($ $),
   cinline(Cmd),cinline($\n);$),
   cinline($Tcl_Eval(interp,buff);$).

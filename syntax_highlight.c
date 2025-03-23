@@ -99,6 +99,7 @@ char extended[EXTENDED_NUMBER][30] = {
     { "dp_child" }, { "dp_wait" }, { "dp_pause" }, { "dp_resume" },
     { "mt_create" }, { "mt_close" }, { "mt_and" }, { "mt_or" },
     { "mt_prove" }, { "cinline" }, { "check_file" }, { "cdeclare" }, { "clibrary" },
+    { "format" },
 };
 
 

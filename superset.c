@@ -2102,3 +2102,87 @@ int b_set_prolog_flag(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
+
+int b_format(int arglist, int rest, int th)
+{
+	int n, arg1,arg2,arg3, ind,i,j,k;
+	char c,format[STRSIZE],output[STRSIZE],substr[STRSIZE];
+
+    n = length(arglist);
+    ind = makeind("format", n, th);
+    if (n == 3) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	arg3 = caddr(arglist);
+	
+	memset(output,0,sizeof(output));
+	memset(format,0,sizeof(format));
+	strcpy(format,GET_NAME(arg2));
+	i = 0;
+	j = 0;
+	c = format[i++];
+	while(c != 0){
+		if (c == '~'){
+			c = format[i++];
+			if(c == 'A'){
+				if(!atomp(car(arg3)))
+					exception(NOT_ATOM,ind,arg3,th);
+				memset(substr,0,sizeof(substr));
+				strcpy(substr,GET_NAME(car(arg3)));
+				arg3 = cdr(arg3);
+				k = 0;
+				c = substr[k++];
+				while(c != 0){
+					output[j++] = c;
+					c = substr[k++];
+				}
+			}
+			if(c == 'S'){
+				if(!stringp(car(arg3)))
+					exception(NOT_STR,ind,arg3,th);
+				memset(substr,0,sizeof(substr));
+				strcpy(substr,GET_NAME(car(arg3)));
+				arg3 = cdr(arg3);
+				k = 0;
+				c = substr[k++];
+				while(c != 0){
+					output[j++] = c;
+					c = substr[k++];
+				}
+			}
+			else if(c == 'D'){
+				if(!integerp(car(arg3)))
+					exception(NOT_INT,ind,arg3,th);
+				memset(substr,0,sizeof(substr));
+				sprintf(substr,"%d",GET_INT(car(arg3)));
+				arg3 = cdr(arg3);
+				k = 0;
+				c = substr[k++];
+				while(c != 0){
+					output[j++] = c;
+					c = substr[k++];
+				}
+			}
+			else if(c == 'F'){
+				memset(substr,0,sizeof(substr));
+				sprintf(substr,"%f",GET_FLT(car(arg3)));
+				arg3 = cdr(arg3);
+				k = 0;
+				c = substr[k++];
+				while(c != 0){
+					output[j++] = c;
+					c = substr[k++];
+				}
+			}
+		}
+		else {
+			output[j++] = c;
+		}
+		c = format[i++];
+	}
+	if(unify(arg1,makestr(output),th) == YES)
+		return(prove_all(rest,sp[th],th));
+	}
+	exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
