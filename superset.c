@@ -2114,6 +2114,12 @@ int b_format(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
+	if(!wide_variable_p(arg1))
+		exception(NOT_VAR,ind,arg1,th);
+	if(!stringp(arg2))
+		exception(NOT_STR,ind,arg2,th);
+	if(!listp(arg3))
+		exception(NOT_LIST,ind,arg3,th);
 	
 	memset(output,0,sizeof(output));
 	memset(format,0,sizeof(format));
@@ -2165,7 +2171,7 @@ int b_format(int arglist, int rest, int th)
 			}
 			else if(c == 'F'){
 				memset(substr,0,sizeof(substr));
-				sprintf(substr,"%f",GET_FLT(car(arg3)));
+				sprintf(substr,"%g",GET_FLT(car(arg3)));
 				arg3 = cdr(arg3);
 				k = 0;
 				c = substr[k++];

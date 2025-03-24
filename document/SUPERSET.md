@@ -224,4 +224,23 @@ I believe ISO-Prolog has excessively high requirements. It sets overly detailed 
 
 # Future plan
 
-format/3  compatible with SWI-Prolog 
+format/3  for cinline/1
+
+e.g.
+
+```
+?- format(X,$hello ~S !$,[$world$]).
+X = $hello world !$ .
+yes
+?- format(X,$hello ~A !$,[world]).
+X = $hello world !$ .
+yes
+?- 
+?- format(X,$number ~D $,[1]).
+X = $number 1 $ .
+yes
+?- format(X,$number ~F $,[1.1]).
+X = $number 1.1 $ .
+yes
+?- 
+```
