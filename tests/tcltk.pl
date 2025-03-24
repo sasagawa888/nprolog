@@ -48,17 +48,15 @@ list_string([X|Xs],S) :-
 
 tk_bind(Obj,Ovent,Func) :-
   tk_function(Func,Cmd),
-  cinline($strcpy(buff,"bind ."$),
-  cinline(varObj),cinline($ $),
-  cinline(Event),cinline($ $),
-  cinline(Cmd),cinline($\n);$),
+  format(Str,$bind .~A ~A ~S\n;$,[Obj,Event,Cmd]),
+  cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
   cinline($Tcl_Eval(interp,buff);$).
 
 tk_command_option(X,Y) :-
   list(X),
   tk_function(X,Y).
-tk_command_option(X,Y) :-
-  list_string([$"$,X,$"$],Y).
+tk_command_option(X,[Y]) :-
+  format(Y,$ ~A $,X).
 
 /*
 
