@@ -5,6 +5,7 @@ cdeclare($#ifdef __linux__
           #else
           #include <tcl.h>
           #endif$).
+cdeclare($#include <stdio.h>$).
 
 cdeclare($#define BUFFSIZE 1024
          Tcl_Interp *interp;
@@ -33,173 +34,123 @@ tk_init :-
              Tcl_CreateObjCommand(interp, "eisl_eval", proc_eval, NULL, NULL);$).
 
 tk_function(X,S) :-
-  tk_function1(X,X1),
-  concat(${eisl_eval$,X1,S).
+    tk_function1(X,X1),
+    concat(${eisl_eval$,X1,S).
 tk_function1([],$}$).
 tk_function1([X|Xs],S) :-
-  concat($ $,X,X1),
-  tk_function1(Xs,S1),
-  concat(X1,S1,S).
+    concat($ $,X,X1),
+    tk_function1(Xs,S1),
+    concat(X1,S1,S).
 
 list_string([],$$).
 list_string([X|Xs],S) :-
-  list_string(Xs,S1),
-  concat(X,S1,S).
+    list_string(Xs,S1),
+    concat(X,S1,S).
 
 tk_bind(Obj,Ovent,Func) :-
-  tk_function(Func,Cmd),
-  format(Str,$bind .~A ~A ~S\n;$,[Obj,Event,Cmd]),
-  cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-  cinline($Tcl_Eval(interp,buff);$).
+    tk_function(Func,Cmd),
+    format(Str,$bind .~A ~A ~S\n;$,[Obj,Event,Cmd]),
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
+    cinline($Tcl_Eval(interp,buff);$).
 
 tk_command_option(X,Y) :-
-  list(X),
-  tk_function(X,Y).
+    list(X),
+    tk_function(X,Y).
 tk_command_option(X,[Y]) :-
-  format(Y,$ ~A $,X).
+    format(Y,$ ~A $,X).
+
+tk_label(Obj) :-
+    format(Str,$label .~A ~A\n;$,[Obj]),
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
+    cinline($Tcl_Eval(interp,buff);$).
+tk_label(Obj,L) :-
+    tk_option(L,Opt),
+    format(Str,$label .~A ~A\n;$,[Obj,Opt]),
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
+    cinline($Tcl_Eval(interp,buff);$).
+
+
+tk_button(Obj,L) :-
+    tk_option(L,Opt),
+    format(Str,$button .~A ~S \n;$,[Obj,Opt]),
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
+    cinline($Tcl_Eval(interp,buff);$).
+ 
+
+tk_radiobutton(Obj,L) :-
+    tk_option(L,Opt),
+    format(Str,$radiobutton .~A ~S\;$,[Obj,Opt]),
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
+    cinline($Tcl_Eval(interp,buff);$).
+ 
+tk_checkbutton(Obj,L) :-
+    tk_option(L,Opt),
+    format(Str,$checkbutton .~A ~S\;$,[Obj,Opt]),
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
+    cinline($Tcl_Eval(interp,buff);$).
+ 
+tk_listbox(Obj,L) :-
+    tk_option(L,Opt),
+    format(Str,$listbox .~A ~S\;$,[Obj,Opt]),
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
+    cinline($Tcl_Eval(interp,buff);$).
+ 
+tk_scrollbar(Obj,L) :-
+    tk_option(L,Opt),
+    format(Str,$scrollbar .~A ~S\;$,[Obj,Opt]),
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
+    cinline($Tcl_Eval(interp,buff);$).
+
+
+tk_menu(Obj,L) :-
+    tk_object(Obj,Objects),
+    tk_option(L,Opt),
+    format(Str,$menu ~A ~S\n;$,[Objects,Opt]),
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
+    cinline($Tcl_Eval(interp,buff);$).
+
+tk_configure(Obj,L) :-
+    tk_object(Obj,Objects),
+    tk_option(L,Opt),
+    format(Str,$ configure ~A ~S\n;$,[Objects,Opt]),
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
+    cinline($Tcl_Eval(interp,buff);$).
+ 
+tk_add(Obj,Class,L) :-
+    tk_object(Obj,Objects),
+    tk_option(L,Opt),
+    format(Str,$ add ~A ~S\n;$,[Object,Class,Opt]),
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
+    cinline($Tcl_Eval(interp,buff);$).
+
+tk_canvas(Obj,L) :-
+    tk_option(L,Opt),
+    format(Str,$canvas .~A ~S\n;$,[Obj,Opt]),
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
+    cinline($Tcl_Eval(interp,buff);$).
+
+tk_mainloop :-
+    cinline($Tk_MainLoop();$).
+
+tk_pack(L) :-
+    tk_packs(L,Obj),
+    format(Str,$pack ~A \n;$,[Obj]),
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
+    cinline($Tcl_Eval(interp,buff);$).
+
+tk_update :-
+    format(Str,$update\n;$),
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
+    cinline($Tcl_Eval(interp,buff);$).
+
+tk_command(Cmd) :-
+    format(Str,$~A\n;$,[Cmd]),
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
+    %cinline($printf("%s",buff);$),
+    cinline($Tcl_Eval(interp,buff);$).
+    %cinline($printf("%s\n",Tcl_GetStringResult(interp));$).
 
 /*
-
-(defun tk:label (obj :rest l)
-  (let ((opt (tk:option l)))
-    (c-lang 
-      "strcpy(buff,''label .'');
-       strcat(buff,str_to_lower(Fgetname(OBJ)));
-       strcat(buff,Fgetname(OPT));
-       strcat(buff,''\n'');
-       Tcl_Eval(interp,buff);")))
-
-(defun tk:button (obj :rest l)
-  (let ((opt (tk:option l)))
-    (c-lang 
-      "strcpy(buff,''button .'');
-       strcat(buff,str_to_lower(Fgetname(OBJ)));
-       strcat(buff,Fgetname(OPT));
-       strcat(buff,''\n'');
-       Tcl_Eval(interp,buff);")))
-
-
-(defun tk:radiobutton (obj :rest l)
-  (let ((opt (tk:option l)))
-    (c-lang 
-      "strcpy(buff,''radiobutton .'');
-       strcat(buff,str_to_lower(Fgetname(OBJ)));
-       strcat(buff,Fgetname(OPT));
-       strcat(buff,''\n'');
-       Tcl_Eval(interp,buff);")))
-
-(defun tk:checkbutton (obj :rest l)
-  (let ((opt (tk:option l)))
-    (c-lang 
-      "strcpy(buff,''radiobutton .'');
-       strcat(buff,str_to_lower(Fgetname(OBJ)));
-       strcat(buff,Fgetname(OPT));
-       strcat(buff,''\n'');
-       Tcl_Eval(interp,buff);")))
-
-(defun tk:listbox (obj :rest l)
-  (let ((opt (tk:option l)))
-    (c-lang 
-      "strcpy(buff,''listbox .'');
-       strcat(buff,str_to_lower(Fgetname(OBJ)));
-       strcat(buff,Fgetname(OPT));
-       strcat(buff,''\n'');
-       Tcl_Eval(interp,buff);")))
-
-(defun tk:scrollbar (obj :rest l)
-  (let ((opt (tk:option l)))
-    (c-lang 
-      "strcpy(buff,''scrollbar .'');
-       strcat(buff,str_to_lower(Fgetname(OBJ)));
-       strcat(buff,Fgetname(OPT));
-       strcat(buff,''\n'');
-       Tcl_Eval(interp,buff);")))
-
-(defun tk:menu (obj :rest l)
-  (let ((objects (tk:objects obj))
-        (opt (tk:option l)))
-    (c-lang 
-      "strcpy(buff,''menu '');
-       strcat(buff,Fgetname(OBJECTS));
-       strcat(buff,Fgetname(OPT));
-       strcat(buff,''\n'');
-       Tcl_Eval(interp,buff);")))
-
-
-
-(defun tk:configure (obj :rest l)
-  (let ((objects (tk:objects obj))
-        (opt (tk:option l)))
-    (c-lang 
-      "strcpy(buff,Fgetname(OBJECTS));
-       strcat(buff,'' configure '');
-       strcat(buff,Fgetname(OPT));
-       strcat(buff,''\n'');
-       Tcl_Eval(interp,buff);")))
-
-
-(defun tk:add (obj class :rest l)
-  (let ((objects (tk:objects obj))
-        (opt (tk:option l)))
-    (c-lang 
-      "strcpy(buff,Fgetname(OBJECTS));
-       strcat(buff,'' add '');
-       strcat(buff,Fgetname(CLASS));
-       strcat(buff,'' '');
-       strcat(buff,Fgetname(OPT));
-       strcat(buff,''\n'');
-       Tcl_Eval(interp,buff);")))
-
-(defun tk:canvas (obj :rest l)
-  (let ((opt (tk:option l)))
-    (c-lang 
-      "strcpy(buff,''canvas .'');
-       strcat(buff,str_to_lower(Fgetname(OBJ)));
-       strcat(buff,Fgetname(OPT));
-       strcat(buff,''\n'');
-       Tcl_Eval(interp,buff);")))       
-
-(defun tk:create (obj class :rest l)
-  (let ((opt (tk:option l)))
-    (c-lang 
-      "strcpy(buff,''.'');
-       strcat(buff,str_to_lower(Fgetname(OBJ)));
-       strcat(buff,'' create '');
-       strcat(buff,str_to_lower(Fgetname(CLASS)));")
-    (c-lang   
-      "strcat(buff,Fgetname(OPT));
-       strcat(buff,''\n'');
-       Tcl_Eval(interp,buff);
-       res = Fmakeint(atoi(Tcl_GetStringResult(interp)));")))       
-
-(defun tk:pack (:rest l)
-  (let ((obj (tk:packs l)))
-  (c-lang 
-  "strcpy(buff,''pack '');
-   strcat(buff,str_to_lower(Fgetname(OBJ)));
-   strcat(buff,''\n'');
-   Tcl_Eval(
-    interp,buff);")))
-
-(defun tk:update ()
-  (c-lang 
-  "strcpy(buff,''update'');
-   strcat(buff,''\n'');
-   Tcl_Eval(
-    interp,buff);"))
-
-(defun tk:mainloop ()
-    (c-lang "Tk_MainLoop();"))
-
-
-(defun tk:command (cmd)
-    (c-lang 
-      "strcpy(buff,Fgetname(CMD));
-       strcat(buff,''\n'');
-       printf(''%s'',buff);
-       Tcl_Eval(interp,buff);
-       printf(''%s\n'', Tcl_GetStringResult(interp));")
-    t)
 
 (defun tk:winfo (class object)
    (let ((obj (tk:objects object)))
@@ -373,4 +324,18 @@ tk_command_option(X,[Y]) :-
           (t (string-append (string-append " " (convert (car ls) <string>))
                             (tk:class-option (cdr ls))))))
           
+
+(defun tk:create (obj class :rest l)
+  (let ((opt (tk:option l)))
+    (c-lang 
+      "strcpy(buff,''.'');
+       strcat(buff,str_to_lower(Fgetname(OBJ)));
+       strcat(buff,'' create '');
+       strcat(buff,str_to_lower(Fgetname(CLASS)));")
+    (c-lang   
+      "strcat(buff,Fgetname(OPT));
+       strcat(buff,''\n'');
+       Tcl_Eval(interp,buff);
+       res = Fmakeint(atoi(Tcl_GetStringResult(interp)));")))       
+
 */
