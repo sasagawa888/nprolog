@@ -48,6 +48,8 @@ cinline($ int a(int m, int n){
           return(Jexec_all(rest,Jget_sp(th),th)); $).
 
 ```
+cinline/1 only functions when there is a single instance in the body. Multiple instances of cinline/1 will not work correctly.
+
 
 ## C inline declare
 To embed C code such as #include and #define, use cdeclate/1.
