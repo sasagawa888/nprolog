@@ -19,3 +19,6 @@ fibo1(N, F) :- fibo1(N, 1, 0, F).
 fibo1(1, A1, _, A1).
 fibo1(N, A1, A2, F) :-
     N > 1, N1 is N - 1, A3 is A1 + A2, fibo1(N1, A3, A1, F).
+
+
+boo(X) :- write(X).
