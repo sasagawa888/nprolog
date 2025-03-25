@@ -10,19 +10,11 @@ cdeclare($#include <stdio.h>$).
 cdeclare($#define BUFFSIZE 1024
          Tcl_Interp *interp;
          char buff[BUFFSIZE];$).
-cdeclare($static int proc_eval(ClientData clientData, Tcl_Interp *interp, int argc, Tcl_Obj *const argv[])
-          { int func,args;
-            int i,len,intarg;
-            func = Fmakesym(Tcl_GetStringFromObj(argv[1], &len));
-            args = NIL;
-            for (i = argc-1; i > 1; i--) {
-            intarg =Fmakeint(atoi(Tcl_GetStringFromObj(argv[i], &len)));
-            args = Fcons(intarg,args);
-            i = Fgetint(Fpeval(Fcons(func,args),0));
-            Tcl_SetObjResult(interp, Tcl_NewIntObj(i));
-            return TCL_OK;
-           }
-         }$).
+
+tk_interp(Str) :-
+    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));
+             Tcl_Eval(interp,buff);$).
+        
 
 tk_exit :-
     cinline($Tcl_DeleteInterp(interp);$).
@@ -30,28 +22,14 @@ tk_exit :-
 tk_init :-
     cinline($interp = Tcl_CreateInterp();
              Tcl_Init(interp);               
-             Tk_Init(interp); 
-             Tcl_CreateObjCommand(interp, "eisl_eval", proc_eval, NULL, NULL);$).
+             Tk_Init(interp);$).
 
-tk_function(X,S) :-
-    tk_function1(X,X1),
-    concat(${eisl_eval$,X1,S).
-tk_function1([],$}$).
-tk_function1([X|Xs],S) :-
-    concat($ $,X,X1),
-    tk_function1(Xs,S1),
-    concat(X1,S1,S).
 
 list_string([],$$).
 list_string([X|Xs],S) :-
     list_string(Xs,S1),
     concat(X,S1,S).
 
-tk_bind(Obj,Ovent,Func) :-
-    tk_function(Func,Cmd),
-    format(Str,$bind .~A ~A ~S\n;$,[Obj,Event,Cmd]),
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-    cinline($Tcl_Eval(interp,buff);$).
 
 tk_command_option(X,Y) :-
     list(X),
@@ -61,73 +39,60 @@ tk_command_option(X,[Y]) :-
 
 tk_label(Obj) :-
     format(Str,$label .~A ~A\n;$,[Obj]),
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-    cinline($Tcl_Eval(interp,buff);$).
+    tk_interp(Str).
 tk_label(Obj,L) :-
     tk_option(L,Opt),
     format(Str,$label .~A ~A\n;$,[Obj,Opt]),
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-    cinline($Tcl_Eval(interp,buff);$).
+    tk_interp(Str).
 
 
 tk_button(Obj,L) :-
     tk_option(L,Opt),
     format(Str,$button .~A ~S \n;$,[Obj,Opt]),
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-    cinline($Tcl_Eval(interp,buff);$).
+    tk_interp(Str).
  
-
 tk_radiobutton(Obj,L) :-
     tk_option(L,Opt),
     format(Str,$radiobutton .~A ~S\;$,[Obj,Opt]),
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-    cinline($Tcl_Eval(interp,buff);$).
+    tk_interp(Str).
  
 tk_checkbutton(Obj,L) :-
     tk_option(L,Opt),
     format(Str,$checkbutton .~A ~S\;$,[Obj,Opt]),
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-    cinline($Tcl_Eval(interp,buff);$).
+    tk_interp(Str).
  
 tk_listbox(Obj,L) :-
     tk_option(L,Opt),
     format(Str,$listbox .~A ~S\;$,[Obj,Opt]),
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-    cinline($Tcl_Eval(interp,buff);$).
+    tk_interp(Str).
  
 tk_scrollbar(Obj,L) :-
     tk_option(L,Opt),
     format(Str,$scrollbar .~A ~S\;$,[Obj,Opt]),
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-    cinline($Tcl_Eval(interp,buff);$).
-
+    tk_interp(Str).
 
 tk_menu(Obj,L) :-
     tk_object(Obj,Objects),
     tk_option(L,Opt),
     format(Str,$menu ~A ~S\n;$,[Objects,Opt]),
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-    cinline($Tcl_Eval(interp,buff);$).
+    tk_interp(Str).
 
 tk_configure(Obj,L) :-
     tk_object(Obj,Objects),
     tk_option(L,Opt),
     format(Str,$ configure ~A ~S\n;$,[Objects,Opt]),
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-    cinline($Tcl_Eval(interp,buff);$).
+    tk_interp(Str).
  
 tk_add(Obj,Class,L) :-
     tk_object(Obj,Objects),
     tk_option(L,Opt),
     format(Str,$ add ~A ~S\n;$,[Object,Class,Opt]),
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-    cinline($Tcl_Eval(interp,buff);$).
+    tk_interp(Str).
 
 tk_canvas(Obj,L) :-
     tk_option(L,Opt),
     format(Str,$canvas .~A ~S\n;$,[Obj,Opt]),
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-    cinline($Tcl_Eval(interp,buff);$).
+    tk_interp(Str).
 
 tk_mainloop :-
     cinline($Tk_MainLoop();$).
@@ -135,20 +100,16 @@ tk_mainloop :-
 tk_pack(L) :-
     tk_packs(L,Obj),
     format(Str,$pack ~A \n;$,[Obj]),
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-    cinline($Tcl_Eval(interp,buff);$).
+    tk_sendinterp(Str).
+
 
 tk_update :-
-    format(Str,$update\n;$),
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-    cinline($Tcl_Eval(interp,buff);$).
+    cinline($strcpy(buff,"update\n");
+             Tcl_Eval(interp,buff);$).
 
 tk_command(Cmd) :-
     format(Str,$~A\n;$,[Cmd]),
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));$),
-    %cinline($printf("%s",buff);$),
-    cinline($Tcl_Eval(interp,buff);$).
-    %cinline($printf("%s\n",Tcl_GetStringResult(interp));$).
+    tk_interp(Str).
 
 /*
 
