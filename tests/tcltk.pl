@@ -18,12 +18,14 @@ tk_interp(Str) :-
         
 
 tk_exit :-
-    cinline($Tcl_DeleteInterp(interp);$).
+    cinline($Tcl_DeleteInterp(interp);
+             return(Jexec_all(rest,Jget_sp(th),th));$).
 
 tk_init :-
     cinline($interp = Tcl_CreateInterp();
              Tcl_Init(interp);               
-             Tk_Init(interp);$).
+             Tk_Init(interp);
+             return(Jexec_all(rest,Jget_sp(th),th));$).
 
 
 list_string([],$$).
