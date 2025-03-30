@@ -15,7 +15,6 @@ tk_interp(Str) :-
     cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));
              Tcl_Eval(interp,buff);
              return(Jexec_all(rest,Jget_sp(th),th));$).
-        
 
 tk_exit :-
     cinline($Tcl_DeleteInterp(interp);

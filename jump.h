@@ -8,7 +8,7 @@ typedef int (*fn2)(int , int);
 typedef int (*fn3)(int , int , int);
 typedef int (*fn4)(char*);
 typedef int (*fn5)(int , int , int, int);
-typedef int (*fn6)(int);
+typedef char* (*fn6)(int);
 typedef void (*tpred)(char*, int(*pred)(int , int));
 typedef void (*tuser)(char*, int(*user)(int , int), int weight, int spec);
 
