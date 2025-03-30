@@ -1741,17 +1741,16 @@ int b_use_module(int arglist, int rest, int th)
 	strcat(str, "/nprolog/library/");
 	strcat(str, GET_NAME(arg1));
 	strcat(str, ".pl");
-	fp = fopen(str, "r");
+	fp = fopen(str, "o");
 	if (fp != NULL) {
 	    fclose(fp);
 	    b_reconsult(list1(makeconst(str)), NIL, 0);
 	    return (prove_all(rest, sp[th], th));
 	}
-	/* compiled library *.o*/
 	strcpy(str, home);
 	strcat(str, "/nprolog/library/");
 	strcat(str, GET_NAME(arg1));
-	strcat(str, ".o");
+	strcat(str, ".pl");
 	fp = fopen(str, "r");
 	if (fp != NULL) {
 	    fclose(fp);

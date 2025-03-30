@@ -165,7 +165,7 @@ asdf_boo(X) :-
 
 ```
 
-
+It is also possible to compile the module. In this case, use_module/1 first looks for a file to be executed by the compiler. If not found, it will load the file to be executed by the interpreter.
 
 
 # Function
@@ -178,6 +178,10 @@ X = 8 .
 yes
 ?- 
 ```
+
+# My Personal Thoughts on ISO-Prolog
+I believe ISO-Prolog has excessively high requirements. It sets overly detailed specifications regarding syntax and imposes high standards on op/3. The appeal of Prolog, in my opinion, lies in the astonishing realization that first-order predicate logic can be applied to programming. I think overly detailed syntax rules hinder the widespread adoption of Prolog. I would like to emphasize that this is my personal opinion.
+
 
 # TCP/IP 
  I have implemented the TCP/IP predicates. see ./tests/socket.pl
@@ -219,13 +223,20 @@ start_client :-
  ```
 
 
-# My Personal Thoughts on ISO-Prolog
-I believe ISO-Prolog has excessively high requirements. It sets overly detailed specifications regarding syntax and imposes high standards on op/3. The appeal of Prolog, in my opinion, lies in the astonishing realization that first-order predicate logic can be applied to programming. I think overly detailed syntax rules hinder the widespread adoption of Prolog. I would like to emphasize that this is my personal opinion.
-
 # Extended 
 
-format(Str,Format,List).
-format(Stream,format,List).
+## format(Str,Format,List).
+If the first argument is a variable, the formatted string will be unified with the variable. The second argument is the format, which is a string. Values can be inserted into the string, and the values to be inserted are provided as a list in the third argument.
+
+The variables for insertion are as follows:
+- ~O  All of atomic.
+- ~A atom
+- ~S string
+- ~D integer
+- ~F float
+
+## format(Stream,format,List).
+If the first argument is a stream or alias, the edited string will be output to that stream. The specifications of the second and third arguments remain the same.
 
 e.g.
 
