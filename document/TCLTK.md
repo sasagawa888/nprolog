@@ -12,7 +12,7 @@ yes
 yes
 ```
 
-# Spec
+# Specification
 
 tk_init/0
 Initializing Tcl/Tk.
@@ -22,3 +22,9 @@ Terminating Tcl/Tk.
 
 tk_interp(Str)
 Execute the command given as the string Str in Tcl/Tk.
+
+tk_update/0
+Send the update command to Tcl/Tk.
+
+tk_mainloop/0
+Execute Tk_MainLoop() in Tcl/Tk.

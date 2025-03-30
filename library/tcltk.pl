@@ -103,7 +103,7 @@ tk_mainloop :-
 tk_pack(L) :-
     tk_packs(L,Obj),
     format(Str,$pack ~A \n;$,[Obj]),
-    tk_sendinterp(Str).
+    tk_interp(Str).
 
 
 tk_update :-
