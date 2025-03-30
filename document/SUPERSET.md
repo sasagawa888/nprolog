@@ -230,6 +230,8 @@ format(Stream,format,List).
 e.g.
 
 ```
+?- format(user_output,$asdf$,[]).
+asdfyes
 ?- format(X,$hello ~S !$,[$world$]).
 X = $hello world !$ .
 yes
@@ -243,5 +245,7 @@ yes
 ?- format(X,$number ~F $,[1.1]).
 X = $number 1.1 $ .
 yes
-?- 
+?- format(X,$number ~O ~O $,[1.1,atom]).
+X = $number 1.1 atom $ .
+yes
 ```
