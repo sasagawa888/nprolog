@@ -50,6 +50,9 @@ void init5(int n, tpred x){
     f5[n] = (fn5)x;
 }
 
+void init6(int n, tpred x){
+    f6[n] = (fn6)x;
+}
 
 //for define compiled builtin predicate
 void init_deftpred(tpred x){
