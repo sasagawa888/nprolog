@@ -16,9 +16,6 @@ tk_interp(Str) :-
              Tcl_Eval(interp,buff);
              return(Jexec_all(rest,Jget_sp(th),th));$).
 
-tk_exit :-
-    cinline($Tcl_DeleteInterp(interp);
-             return(Jexec_all(rest,Jget_sp(th),th));$).
 
 tk_init :-
     cinline($interp = Tcl_CreateInterp();
@@ -26,6 +23,10 @@ tk_init :-
              Tk_Init(interp);
              return(Jexec_all(rest,Jget_sp(th),th));$).
 
+tk_exit :-
+    cinline($Tcl_DeleteInterp(interp);
+             return(Jexec_all(rest,Jget_sp(th),th));$).
+            
 
 list_string([],$$).
 list_string([X|Xs],S) :-
