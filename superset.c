@@ -1740,8 +1740,8 @@ int b_use_module(int arglist, int rest, int th)
 	strcpy(str, home);
 	strcat(str, "/nprolog/library/");
 	strcat(str, GET_NAME(arg1));
-	strcat(str, ".pl");
-	fp = fopen(str, "o");
+	strcat(str, ".o");
+	fp = fopen(str, "r");
 	if (fp != NULL) {
 	    fclose(fp);
 	    b_reconsult(list1(makeconst(str)), NIL, 0);
