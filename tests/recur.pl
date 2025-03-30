@@ -27,7 +27,7 @@ gasket(A,B,C,N) :-
     midpoint(A,B,A1),
     midpoint(B,C,B1),
     midpoint(C,A,C1),
-    draw_triang(A1,B1,C1).
+    draw_triang(A1,B1,C1),
     tk_pack(c0),
     tk_update,
     N1 is N-1,
