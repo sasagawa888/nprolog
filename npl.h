@@ -201,6 +201,10 @@ enum { CALLSUBR_IDX,
        NUM_FN5S,
 };
 
+enum { GETNAME_IDX,
+       NUM_FN6S,
+};
+
 
 
 extern cell heap[CELLSIZE];
@@ -1472,6 +1476,7 @@ int set_cdr(int x, int y);
 int makestrflt(char *str);
 int makestrlong(char *str);
 void debug(void);
+char *get_name(int x);
 
 // wiringPI
 #ifdef __arm__

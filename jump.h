@@ -2,13 +2,13 @@
 #include <stdio.h>
 #include "npl.h"
 
-
 typedef int (*fn0)();
 typedef int (*fn1)(int);
 typedef int (*fn2)(int , int);
 typedef int (*fn3)(int , int , int);
 typedef int (*fn4)(char*);
 typedef int (*fn5)(int , int , int, int);
+typedef int (*fn6)(int);
 typedef void (*tpred)(char*, int(*pred)(int , int));
 typedef void (*tuser)(char*, int(*user)(int , int), int weight, int spec);
 
@@ -18,6 +18,7 @@ static fn2 f2[NUM_FN2S];
 static fn3 f3[NUM_FN3S];
 static fn4 f4[NUM_FN4S];
 static fn5 f5[NUM_FN5S];
+static fn6 f6[NUM_FN6S];
 tpred deftpred;
 tuser deftinfix;
 tpred deftsys;
@@ -517,3 +518,10 @@ static inline int Jcallsubr(int x, int y, int z, int th) {
 static inline int Jwlist3(int x, int y, int z, int th) {
     return f5[WLIST3_IDX](x, y, z, th);
 }
+
+
+static inline char *Jgetname(int x)
+{
+    return f6[GETNAME_IDX] (x);
+}
+

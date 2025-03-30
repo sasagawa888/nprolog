@@ -7,6 +7,13 @@
 typedef void (*tpred)(char *, int(*pred)(int, int));
 typedef void (*tuser)(char *, int(*user)(int, int), int weight, int spec);
 
+
+char *get_name(int x)
+{
+    return (GET_NAME(x));
+}
+
+
 void dynamic_link(int x)
 {
     char str[256] = { "./" };
@@ -18,6 +25,7 @@ void dynamic_link(int x)
     int (*init_f3)(int x, tpred y);
     int (*init_f4)(int x, tpred y);
     int (*init_f5)(int x, tpred y);
+    int (*init_f6)(int x, tpred y);
     void (*init_deftpred)(tpred x);
     void (*init_deftinfix)(tuser x);
     void (*init_tpredicate)();
@@ -38,6 +46,7 @@ void dynamic_link(int x)
     init_f3 = dlsym(hmod, "init3");
     init_f4 = dlsym(hmod, "init4");
     init_f5 = dlsym(hmod, "init5");
+    init_f6 = dlsym(hmod, "init6");
     init_deftpred = dlsym(hmod, "init_deftpred");
     init_deftinfix = dlsym(hmod, "init_deftinfix");
     init_tpredicate = dlsym(hmod, "init_tpredicate");
@@ -163,6 +172,9 @@ void dynamic_link(int x)
     /* argument 4 */
     init_f5(CALLSUBR_IDX, (tpred) callsubr);
     init_f5(WLIST3_IDX, (tpred) wlist3);
+
+    /* argument-1 return char* */
+    init_f6(GETNAME_IDX, (tpred) get_name);
 
     init_deftpred((tpred) defcompiled);
     init_deftinfix((tuser) definfixcomp);
