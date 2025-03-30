@@ -1747,6 +1747,18 @@ int b_use_module(int arglist, int rest, int th)
 	    b_reconsult(list1(makeconst(str)), NIL, 0);
 	    return (prove_all(rest, sp[th], th));
 	}
+	/* compiled library *.o*/
+	strcpy(str, home);
+	strcat(str, "/nprolog/library/");
+	strcat(str, GET_NAME(arg1));
+	strcat(str, ".o");
+	fp = fopen(str, "r");
+	if (fp != NULL) {
+	    fclose(fp);
+	    b_reconsult(list1(makeconst(str)), NIL, 0);
+	    return (prove_all(rest, sp[th], th));
+	}
+
 	exception(CANT_OPEN, ind, arglist, th);
     }
     exception(ARITY_ERR, ind, arglist, th);
