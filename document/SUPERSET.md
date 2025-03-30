@@ -222,9 +222,10 @@ start_client :-
 # My Personal Thoughts on ISO-Prolog
 I believe ISO-Prolog has excessively high requirements. It sets overly detailed specifications regarding syntax and imposes high standards on op/3. The appeal of Prolog, in my opinion, lies in the astonishing realization that first-order predicate logic can be applied to programming. I think overly detailed syntax rules hinder the widespread adoption of Prolog. I would like to emphasize that this is my personal opinion.
 
-# Future plan
+# Extended 
 
-format/3  for cinline/1
+format(Str,Format,List).
+format(Stream,format,List).
 
 e.g.
 

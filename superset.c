@@ -2115,9 +2115,32 @@ int b_set_prolog_flag(int arglist, int rest, int th)
     return (NO);
 }
 
+int format_obj(int x, int ind, int th)
+{
+	char obj[STRSIZE];
+
+	if(integerp(x)){
+		sprintf(obj,"%d",GET_INT(x));
+	}
+	else if(floatp(x)){
+		sprintf(obj,"%g",GET_FLT(x));
+	}
+	else if(atomp(x)){
+		sprintf(obj,"%s",GET_NAME(x));
+	}
+	else if(stringp(x)){
+		sprintf(obj,"%s",GET_NAME(x));
+	}
+	else {
+		exception(NOT_ATOMIC,ind,x,th);
+	}
+
+	return(makestr(obj));
+}
+
 int b_format(int arglist, int rest, int th)
 {
-	int n, arg1,arg2,arg3, ind,i,j,k;
+	int n, arg1,arg2,arg3, ind,i,j,k, save;
 	char c,format[STRSIZE],output[STRSIZE],substr[STRSIZE];
 
     n = length(arglist);
@@ -2126,7 +2149,7 @@ int b_format(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
-	if(!wide_variable_p(arg1))
+	if(!wide_variable_p(arg1) && !streamp(arg1) && !aliasp(arg1))
 		exception(NOT_VAR,ind,arg1,th);
 	if(!stringp(arg2))
 		exception(NOT_STR,ind,arg2,th);
@@ -2142,7 +2165,18 @@ int b_format(int arglist, int rest, int th)
 	while(c != 0){
 		if (c == '~'){
 			c = format[i++];
-			if(c == 'A'){
+			if(c == 'O'){
+				memset(substr,0,sizeof(substr));
+				strcpy(substr,GET_NAME(format_obj(car(arg3),ind,th)));
+				arg3 = cdr(arg3);
+				k = 0;
+				c = substr[k++];
+				while(c != 0){
+					output[j++] = c;
+					c = substr[k++];
+				}
+			}
+			else if(c == 'A'){
 				if(!atomp(car(arg3)))
 					exception(NOT_ATOM,ind,arg3,th);
 				memset(substr,0,sizeof(substr));
@@ -2198,9 +2232,23 @@ int b_format(int arglist, int rest, int th)
 		}
 		c = format[i++];
 	}
-	if(unify(arg1,makestr(output),th) == YES)
-		return(prove_all(rest,sp[th],th));
+	if(wide_variable_p(arg1)){
+		if(unify(arg1,makestr(output),th) == YES)
+			return(prove_all(rest,sp[th],th));
 	}
+	else {
+		save = output_stream;
+		if (aliasp(arg1))
+	    	output_stream = GET_CAR(arg1);
+		else
+	    	output_stream = arg1;
+		quoted_flag = 0;
+		print(makestr(output));
+		quoted_flag = 1;
+		output_stream = save;
+		return(prove_all(rest,sp[th],th));
+	}}
+	
 	exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
