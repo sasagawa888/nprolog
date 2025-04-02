@@ -133,8 +133,8 @@ tk_option(['-width',X|Ls],Str) :-
     format(Str1,$ -width ~D$,[X]),
     tk_option(Ls,Str2),
     concat(Str1,Str2,Str).
-tk_option(['-hight',X|Ls],Str) :-
-    format(Str1,$ -hight ~D$,[X]),
+tk_option(['-height',X|Ls],Str) :-
+    format(Str1,$ -height ~D$,[X]),
     tk_option(Ls,Str2),
     concat(Str1,Str2,Str).
 tk_option(['-relief',X|Ls],Str) :-
@@ -144,7 +144,7 @@ tk_option(['-relief',X|Ls],Str) :-
 tk_option(['-label',X|Ls],Str) :-
     format(Str1,$ -label ~D$,[X]),
     tk_option(Ls,Str2),
-    concat(Str1,Str2,Str).      
+    concat(Str1,Str2,Str),      
     concat(Str1,Str2,Str).      
                       
 
@@ -160,6 +160,11 @@ tk_list([L|Ls],Str) :-
     tk_list(Ls,Str2),
     concat(Str1,Str2,Str).
 
+
+tk_create(Obj,Class,L) :-
+    tk_option(L,Opt),
+    format(Str,$.~O create ~O Class ~O\n$,[Obj,Class,Opt]),
+    tk_interp(Str).
      
 
 /*    
@@ -297,17 +302,5 @@ tk_list([L|Ls],Str) :-
                             (tk:class-option (cdr ls))))))
           
 
-(defun tk:create (obj class :rest l)
-  (let ((opt (tk:option l)))
-    (c-lang 
-      "strcpy(buff,''.'');
-       strcat(buff,str_to_lower(Fgetname(OBJ)));
-       strcat(buff,'' create '');
-       strcat(buff,str_to_lower(Fgetname(CLASS)));")
-    (c-lang   
-      "strcat(buff,Fgetname(OPT));
-       strcat(buff,''\n'');
-       Tcl_Eval(interp,buff);
-       res = Fmakeint(atoi(Tcl_GetStringResult(interp)));")))       
 
 */
