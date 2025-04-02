@@ -2,7 +2,7 @@
 
 recur :- 
     tk_init,
-    tk_canvas(c0,'-width 600','-height 600'),
+    tk_canvas(c0,['-width', 600,'-height', 600]),
     gasket([300,0],[0,600],[600,600],6),
     tk_pack(c0),
     tk_maintoop.

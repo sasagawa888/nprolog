@@ -132,20 +132,20 @@ tk_option(['-text',X|Ls],Str) :-
 tk_option(['-width',X|Ls],Str) :-
     format(Str1,$ -width ~D$,[X]),
     tk_option(Ls,Str2),
-    concar(Str1,Str2,Str).
+    concat(Str1,Str2,Str).
 tk_option(['-hight',X|Ls],Str) :-
     format(Str1,$ -hight ~D$,[X]),
     tk_option(Ls,Str2),
-    concar(Str1,Str2,Str).
+    concat(Str1,Str2,Str).
 tk_option(['-relief',X|Ls],Str) :-
     format(Str1,$ -relief ~D$,[X]),
     tk_option(Ls,Str2),
-    concar(Str1,Str2,Str).
+    concat(Str1,Str2,Str).
 tk_option(['-label',X|Ls],Str) :-
     format(Str1,$ -label ~D$,[X]),
     tk_option(Ls,Str2),
-    concar(Str1,Str2,Str).      
-    concar(Str1,Str2,Str).      
+    concat(Str1,Str2,Str).      
+    concat(Str1,Str2,Str).      
                       
 
 tk_list([],$$).
