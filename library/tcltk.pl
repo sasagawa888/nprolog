@@ -93,7 +93,7 @@ tk_add(Obj,Class,L) :-
     tk_interp(Str).
 
 tk_canvas(Obj,L) :-
-    tk_option(L,Opt),
+    tk_list(L,Opt),
     format(Str,$canvas .~A ~S\n;$,[Obj,Opt]),
     tk_interp(Str).
 
@@ -117,190 +117,15 @@ tk_command(Cmd) :-
 tk_rgb([R,G,B],Str) :-
     format(Str,$ #~D ~D ~D$,[R,G,B]).
 
-tk_option([],$$).
-tk_option(['-text',X|Ls],Str) :-
-    atom(X),
-    format(Str1,$ -text ~A$,[X]),
-    tk_option(Ls,Str2),
-    concat(Str1,Str2,Str).
-tk_option(['-text',X|Ls],Str) :-
-    list(X),
-    tk_list(X,X1),
-    format(Str1,$ -text ~S$,[X1]),
-    tk_option(Ls,Str2),
-    concat(Str1,Str2,Str).
-tk_option(['-width',X|Ls],Str) :-
-    format(Str1,$ -width ~D$,[X]),
-    tk_option(Ls,Str2),
-    concat(Str1,Str2,Str).
-tk_option(['-height',X|Ls],Str) :-
-    format(Str1,$ -height ~D$,[X]),
-    tk_option(Ls,Str2),
-    concat(Str1,Str2,Str).
-tk_option(['-relief',X|Ls],Str) :-
-    format(Str1,$ -relief ~D$,[X]),
-    tk_option(Ls,Str2),
-    concat(Str1,Str2,Str).
-tk_option(['-label',X|Ls],Str) :-
-    format(Str1,$ -label ~D$,[X]),
-    tk_option(Ls,Str2),
-    concat(Str1,Str2,Str),      
-    concat(Str1,Str2,Str).      
-                      
-
-tk_list([],$$).
-tk_list([L|Ls],Str) :-
-    atom(L),
-    string_term(L,Str1),
-    tk_list(Ls,Str2),
-    concat(Str1,Str2,Str).
-tk_list([L|Ls],Str) :-
-    list(L),
-    tk_list(L,Str1),
-    tk_list(Ls,Str2),
-    concat(Str1,Str2,Str).
-
-
 tk_create(Obj,Class,L) :-
-    tk_option(L,Opt),
+    tk_list(L,Opt),
     format(Str,$.~O create ~O Class ~O\n$,[Obj,Class,Opt]),
     tk_interp(Str).
+
+tk_list([],$$).
+tk_list([X|Xs],Str) :-
+    string_term(S,X),
+    concat($ $,S,S1),
+    tk_list(Xs,S2),
+    concat(S1,S2,Str).
      
-
-/*    
-      ((eq (car ls) '-type) (string-append (string-append " -type " (car (cdr ls)))
-                                             (tk:option (cdr (cdr ls)))))
-      ((eq (car ls) '-menu) (string-append (string-append " -menu " (tk:objects (car (cdr ls))))
-                                             (tk:option (cdr (cdr ls)))))                                      
-      ((eq (car ls) '-underline) (string-append (string-append " -underline " (convert (car (cdr ls)) <string>) )
-                                             (tk:option (cdr (cdr ls)))))                                                                              
-      ((eq (car ls) '-xscrollcommand) (string-append (string-append " -xscrollcommand \"" (car (cdr ls)) "\"")
-                                             (tk:option (cdr (cdr ls)))))   	
-      ((eq (car ls) '-yscrollcommand) (string-append (string-append " -yscrollcommand \"" (car (cdr ls)) "\"")
-                                             (tk:option (cdr (cdr ls)))))
-      ((eq (car ls) '-selectmode)  (string-append (string-append " -selectmode " (car (cdr ls)))
-                                                 (tk:option (cdr (cdr ls))))) 
-      ((eq (car ls) '-orient)  (string-append (string-append " -orient " (car (cdr ls)))
-                                                 (tk:option (cdr (cdr ls))))) 
-      ((or (eq (car ls) '-fg) (eq (car ls) '-foreground)) 
-                               (cond ((atom (car (cdr ls))) 
-                                (string-append (string-append " -fg " (convert (car (cdr ls)) <string>))
-                                               (tk:option (cdr (cdr ls)))))
-                               ((vectorp (car (cdr ls)))
-                                (string-append (string-append " -fg " (tk:rgb (car (cdr ls))))
-                                               (tk:option (cdr (cdr ls)))))))
-      ((or (eq (car ls) '-bg) (eq (car ls) '-background)) 
-                               (cond ((atom (car (cdr ls))) 
-                                (string-append (string-append " -bg " (convert (car (cdr ls)) <string>))
-                                               (tk:option (cdr (cdr ls)))))
-                               ((vectorp (car (cdr ls)))
-                                (string-append (string-append " -bg " (tk:rgb (car (cdr ls))))
-                                               (tk:option (cdr (cdr ls)))))))
-      ((eq (car ls) '-activeforeground) 
-                               (cond ((atom (car (cdr ls))) 
-                                (string-append (string-append " -activeforeground " (convert (car (cdr ls)) <string>))
-                                               (tk:option (cdr (cdr ls)))))
-                               ((vectorp (car (cdr ls)))
-                                (string-append (string-append " -activeforeground " (tk:rgb (car (cdr ls))))
-                                               (tk:option (cdr (cdr ls)))))))
-      ((eq (car ls) '-activebackground) 
-                               (cond ((atom (car (cdr ls))) 
-                                (string-append (string-append " -activebackground " (convert (car (cdr ls)) <string>))
-                                               (tk:option (cdr (cdr ls)))))
-                               ((vectorp (car (cdr ls)))
-                                (string-append (string-append " -activebackground " (tk:rgb (car (cdr ls))))
-                                               (tk:option (cdr (cdr ls)))))))
-      ((eq (car ls) '-disabledforeground) 
-                               (cond ((atom (car (cdr ls))) 
-                                (string-append (string-append " -disabledforeground " (convert (car (cdr ls)) <string>))
-                                               (tk:option (cdr (cdr ls)))))
-                               ((vectorp (car (cdr ls)))
-                                (string-append (string-append " -disabledforeground " (tk:rgb (car (cdr ls))))
-                                               (tk:option (cdr (cdr ls)))))))                                         
-      ((eq (car ls) '-troughcolor) 
-                               (cond ((atom (car (cdr ls))) 
-                                (string-append (string-append " -troughcolor " (convert (car (cdr ls)) <string>))
-                                               (tk:option (cdr (cdr ls)))))
-                               ((vectorp (car (cdr ls)))
-                                (string-append (string-append " -troughcolor " (tk:rgb (car (cdr ls))))
-                                               (tk:option (cdr (cdr ls)))))))
-      ((eq (car ls) '-fill) 
-                               (cond ((atom (car (cdr ls))) 
-                                (string-append (string-append " -fill " (convert (car (cdr ls)) <string>))
-                                               (tk:option (cdr (cdr ls)))))
-                               ((vectorp (car (cdr ls)))
-                                (string-append (string-append " -fill " (tk:rgb (car (cdr ls))))
-                                               (tk:option (cdr (cdr ls)))))))
-      ((eq (car ls) '-outline) 
-                               (cond ((atom (car (cdr ls))) 
-                                (string-append (string-append " -outline " (convert (car (cdr ls)) <string>))
-                                               (tk:option (cdr (cdr ls)))))
-                               ((vectorp (car (cdr ls)))
-                                (string-append (string-append " -outline " (tk:rgb (car (cdr ls))))
-                                               (tk:option (cdr (cdr ls)))))))
-      ((eq (car ls) '-stipple) (string-append (string-append " -stipple " (convert (car (cdr ls)) <string>))
-                                            (tk:option (cdr (cdr ls)))))                                          
-      ((eq (car ls) '-anchor) (string-append (string-append " -anchor "
-                                                             (tk:str-to-lower (convert (car (cdr ls)) <string>)))
-                                            (tk:option (cdr (cdr ls)))))
-      ((eq (car ls) '-tearoff) (string-append (string-append " -tearoff " 
-                                                             (tk:str-to-lower (convert (car (cdr ls)) <string>)))
-                                              (tk:option (cdr (cdr ls)))))                                    
-      ((eq (car ls) '-font) (string-append (string-append " -font " (tk:list (car (cdr ls))))
-                                            (tk:option (cdr (cdr ls)))))))
-      
-
-
-
-(defun tk:winfo (class object)
-   (let ((obj (tk:objects object)))
-     (c-lang     
-       "strcpy(buff,''winfo '');
-        strcat(buff,Fgetname(CLASS));
-        strcat(buff,'' '');
-        strcat(buff,Fgetname(OBJ));
-        strcat(buff,''\n'');")
-     (c-lang    
-       "Tcl_Eval(interp,buff);
-        res = Fmakeint(atoi(Tcl_GetStringResult(interp)));
-        return(res);")))
-
-
-;; e.g. menu '(m m1) -> ".m.m1"  menu 'm "."
-(defun tk:objects (ls)
-    (cond ((null ls) "")
-          ((eq ls 'root) ".")
-          ((symbolp ls) (string-append "." (tk:str-to-lower (convert ls <string>))))
-          (t (string-append "." 
-                            (tk:str-to-lower (convert (car ls) <string>))
-                            (tk:objects (cdr ls))))))
-
-
-(defun line (:rest l)
-    (string-append " line" (tk:class-option l)))
-
-(defun oval (:rest l)
-    (string-append " oval" (tk:class-option l)))
-
-(defun rectangle (:rest l)
-    (string-append " rectangle" (tk:class-option l)))
-
-(defun arc (:rest l)
-    (string-append " arc" (tk:class-option l)))
-
-(defun polygon (:rest l)
-    (string-append " polygon" (tk:class-option l)))
-
-(defun text (:rest l)
-    (string-append " text" (tk:class-option l)))
-
-
-
-(defun tk:class-option (ls)
-    (cond ((null ls) "")
-          (t (string-append (string-append " " (convert (car ls) <string>))
-                            (tk:class-option (cdr ls))))))
-          
-
-
-*/
