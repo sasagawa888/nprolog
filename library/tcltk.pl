@@ -115,9 +115,17 @@ tk_option([rgb(R,G,B)|Xs],Str) :-
     concat($ $,S,S1),
     tk_option(Xs,S2),
     concat(S1,S2,Str).
-tk_list([X|Xs],Str) :-
+tk_option([X|Xs],Str) :-
     string_term(S,X),
     concat($ $,S,S1),
     tk_option(Xs,S2),
     concat(S1,S2,Str).
+
+tk_object([],$$).
+tk_object([X|Xs],Str) :-
+    string_term(S,X),
+    concat($.$,S,S1),
+    tk_object(Xs,S2),
+    concat(S1,S2,S3),
+    concat(S3,$ $,Str).
      

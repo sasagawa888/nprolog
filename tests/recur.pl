@@ -2,7 +2,7 @@
 
 recur :- 
     tk_init,
-    tk_canvas(c0,['-width', 600,'-height', 600]),
+    tk_canvas(c0,[width(600),height(600)]),
     gasket([300,0],[0,600],[600,600],6),
     tk_pack(c0),
     tk_maintoop.
@@ -18,7 +18,7 @@ min(X,Y,X) :-
 min(X,Y,Y).
 
 draw_triang([A0,A1],[B0,B1],[C0,C1]) :-
-    tk_create(c0,[line,A0,A1,B0,B1,C0,C1,A0,A1],'-fill',green).
+    tk_create(c0,line(line([A0,A1,B0,B1,C0,C1,A0,A1]),['fill(green)])).
 
 
 gasket(A,B,C,0).
