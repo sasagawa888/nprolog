@@ -28,11 +28,6 @@ tk_exit :-
              return(Jexec_all(rest,Jget_sp(th),th));$).
             
 
-list_string([],$$).
-list_string([X|Xs],S) :-
-    list_string(Xs,S1),
-    concat(X,S1,S).
-
 
 tk_command_option(X,Y) :-
     list(X),
@@ -44,51 +39,51 @@ tk_label(Obj) :-
     format(Str,$label .~A ~A\n;$,[Obj]),
     tk_interp(Str).
 tk_label(Obj,L) :-
-    tk_option(L,Opt),
+    tk_list(L,Opt),
     format(Str,$label .~A ~A\n;$,[Obj,Opt]),
     tk_interp(Str).
 
 
 tk_button(Obj,L) :-
-    tk_option(L,Opt),
+    tk_list(L,Opt),
     format(Str,$button .~A ~S \n;$,[Obj,Opt]),
     tk_interp(Str).
  
 tk_radiobutton(Obj,L) :-
-    tk_option(L,Opt),
+    tk_list(L,Opt),
     format(Str,$radiobutton .~A ~S\;$,[Obj,Opt]),
     tk_interp(Str).
  
 tk_checkbutton(Obj,L) :-
-    tk_option(L,Opt),
+    tk_list(L,Opt),
     format(Str,$checkbutton .~A ~S\;$,[Obj,Opt]),
     tk_interp(Str).
  
 tk_listbox(Obj,L) :-
-    tk_option(L,Opt),
+    tk_list(L,Opt),
     format(Str,$listbox .~A ~S\;$,[Obj,Opt]),
     tk_interp(Str).
  
 tk_scrollbar(Obj,L) :-
-    tk_option(L,Opt),
+    tk_list(L,Opt),
     format(Str,$scrollbar .~A ~S\;$,[Obj,Opt]),
     tk_interp(Str).
 
 tk_menu(Obj,L) :-
     tk_object(Obj,Objects),
-    tk_option(L,Opt),
+    tk_list(L,Opt),
     format(Str,$menu ~A ~S\n;$,[Objects,Opt]),
     tk_interp(Str).
 
 tk_configure(Obj,L) :-
     tk_object(Obj,Objects),
-    tk_option(L,Opt),
+    tk_list(L,Opt),
     format(Str,$ configure ~A ~S\n;$,[Objects,Opt]),
     tk_interp(Str).
  
 tk_add(Obj,Class,L) :-
     tk_object(Obj,Objects),
-    tk_option(L,Opt),
+    tk_list(L,Opt),
     format(Str,$ add ~A ~S\n;$,[Object,Class,Opt]),
     tk_interp(Str).
 
@@ -100,9 +95,9 @@ tk_canvas(Obj,L) :-
 tk_mainloop :-
     cinline($Tk_MainLoop();$).
 
-tk_pack(L) :-
-    tk_packs(L,Obj),
-    format(Str,$pack ~A \n;$,[Obj]),
+tk_pack(Obj,L) :-
+    tk_list(Opt),
+    format(Str,$pack ~A \n;$,[Opt]),
     tk_interp(Str).
 
 
@@ -123,6 +118,11 @@ tk_create(Obj,Class,L) :-
     tk_interp(Str).
 
 tk_list([],$$).
+tk_list([rgb(R,G,B)|Xs],Str) :-
+    tk_rgb([R,G,B],S),
+    concat($ $,S,S1),
+    tk_list(Xs,S2),
+    concat(S1,S2,Str).
 tk_list([X|Xs],Str) :-
     string_term(S,X),
     concat($ $,S,S1),
