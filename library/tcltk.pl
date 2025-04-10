@@ -104,10 +104,23 @@ tk_command(Cmd) :-
 tk_rgb([R,G,B],Str) :-
     format(Str,$ #~D ~D ~D$,[R,G,B]).
 
-tk_create(Obj,Class,L) :-
-    tk_option(L,Opt),
-    format(Str,$.~O create ~O Class ~O\n$,[Obj,Class,Opt]),
+tk_create(Obj,Class,Option) :-
+    tk_class(Class,Cls),
+    tk_option(Option,Opt),
+    format(Str,$.~O create ~O Class ~O\n$,[Obj,Cls,Opt]),
     tk_interp(Str).
+
+tk_class(line(X),Str) :-
+    tk_list(X,S1),
+    format(Str,$-line ~A $,[S1]).
+
+
+tk_list([],$$).
+tk_list([X|Xs],Str) :-
+    string_term(S,X),
+    concat($ $,S,S1),
+    tk_list(Xs,S2),
+    concat(S1,S2,Str).
 
 tk_option([],$$).
 tk_option([rgb(R,G,B)|Xs],Str) :-
@@ -120,12 +133,3 @@ tk_option([X|Xs],Str) :-
     concat($ $,S,S1),
     tk_option(Xs,S2),
     concat(S1,S2,Str).
-
-tk_object([],$$).
-tk_object([X|Xs],Str) :-
-    string_term(S,X),
-    concat($.$,S,S1),
-    tk_object(Xs,S2),
-    concat(S1,S2,S3),
-    concat(S3,$ $,Str).
-     
