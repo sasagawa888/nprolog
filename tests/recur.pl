@@ -5,20 +5,14 @@ recur :-
     tk_canvas(c0,[width(600),height(600)]),
     gasket([300,0],[0,600],[600,600],6),
     tk_pack(c0),
-    tk_maintoop.
+    tk_mainloop.
 
 midpoint([A0,A1],[B0,B1],[X0,X1]) :-
-    min(A0,B0,C0),
-    min(A1,B1,C1),
-    X0 is C0+abs((A0-B0)/2),
-    X1 is C1+abs((A1-B1)/2).
-
-min(X,Y,X) :-
-    X < Y,!.
-min(X,Y,Y).
+    X0 is (A0+B0)/2,
+    X1 is (A1+B1)/2.
 
 draw_triang([A0,A1],[B0,B1],[C0,C1]) :-
-    tk_create(c0,line(line([A0,A1,B0,B1,C0,C1,A0,A1]),['fill(green)])).
+    tk_create(c0,line([A0,A1,B0,B1,C0,C1,A0,A1]),[fill(green)]).
 
 
 gasket(A,B,C,0).
