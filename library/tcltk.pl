@@ -89,16 +89,18 @@ tk_mainloop :-
 
 tk_pack(Obj,L) :-
     tk_option(L,Opt),
-    format(Str,$pack ~A ~A \n;$,[Obj,Opt]),
+    format(Str,$pack ~O ~O \n;$,[Obj,Opt]),
     tk_interp(Str).
-
+tk_pack(Obj) :-
+    format(Str,$pack ~O \n;$,[Obj]),
+    tk_interp(Str).
 
 tk_update :-
     cinline($strcpy(buff,"update\n");
              Tcl_Eval(interp,buff);$).
 
 tk_command(Cmd) :-
-    format(Str,$~A\n;$,[Cmd]),
+    format(Str,$~O\n;$,[Cmd]),
     tk_interp(Str).
 
 tk_rgb([R,G,B],Str) :-
@@ -112,7 +114,7 @@ tk_create(Obj,Class,Option) :-
 
 tk_class(line(X),Str) :-
     tk_list(X,S1),
-    format(Str,$-line ~A $,[S1]).
+    format(Str,$-line ~O $,[S1]).
 
 
 tk_list([],$$).
