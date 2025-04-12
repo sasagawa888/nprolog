@@ -1,5 +1,12 @@
 % test of tcl/tk
 
+
+foo :- 
+    tk_init,
+    tk_canvas(c0,[width(600),height(600)]),
+    tk_pack(c0),
+    tk_mainloop.
+
 recur :- 
     tk_init,
     tk_canvas(c0,[width(600),height(600)]),

@@ -81,7 +81,8 @@ tk_add(Obj,Class,L) :-
 
 tk_canvas(Obj,L) :-
     tk_option(L,Opt),
-    format(Str,$canvas .~A ~S\n;$,[Obj,Opt]),
+    format(Str,$canvas .~A ~S\n$,[Obj,Opt]),
+    write(user_output,Str),
     tk_interp(Str).
 
 tk_mainloop :-
@@ -89,10 +90,10 @@ tk_mainloop :-
 
 tk_pack(Obj,L) :-
     tk_option(L,Opt),
-    format(Str,$pack ~O ~O \n;$,[Obj,Opt]),
+    format(Str,$pack .~O ~O \n$,[Obj,Opt]),
     tk_interp(Str).
 tk_pack(Obj) :-
-    format(Str,$pack ~O \n;$,[Obj]),
+    format(Str,$pack .~O \n$,[Obj]),
     tk_interp(Str).
 
 tk_update :-
@@ -109,7 +110,10 @@ tk_rgb([R,G,B],Str) :-
 tk_create(Obj,Class,Option) :-
     tk_class(Class,Cls),
     tk_option(Option,Opt),
-    format(Str,$.~O create ~O Class ~O\n$,[Obj,Cls,Opt]),
+    format(Str,$.~O create ~O ~O\n$,[Obj,Cls,Opt]),
+    write(user_output,Option),
+    write(user_output,Opt),
+    write(user_output,Str),
     tk_interp(Str).
 
 tk_class(line(X),Str) :-
@@ -127,6 +131,21 @@ tk_list([X|Xs],Str) :-
 tk_option([],$$).
 tk_option([rgb(R,G,B)|Xs],Str) :-
     tk_rgb([R,G,B],S),
+    concat($ $,S,S1),
+    tk_option(Xs,S2),
+    concat(S1,S2,Str).
+tk_option([width(X)|Xs],Str) :-
+    format(S,$ -width ~O $,[X]),
+    concat($ $,S,S1),
+    tk_option(Xs,S2),
+    concat(S1,S2,Str).
+tk_option([height(X)|Xs],Str) :-
+    format(S,$ -height ~O $,[X]),
+    concat($ $,S,S1),
+    tk_option(Xs,S2),
+    concat(S1,S2,Str).
+tk_option([fill(X)|Xs],Str) :-
+    format(S,$ -fill ~A $,[X]),
     concat($ $,S,S1),
     tk_option(Xs,S2),
     concat(S1,S2,Str).
