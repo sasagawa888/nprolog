@@ -14,6 +14,7 @@ cdeclare($#define BUFFSIZE 1024
 
 tk_interp :-
     cinline($Tcl_Eval(interp,buff);
+             printf("%s",buff);
              return(Jexec_all(rest,Jget_sp(th),th));$).
 
 tk_clear :-
@@ -21,6 +22,10 @@ tk_clear :-
 
 tk_addatom(Atom) :-
     cinline($strcat(buff,Jgetname(Jderef(varAtom,th)));$).
+
+tk_addhex(Hex) :-
+    cinline($sprintf(subbuff,"%x",Jget_int(Jderef(varHex,th)));
+             strcat(buff,subbuff);$).
 
 tk_addint(Int) :-
     cinline($sprintf(subbuff," %d",Jget_int(Jderef(varInt,th)));
@@ -51,7 +56,6 @@ tk_pack(Obj,Opt) :-
     tk_clear,
     tk_addatom(' pack .'),
     tk_addatom(Obj),
-    tk_addatom(' '),
     tk_option(Opt),
     tk_interp.
 
@@ -69,9 +73,7 @@ tk_update :-
 tk_rgb([R,G,B]) :-
     tk_addatom(' #'),
     tk_addint(R),
-    tk_addatom(' '),
     tk_addint(G),
-    tk_addatom(' '),
     tk_addint(B).
     
 
