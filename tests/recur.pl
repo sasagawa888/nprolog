@@ -1,17 +1,9 @@
 % test of tcl/tk
 
-
-foo :- 
-    tk_init,
-    tk_canvas(c0,[width(600),height(600)]),
-    tk_create(c0,line([0,0,100,100,100,400,300,400]),[fill(green)]),
-    tk_pack(c0),
-    tk_mainloop.
-
 recur :- 
     tk_init,
     tk_canvas(c0,[width(600),height(600)]),
-    gasket([300,0],[0,600],[600,600],3),
+    gasket([300,0],[0,600],[600,600],6),
     tk_pack(c0),
     tk_mainloop.
 
@@ -23,17 +15,13 @@ draw_triang([A0,A1],[B0,B1],[C0,C1]) :-
     tk_create(c0,line([A0,A1,B0,B1,C0,C1,A0,A1]),[fill(green)]).
 
 
-gasket(A,B,C,0).
-gasket(A,B,C,N) :-
-    draw_triang(A,B,C),
-    midpoint(A,B,A1),
-    midpoint(B,C,B1),
-    midpoint(C,A,C1),
-    draw_triang(A1,B1,C1),
-    tk_pack(c0),
-    tk_update,
-    N1 is N-1,
-    gasket(A,A1,B1,N1),
-    gasket(A1,B,C1,N1),
-    gasket(C1,B1,C,N1).
-
+gasket(A, B, C, 0) :-
+    draw_triang(A, B, C).
+gasket(A, B, C, N) :-
+    midpoint(A, B, AB),
+    midpoint(B, C, BC),
+    midpoint(C, A, CA),
+    N1 is N - 1,
+    gasket(A, AB, CA, N1),
+    gasket(AB, B, BC, N1),
+    gasket(CA, BC, C, N1).
