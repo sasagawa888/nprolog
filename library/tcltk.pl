@@ -13,23 +13,29 @@ cdeclare($#define BUFFSIZE 1024
          char subbuff[BUFFSIZE];$).
 
 tk_interp :-
-    cinline($Tcl_Eval(interp,buff);
-             printf("%s",buff);
+    cinline($strcat(buff,"\n");
+             Tcl_Eval(interp,buff);
+             //printf("%s",buff);
              return(Jexec_all(rest,Jget_sp(th),th));$).
 
 tk_clear :-
-    cinline($buff[0] = '\0';$).
+    cinline($buff[0] = '\0';
+             return(Jexec_all(rest,Jget_sp(th),th));$).
 
 tk_addatom(Atom) :-
-    cinline($strcat(buff,Jgetname(Jderef(varAtom,th)));$).
+    cinline($strcat(buff,Jgetname(Jderef(varAtom,th)));
+             return(Jexec_all(rest,Jget_sp(th),th));$).
 
 tk_addhex(Hex) :-
     cinline($sprintf(subbuff,"%x",Jget_int(Jderef(varHex,th)));
-             strcat(buff,subbuff);$).
+             strcat(buff,subbuff);
+             return(Jexec_all(rest,Jget_sp(th),th));$).
 
 tk_addint(Int) :-
     cinline($sprintf(subbuff," %d",Jget_int(Jderef(varInt,th)));
-             strcat(buff,subbuff);$).
+             strcat(buff,subbuff);
+             return(Jexec_all(rest,Jget_sp(th),th));$).
+
 
 tk_init :-
     cinline($interp = Tcl_CreateInterp();
@@ -43,14 +49,14 @@ tk_exit :-
  
 tk_canvas(Obj,Opt) :-
     tk_clear,
-    tk_addatom(' .'),
+    tk_addatom(' canvas .'),
     tk_addatom(Obj),
-    tk_addatom(' canvas'),
     tk_option(Opt),
     tk_interp.
 
 tk_mainloop :-
-    cinline($Tk_MainLoop();$).
+    cinline($Tk_MainLoop();
+            return(Jexec_all(rest,Jget_sp(th),th));$).
 
 tk_pack(Obj,Opt) :-
     tk_clear,
@@ -66,8 +72,10 @@ tk_pack(Obj) :-
     tk_interp.
 
 tk_update :-
-    cinline($strcpy(buff,"update\n");
-             Tcl_Eval(interp,buff);$).
+    tk_clear,
+    tk_addatom(update),
+    tk_interp.
+            
 
 
 tk_rgb([R,G,B]) :-
@@ -79,15 +87,15 @@ tk_rgb([R,G,B]) :-
 
 tk_create(Obj,Class,Option) :-
     tk_clear,
-    tk_addatom('.'),
+    tk_addatom(' .'),
     tk_addatom(Obj),
     tk_addatom(' create '),
     tk_class(Class),
     tk_option(Option),
-    tk_interp(Str).
+    tk_interp.
 
-tk_class(line(X),Str) :-
-    tk_addatom(' -line '),
+tk_class(line(X)) :-
+    tk_addatom(' line'),
     tk_intlist(X).
 
 tk_intlist([]).
@@ -100,14 +108,14 @@ tk_option([rgb(R,G,B)|Xs]) :-
     tk_rgb([R,G,B]),
     tk_option(Xs).
 tk_option([width(X)|Xs]) :-
-    tk_addatom(' -width '),
+    tk_addatom(' -width'),
     tk_addint(X),
     tk_option(Xs).
 tk_option([height(X)|Xs]) :-
-    tk_addatom(' -height '),
+    tk_addatom(' -height'),
     tk_addint(X),
     tk_option(Xs).
-tk_option([fill(X)|Xs],Str) :-
+tk_option([fill(X)|Xs]) :-
     tk_addatom(' -fill '),
     tk_addatom(X),
     tk_option(Xs).
