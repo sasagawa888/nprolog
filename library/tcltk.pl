@@ -9,12 +9,23 @@ cdeclare($#include <stdio.h>$).
 
 cdeclare($#define BUFFSIZE 1024
          Tcl_Interp *interp;
-         char buff[BUFFSIZE];$).
+         char buff[BUFFSIZE];
+         char subbuff[BUFFSIZE];$).
 
 tk_interp(Str) :-
-    cinline($strcpy(buff,Jgetname(Jderef(varStr,th)));
-             Tcl_Eval(interp,buff);
+    cinline($Tcl_Eval(interp,buff);
              return(Jexec_all(rest,Jget_sp(th),th));$).
+
+tk_clear :-
+    cinline($buff[0] = '\0';$).
+
+tk_addatom(Atom) :-
+    cinline($strcat(buff,Jgetname(Jderef(varAtom,th)));$).
+
+tk_addint(Int) :-
+    cinline($sprintf(subbuff," %d",Jget_int(Jderef(varInt,th)));
+             strcat(buff,subbuff);$).
+
 
 
 tk_init :-
@@ -79,10 +90,12 @@ tk_add(Obj,Class,L) :-
     format(Str,$ add ~A ~S\n;$,[Object,Class,Opt]),
     tk_interp(Str).
 
-tk_canvas(Obj,L) :-
-    tk_option(L,Opt),
-    format(Str,$canvas .~A ~S\n$,[Obj,Opt]),
-    write(user_output,Str),
+tk_canvas(Obj,Opt) :-
+    tk_clear,
+    tk_addatom('.'),
+    tk_addatom(Obj),
+    tk_addatom(' canvas'),
+    tk_option(Opt),
     tk_interp(Str).
 
 tk_mainloop :-
@@ -111,9 +124,6 @@ tk_create(Obj,Class,Option) :-
     tk_class(Class,Cls),
     tk_option(Option,Opt),
     format(Str,$.~O create ~O ~O\n$,[Obj,Cls,Opt]),
-    write(user_output,Option),
-    write(user_output,Opt),
-    write(user_output,Str),
     tk_interp(Str).
 
 tk_class(line(X),Str) :-
