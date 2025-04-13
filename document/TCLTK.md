@@ -36,4 +36,7 @@ Option width(N),height(N)
 Class line([x1,y1,x2,y2,...]) oval([x1,y1,x2,y2,...]) arc([x1,y1,x2,y2])
 rectangle([x1,y1,x2,y2]) polygon([x1,y1,x2,y2,...])
 
+Option fill(Color) e.g. fill(red)
+
 - tk_pack(Object,Option)
+Object is atom or list of atom.
