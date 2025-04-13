@@ -25,3 +25,11 @@ gasket(A, B, C, N) :-
     gasket(A, AB, CA, N1),
     gasket(AB, B, BC, N1),
     gasket(CA, BC, C, N1).
+
+
+japan :-
+    tk_init,
+    tk_canvas(c0,[width(600),height(400)]),
+    tk_create(c0,oval([200,100,400,300]),[fill(red)]),
+    tk_pack(c0),
+    tk_mainloop.
