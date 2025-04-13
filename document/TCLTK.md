@@ -20,7 +20,7 @@ Initializing Tcl/Tk.
 - tk_exit/0
 Terminating Tcl/Tk.
 
-- tk_interp(Str)
+- tk_interp/0
 Execute the command given as the string Str in Tcl/Tk.
 
 - tk_update/0
@@ -28,3 +28,12 @@ Send the update command to Tcl/Tk.
 
 - tk_mainloop/0
 Execute Tk_MainLoop() in Tcl/Tk.
+
+- tk_canvas(Object,Option)
+Option width(N),height(N)
+
+- tk_create(Object,Class,Option)
+Class line([x1,y1,x2,y2,...]) oval([x1,y1,x2,y2,...]) arc([x1,y1,x2,y2])
+rectangle([x1,y1,x2,y2]) polygon([x1,y1,x2,y2,...])
+
+- tk_pack(Object,Option)

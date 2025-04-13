@@ -46,7 +46,10 @@ tk_init :-
 tk_exit :-
     cinline($Tcl_DeleteInterp(interp);
              return(Jexec_all(rest,Jget_sp(th),th));$).
- 
+
+tk_error(Msg,Obj) :-
+    format(user_output,$error ~A ~O$, [Msg,Obj]).
+
 tk_canvas(Obj,Opt) :-
     tk_clear,
     tk_addatom(' canvas .'),
@@ -66,9 +69,16 @@ tk_pack(Obj,Opt) :-
     tk_interp.
 
 tk_pack(Obj) :-
+    atom(Obj),
     tk_clear,
     tk_addatom(' pack .'),
     tk_addatom(Obj),
+    tk_interp.
+tk_pack(Obj) :-
+    list(Obj),
+    tk_clear,
+    tk_addatom(' pack '),
+    tk_atomlist(Obj),
     tk_interp.
 
 tk_update :-
@@ -97,11 +107,36 @@ tk_create(Obj,Class,Option) :-
 tk_class(line(X)) :-
     tk_addatom(' line'),
     tk_intlist(X).
+tk_class(oval(X)) :-
+    tk_addatom(' oval'),
+    tk_intlist(X).
+tk_class(arc(X)) :-
+    tk_addatom(' arc'),
+    tk_intlist(X).
+tk_class(rectangle(X)) :-
+    tk_addatom(' rectangle'),
+    tk_intlist(X).
+tk_class(polygon(X)) :-
+    tk_addatom(' polygon'),
+    tk_intlist(X).
 
 tk_intlist([]).
 tk_intlist([X|Xs]) :-
+    integer(X),
     tk_addint(X),
     tk_intlist(Xs).
+tk_intlist([X|Xs]) :-
+    tk_error('not integer',X).
+
+tk_atomlist([]).
+tk_atomlist([X|Xs]) :-
+    atom(X),
+    tk_addatom(' .'),
+    tk_addatom(X),
+    tk_atomlist(Xs).
+tk_atomlist([X|Xs]) :-
+    tk_error('not atom',X).
+
 
 tk_option([]).
 tk_option([rgb(R,G,B)|Xs]) :-
