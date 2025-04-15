@@ -13,3 +13,9 @@ yes
 ```
 
 # Specification
+
+- open_plot/0
+
+- send_plot(Msg)
+
+- close_plot/0
