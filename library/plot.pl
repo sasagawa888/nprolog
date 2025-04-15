@@ -3,27 +3,18 @@
 cdeclare($#include <stdio.h>
           FILE *gp;$).
 
-/*
-(c-include  "<stdio.h>")
-(c-lang "FILE *gp;")
+open_plot :-
+    cinline($gp = popen("gnuplot -persist","w");
+              return(Jexec_all(rest,Jget_sp(th),th));$).
 
-(defun open-plot ()
-    (c-lang "gp = popen(\"gnuplot -persist\",\"w\");")
-    t)
+send_plot(Msg) :-
+    send_plot1(Msg).
 
-(defun send-plot (msg)
-     (let ((stm (create-string-output-stream)))
-        (format stm msg)
-        (send-plot1 (get-output-stream-string stm))
-        t))
+send_plot1(Msg) :-
+    cinline($fprintf(gp, "%s\n", Jgetname(Jderef(varMsg,th)));
+             fflush(gp);
+             return(Jexec_all(rest,Jget_sp(th),th));$).
 
-(defun send-plot1 (msg)
-    (c-lang "fprintf(gp, \"%s\\n\", Fgetname(MSG));")
-    (c-lang "fflush(gp);")
-    t)
-
-(defun close-plot ()    
-    (c-lang "pclose(gp);")
-    t)
-
-*/
+close_plot :-
+    cinline($pclose(gp);
+             return(Jexec_all(rest,Jget_sp(th),th));$).
