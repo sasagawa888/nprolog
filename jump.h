@@ -544,22 +544,22 @@ static int displayfunc;
 static int mousefunc; 
 static int keyboardfunc;
 
-static void keyboard_callback(unsigned char key, int x, int y)
+static void display_callback(void);
+static void display_callback()
 {
-    Jset_cdr(Jmakesym("gl::key"), Jmakeint((int) key));
-    Jset_cdr(Jmakesym("gl::x"), Jmakeint(x));
-    Jset_cdr(Jmakesym("gl::y"), Jmakeint(y));
-    Fpeval(keyboardfunc,0);
+    Jexec_all(displayfunc,Jget_sp(0),0);
 }
 
-
-static void mouse_callback(int button, int state, int x, int y)
+static void keyboard_callback(void);
+static void keyboard_callback()
 {
-    Jset_cdr(Jmakesym("gl::button"), Jmakeint(button));
-    Jset_cdr(Jmakesym("gl::state"), Jmakeint(state));
-    Jset_cdr(Jmakesym("gl::x"), Jmakeint(x));
-    Jset_cdr(Fmakesym("gl::y"), Jmakeint(y));
-    Fpeval(mousefunc,0);
+    Jexec_all(keyboardfunc,Jget_sp(0),0);
+}
+
+static void mouse_callback(void);
+static void mouse_callback()
+{
+    Jexec_all(mousefunc,Jget_sp(0),0);
 }
 
 

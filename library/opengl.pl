@@ -30,11 +30,11 @@ gl_clear_colot(X1,Y1,X2,Y2) :-
 
 
 glut_display_func(X) :-
-    cinline($displayfunc = Jcons(Jderef(varX,th),NIL);
+    cinline($displayfunc = Jderef(varX,th);
              glutDisplayFunc(display_callback);$).
 
 glut_mouse_func(X) :-
-    cinlie($mousefunc = Fcons(X,NIL);
+    cinline($mousefunc = Jderef(varX,th);
             glutMouseFunc(mouse_callback);$). 
 
 
@@ -86,23 +86,23 @@ gl_error(P,O) :-
 gl_vertex2d(X,Y) :-
     cinline($glVertex2d(Jget_flt(Jderef(varX,th)),Jget_flt(Jderef(varY,th)));$).
 
-gl_vertex3d(X,Y,Z)
+gl_vertex3d(X,Y,Z) :-
     cinline($glVertex3d(Jget_flt(Jderef(varX,th)),
-                        Jget_flt(Jderef(varY,th),
-                        Jget_flt(Jderef(varZ,th))));$).
+                        Jget_flt(Jderef(varY,th)),
+                        Jget_flt(Jderef(varZ,th)));$).
 
 
 
-gl_vertex4d(X1,X2,X3,X4)
+gl_vertex4d(X1,X2,X3,X4) :-
     cinline($glVertex4d(Jget_flt(Jderef(varX1,th)),
                         Jget_flt(Jderef(varX2,th)),
                         Jget_flt(Jderef(varX3,th)),
-                        Jget_flt(Jderef(varX4,th)));"$).
+                        Jget_flt(Jderef(varX4,th)));$).
 
 glut_solid_cube(X) :-
     cinline($glutSolidCube(Jget_flt(Jderef(varX,th)));$). 
                 
-glut_solid_sphere(X,Y,Z)
+glut_solid_sphere(X,Y,Z) :-
     cinline($glutSolidSphere(Jget_flt(Jderef(varX,th)),
                              Jget_flt(Jderef(varY,th)),
                              Jget_flt(Jderef(varZ,th)));$).
