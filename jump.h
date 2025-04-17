@@ -27,8 +27,6 @@ tpred deftsys;
 
 static dp[10]; // disjunction pointer
 static int dynamic_clause;
-static int displayfunc;
-static int mousefunc; 
 
 void init0(int n, tpred x){
     f0[n] = (fn0)x;
@@ -540,3 +538,28 @@ static inline double Jget_flt(int x)
 {
     return f7[GET_FLT_IDX] (x);
 }
+
+//------------ opengl ---------------
+static int displayfunc;
+static int mousefunc; 
+static int keyboardfunc;
+
+static void keyboard_callback(unsigned char key, int x, int y)
+{
+    Jset_cdr(Jmakesym("gl::key"), Jmakeint((int) key));
+    Jset_cdr(Jmakesym("gl::x"), Jmakeint(x));
+    Jset_cdr(Jmakesym("gl::y"), Jmakeint(y));
+    Fpeval(keyboardfunc,0);
+}
+
+
+static void mouse_callback(int button, int state, int x, int y)
+{
+    Jset_cdr(Jmakesym("gl::button"), Jmakeint(button));
+    Jset_cdr(Jmakesym("gl::state"), Jmakeint(state));
+    Jset_cdr(Jmakesym("gl::x"), Jmakeint(x));
+    Jset_cdr(Fmakesym("gl::y"), Jmakeint(y));
+    Fpeval(mousefunc,0);
+}
+
+
