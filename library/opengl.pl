@@ -28,7 +28,7 @@ gl_clear_colot(X1,Y1,X2,Y2) :-
     cinline($glClearColor(Jget_flt(Jderef(varX1,th)),Jget_flt(Jderef(varY1,th)),
                           Jget_flt(Jderef(varX2,th)),Jget_flt(Jderef(varY2,th)));$).
 
-/*
+
 glut_display_func(X) :-
     cinline($displayfunc = Jcons(Jderef(varX,th),NIL);
              glutDisplayFunc(display_callback);$).
@@ -36,7 +36,6 @@ glut_display_func(X) :-
 glut_mouse_func(X) :-
     cinlie($mousefunc = Fcons(X,NIL);
             glutMouseFunc(mouse_callback);$). 
-*/
 
 
 glut_main_loop :-
@@ -84,52 +83,66 @@ gl_error(P,O) :-
     format(user_output,$error ~A ~O$,[P,O]),
     fail.
 
+gl_vertex2d(X,Y) :-
+    cinline($glVertex2d(Jget_flt(Jderef(varX,th)),Jget_flt(Jderef(varY,th)));$).
 
-/*
+gl_vertex3d(X,Y,Z)
+    cinline($glVertex3d(Jget_flt(Jderef(varX,th)),
+                        Jget_flt(Jderef(varY,th),
+                        Jget_flt(Jderef(varZ,th))));$).
 
 
-(defun gl:vertex2d (x y)
-    (c-lang "glVertex2d(Fgetflt(X),Fgetflt(Y));"))
 
-(defun gl:vertex3d (x y z)
-    (c-lang "glVertex3d(Fgetflt(X),Fgetflt(Y),Fgetflt(Z));"))
+gl_vertex4d(X1,X2,X3,X4)
+    cinline($glVertex4d(Jget_flt(Jderef(varX1,th)),
+                        Jget_flt(Jderef(varX2,th)),
+                        Jget_flt(Jderef(varX3,th)),
+                        Jget_flt(Jderef(varX4,th)));"$).
 
-(defun gl:vertex4d (x1 x2 x3 x4)
-    (c-lang "glVertex4d(Fgetflt(X1),Fgetflt(X2),Fgetflt(X3),Fgetflt(X4));"))
+glut_solid_cube(X) :-
+    cinline($glutSolidCube(Jget_flt(Jderef(varX,th)));$). 
+                
+glut_solid_sphere(X,Y,Z)
+    cinline($glutSolidSphere(Jget_flt(Jderef(varX,th)),
+                             Jget_flt(Jderef(varY,th)),
+                             Jget_flt(Jderef(varZ,th)));$).
 
-(defun glut:solid-cube (x)
-    (c-lang "glutSolidCube(Fgetflt(X));")) 
+glut_solid_torus(X1,X2,X3,X4) :-
+    cinline($glutSolidTorus(Jget_flt(Jderef(varX1,th)),
+                            Jget_flt(Jderef(varX2,th)),
+                            Jget_flt(Jderef(varX3,th)),
+                            Jget_flt(Jderef(varX4,th)));$).
 
-(defun glut:solid-sphere (x y z)
-    (c-lang "glutSolidSphere(Fgetflt(X),Fgetflt(Y),Fgetflt(Z));"))
+glut_solid_icosahedron :-
+    cinline($glutSolidIcosahedron();$).
 
-(defun glut:solid-torus (x1 x2 x3 x4)
-    (c-lang "glutSolidTorus(Fgetflt(X1),Fgetflt(X2),Fgetflt(X3),Fgetflt(X4));")) 
+glut_solid_octahedron :-
+    cinline($glutSolidOctahedron();$).
 
-(defun glut:solid-icosahedron ()
-    (c-lang "glutSolidIcosahedron();"))
 
-(defun glut:solid-octahedron ()
-    (c-lang "glutSolidOctahedron();"))
+glut_solid_tetrahedron :-
+    cinline($glutSolidTetrahedron();$).
 
-(defun glut:solid-tetrahedron ()
-    (c-lang "glutSolidTetrahedron();"))
 
-(defun glut:solid-dodecahedron ()
-    (c-lang "glutSolidDodecahedron();"))
+glut_solid_dodecahedron :-
+    cinline($glutSolidDodecahedron();$).
 
-(defun glut:solid-cone (x1 x2 x3 x4)    
-    (c-lang "glutSolidCone(Fgetflt(X1),Fgetflt(X2),Fgetflt(X3),Fgetflt(X4));"))
 
-(defun glut:solid-teapot (x)
-    (c-lang "glutSolidTeapot(Fgetflt(X));")) 
+glut_solid_cone(X1,X2,X3,X4) :-    
+    cinline($glutSolidCone(Jget_flt(Jderef(varX1,th)),
+                           Jget_flt(Jderef(varX2,th)),
+                           Jget_flt(Jderef(varX3,th)),
+                           Jget_flt(Jderef(varX4,th)));$).
 
-(defun gl:end ()
-    (c-lang "glEnd();"))
+glut_solid_teapot(X) :-
+    cinline($glutSolidTeapot(Jget_flt(Jderef(varX,th)));$). 
 
-(defun gl:flush ()
-    (c-lang "glFlush();"))
 
-(defun gl:finish ()
-    (c-lang "glFinish();"))
-*/
+gl_end :-
+    cinline($glEnd();$).
+
+gl_flush :-
+    cinline($glFlush();$).
+
+gl_finish :-
+    cinline($glFinish();$).
