@@ -21,6 +21,11 @@ int get_int(int addr)
 	return (addr);
 }
 
+double get_flt(int x)
+{
+	return(GET_FLT(x));
+}
+
 //transform data type
 
 int exact_to_inexact(int x)

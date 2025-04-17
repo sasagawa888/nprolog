@@ -8,51 +8,54 @@ glut_init :-
              glutInit(&argc, argv);
              return(Jexec_all(rest,Jget_sp(th),th));$).
 
+glut_init_display_mode1 :-
+    cinline($glutInitDisplayMode(GLUT_SINGLE);
+             return(Jexec_all(rest,Jget_sp(th),th));$).
+
+glut_init_display_mode(glut_single) :-
+    glut_init_display_mode1.
+
+glut_init_window_size(Hight,Width) :-
+    cinline($glutInitWindowSize(Jget_int(Jderef(varHight,th)),Jget_int(Jderef(varWidth,th)));$).
+
+glut_init_window_position(Hight,Width) :-
+    cinline($glutInitWindowPosition(Jget_int(Jderef(varHight,th)),Jget_int(Jderef(varWidth,th)));$).
+    
+glut_create_window(X) :-
+    cinline($glutCreateWindow(Jgetname(Jderef(varX,th)));$).
+
+gl_clear_colot(X1,Y1,X2,Y2) :-
+    cinline($glClearColor(Jget_flt(Jderef(varX1,th)),Jget_flt(Jderef(varY1,th)),
+                          Jget_flt(Jderef(varX2,th)),Jget_flt(Jderef(varY2,th)));$).
 
 /*
-(c-include "<GL/glut.h>")
-(c-option "-lglut -lGLU -lGL -L/usr/local/include/")
+glut_display_func(X) :-
+    cinline($displayfunc = Jcons(Jderef(varX,th),NIL);
+             glutDisplayFunc(display_callback);$).
 
-(defun glut:init ()
-    (c-lang "int argc = 0;")
-    (c-lang "char *argv;")
-    (c-lang "glutInit(&argc, argv);"))
+glut_mouse_func(X) :-
+    cinlie($mousefunc = Fcons(X,NIL);
+            glutMouseFunc(mouse_callback);$). 
+*/
 
-(defun glut:init-display-mode (x)
-    (cond ((eq x 'glut_single) (c-lang "glutInitDisplayMode(GLUT_SINGLE);"))))
 
-(defun glut:init-window-size (hight width)
-    (c-lang "glutInitWindowSize((INT_MASK & HIGHT), (INT_MASK & WIDTH));"))
+glut_main_loop :-
+    cinline($glutMainLoop();$).
 
-(defun glut:init-window-position (hight width)
-    (c-lang "glutInitWindowPosition((INT_MASK & HIGHT), (INT_MASK & WIDTH));"))
+gl_clear(gl_color_buffer_bit) :-
+    gl_clear1.
+    
+gl_clear1 :-
+    cinline($glClear(GL_COLOR_BUFFER_BIT);$).
 
-(defun glut:create-window (x)
-    (c-lang "glutCreateWindow(Fgetname(X));"))
+gl_color3d(R,G,B) :-
+    cinline($glColor3d(Jget_flt(Jderef(varR,th)),
+                       Jget_flt(Jderef(varG,th)),
+                       Jget_flt(Jderef(varB,th)));$).
 
-(defun gl:clear-color (x1 y1 x2 y2)
-    (c-lang "glClearColor(Fgetflt(X1),Fgetflt(Y1),Fgetflt(X2),Fgetflt(Y2));"))
 
-(defun glut:display-func (x)
-    (c-lang "displayfunc = Fcons(X,NIL);")
-    (c-lang "glutDisplayFunc(display_callback);"))
+/*
 
-(defun glut:keyboard-func (x)
-    (c-lang "keyboardfunc = Fcons(X,NIL);")
-    (c-lang "glutKeyboardFunc(keyboard_callback);"))
-
-(defun glut:mouse-func (x)
-    (c-lang "mousefunc = Fcons(X,NIL);")
-    (c-lang "glutMouseFunc(mouse_callback);")) 
-
-(defun glut:main-loop ()
-    (c-lang "glutMainLoop();"))
-
-(defun gl:clear (x)
-    (cond ((eq x 'gl_color_buffer_bit) (c-lang "glClear(GL_COLOR_BUFFER_BIT);"))))
-
-(defun gl:color3d (r g b)
-    (c-lang "glColor3d(Fgetflt(R),Fgetflt(G),Fgetflt(B));"))
 
 (defun gl:begin (x)
     (cond ((eq x 'gl-line-loop) (c-lang "glBegin(GL_LINE_LOOP);"))

@@ -205,6 +205,11 @@ enum { GETNAME_IDX,
        NUM_FN6S,
 };
 
+enum { GET_FLT_IDX,
+       NUM_FN7S,
+};
+
+
 
 
 extern cell heap[CELLSIZE];
@@ -1477,6 +1482,7 @@ int makestrflt(char *str);
 int makestrlong(char *str);
 void debug(void);
 char *get_name(int x);
+double get_flt(int x);
 
 // wiringPI
 #ifdef __arm__

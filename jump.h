@@ -9,6 +9,7 @@ typedef int (*fn3)(int , int , int);
 typedef int (*fn4)(char*);
 typedef int (*fn5)(int , int , int, int);
 typedef char* (*fn6)(int);
+typedef int (*fn7)(double);
 typedef void (*tpred)(char*, int(*pred)(int , int));
 typedef void (*tuser)(char*, int(*user)(int , int), int weight, int spec);
 
@@ -19,6 +20,7 @@ static fn3 f3[NUM_FN3S];
 static fn4 f4[NUM_FN4S];
 static fn5 f5[NUM_FN5S];
 static fn6 f6[NUM_FN6S];
+static fn7 f7[NUM_FN7S];
 tpred deftpred;
 tuser deftinfix;
 tpred deftsys;
@@ -52,6 +54,10 @@ void init5(int n, tpred x){
 
 void init6(int n, tpred x){
     f6[n] = (fn6)x;
+}
+
+void init7(int n, tpred x){
+    f7[n] = (fn7)x;
 }
 
 //for define compiled builtin predicate
@@ -528,3 +534,7 @@ static inline char *Jgetname(int x)
     return f6[GETNAME_IDX] (x);
 }
 
+static inline double Jget_flt(int x)
+{
+    return f7[GET_FLT_IDX] (x);
+}
