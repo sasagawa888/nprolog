@@ -54,23 +54,39 @@ gl_color3d(R,G,B) :-
                        Jget_flt(Jderef(varB,th)));$).
 
 
+gl_begin1(X) :-
+    cinline($glBegin(Jgetname(Jderef(varX,th)));$).
+
+gl_begin(gl_line_loop) :-
+    gl_begin1('GL_LINE_LOOP').
+gl_begin(gl_points) :-
+    gl_begin1('GL_POINTS').
+gl_begin(gl_lines) :-
+    gl_begin1('GL_LINES').
+gl_begin(gl_line_strip) :-
+    gl_begin1('GL_LINE_STRIP').
+gl_begin(gl_tryangles) :-
+    gl_begin1('GL_TRIANGLES').
+gl_begin(gl_quads) :-
+    gl_begin1('GL_QUADS').
+gl_begin(gl_tryangle_strip) :-
+    gl_begin1('GL_TRIANGLE_STRIP').
+gl_begin(gl_quad_strip) :-
+    gl_begin1('GL_QUAD_STRIP').
+gl_begin(gl_tryangle_fan) :-
+    gl_begin1('GL_TRIANGLE_FAN').
+gl_begin(gl_polygon) :-
+    gl_begin1('GL_POLYGON').
+gl_begin(X) :-
+    gl_error(gl_begin,X).
+
+gl_error(P,O) :-
+    format(user_output,$error ~A ~O$,[P,O]),
+    fail.
+
+
 /*
 
-
-(defun gl:begin (x)
-    (cond ((eq x 'gl-line-loop) (c-lang "glBegin(GL_LINE_LOOP);"))
-          ((eq x 'gl-points) (c-lang "glBegin(GL_POINTS);"))
-          ((eq x 'gl-lines) (c-lang "glBegin(GL_LINES);"))
-          ((eq x 'gl-line-strip) (c-lang "glBegin(GL_LINE_STRIP);"))
-          ((eq x 'gl-triangles) (c-lang "glBegin(GL_TRIANGLES);"))
-          ((eq x 'gl-quads) (c-lang "glBegin(GL_QUADS);"))
-          ((eq x 'gl-triangle-strip) (c-lang "glBegin(GL_TRIANGLE_STRIP);"))
-          ((eq x 'gl-quad-strip) (c-lang "glBegin(GL_QUAD_STRIP);"))
-          ((eq x 'gl-triangle-fan) (c-lang "glBegin(GL_TRIANGLE_FAN);"))
-          ((eq x 'gl-polygon) (c-lang "glBegin(GL_POLYGON);"))
-          (t (error "gl:begin" x))))
-
-  
 
 (defun gl:vertex2d (x y)
     (c-lang "glVertex2d(Fgetflt(X),Fgetflt(Y));"))
