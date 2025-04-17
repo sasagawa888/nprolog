@@ -16,45 +16,55 @@ glut_init_display_mode(glut_single) :-
     glut_init_display_mode1.
 
 glut_init_window_size(Hight,Width) :-
-    cinline($glutInitWindowSize(Jget_int(Jderef(varHight,th)),Jget_int(Jderef(varWidth,th)));$).
+    cinline($glutInitWindowSize(Jget_int(Jderef(varHight,th)),Jget_int(Jderef(varWidth,th)));
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 glut_init_window_position(Hight,Width) :-
-    cinline($glutInitWindowPosition(Jget_int(Jderef(varHight,th)),Jget_int(Jderef(varWidth,th)));$).
+    cinline($glutInitWindowPosition(Jget_int(Jderef(varHight,th)),Jget_int(Jderef(varWidth,th)));
+             Jexec_all(rest,Jget_sp(th),th);$).
     
 glut_create_window(X) :-
-    cinline($glutCreateWindow(Jgetname(Jderef(varX,th)));$).
+    cinline($glutCreateWindow(Jgetname(Jderef(varX,th)));
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 gl_clear_colot(X1,Y1,X2,Y2) :-
     cinline($glClearColor(Jget_flt(Jderef(varX1,th)),Jget_flt(Jderef(varY1,th)),
-                          Jget_flt(Jderef(varX2,th)),Jget_flt(Jderef(varY2,th)));$).
+                          Jget_flt(Jderef(varX2,th)),Jget_flt(Jderef(varY2,th)));
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 
 glut_display_func(X) :-
     cinline($displayfunc = Jderef(varX,th);
-             glutDisplayFunc(display_callback);$).
+             glutDisplayFunc(display_callback);
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 glut_mouse_func(X) :-
     cinline($mousefunc = Jderef(varX,th);
-            glutMouseFunc(mouse_callback);$). 
+            glutMouseFunc(mouse_callback);
+            Jexec_all(rest,Jget_sp(th),th);$). 
 
 
 glut_main_loop :-
-    cinline($glutMainLoop();$).
+    cinline($glutMainLoop();
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 gl_clear(gl_color_buffer_bit) :-
     gl_clear1.
     
 gl_clear1 :-
-    cinline($glClear(GL_COLOR_BUFFER_BIT);$).
+    cinline($glClear(GL_COLOR_BUFFER_BIT);
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 gl_color3d(R,G,B) :-
     cinline($glColor3d(Jget_flt(Jderef(varR,th)),
                        Jget_flt(Jderef(varG,th)),
-                       Jget_flt(Jderef(varB,th)));$).
+                       Jget_flt(Jderef(varB,th)));
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 
 gl_begin1(X) :-
-    cinline($glBegin(Jgetname(Jderef(varX,th)));$).
+    cinline($glBegin(Jgetname(Jderef(varX,th)));
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 gl_begin(gl_line_loop) :-
     gl_begin1('GL_LINE_LOOP').
@@ -84,12 +94,14 @@ gl_error(P,O) :-
     fail.
 
 gl_vertex2d(X,Y) :-
-    cinline($glVertex2d(Jget_flt(Jderef(varX,th)),Jget_flt(Jderef(varY,th)));$).
+    cinline($glVertex2d(Jget_flt(Jderef(varX,th)),Jget_flt(Jderef(varY,th)));
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 gl_vertex3d(X,Y,Z) :-
     cinline($glVertex3d(Jget_flt(Jderef(varX,th)),
                         Jget_flt(Jderef(varY,th)),
-                        Jget_flt(Jderef(varZ,th)));$).
+                        Jget_flt(Jderef(varZ,th)));
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 
 
@@ -97,52 +109,65 @@ gl_vertex4d(X1,X2,X3,X4) :-
     cinline($glVertex4d(Jget_flt(Jderef(varX1,th)),
                         Jget_flt(Jderef(varX2,th)),
                         Jget_flt(Jderef(varX3,th)),
-                        Jget_flt(Jderef(varX4,th)));$).
+                        Jget_flt(Jderef(varX4,th)));
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 glut_solid_cube(X) :-
-    cinline($glutSolidCube(Jget_flt(Jderef(varX,th)));$). 
+    cinline($glutSolidCube(Jget_flt(Jderef(varX,th)));
+             Jexec_all(rest,Jget_sp(th),th);$). 
                 
 glut_solid_sphere(X,Y,Z) :-
     cinline($glutSolidSphere(Jget_flt(Jderef(varX,th)),
                              Jget_flt(Jderef(varY,th)),
-                             Jget_flt(Jderef(varZ,th)));$).
+                             Jget_flt(Jderef(varZ,th)));
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 glut_solid_torus(X1,X2,X3,X4) :-
     cinline($glutSolidTorus(Jget_flt(Jderef(varX1,th)),
                             Jget_flt(Jderef(varX2,th)),
                             Jget_flt(Jderef(varX3,th)),
-                            Jget_flt(Jderef(varX4,th)));$).
+                            Jget_flt(Jderef(varX4,th)));
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 glut_solid_icosahedron :-
-    cinline($glutSolidIcosahedron();$).
+    cinline($glutSolidIcosahedron();
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 glut_solid_octahedron :-
-    cinline($glutSolidOctahedron();$).
+    cinline($glutSolidOctahedron();
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 
 glut_solid_tetrahedron :-
-    cinline($glutSolidTetrahedron();$).
+    cinline($glutSolidTetrahedron();
+            Jexec_all(rest,Jget_sp(th),th);$).
 
 
 glut_solid_dodecahedron :-
-    cinline($glutSolidDodecahedron();$).
+    cinline($glutSolidDodecahedron();
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 
 glut_solid_cone(X1,X2,X3,X4) :-    
     cinline($glutSolidCone(Jget_flt(Jderef(varX1,th)),
                            Jget_flt(Jderef(varX2,th)),
                            Jget_flt(Jderef(varX3,th)),
-                           Jget_flt(Jderef(varX4,th)));$).
+                           Jget_flt(Jderef(varX4,th)));
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 glut_solid_teapot(X) :-
-    cinline($glutSolidTeapot(Jget_flt(Jderef(varX,th)));$). 
+    cinline($glutSolidTeapot(Jget_flt(Jderef(varX,th)));
+             Jexec_all(rest,Jget_sp(th),th);$). 
 
 
 gl_end :-
-    cinline($glEnd();$).
+    cinline($glEnd();
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 gl_flush :-
-    cinline($glFlush();$).
+    cinline($glFlush();
+             Jexec_all(rest,Jget_sp(th),th);$).
 
 gl_finish :-
-    cinline($glFinish();$).
+    cinline($glFinish();
+             Jexec_all(rest,Jget_sp(th),th);$).
