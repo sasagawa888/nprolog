@@ -11,6 +11,7 @@ main :-
 
 
 show :-
+    write(user_output,ok),
     gl_clear(gl_color_buffer_bit),
     gl_color3d(1.0,0.0,0.0),
     gl_begin(gl_line_loop),
