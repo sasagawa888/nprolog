@@ -8,12 +8,18 @@ glut_init :-
              glutInit(&argc, argv);
              return(Jexec_all(rest,Jget_sp(th),th));$).
 
-glut_init_display_mode1 :-
+glut_init_display_mode_single :-
     cinline($glutInitDisplayMode(GLUT_SINGLE);
              return(Jexec_all(rest,Jget_sp(th),th));$).
 
+glut_init_display_mode_rgba :-
+    cinline($glutInitDisplayMode(GLUT_RGBA);
+             return(Jexec_all(rest,Jget_sp(th),th));$).
+
 glut_init_display_mode(glut_single) :-
-    glut_init_display_mode1.
+    glut_init_display_mode_single.
+glut_init_display_mode(glut_rgba) :-
+    glut_init_display_mode_rgba.
 
 glut_init_window_size(Hight,Width) :-
     cinline($glutInitWindowSize(Jget_int(Jderef(varHight,th)),Jget_int(Jderef(varWidth,th)));
@@ -27,11 +33,10 @@ glut_create_window(X) :-
     cinline($glutCreateWindow(Jgetname(Jderef(varX,th)));
              return(Jexec_all(rest,Jget_sp(th),th));$).
 
-gl_clear_colot(X1,Y1,X2,Y2) :-
+gl_clear_color(X1,Y1,X2,Y2) :-
     cinline($glClearColor(Jget_flt(Jderef(varX1,th)),Jget_flt(Jderef(varY1,th)),
                           Jget_flt(Jderef(varX2,th)),Jget_flt(Jderef(varY2,th)));
              return(Jexec_all(rest,Jget_sp(th),th));$).
-
 
 glut_display_func(X) :-
     cinline($displayfunc = Jmakepred(Jgetname(Jderef(varX,th)));
