@@ -52,12 +52,6 @@ show :-
 - glut_init:
     Initializes GLUT (OpenGL Utility Toolkit) for use with OpenGL applications.
 
-- glut_init_display_mode_single:
-    Initializes the display mode to single-buffered rendering.
-
-- glut_init_display_mode_rgba:
-    Initializes the display mode to use RGBA color format.
-
 - glut_init_display_mode(glut_single):
     Sets the display mode to single-buffered.
 
