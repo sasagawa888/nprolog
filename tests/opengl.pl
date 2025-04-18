@@ -6,8 +6,8 @@ main :-
     glut_create_window('GLUT test'),
     glut_init_display_mode(glut_rgba),
     gl_clear_color(1.0,1.0,1.0,1.0),
-    %glut_display_func(show),
-    glut_main_loop,
+    glut_display_func(show),
+    glut_main_loop.
 
 
 show :-
