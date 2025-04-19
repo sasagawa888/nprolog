@@ -180,6 +180,8 @@ The publicly available APIs that can be used for embedding in this context are a
 - static inline int Jmakefun(char* x) 
 - static inline int Jcallsubr(int x, int y, int z, int th) 
 - static inline int Jwlist3(int x, int y, int z, int th) 
+- static inline char* Jgetname(int x)
+- static inline double Jget_flt(int x)
 
 # Internal of compiler
 Since version 3.92, I have been rewriting the compiler. The previous compiler could optimize only a very limited subset of tail-recursive predicates. I am generalizing this optimization to cover a broader range of cases and improve execution efficiency.
