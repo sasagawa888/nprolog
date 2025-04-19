@@ -57,6 +57,85 @@ tk_canvas(Obj,Opt) :-
     tk_option(Opt),
     tk_interp.
 
+tk_label(Obj) :-
+    tk_clear,
+    tk_addatom(' label .'),
+    tk_addatom(Obj),
+    tk_interp.
+tk_label(Obj,Opt) :-
+    tk_clear,
+    tk_addatom(' label .'),
+    tk_addatom(Obj),
+    tk_option(Opt),
+    tk_interp.
+
+tk_button(Obj) :-
+    tk_clear,
+    tk_addatom(' button .'),
+    tk_addatom(Obj),
+    tk_interp.
+tk_button(Obj,Opt) :-
+    tk_clear,
+    tk_addatom(' button .'),
+    tk_addatom(Obj),
+    tk_option(Opt),
+    tk_interp.
+
+
+tk_radiobutton(Obj) :-
+    tk_clear,
+    tk_addatom(' radiobutton .'),
+    tk_addatom(Obj),
+    tk_interp.
+tk_radiobutton(Obj,Opt) :-
+    tk_clear,
+    tk_addatom(' radiobutton .'),
+    tk_addatom(Obj),
+    tk_option(Opt),
+    tk_interp.
+
+tk_checkbutton(Obj) :-
+    tk_clear,
+    tk_addatom(' checkbutton .'),
+    tk_addatom(Obj),
+    tk_interp.
+tk_checkbutton(Obj,Opt) :-
+    tk_clear,
+    tk_addatom(' checkbutton .'),
+    tk_addatom(Obj),
+    tk_option(Opt),
+    tk_interp.
+
+tk_listbox(Obj) :-
+    tk_clear,
+    tk_addatom(' listbox .'),
+    tk_addatom(Obj),
+    tk_interp.
+tk_listbox(Obj,Opt) :-
+    tk_clear,
+    tk_addatom(' listbox .'),
+    tk_addatom(Obj),
+    tk_option(Opt),
+    tk_interp.
+
+tk_scrollbar(Obj) :-
+    tk_clear,
+    tk_addatom(' scrollbar .'),
+    tk_addatom(Obj),
+    tk_interp.
+tk_scrollbar(Obj,Opt) :-
+    tk_clear,
+    tk_addatom(' scrollbar .'),
+    tk_addatom(Obj),
+    tk_option(Opt),
+    tk_interp.
+
+tk_command(Cmd) :-
+    tk_clear,
+    tk_addatom(Cmd),
+    tk_interp.
+
+
 tk_mainloop :-
     cinline($Tk_MainLoop();
             return(Jexec_all(rest,Jget_sp(th),th));$).
