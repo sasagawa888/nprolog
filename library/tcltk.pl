@@ -233,4 +233,23 @@ tk_option([fill(X)|Xs]) :-
     tk_addatom(' -fill '),
     tk_addatom(X),
     tk_option(Xs).
-
+tk_option([text(X)|Xs]) :-
+    tk_addatom(' -text '),
+    tk_addatom('\"'),
+    tk_addatom(X),
+    tk_addatom('\"'),
+    tk_option(Xs).
+tk_option([font(X)|Xs]) :-
+    tk_addatom(' -font '),
+    tk_addatom('\"'),
+    tk_addatom(X),
+    tk_addatom('\"'),
+    tk_option(Xs).
+tk_option([background(X)|Xs]) :-
+    tk_addatom(' -bg '),
+    tk_addatom(X),
+    tk_option(Xs).
+tk_option([foreground(X)|Xs]) :-
+    tk_addatom(' -fg '),
+    tk_addatom(X),
+    tk_option(Xs).

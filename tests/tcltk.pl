@@ -33,3 +33,10 @@ japan :-
     tk_create(c0,oval([200,100,400,300]),[fill(red)]),
     tk_pack(c0),
     tk_mainloop.
+
+
+hello :-
+    tk_init,
+    tk_label(hello,[text('hello world'),width(50),height(15)]),
+    tk_pack(hello),  
+    tk_mainloop.
