@@ -12,6 +12,13 @@ yes
 yes
 ```
 
+# Usage
+
+```
+?- use_module(tcltk).
+
+```
+
 # Specification
 
 - `tk_init`  
@@ -88,7 +95,7 @@ yes
 - `tk_create(Obj, Class, Option)`  
   Creates a canvas item of type `Class` with ID `Obj` and options.
 
- class line([x1,y1,x2,y2,...]) oval([x1,y1,x2,y2,...]) arc([x1,y1,x2,y2])
+ class line([x1,y1,x2,y2,...]) oval([x1,y1,x2,y2]) arc([x1,y1,x2,y2])
 rectangle([x1,y1,x2,y2]) polygon([x1,y1,x2,y2,...])
 
 
