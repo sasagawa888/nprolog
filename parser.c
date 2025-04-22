@@ -583,6 +583,14 @@ void gettoken(int th)
 	    stok.ch = NUL;
 	    stok.ahead = NUL;
 	    return;
+	} else if (c == '.'){
+		stok.buf[0] = '.';
+		stok.buf[1] = '.';
+		stok.buf[2] = NUL;
+		stok.type = ATOMOBJ;
+		stok.ch = NUL;
+	    stok.ahead = NUL;
+	    return;
 	} else {
 	    unreadc(c);
 	}
@@ -698,9 +706,6 @@ void gettoken(int th)
     case '#':
 	stok.type = SHARP;
 	return;
-    //case '"':
-	//stok.type = DBLQUOTE;
-	//return;
     }
     //variant
     if (c == 'v') {
@@ -1095,12 +1100,24 @@ void gettoken(int th)
 	while (isdigit(c)) {
 	    SETBUF(c) c = readc();
 	}
-	if (c == '.')
-	    goto float1;
+	if (c == '.'){
+		c = readc();
+		if(c == '.'){
+			unreadc(c);
+			c = '.';
+			goto integer1;
+		}
+	    else {
+			unreadc(c);
+			c = '.';
+			goto float1;
+		}
+	}
 	if (c == 'E' || c == 'e')
 	    exception(SYNTAX_ERR, makestr("float number expected dot"),
 		      NIL, th);
 
+  integer1:
 	SETBUFEND(NUL)
 	    if (strlen(stok.buf) <= 9)
 	    stok.type = INTEGER;
