@@ -1505,6 +1505,7 @@ int b_timer_microseconds(int arglist, int rest, int th);
 
 //----CLPFD---------------
 int b_add_constraint(int arglist, int rest, int th);
+int b_constraint_set(int arglist, int rest, int th);
 
 // edit 
 struct position{
