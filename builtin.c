@@ -282,6 +282,7 @@ void init_builtin(void)
     defbuiltin("n_after_cut", b_after_cut, -1);
     defbuiltin("n_pair_list", b_pair_list, -1);
 
+	//------CLPFD--------------------------
 	defbuiltin("add_constraint", b_add_constraint, -1);
 
 #ifdef __arm__
