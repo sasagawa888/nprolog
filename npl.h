@@ -354,7 +354,8 @@ extern socklen_t server_len;
 extern struct sockaddr_in server_addr, client_addr;
 
 
-
+/* -----CLPFD-------------------------- */
+extern int constraint_set;
 
 
 #ifdef __APPLE__
@@ -1501,6 +1502,9 @@ int b_delay(int arglist, int rest, int th);
 int b_delay_microseconds(int arglist, int rest, int th);
 int b_timer_microseconds(int arglist, int rest, int th);
 #endif
+
+//----CLPFD---------------
+int b_add_constraint(int arglist, int rest, int th);
 
 // edit 
 struct position{

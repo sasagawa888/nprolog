@@ -282,6 +282,8 @@ void init_builtin(void)
     defbuiltin("n_after_cut", b_after_cut, -1);
     defbuiltin("n_pair_list", b_pair_list, -1);
 
+	defbuiltin("add_constraint", b_add_constraint, -1);
+
 #ifdef __arm__
     defbuiltin("wiringpi_setup_gpio", b_wiringpi_setup_gpio, 2);
     defbuiltin("wiringpi_spi_setup_ch_speed",

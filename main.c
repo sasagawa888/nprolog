@@ -190,6 +190,8 @@ int export_pt;			// export data pointer
 socklen_t server_len;
 struct sockaddr_in server_addr, client_addr;
 
+/* -----CLPFD-------------------------- */
+int constraint_set = NIL;
 
 //-----editor-----
 char buffer[BUFSIZE][10];

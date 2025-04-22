@@ -28,6 +28,7 @@ NPL_OBJS = main.o \
 	error.o \
 	bignum.o \
 	compute.o \
+	clp.o \
 	edit.o \
 	syntax_highlight.o
 
