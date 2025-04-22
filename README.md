@@ -16,6 +16,7 @@ We have confirmed the operation on the following OS.
 - RaspberryPI Raspbian
 - OpenBSD
 - FreeBSD
+- MacOS
 
 Please use WSL when using it on Windows. 
 
@@ -24,6 +25,11 @@ In home directory ,make clone or download zip file from github.
 On Linux  type "make" on terminal. and type "sudo make install" on terminal. 
 
 see https://www.youtube.com/watch?v=36vUd8ThMF0
+
+On MacOs be sure to install ncurses 
+
+  brew install ncurses
+  export PATH=$PATH:/opt/homebrew/Cellar/ncurses/6.5/bin
 
 ## Uninstall
 On Linux type "sudo make uninstall" on terminal.
