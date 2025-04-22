@@ -704,8 +704,64 @@ void gettoken(int th)
 	    return;
 	}
     case '#':
-	stok.type = SHARP;
-	return;
+	c = readc();
+	if(c == '='){
+		stok.buf[0] = '#';
+		stok.buf[1] = '=';
+		stok.buf[2] = NUL;
+		stok.type = ATOMOBJ;
+		return;
+	} 
+	else if(c == '<'){
+		c = readc();
+		if (c == '='){
+		stok.buf[0] = '#';
+		stok.buf[1] = '<';
+		stok.buf[2] = '=';
+		stok.buf[3] = NUL;
+		stok.type = ATOMOBJ;
+		return;
+		} else{
+			unreadc(c);
+			stok.buf[0] = '#';
+			stok.buf[1] = '<';
+			stok.buf[2] = NUL;
+			stok.type = ATOMOBJ;
+			return;
+		}
+	} else if(c == '>'){
+		c = readc();
+		if (c == '='){
+		stok.buf[0] = '#';
+		stok.buf[1] = '>';
+		stok.buf[2] = '=';
+		stok.buf[3] = NUL;
+		stok.type = ATOMOBJ;
+		return;
+		} else{
+			unreadc(c);
+			stok.buf[0] = '#';
+			stok.buf[1] = '>';
+			stok.buf[2] = NUL;
+			stok.type = ATOMOBJ;
+			return;
+		}
+	} else if(c == '\\'){
+		c = readc();
+		if (c == '='){
+		stok.buf[0] = '#';
+		stok.buf[1] = '\\';
+		stok.buf[2] = '=';
+		stok.buf[3] = NUL;
+		stok.type = ATOMOBJ;
+		return;
+		} else
+			unreadc(c);
+	} else{
+		unreadc(c);
+		stok.type = SHARP;
+		return;
+	}
     }
     //variant
     if (c == 'v') {
