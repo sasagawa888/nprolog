@@ -1352,6 +1352,8 @@ int callablep(int addr)
 	    return (0);
     } else if (user_operation_p(addr))
 	return (1);
+	else if(operationp(addr))
+	return (1);
     else
 	return (0);
 }

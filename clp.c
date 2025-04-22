@@ -16,7 +16,7 @@ int b_add_constraint(int arglist, int rest, int th)
     ind = makeind("add_constraint", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
-    constraint_set = listcons(copy_heap(arg1),constraint_set);
+    constraint_set = listcons(copy_heap(variable_convert1(arg1)),constraint_set);
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
