@@ -425,6 +425,8 @@ void init_repl(void)
 	SET_TR(cadar(i), 0);
 	i = cdr(i);
     }
+	// CLPFD
+	constraint_set = NIL;
 
 }
 
