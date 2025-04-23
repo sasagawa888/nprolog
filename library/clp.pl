@@ -15,7 +15,8 @@ X #= Y+Z :-
     var(Y),
     integer(Z),
     R is X-Z,
-    add_constraint(Y #= R).
+    add_constraint(Y #= R),
+    Y is R.
 X #= Y :-
     add_constraint(X #= Y).
 
