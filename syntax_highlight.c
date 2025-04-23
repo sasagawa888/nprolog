@@ -46,7 +46,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "flush" }, { "date" }, { "date_day" },
     { "string" }, { "string_chars" }, { "string_codes" },
     { "concat" }, { "substring" }, { "string_term" }, { "float_text" },
-    { "inc" }, { "dec" }, { "compare" }, { "in" }, { "out" },
+    { "inc" }, { "dec" }, { "compare" }, 
     { "mkdir" }, { "rmdir" }, { "chdir" }, { "string_length" },
     { "atom_length" },
     { "sort" }, { "keysort" }, { "length" }, { "shell" }, { "measure" },
