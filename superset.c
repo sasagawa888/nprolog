@@ -1730,7 +1730,7 @@ int b_use_module(int arglist, int rest, int th)
     FILE *fp;
 
     n = length(arglist);
-    ind = makeind("use_mdule", n, th);
+    ind = makeind("use_module", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	if (!atomp(arg1))
