@@ -39,15 +39,15 @@ int constraint_propagate()
         if( expr == (X #= Y)){
             if (解が１つ)　constraint_set を１つ取り除く
             else if(解がない) break;
-            else constraint_search(expr);
+            else 解の範囲を絞って総当り constraint_search(expr,env);
         } else if( expr == (X #< Y)){
             if (解が１つ)　constraint_set を１つ取り除く
             else if(解がない) break;
-            else constraint_search(expr);
+            else 解の範囲を絞って総当り constraint_search(expr,env);;
         } else if( expr == (X #> Y)){
             if (解が１つ)　constraint_set を１つ取り除く
             else if(解がない) break;
-            else constraint_search(expr);
+            else 解の範囲を絞って総当り constraint_search(expr,env);;
         } else if ( expt == X in A..Z){
             constraint_var = cons(X,constraint_var);
             constraint_env = cons(makerange(A..Z),constraint_env);
@@ -59,28 +59,18 @@ int constraint_propagate()
     return (NO);
 }
 
-void constraint_search(expr)
+void constraint_search(expr,env)
 {
     int candidate,var,env,domain;
 
     var = constraint_var;
     env = constraint_env;
     domain = NIL;
-    while(最初の変数要素 != NIL){
-        try:
-        assign(expr,var,env); // exprに値を代入する
-        if(establish(expr)){
-            成立したなら2番めの変数要素を１つ減らす　domainに要素を記録
-            goto try;
-        }
-        else {
-            不成立なら1番めの変数要素を１つ減らす
-            2番め以後の変数要素を復元する。
-            goto try;
-        }
-
+    while(解候補が尽きるまで){}
+        if (exprが成立なら)　domainに記憶
     }
     見つけたdomainを既存のものに連結する
     constraint_domain = cons(domain,constraint_domain);
 }
 ```
+
