@@ -75,6 +75,7 @@ void constraint_search(expr)
         }
         else {
             不成立なら1番めの変数要素を１つ減らす
+            2番め以後の変数要素を復元する。
             goto try;
         }
 
