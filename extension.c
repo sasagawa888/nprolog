@@ -177,7 +177,50 @@ int b_atom_convert(int arglist, int rest, int th)
 		str2[3] = NUL;
 		strcat(str4, str2);
 		pos1++;
-	    } else if (isUni1(str1[pos1])) {
+	    } else if (str1[pos1] == '#') {
+			str2[0] = 's';
+			str2[1] = 'h';
+			str2[2] = 'a';
+			str2[3] = NUL;
+			strcat(str4, str2);
+			pos1++;
+		} else if (str1[pos1] == '.') {
+			str2[0] = 'c';
+			str2[1] = 'o';
+			str2[2] = 'l';
+			str2[3] = NUL;
+			strcat(str4, str2);
+			pos1++;
+		} else if (str1[pos1] == '=') {
+			str2[0] = 'e';
+			str2[1] = 'q';
+			str2[2] = 'u';
+			str2[3] = NUL;
+			strcat(str4, str2);
+			pos1++;
+		} else if (str1[pos1] == '\\') {
+			str2[0] = 'n';
+			str2[1] = 'o';
+			str2[2] = 't';
+			str2[3] = NUL;
+			strcat(str4, str2);
+			pos1++;
+		}  else if (str1[pos1] == '$') {
+			str2[0] = 'd';
+			str2[1] = 'o';
+			str2[2] = 'l';
+			str2[3] = NUL;
+			strcat(str4, str2);
+			pos1++;
+		}  else if (str1[pos1] == '!') {
+			str2[0] = 'e';
+			str2[1] = 'x';
+			str2[2] = 'c';
+			str2[3] = NUL;
+			strcat(str4, str2);
+			pos1++;
+		}
+		else if (isUni1(str1[pos1])) {
 		str2[0] = str1[pos1];
 		str2[1] = NUL;
 		strcat(str4, str2);

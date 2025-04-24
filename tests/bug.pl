@@ -1,10 +1,31 @@
-% testing checker
+% clpfd idea memo
 
-cdeclare($#define a 1$).
-cdeclare($#define b 2$).
+:- op(600, xfy, '..').
+:- op(600, xfy, #=).
+:- op(600, xfy, #>).
+:- op(600, xfy, #<).
+:- op(600, xfy, #\=).
+:- op(600, xfy, #<=).
+:- op(600, xfy, #>=).
+:- op(600, xfy, in).
+:- op(600, xfy, ins).
 
-clibrary($-ltcl -ltk$).
+X #= Y+Z :-
+    integer(X),
+    var(Y),
+    integer(Z),
+    R is X-Z,
+    add_constraint(Y #= R),
+    Y is R.
+X #= Y :-
+    add_constraint(X #= Y).
 
-foo(X) :- write(1,2,X).
+X #\= Y :-
+    add_constraint(X #\= Y).
 
-foo(Y,1) :- \+(Y).
+X in Y :-
+    add_constraint(X in Y).
+X ins Y :-
+    add_constraint((X ins Y)).
+
+
