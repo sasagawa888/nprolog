@@ -978,24 +978,19 @@ void gettoken(int th)
     if (c == '$' && !string_flag) {
 	pos = 0;
 	c = readc();
-	c1 = readc();
-	while (!(c == '$' && c1 != '$')) {
-	    if (c == '$') {
-		if (c1 == '$') {
-		SETBUF(c)} else
-		    exception(SYNTAX_ERR,
-			      makestr("double $ in string token"), NIL,
-			      th);
+	while (c != '$') {
+	    if (c == '\\') {
+		SETBUF(c)
+		c = readc();
+		SETBUF(c);
 	    } else if (c == EOF)
 		exception(SYNTAX_ERR, makestr("not exist right $ in file"),
 			  NIL, th);
 	    else {
-		SETBUF(c) unreadc(c1);
+		SETBUF(c)
 	    }
 	    c = readc();
-	    c1 = readc();
 	}
-	unreadc(c1);
 	SETBUFEND(NUL) stok.type = STRING;
 	stok.ch = NUL;
 	stok.ahead = c;
@@ -1005,24 +1000,19 @@ void gettoken(int th)
     if (c == '"' && string_flag) {
 	pos = 0;
 	c = readc();
-	c1 = readc();
-	while (!(c == '"' && c1 != '"')) {
-	    if (c == '"') {
-		if (c1 == '"') {
-		SETBUF(c)} else
-		    exception(SYNTAX_ERR,
-			      makestr("double \" in string token"), NIL,
-			      th);
+	while (c != '"') {
+	    if (c == '\\') {
+		SETBUF(c);
+		c = readc();
+		SETBUF(c);
 	    } else if (c == EOF)
 		exception(SYNTAX_ERR,
 			  makestr("not exist right \" in file"), NIL, th);
 	    else {
-		SETBUF(c) unreadc(c1);
+		SETBUF(c) 
 	    }
 	    c = readc();
-	    c1 = readc();
 	}
-	unreadc(c1);
 	SETBUFEND(NUL) stok.type = STRING;
 	stok.ch = NUL;
 	stok.ahead = c;
