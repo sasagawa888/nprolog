@@ -1,5 +1,6 @@
 :- module(chatgpt, [chatgpt_query/3]).
 
+:- use_module(json).
 
 % Main predicate
 % chatgpt_query(+Prompt, +APIKey, -Response)

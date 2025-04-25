@@ -2,7 +2,7 @@
 
 test_chat :-
     YourPrompt = "What is the capital of France?",
-    YourAPIKey = "sk-...",  % 実際のAPIキーをここに
+    YourAPIKey = "sk-...",  % real API key
     chatgpt_query(YourPrompt, YourAPIKey, Response),
     writeln("ChatGPT says:"),
     writeln(Response).
