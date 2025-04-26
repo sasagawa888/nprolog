@@ -4,5 +4,5 @@ test_chat :-
     YourPrompt = "What is the capital of France?",
     YourAPIKey = "sk-...",  % real API key
     chatgpt_query(YourPrompt, YourAPIKey, Response),
-    writeln("ChatGPT says:"),
-    writeln(Response).
+    write("ChatGPT says:"),nl,
+    write(Response),nl.

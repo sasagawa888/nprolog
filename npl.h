@@ -8,6 +8,7 @@ written by kenichi sasagawa 2016/9~
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
+#include <curl/curl.h>
 
 /*
 memory map
@@ -56,7 +57,7 @@ address
 #define COLON       30
 #define NTRUE       32
 #define NFALSE      34
-#define CURL        36
+#define NCURL       36
 #define IFTHEN      38
 #define IFTHENELSE  40
 #define UNDERBAR    42
@@ -116,6 +117,7 @@ typedef struct {
                 FILE    *port;
                 int record;
                 int socket;
+                CURL *curl;
             } car;
             union{
                 int intnum;
@@ -304,6 +306,7 @@ enum Type {
     NPL_TEXT,  
     NPL_BINARY,
 	NPL_SOCKET, 
+    NPL_CURL,
 };
 
 
@@ -352,6 +355,9 @@ extern size_t mt_para_size[PARASIZE];
 /* -----TCPIP for server----------------*/
 extern socklen_t server_len;
 extern struct sockaddr_in server_addr, client_addr;
+
+/* -----HTTPS CURL ---------------------*/
+extern CURL *curl;
 
 
 /* -----CLPFD-------------------------- */

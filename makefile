@@ -1,6 +1,6 @@
 CC   = gcc
-LIBS = -lm -ldl -pthread
-LIBSRASPI = -lm -ldl -lwiringPi -pthread
+LIBS = -lm -ldl -pthread -lcurl
+LIBSRASPI = -lm -ldl -lwiringPi -pthread -lcurl
 INCS =  
 CFLAGS = $(INCS) -Wall -O3 
 LDFLAGS :=

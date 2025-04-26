@@ -1383,7 +1383,7 @@ int readitem1(int th)
     case RPAREN:
 	return (RIGHTPAREN);
     case LCURL:
-	return (list2(CURL, readcurl(th)));
+	return (list2(NCURL, readcurl(th)));
     case OPERATOR:
 	return (makeatom(stok.buf, OPE));
     case DOT:
@@ -1741,7 +1741,7 @@ int readcurl(int th)
 	return (NIL);
 
     if (stok.type == LCURL) {
-	car = list2(CURL, readcurl(th));
+	car = list2(NCURL, readcurl(th));
     } else {
 	stok.flag = BACK;
 	//comma as separater

@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <curl/curl.h>
 #include "npl.h"
 
 int b_atom_concat(int arglist, int rest, int th)
@@ -2251,3 +2252,79 @@ int b_format(int arglist, int rest, int th)
 	exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
+
+//------------------https curl----------------
+
+// レスポンスを受け取るコールバック関数
+size_t write_callback(void *ptr, size_t size, size_t nmemb, char *data) {
+    strcat(data, ptr);  // 受け取ったデータを格納
+    return size * nmemb;
+}
+
+// curl_init: 初期化
+CURL* curl_init_func() {
+    CURL *curl = curl_easy_init();
+    if (!curl) {
+        fprintf(stderr, "Failed to initialize curl.\n");
+        return NULL;
+    }
+    return curl;
+}
+
+// curl_perform: リクエスト実行
+CURLcode curl_perform_func(CURL *curl, const char *url, const char *headers[], char *response_data) {
+    CURLcode res;
+    
+    // URL設定
+    curl_easy_setopt(curl, CURLOPT_URL, url);
+    
+    // ヘッダー設定（必要に応じて）
+    struct curl_slist *curl_headers = NULL;
+    for (int i = 0; headers[i] != NULL; ++i) {
+        curl_headers = curl_slist_append(curl_headers, headers[i]);
+    }
+    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, curl_headers);
+    
+    // レスポンス受け取りのコールバック関数設定
+    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+    curl_easy_setopt(curl, CURLOPT_WRITEDATA, response_data);
+    
+    // リクエスト実行
+    res = curl_easy_perform(curl);
+    
+    curl_slist_free_all(curl_headers);  // ヘッダーの解放
+    return res;
+}
+
+// curl_exit: 終了処理
+void curl_exit_func(CURL *curl) {
+    if (curl) {
+        curl_easy_cleanup(curl);  // クリーンアップ
+    }
+}
+
+/*
+int main() {
+    CURL *curl = curl_init_func();
+    if (!curl) return 1;
+
+    const char *url = "https://api.openai.com/v1/chat/completions";
+    const char *headers[] = {
+        "Authorization: Bearer YOUR_API_KEY",
+        NULL
+    };
+    char response[1024] = "";  // レスポンス格納用バッファ
+
+    CURLcode res = curl_perform_func(curl, url, headers, response);
+    if (res != CURLE_OK) {
+        fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
+    } else {
+        printf("Response: %s\n", response);  // レスポンス表示
+    }
+
+    curl_exit_func(curl);  // 終了処理
+
+    return 0;
+}
+
+*/

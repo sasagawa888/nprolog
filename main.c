@@ -17,6 +17,7 @@ written by kenichi sasagawa 2016/8~
 #include <netdb.h>
 #include <pthread.h>
 #include <unistd.h>
+#include <curl/curl.h>
 #include "npl.h"
 
 //global vers
@@ -189,6 +190,9 @@ int export_pt;			// export data pointer
 /* -----TCPIP for server----------------*/
 socklen_t server_len;
 struct sockaddr_in server_addr, client_addr;
+
+/* -----HTTPS CURL ---------------------*/
+CURL *curl;
 
 /* -----CLPFD-------------------------- */
 int constraint_set = NIL;
@@ -1328,7 +1332,7 @@ void print(int addr)
 		printlist(addr);
 	    } else
 		printlist_canonical(addr);
-	} else if (eqlp(car(addr), CURL)) {
+	} else if (eqlp(car(addr), NCURL)) {
 	    printc('{');
 	    printcurl(cdr(addr));
 	} else if (mixturep(car(addr))) {

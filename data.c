@@ -2321,7 +2321,7 @@ int copy_heap(int x)
 	return (NIL);
     else if (IS_ALPHA(x))
 	return (alpha_to_variable(x));
-	else if (predicatep(x) && car(x) == CURL)
+	else if (predicatep(x) && car(x) == NCURL)
 	return (x);
     else if (module_flag && predicatep(x) && exportp(x))
 	return (x);
