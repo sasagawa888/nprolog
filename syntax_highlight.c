@@ -78,7 +78,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "stream_property" }, { "dynamic" },
     { "create_client_socket" }, { "create_server_socket" },
     { "recv_socket" }, { "close_socket" },
-    { "create_clinet_curl" }, { "send_curl" }, { "recv_curl" },
+    { "create_client_curl" }, { "send_curl" }, { "recv_curl" },
 	{ "close_curl" },
     { "set_curl_option" }, { "add_curl_header" },
 };
