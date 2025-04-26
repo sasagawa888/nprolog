@@ -2372,8 +2372,6 @@ int b_set_curl_option(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 	if (!streamp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
-	if (!stringp(arg2))
-	    exception(NOT_STR, ind, arg2, th);
 
 	curl = GET_CURL(arg1);
 	var = makevariant(th);
