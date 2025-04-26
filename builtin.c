@@ -228,6 +228,10 @@ void init_builtin(void)
 	defbuiltin("set_prolog_flag", b_set_prolog_flag, 2);
     defbuiltin("cinline", b_cinline, 1);
 	defbuiltin("format", b_format, 3);
+	defbuiltin("create_client_curl", b_create_client_curl, 2);
+    defbuiltin("send_curl", b_send_curl, 2);
+    defbuiltin("recv_curl", b_recv_curl, 2);
+    defbuiltin("close_curl", b_close_curl, 1);
     definfix("\\+", b_not, 900, FY);
 
     //-----Distributed parallel

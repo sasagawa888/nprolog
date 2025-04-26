@@ -2347,4 +2347,74 @@ int b_close_curl(int arglist, int rest, int th)
     return (NO);
 }
 
+/*
+int b_set_curl_option(int arglist, int rest, int th)
+{
+    int n, arg1, arg2, ind;
+    CURL *curl;
+    
+    n = length(arglist);
+    ind = makeind("set_curl_option", n, th);
+    
+    if (n == 2) {
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        
+        curl = GET_CURL(arg1);
+        
+        // オプションのタイプを判定して処理
+        if (isheader(arg2)) {
+            // オプションが header("...") の場合
+            curl_easy_setopt(curl, CURLOPT_HTTPHEADER, GET_NAME(arg2));
+        } else if (ismethod(arg2)) {
+            // オプションが method(post) や method(get) の場合
+            if (equal(GET_NAME(arg2), "post")) {
+                curl_easy_setopt(curl, CURLOPT_POST, 1L);
+            } else if (equal(GET_NAME(arg2), "get")) {
+                curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
+            }
+        } else if (istimeout(arg2)) {
+            // オプションが timeout(5) の場合
+            long timeout = GET_INTEGER(arg2);
+            curl_easy_setopt(curl, CURLOPT_TIMEOUT, timeout);
+        } else {
+            // 他のオプションがある場合
+            exception(SYSTEM_ERR, ind, NIL, th);
+            return (NO);
+        }
+        
+        return (prove_all(rest, sp[th], th));
+    }
+    
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
 
+int b_add_curl_header(int arglist, int rest, int th)
+{
+    int n, arg1, arg2, ind;
+    CURL *curl;
+    struct curl_slist *headers = NULL;
+    
+    n = length(arglist);
+    ind = makeind("add_curl_header", n, th);
+    
+    if (n == 2) {
+        arg1 = car(arglist);
+        arg2 = cadr(arglist);
+        
+        curl = GET_CURL(arg1);
+        
+        // ヘッダーをリストに追加
+        headers = curl_slist_append(headers, GET_NAME(arg2));
+        
+        // curlリクエストにヘッダーを設定
+        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+        
+        return (prove_all(rest, sp[th], th));
+    }
+    
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+*/
