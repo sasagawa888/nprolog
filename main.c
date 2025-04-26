@@ -191,9 +191,6 @@ int export_pt;			// export data pointer
 socklen_t server_len;
 struct sockaddr_in server_addr, client_addr;
 
-/* -----HTTPS CURL ---------------------*/
-CURL *curl;
-
 /* -----CLPFD-------------------------- */
 int constraint_set = NIL;
 

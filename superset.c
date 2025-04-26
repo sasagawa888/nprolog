@@ -2255,76 +2255,97 @@ int b_format(int arglist, int rest, int th)
 
 //------------------https curl----------------
 
+
 // レスポンスを受け取るコールバック関数
-size_t write_callback(void *ptr, size_t size, size_t nmemb, char *data) {
-    strcat(data, ptr);  // 受け取ったデータを格納
+size_t write_callback(void *ptr, size_t size, size_t nmemb, void *userdata) {
+    strcat(userdata, ptr);  // 受け取ったデータを格納
     return size * nmemb;
 }
 
-// curl_init: 初期化
-CURL* curl_init_func() {
-    CURL *curl = curl_easy_init();
+int b_create_client_curl(int arglist, int rest, int th)
+{
+	int n, arg1,arg2,ind;
+	CURL *curl;
+
+    n = length(arglist);
+    ind = makeind("create_clinet_curl", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+	curl = curl_easy_init();
     if (!curl) {
-        fprintf(stderr, "Failed to initialize curl.\n");
-        return NULL;
-    }
-    return curl;
+        exception(SYSTEM_ERR, ind, NIL, th);}
+	
+	curl_easy_setopt(curl, CURLOPT_URL, GET_NAME(arg2)); 
+	if(unify(arg1,makecurl(curl,NPL_CURL,GET_NAME(arg2)),th) == YES)
+		return(prove_all(rest,sp[th],th));
+	else 
+		return(NO);
+	}
+	exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
-// curl_perform: リクエスト実行
-CURLcode curl_perform_func(CURL *curl, const char *url, const char *headers[], char *response_data) {
-    CURLcode res;
-    
-    // URL設定
-    curl_easy_setopt(curl, CURLOPT_URL, url);
-    
-    // ヘッダー設定（必要に応じて）
-    struct curl_slist *curl_headers = NULL;
-    for (int i = 0; headers[i] != NULL; ++i) {
-        curl_headers = curl_slist_append(curl_headers, headers[i]);
-    }
-    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, curl_headers);
-    
-    // レスポンス受け取りのコールバック関数設定
+int b_send_curl(int arglist, int rest, int th)
+{
+	int n, arg1,arg2,ind;
+	CURL *curl;
+
+    n = length(arglist);
+    ind = makeind("send_curl", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	
+	curl = GET_CURL(arg1);
     curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
-    curl_easy_setopt(curl, CURLOPT_WRITEDATA, response_data);
-    
-    // リクエスト実行
-    res = curl_easy_perform(curl);
-    
-    curl_slist_free_all(curl_headers);  // ヘッダーの解放
-    return res;
+	curl_easy_setopt(curl, CURLOPT_POST, 1L);
+    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, GET_NAME(arg2));
+	return(prove_all(rest,sp[th],th));
+	}
+	exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
-// curl_exit: 終了処理
-void curl_exit_func(CURL *curl) {
-    if (curl) {
-        curl_easy_cleanup(curl);  // クリーンアップ
-    }
+int b_recv_curl(int arglist, int rest, int th)
+{
+	int n, arg1,arg2,ind;
+	char response_data[STRSIZE] = {0};
+	CURL *curl;
+
+    n = length(arglist);
+    ind = makeind("recv_curl", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	
+	curl = GET_CURL(arg1);
+	curl_easy_setopt(curl, CURLOPT_WRITEDATA, response_data);
+    curl_easy_perform(curl);
+	if(unify(arg2,makestr(response_data),th) == YES)
+		return(prove_all(rest,sp[th],th));
+	else 
+		return (NO);
+	}
+	exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
-/*
-int main() {
-    CURL *curl = curl_init_func();
-    if (!curl) return 1;
 
-    const char *url = "https://api.openai.com/v1/chat/completions";
-    const char *headers[] = {
-        "Authorization: Bearer YOUR_API_KEY",
-        NULL
-    };
-    char response[1024] = "";  // レスポンス格納用バッファ
+int b_close_curl(int arglist, int rest, int th)
+{
+	int n, arg1,ind;
 
-    CURLcode res = curl_perform_func(curl, url, headers, response);
-    if (res != CURLE_OK) {
-        fprintf(stderr, "curl_easy_perform() failed: %s\n", curl_easy_strerror(res));
-    } else {
-        printf("Response: %s\n", response);  // レスポンス表示
-    }
-
-    curl_exit_func(curl);  // 終了処理
-
-    return 0;
+    n = length(arglist);
+    ind = makeind("close_curl", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+	curl_easy_cleanup(GET_CURL(arg1)); 
+	return(prove_all(rest,sp[th],th));
+	}
+	exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
-*/
+
