@@ -411,7 +411,7 @@ int makesocket(int sockfd, int type, const char *name, int listenfd)
     return (addr);
 }
 
-int makecurl(CURL *curl, int type, const char *name)
+int makecurl(CURL * curl, int type, const char *name)
 {
     int addr;
     char *str;
@@ -606,4 +606,3 @@ int op_connect(int x, int y, int th)
     else
 	return (wlist3(car(x), cadr(x), op_connect(caddr(x), y, th), th));
 }
-

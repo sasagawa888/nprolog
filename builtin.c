@@ -225,13 +225,15 @@ void init_builtin(void)
     defbuiltin("close_socket", b_close_socket, 1);
     defbuiltin("dynamic", b_dynamic, 1);
     defbuiltin("existerrors", b_existerrors, 2);
-	defbuiltin("set_prolog_flag", b_set_prolog_flag, 2);
+    defbuiltin("set_prolog_flag", b_set_prolog_flag, 2);
     defbuiltin("cinline", b_cinline, 1);
-	defbuiltin("format", b_format, 3);
-	defbuiltin("create_client_curl", b_create_client_curl, 2);
+    defbuiltin("format", b_format, 3);
+    defbuiltin("create_client_curl", b_create_client_curl, 2);
     defbuiltin("send_curl", b_send_curl, 2);
     defbuiltin("recv_curl", b_recv_curl, 2);
     defbuiltin("close_curl", b_close_curl, 1);
+    defbuiltin("set_curl_option", b_set_curl_option, 2);
+    defbuiltin("add_curl_header", b_add_curl_header, 2);
     definfix("\\+", b_not, 900, FY);
 
     //-----Distributed parallel
@@ -286,9 +288,9 @@ void init_builtin(void)
     defbuiltin("n_after_cut", b_after_cut, -1);
     defbuiltin("n_pair_list", b_pair_list, -1);
 
-	//------CLPFD--------------------------
-	defbuiltin("add_constraint", b_add_constraint, -1);
-	defbuiltin("constraint_set", b_constraint_set, -1);
+    //------CLPFD--------------------------
+    defbuiltin("add_constraint", b_add_constraint, -1);
+    defbuiltin("constraint_set", b_constraint_set, -1);
 
 #ifdef __arm__
     defbuiltin("wiringpi_setup_gpio", b_wiringpi_setup_gpio, 2);

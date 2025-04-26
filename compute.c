@@ -23,7 +23,7 @@ int get_int(int addr)
 
 double get_flt(int x)
 {
-	return(GET_FLT(x));
+    return (GET_FLT(x));
 }
 
 //transform data type

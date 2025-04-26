@@ -583,12 +583,12 @@ void gettoken(int th)
 	    stok.ch = NUL;
 	    stok.ahead = NUL;
 	    return;
-	} else if (c == '.'){
-		stok.buf[0] = '.';
-		stok.buf[1] = '.';
-		stok.buf[2] = NUL;
-		stok.type = ATOMOBJ;
-		stok.ch = NUL;
+	} else if (c == '.') {
+	    stok.buf[0] = '.';
+	    stok.buf[1] = '.';
+	    stok.buf[2] = NUL;
+	    stok.type = ATOMOBJ;
+	    stok.ch = NUL;
 	    stok.ahead = NUL;
 	    return;
 	} else {
@@ -705,62 +705,61 @@ void gettoken(int th)
 	}
     case '#':
 	c = readc();
-	if(c == '='){
-		stok.buf[0] = '#';
-		stok.buf[1] = '=';
-		stok.buf[2] = NUL;
-		stok.type = ATOMOBJ;
-		return;
-	} 
-	else if(c == '<'){
-		c = readc();
-		if (c == '='){
+	if (c == '=') {
+	    stok.buf[0] = '#';
+	    stok.buf[1] = '=';
+	    stok.buf[2] = NUL;
+	    stok.type = ATOMOBJ;
+	    return;
+	} else if (c == '<') {
+	    c = readc();
+	    if (c == '=') {
 		stok.buf[0] = '#';
 		stok.buf[1] = '<';
 		stok.buf[2] = '=';
 		stok.buf[3] = NUL;
 		stok.type = ATOMOBJ;
 		return;
-		} else{
-			unreadc(c);
-			stok.buf[0] = '#';
-			stok.buf[1] = '<';
-			stok.buf[2] = NUL;
-			stok.type = ATOMOBJ;
-			return;
-		}
-	} else if(c == '>'){
-		c = readc();
-		if (c == '='){
+	    } else {
+		unreadc(c);
+		stok.buf[0] = '#';
+		stok.buf[1] = '<';
+		stok.buf[2] = NUL;
+		stok.type = ATOMOBJ;
+		return;
+	    }
+	} else if (c == '>') {
+	    c = readc();
+	    if (c == '=') {
 		stok.buf[0] = '#';
 		stok.buf[1] = '>';
 		stok.buf[2] = '=';
 		stok.buf[3] = NUL;
 		stok.type = ATOMOBJ;
 		return;
-		} else{
-			unreadc(c);
-			stok.buf[0] = '#';
-			stok.buf[1] = '>';
-			stok.buf[2] = NUL;
-			stok.type = ATOMOBJ;
-			return;
-		}
-	} else if(c == '\\'){
-		c = readc();
-		if (c == '='){
+	    } else {
+		unreadc(c);
+		stok.buf[0] = '#';
+		stok.buf[1] = '>';
+		stok.buf[2] = NUL;
+		stok.type = ATOMOBJ;
+		return;
+	    }
+	} else if (c == '\\') {
+	    c = readc();
+	    if (c == '=') {
 		stok.buf[0] = '#';
 		stok.buf[1] = '\\';
 		stok.buf[2] = '=';
 		stok.buf[3] = NUL;
 		stok.type = ATOMOBJ;
 		return;
-		} else
-			unreadc(c);
-	} else{
+	    } else
 		unreadc(c);
-		stok.type = SHARP;
-		return;
+	} else {
+	    unreadc(c);
+	    stok.type = SHARP;
+	    return;
 	}
     }
     //variant
@@ -981,7 +980,7 @@ void gettoken(int th)
 	while (c != '$') {
 	    if (c == '\\') {
 		SETBUF(c)
-		c = readc();
+		    c = readc();
 		SETBUF(c);
 	    } else if (c == EOF)
 		exception(SYNTAX_ERR, makestr("not exist right $ in file"),
@@ -1009,7 +1008,7 @@ void gettoken(int th)
 		exception(SYNTAX_ERR,
 			  makestr("not exist right \" in file"), NIL, th);
 	    else {
-		SETBUF(c) 
+		SETBUF(c)
 	    }
 	    c = readc();
 	}
@@ -1146,24 +1145,23 @@ void gettoken(int th)
 	while (isdigit(c)) {
 	    SETBUF(c) c = readc();
 	}
-	if (c == '.'){
-		c = readc();
-		if(c == '.'){
-			unreadc(c);
-			c = '.';
-			goto integer1;
-		}
-	    else {
-			unreadc(c);
-			c = '.';
-			goto float1;
-		}
+	if (c == '.') {
+	    c = readc();
+	    if (c == '.') {
+		unreadc(c);
+		c = '.';
+		goto integer1;
+	    } else {
+		unreadc(c);
+		c = '.';
+		goto float1;
+	    }
 	}
 	if (c == 'E' || c == 'e')
 	    exception(SYNTAX_ERR, makestr("float number expected dot"),
 		      NIL, th);
 
-  integer1:
+      integer1:
 	SETBUFEND(NUL)
 	    if (strlen(stok.buf) <= 9)
 	    stok.type = INTEGER;

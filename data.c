@@ -1352,7 +1352,7 @@ int callablep(int addr)
 	    return (0);
     } else if (user_operation_p(addr))
 	return (1);
-	else if(operationp(addr))
+    else if (operationp(addr))
 	return (1);
     else
 	return (0);
@@ -1718,7 +1718,7 @@ int deref1(int x, int th)
 
     int res;
 
-	res = NIL;
+    res = NIL;
     if (variablep(x)) {
       loop:
 	// findvar(x);
@@ -2321,7 +2321,7 @@ int copy_heap(int x)
 	return (NIL);
     else if (IS_ALPHA(x))
 	return (alpha_to_variable(x));
-	else if (predicatep(x) && car(x) == NCURL)
+    else if (predicatep(x) && car(x) == NCURL)
 	return (x);
     else if (module_flag && predicatep(x) && exportp(x))
 	return (x);

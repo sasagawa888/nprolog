@@ -426,8 +426,8 @@ void init_repl(void)
 	SET_TR(cadar(i), 0);
 	i = cdr(i);
     }
-	// CLPFD
-	constraint_set = NIL;
+    // CLPFD
+    constraint_set = NIL;
 
 }
 
@@ -1402,17 +1402,18 @@ void print(int addr)
 	break;
     case STR:
 	if (quoted_flag) {
-	    if (!bridge_flag){
-		if(!string_flag)
-			fprintf(GET_PORT(output_stream), "$%s$", GET_NAME(addr));
+	    if (!bridge_flag) {
+		if (!string_flag)
+		    fprintf(GET_PORT(output_stream), "$%s$",
+			    GET_NAME(addr));
 		else
-			fprintf(GET_PORT(output_stream), "\"%s\"", GET_NAME(addr));
-		}
-	    else {
-		if(!string_flag)
-			sprintf(str1, "$%s$", GET_NAME(addr));
+		    fprintf(GET_PORT(output_stream), "\"%s\"",
+			    GET_NAME(addr));
+	    } else {
+		if (!string_flag)
+		    sprintf(str1, "$%s$", GET_NAME(addr));
 		else
-			sprintf(str1, "\"%s\"", GET_NAME(addr));
+		    sprintf(str1, "\"%s\"", GET_NAME(addr));
 		strcat(bridge, str1);
 	    }
 	} else {

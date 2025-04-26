@@ -4,8 +4,9 @@
 call_chatgpt(Prompt, Response) :-
     create_curl_client(Curl, 'https://api.openai.com/v1/completions'),
     ApiKey = 'your-api-key-here',
-    %set_curl_option(Curl, header('Content-Type: application/json')),
-    %set_curl_option(Curl, header('Authorization: Bearer ' + ApiKey)),
+    set_curl_option(Curl, header('Content-Type: application/json')),
+    atom_concat('Authorization: Bearer ',Apikey,Header),
+    set_curl_option(Curl, header(Header)),
     json_data(Prompt, JSONData),
     send_curl(Curl, JSONData),
     recv_curl(Curl, Response),

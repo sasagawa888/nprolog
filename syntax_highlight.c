@@ -46,7 +46,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "flush" }, { "date" }, { "date_day" },
     { "string" }, { "string_chars" }, { "string_codes" },
     { "concat" }, { "substring" }, { "string_term" }, { "float_text" },
-    { "inc" }, { "dec" }, { "compare" }, 
+    { "inc" }, { "dec" }, { "compare" },
     { "mkdir" }, { "rmdir" }, { "chdir" }, { "string_length" },
     { "atom_length" },
     { "sort" }, { "keysort" }, { "length" }, { "shell" }, { "measure" },
@@ -78,7 +78,9 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "stream_property" }, { "dynamic" },
     { "create_client_socket" }, { "create_server_socket" },
     { "recv_socket" }, { "close_socket" },
-    { "create_clinet_curl" }, { "send_curl" },{ "recv_curl" }, { "close_curl" },
+    { "create_clinet_curl" }, { "send_curl" }, { "recv_curl" },
+	{ "close_curl" },
+    { "set_curl_option" }, { "add_curl_header" },
 };
 
 //compiled predicate
@@ -98,7 +100,8 @@ char extended[EXTENDED_NUMBER][30] = {
     { "dp_compile" }, { "dp_prove" }, { "dp_close" }, { "dp_parent" },
     { "dp_child" }, { "dp_wait" }, { "dp_pause" }, { "dp_resume" },
     { "mt_create" }, { "mt_close" }, { "mt_and" }, { "mt_or" },
-    { "mt_prove" }, { "cinline" }, { "check_file" }, { "cdeclare" }, { "clibrary" },
+    { "mt_prove" }, { "cinline" }, { "check_file" }, { "cdeclare" },
+	{ "clibrary" },
     { "format" },
 };
 

@@ -2091,7 +2091,7 @@ int b_cinline(int arglist, int rest, int th)
 
 int b_set_prolog_flag(int arglist, int rest, int th)
 {
-    int n, arg1,arg2, ind;
+    int n, arg1, arg2, ind;
 
     n = length(arglist);
     ind = makeind("set_prolog_flag", n, th);
@@ -2099,15 +2099,16 @@ int b_set_prolog_flag(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if (eqlp(arg1,makeconst("string")) && eqlp(arg2,makeconst("arity"))){
-		string_flag = 0;
-		return (prove_all(rest, sp[th], th));
+	if (eqlp(arg1, makeconst("string"))
+	    && eqlp(arg2, makeconst("arity"))) {
+	    string_flag = 0;
+	    return (prove_all(rest, sp[th], th));
+	} else if (eqlp(arg1, makeconst("string"))
+		   && eqlp(arg2, makeconst("iso"))) {
+	    string_flag = 1;
+	    return (prove_all(rest, sp[th], th));
 	}
-	else if(eqlp(arg1,makeconst("string")) && eqlp(arg2,makeconst("iso"))){
-		string_flag = 1;
-		return (prove_all(rest, sp[th], th));
-	}
-	
+
 
 	return (NO);
     }
@@ -2117,31 +2118,27 @@ int b_set_prolog_flag(int arglist, int rest, int th)
 
 int format_obj(int x, int ind, int th)
 {
-	char obj[STRSIZE];
+    char obj[STRSIZE];
 
-	if(integerp(x)){
-		sprintf(obj,"%d",GET_INT(x));
-	}
-	else if(floatp(x)){
-		sprintf(obj,"%g",GET_FLT(x));
-	}
-	else if(atomp(x)){
-		sprintf(obj,"%s",GET_NAME(x));
-	}
-	else if(stringp(x)){
-		sprintf(obj,"%s",GET_NAME(x));
-	}
-	else {
-		exception(NOT_ATOMIC,ind,x,th);
-	}
+    if (integerp(x)) {
+	sprintf(obj, "%d", GET_INT(x));
+    } else if (floatp(x)) {
+	sprintf(obj, "%g", GET_FLT(x));
+    } else if (atomp(x)) {
+	sprintf(obj, "%s", GET_NAME(x));
+    } else if (stringp(x)) {
+	sprintf(obj, "%s", GET_NAME(x));
+    } else {
+	exception(NOT_ATOMIC, ind, x, th);
+    }
 
-	return(makestr(obj));
+    return (makestr(obj));
 }
 
 int b_format(int arglist, int rest, int th)
 {
-	int n, arg1,arg2,arg3, ind,i,j,k, save;
-	char c,format[STRSIZE],output[STRSIZE],substr[STRSIZE];
+    int n, arg1, arg2, arg3, ind, i, j, k, save;
+    char c, format[STRSIZE], output[STRSIZE], substr[STRSIZE];
 
     n = length(arglist);
     ind = makeind("format", n, th);
@@ -2149,272 +2146,284 @@ int b_format(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
-	if(!wide_variable_p(arg1) && !streamp(arg1) && !aliasp(arg1))
-		exception(NOT_VAR,ind,arg1,th);
-	if(!stringp(arg2))
-		exception(NOT_STR,ind,arg2,th);
-	if(!listp(arg3))
-		exception(NOT_LIST,ind,arg3,th);
-	
-	memset(output,0,sizeof(output));
-	memset(format,0,sizeof(format));
-	strcpy(format,GET_NAME(arg2));
+	if (!wide_variable_p(arg1) && !streamp(arg1) && !aliasp(arg1))
+	    exception(NOT_VAR, ind, arg1, th);
+	if (!stringp(arg2))
+	    exception(NOT_STR, ind, arg2, th);
+	if (!listp(arg3))
+	    exception(NOT_LIST, ind, arg3, th);
+
+	memset(output, 0, sizeof(output));
+	memset(format, 0, sizeof(format));
+	strcpy(format, GET_NAME(arg2));
 	i = 0;
 	j = 0;
 	c = format[i++];
-	while(c != 0){
-		if (c == '~'){
-			c = format[i++];
-			if(c == 'O'){
-				memset(substr,0,sizeof(substr));
-				strcpy(substr,GET_NAME(format_obj(car(arg3),ind,th)));
-				arg3 = cdr(arg3);
-				k = 0;
-				c = substr[k++];
-				while(c != 0){
-					output[j++] = c;
-					c = substr[k++];
-				}
-			}
-			else if(c == 'A'){
-				if(!atomp(car(arg3)))
-					exception(NOT_ATOM,ind,arg3,th);
-				memset(substr,0,sizeof(substr));
-				strcpy(substr,GET_NAME(car(arg3)));
-				arg3 = cdr(arg3);
-				k = 0;
-				c = substr[k++];
-				while(c != 0){
-					output[j++] = c;
-					c = substr[k++];
-				}
-			}
-			if(c == 'S'){
-				if(!stringp(car(arg3)))
-					exception(NOT_STR,ind,arg3,th);
-				memset(substr,0,sizeof(substr));
-				strcpy(substr,GET_NAME(car(arg3)));
-				arg3 = cdr(arg3);
-				k = 0;
-				c = substr[k++];
-				while(c != 0){
-					output[j++] = c;
-					c = substr[k++];
-				}
-			}
-			else if(c == 'D'){
-				if(!integerp(car(arg3)))
-					exception(NOT_INT,ind,arg3,th);
-				memset(substr,0,sizeof(substr));
-				sprintf(substr,"%d",GET_INT(car(arg3)));
-				arg3 = cdr(arg3);
-				k = 0;
-				c = substr[k++];
-				while(c != 0){
-					output[j++] = c;
-					c = substr[k++];
-				}
-			}
-			else if(c == 'F'){
-				memset(substr,0,sizeof(substr));
-				sprintf(substr,"%g",GET_FLT(car(arg3)));
-				arg3 = cdr(arg3);
-				k = 0;
-				c = substr[k++];
-				while(c != 0){
-					output[j++] = c;
-					c = substr[k++];
-				}
-			}
-		}
-		else {
-			output[j++] = c;
-		}
+	while (c != 0) {
+	    if (c == '~') {
 		c = format[i++];
+		if (c == 'O') {
+		    memset(substr, 0, sizeof(substr));
+		    strcpy(substr,
+			   GET_NAME(format_obj(car(arg3), ind, th)));
+		    arg3 = cdr(arg3);
+		    k = 0;
+		    c = substr[k++];
+		    while (c != 0) {
+			output[j++] = c;
+			c = substr[k++];
+		    }
+		} else if (c == 'A') {
+		    if (!atomp(car(arg3)))
+			exception(NOT_ATOM, ind, arg3, th);
+		    memset(substr, 0, sizeof(substr));
+		    strcpy(substr, GET_NAME(car(arg3)));
+		    arg3 = cdr(arg3);
+		    k = 0;
+		    c = substr[k++];
+		    while (c != 0) {
+			output[j++] = c;
+			c = substr[k++];
+		    }
+		}
+		if (c == 'S') {
+		    if (!stringp(car(arg3)))
+			exception(NOT_STR, ind, arg3, th);
+		    memset(substr, 0, sizeof(substr));
+		    strcpy(substr, GET_NAME(car(arg3)));
+		    arg3 = cdr(arg3);
+		    k = 0;
+		    c = substr[k++];
+		    while (c != 0) {
+			output[j++] = c;
+			c = substr[k++];
+		    }
+		} else if (c == 'D') {
+		    if (!integerp(car(arg3)))
+			exception(NOT_INT, ind, arg3, th);
+		    memset(substr, 0, sizeof(substr));
+		    sprintf(substr, "%d", GET_INT(car(arg3)));
+		    arg3 = cdr(arg3);
+		    k = 0;
+		    c = substr[k++];
+		    while (c != 0) {
+			output[j++] = c;
+			c = substr[k++];
+		    }
+		} else if (c == 'F') {
+		    memset(substr, 0, sizeof(substr));
+		    sprintf(substr, "%g", GET_FLT(car(arg3)));
+		    arg3 = cdr(arg3);
+		    k = 0;
+		    c = substr[k++];
+		    while (c != 0) {
+			output[j++] = c;
+			c = substr[k++];
+		    }
+		}
+	    } else {
+		output[j++] = c;
+	    }
+	    c = format[i++];
 	}
-	if(wide_variable_p(arg1)){
-		if(unify(arg1,makestr(output),th) == YES)
-			return(prove_all(rest,sp[th],th));
+	if (wide_variable_p(arg1)) {
+	    if (unify(arg1, makestr(output), th) == YES)
+		return (prove_all(rest, sp[th], th));
+	} else {
+	    save = output_stream;
+	    if (aliasp(arg1))
+		output_stream = GET_CAR(arg1);
+	    else
+		output_stream = arg1;
+	    quoted_flag = 0;
+	    print(makestr(output));
+	    quoted_flag = 1;
+	    output_stream = save;
+	    return (prove_all(rest, sp[th], th));
 	}
-	else {
-		save = output_stream;
-		if (aliasp(arg1))
-	    	output_stream = GET_CAR(arg1);
-		else
-	    	output_stream = arg1;
-		quoted_flag = 0;
-		print(makestr(output));
-		quoted_flag = 1;
-		output_stream = save;
-		return(prove_all(rest,sp[th],th));
-	}}
-	
-	exception(ARITY_ERR, ind, arglist, th);
+    }
+
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 //------------------https curl----------------
 
 
-size_t write_callback(void *ptr, size_t size, size_t nmemb, void *userdata) {
-    strncat((char *)userdata, (char *)ptr, size * nmemb);  // store recieved data
+size_t write_callback(void *ptr, size_t size, size_t nmemb, void *userdata)
+{
+    strncat((char *) userdata, (char *) ptr, size * nmemb);	// store recieved data
     return size * nmemb;
 }
 
 int b_create_client_curl(int arglist, int rest, int th)
 {
-	int n, arg1,arg2,ind;
-	CURL *curl;
+    int n, arg1, arg2, ind;
+    CURL *curl;
 
     n = length(arglist);
     ind = makeind("create_client_curl", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
+	if (!wide_variable_p(arg1))
+	    exception(NOT_STREAM, ind, arg1, th);
+	if (!stringp(arg2))
+	    exception(NOT_STR, ind, arg2, th);
 
 	curl = curl_easy_init();
-    if (!curl) {
-        exception(SYSTEM_ERR, ind, NIL, th);}
-	
-	curl_easy_setopt(curl, CURLOPT_URL, GET_NAME(arg2)); 
-	if(unify(arg1,makecurl(curl,NPL_CURL,GET_NAME(arg2)),th) == YES)
-		return(prove_all(rest,sp[th],th));
-	else 
-		return(NO);
+	if (!curl) {
+	    exception(SYSTEM_ERR, ind, NIL, th);
 	}
-	exception(ARITY_ERR, ind, arglist, th);
+
+	curl_easy_setopt(curl, CURLOPT_URL, GET_NAME(arg2));
+	if (unify(arg1, makecurl(curl, NPL_CURL, GET_NAME(arg2)), th) ==
+	    YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_send_curl(int arglist, int rest, int th)
 {
-	int n, arg1,arg2,ind;
-	CURL *curl;
+    int n, arg1, arg2, ind;
+    CURL *curl;
 
     n = length(arglist);
     ind = makeind("send_curl", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-	
+	if (!streamp(arg1))
+	    exception(NOT_STREAM, ind, arg1, th);
+	if (!stringp(arg2))
+	    exception(NOT_STR, ind, arg2, th);
+
 	curl = GET_CURL(arg1);
-    curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
+	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_callback);
 	curl_easy_setopt(curl, CURLOPT_POST, 1L);
-    curl_easy_setopt(curl, CURLOPT_POSTFIELDS, GET_NAME(arg2));
-	return(prove_all(rest,sp[th],th));
-	}
-	exception(ARITY_ERR, ind, arglist, th);
+	curl_easy_setopt(curl, CURLOPT_POSTFIELDS, GET_NAME(arg2));
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_recv_curl(int arglist, int rest, int th)
 {
-	int n, arg1,arg2,ind;
-	char response_data[STRSIZE] = {0};
-	CURL *curl;
+    int n, arg1, arg2, ind;
+    char response_data[STRSIZE] = { 0 };
+    CURL *curl;
 
     n = length(arglist);
     ind = makeind("recv_curl", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
-	
+	if (!streamp(arg1))
+	    exception(NOT_STREAM, ind, arg1, th);
+	if (!stringp(arg2))
+	    exception(NOT_STR, ind, arg2, th);
+
 	curl = GET_CURL(arg1);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, response_data);
-    curl_easy_perform(curl);
-	if(unify(arg2,makestr(response_data),th) == YES)
-		return(prove_all(rest,sp[th],th));
-	else 
-		return (NO);
-	}
-	exception(ARITY_ERR, ind, arglist, th);
+	curl_easy_perform(curl);
+	if (unify(arg2, makestr(response_data), th) == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 
 int b_close_curl(int arglist, int rest, int th)
 {
-	int n, arg1,ind;
+    int n, arg1, ind;
 
     n = length(arglist);
     ind = makeind("close_curl", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
-	curl_easy_cleanup(GET_CURL(arg1)); 
-	return(prove_all(rest,sp[th],th));
-	}
-	exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-
-/*
-int b_set_curl_option(int arglist, int rest, int th)
-{
-    int n, arg1, arg2, ind;
-    CURL *curl;
-    
-    n = length(arglist);
-    ind = makeind("set_curl_option", n, th);
-    
-    if (n == 2) {
-        arg1 = car(arglist);
-        arg2 = cadr(arglist);
-        
-        curl = GET_CURL(arg1);
-        
-        // オプションのタイプを判定して処理
-        if (isheader(arg2)) {
-            // オプションが header("...") の場合
-            curl_easy_setopt(curl, CURLOPT_HTTPHEADER, GET_NAME(arg2));
-        } else if (ismethod(arg2)) {
-            // オプションが method(post) や method(get) の場合
-            if (equal(GET_NAME(arg2), "post")) {
-                curl_easy_setopt(curl, CURLOPT_POST, 1L);
-            } else if (equal(GET_NAME(arg2), "get")) {
-                curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
-            }
-        } else if (istimeout(arg2)) {
-            // オプションが timeout(5) の場合
-            long timeout = GET_INTEGER(arg2);
-            curl_easy_setopt(curl, CURLOPT_TIMEOUT, timeout);
-        } else {
-            // 他のオプションがある場合
-            exception(SYSTEM_ERR, ind, NIL, th);
-            return (NO);
-        }
-        
-        return (prove_all(rest, sp[th], th));
+	if (!streamp(arg1))
+	    exception(NOT_STREAM, ind, arg1, th);
+	curl_easy_cleanup(GET_CURL(arg1));
+	return (prove_all(rest, sp[th], th));
     }
-    
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
+
+
+int b_set_curl_option(int arglist, int rest, int th)
+{
+    int n, arg1, arg2, ind, header, post, get, timeout, var;
+    CURL *curl;
+
+    n = length(arglist);
+    ind = makeind("set_curl_option", n, th);
+
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	if (!streamp(arg1))
+	    exception(NOT_STREAM, ind, arg1, th);
+	if (!stringp(arg2))
+	    exception(NOT_STR, ind, arg2, th);
+
+	curl = GET_CURL(arg1);
+	var = makevariant(th);
+	header = list2(makepred("header"), var);
+	post = list2(makepred("method"), makeconst("post"));
+	get = list2(makepred("get"), makeconst("get"));
+	timeout = list2(makepred("timeout"), var);
+	if (unify(arg2, header, th) == YES) {
+	    curl_easy_setopt(curl, CURLOPT_HTTPHEADER, GET_NAME(var));
+	} else if (unify(arg2, post, th) == YES) {
+	    curl_easy_setopt(curl, CURLOPT_POST, 1L);
+	} else if (unify(arg2, get, th) == YES) {
+	    curl_easy_setopt(curl, CURLOPT_HTTPGET, 1L);
+	} else if (unify(arg2, timeout, th) == YES) {
+	    long timeout = GET_INT(var);
+	    curl_easy_setopt(curl, CURLOPT_TIMEOUT, timeout);
+	} else {
+	    exception(SYSTEM_ERR, ind, NIL, th);
+	    return (NO);
+	}
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+
 
 int b_add_curl_header(int arglist, int rest, int th)
 {
     int n, arg1, arg2, ind;
     CURL *curl;
     struct curl_slist *headers = NULL;
-    
+
     n = length(arglist);
     ind = makeind("add_curl_header", n, th);
-    
+
     if (n == 2) {
-        arg1 = car(arglist);
-        arg2 = cadr(arglist);
-        
-        curl = GET_CURL(arg1);
-        
-        // ヘッダーをリストに追加
-        headers = curl_slist_append(headers, GET_NAME(arg2));
-        
-        // curlリクエストにヘッダーを設定
-        curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
-        
-        return (prove_all(rest, sp[th], th));
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	if (!streamp(arg1))
+	    exception(NOT_STREAM, ind, arg1, th);
+	if (!stringp(arg2))
+	    exception(NOT_STR, ind, arg2, th);
+
+	curl = GET_CURL(arg1);
+	headers = curl_slist_append(headers, GET_NAME(arg2));
+	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+	return (prove_all(rest, sp[th], th));
     }
-    
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
-*/
