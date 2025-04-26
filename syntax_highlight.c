@@ -77,8 +77,8 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "peek_code" }, { "peek_char" }, { "peek_byte" },
     { "stream_property" }, { "dynamic" },
     { "create_client_socket" }, { "create_server_socket" },
-    { "b_send_socket" },
     { "recv_socket" }, { "close_socket" },
+    { "create_clinet_curl" }, { "send_curl" },{ "recv_curl" }, { "close_curl" },
 };
 
 //compiled predicate

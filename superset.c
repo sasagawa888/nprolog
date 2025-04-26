@@ -2256,9 +2256,8 @@ int b_format(int arglist, int rest, int th)
 //------------------https curl----------------
 
 
-// レスポンスを受け取るコールバック関数
 size_t write_callback(void *ptr, size_t size, size_t nmemb, void *userdata) {
-    strcat(userdata, ptr);  // 受け取ったデータを格納
+    strncat((char *)userdata, (char *)ptr, size * nmemb);  // store recieved data
     return size * nmemb;
 }
 
@@ -2268,7 +2267,7 @@ int b_create_client_curl(int arglist, int rest, int th)
 	CURL *curl;
 
     n = length(arglist);
-    ind = makeind("create_clinet_curl", n, th);
+    ind = makeind("create_client_curl", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);

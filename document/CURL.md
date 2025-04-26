@@ -2,9 +2,21 @@
 under construction
 
 # Specification
-- create_curl_client(Curl, URL)	指定URLでCURL *を生成。成功すればCurlに格納。
-- send_curl(Curl, Atom)	POST/PUTなどでボディを送信（文字列形式）。
-- recv_curl(Curl, Response)	レスポンスの受信。文字列としてResponseに格納。
-- close_curl(Curl)	CURL *を開放。内部状態・メモリ解放。
-- set_curl_option(Curl, Option)	Optionは header("..."), method(post), timeout(5) などの構造に。
-- add_curl_header(Curl, Header)	複数ヘッダーの追加が必要なとき。"Authorization: Bearer ..." など。
+- create_curl_client(Curl, URL) 
+Creates a Curl for the specified URL. If successful, unify it in Curl.
+
+- send_curl(Curl, Post) 
+Sends the body (as a string) using POST/PUT.
+
+- recv_curl(Curl, Response) 
+Receives the response. Stores it as a string in Response.
+
+- close_curl(Curl) 
+Releases the CURL*. Frees internal state and memory.
+
+- set_curl_option(Curl, Option) 
+Option can be structures like header("..."), method(post), timeout(5), etc.
+
+- add_curl_header(Curl, Header) 
+Adds multiple headers if needed. For example, "Authorization: Bearer ...".
+
