@@ -2325,8 +2325,8 @@ int b_recv_curl(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 	if (!streamp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
-	if (!stringp(arg2))
-	    exception(NOT_STR, ind, arg2, th);
+	if (!wide_variable_p(arg2))
+	    exception(NOT_VAR, ind, arg2, th);
 
 	curl = GET_CURL(arg1);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, response_data);

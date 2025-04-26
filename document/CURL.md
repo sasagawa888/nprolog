@@ -2,7 +2,7 @@
 under construction
 
 # Specification
-- create_curl_client(Curl, URL) 
+- create_client_curl(Curl, URL) 
 Creates a Curl for the specified URL. If successful, unify it in Curl.
 
 - send_curl(Curl, Post) 
