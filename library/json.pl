@@ -80,6 +80,9 @@ json_to_term(X,T) :-
 json_to_term(X,X) :-
     number(X).
 
+json_to_term(X,X) :-
+    atom(X).
+
 json_to_term({"predicate":A,"argument":B},T) :-
     string_term(A,P),
     json_to_term_list(B,L),

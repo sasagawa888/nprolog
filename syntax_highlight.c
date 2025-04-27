@@ -81,6 +81,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "create_client_curl" }, { "send_curl" }, { "recv_curl" },
 	{ "close_curl" },
     { "set_curl_option" }, { "add_curl_header" }, { "string_atom" },
+    { "atom_term" },
 };
 
 //compiled predicate
