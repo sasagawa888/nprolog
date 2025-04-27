@@ -1,6 +1,6 @@
 % JSON
 
-:- op(500,xfy,':').
+:- op(400,xfy,':').
 
 :- set_prolog_flag(string,iso).
 
@@ -69,19 +69,28 @@ term_to_json((H :- B),J) :-
     J = {"head":H1,"body":B1}.
 
 
+json_to_term((X,Y),T) :-
+    json_to_term(X,X1),
+    json_to_term(Y,Y1),
+    T = [X1|Y1].
+    
+
 json_to_term("true",'@true').
 
 json_to_term("null",'@null').
 
+json_to_term("","").
+
 json_to_term(X,T) :-
     string(X),
-    string_term(X,T).
+    string_atom(X,T).
 
 json_to_term(X,X) :-
     number(X).
 
 json_to_term(X,X) :-
     atom(X).
+
 
 json_to_term({"predicate":A,"argument":B},T) :-
     string_term(A,P),
@@ -93,6 +102,7 @@ json_to_term({"head":H,"body":B},T) :-
     json_to_term(B,B1),
     T = :-(H1,B1).
 
+
 json_to_term((X:Y),T) :-
     json_to_term(X,X1),
     json_to_term(Y,Y1),
@@ -101,13 +111,18 @@ json_to_term((X:Y),T) :-
 json_to_term({X,Y},T) :-
     json_to_term(X,X1),
     json_to_term(Y,Y1),
-    T = (X1,Y1).
+    T = [X1|Y1].
+
 json_to_term({X},T) :-
     json_to_term(X,T).
 
 json_to_term(X,T) :-
     list(X),
     json_to_term_list(X,T).
+
+% parse error
+json_to_term(X,Y) :-
+    display(X),nl,write(Y),nl.
 
 
 json_to_term_list([],[]).
