@@ -2425,3 +2425,34 @@ int b_add_curl_header(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
+
+int b_string_atom(int arglist, int rest, int th){
+	int n, arg1, arg2, ind;
+
+    n = length(arglist);
+    ind = makeind("string_atom", n, th);
+
+    if (n == 2) {
+		arg1 = car(arglist);
+		arg2 = cadr(arglist);
+		if(!(stringp(arg1) || wide_variable_p(arg1)))
+			exception(NOT_STR,ind,arg1,th);
+		if(!(atomp(arg2) || wide_variable_p(arg2)))
+			exception(NOT_ATOM,ind,arg1,th);
+
+		if(stringp(arg1)){
+			if(unify(arg2,makeconst(GET_NAME(arg1)),th) == YES)
+				return (prove_all(rest, sp[th], th));
+			else 
+				return(NO);
+		} else if(atomp(arg2)){
+			if(unify(arg1,makestr(GET_NAME(arg2)),th) == YES)
+				return (prove_all(rest, sp[th], th));
+			else 
+				return(NO);
+		} else 
+			    return(NO);
+	}
+	exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}

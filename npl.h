@@ -976,6 +976,7 @@ int b_stdout(int arglist, int rest, int th);
 int b_stdinout(int arglist, int rest, int th);
 int b_stream_property(int arglist, int rest, int th);
 int b_string(int arglist, int rest, int th);
+int b_string_atom(int arglist, int rest, int th);
 int b_string_length(int arglist, int rest, int th);
 int b_string_term(int arglist, int rest, int th);
 int b_substring(int arglist, int rest, int th);

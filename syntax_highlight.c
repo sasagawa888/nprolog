@@ -80,7 +80,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "recv_socket" }, { "close_socket" },
     { "create_client_curl" }, { "send_curl" }, { "recv_curl" },
 	{ "close_curl" },
-    { "set_curl_option" }, { "add_curl_header" },
+    { "set_curl_option" }, { "add_curl_header" }, { "string_atom" },
 };
 
 //compiled predicate
