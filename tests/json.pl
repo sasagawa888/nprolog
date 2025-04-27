@@ -1,9 +1,6 @@
 
 % JSON tests
-
-alltest :-
-    test(Test),write(Test),nl,fail.
-alltest.
+:- use_module(json).
 
 test(predicate) :-
     term_json(foo(1),J),
@@ -12,6 +9,7 @@ test(rpredicate) :-
     J = {"predicate":"foo","argument":[1]},
     term_json(T,J),
     T = foo(1).
+
 
 test(clause) :- 
     term_json((foo(1):-bar(2)),J),
