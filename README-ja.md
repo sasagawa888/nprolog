@@ -30,7 +30,7 @@ linuexの端末において"sudo make install"とタイプします。
 
 参考 https://www.youtube.com/watch?v=36vUd8ThMF0
 
-ver4.08からcurlライブラリを必要が必要となりました。
+ver4.08からcurlライブラリが必要となりました。
 標準でインストールされていない場合には下記によりインストールしてください。
 
 ```
