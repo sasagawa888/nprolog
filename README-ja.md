@@ -30,6 +30,19 @@ linuexの端末において"sudo make install"とタイプします。
 
 参考 https://www.youtube.com/watch?v=36vUd8ThMF0
 
+ver4.08からcurlライブラリを必要が必要となりました。
+標準でインストールされていない場合には下記によりインストールしてください。
+
+```
+sudo apt update
+sudo apt install libcurl4-openssl-dev
+```
+
+macOSにおいてはncursesが必要となります。
+
+brew install ncurses
+  export PATH=$PATH:/opt/homebrew/Cellar/ncurses/6.5/bin
+
 ## アンインストール
 Linuxの端末において"sudo make uninstall"とタイプします。
 
