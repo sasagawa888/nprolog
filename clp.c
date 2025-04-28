@@ -40,3 +40,34 @@ int b_constraint_set(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
+
+
+
+int constraint_propagate()
+{
+    int expr;
+
+    constraint_set = reverse(constraint_set);
+    constraint_var = NIL;
+    constraint_env = NIL;
+    constraint_domain = NIL;
+
+    while (constraint_set != NIL) {
+        expr = car(constraint_set);
+        //if (expr is (X #= Y)) {
+            // If only one solution exists, remove from constraint_set
+            // If none, break
+            // Otherwise, narrow range and search
+        //} else if (expr is (X in A..Z)) {
+            // Register variable and initial range
+        //}
+        constraint_set = cdr(constraint_set);
+    }
+    return NO;
+}
+
+void constraint_search(int expr, int var, int env) {
+    // Try all candidates, like Lisp’s dolist
+    // Save valid values to domain
+    // Merge into existing domains
+}

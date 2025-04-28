@@ -193,6 +193,9 @@ struct sockaddr_in server_addr, client_addr;
 
 /* -----CLPFD-------------------------- */
 int constraint_set = NIL;
+int constraint_var = NIL;
+int constraint_env = NIL;
+int constraint_domain = NIL;
 
 //-----editor-----
 char buffer[BUFSIZE][10];
@@ -428,7 +431,9 @@ void init_repl(void)
     }
     // CLPFD
     constraint_set = NIL;
-
+	constraint_var = NIL;
+    constraint_env = NIL;
+    constraint_domain = NIL;
 }
 
 void query(int x, int th)

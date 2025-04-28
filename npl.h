@@ -358,7 +358,9 @@ extern struct sockaddr_in server_addr, client_addr;
 
 /* -----CLPFD-------------------------- */
 extern int constraint_set;
-
+extern int constraint_var;
+extern int constraint_env;
+extern int constraint_domain;
 
 #ifdef __APPLE__
 #define FLUSH               fpurge(stdin);
