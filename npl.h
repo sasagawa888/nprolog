@@ -359,7 +359,6 @@ extern struct sockaddr_in server_addr, client_addr;
 /* -----CLPFD-------------------------- */
 extern int constraint_set;
 extern int constraint_var;
-extern int constraint_env;
 extern int constraint_domain;
 
 #ifdef __APPLE__
@@ -1067,6 +1066,7 @@ int cons(int car, int cdr);
 int cons_next(int x, int y);
 int cons_prev(int x, int y);
 int constantp(int addr);
+int constraint_propagate(void);
 int convert_to_variant(int x, int th);
 int convert_to_variable(int x, int th);
 int copy_heap(int x);
