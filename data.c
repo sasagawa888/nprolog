@@ -1741,6 +1741,46 @@ int deref1(int x, int th)
     return (NIL);
 }
 
+/* reverse deref for CLPFD */
+int revderef(int x, int th)
+{
+    int temp;
+
+    if (nullp(x))
+	return (NIL);
+    else if (!structurep(x))
+	return (revderef1(x, th));
+    else {
+	temp = wcons(revderef(car(x), th), revderef(cdr(x), th), th);
+	SET_AUX(temp, GET_AUX(x));
+	return (temp);
+    }
+}
+
+int revderef1(int x, int th)
+{
+
+    int res;
+
+    res = NIL;
+    if (alpha_variable_p(x)) {
+      loop:
+	    // reverse-findvar(x);
+		res = x;
+		res--;
+		while(res > CELLSIZE){
+			if(variant[res - CELLSIZE][th] == x){
+				res = x;
+				goto loop;
+			} else 
+				res--;
+		}
+		return(x);
+    } else
+	return (x);
+
+    return (NIL);
+}
 
 
 int unify(int x, int y, int th)
