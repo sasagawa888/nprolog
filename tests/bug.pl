@@ -1,4 +1,4 @@
-% CLPFD test
+% CLPFD test thinking
 
 :- use_module(clpfd).
 
