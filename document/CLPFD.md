@@ -19,69 +19,44 @@ under construction
 
 # memo
 
-```
-// Idea sketch
-int constraint_set;
-int constraint_var;
-int constraint_env;
-int constraint_domain;
+データ構造
+制約集合
+変数リスト　e.g. [var_1,var2] 変数シンボルにその範囲を紐付ける。
+　　　　　　　　　var_1 = [1,2,3] var_2 = [0,1,2]
+ドメインリスト w.g.  var1:var_2 [[1,1],[2,2]]
 
-int constraint_propagate()
-{
-    int expr;
+アルゴリズム
 
-    constraint_set = reverse(constraint_set);
-    constraint_var = NIL;
-    constraint_env = NIL;
-    constraint_domain = NIL;
+in 変数の範囲を生成し変数アトムに紐付ける
 
-    while(constraint_set != NIL){
-        expr = car(constraint_set);
-        if( expr == (X #= Y)){
-            // If there is only one solution, remove it from constraint_set
-            if (only one solution) constraint_set is reduced by one
-            // If no solution exists, break
-            else if(no solution) break;
-            // Otherwise, narrow the solution range and try all possibilities
-            else narrow the solution range and try all possibilities constraint_search(expr, env);
-        } else if( expr == (X #< Y)){
-            // If there is only one solution, remove it from constraint_set
-            if (only one solution) constraint_set is reduced by one
-            // If no solution exists, break
-            else if(no solution) break;
-            // Otherwise, narrow the solution range and try all possibilities
-            else narrow the solution range and try all possibilities constraint_search(expr, env);
-        } else if( expr == (X #> Y)){
-            // If there is only one solution, remove it from constraint_set
-            if (only one solution) constraint_set is reduced by one
-            // If no solution exists, break
-            else if(no solution) break;
-            // Otherwise, narrow the solution range and try all possibilities
-            else narrow the solution range and try all possibilities constraint_search(expr, env);
-        } else if ( expr == X in A..Z){
-            // Register the variable and its initial value range
-            constraint_var = cons(X, constraint_var);
-            constraint_env = cons(makerange(A..Z), constraint_env);
-        }
 
-        constraint_set = cdr(constraint_set);
-    }
-    return (NO);
-}
+#= 等号　具体化してドメインリストに登録する。この際、未確定の変数部分には＊を挿入する。
+変数範囲が具体的に定められてない場合にはNOとする。
 
-void constraint_search(expr, env)
-{
-    int candidate, var, env, domain;
+e.g.　X = [1,2] Y=[1,2,3] X #= Y domain = [[1,1],[2,2]]
+e.g.  X = [1,2] Y=[1,2,3],Z=[0,1,2] X #= Y domein =[[1,1,*],[2,2,*]]
 
-    var = constraint_var;
-    env = constraint_env;
-    domain = NIL;
-    while(candidates remain){
-         // Like Lisp's dolist
-        if (expr is satisfied) remember it in domain
-    }
-    // Append the found domain to the existing one
-    constraint_domain = cons(domain, constraint_domain);
-}
-```
+#\= 不等号　具体化してドメインリストに登録する。この際、未確定の変数部分には＊を挿入する。
+変数範囲が具体的に定められてない場合にはNOとする。
+
+e.g.　X = [1,2] Y=[1,2,3] X #= Y domain = [[1,2],[1,3],[2,1],[2,3]]
+e.g.  X = [1,2] Y=[1,2,3],Z=[0,1,2] X #= Y domein = [[1,2,*],[1,3,*],[2,1,*],[2,3,*]]
+
+
+#< #> #<= #>=  比較制約演算子　
+変数の範囲を狭めて変数アトムに紐付ける。その結果、値が１つだけになり確定した場合には
+ドメインリストに登録する。すでにドメインリストにある場合には不適合なデータを削除する。
+＊ならそれを具体値に置き換える。
+
+e.g.　X = [1,2,3] X#<2 -> X=[1]
+
+変数範囲が具体的に定められていない場合には抽象的に表現して変数アトムに紐付ける。
+e.g. X #> 0   X = [0,inf]
+
+
+label述語
+ドメイン中に＊がなければ確定しているので引数の変数リストとunifyする。
+ドメインチュに＊があれば変数リストの範囲内で総当りで調べ確定させる。その後に引数の
+変数リストとunifyする。
+
 
