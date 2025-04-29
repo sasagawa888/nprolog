@@ -1312,6 +1312,7 @@ int resolve(int end, int bindings, int trail, int n);
 int revderef(int x, int th);
 int revderef1(int x, int th);
 int reverse(int x);
+int rev_variable_convert(int x);
 int set_ac(int x, int th);
 int set_sp(int x, int th);
 int set_wp(int x, int th);

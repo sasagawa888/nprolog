@@ -535,6 +535,18 @@ int variable_convert5(int x)
     return (res);
 }
 
+//compiler variable var_1 -> alpha variable v_1
+int rev_variable_convert(int x)
+{
+    int res;
+    char str[STRSIZE];
+
+    strcpy(str, GET_NAME(x));
+    res = atoi(str + 4) + CELLSIZE;
+    return (res);
+}
+
+
 
 int b_clause_with_arity(int arglist, int rest, int th)
 {

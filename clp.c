@@ -15,7 +15,7 @@ int b_add_constraint(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("add_constraint", n, th);
     if (n == 1) {
-	arg1 = deref(car(arglist),th);
+	arg1 = revderef(car(arglist),th);
 	constraint_set =
 	    listcons(copy_heap(variable_convert1(arg1)), constraint_set);
 	return (prove_all(rest, sp[th], th));
@@ -43,17 +43,15 @@ int b_constraint_set(int arglist, int rest, int th)
 
 int b_label(int arglist, int rest, int th)
 {
-    int n, ind, arg1;
+    int n, ind, arg1,compvar;
 
     n = length(arglist);
     ind = makeind("label", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
-
-    print(constraint_set); printf("\n");
+       
     constraint_propagate();
-    print(constraint_var); printf("\n");
-    print(constraint_domain); printf("\n");
+    compvar = revderef(arg1,th);
 
 	return (NO);
     }
@@ -61,6 +59,21 @@ int b_label(int arglist, int rest, int th)
     return (NO);
 }
 
+int each_car(int x)
+{
+    if (nullp(x))
+        return(NIL);
+    else 
+        return(listcons(caar(x),each_car(cdr(x))));
+}
+
+int each_cdr(int x)
+{
+    if (nullp(x))
+        return(NIL);
+    else 
+        return(listcons(cdar(x),each_cdr(cdr(x))));
+}
 
 
 int fd_eq(int x)
@@ -184,7 +197,7 @@ void fd_set_domain(int var,int val)
     new = NIL;
     while(vars != NIL){
         if(eqlp(var,car(vars)))
-            new = listcons(var,new);
+            new = listcons(val,new);
         else 
             new = listcons(car(domain),new);
 
@@ -228,8 +241,8 @@ int constraint_propagate()
                 min = fd_max(car(fd_get_domain(left)),car(fd_get_domain(right)));
                 max = fd_min(last(fd_get_domain(left)),last(fd_get_domain(right)));
                 domain = iota(min,max);
-                fd_set_domain(left,domain); print(constraint_domain);
-                fd_set_domain(right,domain); print(constraint_domain);
+                fd_set_domain(left,domain);
+                fd_set_domain(right,domain); 
             }
         } else if (fd_in(expr)) {
             // e.g. X in 1..3 
