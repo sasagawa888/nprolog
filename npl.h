@@ -882,6 +882,7 @@ int b_int_text(int arglist, int rest, int th);
 int b_is(int arglist, int rest, int th);
 int b_key(int arglist, int rest, int th);
 int b_keysort(int arglist, int rest, int th);
+int b_label(int arglist, int rest, int th);
 int b_leash(int arglist, int rest, int th);
 int b_length(int arglist, int rest, int th);
 int b_list(int arglist, int rest, int th);

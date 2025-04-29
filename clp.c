@@ -15,7 +15,7 @@ int b_add_constraint(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("add_constraint", n, th);
     if (n == 1) {
-	arg1 = car(arglist);
+	arg1 = deref(car(arglist),th);
 	constraint_set =
 	    listcons(copy_heap(variable_convert1(arg1)), constraint_set);
 	return (prove_all(rest, sp[th], th));
@@ -41,10 +41,31 @@ int b_constraint_set(int arglist, int rest, int th)
     return (NO);
 }
 
+int b_label(int arglist, int rest, int th)
+{
+    int n, ind, arg1;
+
+    n = length(arglist);
+    ind = makeind("label", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+
+    print(constraint_set); printf("\n");
+    constraint_propagate();
+    print(constraint_var); printf("\n");
+    print(constraint_domain); printf("\n");
+
+	return (NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+
 
 int fd_eq(int x)
 {
-    if(structurep(x) && car(x) == makeconst("#="))
+    if(structurep(x) && eqlp(car(x),makeconst("#=")))
         return(1);
     else 
         return(0);
@@ -52,7 +73,7 @@ int fd_eq(int x)
 
 int fd_neq(int x)
 {
-    if(structurep(x) && car(x) == makeconst("#\\="))
+    if(structurep(x) && eqlp(car(x),makeconst("#\\=")))
         return(1);
     else 
         return(0);
@@ -60,7 +81,7 @@ int fd_neq(int x)
 
 int fd_greater(int x)
 {
-    if(structurep(x) && car(x) == makeconst("#>"))
+    if(structurep(x) && eqlp(car(x),makeconst("#>")))
         return(1);
     else 
         return(0);
@@ -68,7 +89,7 @@ int fd_greater(int x)
 
 int fd_eqgreater(int x)
 {
-    if(structurep(x) && car(x) == makeconst("#>="))
+    if(structurep(x) && eqlp(car(x),makeconst("#>=")))
         return(1);
     else 
         return(0);
@@ -76,7 +97,7 @@ int fd_eqgreater(int x)
 
 int fd_smaller(int x)
 {
-    if(structurep(x) && car(x) == makeconst("#<"))
+    if(structurep(x) && eqlp(car(x),makeconst("#<")))
         return(1);
     else 
         return(0);
@@ -84,7 +105,7 @@ int fd_smaller(int x)
 
 int fd_eqsmaller(int x)
 {
-    if(structurep(x) && car(x) == makeconst("#<="))
+    if(structurep(x) && eqlp(car(x),makeconst("#<=")))
         return(1);
     else 
         return(0);
@@ -92,7 +113,7 @@ int fd_eqsmaller(int x)
 
 int fd_in(int x)
 {
-    if(structurep(x) && car(x) == makeconst("in"))
+    if(structurep(x) && eqlp(car(x),makeconst("in")))
         return(1);
     else 
         return(0);
@@ -123,8 +144,8 @@ int iota(int min, int max)
     j = GET_INT(max);
     res = NIL;
 
-    while(i<j){
-        listcons(makeint(j),res);
+    while(j>=i){
+        res = listcons(makeint(j),res);
         j--;
     }
     return(res);
@@ -133,22 +154,23 @@ int iota(int min, int max)
 int fd_index(int var){
     int i,vars;
 
-    i = 0;
+    i = 1;
     vars = constraint_var;
     while(vars != NIL){
         if(eqlp(var,car(vars)))
             return(i);
 
+        i++;
         vars = cdr(vars);
     }
-    return(-1);
+    return(0);
 }
 
 int fd_get_domain(int var)
 {
     int index = fd_index(var);
-    if(index == -1)
-        exception(SYNTAX_ERR,makeind("constraint_propergate",0,0),NIL,0);
+    if(index == 0)
+        exception(SYSTEM_ERR,makeind("constraint_propergate",0,0),NIL,0);
     
     return(nth(constraint_domain,index));
 }
@@ -205,10 +227,9 @@ int constraint_propagate()
             if(fd_var(left) && fd_var(right)){ 
                 min = fd_max(car(fd_get_domain(left)),car(fd_get_domain(right)));
                 max = fd_min(last(fd_get_domain(left)),last(fd_get_domain(right)));
-                if(min > max) return(NO);
                 domain = iota(min,max);
-                fd_set_domain(left,domain);
-                fd_set_domain(right,domain);
+                fd_set_domain(left,domain); print(constraint_domain);
+                fd_set_domain(right,domain); print(constraint_domain);
             }
         } else if (fd_in(expr)) {
             // e.g. X in 1..3 
