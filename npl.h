@@ -1081,6 +1081,8 @@ int deref(int x, int th);
 int deref1(int x, int th);
 int disjunctionp(int addr);
 int divide(int arg1, int arg2, int th);
+int each_car(int x);
+int each_cdr(int x);
 int eqgreaterp(int x1, int x2);
 int eqlp(int addr1, int addr2);
 int eqp(int addr1, int addr2);

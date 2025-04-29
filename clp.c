@@ -41,23 +41,6 @@ int b_constraint_set(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_label(int arglist, int rest, int th)
-{
-    int n, ind, arg1,compvar;
-
-    n = length(arglist);
-    ind = makeind("label", n, th);
-    if (n == 1) {
-	arg1 = car(arglist);
-       
-    constraint_propagate();
-    compvar = revderef(arg1,th);
-
-	return (NO);
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
 
 int each_car(int x)
 {
@@ -261,4 +244,39 @@ void constraint_search(int expr, int var, int env) {
     // Try all candidates, like Lisp’s dolist
     // Save valid values to domain
     // Merge into existing domains
+}
+
+int b_label(int arglist, int rest, int th)
+{
+    int n, ind, arg1,compvar,result,save1,save2,save3;
+
+    n = length(arglist);
+    ind = makeind("label", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+       
+    constraint_propagate();
+    compvar = variable_convert1(revderef(arg1,th));
+    result = NIL;
+    while(!nullp(compvar)){
+        result = cons(fd_get_domain(car(compvar)),result);
+        compvar = cdr(compvar);
+    }
+    save1 = wp[th];
+	save2 = sp[th];
+	save3 = ac[th];
+    while(car(result) != NIL){
+        unify(arg1,each_car(result),th);
+            if (prove_all(rest, sp[th], th) == YES)
+                return(YES);
+
+        wp[th] = save1;
+        unbind(save2, th);
+        ac[th] = save3;
+        result = each_cdr(result);
+    }
+	return (NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
