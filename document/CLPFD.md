@@ -75,6 +75,27 @@ CLP(FD): Organization of Algorithms and Data Structures
 
     label Predicate
     The label predicate searches for a solution that satisfies the constraints processed up to that point and generates it in the domain. If no solution exists, it returns no.
+
+
+    Example:
+    X + Y + Z #= 9, with X in 1..3, Y in 1..3, Z in 1..3.
+
+    Assume X = 1. Then Y + Z = 8.
+    However, since the maximum values of Y and Z are both 3, this cannot be satisfied.
+    Therefore, all choices with X = 1 fail.
+
+    Assume X = 2. Then Y + Z = 7.
+    Again, with the ranges of Y and Z, this is not possible.
+    So all choices with X = 2 also fail.
+
+    Assume X = 3. Then Y + Z = 6.
+
+    Assume Y = 1, then Z = 5, which is outside the domain. So Y = 1 fails.
+
+    Assume Y = 2, then Z = 4, which is also outside the domain. So Y = 2 fails.
+
+    Assume Y = 3, then Z = 3, which is within the domain. Success.
+   
    
 ```
 
