@@ -96,6 +96,12 @@ CLP(FD): Organization of Algorithms and Data Structures
 
     Assume Y = 3, then Z = 3, which is within the domain. Success.
    
+   Standard form of expressions: To perform inference efficiently, we establish a standard form for expressions where the left-hand side is a variable and the right-hand side is a constant. For example, X #= Y becomes X - Y #= 0. At the stage where we assume X = 1, we transform the expression to Y #= 1.
+   For simple expressions, this might seem less efficient, but for more complex expressions, it becomes more efficient. In cases like X + Y + Z #= 9, it is easier to formalize the reasoning process.
+
+   X=1  1+Y+Z=9 -> Y+Z=8 fail
+   X=2  2+Y+Z=9 -> Y+Z=7 fail
+   x=3  3+Y+Z=9 -> Y+Z=6 succ
    
 ```
 
