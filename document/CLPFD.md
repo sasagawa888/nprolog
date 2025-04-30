@@ -47,7 +47,9 @@ CLP(FD): Organization of Algorithms and Data Structures
 
     Examples:
     X = [1,2], Y = [1,2,3] → X #= Y → domain = [[1,1], [2,2]]
-    X = [1,2], Y = [1,2,3], Z = [0,1,2] → X #= Y → domain = [[1,1,*], [2,2,*]]
+
+    X = [1,2], Y = [1,2,3], Z = [0,1,2] → X #= Y → domain = []
+    Z #<3 → domain[[1,1,3],[2,2,3]]
 
     Inequality Constraint #\=
     Similar to equality, the relation is instantiated and added to the domain list.
@@ -56,7 +58,9 @@ CLP(FD): Organization of Algorithms and Data Structures
 
     Examples:
     X = [1,2], Y = [1,2,3] → X #\= Y → domain = [[1,2], [1,3], [2,1], [2,3]]
-    X = [1,2], Y = [1,2,3], Z = [0,1,2] → X #\= Y → domain = [[1,2,*], [1,3,*], [2,1,*], [2,3,*]]
+    
+    X = [1,2], Y = [1,2,3], Z = [0,1,2] → X #\= Y → domain = []
+    X #= 0 → domain = [[1,2,0], [1,3,0], [2,1,0], [2,3,0]]
 
     Comparison Constraints #<, #>, #=<, #>=
     These constraints narrow the domain of variables.
