@@ -71,10 +71,10 @@ CLP(FD): Organization of Algorithms and Data Structures
     Example:
     X = [1,2,3] → X #< 2 → X = [1]
     If domains are not concretely defined, represent them abstractly:
-    X #> 0 → X = [0, ∞]
+    X #> 0 → X = [0,inf]
 
     label Predicate
-    If there is no * in the domain, the variable is determined and unified with the argument list.
-    If * exists, exhaustive search is performed within the variable's range to determine values, then unified with the argument list.
+    The label predicate searches for a solution that satisfies the constraints processed up to that point and generates it in the domain. If no solution exists, it returns no.
+   
 ```
 
