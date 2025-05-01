@@ -110,6 +110,32 @@ CLP(FD): Organization of Algorithms and Data Structures
    local int env is list
    [[var1,list1],[var2,list2]] e.g. [[var_1,[1,2,3]],[var_2,[2,3,4]]] 
 
+   set_variable  SET_CDR(var_1,val)
+
+   satisfiablep(expr,env)
+   {
+       bind_variable(expr,env);
+       if(satisfiablep1(expr,env))
+             return(YES);
+       else
+             return(NO);
+   }
+
+   satisfiablep1(expr,env)
+   {
+      e.g. X+Y#=3  X=[0,1] Y=[0,1] -> NO
+           X+Y#=3  X=[0,1,2] Y=[0,1] -> YES
+           X+Y#<3  X=[0,1] Y=[0,1] -> YES
+           X+Y#<3  X=[3,4] Y=[2,3] -> NO
+   }
+
+   standardization(expr)
+   {
+      e.g. X #= Y -> X-Y #=0
+           X #= Y+1 -> X-Y#=1
+           X+Y+Z #= 1 -> X+Y+Z #= 1
+   }
+
    propagate_all(constraint_set,[],[]);
 
    
