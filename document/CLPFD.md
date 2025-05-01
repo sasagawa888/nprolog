@@ -156,11 +156,11 @@ CLP(FD): Organization of Algorithms and Data Structures
       return(NO);
    
 
-   propagate_all(set,env,domain){
+   propagate_all(set,env,index){
         if(set == NIL)
             return(domain)
         else {
-            if(propagete(car(set),env,init_index(env),domain)==YES) 
+            if(propagete(car(set),env,init_index(env))==YES) 
                //e.g. init_index(env) = [1] 
                propagate_all(cdr(set));
             else
