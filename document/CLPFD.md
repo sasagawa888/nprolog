@@ -104,17 +104,27 @@ CLP(FD): Organization of Algorithms and Data Structures
    x=3  3+Y+Z=9 -> Y+Z=6 succ
 
    data structure
-   int constraint_set;
-   int constraint_domain;
+   int constraint_set;   e.g. [X in 1..3,Y in 1..3,X#=Y]
 
    local int env is list
    [[var1,list1],[var2,list2]] e.g. [[var_1,[1,2,3]],[var_2,[2,3,4]]] 
 
-   set_variable  SET_CDR(var_1,val)
+   local int index is list
+   [1,1] -> var_1=1,var_2=2 when env=[[var_1,[1,2,3]],[var_2,[2,3,4]]] 
+
+   local int domain is list
+   e.g. var_1,var_2,var_3...
+        [1,2,3]
+
+   bind_variable(expr,env,index)
+   { 
+     e.g. X+Y#=0 env=[[X,[1,2]],[Y,[2,3]]] index=[1]
+     
+     SET_CDR(X,nth(find(X,env)))
+   }
 
    satisfiablep(expr,env)
    {
-       bind_variable(expr,env);
        if(satisfiablep1(expr,env))
              return(YES);
        else
@@ -123,10 +133,11 @@ CLP(FD): Organization of Algorithms and Data Structures
 
    satisfiablep1(expr,env)
    {
-      e.g. X+Y#=3  X=[0,1] Y=[0,1] -> NO
-           X+Y#=3  X=[0,1,2] Y=[0,1] -> YES
-           X+Y#<3  X=[0,1] Y=[0,1] -> YES
-           X+Y#<3  X=[3,4] Y=[2,3] -> NO
+      e.g. X+Y#=3  X=[0,1] Y=[0,1] -> NO  (because 1+1 < 3)
+           X+Y#=3  X=[0,1,2] Y=[0,1] -> YES (because 2+1=3)
+           X+Y#<3  X=[0,1] Y=[0,1] -> YES (because 0+0<3)
+           X+Y#<3  X=[3,4] Y=[2,3] -> NO  (because 3+2>3)
+           X-Y#<3  X=[3,4] Y=[2,3] ->YES (because 3-2<3 or 4-3<3)
    }
 
    standardization(expr)
@@ -136,28 +147,39 @@ CLP(FD): Organization of Algorithms and Data Structures
            X+Y+Z #= 1 -> X+Y+Z #= 1
    }
 
-   propagate_all(constraint_set,[],[]);
-
+   label/1
+   res = propagate_all(constraint_set,[],[]);
+   if(unify(res,arg1)=YES)
+      return(rest,sp[th],th);
+   else 
+      return(NO);
    
 
    propagate_all(set,env,domain){
         if(set == NIL)
-            return(YES)
+            return(domain)
         else {
-            if(propagete(car(set))==YES)
+            if(propagete(car(set),env,init_index(env),domain)==YES) 
+               //e.g. init_index(env) = [1] 
                propagate_all(cdr(set));
             else
                return(NO);
         }
    }
 
-   propagate(expr,env){
+   propagate(expr,env,index,domain){
         if(expr == NIL)
-            return(YES);
+            return(domain);
 
-        assume_var(expr,env);
+        domain = bind_variable(expr,env,index,domain);
         if(saticfiablep(expr,env)=YES)
-            return(propagate(new_expr(expr),new_exv(env)));
+            index = new_index(index);
+            return(propagate(new_expr(expr),env,index,domain));
+        else if (next_bind_variable(expr,env,new_index(index))=YES)
+            index = new_index(index);
+            domain = bind_variable(expr,env,index,domain);
+            if(saticfiablep(expr,env)=YES)
+                return(propagate(new_expr(expr),new_exv(env),org,domain));
         else
            return(NO);
    }
