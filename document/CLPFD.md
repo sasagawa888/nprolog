@@ -138,6 +138,7 @@ CLP(FD): Organization of Algorithms and Data Structures
            X+Y#<3  X=[0,1] Y=[0,1] -> YES (because 0+0<3)
            X+Y#<3  X=[3,4] Y=[2,3] -> NO  (because 3+2>3)
            X-Y#<3  X=[3,4] Y=[2,3] ->YES (because 3-2<3 or 4-3<3)
+      e.g. X+Y+Z#=3, if X=1 -> 1+Y+Z#=3 -> Y+Z#=2  
    }
 
    standardization(expr)
