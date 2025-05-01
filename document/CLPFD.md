@@ -112,9 +112,7 @@ CLP(FD): Organization of Algorithms and Data Structures
    local int index is list
    [1,1] -> var_1=1,var_2=2 when env=[[var_1,[1,2,3]],[var_2,[2,3,4]]] 
 
-   local int domain is list
-   e.g. var_1,var_2,var_3...
-        [1,2,3]
+   
 
    bind_variable(expr,env,index)
    { 
@@ -149,8 +147,10 @@ CLP(FD): Organization of Algorithms and Data Structures
    }
 
    label/1
+   if(satisfiablep(set,env) == NO)
+        return(NO); //If even one of the constraint sets is unsatisfiable, computation is               unnecessary , return NO.
    res = propagate_all(constraint_set,[],[]);
-   if(unify(res,arg1)=YES)
+   if(unify(index_to_var(res,env),arg1)=YES)
       return(rest,sp[th],th);
    else 
       return(NO);
@@ -168,19 +168,19 @@ CLP(FD): Organization of Algorithms and Data Structures
         }
    }
 
-   propagate(expr,env,index,domain){
+   propagate(expr,env,index){
         if(expr == NIL)
-            return(domain);
+            return(index);
 
-        domain = bind_variable(expr,env,index,domain);
+        domain = bind_variable(expr,env,index);
         if(saticfiablep(expr,env)=YES)
             index = new_index(index);
-            return(propagate(new_expr(expr),env,index,domain));
+            return(propagate(new_expr(expr),env,index));
         else if (next_bind_variable(expr,env,new_index(index))=YES)
             index = new_index(index);
-            domain = bind_variable(expr,env,index,domain);
+            bind_variable(expr,env,index);
             if(saticfiablep(expr,env)=YES)
-                return(propagate(new_expr(expr),new_exv(env),org,domain));
+                return(propagate(new_expr(expr),env,index));
         else
            return(NO);
    }
