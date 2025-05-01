@@ -102,6 +102,40 @@ CLP(FD): Organization of Algorithms and Data Structures
    X=1  1+Y+Z=9 -> Y+Z=8 fail
    X=2  2+Y+Z=9 -> Y+Z=7 fail
    x=3  3+Y+Z=9 -> Y+Z=6 succ
+
+   data structure
+   int constraint_set;
+   int constraint_domain;
+
+   local int env is list
+   [[var1,list1],[var2,list2]] e.g. [[var_1,[1,2,3]],[var_2,[2,3,4]]] 
+
+   propagate_all(constraint_set,[],[]);
+
+   
+
+   propagate_all(set,env,domain){
+        if(set == NIL)
+            return(YES)
+        else {
+            if(propagete(car(set))==YES)
+               propagate_all(cdr(set));
+            else
+               return(NO);
+        }
+   }
+
+   propagate(expr,env){
+        if(expr == NIL)
+            return(YES);
+
+        assume_var(expr,env);
+        if(saticfiablep(expr,env)=YES)
+            return(propagate(new_expr(expr),new_exv(env)));
+        else
+           return(NO);
+   }
+
    
 ```
 
