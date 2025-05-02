@@ -81,7 +81,7 @@ int b_constraint_var(int arglist, int rest, int th)
 
 int b_all_different(int arglist, int rest, int th)
 {
-    int n, ind, arg1,arg2;
+    int n, ind, arg1;
 
     n = length(arglist);
     ind = makeind("all_different", n, th);
@@ -265,28 +265,14 @@ int fd_max(int x, int y)
 	return (y);
 }
 
-int b_label(int arglist, int rest, int th)
-{
-    int n, ind, arg1;
-
-    n = length(arglist);
-    ind = makeind("label", n, th);
-    if (n == 1) {
-	arg1 = car(arglist);
-	
-	return (NO);
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
 
 /* make initial index [1] */
-int init_index(int env)
+int init_domain()
 {
     return (list1(makeint(1)));
 }
 
-int new_index(int index)
+int new_domain(int domain)
 {
     return (1);
 }
@@ -296,24 +282,29 @@ int new_expr(int expr)
     return (1);
 }
 
-int bind_variable(int expr, int env, int index)
+int bind_variable(int expr, int index)
 {
     return (1);
 }
 
-int saticfiablep(int expr, int env)
+int domain_to_value(int domain, int varlist)
+{
+    return(1);
+}
+
+int saticfiablep(int expr, int domain)
 {
     return (1);
 }
 
-int propagate_all(int set, int env, int domain)
+int propagate_all(int set, int domain)
 {
     if (set == NIL)
 	return (domain);
     else {
-	if (propagate(car(set), env, init_index(env)) == YES)
+	if (propagate(car(set), init_domain()) == YES)
 	    //e.g. init_index(env) = [1] 
-	    propagate_all(cdr(set), env, domain);
+	    propagate_all(cdr(set), domain);
 	else
 	    return (NO);
     }
@@ -321,22 +312,54 @@ int propagate_all(int set, int env, int domain)
     return (NO);
 }
 
-int propagate(int expr, int env, int domain)
+int propagate(int expr, int domain)
 {
     if (expr == NIL)
 	return (domain);
 
-    domain = bind_variable(expr, env, domain);
-    if (saticfiablep(expr, env) == YES) {
-	domain = new_index(domain);
-	return (propagate(new_expr(expr), env, domain));
-    } else if (bind_variable(expr, env, new_index(domain)) == YES) {
-	domain = new_index(domain);
-	bind_variable(expr, env, domain);
-	if (saticfiablep(expr, env) == YES)
-	    return (propagate(new_expr(expr), env, domain));
+    domain = bind_variable(expr, domain);
+    if (saticfiablep(expr, domain) == YES) {
+	domain = new_domain(domain);
+	return (propagate(new_expr(expr), domain));
+    } else if (bind_variable(expr, new_domain(domain)) == YES) {
+	domain = new_domain(domain);
+	bind_variable(expr, domain);
+	if (saticfiablep(expr, domain) == YES)
+	    return (propagate(new_expr(expr), domain));
     } else
 	return (NO);
 
+    return (NO);
+}
+
+int b_label(int arglist, int rest, int th)
+{
+    int n, ind, arg1, domain, save;
+
+    n = length(arglist);
+    ind = makeind("label", n, th);
+    save = sp[th];
+    if (n == 1) {
+	arg1 = car(arglist);
+    
+    constraint_set = reverse(constraint_set);
+    constraint_var = reverse(constraint_var);
+    constraint_env = reverse(constraint_env);
+    domain = propagate_all(constraint_set,init_domain());
+    loop:
+    unify(arg1,domain_to_value(domain,arg1),th);
+    if (prove_all(rest,sp[th],th) == YES)
+        return(YES);
+
+    unbind(save,th);
+    domain = propagate_all(constraint_set,domain);
+    if(nullp(domain)){
+        return(NO);
+    }
+    else {
+        goto loop;
+    }
+    }
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
