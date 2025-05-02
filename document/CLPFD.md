@@ -190,7 +190,7 @@ CLP(FD): Organization of Algorithms and Data Structures
     When this predicate is executed, the list is registered in constraint_different.
 　　Actual computation is not performed at this point.
 　　The domains are calculated during the label phase, when propagate_all is executed. At that 　　time, values are selected while avoiding duplication.
-　　If a variable is subject to the uniqueness constraint, the assumed value is stored as a list 　　in constraint_double.
+　　If a variable is subject to the uniqueness constraint, the assumed value is stored as a list 　　in constraint_unique.
 　　This list is referenced to avoid selecting duplicate values. This is a naive approach and has 　　a time complexity of O(log n).
 　　However, since the target problem is something like the Queens problem, I believe this simple 　　algorithm should suffice.
 　　For more serious applications, Regin’s algorithm is well known.

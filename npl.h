@@ -360,6 +360,8 @@ extern struct sockaddr_in server_addr, client_addr;
 extern int constraint_set;
 extern int constraint_var;
 extern int constraint_domain;
+extern int constraint_env;
+extern int constraint_unique;
 
 #ifdef __APPLE__
 #define FLUSH               fpurge(stdin);

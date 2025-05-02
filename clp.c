@@ -41,6 +41,21 @@ int b_constraint_set(int arglist, int rest, int th)
     return (NO);
 }
 
+int b_all_different(int arglist, int rest, int th)
+{
+    int n, ind, arg1;
+
+    n = length(arglist);
+    ind = makeind("all_different", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+    constraint_unique = arg1;
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
 
 int each_car(int x)
 {
@@ -233,7 +248,7 @@ int constraint_propagate()
             min = cadr(caddr(expr));
             max = caddr(caddr(expr));
             constraint_var = cons(var,constraint_var);
-            constraint_domain = cons(iota(min,max),constraint_domain);
+            constraint_env = cons(iota(min,max),constraint_env);
         }
         constraint_set = cdr(constraint_set);
     }

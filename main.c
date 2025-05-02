@@ -196,6 +196,7 @@ int constraint_set = NIL;
 int constraint_var = NIL;
 int constraint_env = NIL;
 int constraint_domain = NIL;
+int constraint_unique = NIL;
 
 //-----editor-----
 char buffer[BUFSIZE][10];
