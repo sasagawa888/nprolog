@@ -1291,6 +1291,8 @@ int predicatep(int addr);
 int pred_to_str(int x);
 int prefixp(int addr);
 int prev(int x);
+int propagate_all(int set,int env,int domain);
+int propagate(int set,int env,int domain);
 int prove(int goal, int bindings, int rest, int th);
 int prove_all(int goals, int bindings, int th);
 int quoted_option_p(int x);

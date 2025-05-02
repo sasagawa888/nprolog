@@ -79,7 +79,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "create_client_socket" }, { "create_server_socket" },
     { "recv_socket" }, { "close_socket" },
     { "create_client_curl" }, { "send_curl" }, { "recv_curl" },
-	{ "close_curl" },
+    { "close_curl" },
     { "set_curl_option" }, { "add_curl_header" }, { "string_atom" },
     { "label" }, { "all_different" },
 };
@@ -102,7 +102,7 @@ char extended[EXTENDED_NUMBER][30] = {
     { "dp_child" }, { "dp_wait" }, { "dp_pause" }, { "dp_resume" },
     { "mt_create" }, { "mt_close" }, { "mt_and" }, { "mt_or" },
     { "mt_prove" }, { "cinline" }, { "check_file" }, { "cdeclare" },
-	{ "clibrary" },
+    { "clibrary" },
     { "format" },
 };
 

@@ -432,7 +432,7 @@ void init_repl(void)
     }
     // CLPFD
     constraint_set = NIL;
-	constraint_var = NIL;
+    constraint_var = NIL;
     constraint_domain = NIL;
 }
 

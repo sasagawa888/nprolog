@@ -1750,7 +1750,7 @@ int revderef(int x, int th)
 	return (NIL);
     else if (alpha_variable_p(x))
 	return (revderef1(x, th));
-	else if(!structurep(x))
+    else if (!structurep(x))
 	return (x);
     else {
 	temp = wcons(revderef(car(x), th), revderef(cdr(x), th), th);
@@ -1766,18 +1766,18 @@ int revderef1(int x, int th)
 
     y = NIL;
     if (alpha_variable_p(x)) {
-	    // reverse-findvar(x);
-		y = x;
-		loop:
-		y--;
-		while(y > CELLSIZE){
-			if(variant[y - CELLSIZE][th] == x){
-				x = y;
-				goto loop;
-			}
-			y--;
-		}
-		return(x);
+	// reverse-findvar(x);
+	y = x;
+      loop:
+	y--;
+	while (y > CELLSIZE) {
+	    if (variant[y - CELLSIZE][th] == x) {
+		x = y;
+		goto loop;
+	    }
+	    y--;
+	}
+	return (x);
     } else
 	return (x);
 
