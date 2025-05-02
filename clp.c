@@ -303,7 +303,7 @@ int propagate_all(int set, int domain)
 	return (domain);
     else {
 	if (propagate(car(set), init_domain()) == YES)
-	    //e.g. init_index(env) = [1] 
+	    //e.g. init_domain(env) = [1] 
 	    propagate_all(cdr(set), domain);
 	else
 	    return (NO);
