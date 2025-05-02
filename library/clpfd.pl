@@ -44,7 +44,6 @@ X #\= Y :-
     add_constraint(X #\= Y).
 
 X in Y :-
-    add_constraint(X in Y).
-X ins Y :-
-    add_constraint((X ins Y)).
+    constraint_var(X,Y).
+
 

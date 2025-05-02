@@ -41,6 +41,44 @@ int b_constraint_set(int arglist, int rest, int th)
     return (NO);
 }
 
+int iota(int min, int max)
+{
+    int i, j, res;
+
+    i = GET_INT(min);
+    j = GET_INT(max);
+    res = NIL;
+
+    while (j >= i) {
+	res = listcons(makeint(j), res);
+	j--;
+    }
+    return (res);
+}
+
+
+int b_constraint_var(int arglist, int rest, int th)
+{
+    int n, ind, arg1, arg2,var,range;
+
+    n = length(arglist);
+    ind = makeind("constraint_var", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);
+    arg2 = cadr(arglist);
+
+    var = variable_convert1(arg1);
+    range = iota(GET_INT(cadr(arg2)),GET_INT(caddr(arg2)));
+    SET_CDR(var,range);
+    constraint_var = cons(var,constraint_var);
+
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+
 int b_all_different(int arglist, int rest, int th)
 {
     int n, ind, arg1;
@@ -147,20 +185,6 @@ int fd_form(int x)
 	return (0);
 }
 
-int iota(int min, int max)
-{
-    int i, j, res;
-
-    i = GET_INT(min);
-    j = GET_INT(max);
-    res = NIL;
-
-    while (j >= i) {
-	res = listcons(makeint(j), res);
-	j--;
-    }
-    return (res);
-}
 
 int fd_index(int var)
 {
@@ -223,90 +247,25 @@ int fd_max(int x, int y)
 	return (y);
 }
 
-int constraint_propagate()
-{
-    int expr, var, min, max, left, right, domain;
-
-    constraint_set = reverse(constraint_set);
-    constraint_var = NIL;
-    constraint_domain = NIL;
-
-    while (constraint_set != NIL) {
-	expr = car(constraint_set);
-	if (fd_eq(expr)) {
-	    left = cadr(expr);
-	    right = caddr(expr);
-	    // e.g. X #= Y
-	    if (fd_var(left) && fd_var(right)) {
-		min =
-		    fd_max(car(fd_get_domain(left)),
-			   car(fd_get_domain(right)));
-		max =
-		    fd_min(last(fd_get_domain(left)),
-			   last(fd_get_domain(right)));
-		domain = iota(min, max);
-		fd_set_domain(left, domain);
-		fd_set_domain(right, domain);
-	    }
-	} else if (fd_in(expr)) {
-	    // e.g. X in 1..3 
-	    var = cadr(expr);
-	    min = cadr(caddr(expr));
-	    max = caddr(caddr(expr));
-	    constraint_var = cons(var, constraint_var);
-	    constraint_env = cons(iota(min, max), constraint_env);
-	}
-	constraint_set = cdr(constraint_set);
-    }
-    return (YES);
-}
-
-void constraint_search(int expr, int var, int env)
-{
-    // Try all candidates, like Lisp’s dolist
-    // Save valid values to domain
-    // Merge into existing domains
-}
-
 int b_label(int arglist, int rest, int th)
 {
-    int n, ind, arg1, compvar, result, save1, save2, save3;
+    int n, ind, arg1;
 
     n = length(arglist);
     ind = makeind("label", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
-
-	constraint_propagate();
-	compvar = variable_convert1(revderef(arg1, th));
-	result = NIL;
-	while (!nullp(compvar)) {
-	    result = cons(fd_get_domain(car(compvar)), result);
-	    compvar = cdr(compvar);
-	}
-	save1 = wp[th];
-	save2 = sp[th];
-	save3 = ac[th];
-	while (car(result) != NIL) {
-	    unify(arg1, each_car(result), th);
-	    if (prove_all(rest, sp[th], th) == YES)
-		return (YES);
-
-	    wp[th] = save1;
-	    unbind(save2, th);
-	    ac[th] = save3;
-	    result = each_cdr(result);
-	}
+	
 	return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
-
+/* make initial index [1] */
 int init_index(int env)
 {
-    return (1);
+    return (list1(makeint(1)));
 }
 
 int new_index(int index)

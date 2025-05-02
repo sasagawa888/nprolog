@@ -294,6 +294,7 @@ void init_builtin(void)
     //------CLPFD--------------------------
     defbuiltin("add_constraint", b_add_constraint, -1);
     defbuiltin("constraint_set", b_constraint_set, -1);
+	defbuiltin("constraint_var", b_constraint_var, -1);
 
 #ifdef __arm__
     defbuiltin("wiringpi_setup_gpio", b_wiringpi_setup_gpio, 2);
