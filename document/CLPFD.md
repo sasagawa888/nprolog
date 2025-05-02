@@ -28,15 +28,19 @@ CLP(FD): Organization of Algorithms and Data Structures
 ## Data Structures
 
 ```
-    Variable List
+    Variable List constraint_var
     Example: [var_1, var_2]
     Variables are associated with their respective domains:
     var_1 = [1, 2, 3]
     var_2 = [0, 1, 2]
-
-    Domain List
+    
+    Domain List index of variable list
     Example:
-    var_1 : var_2 → [[1,1], [2,2]]
+    constraint_var =  [var_1, var_2]
+    var_1 = [1, 2, 3]
+    var_2 = [0, 1, 2]
+            var_1,var_2
+    [1,3] → [1,2]
 ```
 
 ## Algorithms
