@@ -33,7 +33,7 @@ X #= Y*Z :-
     integer(Z),
     X is Y*Z.
 X #= Y :-
-    add_constraint(X #= Y).
+    add_constraint(X-Y #= 0).
 
 X #> Y :-
     integer(X),
@@ -41,7 +41,7 @@ X #> Y :-
     X > Y.
 
 X #\= Y :-
-    add_constraint(X #\= Y).
+    pair_different(X,Y).
 
 X in Y :-
     constraint_var(X,Y).

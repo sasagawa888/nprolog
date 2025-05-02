@@ -81,14 +81,32 @@ int b_constraint_var(int arglist, int rest, int th)
 
 int b_all_different(int arglist, int rest, int th)
 {
-    int n, ind, arg1;
+    int n, ind, arg1,arg2;
 
     n = length(arglist);
     ind = makeind("all_different", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
-	constraint_unique = copy_heap(variable_convert1(arg1));
+	constraint_unique = listcons(copy_heap(variable_convert1(arg1)),constraint_unique);
 	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+int b_pair_different(int arglist, int rest, int th)
+{
+    int n, ind, arg1,arg2;
+
+    n = length(arglist);
+    ind = makeind("pair_different", n, th);
+    if(n == 2){
+    arg1 = variable_convert1(car(arglist));
+    arg2 = variable_convert1(cadr(arglist));
+    if(!memberp(arg1,constraint_unique))
+        constraint_unique = listcons(arg1,constraint_unique);
+    if(!memberp(arg2,constraint_unique))
+        constraint_unique = listcons(arg2,constraint_unique);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
