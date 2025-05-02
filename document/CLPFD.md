@@ -15,7 +15,12 @@ under construction
 - X #< Y
 - X #>= Y
 - X #<= Y
+- X in A..Z
 
+# Internal system predicate
+- add_constraint(Expr)  Add the constraint expression to the set of constraints.
+- constraint_set(X) Unify X with the list of constraint sets.
+- constraint_var(Var,Range) Assign a range of integers to the variable and also add it to the list of constraint variables.
 
 # memo
 CLP(FD): Organization of Algorithms and Data Structures
