@@ -290,10 +290,10 @@ void init_builtin(void)
     defbuiltin("n_pair_list", b_pair_list, -1);
 
     //------CLPFD--------------------------
-    defbuiltin("add_constraint", b_add_constraint, -1);
-    defbuiltin("constraint_set", b_constraint_set, -1);
-	defbuiltin("constraint_var", b_constraint_var, -1);
-	defbuiltin("pair_different", b_pair_different, -1);
+    defbuiltin("n_add_constraint", b_add_constraint, -1);
+    defbuiltin("n_constraint_set", b_constraint_set, -1);
+	defbuiltin("n_constraint_var", b_constraint_var, -1);
+	defbuiltin("n_different", b_different, -1);
 	defbuiltin("label", b_label, 1);
     defbuiltin("all_different", b_all_different, 1);
 

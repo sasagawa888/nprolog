@@ -94,12 +94,12 @@ int b_all_different(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_pair_different(int arglist, int rest, int th)
+int b_different(int arglist, int rest, int th)
 {
     int n, ind, arg1,arg2;
 
     n = length(arglist);
-    ind = makeind("pair_different", n, th);
+    ind = makeind("different", n, th);
     if(n == 2){
     arg1 = variable_convert1(car(arglist));
     arg2 = variable_convert1(cadr(arglist));

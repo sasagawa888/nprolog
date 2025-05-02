@@ -15,7 +15,7 @@ X #= Y+Z :-
     var(Y),
     integer(Z),
     R is X-Z,
-    add_constraint(Y #= R),
+    n_add_constraint(Y #= R),
     Y is R.
 X #= Y+Z :-
     var(X),
@@ -33,7 +33,7 @@ X #= Y*Z :-
     integer(Z),
     X is Y*Z.
 X #= Y :-
-    add_constraint(X-Y #= 0).
+    n_add_constraint(X-Y #= 0).
 
 X #> Y :-
     integer(X),
@@ -41,9 +41,9 @@ X #> Y :-
     X > Y.
 
 X #\= Y :-
-    pair_different(X,Y).
+    n_different(X,Y).
 
 X in Y :-
-    constraint_var(X,Y).
+    n_constraint_var(X,Y).
 
 
