@@ -738,6 +738,7 @@ int b_abolish(int arglist, int rest, int th);
 int b_abort(int arglist, int rest, int th);
 int b_add_curl_header(int arglist, int rest, int th);
 int b_after_cut(int arglist, int rest, int th);
+int b_all_different(int arglist, int rest, int th);
 int b_ansi_cup(int arglist, int rest, int th);
 int b_ansi_cuu(int arglist, int rest, int th);
 int b_ansi_cud(int arglist, int rest, int th);

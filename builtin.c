@@ -236,6 +236,7 @@ void init_builtin(void)
     defbuiltin("add_curl_header", b_add_curl_header, 2);
 	defbuiltin("string_atom", b_string_atom, 2);
 	defbuiltin("label", b_label, 1);
+	defbuiltin("all_different", b_all_different,1);
     definfix("\\+", b_not, 900, FY);
 
     //-----Distributed parallel

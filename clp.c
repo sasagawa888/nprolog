@@ -49,7 +49,7 @@ int b_all_different(int arglist, int rest, int th)
     ind = makeind("all_different", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
-    constraint_unique = arg1;
+    constraint_unique = copy_heap(variable_convert1(arg1));
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
