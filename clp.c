@@ -270,7 +270,8 @@ int init_domain()
     return (list1(makeint(1)));
 }
 
-int new_domain(int domain)
+/* この処理においてall_differentのことを考慮して生成*/
+int next_domain(int domain)
 {
     return (1);
 }
@@ -283,6 +284,11 @@ int new_expr(int expr)
 int bind_variable(int expr, int index)
 {
     return (1);
+}
+
+int generate_unique(int domain)
+{
+    return(1);
 }
 
 int domain_to_value(int domain, int varlist)
@@ -300,8 +306,7 @@ int propagate_all(int set, int domain)
     if (set == NIL)
 	return (domain);
     else {
-	if (propagate(car(set), init_domain()) == YES)
-	    //e.g. init_domain(env) = [1] 
+	if (propagate(car(set), domain) != NO)
 	    propagate_all(cdr(set), domain);
 	else
 	    return (NO);
@@ -315,12 +320,13 @@ int propagate(int expr, int domain)
     if (expr == NIL)
 	return (domain);
 
+    
     domain = bind_variable(expr, domain);
     if (saticfiablep(expr, domain) == YES) {
-	domain = new_domain(domain);
-	return (propagate(new_expr(expr), domain));
-    } else if (bind_variable(expr, new_domain(domain)) == YES) {
-	domain = new_domain(domain);
+	domain = next_domain(domain);
+	return (propagate_all(new_expr(expr), domain));
+    } else if (bind_variable(expr, next_domain(domain)) == YES) {
+	domain = next_domain(domain);
 	bind_variable(expr, domain);
 	if (saticfiablep(expr, domain) == YES)
 	    return (propagate(new_expr(expr), domain));
@@ -343,14 +349,14 @@ int b_label(int arglist, int rest, int th)
     constraint_set = reverse(constraint_set);
     constraint_var = reverse(constraint_var);
     constraint_env = reverse(constraint_env);
-    domain = propagate_all(constraint_set,init_domain());
+    domain = propagate_all(constraint_set,NIL);
     loop:
     unify(arg1,domain_to_value(domain,arg1),th);
     if (prove_all(rest,sp[th],th) == YES)
         return(YES);
 
     unbind(save,th);
-    domain = propagate_all(constraint_set,domain);
+    domain = propagate_all(constraint_set,next_domain(domain));
     if(nullp(domain)){
         return(NO);
     }
