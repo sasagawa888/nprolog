@@ -206,20 +206,38 @@ int fd_form(int x)
 
 
 
-
-/* この処理においてall_differentのことを考慮して生成*/
-int next_domain(int domain)
+int inc_domain()
 {   
+    int i;
 
-    if(domain == NIL){
-        return(list1(makeint(1)));
+    i = 0;
+    // fine unbind var index
+    while(i < fd_var_max){
+        if(fd_domain[i] == -1){
+            fd_domain[i] = 0;
+            fd_var_idx = i;
+            return(1);
+        }
     }
-    else {
-        return (1);
+    i = fd_var_max - 1;
+    // increment
+    while(i>=0){
+        fd_domain[i]++;
+        // carry
+        if(fd_domain[i] >= fd_len[i]){
+            fd_domain[i] = -1;
+            i--;
+        } else
+            return(1);
     }
+    // all incremented
     return(0);
 }
 
+int next_domain()
+{
+    return(inc_domain());
+}
 
 /* e.g. 1+Y+Z#=3 -> Y+Z#=2*/
 int new_expr(int expr)
@@ -228,18 +246,18 @@ int new_expr(int expr)
 }
 
 /* e.g. X+Y+Z#=3 X<-1 1+Y+Z#=3*/
-int bind_variable(int expr, int domain)
+int bind_variable(int expr)
 {
     return (1);
 }
 
 
-int domain_to_value(int domain, int varlist)
+int domain_to_value(int varlist)
 {
     return(1);
 }
 
-int saticfiablep(int expr, int domain)
+int saticfiablep(int expr)
 {
     if(expr == NIL) // 制約式がなければ充足可能
         return (1);
@@ -249,13 +267,13 @@ int saticfiablep(int expr, int domain)
     return(0);
 }
 
-int propagate_all(int set, int domain)
+int propagate_all(int sets)
 {
-    if (set == NIL)
-	return (domain); /*制約式がなくなればdomainが求まっている*/
+    if (sets == NIL)
+	return (YES);
     else {
-	if (propagate(car(set), domain) != NO) /*制約式があるなら先頭で制約計算*/
-	    propagate_all(cdr(set), domain);
+	if (propagate(car(sets)) != NO) 
+	    propagate_all(cdr(sets));
 	else
 	    return (NO);
     }
@@ -263,20 +281,29 @@ int propagate_all(int set, int domain)
     return (NO);
 }
 
-int propagate(int expr, int domain)
+int propagate(int expr)
 {
-    
-    domain = next_domain(domain);
-    domain = bind_variable(expr, domain);
-    if (saticfiablep(expr, domain) == YES) {
-	domain = next_domain(domain);
-	return (propagate(new_expr(expr), domain));
-    } else if (bind_variable(expr, next_domain(domain)) == YES) {
-	domain = next_domain(domain);
-	bind_variable(expr, domain);
-	if (saticfiablep(expr, domain) == YES)
-	    return (propagate(new_expr(expr), domain));
-    } else
+    int res;
+
+    res = next_domain();
+    if(res == 0)
+        return(NO);
+    bind_variable(expr);
+    if (saticfiablep(expr) == YES) {
+	res = next_domain();
+    if(res == 0)
+        return(NO);
+    else 
+	    return (propagate(new_expr(expr)));
+    } else {
+	res = next_domain();
+    if(res == 0)
+        return(NO);
+    else 
+	    bind_variable(expr);
+	if (saticfiablep(expr) == YES)
+	    return (propagate(new_expr(expr)));
+    }
 	return (NO);
 
     return (NO);
@@ -284,7 +311,7 @@ int propagate(int expr, int domain)
 
 int b_label(int arglist, int rest, int th)
 {
-    int n, ind, arg1, domain, save;
+    int n, ind, arg1, save,res;
 
     n = length(arglist);
     ind = makeind("label", n, th);
@@ -293,21 +320,21 @@ int b_label(int arglist, int rest, int th)
 	arg1 = car(arglist);
     
     fd_sets = reverse(fd_sets);
-    domain = propagate_all(fd_sets,NIL);
+    propagate_all(fd_sets);
     loop:
-    unify(arg1,domain_to_value(domain,arg1),th);
+    unify(arg1,domain_to_value(arg1),th);
     if (prove_all(rest,sp[th],th) == YES)
         return(YES);
 
     unbind(save,th);
-    domain = propagate_all(fd_sets,next_domain(domain));
-    if(nullp(domain)){
+    res = next_domain();
+    if(res == NO)
         return(NO);
+    
+    propagate_all(fd_sets);
+    goto loop;
     }
-    else {
-        goto loop;
-    }
-    }
+    
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
