@@ -358,10 +358,11 @@ extern struct sockaddr_in server_addr, client_addr;
 
 /* -----CLPFD-------------------------- */
 extern int constraint_set;
+extern int constraint_domain[256][10];
 extern int constraint_var;
-extern int constraint_env;
-extern int constraint_unique;
-extern int constraint_select;
+extern int constraint_var_idx;
+extern int constraint_select_idx;
+
 
 #ifdef __APPLE__
 #define FLUSH               fpurge(stdin);
@@ -1532,7 +1533,6 @@ int b_constraint_var(int arglist, int rest, int th);
 int b_constraint_vars(int arglist, int rest, int th);
 int b_label(int arglist, int rest, int th);
 int b_all_different(int arglist, int rest, int th);
-int b_different(int arglist, int rest, int th);
 
 // edit 
 struct position{

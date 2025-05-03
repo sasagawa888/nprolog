@@ -41,25 +41,32 @@ int b_constraint_set(int arglist, int rest, int th)
     return (NO);
 }
 
-int iota(int min, int max)
+int variable_index(int var)
 {
-    int i, j, res;
+    int total,idx,vars;
 
-    i = GET_INT(min);
-    j = GET_INT(max);
-    res = NIL;
+    total = length(constraint_var);
+    idx = 0;
+    vars = constraint_var;
+    while(vars != NIL){
+        if(eqlp(var,car(vars)))
+            return(total-idx);
 
-    while (j >= i) {
-	res = listcons(makeint(j), res);
-	j--;
+        vars = cdr(vars);
     }
-    return (res);
+
+    return(-1);
 }
 
+#define FD_IDX 0
+#define FD_START 1
+#define FD_END 2
+#define FD_LEN 3
+#define FD_UNIQUE 4
 
 int b_constraint_var(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2,var,range;
+    int n, ind, arg1, arg2, var, start, end;
 
     n = length(arglist);
     ind = makeind("constraint_var", n, th);
@@ -68,9 +75,13 @@ int b_constraint_var(int arglist, int rest, int th)
     arg2 = cadr(arglist);
 
     var = variable_convert1(arg1);
-    range = iota(GET_INT(cadr(arg2)),GET_INT(caddr(arg2)));
+    start = GET_INT(cadr(arg2));
+    end = GET_INT(caddr(arg2));
+    constraint_domain[constraint_var_idx][FD_START] = start;
+    constraint_domain[constraint_var_idx][FD_END] = end;
+    constraint_domain[constraint_var_idx][FD_LEN] = end-start;
     constraint_var = cons(var,constraint_var);
-    constraint_env = cons(range,constraint_env);
+    constraint_var_idx++;
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -79,7 +90,7 @@ int b_constraint_var(int arglist, int rest, int th)
 
 int b_constraint_vars(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2,elt, var,range;
+    int n, ind, arg1, arg2,elt, var,start,end;
 
     n = length(arglist);
     ind = makeind("constraint_vars", n, th);
@@ -90,9 +101,13 @@ int b_constraint_vars(int arglist, int rest, int th)
     while(arg1 != NIL){
     elt = car(arg1);
     var = variable_convert1(elt);
-    range = iota(GET_INT(cadr(arg2)),GET_INT(caddr(arg2)));
+    start = GET_INT(cadr(arg2));
+    end = GET_INT(caddr(arg2));
+    constraint_domain[constraint_var_idx][FD_START] = start;
+    constraint_domain[constraint_var_idx][FD_END] = end;
+    constraint_domain[constraint_var_idx][FD_LEN] = end-start;
     constraint_var = cons(var,constraint_var);
-    constraint_env = cons(range,constraint_env);
+    constraint_var_idx++;
     arg1 = cdr(arg1);
     }
 	return (prove_all(rest, sp[th], th));
@@ -105,36 +120,23 @@ int b_constraint_vars(int arglist, int rest, int th)
 
 int b_all_different(int arglist, int rest, int th)
 {
-    int n, ind, arg1;
+    int n, ind, arg1, idx;
 
     n = length(arglist);
     ind = makeind("all_different", n, th);
     if (n == 1) {
-	arg1 = car(arglist);
-	constraint_unique = listcons(copy_heap(variable_convert1(arg1)),constraint_unique);
+	arg1 = variable_convert1(car(arglist));
+    while(arg1 != NIL){
+        idx = variable_index(car(arg1));
+        constraint_domain[idx][FD_UNIQUE] = 1;
+        arg1 = cdr(arg1);
+    }
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
-int b_different(int arglist, int rest, int th)
-{
-    int n, ind, arg1,arg2;
-
-    n = length(arglist);
-    ind = makeind("different", n, th);
-    if(n == 2){
-    arg1 = variable_convert1(car(arglist));
-    arg2 = variable_convert1(cadr(arglist));
-    if(!memberp(arg1,constraint_unique))
-        constraint_unique = listcons(arg1,constraint_unique);
-    if(!memberp(arg2,constraint_unique))
-        constraint_unique = listcons(arg2,constraint_unique);
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
 
 
 int each_car(int x)
@@ -266,15 +268,13 @@ int fd_max(int x, int y)
 
 /* この処理においてall_differentのことを考慮して生成*/
 int next_domain(int domain)
-{
+{   
+
     if(domain == NIL){
         return(list1(makeint(1)));
     }
-    else if(constraint_unique == NIL){
+    else {
         return (1);
-    }
-    else{
-
     }
     return(0);
 }
