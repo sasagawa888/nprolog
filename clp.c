@@ -216,7 +216,7 @@ int inc_domain()
         if(fd_domain[i] == -1){
             fd_domain[i] = 0;
             fd_var_idx = i;
-            return(1);
+            return(YES);
         }
     }
     i = fd_var_max - 1;
@@ -228,15 +228,20 @@ int inc_domain()
             fd_domain[i] = -1;
             i--;
         } else
-            return(1);
+            return(YES);
     }
-    // all incremented
-    return(0);
+    // already incremented
+    return(NO);
 }
 
 int next_domain()
 {
     return(inc_domain());
+}
+
+int prune_domain()
+{
+    return(1);
 }
 
 /* e.g. 1+Y+Z#=3 -> Y+Z#=2*/
@@ -259,7 +264,7 @@ int domain_to_value(int varlist)
 
 int saticfiablep(int expr)
 {
-    if(expr == NIL) // 制約式がなければ充足可能
+    if(expr == NIL) 
         return (1);
     else{
 
@@ -273,7 +278,7 @@ int propagate_all(int sets)
 	return (YES);
     else {
 	if (propagate(car(sets)) != NO) 
-	    propagate_all(cdr(sets));
+	    return(propagate_all(cdr(sets)));
 	else
 	    return (NO);
     }
@@ -286,25 +291,24 @@ int propagate(int expr)
     int res;
 
     res = next_domain();
-    if(res == 0)
+    if(res == NO)
         return(NO);
     bind_variable(expr);
     if (saticfiablep(expr) == YES) {
 	res = next_domain();
     if(res == 0)
         return(NO);
-    else 
-	    return (propagate(new_expr(expr)));
+
+	return (propagate(new_expr(expr)));
     } else {
-	res = next_domain();
-    if(res == 0)
+	res = prune_domain();
+    if(res == NO)
         return(NO);
-    else 
-	    bind_variable(expr);
+    
+    bind_variable(expr);
 	if (saticfiablep(expr) == YES)
 	    return (propagate(new_expr(expr)));
     }
-	return (NO);
 
     return (NO);
 }
