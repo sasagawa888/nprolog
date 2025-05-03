@@ -196,6 +196,7 @@ int constraint_set = NIL;
 int constraint_var = NIL;
 int constraint_env = NIL;
 int constraint_unique = NIL;
+int constraint_select = NIL;
 
 //-----editor-----
 char buffer[BUFSIZE][10];
@@ -433,6 +434,8 @@ void init_repl(void)
     constraint_set = NIL;
     constraint_var = NIL;
 	constraint_env = NIL;
+	constraint_unique = NIL;
+	constraint_select = NIL;
 }
 
 void query(int x, int th)

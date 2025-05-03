@@ -264,32 +264,34 @@ int fd_max(int x, int y)
 }
 
 
-/* make initial index [1] */
-int init_domain()
-{
-    return (list1(makeint(1)));
-}
-
 /* この処理においてall_differentのことを考慮して生成*/
 int next_domain(int domain)
 {
-    return (1);
+    if(domain == NIL){
+        return(list1(makeint(1)));
+    }
+    else if(constraint_unique == NIL){
+        return (1);
+    }
+    else{
+
+    }
+    return(0);
 }
 
+
+/* e.g. 1+Y+Z#=3 -> Y+Z#=2*/
 int new_expr(int expr)
 {
     return (1);
 }
 
-int bind_variable(int expr, int index)
+/* e.g. X+Y+Z#=3 X<-1 1+Y+Z#=3*/
+int bind_variable(int expr, int domain)
 {
     return (1);
 }
 
-int generate_unique(int domain)
-{
-    return(1);
-}
 
 int domain_to_value(int domain, int varlist)
 {
@@ -298,15 +300,20 @@ int domain_to_value(int domain, int varlist)
 
 int saticfiablep(int expr, int domain)
 {
-    return (1);
+    if(expr == NIL) // 制約式がなければ充足可能
+        return (1);
+    else{
+
+    }
+    return(0);
 }
 
 int propagate_all(int set, int domain)
 {
     if (set == NIL)
-	return (domain);
+	return (domain); /*制約式がなくなればdomainが求まっている*/
     else {
-	if (propagate(car(set), domain) != NO)
+	if (propagate(car(set), domain) != NO) /*制約式があるなら先頭で制約計算*/
 	    propagate_all(cdr(set), domain);
 	else
 	    return (NO);
@@ -317,14 +324,12 @@ int propagate_all(int set, int domain)
 
 int propagate(int expr, int domain)
 {
-    if (expr == NIL)
-	return (domain);
-
     
+    domain = next_domain(domain);
     domain = bind_variable(expr, domain);
     if (saticfiablep(expr, domain) == YES) {
 	domain = next_domain(domain);
-	return (propagate_all(new_expr(expr), domain));
+	return (propagate(new_expr(expr), domain));
     } else if (bind_variable(expr, next_domain(domain)) == YES) {
 	domain = next_domain(domain);
 	bind_variable(expr, domain);
@@ -347,8 +352,6 @@ int b_label(int arglist, int rest, int th)
 	arg1 = car(arglist);
     
     constraint_set = reverse(constraint_set);
-    constraint_var = reverse(constraint_var);
-    constraint_env = reverse(constraint_env);
     domain = propagate_all(constraint_set,NIL);
     loop:
     unify(arg1,domain_to_value(domain,arg1),th);

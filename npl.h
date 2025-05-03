@@ -361,6 +361,7 @@ extern int constraint_set;
 extern int constraint_var;
 extern int constraint_env;
 extern int constraint_unique;
+extern int constraint_select;
 
 #ifdef __APPLE__
 #define FLUSH               fpurge(stdin);
