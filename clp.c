@@ -16,8 +16,8 @@ int b_add_constraint(int arglist, int rest, int th)
     ind = makeind("add_constraint", n, th);
     if (n == 1) {
 	arg1 = revderef(car(arglist), th);
-	constraint_set =
-	    listcons(copy_heap(variable_convert1(arg1)), constraint_set);
+	fd_sets =
+	    listcons(copy_heap(variable_convert1(arg1)), fd_sets);
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -32,7 +32,7 @@ int b_constraint_set(int arglist, int rest, int th)
     ind = makeind("constraint_set", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
-	if (unify(arg1, constraint_set, th) == YES)
+	if (unify(arg1, fd_sets, th) == YES)
 	    return (prove_all(rest, sp[th], th));
 
 	return (NO);
@@ -41,32 +41,10 @@ int b_constraint_set(int arglist, int rest, int th)
     return (NO);
 }
 
-int variable_index(int var)
-{
-    int total,idx,vars;
-
-    total = length(constraint_var);
-    idx = 0;
-    vars = constraint_var;
-    while(vars != NIL){
-        if(eqlp(var,car(vars)))
-            return(total-idx);
-
-        vars = cdr(vars);
-    }
-
-    return(-1);
-}
-
-#define FD_IDX 0
-#define FD_START 1
-#define FD_END 2
-#define FD_LEN 3
-#define FD_UNIQUE 4
 
 int b_constraint_var(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2, var, start, end;
+    int n, ind, arg1, arg2, var, idx, min, max;
 
     n = length(arglist);
     ind = makeind("constraint_var", n, th);
@@ -75,13 +53,11 @@ int b_constraint_var(int arglist, int rest, int th)
     arg2 = cadr(arglist);
 
     var = variable_convert1(arg1);
-    start = GET_INT(cadr(arg2));
-    end = GET_INT(caddr(arg2));
-    constraint_domain[constraint_var_idx][FD_START] = start;
-    constraint_domain[constraint_var_idx][FD_END] = end;
-    constraint_domain[constraint_var_idx][FD_LEN] = end-start;
-    constraint_var = cons(var,constraint_var);
-    constraint_var_idx++;
+    idx = GET_ARITY(var);
+    min = GET_INT(cadr(arg2));
+    max = GET_INT(caddr(arg2));
+    fd_min[idx] = min;
+    fd_len[idx] = max-min;
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -90,7 +66,7 @@ int b_constraint_var(int arglist, int rest, int th)
 
 int b_constraint_vars(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2,elt, var,start,end;
+    int n, ind, arg1, arg2,elt, var,idx,min,max;
 
     n = length(arglist);
     ind = makeind("constraint_vars", n, th);
@@ -101,13 +77,11 @@ int b_constraint_vars(int arglist, int rest, int th)
     while(arg1 != NIL){
     elt = car(arg1);
     var = variable_convert1(elt);
-    start = GET_INT(cadr(arg2));
-    end = GET_INT(caddr(arg2));
-    constraint_domain[constraint_var_idx][FD_START] = start;
-    constraint_domain[constraint_var_idx][FD_END] = end;
-    constraint_domain[constraint_var_idx][FD_LEN] = end-start;
-    constraint_var = cons(var,constraint_var);
-    constraint_var_idx++;
+    idx = GET_ARITY(var);
+    min = GET_INT(cadr(arg2));
+    max = GET_INT(caddr(arg2));
+    fd_min[idx] = min;
+    fd_len[idx] = max-min;
     arg1 = cdr(arg1);
     }
 	return (prove_all(rest, sp[th], th));
@@ -127,8 +101,8 @@ int b_all_different(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = variable_convert1(car(arglist));
     while(arg1 != NIL){
-        idx = variable_index(car(arg1));
-        constraint_domain[idx][FD_UNIQUE] = 1;
+        idx = GET_ARITY(car(arg1));
+        fd_unique[idx] = 1;
         arg1 = cdr(arg1);
     }
 	return (prove_all(rest, sp[th], th));
@@ -230,40 +204,7 @@ int fd_form(int x)
 }
 
 
-int fd_index(int var)
-{
-    int i, vars;
 
-    i = 1;
-    vars = constraint_var;
-    while (vars != NIL) {
-	if (eqlp(var, car(vars)))
-	    return (i);
-
-	i++;
-	vars = cdr(vars);
-    }
-    return (0);
-}
-
-
-
-
-int fd_min(int x, int y)
-{
-    if (x < y)
-	return (x);
-    else
-	return (y);
-}
-
-int fd_max(int x, int y)
-{
-    if (x > y)
-	return (x);
-    else
-	return (y);
-}
 
 
 /* この処理においてall_differentのことを考慮して生成*/
@@ -351,15 +292,15 @@ int b_label(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
     
-    constraint_set = reverse(constraint_set);
-    domain = propagate_all(constraint_set,NIL);
+    fd_sets = reverse(fd_sets);
+    domain = propagate_all(fd_sets,NIL);
     loop:
     unify(arg1,domain_to_value(domain,arg1),th);
     if (prove_all(rest,sp[th],th) == YES)
         return(YES);
 
     unbind(save,th);
-    domain = propagate_all(constraint_set,next_domain(domain));
+    domain = propagate_all(fd_sets,next_domain(domain));
     if(nullp(domain)){
         return(NO);
     }

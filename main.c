@@ -192,11 +192,15 @@ socklen_t server_len;
 struct sockaddr_in server_addr, client_addr;
 
 /* -----CLPFD-------------------------- */
-int constraint_set = NIL;
-int constraint_domain[256][10];
-int constraint_var = NIL;
-int constraint_var_idx;
-int constraint_select_idx;
+int fd_sets = NIL;
+int fd_domain[256];
+int fd_var_max = NIL;
+int fd_var_idx;
+int fd_min[256];
+int fd_len[256];
+int fd_unique[256];
+int fd_select[256];
+int fd_select_idx;
 
 //-----editor-----
 char buffer[BUFSIZE][10];
@@ -431,10 +435,14 @@ void init_repl(void)
 	i = cdr(i);
     }
     // CLPFD
-    constraint_set = NIL;
-    constraint_var = NIL;
-	constraint_var_idx = 0;
-	constraint_select_idx = 0;
+    fd_sets = NIL;
+    fd_var_max = NIL;
+	fd_var_idx = 0;
+	fd_select_idx = 0;
+	for(i=0;i<256;i++){
+		fd_domain[i] = -1;
+		fd_unique[i] = 0;
+	}
 }
 
 void query(int x, int th)
