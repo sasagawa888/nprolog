@@ -69,14 +69,38 @@ int b_constraint_var(int arglist, int rest, int th)
 
     var = variable_convert1(arg1);
     range = iota(GET_INT(cadr(arg2)),GET_INT(caddr(arg2)));
-    SET_CDR(var,range);
     constraint_var = cons(var,constraint_var);
-
+    constraint_env = cons(range,constraint_env);
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
+
+int b_constraint_vars(int arglist, int rest, int th)
+{
+    int n, ind, arg1, arg2,elt, var,range;
+
+    n = length(arglist);
+    ind = makeind("constraint_vars", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);
+    arg2 = cadr(arglist);
+
+    while(arg1 != NIL){
+    elt = car(arg1);
+    var = variable_convert1(elt);
+    range = iota(GET_INT(cadr(arg2)),GET_INT(caddr(arg2)));
+    constraint_var = cons(var,constraint_var);
+    constraint_env = cons(range,constraint_env);
+    arg1 = cdr(arg1);
+    }
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
 
 
 int b_all_different(int arglist, int rest, int th)
@@ -220,34 +244,8 @@ int fd_index(int var)
     return (0);
 }
 
-int fd_get_domain(int var)
-{
-    int index = fd_index(var);
-    if (index == 0)
-	exception(SYSTEM_ERR, makeind("constraint_propergate", 0, 0), NIL,
-		  0);
 
-    return (nth(constraint_domain, index));
-}
 
-void fd_set_domain(int var, int val)
-{
-    int vars, domain, new;
-
-    vars = constraint_var;
-    domain = constraint_domain;
-    new = NIL;
-    while (vars != NIL) {
-	if (eqlp(var, car(vars)))
-	    new = listcons(val, new);
-	else
-	    new = listcons(car(domain), new);
-
-	vars = cdr(vars);
-	domain = cdr(domain);
-    }
-    constraint_domain = reverse(new);
-}
 
 int fd_min(int x, int y)
 {

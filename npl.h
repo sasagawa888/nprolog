@@ -359,7 +359,6 @@ extern struct sockaddr_in server_addr, client_addr;
 /* -----CLPFD-------------------------- */
 extern int constraint_set;
 extern int constraint_var;
-extern int constraint_domain;
 extern int constraint_env;
 extern int constraint_unique;
 
@@ -1530,6 +1529,7 @@ int b_timer_microseconds(int arglist, int rest, int th);
 int b_add_constraint(int arglist, int rest, int th);
 int b_constraint_set(int arglist, int rest, int th);
 int b_constraint_var(int arglist, int rest, int th);
+int b_constraint_vars(int arglist, int rest, int th);
 int b_label(int arglist, int rest, int th);
 int b_all_different(int arglist, int rest, int th);
 int b_different(int arglist, int rest, int th);

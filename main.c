@@ -195,7 +195,6 @@ struct sockaddr_in server_addr, client_addr;
 int constraint_set = NIL;
 int constraint_var = NIL;
 int constraint_env = NIL;
-int constraint_domain = NIL;
 int constraint_unique = NIL;
 
 //-----editor-----
@@ -433,7 +432,7 @@ void init_repl(void)
     // CLPFD
     constraint_set = NIL;
     constraint_var = NIL;
-    constraint_domain = NIL;
+	constraint_env = NIL;
 }
 
 void query(int x, int th)
