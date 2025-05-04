@@ -154,3 +154,24 @@ X + Y - Z #= 3 → X + Y #= Z + 3
 
 If an expression with a negative sign is provided, an attempt will be made to convert it into an expression with only positive signs during the unification phase.
 If conversion is not possible, the expression will remain as-is. In such cases, the satisfiability computation will be determined using the values of the instantiated variables.
+
+
+
+# Internal Predicates
+The handling of constraint operators like #= is defined as user-defined predicates within the library. These use internal predicates to store constraints as lists in fd_sets. The definitions are written in the clpfd.pl file inside the library.
+
+```
+X #= Y :-
+    n_add_constraint(X #= Y).
+
+```
+
+The in and ins operators are used to register variables and add variable information, using the following internal predicates:
+
+```
+X in Y :-
+    n_constraint_var(X, Y).
+
+X ins Y :-
+    n_constraint_vars(X, Y).
+```
