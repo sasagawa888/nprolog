@@ -32,6 +32,7 @@ CLP(FD): Organization of Algorithms and Data Structures
 
     fd_domain[256] index of variable 
     fd_min[256]  A in A..Z  
+    fd_max[256]  Z in A..Z
     fd_len[256]  Z-A
     fd_unique[256] all-different variable=1 else 0
     
@@ -91,3 +92,33 @@ int propagate(int expr)
 
 
 ```
+
+## Satisfiable
+Analyze the expressions on the left-hand side and right-hand side, and convert them into lists whose elements are integers. The list will have either one or two elements.
+If a variable is already instantiated or the expression is a constant, the list will have one element.
+If the expression includes an uninstantiated variable, then compute two values: one using the lower bound of the variable's domain, and one using the upper bound. The result is a list with two elements.
+Example:
+```
+X in 1..3  
+Y in 2..3  
+X + Y #= 3  
+```
+First stage:
+
+X and Y are still uninstantiated.
+Left-hand side: 1 + 2 = 3 (min), 3 + 3 = 6 (max) → [3,6]
+Right-hand side: constant → [3]
+Since 3 lies within the range [3,6], the constraint is deemed satisfiable.
+Second stage:
+
+Assume X is 1, Y remains uninstantiated.
+1 + 2 = 3 (min), 1 + 3 = 4 (max) → [3,4]
+Right-hand side is [3]
+Since 3 lies within the range [3,4], the constraint is still satisfiable.
+Third stage:
+
+Assume X is 1 and Y is 2.
+1 + 2 = 3 → [3], Right-hand side is also [3]
+Since 3 equals 3, the constraint is satisfied.
+
+If backtracking occurs, satisfiability is evaluated for other possible solutions in the same way.
