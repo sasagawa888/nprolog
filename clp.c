@@ -205,7 +205,24 @@ int fd_form(int x)
 	return (0);
 }
 
+int uniquep()
+{
+    int idx1,idx2,val;
 
+    idx1 = fd_var_idx;
+    while(idx1 > 0){
+    val =  fd_domain[idx1]+fd_min[idx1];
+    idx2 = idx1-1;
+        while(idx2 >= 0){
+            if(fd_unique[idx2] == 1 && fd_domain[idx2]+fd_min[idx2] == val)
+                 return(NO);
+
+            idx2--;
+        }
+    idx1--;
+    }
+    return(YES);
+}
 
 
 int inc_domain()
@@ -236,6 +253,7 @@ int inc_domain()
                         return(NO);
                     fd_domain[i] = -1;
                     i--;
+                    fd_var_idx = i;
                 } else{
                     fd_var_idx = i;
                     return(YES);
@@ -250,7 +268,18 @@ int inc_domain()
 
 int next_domain()
 {
-    return(inc_domain());
+    int res;
+
+    retry:
+    res = inc_domain();
+    if(res == NO)
+        return(NO);
+    else if(fd_unique[fd_var_idx] == 0) //not unique var
+        return(YES);
+    else if(fd_unique[fd_var_idx] == 1 && uniquep()==YES)
+        return(YES);
+    else 
+        goto retry;   
 }
 
 int prune_domain()
@@ -334,11 +363,7 @@ int propagate(int expr)
     if (satisfiablep(expr) == YES) {
         if(fd_var_idx == fd_var_max -1)
             return(YES);
-
-	res = next_domain();
-    if(res == NO)
-            return(NO);
-        
+    
 	return (propagate(new_expr(expr)));
     } else {
 	res = prune_domain();
@@ -351,7 +376,6 @@ int propagate(int expr)
 	if (satisfiablep(expr) == YES)
 	    return (propagate(new_expr(expr)));
     }
-
     return (NO);
 }
 
