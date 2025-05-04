@@ -39,9 +39,16 @@ CLP(FD): Organization of Algorithms and Data Structures
 ```
 
 ## Constraint propagation
+propagate_all sequentially takes constraint expressions from the given constraint set, from left to right, and passes them to propagate. The propagate function analyzes a single constraint expression. As a result of this analysis, it appropriately increments the global variable fd_domain.
+
+If nil is given to propagate, it is interpreted as there being no constraints. It then processes the domains given by in, ins, and all_different one by one.
+
+propagate_all receives multiple constraint expressions. It processes them sequentially, and when it finally reaches nil, the computation of the domains based on constraints is considered complete.
+
+Since the domains are retained, when backtracking occurs, the search continues from the current state.
+
 
 ```
-
 int propagate_all(int sets)
 {
     int res;
