@@ -44,7 +44,7 @@ int b_constraint_set(int arglist, int rest, int th)
 
 int b_constraint_var(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2, var, idx, min, max;
+    int n, ind, arg1, arg2, var, min, max;
 
     n = length(arglist);
     ind = makeind("constraint_var", n, th);
@@ -53,11 +53,11 @@ int b_constraint_var(int arglist, int rest, int th)
     arg2 = cadr(arglist);
 
     var = variable_convert1(arg1);
-    idx = GET_ARITY(var);
+    SET_ARITY(var,fd_var_max);
     min = GET_INT(cadr(arg2));
     max = GET_INT(caddr(arg2));
-    fd_min[idx] = min;
-    fd_len[idx] = max-min;
+    fd_min[fd_var_max] = min;
+    fd_len[fd_var_max] = max-min;
     fd_var_max++;
 	return (prove_all(rest, sp[th], th));
     }
@@ -67,7 +67,7 @@ int b_constraint_var(int arglist, int rest, int th)
 
 int b_constraint_vars(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2,elt, var,idx,min,max;
+    int n, ind, arg1, arg2,elt, var,min,max;
 
     n = length(arglist);
     ind = makeind("constraint_vars", n, th);
@@ -78,11 +78,11 @@ int b_constraint_vars(int arglist, int rest, int th)
     while(arg1 != NIL){
     elt = car(arg1);
     var = variable_convert1(elt);
-    idx = GET_ARITY(var);
+    SET_ARITY(var,fd_var_max);
     min = GET_INT(cadr(arg2));
     max = GET_INT(caddr(arg2));
-    fd_min[idx] = min;
-    fd_len[idx] = max-min;
+    fd_min[fd_var_max] = min;
+    fd_len[fd_var_max] = max-min;
     fd_var_max++;
     arg1 = cdr(arg1);
     }
@@ -224,16 +224,27 @@ int inc_domain()
     }
     i = fd_var_max - 1;
     // increment
-    while(i>=0){
-        fd_domain[i]++;
-        // carry
-        if(fd_domain[i] >= fd_len[i]){
+    fd_domain[i]++;
+    // carry
+    if(fd_domain[i] >= fd_len[i]){
             fd_domain[i] = -1;
             i--;
-        } else
-            return(YES);
-    }
-    // already incremented
+            while(i>=0){
+                fd_domain[i]++;
+                if(fd_domain[i] >= fd_len[i]){
+                    if(i==0) // already incremented
+                        return(NO);
+                    fd_domain[i] = -1;
+                    i--;
+                } else{
+                    fd_var_idx = i;
+                    return(YES);
+                }
+            }
+            
+    } else
+        return(YES);
+
     return(NO);
 }
 
@@ -370,16 +381,15 @@ int b_label(int arglist, int rest, int th)
         return(YES);
 
     unbind(save,th);
-    res = next_domain();
-    if(res == NO)
-        return(NO);
-    
     if(fd_sets == NIL)
         res = propagate(fd_sets);
     else 
         res = propagate_all(fd_sets);
     
-    goto loop;
+    if(res == YES)
+        goto loop;
+    else 
+        return(NO);
     }
     
     exception(ARITY_ERR, ind, arglist, th);
