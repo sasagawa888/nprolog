@@ -226,12 +226,12 @@ int inc_domain()
     // increment
     fd_domain[i]++;
     // carry
-    if(fd_domain[i] >= fd_len[i]){
+    if(fd_domain[i] > fd_len[i]){
             fd_domain[i] = -1;
             i--;
             while(i>=0){
                 fd_domain[i]++;
-                if(fd_domain[i] >= fd_len[i]){
+                if(fd_domain[i] > fd_len[i]){
                     if(i==0) // already incremented
                         return(NO);
                     fd_domain[i] = -1;
