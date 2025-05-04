@@ -75,7 +75,7 @@ int propagate(int expr)
         if(fd_var_idx == fd_var_max -1)
             return(YES);
     
-	return (propagate(new_expr(expr)));
+	return (propagate(expr));
     } else {
 	res = prune_domain();
     if(res == NO){
@@ -85,7 +85,7 @@ int propagate(int expr)
     
     bind_variable(expr);
 	if (satisfiablep(expr) == YES)
-	    return (propagate(new_expr(expr)));
+	    return (propagate(expr));
     }
     return (NO);
 }
