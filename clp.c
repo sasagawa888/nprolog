@@ -58,6 +58,7 @@ int b_constraint_var(int arglist, int rest, int th)
     max = GET_INT(caddr(arg2));
     fd_min[idx] = min;
     fd_len[idx] = max-min;
+    fd_var_max++;
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -82,6 +83,7 @@ int b_constraint_vars(int arglist, int rest, int th)
     max = GET_INT(caddr(arg2));
     fd_min[idx] = min;
     fd_len[idx] = max-min;
+    fd_var_max++;
     arg1 = cdr(arg1);
     }
 	return (prove_all(rest, sp[th], th));
@@ -218,6 +220,7 @@ int inc_domain()
             fd_var_idx = i;
             return(YES);
         }
+        i++;
     }
     i = fd_var_max - 1;
     // increment
@@ -247,7 +250,7 @@ int prune_domain()
 /* e.g. 1+Y+Z#=3 -> Y+Z#=2*/
 int new_expr(int expr)
 {
-    return (1);
+    return (expr);
 }
 
 /* e.g. X+Y+Z#=3 X<-1 1+Y+Z#=3*/
@@ -256,16 +259,32 @@ int bind_variable(int expr)
     return (1);
 }
 
-
-int domain_to_value(int varlist)
+int unbind_variable(int expr)
 {
-    return(1);
+    return (1);
 }
 
-int saticfiablep(int expr)
+
+int domain_to_value(int varlist, int th);
+int domain_to_value(int varlist, int th)
+{
+    int var,val,idx;
+
+    if(nullp(varlist))
+        return(NIL);
+    else{
+        var = variable_convert1(revderef(car(varlist),th));
+        idx = GET_ARITY(var);
+        val = makeint(fd_domain[idx]+fd_min[idx]);
+        return(listcons(val,domain_to_value(cdr(varlist),th)));
+    }
+        
+}
+
+int satisfiablep(int expr)
 {
     if(expr == NIL) 
-        return (1);
+        return (YES);
     else{
 
     }
@@ -274,13 +293,19 @@ int saticfiablep(int expr)
 
 int propagate_all(int sets)
 {
+    int res;
     if (sets == NIL)
-	return (YES);
-    else {
-	if (propagate(car(sets)) != NO) 
-	    return(propagate_all(cdr(sets)));
-	else
-	    return (NO);
+             return(YES);
+
+	if (propagate(car(sets)) == YES){
+	        return(propagate_all(cdr(sets)));
+    }
+	else{
+        res = prune_domain();
+        if(res == NO)
+            return(NO);
+
+        propagate_all(fd_sets);
     }
 
     return (NO);
@@ -293,20 +318,26 @@ int propagate(int expr)
     res = next_domain();
     if(res == NO)
         return(NO);
+    loop:
     bind_variable(expr);
-    if (saticfiablep(expr) == YES) {
-	res = next_domain();
-    if(res == 0)
-        return(NO);
+    if (satisfiablep(expr) == YES) {
+        if(fd_var_idx == fd_var_max -1)
+            return(YES);
 
+	res = next_domain();
+    if(res == NO)
+            return(NO);
+        
 	return (propagate(new_expr(expr)));
     } else {
 	res = prune_domain();
-    if(res == NO)
-        return(NO);
+    if(res == NO){
+        unbind_variable(expr);
+        goto loop;
+    }
     
     bind_variable(expr);
-	if (saticfiablep(expr) == YES)
+	if (satisfiablep(expr) == YES)
 	    return (propagate(new_expr(expr)));
     }
 
@@ -324,9 +355,17 @@ int b_label(int arglist, int rest, int th)
 	arg1 = car(arglist);
     
     fd_sets = reverse(fd_sets);
-    propagate_all(fd_sets);
+    if(fd_sets == NIL)
+        res = propagate(fd_sets);
+    else 
+        res = propagate_all(fd_sets);
+
+    
+    if(res == NO)
+        return(NO);
+
     loop:
-    unify(arg1,domain_to_value(arg1),th);
+    unify(arg1,domain_to_value(arg1,th),th);
     if (prove_all(rest,sp[th],th) == YES)
         return(YES);
 
@@ -335,7 +374,11 @@ int b_label(int arglist, int rest, int th)
     if(res == NO)
         return(NO);
     
-    propagate_all(fd_sets);
+    if(fd_sets == NIL)
+        res = propagate(fd_sets);
+    else 
+        res = propagate_all(fd_sets);
+    
     goto loop;
     }
     
