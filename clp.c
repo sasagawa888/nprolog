@@ -16,8 +16,7 @@ int b_add_constraint(int arglist, int rest, int th)
     ind = makeind("add_constraint", n, th);
     if (n == 1) {
 	arg1 = revderef(car(arglist), th);
-	fd_sets =
-	    listcons(copy_heap(variable_convert1(arg1)), fd_sets);
+	fd_sets = listcons(copy_heap(variable_convert1(arg1)), fd_sets);
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -50,15 +49,15 @@ int b_constraint_var(int arglist, int rest, int th)
     ind = makeind("constraint_var", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
-    arg2 = cadr(arglist);
+	arg2 = cadr(arglist);
 
-    var = variable_convert1(arg1);
-    SET_ARITY(var,fd_var_max);
-    min = GET_INT(cadr(arg2));
-    max = GET_INT(caddr(arg2));
-    fd_min[fd_var_max] = min;
-    fd_len[fd_var_max] = max-min;
-    fd_var_max++;
+	var = variable_convert1(arg1);
+	SET_ARITY(var, fd_var_max);
+	min = GET_INT(cadr(arg2));
+	max = GET_INT(caddr(arg2));
+	fd_min[fd_var_max] = min;
+	fd_len[fd_var_max] = max - min;
+	fd_var_max++;
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -67,25 +66,25 @@ int b_constraint_var(int arglist, int rest, int th)
 
 int b_constraint_vars(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2,elt, var,min,max;
+    int n, ind, arg1, arg2, elt, var, min, max;
 
     n = length(arglist);
     ind = makeind("constraint_vars", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
-    arg2 = cadr(arglist);
+	arg2 = cadr(arglist);
 
-    while(arg1 != NIL){
-    elt = car(arg1);
-    var = variable_convert1(elt);
-    SET_ARITY(var,fd_var_max);
-    min = GET_INT(cadr(arg2));
-    max = GET_INT(caddr(arg2));
-    fd_min[fd_var_max] = min;
-    fd_len[fd_var_max] = max-min;
-    fd_var_max++;
-    arg1 = cdr(arg1);
-    }
+	while (arg1 != NIL) {
+	    elt = car(arg1);
+	    var = variable_convert1(elt);
+	    SET_ARITY(var, fd_var_max);
+	    min = GET_INT(cadr(arg2));
+	    max = GET_INT(caddr(arg2));
+	    fd_min[fd_var_max] = min;
+	    fd_len[fd_var_max] = max - min;
+	    fd_var_max++;
+	    arg1 = cdr(arg1);
+	}
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -102,11 +101,11 @@ int b_all_different(int arglist, int rest, int th)
     ind = makeind("all_different", n, th);
     if (n == 1) {
 	arg1 = variable_convert1(car(arglist));
-    while(arg1 != NIL){
-        idx = GET_ARITY(car(arg1));
-        fd_unique[idx] = 1;
-        arg1 = cdr(arg1);
-    }
+	while (arg1 != NIL) {
+	    idx = GET_ARITY(car(arg1));
+	    fd_unique[idx] = 1;
+	    arg1 = cdr(arg1);
+	}
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -180,111 +179,120 @@ int fd_eqsmaller(int x)
 	return (0);
 }
 
-int fd_in(int x)
-{
-    if (structurep(x) && eqlp(car(x), makeconst("in")))
-	return (1);
-    else
-	return (0);
-}
-
-
-int fd_var(int x)
-{
-    if (compiler_variable_p(x))
-	return (1);
-    else
-	return (0);
-}
-
-int fd_form(int x)
-{
-    if (structurep(x))
-	return (1);
-    else
-	return (0);
-}
 
 int uniquep()
 {
-    int idx1,idx2,val;
+    int idx1, idx2, val;
 
     idx1 = fd_var_idx;
-    while(idx1 > 0){
-    val =  fd_domain[idx1]+fd_min[idx1];
-    idx2 = idx1-1;
-        while(idx2 >= 0){
-            if(fd_unique[idx2] == 1 && fd_domain[idx2]+fd_min[idx2] == val)
-                 return(NO);
+    while (idx1 > 0) {
+	val = fd_domain[idx1] + fd_min[idx1];
+	idx2 = idx1 - 1;
+	while (idx2 >= 0) {
+	    if (fd_unique[idx2] == 1
+		&& fd_domain[idx2] + fd_min[idx2] == val)
+		return (NO);
 
-            idx2--;
-        }
-    idx1--;
+	    idx2--;
+	}
+	idx1--;
     }
-    return(YES);
+    return (YES);
 }
 
 
 int inc_domain()
-{   
+{
     int i;
 
     i = 0;
     // fine unbind var index
-    while(i < fd_var_max){
-        if(fd_domain[i] == -1){
-            fd_domain[i] = 0;
-            fd_var_idx = i;
-            return(YES);
-        }
-        i++;
+    while (i < fd_var_max) {
+	if (fd_domain[i] == -1) {
+	    fd_domain[i] = 0;
+	    fd_var_idx = i;
+	    return (YES);
+	}
+	i++;
     }
     i = fd_var_max - 1;
     // increment
     fd_domain[i]++;
     // carry
-    if(fd_domain[i] > fd_len[i]){
-            fd_domain[i] = -1;
-            i--;
-            while(i>=0){
-                fd_domain[i]++;
-                if(fd_domain[i] > fd_len[i]){
-                    if(i==0) // already incremented
-                        return(NO);
-                    fd_domain[i] = -1;
-                    i--;
-                    fd_var_idx = i;
-                } else{
-                    fd_var_idx = i;
-                    return(YES);
-                }
-            }
-            
-    } else
-        return(YES);
+    if (fd_domain[i] > fd_len[i]) {
+	fd_domain[i] = -1;
+	i--;
+	while (i >= 0) {
+	    fd_domain[i]++;
+	    if (fd_domain[i] > fd_len[i]) {
+		if (i == 0)	// already incremented
+		    return (NO);
+		fd_domain[i] = -1;
+		i--;
+		fd_var_idx = i;
+	    } else {
+		fd_var_idx = i;
+		return (YES);
+	    }
+	}
 
-    return(NO);
+    } else
+	return (YES);
+
+    return (NO);
 }
 
 int next_domain()
 {
     int res;
 
-    retry:
+  retry:
     res = inc_domain();
-    if(res == NO)
-        return(NO);
-    else if(fd_unique[fd_var_idx] == 0) //not unique var
-        return(YES);
-    else if(fd_unique[fd_var_idx] == 1 && uniquep()==YES)
-        return(YES);
-    else 
-        goto retry;   
+    if (res == NO)
+	return (NO);
+    else if (fd_unique[fd_var_idx] == 0)	//not unique var
+	return (YES);
+    else if (fd_unique[fd_var_idx] == 1 && uniquep() == YES)
+	return (YES);
+    else
+	goto retry;
 }
 
 int prune_domain()
 {
-    return(1);
+    int i;
+
+    i = fd_var_idx+1;
+    while(i<fd_var_max){
+        fd_domain[i] = 0;
+        i++;
+    }
+
+    i = fd_var_idx;
+    // increment
+    fd_domain[i]++;
+    // carry
+    if (fd_domain[i] > fd_len[i]) {
+	fd_domain[i] = -1;
+	i--;
+	while (i >= 0) {
+	    fd_domain[i]++;
+	    if (fd_domain[i] > fd_len[i]) {
+		if (i == 0)	// already incremented
+		    return (NO);
+		fd_domain[i] = -1;
+		i--;
+		fd_var_idx = i;
+	    } else {
+		fd_var_idx = i;
+		return (YES);
+	    }
+	}
+
+    } else
+	return (YES);
+
+    return (NO);
 }
 
 /* e.g. 1+Y+Z#=3 -> Y+Z#=2*/
@@ -294,58 +302,94 @@ int new_expr(int expr)
 }
 
 /* e.g. X+Y+Z#=3 X<-1 1+Y+Z#=3*/
-int bind_variable(int expr)
+void bind_variable(int expr)
 {
-    return (1);
+    int idx, val;
+
+    if (nullp(expr))
+	return;
+    else if (compiler_variable_p(expr)) {
+	idx = GET_ARITY(expr);
+	val = fd_domain[idx] + fd_min[idx];
+	SET_CDR(expr, makeint(val));
+	return;
+    } else if (atomp(expr)) {
+	return;
+    } else if (structurep(expr)) {
+	bind_variable(cadr(expr));
+	bind_variable(caddr(expr));
+	return;
+    }
 }
 
-int unbind_variable(int expr)
+/* e.g.  1+Y+Z#=3 -> X+Y+Z#=3*/
+void unbind_variable(int expr)
 {
-    return (1);
+    if (nullp(expr))
+	return;
+    else if (compiler_variable_p(expr)) {
+	SET_CDR(expr, NIL);
+	return;
+    } else if (atomp(expr)) {
+	return;
+    } else if (structurep(expr)) {
+	unbind_variable(cadr(expr));
+	unbind_variable(caddr(expr));
+	return;
+    }
 }
 
 
 int domain_to_value(int varlist, int th);
 int domain_to_value(int varlist, int th)
 {
-    int var,val,idx;
+    int var, val, idx;
 
-    if(nullp(varlist))
-        return(NIL);
-    else{
-        var = variable_convert1(revderef(car(varlist),th));
-        idx = GET_ARITY(var);
-        val = makeint(fd_domain[idx]+fd_min[idx]);
-        return(listcons(val,domain_to_value(cdr(varlist),th)));
+    if (nullp(varlist))
+	return (NIL);
+    else {
+	var = variable_convert1(revderef(car(varlist), th));
+	idx = GET_ARITY(var);
+	val = makeint(fd_domain[idx] + fd_min[idx]);
+	return (listcons(val, domain_to_value(cdr(varlist), th)));
     }
-        
+
 }
 
 int satisfiablep(int expr)
 {
-    if(expr == NIL) 
-        return (YES);
-    else{
+    if (expr == NIL)
+	return (YES);
+    else if (fd_eq(expr)) {
+
+    } else if (fd_neq(expr)) {
+
+    } else if (fd_smaller(expr)) {
+
+    } else if (fd_eqsmaller(expr)) {
+
+    } else if (fd_greater(expr)) {
+
+    } else if (fd_eqgreater(expr)) {
 
     }
-    return(0);
+    return (0);
 }
 
 int propagate_all(int sets)
 {
     int res;
     if (sets == NIL)
-             return(YES);
+	return (YES);
 
-	if (propagate(car(sets)) == YES){
-	        return(propagate_all(cdr(sets)));
-    }
-	else{
-        res = prune_domain();
-        if(res == NO)
-            return(NO);
+    if (propagate(car(sets)) == YES) {
+	return (propagate_all(cdr(sets)));
+    } else {
+	res = prune_domain();
+	if (res == NO)
+	    return (NO);
 
-        propagate_all(fd_sets);
+	propagate_all(fd_sets);
     }
 
     return (NO);
@@ -356,23 +400,23 @@ int propagate(int expr)
     int res;
 
     res = next_domain();
-    if(res == NO)
-        return(NO);
-    loop:
+    if (res == NO)
+	return (NO);
+  loop:
     bind_variable(expr);
     if (satisfiablep(expr) == YES) {
-        if(fd_var_idx == fd_var_max -1)
-            return(YES);
-    
+	if (fd_var_idx == fd_var_max - 1)
+	    return (YES);
+
 	return (propagate(new_expr(expr)));
     } else {
 	res = prune_domain();
-    if(res == NO){
-        unbind_variable(expr);
-        goto loop;
-    }
-    
-    bind_variable(expr);
+	if (res == NO) {
+	    unbind_variable(expr);
+	    goto loop;
+	}
+
+	bind_variable(expr);
 	if (satisfiablep(expr) == YES)
 	    return (propagate(new_expr(expr)));
     }
@@ -381,41 +425,41 @@ int propagate(int expr)
 
 int b_label(int arglist, int rest, int th)
 {
-    int n, ind, arg1, save,res;
+    int n, ind, arg1, save, res;
 
     n = length(arglist);
     ind = makeind("label", n, th);
     save = sp[th];
     if (n == 1) {
 	arg1 = car(arglist);
-    
-    fd_sets = reverse(fd_sets);
-    if(fd_sets == NIL)
-        res = propagate(fd_sets);
-    else 
-        res = propagate_all(fd_sets);
 
-    
-    if(res == NO)
-        return(NO);
+	fd_sets = reverse(fd_sets);
+	if (fd_sets == NIL)
+	    res = propagate(fd_sets);
+	else
+	    res = propagate_all(fd_sets);
 
-    loop:
-    unify(arg1,domain_to_value(arg1,th),th);
-    if (prove_all(rest,sp[th],th) == YES)
-        return(YES);
 
-    unbind(save,th);
-    if(fd_sets == NIL)
-        res = propagate(fd_sets);
-    else 
-        res = propagate_all(fd_sets);
-    
-    if(res == YES)
-        goto loop;
-    else 
-        return(NO);
+	if (res == NO)
+	    return (NO);
+
+      loop:
+	unify(arg1, domain_to_value(arg1, th), th);
+	if (prove_all(rest, sp[th], th) == YES)
+	    return (YES);
+
+	unbind(save, th);
+	if (fd_sets == NIL)
+	    res = propagate(fd_sets);
+	else
+	    res = propagate_all(fd_sets);
+
+	if (res == YES)
+	    goto loop;
+	else
+	    return (NO);
     }
-    
+
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
