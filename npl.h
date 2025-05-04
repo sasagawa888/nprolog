@@ -364,8 +364,6 @@ extern int fd_var_idx;
 extern int fd_min[256];
 extern int fd_len[256];
 extern int fd_unique[256];
-extern int fd_select[256];
-extern int fd_select_idx;
 
 
 #ifdef __APPLE__

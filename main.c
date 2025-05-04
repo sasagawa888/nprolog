@@ -199,8 +199,6 @@ int fd_var_idx;
 int fd_min[256];
 int fd_len[256];
 int fd_unique[256];
-int fd_select[256];
-int fd_select_idx;
 
 //-----editor-----
 char buffer[BUFSIZE][10];
@@ -438,7 +436,6 @@ void init_repl(void)
     fd_sets = NIL;
     fd_var_max = NIL;
 	fd_var_idx = 0;
-	fd_select_idx = 0;
 	for(i=0;i<256;i++){
 		fd_domain[i] = -1;
 		fd_unique[i] = 0;
