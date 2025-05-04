@@ -41,7 +41,7 @@ X #> Y :-
     X > Y.
 
 X #\= Y :-
-    n_different(X,Y).
+    n_add_constraint(X #\= Y).
 
 X in Y :-
     n_constraint_var(X,Y).
