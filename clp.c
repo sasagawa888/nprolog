@@ -114,23 +114,6 @@ int b_all_different(int arglist, int rest, int th)
 
 
 
-int each_car(int x)
-{
-    if (nullp(x))
-	return (NIL);
-    else
-	return (listcons(caar(x), each_car(cdr(x))));
-}
-
-int each_cdr(int x)
-{
-    if (nullp(x))
-	return (NIL);
-    else
-	return (listcons(cdar(x), each_cdr(cdr(x))));
-}
-
-
 int fd_eq(int x)
 {
     if (structurep(x) && eqlp(car(x), makeconst("#=")))
