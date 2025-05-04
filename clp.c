@@ -56,6 +56,7 @@ int b_constraint_var(int arglist, int rest, int th)
 	min = GET_INT(cadr(arg2));
 	max = GET_INT(caddr(arg2));
 	fd_min[fd_var_max] = min;
+    fd_max[fd_var_max] = max;
 	fd_len[fd_var_max] = max - min;
 	fd_var_max++;
 	return (prove_all(rest, sp[th], th));
@@ -81,6 +82,7 @@ int b_constraint_vars(int arglist, int rest, int th)
 	    min = GET_INT(cadr(arg2));
 	    max = GET_INT(caddr(arg2));
 	    fd_min[fd_var_max] = min;
+        fd_max[fd_var_max] = max;
 	    fd_len[fd_var_max] = max - min;
 	    fd_var_max++;
 	    arg1 = cdr(arg1);
@@ -322,6 +324,56 @@ void unbind_variable(int expr)
     }
 }
 
+int fd_plus(int x)
+{
+    if (structurep(x) && eqlp(car(x), makeconst("+")))
+	return (1);
+    else
+	return (0);
+}
+
+int fd_minus(int x)
+{
+    if (structurep(x) && eqlp(car(x), makeconst("-")))
+	return (1);
+    else
+	return (0);
+}
+
+int fd_mult(int x)
+{
+    if (structurep(x) && eqlp(car(x), makeconst("*")))
+	return (1);
+    else
+	return (0);
+}
+
+int fd_eval(int expr){
+    int left,right,idx;
+
+    if(integerp(expr))
+        return(GET_INT(expr));
+    else if(compiler_variable_p(expr)){
+        idx = GET_ARITY(expr);
+        return(fd_domain[idx]+fd_min[idx]);
+    }
+    else if(fd_plus(expr)){
+        left = fd_eval(cadr(expr));
+        right = fd_eval(caddr(expr));
+        return(makeint(left+right));
+    } else if(fd_minus(expr)){
+        left = fd_eval(cadr(expr));
+        right = fd_eval(caddr(expr));
+        return(makeint(left-right));
+    } else if(fd_mult(expr)){
+        left = fd_eval(cadr(expr));
+        right = fd_eval(caddr(expr));
+        return(makeint(left*right));
+    }
+    return(NO);
+}
+
+
 
 int domain_to_value(int varlist, int th);
 int domain_to_value(int varlist, int th)
@@ -391,7 +443,7 @@ int propagate(int expr)
 	if (fd_var_idx == fd_var_max - 1)
 	    return (YES);
 
-	return (propagate(new_expr(expr)));
+	return (propagate(expr));
     } else {
 	res = prune_domain();
 	if (res == NO) {

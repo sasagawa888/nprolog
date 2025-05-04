@@ -362,6 +362,7 @@ extern int fd_domain[256];
 extern int fd_var_max;
 extern int fd_var_idx;
 extern int fd_min[256];
+extern int fd_max[256];
 extern int fd_len[256];
 extern int fd_unique[256];
 

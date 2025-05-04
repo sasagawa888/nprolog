@@ -197,6 +197,7 @@ int fd_domain[256];
 int fd_var_max = NIL;
 int fd_var_idx;
 int fd_min[256];
+int fd_max[256];
 int fd_len[256];
 int fd_unique[256];
 
