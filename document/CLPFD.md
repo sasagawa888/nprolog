@@ -122,3 +122,28 @@ Assume X is 1 and Y is 2.
 Since 3 equals 3, the constraint is satisfied.
 
 If backtracking occurs, satisfiability is evaluated for other possible solutions in the same way.
+
+
+# Standard Form
+
+Constraint expressions will be stored in a standard form.
+
+Standard Form:
+
+- Left-hand side: Expressions containing only variables
+
+- Right-hand side: Expressions containing both variables and constants
+
+Example 1:
+X #= Y
+
+Example 2:
+X #= Y + 1
+
+The use of negative signs will be avoided as much as possible. If negative signs are included, it complicates the satisfiability computation.
+
+Example 3:
+X + Y - Z #= 3 → X + Y #= Z + 3
+
+If an expression with a negative sign is provided, an attempt will be made to convert it into an expression with only positive signs during the unification phase.
+If conversion is not possible, the expression will remain as-is. In such cases, the satisfiability computation will be determined using the values of the instantiated variables.
