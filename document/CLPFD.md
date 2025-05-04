@@ -175,3 +175,18 @@ X in Y :-
 X ins Y :-
     n_constraint_vars(X, Y).
 ```
+
+Constraint operators like #= are handled as infix operators using op/3.
+
+```
+:- op(600, xfy, '..').
+:- op(600, xfy, #=).
+:- op(600, xfy, #>).
+:- op(600, xfy, #<).
+:- op(600, xfy, #\=).
+:- op(600, xfy, #<=).
+:- op(600, xfy, #>=).
+:- op(600, xfy, in).
+:- op(600, xfy, ins).
+```
+
