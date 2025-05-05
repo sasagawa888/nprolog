@@ -56,7 +56,7 @@ int b_constraint_var(int arglist, int rest, int th)
 	min = GET_INT(cadr(arg2));
 	max = GET_INT(caddr(arg2));
 	fd_min[fd_var_max] = min;
-    fd_max[fd_var_max] = max;
+	fd_max[fd_var_max] = max;
 	fd_len[fd_var_max] = max - min;
 	fd_var_max++;
 	return (prove_all(rest, sp[th], th));
@@ -82,7 +82,7 @@ int b_constraint_vars(int arglist, int rest, int th)
 	    min = GET_INT(cadr(arg2));
 	    max = GET_INT(caddr(arg2));
 	    fd_min[fd_var_max] = min;
-        fd_max[fd_var_max] = max;
+	    fd_max[fd_var_max] = max;
 	    fd_len[fd_var_max] = max - min;
 	    fd_var_max++;
 	    arg1 = cdr(arg1);
@@ -247,10 +247,10 @@ int prune_domain()
 {
     int i;
 
-    i = fd_var_idx+1;
-    while(i<fd_var_max){
-        fd_domain[i] = 0;
-        i++;
+    i = fd_var_idx + 1;
+    while (i < fd_var_max) {
+	fd_domain[i] = 0;
+	i++;
     }
 
     i = fd_var_idx;
@@ -346,53 +346,51 @@ int fd_mult(int x)
 
 int fd_analyze1(int form, int flag)
 {
-	int idx,left,right;
+    int idx, left, right;
 
-	if(numberp(form))
-		return(GET_INT(form));
-	else if(compiler_variable_p(form)){
-		idx = GET_ARITY(form);
-		if(fd_domain[idx] == -1 && flag == 0){
-			fd_analyze_sw = 1;
-			return(fd_min[idx]);
-		}
-		else if(fd_domain[idx] == -1 && flag == 1){
-			fd_analyze_sw = 1;
-			return(fd_max[idx]);
-		}
-		else 
-			return(fd_domain[idx]);
-	}  else if(fd_plus(form)){
-        left = fd_analyze1(cadr(form),flag);
-        right = fd_analyze1(caddr(form),flag);
-        return(left+right);
-    } else if(fd_minus(form)){
-        left = fd_analyze1(cadr(form),flag);
-        right = fd_analyze1(caddr(form),flag);
-        return(left-right);
-    } else if(fd_mult(form)){
-        left = fd_analyze1(cadr(form),flag);
-        right = fd_analyze1(caddr(form),flag);
-        return(left*right);
+    if (numberp(form))
+	return (GET_INT(form));
+    else if (compiler_variable_p(form)) {
+	idx = GET_ARITY(form);
+	if (fd_domain[idx] == -1 && flag == 0) {
+	    fd_analyze_sw = 1;
+	    return (fd_min[idx]);
+	} else if (fd_domain[idx] == -1 && flag == 1) {
+	    fd_analyze_sw = 1;
+	    return (fd_max[idx]);
+	} else
+	    return (fd_domain[idx]);
+    } else if (fd_plus(form)) {
+	left = fd_analyze1(cadr(form), flag);
+	right = fd_analyze1(caddr(form), flag);
+	return (left + right);
+    } else if (fd_minus(form)) {
+	left = fd_analyze1(cadr(form), flag);
+	right = fd_analyze1(caddr(form), flag);
+	return (left - right);
+    } else if (fd_mult(form)) {
+	left = fd_analyze1(cadr(form), flag);
+	right = fd_analyze1(caddr(form), flag);
+	return (left * right);
     }
-    return(NO);
+    return (NO);
 }
 
 /* if form has unbind variable [min,max]
  * if form has no unbind variable [val] 
 */
 int fd_analyze(int form)
-{	
-	int res1,res2;
+{
+    int res1, res2;
 
-	fd_analyze_sw = 0; // switch if form has unbind variable 1, else 0
-	res1 = fd_analyze1(form,0);
-	if(fd_analyze_sw)
-		return(list1(makeint(res1)));
-	else{
-		res2 = fd_analyze1(form,1);
-		return(list2(makeint(res1),makeint(res2)));
-	}
+    fd_analyze_sw = 0;		// switch if form has unbind variable 1, else 0
+    res1 = fd_analyze1(form, 0);
+    if (fd_analyze_sw)
+	return (list1(makeint(res1)));
+    else {
+	res2 = fd_analyze1(form, 1);
+	return (list2(makeint(res1), makeint(res2)));
+    }
 
 }
 
@@ -413,22 +411,86 @@ int domain_to_value(int varlist, int th)
 
 }
 
+int in_interval(int value, int range)
+{
+    if (eqsmallerp(car(range), car(value))
+	&& eqgreaterp(cadr(range), car(value)))
+	return (1);
+    else
+	return (0);
+}
+
+int overlap(int left, int right)
+{
+    if (!
+	(greaterp(car(right), cadr(left))
+	 || greaterp(car(left), cadr(right))))
+	return (1);
+    else
+	return (0);
+}
 
 int satisfiablep(int expr)
 {
+    int left, right;
+
     if (expr == NIL)
 	return (YES);
-    else if (fd_eq(expr)) {
+    else if (fd_eq(expr)) {	//#=
+	left = fd_analyze(cadr(expr));
+	right = fd_analyze(caddr(expr));
+	if (length(left) == 1 && length(right) == 1) {
+	    if (equalp(left, right))
+		return (YES);
+	    else
+		return (NO);
+	} else if (length(left) == 2 && length(right) == 1) {
+	    if (in_interval(right, left))
+		return (YES);
+	    else
+		return (NO);
+	} else if (length(left) == 1 && length(right) == 2) {
+	    if (in_interval(left, right))
+		return (YES);
+	    else
+		return (NO);
+	} else if (length(left) == 2 && length(right) == 2) {
+	    if (overlap(left, right))
+		return (YES);
+	    else
+		return (NO);
+	}
+    } else if (fd_neq(expr)) {	//#\=
+	left = fd_analyze(cadr(expr));
+	right = fd_analyze(caddr(expr));
+	if (length(left) == 1 && length(right) == 1) {
+	    if (smallerp(left, right))
+		return (YES);
+	    else
+		return (NO);
+	} else if (length(left) == 2 && length(right) == 1) {
+	    if (!in_interval(right, left))
+		return (YES);
+	    else
+		return (UNKNOWN);
+	} else if (length(left) == 1 && length(right) == 2) {
+	    if (!in_interval(left, right))
+		return (YES);
+	    else
+		return (UNKNOWN);
+	} else if (length(left) == 2 && length(right) == 2) {
+	    if (!overlap(left, right))
+		return (YES);
+	    else
+		return (UNKNOWN);
+	}
+    } else if (fd_smaller(expr)) {	//#<
 
-    } else if (fd_neq(expr)) {
+    } else if (fd_eqsmaller(expr)) {	//#<=
 
-    } else if (fd_smaller(expr)) {
+    } else if (fd_greater(expr)) {	//#>
 
-    } else if (fd_eqsmaller(expr)) {
-
-    } else if (fd_greater(expr)) {
-
-    } else if (fd_eqgreater(expr)) {
+    } else if (fd_eqgreater(expr)) {	//#>=
 
     }
     return (0);
