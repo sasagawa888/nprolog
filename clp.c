@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include "npl.h"
 
+#define UNBOUND -1
 
 int b_add_constraint(int arglist, int rest, int th)
 {
@@ -193,7 +194,7 @@ int inc_domain()
     i = 0;
     // fine unbind var index
     while (i < fd_var_max) {
-	if (fd_domain[i] == -1) {
+	if (fd_domain[i] == UNBOUND) {
 	    fd_domain[i] = 0;
 	    fd_var_idx = i;
 	    return (YES);
@@ -205,14 +206,14 @@ int inc_domain()
     fd_domain[i]++;
     // carry
     if (fd_domain[i] > fd_len[i]) {
-	fd_domain[i] = -1;
+	fd_domain[i] = UNBOUND;
 	i--;
 	while (i >= 0) {
 	    fd_domain[i]++;
 	    if (fd_domain[i] > fd_len[i]) {
 		if (i == 0)	// already incremented
 		    return (NO);
-		fd_domain[i] = -1;
+		fd_domain[i] = UNBOUND;
 		i--;
 		fd_var_idx = i;
 	    } else {
@@ -258,14 +259,14 @@ int prune_domain()
     fd_domain[i]++;
     // carry
     if (fd_domain[i] > fd_len[i]) {
-	fd_domain[i] = -1;
+	fd_domain[i] = UNBOUND;
 	i--;
 	while (i >= 0) {
 	    fd_domain[i]++;
 	    if (fd_domain[i] > fd_len[i]) {
 		if (i == 0)	// already incremented
 		    return (NO);
-		fd_domain[i] = -1;
+		fd_domain[i] = UNBOUND;
 		i--;
 		fd_var_idx = i;
 	    } else {
@@ -352,10 +353,10 @@ int fd_analyze1(int form, int flag)
 	return (GET_INT(form));
     else if (compiler_variable_p(form)) {
 	idx = GET_ARITY(form);
-	if (fd_domain[idx] == -1 && flag == 0) {
+	if (fd_domain[idx] == UNBOUND && flag == 0) {
 	    fd_analyze_sw = 1;
 	    return (fd_min[idx]);
-	} else if (fd_domain[idx] == -1 && flag == 1) {
+	} else if (fd_domain[idx] == UNBOUND && flag == 1) {
 	    fd_analyze_sw = 1;
 	    return (fd_max[idx]);
 	} else
