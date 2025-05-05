@@ -524,12 +524,15 @@ int propagate(int expr)
 	return (NO);
   loop:
     bind_variable(expr);
-    if (satisfiablep(expr) == YES) {
+	res = satisfiablep(expr);
+    if (res == YES) {
 	if (fd_var_idx == fd_var_max - 1)
 	    return (YES);
 
 	return (propagate(expr));
-    } else {
+	} else if(res == UNKNOWN){
+	return (propagate(expr));
+    } else if (res ==NO) {
 	res = prune_domain();
 	if (res == NO) {
 	    unbind_variable(expr);
