@@ -280,12 +280,6 @@ int prune_domain()
     return (NO);
 }
 
-/* e.g. 1+Y+Z#=3 -> Y+Z#=2*/
-int new_expr(int expr)
-{
-    return (expr);
-}
-
 /* e.g. X+Y+Z#=3 X<-1 1+Y+Z#=3*/
 void bind_variable(int expr)
 {
@@ -348,31 +342,59 @@ int fd_mult(int x)
 	return (0);
 }
 
-int fd_eval(int expr){
-    int left,right,idx;
 
-    if(integerp(expr))
-        return(GET_INT(expr));
-    else if(compiler_variable_p(expr)){
-        idx = GET_ARITY(expr);
-        return(fd_domain[idx]+fd_min[idx]);
-    }
-    else if(fd_plus(expr)){
-        left = fd_eval(cadr(expr));
-        right = fd_eval(caddr(expr));
-        return(makeint(left+right));
-    } else if(fd_minus(expr)){
-        left = fd_eval(cadr(expr));
-        right = fd_eval(caddr(expr));
-        return(makeint(left-right));
-    } else if(fd_mult(expr)){
-        left = fd_eval(cadr(expr));
-        right = fd_eval(caddr(expr));
-        return(makeint(left*right));
+
+int fd_analyze1(int form, int flag)
+{
+	int idx,left,right;
+
+	if(numberp(form))
+		return(GET_INT(form));
+	else if(compiler_variable_p(form)){
+		idx = GET_ARITY(form);
+		if(fd_domain[idx] == -1 && flag == 0){
+			fd_analyze_sw = 1;
+			return(fd_min[idx]);
+		}
+		else if(fd_domain[idx] == -1 && flag == 1){
+			fd_analyze_sw = 1;
+			return(fd_max[idx]);
+		}
+		else 
+			return(fd_domain[idx]);
+	}  else if(fd_plus(form)){
+        left = fd_analyze1(cadr(form),flag);
+        right = fd_analyze1(caddr(form),flag);
+        return(left+right);
+    } else if(fd_minus(form)){
+        left = fd_analyze1(cadr(form),flag);
+        right = fd_analyze1(caddr(form),flag);
+        return(left-right);
+    } else if(fd_mult(form)){
+        left = fd_analyze1(cadr(form),flag);
+        right = fd_analyze1(caddr(form),flag);
+        return(left*right);
     }
     return(NO);
 }
 
+/* if form has unbind variable [min,max]
+ * if form has no unbind variable [val] 
+*/
+int fd_analyze(int form)
+{	
+	int res1,res2;
+
+	fd_analyze_sw = 0; // switch if form has unbind variable 1, else 0
+	res1 = fd_analyze1(form,0);
+	if(fd_analyze_sw)
+		return(list1(makeint(res1)));
+	else{
+		res2 = fd_analyze1(form,1);
+		return(list2(makeint(res1),makeint(res2)));
+	}
+
+}
 
 
 int domain_to_value(int varlist, int th);
@@ -390,6 +412,7 @@ int domain_to_value(int varlist, int th)
     }
 
 }
+
 
 int satisfiablep(int expr)
 {
@@ -453,7 +476,7 @@ int propagate(int expr)
 
 	bind_variable(expr);
 	if (satisfiablep(expr) == YES)
-	    return (propagate(new_expr(expr)));
+	    return (propagate(expr));
     }
     return (NO);
 }

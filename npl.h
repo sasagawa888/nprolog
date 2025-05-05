@@ -365,6 +365,7 @@ extern int fd_min[256];
 extern int fd_max[256];
 extern int fd_len[256];
 extern int fd_unique[256];
+extern int fd_analyze_sw;
 
 
 #ifdef __APPLE__

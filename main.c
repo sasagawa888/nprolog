@@ -200,6 +200,7 @@ int fd_min[256];
 int fd_max[256];
 int fd_len[256];
 int fd_unique[256];
+int fd_analyze_sw;
 
 //-----editor-----
 char buffer[BUFSIZE][10];
