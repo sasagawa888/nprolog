@@ -22,7 +22,7 @@ under construction
 - constraint_set(X) Unify X with the list of constraint sets.
 - constraint_var(Var,Range) Assign a range of integers to the variable and also add it to the list of constraint variables.
 
-# memo
+# Memo
 CLP(FD): Organization of Algorithms and Data Structures
 
 ## Data Structures
@@ -77,7 +77,6 @@ int propagate(int expr)
     if(res == NO)
         return(NO);
     loop:
-    bind_variable(expr);
     if (satisfiablep(expr) == YES) {
         if(fd_var_idx == fd_var_max -1)
             return(YES);
@@ -86,7 +85,6 @@ int propagate(int expr)
     } else {
 	res = prune_domain();
     if(res == NO){
-        unbind_variable(expr);
         goto loop;
     }
     
@@ -130,8 +128,24 @@ Since 3 equals 3, the constraint is satisfied.
 
 If backtracking occurs, satisfiability is evaluated for other possible solutions in the same way.
 
+## Mechanism for Determining Satisfiability
 
-# Standard Form
+fd_analyze(expr) determines whether the given expression is satisfiable under the current domain.
+It returns one of the following results: yes, no, or unknown. The function analyzes and evaluates both the left-hand side and right-hand side of the expression.
+
+If a variable is already bound, its bound value is used.
+If a variable is unbound, two evaluations are performed: one using its lower bound and one using its upper bound.
+The result is stored in a list.
+If all variables are bound, the result is a list of length 1.
+If there are unbound variables, the result is a list of length 2.
+In this case, the first element represents the lower bound and the second represents the upper bound.
+
+satisfiablep(expr) analyzes this list to determine whether the expression is satisfiable.
+If a definitive judgment cannot be made at that point, it returns unknown.
+
+When propagate encounters an unknown result, it incrementally expands the domain and performs further satisfiability checks.
+
+## Standard Form
 
 Constraint expressions will be stored in a standard form.
 
@@ -157,7 +171,7 @@ If conversion is not possible, the expression will remain as-is. In such cases, 
 
 
 
-# Internal Predicates
+## Internal Predicates
 The handling of constraint operators like #= is defined as user-defined predicates within the library. These use internal predicates to store constraints as lists in fd_sets. The definitions are written in the clpfd.pl file inside the library.
 
 ```
@@ -189,4 +203,3 @@ Constraint operators like #= are handled as infix operators using op/3.
 :- op(600, xfy, in).
 :- op(600, xfy, ins).
 ```
-
