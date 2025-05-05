@@ -281,43 +281,6 @@ int prune_domain()
     return (NO);
 }
 
-/* e.g. X+Y+Z#=3 X<-1 1+Y+Z#=3*/
-void bind_variable(int expr)
-{
-    int idx, val;
-
-    if (nullp(expr))
-	return;
-    else if (compiler_variable_p(expr)) {
-	idx = GET_ARITY(expr);
-	val = fd_domain[idx] + fd_min[idx];
-	SET_CDR(expr, makeint(val));
-	return;
-    } else if (atomp(expr)) {
-	return;
-    } else if (structurep(expr)) {
-	bind_variable(cadr(expr));
-	bind_variable(caddr(expr));
-	return;
-    }
-}
-
-/* e.g.  1+Y+Z#=3 -> X+Y+Z#=3*/
-void unbind_variable(int expr)
-{
-    if (nullp(expr))
-	return;
-    else if (compiler_variable_p(expr)) {
-	SET_CDR(expr, NIL);
-	return;
-    } else if (atomp(expr)) {
-	return;
-    } else if (structurep(expr)) {
-	unbind_variable(cadr(expr));
-	unbind_variable(caddr(expr));
-	return;
-    }
-}
 
 int fd_plus(int x)
 {
@@ -602,7 +565,6 @@ int propagate(int expr)
     if (res == NO)
 	return (NO);
   loop:
-    bind_variable(expr);
     res = satisfiablep(expr);
     if (res == YES) {
 	if (fd_var_idx == fd_var_max - 1)
@@ -614,11 +576,10 @@ int propagate(int expr)
     } else if (res == NO) {
 	res = prune_domain();
 	if (res == NO) {
-	    unbind_variable(expr);
 	    goto loop;
 	}
 
-	bind_variable(expr);
+
 	if (satisfiablep(expr) == YES)
 	    return (propagate(expr));
     }
