@@ -1,4 +1,5 @@
 # CLPFD
+CLP(FD): Constraint Logic Programming over Finite Domains
 under construction
 
 # Usage
