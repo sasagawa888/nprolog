@@ -407,7 +407,7 @@ int satisfiablep(int expr)
 
 	left = fd_analyze(cadr(expr));
 	right = fd_analyze(caddr(expr));
-	
+	//print(left);print(right);printf("\n");
     if (fd_eq(expr)) {	//#=
 	if (length(left) == 1 && length(right) == 1) {
 	    if (eqlp(car(left), car(right))) // value left ==value right
@@ -546,7 +546,7 @@ int satisfiablep(int expr)
 
 int propagate_all(int sets)
 {
-    int res;
+    
     if (sets == NIL)
 	return (YES);
 
@@ -580,7 +580,10 @@ int propagate(int expr)
 		return (NO);
 	return (propagate(expr));
     } else if (res == NO) {
-	return(NO);
+	res = prune_domain();
+	if(res == NO)
+		return(NO);
+	return(propagate(expr));
     }
     return (NO);
 }
