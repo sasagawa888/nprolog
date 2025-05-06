@@ -191,6 +191,7 @@ int inc_domain()
 {
     int i;
 
+	//printf("%d %d \n", fd_domain[0]+fd_min[0],fd_domain[1]+fd_min[1]);
     i = 0;
     // fine unbind var index
     while (i < fd_var_max) {
@@ -234,6 +235,7 @@ int next_domain()
 
   retry:
     res = inc_domain();
+	//printf("%d %d \n", fd_domain[0]+fd_min[0],fd_domain[0]+fd_min[0]);
     if (res == NO)
 	return (NO);
     else if (fd_unique[fd_var_idx] == 0)	//not unique var
@@ -367,7 +369,7 @@ int domain_to_value(int varlist, int th)
     if (nullp(varlist))
 	return (NIL);
     else {
-	var = variable_convert1(revderef(car(varlist), th));
+	var = variable_convert1(car(varlist));
 	idx = GET_ARITY(var);
 	val = makeint(fd_domain[idx] + fd_min[idx]);
 	return (listcons(val, domain_to_value(cdr(varlist), th)));
@@ -562,11 +564,13 @@ int propagate(int expr)
     int res;
 
     res = next_domain();
+	//printf("%d %d \n", fd_domain[0]+fd_min[0],fd_domain[1]+fd_min[1]);
     if (res == NO)
 	return (NO);
   loop:
     res = satisfiablep(expr);
     if (res == YES) {
+	//printf("var_idx=%d var_max=%d\n", fd_var_idx, fd_var_max);
 	if (fd_var_idx == fd_var_max - 1)
 	    return (YES);
 
