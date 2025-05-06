@@ -5,7 +5,7 @@
 foo(L) :-
     L = [A, B, C],
     L ins 1..3,
-    all_different(L),
+    %all_different(L),
     %A#>C,
     label(L).
 

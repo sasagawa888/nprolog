@@ -78,7 +78,7 @@ int b_constraint_vars(int arglist, int rest, int th)
 
 	while (arg1 != NIL) {
 	    elt = car(arg1);
-	    var = variable_convert1(elt);
+	    var = variable_convert1(revderef(elt,th));
 	    SET_ARITY(var, fd_var_max);
 	    min = GET_INT(cadr(arg2));
 	    max = GET_INT(caddr(arg2));
@@ -567,29 +567,24 @@ int propagate(int expr)
 {
     int res;
 
-    res = next_domain();
-	//printf("%d %d \n", fd_domain[0]+fd_min[0],fd_domain[1]+fd_min[1]);
-    if (res == NO)
-	return (NO);
-  loop:
     res = satisfiablep(expr);
     if (res == YES) {
-	//printf("var_idx=%d var_max=%d\n", fd_var_idx, fd_var_max);
-	if (fd_var_idx == fd_var_max - 1)
+	if (fd_domain[0] != UNBOUND && fd_var_idx == fd_var_max - 1)
 	    return (YES);
-
+	
+	// still not success
+	res = next_domain();
+	if (res == NO)
+		return (NO);
 	return (propagate(expr));
     } else if (res == UNKNOWN) {
+	// still not success
+	res = next_domain();
+	if (res == NO)
+		return (NO);
 	return (propagate(expr));
     } else if (res == NO) {
-	res = prune_domain();
-	if (res == NO) {
-	    goto loop;
-	}
-
-
-	if (satisfiablep(expr) == YES)
-	    return (propagate(expr));
+	return(NO);
     }
     return (NO);
 }
@@ -620,6 +615,9 @@ int b_label(int arglist, int rest, int th)
 	    return (YES);
 
 	unbind(save, th);
+	res = next_domain();
+	if(res == NO)
+		return(NO);
 	if (fd_sets == NIL)
 	    res = propagate(fd_sets);
 	else
