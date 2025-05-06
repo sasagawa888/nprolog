@@ -252,13 +252,6 @@ int prune_domain()
 {
     int i;
 
-
-    i = fd_var_idx + 1;
-    while (i < fd_var_max) {
-	fd_domain[i] = 0;
-	i++;
-    }
-
     i = fd_var_idx;
     // increment
     fd_domain[i]++;
