@@ -6,7 +6,7 @@ foo(L) :-
     L = [A, B, C],
     L ins 1..3,
     all_different(L),
-    A#>C,
+    %A#>C,
     label(L).
 
 n_factorial(0, 1).
