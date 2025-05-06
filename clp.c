@@ -573,6 +573,7 @@ int propagate(int expr)
 		return (NO);
 	return (propagate(expr));
     } else if (res == NO) {
+	// it shoud prune_domain() 
 	res = next_domain();
 	if(res == NO)
 		return(NO);
