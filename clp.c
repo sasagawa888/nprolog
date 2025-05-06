@@ -328,7 +328,7 @@ int fd_analyze1(int form, int flag)
 	    fd_analyze_sw = 1;
 	    return (fd_max[idx]);
 	} else
-	    return (fd_domain[idx]);
+	    return (fd_domain[idx]+fd_min[idx]);
     } else if (fd_plus(form)) {
 	left = fd_analyze1(cadr(form), flag);
 	right = fd_analyze1(caddr(form), flag);
