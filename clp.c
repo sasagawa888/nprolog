@@ -553,11 +553,7 @@ int propagate_all(int sets)
     if (propagate(car(sets)) == YES) {
 	return (propagate_all(cdr(sets)));
     } else {
-	res = prune_domain();
-	if (res == NO)
-	    return (NO);
-
-	propagate_all(fd_sets);
+	return(NO);
     }
 
     return (NO);
@@ -572,7 +568,7 @@ int propagate(int expr)
 	if (fd_domain[0] != UNBOUND && fd_var_idx == fd_var_max - 1)
 	    return (YES);
 	
-	// still not success
+	// still not instantation
 	res = next_domain();
 	if (res == NO)
 		return (NO);
