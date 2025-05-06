@@ -20,7 +20,7 @@ test1(X) :-
     X in 1..3,
     label([X]).
 
-%not good
+
 test2(X, Y) :-
     X in 1..3,
     Y in 1..3,
@@ -37,3 +37,15 @@ test4(X) :-
     X in 1..5,
     X #\= 3,
     label([X]).
+
+test5(X,Y) :-
+    X in 1..5,
+    Y in 1..5,
+    X+Y #= 6,
+    label([X,Y]).
+
+test6(X, Y) :-
+    X in 1..3,
+    Y in 1..3,
+    X #= Y,
+    label([X, Y]).
