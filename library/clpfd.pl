@@ -59,7 +59,7 @@ X #< Y :-
 X #<= Y :-
     integer(X),
     integer(Y),
-    X <= Y.
+    X =< Y.
 X #<= Y :-
     n_add_constraint(X #<= Y).
     
