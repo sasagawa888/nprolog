@@ -52,7 +52,7 @@ int b_constraint_var(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	var = variable_convert1(arg1);
+	var = variable_convert1(revderef(arg1,th));
 	SET_ARITY(var, fd_var_max);
 	min = GET_INT(cadr(arg2));
 	max = GET_INT(caddr(arg2));
@@ -103,7 +103,7 @@ int b_all_different(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("all_different", n, th);
     if (n == 1) {
-	arg1 = variable_convert1(car(arglist));
+	arg1 = variable_convert1(revderef(car(arglist),th));
 	while (arg1 != NIL) {
 	    idx = GET_ARITY(car(arg1));
 	    fd_unique[idx] = 1;
@@ -191,7 +191,9 @@ int inc_domain()
 {
     int i;
 
-	//printf("%d %d \n", fd_domain[0]+fd_min[0],fd_domain[1]+fd_min[1]);
+	if(fd_domain[0] > fd_len[0])
+		return(NO); // all incremented
+
     i = 0;
     // fine unbind var index
     while (i < fd_var_max) {
@@ -208,6 +210,7 @@ int inc_domain()
     // carry
     if (fd_domain[i] > fd_len[i]) {
 	fd_domain[i] = UNBOUND;
+	if(i==0) return(NO); //all incremented
 	i--;
 	while (i >= 0) {
 	    fd_domain[i]++;
@@ -235,7 +238,6 @@ int next_domain()
 
   retry:
     res = inc_domain();
-	//printf("%d %d \n", fd_domain[0]+fd_min[0],fd_domain[0]+fd_min[0]);
     if (res == NO)
 	return (NO);
     else if (fd_unique[fd_var_idx] == 0)	//not unique var
@@ -249,6 +251,7 @@ int next_domain()
 int prune_domain()
 {
     int i;
+
 
     i = fd_var_idx + 1;
     while (i < fd_var_max) {
@@ -404,6 +407,7 @@ int satisfiablep(int expr)
 
 	left = fd_analyze(cadr(expr));
 	right = fd_analyze(caddr(expr));
+	
     if (fd_eq(expr)) {	//#=
 	if (length(left) == 1 && length(right) == 1) {
 	    if (eqlp(car(left), car(right))) // value left ==value right
@@ -611,7 +615,7 @@ int b_label(int arglist, int rest, int th)
 	    return (NO);
 
       loop:
-	unify(arg1, domain_to_value(arg1, th), th);
+	unify(arg1, domain_to_value(revderef(arg1,th), th), th);
 	if (prove_all(rest, sp[th], th) == YES)
 	    return (YES);
 

@@ -23,7 +23,7 @@ test1(X) :-
 test2(X, Y) :-
     X in 1..3,
     Y in 1..3,
-    X #> Y,
+    X #< Y,
     label([X, Y]).
 
 test3(X, Y) :-
@@ -31,3 +31,8 @@ test3(X, Y) :-
     Y in 1..2,
     all_different([X, Y]),
     label([X, Y]).
+
+test4(X) :-
+    X in 1..5,
+    X #\= 3,
+    label([X]).
