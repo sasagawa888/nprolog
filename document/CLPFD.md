@@ -50,21 +50,17 @@ Since the domains are retained, when backtracking occurs, the search continues f
 
 
 ```
+
 int propagate_all(int sets)
 {
-    int res;
+
     if (sets == NIL)
-             return(YES);
+	return (YES);
 
-	if (propagate(car(sets)) == YES){
-	        return(propagate_all(cdr(sets)));
-    }
-	else{
-        res = prune_domain();
-        if(res == NO)
-            return(NO);
-
-        propagate_all(fd_sets);
+    if (propagate(car(sets)) == YES) {
+	return (propagate_all(cdr(sets)));
+    } else {
+	return (NO);
     }
 
     return (NO);
@@ -74,30 +70,49 @@ int propagate(int expr)
 {
     int res;
 
-    res = next_domain();
-    if(res == NO)
-        return(NO);
-    loop:
-    if (satisfiablep(expr) == YES) {
-        if(fd_var_idx == fd_var_max -1)
-            return(YES);
-    
+    res = satisfiablep(expr);
+    if (res == YES) {
+	if (fd_domain[0] != UNBOUND && fd_var_idx == fd_var_max - 1)
+	    return (YES);
+
+	// still not instantation
+	res = next_domain();
+	if (res == NO)
+	    return (NO);
 	return (propagate(expr));
-    } else {
+    } else if (res == UNKNOWN) {
+	// still not success
+	res = next_domain();
+	if (res == NO)
+	    return (NO);
+	return (propagate(expr));
+    } else if (res == NO) {
+	// Success is still possible.
+	res = next_domain();
+	if (res == NO)
+	    return (NO);
+	return (propagate(expr));
+    } else if (res == FUTILE) {
+	// Success is no longer possible.
 	res = prune_domain();
-    if(res == NO){
-        goto loop;
-    }
-    
-    bind_variable(expr);
-	if (satisfiablep(expr) == YES)
-	    return (propagate(expr));
+	if (res == NO)
+	    return (NO);
+	return (propagate(expr));
     }
     return (NO);
 }
 
-
 ```
+
+satisfiablep analyzes the expression expr and returns one of four possible values: yes, no, unknown, or futile.
+
+- yes means that the expression is definitively true.
+
+- no indicates failure, but there may still be a possibility of success in further exploration.
+
+- unknown means the result cannot be determined at this point, but success is still possible.
+
+- futile signifies that there is absolutely no possibility of success.
 
 ## Satisfiable
 Analyze the expressions on the left-hand side and right-hand side, and convert them into lists whose elements are integers. The list will have either one or two elements.
