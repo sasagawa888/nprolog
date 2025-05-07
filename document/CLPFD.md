@@ -50,20 +50,22 @@ Since the domains are retained, when backtracking occurs, the search continues f
 
 
 ```
-
 int propagate_all(int sets)
 {
 
     if (sets == NIL)
-	return (YES);
-
+		return (YES);
+	
+	loop:
     if (propagate(car(sets)) == YES) {
 	return (propagate_all(cdr(sets)));
     } else {
-	return (NO);
-    }
-
-    return (NO);
+		fd_var_lock = 0;
+		if(next_domain() == NO)
+			return(NO);
+		sets = fd_sets;
+		goto loop;
+	}
 }
 
 int propagate(int expr)
@@ -72,9 +74,10 @@ int propagate(int expr)
 
     res = satisfiablep(expr);
     if (res == YES) {
-	if (fd_domain[0] != UNBOUND && fd_var_idx == fd_var_max - 1)
+	if (fd_domain[0] != UNBOUND && fd_var_idx == fd_var_max - 1){
+		fd_var_lock = 1;
 	    return (YES);
-
+	}
 	// still not instantation
 	res = next_domain();
 	if (res == NO)
@@ -88,12 +91,14 @@ int propagate(int expr)
 	return (propagate(expr));
     } else if (res == NO) {
 	// Success is still possible.
+	//printf("%d %d\n", fd_domain[0], fd_domain[1]);
 	res = next_domain();
 	if (res == NO)
 	    return (NO);
 	return (propagate(expr));
     } else if (res == FUTILE) {
 	// Success is no longer possible.
+	//printf("%d %d\n", fd_domain[0], fd_domain[1]);
 	res = prune_domain();
 	if (res == NO)
 	    return (NO);
@@ -101,6 +106,7 @@ int propagate(int expr)
     }
     return (NO);
 }
+
 
 ```
 
