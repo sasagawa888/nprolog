@@ -191,6 +191,9 @@ int inc_domain()
 {
     int i;
 
+	if(fd_var_lock)
+	return(NO);  // vars are already binded
+
     if (fd_domain[0] > fd_len[0])
 	return (NO);		// all incremented
 
@@ -542,15 +545,18 @@ int propagate_all(int sets)
 {
 
     if (sets == NIL)
-	return (YES);
-
+		return (YES);
+	
+	loop:
     if (propagate(car(sets)) == YES) {
 	return (propagate_all(cdr(sets)));
     } else {
-	return (NO);
-    }
-
-    return (NO);
+		fd_var_lock = 0;
+		if(next_domain() == NO)
+			return(NO);
+		sets = fd_sets;
+		goto loop;
+	}
 }
 
 int propagate(int expr)
@@ -559,9 +565,10 @@ int propagate(int expr)
 
     res = satisfiablep(expr);
     if (res == YES) {
-	if (fd_domain[0] != UNBOUND && fd_var_idx == fd_var_max - 1)
+	if (fd_domain[0] != UNBOUND && fd_var_idx == fd_var_max - 1){
+		fd_var_lock = 1;
 	    return (YES);
-
+	}
 	// still not instantation
 	res = next_domain();
 	if (res == NO)
@@ -602,6 +609,7 @@ int b_label(int arglist, int rest, int th)
 	arg1 = car(arglist);
 
 	fd_sets = reverse(fd_sets);
+	fd_var_lock = 0;
 	if (fd_sets == NIL)
 	    res = propagate(fd_sets);
 	else
@@ -617,6 +625,7 @@ int b_label(int arglist, int rest, int th)
 	    return (YES);
 
 	unbind(save, th);
+	fd_var_lock = 0;
 	res = next_domain();
 	if (res == NO)
 	    return (NO);
