@@ -61,6 +61,7 @@ void init_cell(void)
     makeatom("<pause>", SIMP);	//address = 56
     makeatom("<resume>", SIMP);	//address = 58
     makeatom("unknown", SIMP);	//address = 60
+    makeatom("futile", SIMP);	//address = 62
 }
 
 int freshcell(void)
