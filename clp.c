@@ -572,22 +572,31 @@ int fd_solve()
     int res;
 
   loop:
-    if (fd_var_idx == fd_var_max - 1)
-	return (YES);
-
+    
+	// constraint propagate
     res = fd_propagate(fd_sets);
     if (res == YES) {
+	// if all variables are bounded, then success
+	if (fd_domain[0] != UNBOUND && fd_var_idx == fd_var_max - 1)
+	return (YES);
+	
+	// if there are unbound variable, then next domain
 	res = next_domain();
+	// if domain is all selected, then end return no
 	if (res == NO)
 	    return (NO);
 	goto loop;
     } else if (res == NO) {
+	// if constraint set is not satistificate, then prune and go on
 	res = prune_domain();
+	// if domain is all selected, then end return no
 	if (res == NO)
 	    return (NO);
 	goto loop;
     } else if (res == UNKNOWN) {
+	// if there is possibility, then go on solving 
 	res = next_domain();
+	// if domain is all selected, then end return no
 	if (res == NO)
 	    return (NO);
 	goto loop;
