@@ -68,7 +68,6 @@ address
 #define SLASH       52
 #define ERROBJ      54
 #define UNKNOWN     60
-#define FUTILE      62
 #define HASHTBSIZE 107
 #define BIGNUM_BASE 1000000000
 #define SMALL_INT_MAX       1000000000

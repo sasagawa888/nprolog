@@ -166,26 +166,6 @@ int fd_eqsmaller(int x)
 }
 
 
-int uniquep()
-{
-    int idx1, idx2, val;
-
-    idx1 = fd_var_idx;
-    while (idx1 > 0) {
-	val = fd_domain[idx1] + fd_min[idx1];
-	idx2 = idx1 - 1;
-	while (idx2 >= 0) {
-	    if (fd_unique[idx2] == 1
-		&& fd_domain[idx2] + fd_min[idx2] == val)
-		return (NO);
-
-	    idx2--;
-	}
-	idx1--;
-    }
-    return (YES);
-}
-
 void fd_push(int x)
 {
     fd_selected[fd_sel_idx] = x;
@@ -434,7 +414,7 @@ int fd_satisfiable(int expr)
 	    if (eqlp(car(left), car(right)))	// value left ==value right
 		return (YES);
 	    else
-		return (FUTILE);
+		return (NO);
 	} else if (length(left) == 2 && length(right) == 1) {
 	    if (in_interval(right, left))	// value right is in_interval range left
 		return (YES);
@@ -500,7 +480,7 @@ int fd_satisfiable(int expr)
 	    if (eqsmallerp(car(left), car(right)))	//value left < value right
 		return (YES);
 	    else
-		return (FUTILE);
+		return (NO);
 	} else if (length(left) == 2 && length(right) == 1) {
 	    if (eqsmallerp(cadr(left), car(right)))	//max of range <= value
 		return (YES);
