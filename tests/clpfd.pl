@@ -54,7 +54,9 @@ test6(X, Y, Z) :-
     X #< Z,
     label([X, Y, Z]).
 
-nine_queens(Queens) :-
+test :- nqueens,fail.
+
+nqueens(Queens) :-
     length(Queens, 9),       
     Queens ins 1..9,         
     all_different(Queens),   
@@ -72,3 +74,5 @@ no_attack(Q, [Q2|Rest], Dist) :-
     Q #\= Q2 - Dist,
     Dist1 #= Dist + 1,
     no_attack(Q, Rest, Dist1).
+
+

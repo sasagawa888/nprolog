@@ -186,13 +186,30 @@ int uniquep()
     return (YES);
 }
 
+void fd_push(int x)
+{
+    fd_selected[fd_sel_idx] = x;
+}
 
-int inc_domain()
+void fd_pop()
+{
+    fd_sel_idx--;
+}
+
+int fd_duplicate(int x)
 {
     int i;
 
-	if(fd_var_lock)
-	return(NO);  // vars are already binded
+    for (i = 0; i < fd_sel_idx; i++) {
+	if (fd_selected[i] == x)
+	    return (1);
+    }
+    return (0);
+}
+
+int next_domain()
+{
+    int i;
 
     if (fd_domain[0] > fd_len[0])
 	return (NO);		// all incremented
@@ -203,6 +220,8 @@ int inc_domain()
 	if (fd_domain[i] == UNBOUND) {
 	    fd_domain[i] = 0;
 	    fd_var_idx = i;
+	    if (fd_unique[i] == 1)
+		fd_push(fd_domain[i] + fd_min[i]);
 	    return (YES);
 	}
 	i++;
@@ -210,18 +229,27 @@ int inc_domain()
     i = fd_var_max - 1;
     // increment
     fd_domain[i]++;
+    if (fd_unique[i] == 1 && fd_duplicate(fd_domain[i] + fd_min[i]))
+	fd_domain[i]++;
     // carry
     if (fd_domain[i] > fd_len[i]) {
 	fd_domain[i] = UNBOUND;
+	if (fd_unique[i] == 1)
+	    fd_pop();
 	if (i == 0)
 	    return (NO);	//all incremented
 	i--;
 	while (i >= 0) {
 	    fd_domain[i]++;
+	    if (fd_unique[i] == 1
+		&& fd_duplicate(fd_domain[i] + fd_min[i]))
+		fd_domain[i]++;
 	    if (fd_domain[i] > fd_len[i]) {
 		if (i == 0)	// already incremented
 		    return (NO);
 		fd_domain[i] = UNBOUND;
+		if (fd_unique[i] == 1)
+		    fd_pop();
 		i--;
 		fd_var_idx = i;
 	    } else {
@@ -236,42 +264,35 @@ int inc_domain()
     return (NO);
 }
 
-int next_domain()
-{
-    int res;
-
-  retry:
-    res = inc_domain();
-    if (res == NO)
-	return (NO);
-    else if (fd_unique[fd_var_idx] == 0)	//not unique var
-	return (YES);
-    else if (fd_unique[fd_var_idx] == 1 && uniquep() == YES)
-	return (YES);
-    else
-	goto retry;
-}
-
 int prune_domain()
 {
     int i;
 
-	if(fd_var_lock)
-		return(NO);
-
     i = fd_var_idx;
     // increment
     fd_domain[i]++;
+    if (fd_unique[i] == 1 && fd_duplicate(fd_domain[i] + fd_min[i]))
+	fd_domain[i]++;
     // carry
     if (fd_domain[i] > fd_len[i]) {
 	fd_domain[i] = UNBOUND;
+	if (fd_unique[i] == 1)
+	    fd_pop();
 	i--;
 	while (i >= 0) {
 	    fd_domain[i]++;
+	    if (fd_unique[i] == 1
+		&& fd_duplicate(fd_domain[i] + fd_min[i]))
+		fd_domain[i]++;
+	    if (fd_unique[i] == 1
+		&& fd_duplicate(fd_domain[i] + fd_min[i]))
+		fd_domain[i]++;
 	    if (fd_domain[i] > fd_len[i]) {
 		if (i == 0)	// already incremented
 		    return (NO);
 		fd_domain[i] = UNBOUND;
+		if (fd_unique[i] == 1)
+		    fd_pop();
 		i--;
 		fd_var_idx = i;
 	    } else {
@@ -398,7 +419,7 @@ int overlap(int left, int right)
 	return (0);
 }
 
-int satisfiablep(int expr)
+int fd_satisfiable(int expr)
 {
     int left, right;
 
@@ -428,19 +449,19 @@ int satisfiablep(int expr)
 	    if (overlap(left, right))	// range left and range right has overlap
 		return (YES);
 	    else
-		return (FUTILE);
+		return (NO);
 	}
     } else if (fd_neq(expr)) {	//#\=
 	if (length(left) == 1 && length(right) == 1) {
 	    if (!eqlp(car(left), car(right)))	// value left != value right
 		return (YES);
 	    else
-		return (FUTILE);
+		return (NO);
 	} else if (length(left) == 2 && length(right) == 1) {
 	    if (!in_interval(right, left))	// value right is not in_interval left range
 		return (YES);
 	    else
-		return (UNKNOWN);
+		return (NO);
 	} else if (length(left) == 1 && length(right) == 2) {
 	    if (!in_interval(left, right))	// value left is not in_interval right range
 		return (YES);
@@ -450,14 +471,14 @@ int satisfiablep(int expr)
 	    if (!overlap(left, right))	// range left and range right has no overlap
 		return (YES);
 	    else
-		return (FUTILE);
+		return (NO);
 	}
     } else if (fd_smaller(expr)) {	//#<
 	if (length(left) == 1 && length(right) == 1) {
 	    if (smallerp(car(left), car(right)))	// value left < value right
 		return (YES);
 	    else
-		return (FUTILE);
+		return (NO);
 	} else if (length(left) == 2 && length(right) == 1) {
 	    if (smallerp(cadr(left), car(right)))	//max of range < value
 		return (YES);
@@ -472,7 +493,7 @@ int satisfiablep(int expr)
 	    if (smallerp(cadr(left), car(right)))	//max of range left < min of range right
 		return (YES);
 	    else
-		return (FUTILE);
+		return (NO);
 	}
     } else if (fd_eqsmaller(expr)) {	//#<=
 	if (length(left) == 1 && length(right) == 1) {
@@ -494,14 +515,14 @@ int satisfiablep(int expr)
 	    if (eqsmallerp(cadr(left), car(right)))	//max of range left <= min of range right
 		return (YES);
 	    else
-		return (FUTILE);
+		return (NO);
 	}
     } else if (fd_greater(expr)) {	//#>
 	if (length(left) == 1 && length(right) == 1) {
 	    if (greaterp(car(left), car(right)))	// value left > value right
 		return (YES);
 	    else
-		return (FUTILE);
+		return (NO);
 	} else if (length(left) == 2 && length(right) == 1) {
 	    if (greaterp(car(left), car(right)))	//min of range > value
 		return (YES);
@@ -516,14 +537,14 @@ int satisfiablep(int expr)
 	    if (greaterp(car(left), cadr(right)))	//min of range left > max of range right
 		return (YES);
 	    else
-		return (FUTILE);
+		return (NO);
 	}
     } else if (fd_eqgreater(expr)) {	//#>=
 	if (length(left) == 1 && length(right) == 1) {
 	    if (eqgreaterp(car(left), car(right)))
 		return (YES);
 	    else
-		return (FUTILE);
+		return (NO);
 	} else if (length(left) == 2 && length(right) == 1) {
 	    if (eqgreaterp(car(left), car(right)))	//min of range > value
 		return (YES);
@@ -538,68 +559,57 @@ int satisfiablep(int expr)
 	    if (eqgreaterp(car(left), cadr(right)))	//min of range left > max of range right
 		return (YES);
 	    else
-		return (FUTILE);
+		return (NO);
 	}
     }
     return (UNKNOWN);
 }
 
-int propagate_all(int sets)
-{
-
-    if (sets == NIL)
-		return (YES);
-	
-	loop:
-    if (propagate(car(sets)) == YES) {
-	return (propagate_all(cdr(sets)));
-    } else {
-		fd_var_lock = 0;
-		if(next_domain() == NO)
-			return(NO);
-		sets = fd_sets;
-		goto loop;
-	}
-}
-
-int propagate(int expr)
+int fd_propagate(int sets)
 {
     int res;
 
-    res = satisfiablep(expr);
-    if (res == YES) {
-	if (fd_domain[0] != UNBOUND && fd_var_idx == fd_var_max - 1){
-		fd_var_lock = 1;
-	    return (YES);
-	}
-	// still not instantation
-	res = next_domain();
-	if (res == NO)
+    if (sets == NIL)
+	return (YES);
+    else {
+	res = fd_satisfiable(car(sets));
+	if (res == YES || res == UNKNOWN)
+	    return (fd_propagate(cdr(sets)));
+	else if (res == NO)
 	    return (NO);
-	return (propagate(expr));
-    } else if (res == UNKNOWN) {
-	// still not success
-	res = next_domain();
-	if (res == NO)
-	    return (NO);
-	return (propagate(expr));
-    } else if (res == NO) {
-	// Success is still possible.
-	//printf("%d %d\n", fd_domain[0], fd_domain[1]);
-	res = next_domain();
-	if (res == NO)
-	    return (NO);
-	return (propagate(expr));
-    } else if (res == FUTILE) {
-	// Success is no longer possible.
-	//printf("%d %d\n", fd_domain[0], fd_domain[1]);
-	res = prune_domain();
-	if (res == NO)
-	    return (NO);
-	return (propagate(expr));
     }
     return (NO);
 }
+
+int fd_solve()
+{
+    int res;
+
+  loop:
+    if (fd_var_idx == fd_var_max - 1)
+	return (YES);
+
+    res = fd_propagate(fd_sets);
+    if (res == YES) {
+	res = next_domain();
+	if (res == NO)
+	    return (NO);
+	goto loop;
+    } else if (res == NO) {
+	res = prune_domain();
+	if (res == NO)
+	    return (NO);
+	goto loop;
+    } else if (res == UNKNOWN) {
+	res = next_domain();
+	if (res == NO)
+	    return (NO);
+	goto loop;
+    }
+
+    return (NO);
+}
+
 
 int b_label(int arglist, int rest, int th)
 {
@@ -612,12 +622,7 @@ int b_label(int arglist, int rest, int th)
 	arg1 = car(arglist);
 
 	fd_sets = reverse(fd_sets);
-	fd_var_lock = 0;
-	if (fd_sets == NIL)
-	    res = propagate(fd_sets);
-	else
-	    res = propagate_all(fd_sets);
-
+	res = fd_solve();
 
 	if (res == NO)
 	    return (NO);
@@ -628,15 +633,11 @@ int b_label(int arglist, int rest, int th)
 	    return (YES);
 
 	unbind(save, th);
-	fd_var_lock = 0;
 	res = next_domain();
 	if (res == NO)
 	    return (NO);
-	if (fd_sets == NIL)
-	    res = propagate(fd_sets);
-	else
-	    res = propagate_all(fd_sets);
 
+	res = fd_solve();
 	if (res == YES)
 	    goto loop;
 	else

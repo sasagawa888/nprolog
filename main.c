@@ -201,7 +201,9 @@ int fd_max[256];
 int fd_len[256];
 int fd_unique[256];
 int fd_analyze_sw;
-int fd_var_lock;
+int fd_selected[256];
+int fd_sel_idx;
+
 
 //-----editor-----
 char buffer[BUFSIZE][10];
