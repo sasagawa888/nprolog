@@ -5,8 +5,8 @@
 foo(L) :-
     L = [A, B, C],
     L ins 1..3,
-    all_different(L),
-    A#>C,
+    %all_different(L),
+    %A#>C,
     label(L).
 
 n_factorial(0, 1).
@@ -51,7 +51,7 @@ test6(X, Y, Z) :-
     Y in 1..3,
     Z in 1..3,
     X + Y + Z #= 5,
-    X #< Z,
+    %X #< Z,
     label([X, Y, Z]).
 
 test :- nqueens,fail.

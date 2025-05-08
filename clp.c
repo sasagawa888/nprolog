@@ -169,6 +169,7 @@ int fd_eqsmaller(int x)
 void fd_push(int x)
 {
     fd_selected[fd_sel_idx] = x;
+	fd_sel_idx++;
 }
 
 void fd_pop()
@@ -191,6 +192,11 @@ int next_domain()
 {
     int i;
 
+	//printf("%d %d %d\n", fd_domain[0], fd_domain[1], fd_domain[2]);
+	//printf("%d %d %d\n", fd_unique[0], fd_unique[1], fd_unique[2]);
+	//printf("%d %d %d %d\n", fd_selected[0], fd_selected[1], fd_selected[2], fd_sel_idx);
+
+
     if (fd_domain[0] > fd_len[0])
 	return (NO);		// all incremented
 
@@ -200,6 +206,15 @@ int next_domain()
 	if (fd_domain[i] == UNBOUND) {
 	    fd_domain[i] = 0;
 	    fd_var_idx = i;
+		// if unique variable and duplicate skip
+		while(1){
+		if(fd_unique[i] == 1 && fd_duplicate(fd_domain[i]+fd_min[i]))
+			fd_domain[i]++;
+		else {
+			break;
+			}
+		}
+		// if unique variable memoize the value
 	    if (fd_unique[i] == 1)
 		fd_push(fd_domain[i] + fd_min[i]);
 	    return (YES);
@@ -208,10 +223,17 @@ int next_domain()
     }
     i = fd_var_max - 1;
     // increment
+	if (fd_unique[i] == 1)
+		    fd_pop();
     fd_domain[i]++;
 	// if unique variable and duplicate then skip
+	while(1){
     if (fd_unique[i] == 1 && fd_duplicate(fd_domain[i] + fd_min[i]))
-	fd_domain[i]++;
+		fd_domain[i]++;
+	else {
+		break;
+		}
+	}
     // carry
     if (fd_domain[i] > fd_len[i]) {
 	fd_domain[i] = UNBOUND;
@@ -221,11 +243,21 @@ int next_domain()
 	    return (NO);	//all incremented
 	i--;
 	while (i >= 0) {
+		if (fd_unique[i] == 1){
+	    	fd_pop();
+			fd_push(fd_domain[i] + fd_min[i]);
+		}
 	    fd_domain[i]++;
 		// if unique variable and duplicate then skip
+		while(1){
 	    if (fd_unique[i] == 1
 		&& fd_duplicate(fd_domain[i] + fd_min[i]))
-		fd_domain[i]++;
+			fd_domain[i]++;
+		else {
+			fd_push(fd_domain[i] + fd_min[i]);
+			break;
+			}
+		}
 		// already incremented
 	    if (fd_domain[i] > fd_len[i]) {
 		if (i == 0)	
@@ -254,10 +286,18 @@ int prune_domain()
 
     i = fd_var_idx;
     // increment
+	if (fd_unique[i] == 1)
+	    fd_pop();
     fd_domain[i]++;
 	// if unique variable and duplicate then skip
+	while(1){
     if (fd_unique[i] == 1 && fd_duplicate(fd_domain[i] + fd_min[i]))
-	fd_domain[i]++;
+		fd_domain[i]++;
+	else{
+		fd_push(fd_domain[i] + fd_min[i]);
+		break;
+		}
+	}
     // carry
     if (fd_domain[i] > fd_len[i]) {
 	fd_domain[i] = UNBOUND;
@@ -268,17 +308,23 @@ int prune_domain()
 	while (i >= 0) {
 	    fd_domain[i]++;
 		// if unique variable and duplicate then skip
+		while(1){
 	    if (fd_unique[i] == 1
 		&& fd_duplicate(fd_domain[i] + fd_min[i]))
-		fd_domain[i]++;
+			fd_domain[i]++;
+		else 
+			break;
+		}
 		// already incremented
 	    if (fd_domain[i] > fd_len[i]) {
 		if (i == 0)	
 		    return (NO);
 		fd_domain[i] = UNBOUND;
 		// if unique variable remove duplicate data
-		if (fd_unique[i] == 1)
+		if (fd_unique[i] == 1){
 		    fd_pop();
+			fd_push(fd_domain[i] + fd_min[i]);
+		}
 		i--;
 		fd_var_idx = i;
 	    } else {
