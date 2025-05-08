@@ -25,7 +25,7 @@ test2(X, Y) :-
     X in 1..4,
     Y in 1..4,
     X #= Y+1,
-    X #< Y,
+    X #>= Y,
     label([X, Y]).
 
 test3(X, Y) :-
