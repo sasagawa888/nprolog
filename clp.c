@@ -209,6 +209,7 @@ int next_domain()
     i = fd_var_max - 1;
     // increment
     fd_domain[i]++;
+	// if unique variable and duplicate then skip
     if (fd_unique[i] == 1 && fd_duplicate(fd_domain[i] + fd_min[i]))
 	fd_domain[i]++;
     // carry
@@ -221,13 +222,16 @@ int next_domain()
 	i--;
 	while (i >= 0) {
 	    fd_domain[i]++;
+		// if unique variable and duplicate then skip
 	    if (fd_unique[i] == 1
 		&& fd_duplicate(fd_domain[i] + fd_min[i]))
 		fd_domain[i]++;
+		// already incremented
 	    if (fd_domain[i] > fd_len[i]) {
-		if (i == 0)	// already incremented
+		if (i == 0)	
 		    return (NO);
 		fd_domain[i] = UNBOUND;
+		// if unique variable remove duplicate data
 		if (fd_unique[i] == 1)
 		    fd_pop();
 		i--;
@@ -251,26 +255,28 @@ int prune_domain()
     i = fd_var_idx;
     // increment
     fd_domain[i]++;
+	// if unique variable and duplicate then skip
     if (fd_unique[i] == 1 && fd_duplicate(fd_domain[i] + fd_min[i]))
 	fd_domain[i]++;
     // carry
     if (fd_domain[i] > fd_len[i]) {
 	fd_domain[i] = UNBOUND;
+	// if unique variable remove duplicate data
 	if (fd_unique[i] == 1)
 	    fd_pop();
 	i--;
 	while (i >= 0) {
 	    fd_domain[i]++;
+		// if unique variable and duplicate then skip
 	    if (fd_unique[i] == 1
 		&& fd_duplicate(fd_domain[i] + fd_min[i]))
 		fd_domain[i]++;
-	    if (fd_unique[i] == 1
-		&& fd_duplicate(fd_domain[i] + fd_min[i]))
-		fd_domain[i]++;
+		// already incremented
 	    if (fd_domain[i] > fd_len[i]) {
-		if (i == 0)	// already incremented
+		if (i == 0)	
 		    return (NO);
 		fd_domain[i] = UNBOUND;
+		// if unique variable remove duplicate data
 		if (fd_unique[i] == 1)
 		    fd_pop();
 		i--;
@@ -602,6 +608,7 @@ int b_label(int arglist, int rest, int th)
 	arg1 = car(arglist);
 
 	fd_sets = reverse(fd_sets);
+	fd_var_idx = 0;
 	res = fd_solve();
 
 	if (res == NO)
