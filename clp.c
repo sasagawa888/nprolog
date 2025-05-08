@@ -256,6 +256,9 @@ int prune_domain()
 {
     int i;
 
+	if(fd_var_lock)
+		return(NO);
+
     i = fd_var_idx;
     // increment
     fd_domain[i]++;
@@ -410,7 +413,7 @@ int satisfiablep(int expr)
 	    if (eqlp(car(left), car(right)))	// value left ==value right
 		return (YES);
 	    else
-		return (NO);
+		return (FUTILE);
 	} else if (length(left) == 2 && length(right) == 1) {
 	    if (in_interval(right, left))	// value right is in_interval range left
 		return (YES);
@@ -432,7 +435,7 @@ int satisfiablep(int expr)
 	    if (!eqlp(car(left), car(right)))	// value left != value right
 		return (YES);
 	    else
-		return (NO);
+		return (FUTILE);
 	} else if (length(left) == 2 && length(right) == 1) {
 	    if (!in_interval(right, left))	// value right is not in_interval left range
 		return (YES);
@@ -454,7 +457,7 @@ int satisfiablep(int expr)
 	    if (smallerp(car(left), car(right)))	// value left < value right
 		return (YES);
 	    else
-		return (NO);
+		return (FUTILE);
 	} else if (length(left) == 2 && length(right) == 1) {
 	    if (smallerp(cadr(left), car(right)))	//max of range < value
 		return (YES);
@@ -476,7 +479,7 @@ int satisfiablep(int expr)
 	    if (eqsmallerp(car(left), car(right)))	//value left < value right
 		return (YES);
 	    else
-		return (NO);
+		return (FUTILE);
 	} else if (length(left) == 2 && length(right) == 1) {
 	    if (eqsmallerp(cadr(left), car(right)))	//max of range <= value
 		return (YES);
@@ -498,7 +501,7 @@ int satisfiablep(int expr)
 	    if (greaterp(car(left), car(right)))	// value left > value right
 		return (YES);
 	    else
-		return (NO);
+		return (FUTILE);
 	} else if (length(left) == 2 && length(right) == 1) {
 	    if (greaterp(car(left), car(right)))	//min of range > value
 		return (YES);
@@ -520,7 +523,7 @@ int satisfiablep(int expr)
 	    if (eqgreaterp(car(left), car(right)))
 		return (YES);
 	    else
-		return (NO);
+		return (FUTILE);
 	} else if (length(left) == 2 && length(right) == 1) {
 	    if (eqgreaterp(car(left), car(right)))	//min of range > value
 		return (YES);

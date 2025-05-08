@@ -23,9 +23,9 @@ test1(X) :-
 
 test2(X, Y) :-
     X in 1..4,
-    Y in 1..5,
+    Y in 1..4,
     X #= Y+1,
-    X #> Y,
+    X #< Y,
     label([X, Y]).
 
 test3(X, Y) :-
@@ -50,6 +50,6 @@ test6(X, Y, Z) :-
     X in 1..3,
     Y in 1..3,
     Z in 1..3,
-    X + Y + Z #= 4,
-    X #> Z,
+    X + Y + Z #= 5,
+    X #< Z,
     label([X, Y, Z]).
