@@ -6,7 +6,7 @@ foo(L) :-
     L = [A, B, C],
     L ins 1..3,
     all_different(L),
-    %A#>C,
+    A#<C,
     label(L).
 
 n_factorial(0, 1).
@@ -30,7 +30,7 @@ test2(X, Y) :-
 
 test3(X, Y) :-
     X in 1..2,
-    Y in 1..2,
+    Y in 2..3,
     all_different([X, Y]),
     label([X, Y]).
 

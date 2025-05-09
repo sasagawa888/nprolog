@@ -247,16 +247,18 @@ int next_domain()
 		fd_var_idx = i;
 	    } else {
 		fd_var_idx = i;
-		if(fd_unique[i] == 1)
+		if(fd_unique[i] == 1){
 			fd_pop();
-		fd_push(fd_domain[i]+fd_min[i]);
+			fd_push(fd_domain[i]+fd_min[i]);
+		}
 		return (YES);
 	    }
 	}
     } else{
-	if(fd_unique[i] == 1)
+	if(fd_unique[i] == 1){
 		fd_pop();
-	fd_push(fd_domain[i]+fd_min[i]);	
+		fd_push(fd_domain[i]+fd_min[i]);
+	}	
 	return (YES);
 	}
     return (NO);
@@ -266,35 +268,48 @@ int prune_domain()
 {
     int i;
 
+	printf("domain %d %d %d\n",fd_domain[0],fd_domain[1],fd_domain[2]);
+	getchar();
+
+
     i = fd_var_idx;
     // increment
-    fd_domain[i]++;
-	// if unique variable and duplicate then skip
+	increment(i);
     // carry
     if (fd_domain[i] > fd_len[i]) {
 	fd_domain[i] = UNBOUND;
+	if(fd_unique[i]==1)
+		fd_pop();
 	i--;
 	while (i >= 0) {
-	    fd_domain[i]++;
-		// if unique variable and duplicate then skip
-		
+	    increment(i);
 		// already incremented
 	    if (fd_domain[i] > fd_len[i]) {
 		if (i == 0)	
 		    return (NO);
 		fd_domain[i] = UNBOUND;
+		if(fd_unique[i]==1)
+			fd_pop();
 		// if unique variable remove duplicate data
 		i--;
 		fd_var_idx = i;
 	    } else {
 		fd_var_idx = i;
+		if(fd_unique[i] == 1){
+			fd_pop();
+			fd_push(fd_domain[i]+fd_min[i]);
+		}
 		return (YES);
 	    }
 	}
 
-    } else
+    } else{
+	if(fd_unique[i] == 1){
+		fd_pop();
+		fd_push(fd_domain[i]+fd_min[i]);
+	}
 	return (YES);
-
+	}
     return (NO);
 }
 
@@ -484,7 +499,7 @@ int fd_satisfiable(int expr)
 	    if (smallerp(cadr(left), car(right)))	//max of range left < min of range right
 		return (YES);
 	    else
-		return (NO);
+		return (UNKNOWN);
 	}
     } else if (fd_eqsmaller(expr)) {	//#<=
 	if (length(left) == 1 && length(right) == 1) {
