@@ -215,38 +215,50 @@ int next_domain()
     // find unbind var index
     while (i < fd_var_max) {
 	if (fd_domain[i] == UNBOUND) {
-	    fd_domain[i] = 0;
+	    increment(i);
 	    fd_var_idx = i;
+		if(fd_unique[i] == 1)
+			fd_push(fd_domain[i]+fd_min[i]);
 	    return (YES);
 	}
 	i++;
     }
     i = fd_var_max - 1;
     // increment
-    fd_domain[i]++;
+    increment(i);
     // carry
     if (fd_domain[i] > fd_len[i]) {
 	fd_domain[i] = UNBOUND;
+	if(fd_unique[i] == 1)
+	fd_pop();
 	if (i == 0)
 	    return (NO);	//all incremented
 	i--;
 	while (i >= 0) {
-	    fd_domain[i]++;
+	    increment(i);
 		// already incremented
 	    if (fd_domain[i] > fd_len[i]) {
 		if (i == 0)	
 		    return (NO);
 		fd_domain[i] = UNBOUND;
+		if(fd_unique[i]==1)
+			fd_pop();
 		i--;
 		fd_var_idx = i;
 	    } else {
 		fd_var_idx = i;
+		if(fd_unique[i] == 1)
+			fd_pop();
+		fd_push(fd_domain[i]+fd_min[i]);
 		return (YES);
 	    }
 	}
-    } else
+    } else{
+	if(fd_unique[i] == 1)
+		fd_pop();
+	fd_push(fd_domain[i]+fd_min[i]);	
 	return (YES);
-
+	}
     return (NO);
 }
 
