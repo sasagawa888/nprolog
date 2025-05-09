@@ -188,26 +188,35 @@ int fd_duplicate(int x)
     return (0);
 }
 
+int increment(int idx){
+	if(fd_unique[idx] == 0){
+		fd_domain[idx]++;
+	} else{
+		while(1){
+		if(fd_duplicate(fd_domain[idx]+fd_min[idx]))
+			fd_domain[idx]++;
+		else
+			break;
+	}
+	}
+	return(NO);
+}
+
+
 int next_domain()
 {
     int i;
 
-	//printf("%d %d %d\n", fd_domain[0], fd_domain[1], fd_domain[2]);
-	//printf("%d %d %d\n", fd_unique[0], fd_unique[1], fd_unique[2]);
-	//printf("%d %d %d %d\n", fd_selected[0], fd_selected[1], fd_selected[2], fd_sel_idx);
-
-
+	
     if (fd_domain[0] > fd_len[0])
 	return (NO);		// all incremented
 
     i = 0;
-    // fine unbind var index
+    // find unbind var index
     while (i < fd_var_max) {
 	if (fd_domain[i] == UNBOUND) {
 	    fd_domain[i] = 0;
 	    fd_var_idx = i;
-		// if unique variable and duplicate skip
-		// if unique variable memoize the value
 	    return (YES);
 	}
 	i++;
@@ -215,7 +224,6 @@ int next_domain()
     i = fd_var_max - 1;
     // increment
     fd_domain[i]++;
-	// if unique variable and duplicate then skip
     // carry
     if (fd_domain[i] > fd_len[i]) {
 	fd_domain[i] = UNBOUND;
@@ -224,13 +232,11 @@ int next_domain()
 	i--;
 	while (i >= 0) {
 	    fd_domain[i]++;
-		// if unique variable and duplicate then skip
 		// already incremented
 	    if (fd_domain[i] > fd_len[i]) {
 		if (i == 0)	
 		    return (NO);
 		fd_domain[i] = UNBOUND;
-		// if unique variable remove duplicate data
 		i--;
 		fd_var_idx = i;
 	    } else {
