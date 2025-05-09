@@ -51,7 +51,7 @@ test6(X, Y, Z) :-
     Y in 1..3,
     Z in 1..3,
     X + Y + Z #= 5,
-    %X #< Z,
+    X #< Z,
     label([X, Y, Z]).
 
 test :- nqueens,fail.

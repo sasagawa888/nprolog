@@ -441,17 +441,17 @@ int fd_satisfiable(int expr)
 	    if (in_interval(right, left))	// value right is in_interval range left
 		return (YES);
 	    else
-		return (NO);
+		return (UNKNOWN);
 	} else if (length(left) == 1 && length(right) == 2) {
 	    if (in_interval(left, right))	// value left is in_interval range right
 		return (YES);
 	    else
-		return (NO);
+		return (UNKNOWN);
 	} else if (length(left) == 2 && length(right) == 2) {
 	    if (overlap(left, right))	// range left and range right has overlap
 		return (YES);
 	    else
-		return (NO);
+		return (UNKNOWN);
 	}
     } else if (fd_neq(expr)) {	//#\=
 	if (length(left) == 1 && length(right) == 1) {
@@ -463,7 +463,7 @@ int fd_satisfiable(int expr)
 	    if (!in_interval(right, left))	// value right is not in_interval left range
 		return (YES);
 	    else
-		return (NO);
+		return (UNKNOWN);
 	} else if (length(left) == 1 && length(right) == 2) {
 	    if (!in_interval(left, right))	// value left is not in_interval right range
 		return (YES);
@@ -473,7 +473,7 @@ int fd_satisfiable(int expr)
 	    if (!overlap(left, right))	// range left and range right has no overlap
 		return (YES);
 	    else
-		return (NO);
+		return (UNKNOWN);
 	}
     } else if (fd_smaller(expr)) {	//#<
 	if (length(left) == 1 && length(right) == 1) {
@@ -517,7 +517,7 @@ int fd_satisfiable(int expr)
 	    if (eqsmallerp(cadr(left), car(right)))	//max of range left <= min of range right
 		return (YES);
 	    else
-		return (NO);
+		return (UNKNOWN);
 	}
     } else if (fd_greater(expr)) {	//#>
 	if (length(left) == 1 && length(right) == 1) {
@@ -561,7 +561,7 @@ int fd_satisfiable(int expr)
 	    if (eqgreaterp(car(left), cadr(right)))	//min of range left > max of range right
 		return (YES);
 	    else
-		return (NO);
+		return (UNKNOWN);
 	}
     }
     return (UNKNOWN);
