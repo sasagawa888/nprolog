@@ -268,10 +268,6 @@ int prune_domain()
 {
     int i;
 
-	printf("domain %d %d %d\n",fd_domain[0],fd_domain[1],fd_domain[2]);
-	getchar();
-
-
     i = fd_var_idx;
     // increment
 	increment(i);
@@ -381,7 +377,7 @@ int fd_analyze(int form)
 
     fd_analyze_sw = 0;		// switch if form has unbind variable 1, else 0
     res1 = fd_analyze1(form, 0);
-    if (fd_analyze_sw)
+    if (!fd_analyze_sw)
 	return (list1(makeint(res1)));
     else {
 	res2 = fd_analyze1(form, 1);
@@ -543,7 +539,7 @@ int fd_satisfiable(int expr)
 	    if (greaterp(car(left), cadr(right)))	//min of range left > max of range right
 		return (YES);
 	    else
-		return (NO);
+		return (UNKNOWN);
 	}
     } else if (fd_eqgreater(expr)) {	//#>=
 	if (length(left) == 1 && length(right) == 1) {
