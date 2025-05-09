@@ -250,45 +250,22 @@ int prune_domain()
 
     i = fd_var_idx;
     // increment
-	if (fd_unique[i] == 1)
-	    fd_pop();
     fd_domain[i]++;
 	// if unique variable and duplicate then skip
-	while(1){
-    if (fd_unique[i] == 1 && fd_duplicate(fd_domain[i] + fd_min[i]))
-		fd_domain[i]++;
-	else{
-		fd_push(fd_domain[i] + fd_min[i]);
-		break;
-		}
-	}
     // carry
     if (fd_domain[i] > fd_len[i]) {
 	fd_domain[i] = UNBOUND;
-	// if unique variable remove duplicate data
-	if (fd_unique[i] == 1)
-	    fd_pop();
 	i--;
 	while (i >= 0) {
 	    fd_domain[i]++;
 		// if unique variable and duplicate then skip
-		while(1){
-	    if (fd_unique[i] == 1
-		&& fd_duplicate(fd_domain[i] + fd_min[i]))
-			fd_domain[i]++;
-		else 
-			break;
-		}
+		
 		// already incremented
 	    if (fd_domain[i] > fd_len[i]) {
 		if (i == 0)	
 		    return (NO);
 		fd_domain[i] = UNBOUND;
 		// if unique variable remove duplicate data
-		if (fd_unique[i] == 1){
-		    fd_pop();
-			fd_push(fd_domain[i] + fd_min[i]);
-		}
 		i--;
 		fd_var_idx = i;
 	    } else {
