@@ -209,7 +209,7 @@ int next_domain()
 
 	
     if (fd_domain[0] > fd_len[0])
-	return (NO);		// all incremented
+	return (COMPLETE);		// all incremented
 
     i = 0;
     // find unbind var index
@@ -239,7 +239,7 @@ int next_domain()
 		// already incremented
 	    if (fd_domain[i] > fd_len[i]) {
 		if (i == 0)	
-		    return (NO);
+		    return (COMPLETE);
 		fd_domain[i] = UNBOUND;
 		if(fd_unique[i]==1)
 			fd_pop();
@@ -268,6 +268,9 @@ int prune_domain()
 {
     int i;
 
+	if (fd_domain[0] > fd_len[0])
+	return (COMPLETE);		// all incremented
+	
     i = fd_var_idx;
     // increment
 	increment(i);
@@ -282,7 +285,7 @@ int prune_domain()
 		// already incremented
 	    if (fd_domain[i] > fd_len[i]) {
 		if (i == 0)	
-		    return (NO);
+		    return (COMPLETE);
 		fd_domain[i] = UNBOUND;
 		if(fd_unique[i]==1)
 			fd_pop();
@@ -378,10 +381,10 @@ int fd_analyze(int form)
     fd_analyze_sw = 0;		// switch if form has unbind variable 1, else 0
     res1 = fd_analyze1(form, 0);
     if (!fd_analyze_sw)
-	return (list1(makeint(res1)));
+	return (wlist1(makeint(res1),0));
     else {
 	res2 = fd_analyze1(form, 1);
-	return (list2(makeint(res1), makeint(res2)));
+	return (wlist2(makeint(res1), makeint(res2),0));
     }
 
 }
@@ -585,7 +588,7 @@ int fd_propagate(int sets)
 
 int fd_solve()
 {
-    int res;
+    int res,res1;
 
   loop:
     
@@ -597,24 +600,25 @@ int fd_solve()
 	return (YES);
 	
 	// if there are unbound variable, then next domain
-	res = next_domain();
-	// if domain is all selected, then end return no
-	if (res == NO)
-	    return (NO);
+	res1 = next_domain();
+	// if domain is all selected, then end return complete
+	if (res1 == COMPLETE)
+		//exit(1);
+		return (COMPLETE);
 	goto loop;
     } else if (res == NO) {
 	// if constraint set is not satistificate, then prune and go on
-	res = prune_domain();
-	// if domain is all selected, then end return no
-	if (res == NO)
-	    return (NO);
+	res1 = prune_domain();
+	// if domain is all selected, then end return complete
+	if (res1 == COMPLETE)
+	    return (COMPLETE);
 	goto loop;
     } else if (res == UNKNOWN) {
 	// if there is possibility, then go on solving 
-	res = next_domain();
-	// if domain is all selected, then end return no
-	if (res == NO)
-	    return (NO);
+	res1 = next_domain();
+	// if domain is all selected, then end return complete
+	if (res1 == COMPLETE)
+	    return (COMPLETE);
 	goto loop;
     }
 
@@ -624,11 +628,13 @@ int fd_solve()
 
 int b_label(int arglist, int rest, int th)
 {
-    int n, ind, arg1, save, res;
+    int n, ind, arg1, save1, save2, save3, res;
 
     n = length(arglist);
     ind = makeind("label", n, th);
-    save = sp[th];
+	save1 = wp[th];
+	save2 = sp[th];
+	save3 = ac[th];
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -636,7 +642,7 @@ int b_label(int arglist, int rest, int th)
 	fd_var_idx = 0;
 	res = fd_solve();
 
-	if (res == NO)
+	if (res == NO || res == COMPLETE)
 	    return (NO);
 
       loop:
@@ -644,15 +650,22 @@ int b_label(int arglist, int rest, int th)
 	if (prove_all(rest, sp[th], th) == YES)
 	    return (YES);
 
-	unbind(save, th);
+	wp[th] = save1;
+	unbind(save2, th);
+	ac[th] = save3;
 	res = next_domain();
 	if (res == NO)
 	    return (NO);
+	if(res == COMPLETE)
+		return(YES);
 
 	res = fd_solve();
-	if (res == YES)
+
+	if(res == COMPLETE)
+		return(YES);
+	else if (res == YES)
 	    goto loop;
-	else
+	else if(res == NO)
 	    return (NO);
     }
 
