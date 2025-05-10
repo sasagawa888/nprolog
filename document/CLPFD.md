@@ -41,10 +41,10 @@ CLP(FD): Organization of Algorithms and Data Structures
     fd_sel_idx        index of selected stack
     
 ```
+## Domain generation
+
 
 ## Constraint propagation
-
-
 
 ```
 int fd_propagate(int sets)
