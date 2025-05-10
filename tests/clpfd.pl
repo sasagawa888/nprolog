@@ -54,7 +54,7 @@ test6(X, Y, Z) :-
     X #< Z,
     label([X, Y, Z]).
 
-test :- nqueens,fail.
+test :- nqueens(X),fail.
 
 nqueens(Queens) :-
     length(Queens, 9),       
