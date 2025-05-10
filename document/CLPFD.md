@@ -36,17 +36,14 @@ CLP(FD): Organization of Algorithms and Data Structures
     fd_max[256]  Z in A..Z
     fd_len[256]  Z-A
     fd_unique[256] all-different variable=1 else 0
+
+    fd_selected[256]  for all_different/1
+    fd_sel_idx        index of selected stack
     
 ```
 
 ## Constraint propagation
-propagate_all sequentially takes constraint expressions from the given constraint set, from left to right, and passes them to propagate. The propagate function analyzes a single constraint expression. As a result of this analysis, it appropriately increments the global variable fd_domain.
 
-If nil is given to propagate, it is interpreted as there being no constraints. It then processes the domains given by in, ins, and all_different one by one.
-
-propagate_all receives multiple constraint expressions. It processes them sequentially, and when it finally reaches nil, the computation of the domains based on constraints is considered complete.
-
-Since the domains are retained, when backtracking occurs, the search continues from the current state.
 
 
 ```
@@ -68,38 +65,45 @@ int fd_propagate(int sets)
 
 int fd_solve()
 {
-    int res;
+    int res,res1;
 
   loop:
-    if (fd_var_idx == fd_var_max - 1)
-	return (YES);
-
+    
+	// constraint propagate
     res = fd_propagate(fd_sets);
     if (res == YES) {
-	res = next_domain();
-	if (res == NO)
-	    return (NO);
+	// if all variables are bounded, then success
+	if (fd_domain[0] != UNBOUND && fd_var_idx == fd_var_max - 1)
+	return (YES);
+	
+	// if there are unbound variable, then next domain
+	res1 = next_domain();
+	// if domain is all selected, then end return complete
+	if (res1 == COMPLETE)
+		return (COMPLETE);
 	goto loop;
     } else if (res == NO) {
-	res = prune_domain();
-	if (res == NO)
-	    return (NO);
+	// if constraint set is not satistificate, then prune and go on
+	res1 = prune_domain();
+	// if domain is all selected, then end return complete
+	if (res1 == COMPLETE)
+	    return (COMPLETE);
 	goto loop;
     } else if (res == UNKNOWN) {
-	res = next_domain();
-	if (res == NO)
-	    return (NO);
+	// if there is possibility, then go on solving 
+	res1 = next_domain();
+	// if domain is all selected, then end return complete
+	if (res1 == COMPLETE)
+	    return (COMPLETE);
 	goto loop;
     }
 
     return (NO);
 }
 
-
-
 ```
 
-satisfiablep analyzes the expression expr and returns one of four possible values: yes, no, unknown, or futile.
+satisfiable analyzes the expression expr and returns one of four possible values: yes, no, unknown.
 
 - yes means that the expression is definitively true.
 
@@ -107,7 +111,6 @@ satisfiablep analyzes the expression expr and returns one of four possible value
 
 - unknown means the result cannot be determined at this point, but success is still possible.
 
-- futile signifies that there is absolutely no possibility of success.
 
 ## Satisfiable
 Analyze the expressions on the left-hand side and right-hand side, and convert them into lists whose elements are integers. The list will have either one or two elements.
@@ -155,30 +158,6 @@ satisfiablep(expr) analyzes this list to determine whether the expression is sat
 If a definitive judgment cannot be made at that point, it returns unknown.
 
 When propagate encounters an unknown result, it incrementally expands the domain and performs further satisfiability checks.
-
-## Standard Form
-
-Constraint expressions will be stored in a standard form.
-
-Standard Form:
-
-- Left-hand side: Expressions containing only variables
-
-- Right-hand side: Expressions containing both variables and constants
-
-Example 1:
-X #= Y
-
-Example 2:
-X #= Y + 1
-
-The use of negative signs will be avoided as much as possible. If negative signs are included, it complicates the satisfiability computation.
-
-Example 3:
-X + Y - Z #= 3 → X + Y #= Z + 3
-
-If an expression with a negative sign is provided, an attempt will be made to convert it into an expression with only positive signs during the unification phase.
-If conversion is not possible, the expression will remain as-is. In such cases, the satisfiability computation will be determined using the values of the instantiated variables.
 
 
 
