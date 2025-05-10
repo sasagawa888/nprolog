@@ -42,7 +42,14 @@ CLP(FD): Organization of Algorithms and Data Structures
     
 ```
 ## Domain generation
-
+The domain is generated on a C language array, where integer indices are stored.
+The actual values are obtained by adding the index to the minimum value of the range.
+This corresponds to variables.
+By incrementing these indices, all integers within the range are generated without omission.
+When the all_different/1 constraint requires the variables to be unique,
+selected numbers are pushed onto a stack to avoid duplication.
+When generating a new domain, these values are popped,
+and new indices are generated and pushed onto the stack.
 
 ## Constraint propagation
 
