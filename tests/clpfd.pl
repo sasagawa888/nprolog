@@ -76,3 +76,17 @@ no_attack(Q, [Q2|Rest], Dist) :-
     no_attack(Q, Rest, Dist1).
 
 
+magic(Xs) :-
+    Xs = [A, B, C, D, E, F, G, H, I],
+    N in 1..27,
+    Xs ins 1..9,
+    all_different(Xs),
+    N #= A + B + C,
+    N #= D + E + F,
+    N #= G + H + I,
+    N #= A + D + G,
+    N #= B + E + H,
+    N #= C + F + I,
+    N #= A + E + I,
+    N #= C + E + G,
+    label(Xs).
