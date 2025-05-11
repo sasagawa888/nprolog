@@ -381,10 +381,10 @@ int fd_analyze(int form)
     fd_analyze_sw = 0;		// switch if form has unbind variable 1, else 0
     res1 = fd_analyze1(form, 0);
     if (!fd_analyze_sw)
-	return (wlist1(makeint(res1),0));
+	return (wlist1(res1,0));
     else {
 	res2 = fd_analyze1(form, 1);
-	return (wlist2(makeint(res1), makeint(res2),0));
+	return (wlist2(res1, res2,0));
     }
 
 }
@@ -408,8 +408,8 @@ int domain_to_value(int varlist, int th)
 
 int in_interval(int value, int range)
 {
-    if (eqsmallerp(car(range), car(value))
-	&& eqgreaterp(cadr(range), car(value)))
+    if (car(range) <= car(value)
+	&& (cadr(range) >= car(value)))
 	return (1);
     else
 	return (0);
@@ -417,8 +417,8 @@ int in_interval(int value, int range)
 
 int overlap(int left, int right)
 {
-    if (!(greaterp(car(right), cadr(left))
-	  || greaterp(car(left), cadr(right))))
+    if (!(car(right) > cadr(left))
+	  || ((car(left) > cadr(right))))
 	return (1);
     else
 	return (0);
@@ -436,7 +436,7 @@ int fd_satisfiable(int expr)
     //print(left);print(right);printf("\n");
     if (fd_eq(expr)) {		//#=
 	if (length(left) == 1 && length(right) == 1) {
-	    if (eqlp(car(left), car(right)))	// value left ==value right
+	    if (car(left) == car(right))	// value left ==value right
 		return (YES);
 	    else
 		return (NO);
@@ -458,7 +458,7 @@ int fd_satisfiable(int expr)
 	}
     } else if (fd_neq(expr)) {	//#\=
 	if (length(left) == 1 && length(right) == 1) {
-	    if (!eqlp(car(left), car(right)))	// value left != value right
+	    if (!(car(left) ==  car(right)))	// value left != value right
 		return (YES);
 	    else
 		return (NO);
@@ -480,88 +480,88 @@ int fd_satisfiable(int expr)
 	}
     } else if (fd_smaller(expr)) {	//#<
 	if (length(left) == 1 && length(right) == 1) {
-	    if (smallerp(car(left), car(right)))	// value left < value right
+	    if (car(left) < car(right))	// value left < value right
 		return (YES);
 	    else
 		return (NO);
 	} else if (length(left) == 2 && length(right) == 1) {
-	    if (smallerp(cadr(left), car(right)))	//max of range < value
+	    if (cadr(left) < car(right))	//max of range < value
 		return (YES);
 	    else
 		return (UNKNOWN);
 	} else if (length(left) == 1 && length(right) == 2) {
-	    if (smallerp(car(left), car(right)))	//min of range  < value
+	    if (car(left) < car(right))	//min of range  < value
 		return (YES);
 	    else
 		return (UNKNOWN);
 	} else if (length(left) == 2 && length(right) == 2) {
-	    if (smallerp(cadr(left), car(right)))	//max of range left < min of range right
+	    if (cadr(left) < car(right))	//max of range left < min of range right
 		return (YES);
 	    else
 		return (UNKNOWN);
 	}
     } else if (fd_eqsmaller(expr)) {	//#<=
 	if (length(left) == 1 && length(right) == 1) {
-	    if (eqsmallerp(car(left), car(right)))	//value left < value right
+	    if (car(left) <= car(right))	//value left < value right
 		return (YES);
 	    else
 		return (NO);
 	} else if (length(left) == 2 && length(right) == 1) {
-	    if (eqsmallerp(cadr(left), car(right)))	//max of range <= value
+	    if (cadr(left) <= car(right))	//max of range <= value
 		return (YES);
 	    else
 		return (UNKNOWN);
 	} else if (length(left) == 1 && length(right) == 2) {
-	    if (eqsmallerp(car(left), car(right)))	//min of range  <= value
+	    if (car(left) <= car(right))	//min of range  <= value
 		return (YES);
 	    else
 		return (UNKNOWN);
 	} else if (length(left) == 2 && length(right) == 2) {
-	    if (eqsmallerp(cadr(left), car(right)))	//max of range left <= min of range right
+	    if (cadr(left) <= car(right))	//max of range left <= min of range right
 		return (YES);
 	    else
 		return (UNKNOWN);
 	}
     } else if (fd_greater(expr)) {	//#>
 	if (length(left) == 1 && length(right) == 1) {
-	    if (greaterp(car(left), car(right)))	// value left > value right
+	    if (car(left) > car(right))	// value left > value right
 		return (YES);
 	    else
 		return (NO);
 	} else if (length(left) == 2 && length(right) == 1) {
-	    if (greaterp(car(left), car(right)))	//min of range > value
+	    if (car(left) > car(right))	//min of range > value
 		return (YES);
 	    else
 		return (UNKNOWN);
 	} else if (length(left) == 1 && length(right) == 2) {
-	    if (greaterp(car(left), cadr(right)))	//value of max of range
+	    if (car(left) > cadr(right))	//value of max of range
 		return (YES);
 	    else
 		return (UNKNOWN);
 	} else if (length(left) == 2 && length(right) == 2) {
-	    if (greaterp(car(left), cadr(right)))	//min of range left > max of range right
+	    if (car(left) > cadr(right))	//min of range left > max of range right
 		return (YES);
 	    else
 		return (UNKNOWN);
 	}
     } else if (fd_eqgreater(expr)) {	//#>=
 	if (length(left) == 1 && length(right) == 1) {
-	    if (eqgreaterp(car(left), car(right)))
+	    if (car(left) >= car(right))
 		return (YES);
 	    else
 		return (NO);
 	} else if (length(left) == 2 && length(right) == 1) {
-	    if (eqgreaterp(car(left), car(right)))	//min of range > value
+	    if (car(left) >= car(right))	//min of range > value
 		return (YES);
 	    else
 		return (UNKNOWN);
 	} else if (length(left) == 1 && length(right) == 2) {
-	    if (eqgreaterp(car(left), cadr(right)))	//value of max of range
+	    if (car(left) >= cadr(right))	//value of max of range
 		return (YES);
 	    else
 		return (UNKNOWN);
 	} else if (length(left) == 2 && length(right) == 2) {
-	    if (eqgreaterp(car(left), cadr(right)))	//min of range left > max of range right
+	    if (car(left) >= cadr(right))	//min of range left > max of range right
 		return (YES);
 	    else
 		return (UNKNOWN);
@@ -603,7 +603,6 @@ int fd_solve()
 	res1 = next_domain();
 	// if domain is all selected, then end return complete
 	if (res1 == COMPLETE)
-		//exit(1);
 		return (COMPLETE);
 	goto loop;
     } else if (res == NO) {
