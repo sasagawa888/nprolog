@@ -1,5 +1,5 @@
 # CURL HTTPS
-under construction
+
 
 # Specification
 - create_client_curl(Curl, URL) 

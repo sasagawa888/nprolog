@@ -1,6 +1,5 @@
 # CLPFD
 CLP(FD): Constraint Logic Programming over Finite Domains
-under construction
 
 # Usage
 
@@ -214,3 +213,6 @@ If the result is undecidable (UNKNOWN), the value is retained.
 The index of the free variable is kept in the fd_var_free stack.
 In the case of backtracking, refer to this stack to clear the value.
 When returning to the REPL, the stack is cleared in init_repl().
+
+Idea Note
+labeling/2: There may be situations where it is effective to have an option that prunes the search tree without exploring branches when the value is UNKNOWN. For example, in the queens problem, the determined variables are more important, and computing satisfiability for undetermined variables is meaningless.
