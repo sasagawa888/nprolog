@@ -1,6 +1,6 @@
 % CLP-test 
 
-:- use_module(clpfd).
+%:- use_module(clpfd).
 
 foo(L) :-
     L = [A, B, C],
@@ -60,7 +60,9 @@ nqueens(Queens) :-
     length(Queens, 9),       
     Queens ins 1..9,         
     all_different(Queens),   
-    safe(Queens),         
+    safe(Queens),  
+    n_constraint_set(X),
+    write(X),       
     label(Queens).
     
 safe([]).
@@ -90,3 +92,4 @@ magic(Xs) :-
     N #= A + E + I,
     N #= C + E + G,
     label(Xs).
+

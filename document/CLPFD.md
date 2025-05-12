@@ -200,3 +200,17 @@ Constraint operators like #= are handled as infix operators using op/3.
 :- op(600, xfy, in).
 :- op(600, xfy, ins).
 ```
+
+Idea Memo: Handling Free Variables
+There may be cases where variables are used without specifying a range. For example, in code that solves a magic square, there may be cases where the sum of every three variables is equal to a value N.
+When a free variable like N appears in a constraint expression, handle it as follows:
+Assign the domain index to the ARITY part of the compiler variable atom corresponding to N.
+At the same time, store the estimated value at that point in the domain.
+
+When fd_propagate succeeds in inference (YES), and backtracking occurs, the value of the free variable is cleared.
+If the inference fails (NO), the value of the free variable is also cleared.
+If the result is undecidable (UNKNOWN), the value is retained.
+
+The index of the free variable is kept in the fd_var_free stack.
+In the case of backtracking, refer to this stack to clear the value.
+When returning to the REPL, the stack is cleared in init_repl().

@@ -32,7 +32,7 @@ int b_constraint_set(int arglist, int rest, int th)
     ind = makeind("constraint_set", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
-	if (unify(arg1, fd_sets, th) == YES)
+	if (unify(arg1, reverse(fd_sets), th) == YES)
 	    return (prove_all(rest, sp[th], th));
 
 	return (NO);
