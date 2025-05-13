@@ -17,6 +17,9 @@ This is a description of the N-Prolog compiler.
 ![Curl](CURL.md)
 This is a description of the HTTPS functionality with encryption using curl.
 
+![DCG](DCG.md)
+This is a description of the DCG library.
+
 ![Edlog](EDLOG.md)
 This is a description of Edlog, a CUI editor dedicated to N-Prolog.
 
@@ -26,8 +29,14 @@ This is the development history of N-Prolog.
 ![JSON](JSON.md)
 This is a description of the JSON library.
 
+![List](LIST.md)
+This is a description of the List library.
+
 ![Module](MODULE.md)
 This is a description of the module functionality in N-Prolog.
+
+![MultipleWorld](MPW.md)
+This is a description of Professor Hideyuki Nakashima's multiple world mechanism.
 
 ![OpenGL](OPENGL.md)
 This is a library for interfacing with OpenGL.
@@ -40,6 +49,9 @@ This is a library for interfacing with Gnuplot.
 
 ![Python](PYTHON.md)
 This is a library for using TensorFlow via Python.
+
+![Sets](SETS.md)
+This is a description of the Sets library.
 
 ![SuperSet](SUPERSET.md)
 This is a description of ISO-style predicates and other modern extended predicates.
