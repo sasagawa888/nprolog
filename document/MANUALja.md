@@ -848,10 +848,195 @@ EdlogはN-Prolog専用のエディタです。
 edlog  あるいは　edlog filename と端末から入力してください。
 詳細はctrl+hでヘルプを参照してください。
 
-## Hello
 
-My name is Kenichi Sasagawa.
-I learned prolog at Arity/Prolog in the 1980s.
-Now, I'm making a Prolog interpreter and compiler.
-I want to make it compatible with the familiar Arity/Prolog.
-Thank you.
+
+# 組込み述語
+
+```
+<
+=/
+\=
+= ..
+=<
+> 
+>=
+=:=
+=\=
+==
+\==
+@<
+@=<
+@>
+@>=
+abolish/1
+abort/0
+ansi_cuu/1
+ansi_cud/1
+ansi_cuf/1
+ansi_cub/1
+ansi_sgr/1
+ansi_cpr/2
+ansi_scp/0
+ansi_rcp/0
+ansi_ed/0
+ansi_el/0
+arg/3
+arg0/3
+assert/1
+asserta/1
+assertz/1
+atom/1
+atomic/1
+break/0
+call/1
+chdir/1
+clause/2
+close/1
+compare/3
+concat/3
+consult/1
+ctr_set/2
+ctr_dec/2
+ctr_inc/2
+ctr_is/2
+current_op/3
+current_predicate/1
+date/1
+date_day/2
+dec/2
+delete/1
+directory/6
+display/1
+dup/2
+edit/1
+eq/2
+erase/1
+eraseall/1
+expand_term/2
+fail/0
+float/1
+float_text/3
+flush/0 
+gc/0
+get/1
+get/2
+get0/1
+get0/2
+get0_noecho/1
+halt/0
+ifthen/2
+ifthenelse/3
+in/2
+inc/2
+instance/2
+integer/1
+is/2
+keysort/2
+length/2
+listing/0
+listing/1
+mkdir/1
+name/2
+nl/0
+nl/1
+nonvar/1
+nospy/1
+notrace/0
+number/1
+not/1
+out/1
+open/3
+read/1
+read_line/2
+reconsult/1
+recorda/3
+recordh/3
+recordz/3
+ref/1
+reset_op/0
+retrieveh/3
+rmdir/1
+see/1
+seeing/1
+seen/0
+shell/1
+sort/2
+spy/1
+string/1
+string_length/2
+string_term/2
+syntaxerrors/2
+system/1
+tell/1
+telling/1
+told/0
+time/1
+trace/0
+true/0
+var/1
+write/1
+write/2
+writeq/1
+writeq/2
+```
+
+# 組み込み述語（拡張）
+document/SUPERSET.mdをご参照ください。
+
+# wiringPi 
+ラズペリーPIにおいてはwiringPiのための組み込み述語が含まれます。
+
+```
+N-Prolog <==================================> C
+wiringpi_spi_setup(ch speed) <===> wiringPiSPISetup (SPI_CH, SPI_SPEED)
+wiringpi_setup_gpio  <===> wiringPiSetupGpio()
+pin_mode(n, 'output) <====> pinMode(n, OUTPUT) or 'input -> INPUT 'pwm-output -> PWM_OUTPUT
+digital_write(n, v) <===> digitalWrite(n, v)
+digital_write_byte(v) <===> digitalWriteByte(value)
+digital_read(pin) <===> digitalRead(pin)
+delay(howlong) <===> void delay(unsigned int howLong)
+delay_microseconds(howlong) <===> void delay_microseconds(unsigned int howLong)
+pull_up_dn_control(pin, pud) <===> pullUpDnControl(pin,pud)
+pwm_set_mode('pwm_mode_ms) <===> pwmSetMode(PWM_MODE_MS); or 'pwm_mode_bal -> PWM_MODE_BAL
+pwm_set_clock(n) <===> pwmSetClock(n)
+pwm_set_range(n) <===> pwmSetRange(n)
+pwm_write(pin, value) <===> pwmWrite(pin , value)
+
+timer_microseconds/1
+usage:  timer_microseconds(on).   timer on
+        timer_microseconds(off).  timer off
+        timer_microsecons(X).     unify X elapsed time. float number ,unit seconds , valid digits microsecnods
+        see tests/measure.pl
+```
+
+
+# 関数
+```
+pi             定数　円周率
+X + Y          加算
+X - Y　        減算
+X * Y　        乗算
+X / Y　        通常の除算　結果は浮動小数点数
+X // Y　       整数の除算　結果は整数。
+X ^ Y          べき乗
+X << Y         XをYだけ左へビットシフトする。（整数のみ）
+X >> Y         XをYだけ右へビットシフトする。（整数のみ）
+X mod Y        XをYで割った剰余（整数のみ）
+X /\ Y         論理積
+X \/ Y         論理和
+\X  complement
+abs(X)         Xの値の絶対値
+sin(X)　       Xの正弦関数
+asin(X)　      Xの逆正弦関数
+cos(X) 　      Xの余弦関数
+acos(X)　      Xの逆余弦関数
+tan(X)　       Xの正接関数
+atan(X)　      Xの逆正接関数
+exp(X)　　     Xの指数関数
+ln(X)          Xの自然対数関数
+log(X)　　     Xの常用対数関数
+sqrt(X)        Xの平方根関数
+round(X,N)     Xを小数点以下N桁に丸める。Nは０〜１５の整数
+randi(n)      n以下0以上の整数乱数
+random　    １以下０以上の浮動小数点数乱数
+```

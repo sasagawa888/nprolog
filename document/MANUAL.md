@@ -837,10 +837,170 @@ Edlog is editor for N-Prolog.
 
 For more details, enter ctrl+h. see help. 
 
-## Hello
 
-My name is Kenichi Sasagawa.
-I learned prolog at Arity/Prolog in the 1980s.
-Now, I'm making a Prolog interpreter and compiler.
-I want to make it compatible with the familiar Arity/Prolog.
-Thank you.
+# builtin predicate
+
+```
+<
+=/
+\=
+= ..
+=<
+> 
+>=
+=:=
+=\=
+==
+\==
+@<
+@=<
+@>
+@>=
+abolish/1
+abort/0
+ansi_cuu/1
+ansi_cud/1
+ansi_cuf/1
+ansi_cub/1
+ansi_sgr/1
+ansi_cpr/2
+ansi_scp/0
+ansi_rcp/0
+ansi_ed/0
+ansi_el/0
+arg/3
+arg0/3
+assert/1
+asserta/1
+assertz/1
+atom/1
+atomic/1
+break/0
+call/1
+chdir/1
+clause/2
+close/1
+compare/3
+concat/3
+consult/1
+ctr_set/2
+ctr_dec/2
+ctr_inc/2
+ctr_is/2
+current_op/3
+current_predicate/1
+date/1
+date_day/2
+dec/2
+delete/1
+directory/6
+display/1
+dup/2
+edit/1
+eq/2
+erase/1
+eraseall/1
+expand_term/2
+fail/0
+float/1
+float_text/3
+flush/0 
+gc/0
+get/1
+get/2
+get0/1
+get0/2
+get0_noecho/1
+halt/0
+ifthen/2
+ifthenelse/3
+in/2
+inc/2
+instance/2
+integer/1
+int_text/2
+is/2
+keysort/2
+length/2
+listing/0
+listing/1
+list_text/2
+mkdir/1
+name/2
+nl/0
+nl/1
+nonvar/1
+nospy/1
+notrace/0
+number/1
+not/1
+out/1
+open/3
+read/1
+read_line/2
+reconsult/1
+recorda/3
+recordh/3
+recordz/3
+ref/1
+reset_op/0
+retrieveh/3
+rmdir/1
+see/1
+seeing/1
+seen/0
+shell/1
+sort/2
+spy/1
+string/1
+string_length/2
+string_term/2
+syntaxerrors/2
+system/1
+tell/1
+telling/1
+told/0
+time/1
+trace/0
+true/0
+var/1
+write/1
+write/2
+writeq/1
+writeq/2
+```
+
+# builtin (extension)
+See document/SUPERSET.md
+
+
+# function
+```
+pi  constant 3.1415...
+X + Y
+X - Y
+X * Y
+X / Y
+X // Y
+X ^ Y  expt
+X << Y leftshift
+X >> Y rightshift
+X /\ Y logical and
+X \/ Y logical or
+\  complement
+X mod Y 
+abs(X) 
+sin(X)
+asin(X)
+cos(X)
+acos(X)
+tan(X)
+atan(X)
+exp(X)
+ln(X)
+log(X)
+sqrt(X)
+round(X,N)　Round X to N decimal places. N is an integer between 0 and 15.　
+randi(n)    generate random integer (n >= x >= 0) 
+random generate random float (1 >= x >= 0)
+```
