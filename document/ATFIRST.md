@@ -41,8 +41,11 @@ This is a description of Professor Hideyuki Nakashima's multiple world mechanism
 ![OpenGL](OPENGL.md)
 This is a library for interfacing with OpenGL.
 
-![Parallel](PARA.md)
-This is a description of the parallel features in N-Prolog.
+![Parallel1](PARA1.md)
+This is a description of the distributed parallel features in N-Prolog.
+
+![Parallel2](PARA2.md)
+This is a description of the multi-thread parallel features in N-Prolog.
 
 ![Plot](PLOT.md)
 This is a library for interfacing with Gnuplot.
