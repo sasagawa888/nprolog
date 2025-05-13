@@ -32,6 +32,9 @@ This is a description of the module functionality in N-Prolog.
 ![OpenGL](OPENGL.md)
 This is a library for interfacing with OpenGL.
 
+![Parallel](PARA.md)
+This is a description of the parallel features in N-Prolog.
+
 ![Plot](PLOT.md)
 This is a library for interfacing with Gnuplot.
 
