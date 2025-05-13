@@ -41,7 +41,7 @@ This is a library for interfacing with Gnuplot.
 ![Python](PYTHON.md)
 This is a library for using TensorFlow via Python.
 
-![SuperSet][(SUPERSET.md)]
+![SuperSet](SUPERSET.md)
 This is a description of ISO-style predicates and other modern extended predicates.
 
 ![TCL/TK](TCLTK.md)
