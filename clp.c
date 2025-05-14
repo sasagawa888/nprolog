@@ -169,7 +169,7 @@ int fd_eqsmaller(int x)
 void fd_push(int x)
 {
     fd_selected[fd_sel_idx] = x;
-	fd_sel_idx++;
+    fd_sel_idx++;
 }
 
 void fd_pop()
@@ -188,18 +188,19 @@ int fd_duplicate(int x)
     return (0);
 }
 
-int increment(int idx){
-	if(fd_unique[idx] == 0){
+int increment(int idx)
+{
+    if (fd_unique[idx] == 0) {
+	fd_domain[idx]++;
+    } else {
+	while (1) {
+	    if (fd_duplicate(fd_domain[idx] + fd_min[idx]))
 		fd_domain[idx]++;
-	} else{
-		while(1){
-		if(fd_duplicate(fd_domain[idx]+fd_min[idx]))
-			fd_domain[idx]++;
-		else
-			break;
+	    else
+		break;
 	}
-	}
-	return(NO);
+    }
+    return (NO);
 }
 
 
@@ -207,9 +208,9 @@ int next_domain()
 {
     int i;
 
-	
+
     if (fd_domain[0] > fd_len[0])
-	return (COMPLETE);		// all incremented
+	return (COMPLETE);	// all incremented
 
     i = 0;
     // find unbind var index
@@ -217,8 +218,8 @@ int next_domain()
 	if (fd_domain[i] == UNBOUND) {
 	    increment(i);
 	    fd_var_idx = i;
-		if(fd_unique[i] == 1)
-			fd_push(fd_domain[i]+fd_min[i]);
+	    if (fd_unique[i] == 1)
+		fd_push(fd_domain[i] + fd_min[i]);
 	    return (YES);
 	}
 	i++;
@@ -229,38 +230,38 @@ int next_domain()
     // carry
     if (fd_domain[i] > fd_len[i]) {
 	fd_domain[i] = UNBOUND;
-	if(fd_unique[i] == 1)
-	fd_pop();
+	if (fd_unique[i] == 1)
+	    fd_pop();
 	if (i == 0)
 	    return (NO);	//all incremented
 	i--;
 	while (i >= 0) {
 	    increment(i);
-		// already incremented
+	    // already incremented
 	    if (fd_domain[i] > fd_len[i]) {
-		if (i == 0)	
+		if (i == 0)
 		    return (COMPLETE);
 		fd_domain[i] = UNBOUND;
-		if(fd_unique[i]==1)
-			fd_pop();
+		if (fd_unique[i] == 1)
+		    fd_pop();
 		i--;
 		fd_var_idx = i;
 	    } else {
 		fd_var_idx = i;
-		if(fd_unique[i] == 1){
-			fd_pop();
-			fd_push(fd_domain[i]+fd_min[i]);
+		if (fd_unique[i] == 1) {
+		    fd_pop();
+		    fd_push(fd_domain[i] + fd_min[i]);
 		}
 		return (YES);
 	    }
 	}
-    } else{
-	if(fd_unique[i] == 1){
-		fd_pop();
-		fd_push(fd_domain[i]+fd_min[i]);
-	}	
-	return (YES);
+    } else {
+	if (fd_unique[i] == 1) {
+	    fd_pop();
+	    fd_push(fd_domain[i] + fd_min[i]);
 	}
+	return (YES);
+    }
     return (NO);
 }
 
@@ -268,47 +269,47 @@ int prune_domain()
 {
     int i;
 
-	if (fd_domain[0] > fd_len[0])
-	return (COMPLETE);		// all incremented
-	
+    if (fd_domain[0] > fd_len[0])
+	return (COMPLETE);	// all incremented
+
     i = fd_var_idx;
     // increment
-	increment(i);
+    increment(i);
     // carry
     if (fd_domain[i] > fd_len[i]) {
 	fd_domain[i] = UNBOUND;
-	if(fd_unique[i]==1)
-		fd_pop();
+	if (fd_unique[i] == 1)
+	    fd_pop();
 	i--;
 	while (i >= 0) {
 	    increment(i);
-		// already incremented
+	    // already incremented
 	    if (fd_domain[i] > fd_len[i]) {
-		if (i == 0)	
+		if (i == 0)
 		    return (COMPLETE);
 		fd_domain[i] = UNBOUND;
-		if(fd_unique[i]==1)
-			fd_pop();
+		if (fd_unique[i] == 1)
+		    fd_pop();
 		// if unique variable remove duplicate data
 		i--;
 		fd_var_idx = i;
 	    } else {
 		fd_var_idx = i;
-		if(fd_unique[i] == 1){
-			fd_pop();
-			fd_push(fd_domain[i]+fd_min[i]);
+		if (fd_unique[i] == 1) {
+		    fd_pop();
+		    fd_push(fd_domain[i] + fd_min[i]);
 		}
 		return (YES);
 	    }
 	}
 
-    } else{
-	if(fd_unique[i] == 1){
-		fd_pop();
-		fd_push(fd_domain[i]+fd_min[i]);
+    } else {
+	if (fd_unique[i] == 1) {
+	    fd_pop();
+	    fd_push(fd_domain[i] + fd_min[i]);
 	}
 	return (YES);
-	}
+    }
     return (NO);
 }
 
@@ -381,10 +382,10 @@ int fd_analyze(int form)
     fd_analyze_sw = 0;		// switch if form has unbind variable 1, else 0
     res1 = fd_analyze1(form, 0);
     if (!fd_analyze_sw)
-	return (wlist1(res1,0));
+	return (wlist1(res1, 0));
     else {
 	res2 = fd_analyze1(form, 1);
-	return (wlist2(res1, res2,0));
+	return (wlist2(res1, res2, 0));
     }
 
 }
@@ -418,7 +419,7 @@ int in_interval(int value, int range)
 int overlap(int left, int right)
 {
     if (!(car(right) > cadr(left))
-	  || ((car(left) > cadr(right))))
+	|| ((car(left) > cadr(right))))
 	return (1);
     else
 	return (0);
@@ -458,7 +459,7 @@ int fd_satisfiable(int expr)
 	}
     } else if (fd_neq(expr)) {	//#\=
 	if (length(left) == 1 && length(right) == 1) {
-	    if (!(car(left) ==  car(right)))	// value left != value right
+	    if (!(car(left) == car(right)))	// value left != value right
 		return (YES);
 	    else
 		return (NO);
@@ -588,22 +589,22 @@ int fd_propagate(int sets)
 
 int fd_solve()
 {
-    int res,res1;
+    int res, res1;
 
   loop:
-    
-	// constraint propagate
+
+    // constraint propagate
     res = fd_propagate(fd_sets);
     if (res == YES) {
 	// if all variables are bounded, then success
 	if (fd_domain[0] != UNBOUND && fd_var_idx == fd_var_max - 1)
-	return (YES);
-	
+	    return (YES);
+
 	// if there are unbound variable, then next domain
 	res1 = next_domain();
 	// if domain is all selected, then end return complete
 	if (res1 == COMPLETE)
-		return (COMPLETE);
+	    return (COMPLETE);
 	goto loop;
     } else if (res == NO) {
 	// if constraint set is not satistificate, then prune and go on
@@ -631,9 +632,9 @@ int b_label(int arglist, int rest, int th)
 
     n = length(arglist);
     ind = makeind("label", n, th);
-	save1 = wp[th];
-	save2 = sp[th];
-	save3 = ac[th];
+    save1 = wp[th];
+    save2 = sp[th];
+    save3 = ac[th];
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -655,16 +656,16 @@ int b_label(int arglist, int rest, int th)
 	res = next_domain();
 	if (res == NO)
 	    return (NO);
-	if(res == COMPLETE)
-		return(YES);
+	if (res == COMPLETE)
+	    return (YES);
 
 	res = fd_solve();
 
-	if(res == COMPLETE)
-		return(YES);
+	if (res == COMPLETE)
+	    return (YES);
 	else if (res == YES)
 	    goto loop;
-	else if(res == NO)
+	else if (res == NO)
 	    return (NO);
     }
 
