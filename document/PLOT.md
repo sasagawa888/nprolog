@@ -19,3 +19,6 @@ yes
 - send_plot(Msg)
 
 - close_plot/0
+
+![screen3.png](screen3.png)
+
