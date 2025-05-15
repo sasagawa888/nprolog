@@ -354,7 +354,7 @@ int fd_analyze1(int form, int flag)
 	return (GET_INT(form));
     else if (compiler_variable_p(form)) {
 	idx = GET_ARITY(form);
-	if(idx == 0 && fd_min[idx] == -1){
+	if(fd_min[idx] == -1){
 		// free variable
 		idx = fd_var_max + fd_var_free;
 		SET_ARITY(form,idx);
