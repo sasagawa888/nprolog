@@ -201,10 +201,11 @@ Constraint operators like #= are handled as infix operators using op/3.
 ```
 
 Idea Memo: Handling Free Variables
-free variable is Var in -999..999
-fd_unique[idx] = 2; distinguish normal var
-idx is out of fd_var_max
-unbind_free_var when fd_propagate returns NO;
+free variable is Var in -999999999..999999999
+GET_VAR(x) == 2; distinguish normal var. normal var GET_VAR(x)==1.
+At first free variable's GET_VAR is 0. when find free var,SET_VAR(x,2),and -999999999..999999999
+satisficational find free variable, set fd_domain[idx] = value.
+when propagate get NO , unbind free variables.
 
 Idea Note
 labeling/2: There may be situations where it is effective to have an option that prunes the search tree without exploring branches when the value is UNKNOWN. For example, in the queens problem, the determined variables are more important, and computing satisfiability for undetermined variables is meaningless.
