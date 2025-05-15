@@ -351,7 +351,7 @@ void unbind_free_var()
 int free_variablep(int x)
 {
 
-	if(compiler_variable_p(x) && GET_VAR(x) == 0)
+	if(compiler_variable_p(x) && GET_VAR(x) == 0 && fd_domain[GET_ARITY(x)] == UNBOUND)
 		return(1);
 	else 
 		return(0);

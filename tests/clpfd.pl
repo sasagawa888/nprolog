@@ -94,7 +94,10 @@ magic(Xs) :-
     label(Xs).
 
 
-boo(N) :-
-    A in 2..3,
-    N #= A,
-    label([N]).
+boo(Xs) :-
+    Xs = [A,B,C],
+    Xs ins 1..9,
+    all_different(Xs),
+    N #= A+B,
+    N #= B+C,
+    label(Xs).
