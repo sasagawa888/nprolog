@@ -371,6 +371,7 @@ extern int fd_analyze_sw;
 extern int fd_selected[256];
 extern int fd_sel_idx;
 extern int fd_var_free;
+extern int fd_vars;
 
 
 #ifdef __APPLE__

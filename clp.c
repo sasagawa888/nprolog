@@ -54,6 +54,7 @@ int b_constraint_var(int arglist, int rest, int th)
 
 	var = variable_convert1(revderef(arg1, th));
 	SET_ARITY(var, fd_var_max);
+	SET_VAR(var,1);
 	min = GET_INT(cadr(arg2));
 	max = GET_INT(caddr(arg2));
 	fd_min[fd_var_max] = min;
@@ -80,6 +81,7 @@ int b_constraint_vars(int arglist, int rest, int th)
 	    elt = car(arg1);
 	    var = variable_convert1(revderef(elt, th));
 	    SET_ARITY(var, fd_var_max);
+		SET_VAR(var,1);
 	    min = GET_INT(cadr(arg2));
 	    max = GET_INT(caddr(arg2));
 	    fd_min[fd_var_max] = min;
@@ -343,9 +345,17 @@ void unbind_free_var()
 	int i;
 
 	for(i=0;i<fd_var_free;i++)
-		fd_domain[i] = UNBOUND;
+		fd_domain[i+fd_var_max] = UNBOUND;
 }
 
+int free_variablep(int x)
+{
+
+	if(compiler_variable_p(x) && GET_VAR(x) == 0)
+		return(1);
+	else 
+		return(0);
+}
 
 int fd_analyze1(int form, int flag)
 {
@@ -354,13 +364,12 @@ int fd_analyze1(int form, int flag)
 	return (GET_INT(form));
     else if (compiler_variable_p(form)) {
 	idx = GET_ARITY(form);
-
 	// free variable
-	if(fd_min[idx] == -999){
+	if(GET_VAR(form) == 0){
 		idx = fd_var_max + fd_var_free;
 		SET_ARITY(form,idx);
-		fd_min[idx] = -999;
-		fd_max[idx] = 999;
+		fd_min[idx] = -999999999;
+		fd_max[idx] = 999999999;
 		fd_var_free++;
 	}
 
@@ -450,7 +459,7 @@ int fd_satisfiable(int expr)
 
     left = fd_analyze(cadr(expr));
     right = fd_analyze(caddr(expr));
-    //print(left);print(right);printf("\n");
+    //print(expr);print(left);print(right);printf("\n");
     if (fd_eq(expr)) {		//#=
 	if (length(left) == 1 && length(right) == 1) {
 	    if (car(left) == car(right))	// value left ==value right
@@ -458,7 +467,11 @@ int fd_satisfiable(int expr)
 	    else
 		return (NO);
 	} else if (length(left) == 2 && length(right) == 1) {
-	    if (in_interval(right, left))	// value right is in_interval range left
+		if (free_variablep(cadr(expr))){
+			fd_domain[GET_ARITY(cadr(expr))] = car(right);
+			fd_min[GET_ARITY(cadr(expr))] = 0;
+			return (YES);
+		} else if (in_interval(right, left))	// value right is in_interval range left
 		return (YES);
 	    else
 		return (UNKNOWN);

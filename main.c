@@ -204,6 +204,7 @@ int fd_analyze_sw;
 int fd_selected[256];
 int fd_sel_idx;
 int fd_var_free;
+int fd_vars;
 
 
 //-----editor-----
@@ -446,9 +447,13 @@ void init_repl(void)
 	fd_var_free = 0;
     for (i = 0; i < 256; i++) {
 	fd_domain[i] = -1;
-	fd_min[i] = -999;
 	fd_unique[i] = 0;
     }
+	while(!nullp(fd_vars)){
+		SET_ARITY(car(fd_vars),0);
+		SET_VAR(car(fd_vars),0);
+		fd_vars = cdr(fd_vars);
+	}
 }
 
 void query(int x, int th)

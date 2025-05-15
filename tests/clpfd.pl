@@ -94,7 +94,7 @@ magic(Xs) :-
     label(Xs).
 
 
-boo(X) :-
+boo(N) :-
     A in 2..3,
     N #= A,
     label([N]).
