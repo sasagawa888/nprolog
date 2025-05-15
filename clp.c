@@ -338,17 +338,31 @@ int fd_mult(int x)
 	return (0);
 }
 
+int free_variablep(int x)
+{
+	if(x >= 999999999)
+		return(1);
+	else 
+		return(0);
+}
 
 
 int fd_analyze1(int form, int flag)
 {
     int idx, left, right;
-
     if (numberp(form))
 	return (GET_INT(form));
     else if (compiler_variable_p(form)) {
 	idx = GET_ARITY(form);
-	if (fd_domain[idx] == UNBOUND && flag == 0) {
+	if(idx == 0 && fd_min[idx] == -1){
+		// free variable
+		idx = fd_var_max + fd_var_free;
+		SET_ARITY(form,idx);
+		fd_unique[idx] = 2;
+		fd_var_free++;
+		return (idx+999999999);
+	}
+	else if (fd_domain[idx] == UNBOUND && flag == 0) {
 	    fd_analyze_sw = 1;
 	    return (fd_min[idx]);
 	} else if (fd_domain[idx] == UNBOUND && flag == 1) {

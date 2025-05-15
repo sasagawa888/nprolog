@@ -61,8 +61,8 @@ nqueens(Queens) :-
     Queens ins 1..9,         
     all_different(Queens),   
     safe(Queens),  
-    n_constraint_set(X),
-    write(X),       
+    %n_constraint_set(X),
+    %write(X),       
     label(Queens).
     
 safe([]).
@@ -93,3 +93,8 @@ magic(Xs) :-
     N #= C + E + G,
     label(Xs).
 
+
+boo(X) :-
+    A in 2..3,
+    N #= A,
+    label([N]).

@@ -370,6 +370,7 @@ extern int fd_unique[256];
 extern int fd_analyze_sw;
 extern int fd_selected[256];
 extern int fd_sel_idx;
+extern int fd_var_free;
 
 
 #ifdef __APPLE__

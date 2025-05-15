@@ -203,6 +203,7 @@ int fd_unique[256];
 int fd_analyze_sw;
 int fd_selected[256];
 int fd_sel_idx;
+int fd_var_free;
 
 
 //-----editor-----
@@ -442,8 +443,10 @@ void init_repl(void)
     fd_var_max = 0;
     fd_var_idx = 0;
     fd_sel_idx = 0;
+	fd_var_free = 0;
     for (i = 0; i < 256; i++) {
 	fd_domain[i] = -1;
+	fd_min[i] = -1;
 	fd_unique[i] = 0;
     }
 }
