@@ -446,7 +446,7 @@ void init_repl(void)
 	fd_var_free = 0;
     for (i = 0; i < 256; i++) {
 	fd_domain[i] = -1;
-	fd_min[i] = -1;
+	fd_min[i] = -999;
 	fd_unique[i] = 0;
     }
 }

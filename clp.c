@@ -338,12 +338,12 @@ int fd_mult(int x)
 	return (0);
 }
 
-int free_variablep(int x)
+void unbind_free_var()
 {
-	if(x >= 999999999)
-		return(1);
-	else 
-		return(0);
+	int i;
+
+	for(i=0;i<fd_var_free;i++)
+		fd_domain[i] = UNBOUND;
 }
 
 
@@ -354,15 +354,17 @@ int fd_analyze1(int form, int flag)
 	return (GET_INT(form));
     else if (compiler_variable_p(form)) {
 	idx = GET_ARITY(form);
-	if(fd_min[idx] == -1){
-		// free variable
+
+	// free variable
+	if(fd_min[idx] == -999){
 		idx = fd_var_max + fd_var_free;
 		SET_ARITY(form,idx);
-		fd_unique[idx] = 2;
+		fd_min[idx] = -999;
+		fd_max[idx] = 999;
 		fd_var_free++;
-		return (idx+999999999);
 	}
-	else if (fd_domain[idx] == UNBOUND && flag == 0) {
+
+	if (fd_domain[idx] == UNBOUND && flag == 0) {
 	    fd_analyze_sw = 1;
 	    return (fd_min[idx]);
 	} else if (fd_domain[idx] == UNBOUND && flag == 1) {
@@ -621,6 +623,7 @@ int fd_solve()
 	    return (COMPLETE);
 	goto loop;
     } else if (res == NO) {
+	unbind_free_var();
 	// if constraint set is not satistificate, then prune and go on
 	res1 = prune_domain();
 	// if domain is all selected, then end return complete
