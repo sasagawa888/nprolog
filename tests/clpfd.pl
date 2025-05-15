@@ -80,7 +80,6 @@ no_attack(Q, [Q2|Rest], Dist) :-
 
 magic(Xs) :-
     Xs = [A, B, C, D, E, F, G, H, I],
-    N in 1..27,
     Xs ins 1..9,
     all_different(Xs),
     N #= A + B + C,
@@ -97,7 +96,7 @@ magic(Xs) :-
 boo(Xs) :-
     Xs = [A,B,C],
     Xs ins 1..9,
-    all_different(Xs),
+    %all_different(Xs),
     N #= A+B,
     N #= B+C,
     label(Xs).

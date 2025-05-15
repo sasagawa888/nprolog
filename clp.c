@@ -344,14 +344,17 @@ void unbind_free_var()
 {
 	int i;
 
-	for(i=0;i<fd_var_free;i++)
+	for(i=0;i<fd_var_free;i++){
 		fd_domain[i+fd_var_max] = UNBOUND;
+		fd_min[i+fd_var_max] = -999999999;
+		fd_max[i+fd_var_max] =  999999999;
+	}
 }
 
 int free_variablep(int x)
 {
 
-	if(compiler_variable_p(x) && GET_VAR(x) == 0 && fd_domain[GET_ARITY(x)] == UNBOUND)
+	if(compiler_variable_p(x) && GET_VAR(x) == 2)
 		return(1);
 	else 
 		return(0);
@@ -364,10 +367,11 @@ int fd_analyze1(int form, int flag)
 	return (GET_INT(form));
     else if (compiler_variable_p(form)) {
 	idx = GET_ARITY(form);
-	// free variable
+	// new free variable
 	if(GET_VAR(form) == 0){
 		idx = fd_var_max + fd_var_free;
 		SET_ARITY(form,idx);
+		SET_VAR(form,2);
 		fd_min[idx] = -999999999;
 		fd_max[idx] = 999999999;
 		fd_var_free++;
