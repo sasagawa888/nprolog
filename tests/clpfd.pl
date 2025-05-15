@@ -1,6 +1,6 @@
 % CLP-test 
 
-%:- use_module(clpfd).
+:- use_module(clpfd).
 
 foo(L) :-
     L = [A, B, C],
