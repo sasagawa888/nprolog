@@ -55,6 +55,7 @@ int b_constraint_var(int arglist, int rest, int th)
 	var = variable_convert1(revderef(arg1, th));
 	SET_ARITY(var, fd_var_max);
 	SET_VAR(var,1);
+	fd_vars = cons(var,fd_vars);
 	min = GET_INT(cadr(arg2));
 	max = GET_INT(caddr(arg2));
 	fd_min[fd_var_max] = min;
@@ -82,6 +83,7 @@ int b_constraint_vars(int arglist, int rest, int th)
 	    var = variable_convert1(revderef(elt, th));
 	    SET_ARITY(var, fd_var_max);
 		SET_VAR(var,1);
+		fd_vars = cons(var,fd_vars);
 	    min = GET_INT(cadr(arg2));
 	    max = GET_INT(caddr(arg2));
 	    fd_min[fd_var_max] = min;
@@ -389,6 +391,7 @@ int fd_analyze1(int form, int flag)
 		idx = fd_var_max + fd_var_free;
 		SET_ARITY(form,idx);
 		SET_VAR(form,2);
+		fd_vars = cons(form,fd_vars);
 		fd_min[idx] = -999999999;
 		fd_max[idx] = 999999999;
 		fd_var_free++;

@@ -204,7 +204,7 @@ int fd_analyze_sw;
 int fd_selected[256];
 int fd_sel_idx;
 int fd_var_free;
-int fd_vars;
+int fd_vars = NIL;
 
 
 //-----editor-----
