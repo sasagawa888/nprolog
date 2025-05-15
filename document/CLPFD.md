@@ -202,6 +202,7 @@ Constraint operators like #= are handled as infix operators using op/3.
 
 Idea Memo: Handling Free Variables
 free variable is Var in -999..999
+fd_unique[idx] = 2; distinguish normal var
 idx is out of fd_var_max
 unbind_free_var when fd_propagate returns NO;
 
