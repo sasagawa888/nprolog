@@ -360,6 +360,23 @@ int free_variablep(int x)
 		return(0);
 }
 
+int out_of_max(int left, int right)
+{
+	if(left >= 999999999 || right >= 999999999)
+		return(1);
+	else 
+		return(0);
+}
+
+int out_of_min(int left, int right)
+{
+	if(left <= -999999999 || right <= -999999999)
+		return(1);
+	else 
+		return(0);
+}
+
+
 int fd_analyze1(int form, int flag)
 {
     int idx, left, right;
@@ -388,15 +405,30 @@ int fd_analyze1(int form, int flag)
     } else if (fd_plus(form)) {
 	left = fd_analyze1(cadr(form), flag);
 	right = fd_analyze1(caddr(form), flag);
-	return (left + right);
+	if (out_of_min(left,right))
+		return (-999999999);
+	else if(out_of_max(left,right))
+		return (999999999);
+	else
+		return (left + right);
     } else if (fd_minus(form)) {
 	left = fd_analyze1(cadr(form), flag);
 	right = fd_analyze1(caddr(form), flag);
-	return (left - right);
+	if (out_of_min(left,right))
+		return (-999999999);
+	else if(out_of_max(left,right))
+		return (999999999);
+	else
+		return (left - right);
     } else if (fd_mult(form)) {
 	left = fd_analyze1(cadr(form), flag);
 	right = fd_analyze1(caddr(form), flag);
-	return (left * right);
+	if (out_of_min(left,right))
+		return (-999999999);
+	else if(out_of_max(left,right))
+		return (999999999);
+	else
+		return (left * right);
     }
     return (NO);
 }
