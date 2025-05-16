@@ -114,12 +114,21 @@ perm(Xs) :-
     Y #\= Z,
     label(Xs).
 
-mask :-
+mask(Wrong,M,Right) :-
     Xs = [W, R, O, N, G, M, I, H, T],
     Xs ins 1..9,
     all_different(Xs),
     Wrong #= 10000*W + 1000*R + 100*O + 10*N + G,
     Right #= 10000*R + 1000*I + 100*G + 10*H + T,
     Wrong * M #= Right,
-    label([Wrong,M,Right]),
-    format(user_output,$~D * ~D = ~D$, [Wrong, M, Right]).
+    label([Wrong,M,Right]).
+
+send([S,E,N,D,M,O,R,Y]) :-
+    Vars = [S,E,N,D,M,O,R,Y],
+    Vars ins 0..9,
+    all_different(Vars),
+    S #\= 0,
+    M #\= 0,
+    1000*S + 100*E + 10*N + D + 1000*M + 100*O + 10*R + E
+    #= 10000*M + 1000*O + 100*N + 10*E + Y,
+    label(Vars).
