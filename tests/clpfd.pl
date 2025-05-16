@@ -60,9 +60,7 @@ nqueens(Queens) :-
     length(Queens, 9),       
     Queens ins 1..9,         
     all_different(Queens),   
-    safe(Queens),  
-    %n_constraint_set(X),
-    %write(X),       
+    safe(Queens),       
     label(Queens).
     
 safe([]).
@@ -100,3 +98,28 @@ boo(Xs) :-
     N #= A+B,
     N #= B+C,
     label(Xs).
+
+equations(X,Y,Z) :-
+    X + Y + Z #= 10, 
+    2*X + 4*Y + 6*Z #= 38,
+    2*X + 4*Z #= 14,
+    [X,Y,Z] ins 1..10,
+    label([X,Y,Z]).
+
+perm(Xs) :-
+    Xs = [X, Y, Z], 
+    Xs ins 1..3,
+    X #\= Y,
+    X #\= Z,
+    Y #\= Z,
+    label(Xs).
+
+mask :-
+    Xs = [W, R, O, N, G, M, I, H, T],
+    Xs ins 1..9,
+    all_different(Xs),
+    Wrong #= 10000*W + 1000*R + 100*O + 10*N + G,
+    Right #= 10000*R + 1000*I + 100*G + 10*H + T,
+    Wrong * M #= Right,
+    label([Wrong,M,Right]),
+    format(user_output,$~D * ~D = ~D$, [Wrong, M, Right]).
