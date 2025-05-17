@@ -124,11 +124,23 @@ mask(Wrong,M,Right) :-
     label([Wrong,M,Right]).
 
 send([S,E,N,D,M,O,R,Y]) :-
-    Vars = [S,E,N,D,M,O,R,Y],
+    Vars = [M,S,E,O,N,R,D,Y],
     Vars ins 0..9,
     all_different(Vars),
     S #\= 0,
     M #\= 0,
+    S+M #= 10*M,
     1000*S + 100*E + 10*N + D + 1000*M + 100*O + 10*R + E
     #= 10000*M + 1000*O + 100*N + 10*E + Y,
+    label(Vars).
+
+
+taxi(Vars) :-
+    Vars = [A1, B1, A2, B2],
+    Vars ins 1..20, 
+    all_different(Vars),
+    A1 #< B1,
+    A2 #< B2,
+    N #= A1*A1*A1 + B1*B1*B1,
+    N #= A2*A2*A2 + B2*B2*B2,
     label(Vars).
