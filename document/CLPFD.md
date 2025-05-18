@@ -16,6 +16,17 @@ CLP(FD): Constraint Logic Programming over Finite Domains
 - X #>= Y
 - X #<= Y
 - X in A..Z
+- Xs ins A..Z
+- all_different(Xs)
+
+# Function
+- + plus
+- - minus
+- * mult
+- // divide
+- ^ exponent
+- ** exponent
+- mod modulo
 
 # Internal system predicate
 - add_constraint(Expr)  Add the constraint expression to the set of constraints.
