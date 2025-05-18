@@ -54,8 +54,8 @@ int b_constraint_var(int arglist, int rest, int th)
 
 	var = variable_convert1(revderef(arg1, th));
 	SET_ARITY(var, fd_var_max);
-	SET_VAR(var,1);
-	fd_vars = cons(var,fd_vars);
+	SET_VAR(var, 1);
+	fd_vars = cons(var, fd_vars);
 	min = GET_INT(cadr(arg2));
 	max = GET_INT(caddr(arg2));
 	fd_min[fd_var_max] = min;
@@ -82,8 +82,8 @@ int b_constraint_vars(int arglist, int rest, int th)
 	    elt = car(arg1);
 	    var = variable_convert1(revderef(elt, th));
 	    SET_ARITY(var, fd_var_max);
-		SET_VAR(var,1);
-		fd_vars = cons(var,fd_vars);
+	    SET_VAR(var, 1);
+	    fd_vars = cons(var, fd_vars);
 	    min = GET_INT(cadr(arg2));
 	    max = GET_INT(caddr(arg2));
 	    fd_min[fd_var_max] = min;
@@ -342,40 +342,81 @@ int fd_mult(int x)
 	return (0);
 }
 
+int fd_div(int x)
+{
+    if (structurep(x) && eqlp(car(x), makeconst("//")))
+	return (1);
+    else
+	return (0);
+}
+
+int fd_mod(int x)
+{
+    if (structurep(x) && eqlp(car(x), makeconst("mod")))
+	return (1);
+    else
+	return (0);
+}
+
+int fd_expt(int x)
+{
+    if (structurep(x) && eqlp(car(x), makeconst("**")))
+	return (1);
+    else if (structurep(x) && eqlp(car(x), makeconst("^")))
+	return (1);
+    else
+	return (0);
+}
+
+int fd_compute_expt(int x, int y)
+{
+    int res = 1;
+    int base = x;
+
+    while (y > 0) {
+	if (y % 2 == 1) {
+	    res *= base;
+	}
+	base *= base;
+	y /= 2;
+    }
+    return (res);
+}
+
 void unbind_free_var()
 {
-	int i;
+    int i;
 
-	for(i=0;i<fd_var_free;i++){
-		fd_domain[i+fd_var_max] = UNBOUND;
-		fd_min[i+fd_var_max] = -999999999;
-		fd_max[i+fd_var_max] =  999999999;
-	}
+    for (i = 0; i < fd_var_free; i++) {
+	fd_domain[i + fd_var_max] = UNBOUND;
+	fd_min[i + fd_var_max] = -999999999;
+	fd_max[i + fd_var_max] = 999999999;
+    }
 }
 
 int free_variablep(int x)
 {
 
-	if(compiler_variable_p(x) && GET_VAR(x) == 2)
-		return(1);
-	else 
-		return(0);
+    if (compiler_variable_p(x) && GET_VAR(x) == 2)
+	return (1);
+    else
+	return (0);
 }
 
 int out_of_max(int left, int right)
 {
-	if(left >= 999999999 || right >= 999999999)
-		return(1);
-	else 
-		return(0);
+    if (left >= 999999999 || right >= 999999999)
+	return (1);
+    else
+	return (0);
 }
 
 int out_of_min(int left, int right)
 {
-	if(left <= -999999999 || right <= -999999999)
-		return(1);
-	else 
-		return(0);
+    if (left <= -999999999 || right <= -999999999)
+	return (1);
+    else
+	return (0);
 }
 
 
@@ -387,14 +428,14 @@ int fd_analyze1(int form, int flag)
     else if (compiler_variable_p(form)) {
 	idx = GET_ARITY(form);
 	// new free variable
-	if(GET_VAR(form) == 0){
-		idx = fd_var_max + fd_var_free;
-		SET_ARITY(form,idx);
-		SET_VAR(form,2);
-		fd_vars = cons(form,fd_vars);
-		fd_min[idx] = -999999999;
-		fd_max[idx] = 999999999;
-		fd_var_free++;
+	if (GET_VAR(form) == 0) {
+	    idx = fd_var_max + fd_var_free;
+	    SET_ARITY(form, idx);
+	    SET_VAR(form, 2);
+	    fd_vars = cons(form, fd_vars);
+	    fd_min[idx] = -999999999;
+	    fd_max[idx] = 999999999;
+	    fd_var_free++;
 	}
 
 	if (fd_domain[idx] == UNBOUND && flag == 0) {
@@ -408,31 +449,43 @@ int fd_analyze1(int form, int flag)
     } else if (fd_plus(form)) {
 	left = fd_analyze1(cadr(form), flag);
 	right = fd_analyze1(caddr(form), flag);
-	if (out_of_min(left,right))
-		return (-999999999);
-	else if(out_of_max(left,right))
-		return (999999999);
+	if (out_of_min(left, right))
+	    return (-999999999);
+	else if (out_of_max(left, right))
+	    return (999999999);
 	else
-		return (left + right);
+	    return (left + right);
     } else if (fd_minus(form)) {
 	left = fd_analyze1(cadr(form), flag);
 	right = fd_analyze1(caddr(form), flag);
-	if (out_of_min(left,right))
-		return (-999999999);
-	else if(out_of_max(left,right))
-		return (999999999);
+	if (out_of_min(left, right))
+	    return (-999999999);
+	else if (out_of_max(left, right))
+	    return (999999999);
 	else
-		return (left - right);
+	    return (left - right);
     } else if (fd_mult(form)) {
 	left = fd_analyze1(cadr(form), flag);
 	right = fd_analyze1(caddr(form), flag);
-	if (out_of_min(left,right))
-		return (-999999999);
-	else if(out_of_max(left,right))
-		return (999999999);
+	if (out_of_min(left, right))
+	    return (-999999999);
+	else if (out_of_max(left, right))
+	    return (999999999);
 	else
-		return (left * right);
-    }
+	    return (left * right);
+    } else if(fd_div(form)){
+	left = fd_analyze1(cadr(form), flag);
+	right = fd_analyze1(caddr(form), flag);
+		return (left / right);
+	} else if(fd_mod(form)){
+	left = fd_analyze1(cadr(form), flag);
+	right = fd_analyze1(caddr(form), flag);
+		return (left % right);
+	} else if(fd_expt(form)){
+	left = fd_analyze1(cadr(form), flag);
+	right = fd_analyze1(caddr(form), flag);
+		return (fd_compute_expt(left,right));
+	}
     return (NO);
 }
 
@@ -494,9 +547,9 @@ int fd_satisfiable(int expr)
     int left, right;
 
     if (expr == NIL)
-		return (YES);
+	return (YES);
 
-	proof[0]++;
+    proof[0]++;
     left = fd_analyze(cadr(expr));
     right = fd_analyze(caddr(expr));
     //print(expr);print(left);print(right);printf("\n");
@@ -507,11 +560,11 @@ int fd_satisfiable(int expr)
 	    else
 		return (NO);
 	} else if (length(left) == 2 && length(right) == 1) {
-		if (free_variablep(cadr(expr))){
-			fd_domain[GET_ARITY(cadr(expr))] = car(right);
-			fd_min[GET_ARITY(cadr(expr))] = 0;
-			return (YES);
-		} else if (in_interval(right, left))	// value right is in_interval range left
+	    if (free_variablep(cadr(expr))) {
+		fd_domain[GET_ARITY(cadr(expr))] = car(right);
+		fd_min[GET_ARITY(cadr(expr))] = 0;
+		return (YES);
+	    } else if (in_interval(right, left))	// value right is in_interval range left
 		return (YES);
 	    else
 		return (UNKNOWN);

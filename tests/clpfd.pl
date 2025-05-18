@@ -54,6 +54,32 @@ test6(X, Y, Z) :-
     X #< Z,
     label([X, Y, Z]).
 
+test7(X,Y) :-
+    X in 1..10,
+    Y in 1..10,
+    X #= Y mod 3,
+    label([X,Y]).
+
+test8(X,Y) :-
+    X in 1..10,
+    Y in 1..10,
+    X #= Y ^ 3,
+    label([X,Y]).
+
+test9(X,Y) :-
+    X in 1..10,
+    Y in 1..10,
+    X #= Y ** 3,
+    label([X,Y]).
+
+
+test10(X,Y) :-
+    X in 1..10,
+    Y in 1..10,
+    X #= Y // 3,
+    label([X,Y]).
+
+
 test :- nqueens(X),fail.
 
 nqueens(Queens) :-
