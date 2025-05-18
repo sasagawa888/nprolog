@@ -1,58 +1,11 @@
-% CLPFD test thinking
-
-:- use_module(clpfd).
-
-foo(X,Y) :-
-    X in 1..2,
-    Y in 1..3,
-    X #= Y,
-    label([X,Y]).
-
-/*
- domain    env
-[]         [[1,2],[1,2,3]]
-
- X Y       [[1,2],[1,2]]
-[[1,1] 
- [2,2]] 
-*/
-
-bar(X,Y,Z) :-
-    X in 1..2,
-    Y in 1..3,
-    Z in 1..3,
-    X #= Y,
-    Z #= 3,
-    label([X,Y,Z]).
-
-/* idea memo
-  domain          env
-[]              [[1,2],[1,2,3],[1,2,3]]
-|          
-  x,y,z         [[1,2],[1,2],[1,2,3]]
-[[1,1,*]
- [2,2,*]]
-|               [[1,2],[1,2],[3]]]
-[[1,1,3] 
- [2,2,3]]
-
-*/
-
-boo(X,Y,Z) :-
-    X in 1..2,
-    Y in 1..3,
-    Z in 1..3,
-    X #= Y,
-    Z #< 3,
-    label([X,Y,Z]).
-
-/* idea memo
-domain       env
-  x,y,z     [[1,2],[1,2],[1,2,3]]
-[[1,1,*]
- [2,2,*]]
-  |   
-[[1,1,*]    [[1,2],[1,2],[1,2]]
- [2,2,*]]
-
-*/
+% test for GNU-Prolog
+% ?- statistics(runtime, [T0|_]), send(Vars), statistics(runtime, [T1|_]), T is T1 - T0. 
+send(Vars) :-
+    Vars = [S,E,N,D,M,O,R,Y],
+    fd_domain(Vars, 0, 9),
+    fd_all_different(Vars),
+    S #\= 0,
+    M #\= 0,
+    1000*S + 100*E + 10*N + D + 1000*M + 100*O + 10*R + E
+    #= 10000*M + 1000*O + 100*N + 10*E + Y,
+    fd_labeling(Vars).

@@ -155,7 +155,10 @@ send([S,E,N,D,M,O,R,Y]) :-
     all_different(Vars),
     S #\= 0,
     M #\= 0,
-    S+M #= 10*M,
+    (D+E) mod 10 #= Y,
+    (((D+E) // 10) + N+R) mod 10 #= E,
+    (((((D+E) // 10) + N+R) // 10) + E+O) mod 10 #= N,
+    ((((((D+E) // 10) + N+R) // 10) + E+O) // 10) + S+M #= 10*M,
     1000*S + 100*E + 10*N + D + 1000*M + 100*O + 10*R + E
     #= 10000*M + 1000*O + 100*N + 10*E + Y,
     label(Vars).
@@ -167,6 +170,6 @@ taxi(Vars) :-
     all_different(Vars),
     A1 #< B1,
     A2 #< B2,
-    N #= A1*A1*A1 + B1*B1*B1,
-    N #= A2*A2*A2 + B2*B2*B2,
+    N #= A1^3 + B1^3,
+    N #= A2^3 + B2^3,
     label(Vars).
