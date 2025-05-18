@@ -494,8 +494,9 @@ int fd_satisfiable(int expr)
     int left, right;
 
     if (expr == NIL)
-	return (YES);
+		return (YES);
 
+	proof[0]++;
     left = fd_analyze(cadr(expr));
     right = fd_analyze(caddr(expr));
     //print(expr);print(left);print(right);printf("\n");
