@@ -473,19 +473,19 @@ int fd_analyze1(int form, int flag)
 	    return (999999999);
 	else
 	    return (left * right);
-    } else if(fd_div(form)){
+    } else if (fd_div(form)) {
 	left = fd_analyze1(cadr(form), flag);
 	right = fd_analyze1(caddr(form), flag);
-		return (left / right);
-	} else if(fd_mod(form)){
+	return (left / right);
+    } else if (fd_mod(form)) {
 	left = fd_analyze1(cadr(form), flag);
 	right = fd_analyze1(caddr(form), flag);
-		return (left % right);
-	} else if(fd_expt(form)){
+	return (left % right);
+    } else if (fd_expt(form)) {
 	left = fd_analyze1(cadr(form), flag);
 	right = fd_analyze1(caddr(form), flag);
-		return (fd_compute_expt(left,right));
-	}
+	return (fd_compute_expt(left, right));
+    }
     return (NO);
 }
 
