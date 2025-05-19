@@ -3321,6 +3321,19 @@ void save_data(char *fname)
 {
     int row, col;
 
+	/* 
+	* If the final line does not end with a newline, 
+	* a newline will be inserted before saving.
+	*/
+	col = 0;
+	while(ed_data[ed_end][col] != 0){
+		col++;
+	}
+	if(ed_data[ed_end][col-1] != EOL){
+		ed_data[ed_end][col] = EOL;
+		ed_end++;
+	}
+
     FILE *port = fopen(fname, "w");
     for (row = 0; row < ed_end; row++)
 	for (col = 0; col < COL_SIZE; col++) {
