@@ -163,7 +163,6 @@ send([S,E,N,D,M,O,R,Y]) :-
     #= 10000*M + 1000*O + 100*N + 10*E + Y,
     label(Vars).
 
-
 taxi(Vars) :-
     Vars = [A1, B1, A2, B2],
     Vars ins 1..20, 

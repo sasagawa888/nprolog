@@ -3327,13 +3327,17 @@ void save_data(char *fname)
 	*/
 	col = 0;
 	while(ed_data[ed_end][col] != 0){
+		if(ed_data[ed_end][col] == EOL)
+			goto save;
 		col++;
 	}
-	if(ed_data[ed_end][col-1] != EOL){
+	if (col != 0){
 		ed_data[ed_end][col] = EOL;
 		ed_end++;
 	}
 
+	
+	save:
     FILE *port = fopen(fname, "w");
     for (row = 0; row < ed_end; row++)
 	for (col = 0; col < COL_SIZE; col++) {
