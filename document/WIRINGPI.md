@@ -8,7 +8,7 @@ wiringpi_setup_gpio  <===> wiringPiSetupGpio()
 pin_mode(n, 'output) <====> pinMode(n, OUTPUT) or 'input -> INPUT 'pwm-output -> PWM_OUTPUT
 digital_write(n, v) <===> digitalWrite(n, v)
 digital_write_byte(v) <===> digitalWriteByte(value)
-digital_read(pin) <===> digitalRead(pin)
+digital_read(pin,Var) <===> digitalRead(pin,Var)
 delay(howlong) <===> void delay(unsigned int howLong)
 delay_microseconds(howlong) <===> void delay_microseconds(unsigned int howLong)
 pull_up_dn_control(pin, pud) <===> pullUpDnControl(pin,pud)

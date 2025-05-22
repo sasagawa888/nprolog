@@ -308,11 +308,9 @@ void init_builtin(void)
     defbuiltin("digital_write", b_digital_write, 2);
     defbuiltin("digital_write_byte", b_digital_write_byte, 1);
     defbuiltin("pull_up_dn_control", b_pull_up_dn_control, 2);
-    defbuiltin("digital_read", b_digital_read, 1);
+    defbuiltin("digital_read", b_digital_read, 2);
     defbuiltin("delay", b_delay, 1);
     defbuiltin("delay_microseconds", b_delay_microseconds, 1);
-    defbuiltin("out", b_digital_write, 2);
-    defbuiltin("in", b_digital_read, 2);
     defbuiltin("timer_microseconds", b_timer_microseconds, 1);
 #endif
     return;
