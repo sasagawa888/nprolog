@@ -222,3 +222,83 @@ when propagate get NO , unbind free variables.
 
 Idea Note
 labeling/2: There may be situations where it is effective to have an option that prunes the search tree without exploring branches when the value is UNKNOWN. For example, in the queens problem, the determined variables are more important, and computing satisfiability for undetermined variables is meaningless.
+
+# ✅ fd_narrowing Algorithm Overview
+
+## 🎯 Goal
+To iteratively **narrow the domain of finite-domain variables** by computing **min/max values of the overall expression**, thereby deducing constraints.
+
+---
+
+## 🧠 Core Idea
+- Prioritize variables based on **coefficient magnitude** and **order of appearance**.
+- Use **min/max evaluation** of expressions to determine feasible value ranges.
+- If overlapping ranges between the left-hand side (LHS) and right-hand side (RHS) expressions shrink, restrict variable domains accordingly.
+
+---
+
+## 📝 Example: SEND + MORE = MONEY
+
+### Setup
+
+**Expressions:**
+- LHS = `SEND + MORE`
+- RHS = `MONEY`
+- Each letter represents a digit with all values distinct (`all_different`).
+
+**Variable order (based on descending coefficient → then appearance):**
+- LHS variables: `[S, M, E, O, N, R, D]`
+- RHS variables: `[M, O, N, E, Y]`
+
+---
+
+## 🔍 Step-by-Step Narrowing
+
+### Step 1: All variables undefined
+- Max(`SEND + MORE`) = `9999 + 9999 = 19998`
+- Max(`MONEY`) = `99999`
+- Min(`SEND + MORE`) = `0`
+- Min(`MONEY`) = `0`
+
+**Overlap:** `0 ~ 19998`  
+➡ `MONEY` starts with `M × 10000`. To stay within overlap, `M` must be ≤ 1 ⇒ **`M = 1`**
+
+---
+
+### Step 2: `M = 1`
+- Max(`MORE`) = `1999`
+- Max(`SEND + MORE`) = `9999 + 1999 = 11998`
+- Min(`MONEY`) = `10000`
+
+**Overlap:** `10000 ~ 11998`  
+➡ Assign smallest available digit to `O` ⇒ **`O = 0`**
+
+---
+
+### Step 3: `M = 1`, `O = 0`
+- `MORE` = `1000`
+- Max(`SEND`) = `9999`
+- `SEND + MORE` = `9999 + 1000 = 10999`
+➡ To match `MONEY = 10999`, `S` must be 9 ⇒ **`S = 9`**
+
+---
+
+### Step 4: `M = 1`, `O = 0`, `S = 9`
+- `SEND + MORE = 10999`
+- `MONEY = 10999`
+
+➡ Both sides match ⇒ **Narrowing complete 🎉**
+
+---
+
+## 🧩 Key Characteristics
+
+| Feature             | Description                                                                 |
+|---------------------|-----------------------------------------------------------------------------|
+| Heuristic-driven     | Prioritizes variables based on coefficient size and appearance order        |
+| Semantic narrowing   | Uses expression-level min/max evaluation instead of only local constraints  |
+| Decision mechanism   | Assumes a value → checks range consistency → narrows domain if necessary   |
+| Contrast with AC-3   | Goes beyond binary constraints to analyze global structure of expressions   |
+| Implementation ease  | Can be structured around symbolic expression evaluation and propagation     |
+
+
