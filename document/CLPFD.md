@@ -301,4 +301,91 @@ To iteratively **narrow the domain of finite-domain variables** by computing **m
 | Contrast with AC-3   | Goes beyond binary constraints to analyze global structure of expressions   |
 | Implementation ease  | Can be structured around symbolic expression evaluation and propagation     |
 
+Idea Memo
+Arc Consistency
 
+Given:
+[X, Y] ins 0..3
+X + Y #= 2
+as an example.
+
+Variables:
+[X, Y]
+Step 1: [X, Y]
+
+X → Y (propagation from X to Y)
+
+    X = 0
+
+        max: 0 + 9 = 9
+
+        min: 0 + 0 = 0
+
+        → 2 ∈ 0..9 → OK
+
+    X = 1
+
+        max: 1 + 9 = 10
+
+        min: 1 + 0 = 1
+
+        → 2 ∈ 1..10 → OK
+
+    X = 2
+
+        → 2 ∈ 2..11 → OK
+
+    X = 3
+
+        → 2 ∉ 3..12 → Invalid
+
+→ Thus, X ∈ 0..2 (remove 3)
+Reverse Direction: Y → X
+
+    Y = 0
+
+        max: 2 + 0 = 2
+
+        min: 0 + 0 = 0
+
+        Shared domain: 0..2 → OK
+
+    Y = 1
+
+        max: 2 + 1 = 3
+
+        min: 0 + 1 = 1
+
+        Shared domain: 1..3, intersects 0..2 → OK
+
+    Y = 2
+
+        Shared domain: 2..4, intersects 0..2 → OK
+
+    Y = 3
+
+        Shared domain: 3..5, does not intersect 0..2 → Invalid
+
+→ Thus, Y ∈ 0..2 (remove 3)
+AC-3
+
+Arc set:
+asets = [[X, Y]]
+
+while (asets != NIL) {
+  c = car(asets)
+  apply arc consistency to c
+  asets = cdr(asets)
+}
+
+As a result:
+→ X ∈ 0..2, Y ∈ 0..2
+Summary
+
+    For each constraint expression, extract all pairs of variables involved.
+
+    Add those pairs to the arc set asets.
+
+    Once the arc set is populated for all constraints, process it using the AC-3 loop above.
+
+    This narrows down the domains of the variables.
