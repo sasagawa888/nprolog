@@ -422,6 +422,11 @@ void fd_consistent(int c){
 
 }
 
+void fd_remove(int x)
+{
+    fd_remove[idx][fd_remove_idx] = x;
+    fd_rem_idx[idx]++; 
+}
 
 void fd_consistent1(int form, int idx){
 
@@ -430,6 +435,6 @@ void fd_consistent1(int form, int idx){
 
     //many cases
     if(！involve)
-        fd_remove(fd_min[idx]+fd_len);
+        fd_remove(idx,fd_min[idx]+fd_len);
 
 }

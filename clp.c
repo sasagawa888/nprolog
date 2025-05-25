@@ -748,6 +748,253 @@ int fd_solve()
     return (NO);
 }
 
+/*
+*  AC-3 
+*/
+
+void fd_remove(int idx, int x)
+{
+	int i;
+
+	// if already removed return
+	for(i=0;i<fd_rem_idx[idx];i++)
+	{
+		if(fd_removed[idx][i] == x)
+			return;
+	}
+
+    fd_removed[idx][fd_rem_idx[idx]] = x;
+    fd_rem_idx[idx]++;
+}
+
+
+void fd_consistent1(int expr, int idx)
+{
+    int left, right;
+
+    left = fd_analyze(cadr(expr));
+    right = fd_analyze(caddr(expr));
+
+    if (fd_eq(expr)) {		//#=
+	if (length(left) == 1 && length(right) == 1) {
+	    if (car(left) == car(right))	// value left ==value right
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 2 && length(right) == 1) {
+	    if (free_variablep(cadr(expr))) {
+		fd_domain[GET_ARITY(cadr(expr))] = car(right);
+		fd_min[GET_ARITY(cadr(expr))] = 0;
+		return;
+	    } else if (in_interval(right, left))	// value right is in_interval range left
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 1 && length(right) == 2) {
+	    if (in_interval(left, right))	// value left is in_interval range right
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 2 && length(right) == 2) {
+	    if (overlap(left, right))	// range left and range right has overlap
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	}
+    } else if (fd_neq(expr)) {	//#\=
+	if (length(left) == 1 && length(right) == 1) {
+	    if (!(car(left) == car(right)))	// value left != value right
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 2 && length(right) == 1) {
+	    if (!in_interval(right, left))	// value right is not in_interval left range
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 1 && length(right) == 2) {
+	    if (!in_interval(left, right))	// value left is not in_interval right range
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 2 && length(right) == 2) {
+	    if (!overlap(left, right))	// range left and range right has no overlap
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	}
+    } else if (fd_smaller(expr)) {	//#<
+	if (length(left) == 1 && length(right) == 1) {
+	    if (car(left) < car(right))	// value left < value right
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 2 && length(right) == 1) {
+	    if (cadr(left) < car(right))	//max of range < value
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 1 && length(right) == 2) {
+	    if (car(left) < car(right))	//min of range  < value
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 2 && length(right) == 2) {
+	    if (cadr(left) < car(right))	//max of range left < min of range right
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	}
+    } else if (fd_eqsmaller(expr)) {	//#<=
+	if (length(left) == 1 && length(right) == 1) {
+	    if (car(left) <= car(right))	//value left < value right
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 2 && length(right) == 1) {
+	    if (cadr(left) <= car(right))	//max of range <= value
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 1 && length(right) == 2) {
+	    if (car(left) <= car(right))	//min of range  <= value
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 2 && length(right) == 2) {
+	    if (cadr(left) <= car(right))	//max of range left <= min of range right
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	}
+    } else if (fd_greater(expr)) {	//#>
+	if (length(left) == 1 && length(right) == 1) {
+	    if (car(left) > car(right))	// value left > value right
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 2 && length(right) == 1) {
+	    if (car(left) > car(right))	//min of range > value
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 1 && length(right) == 2) {
+	    if (car(left) > cadr(right))	//value of max of range
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 2 && length(right) == 2) {
+	    if (car(left) > cadr(right))	//min of range left > max of range right
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	}
+    } else if (fd_eqgreater(expr)) {	//#>=
+	if (length(left) == 1 && length(right) == 1) {
+	    if (car(left) >= car(right))
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 2 && length(right) == 1) {
+	    if (car(left) >= car(right))	//min of range > value
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 1 && length(right) == 2) {
+	    if (car(left) >= cadr(right))	//value of max of range
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	} else if (length(left) == 2 && length(right) == 2) {
+	    if (car(left) >= cadr(right))	//min of range left > max of range right
+		return;
+	    else {
+		fd_remove(idx, fd_min[idx] + fd_len[idx]);
+		return;
+	    }
+	}
+    }
+    return;
+
+}
+
+void fd_consistent(int c)
+{
+    int var1, var2, expr, idx, len, i;
+
+    var1 = car(c);
+    var2 = cadr(c);
+    expr = caddr(c);
+    idx = GET_ARITY(var1);
+    len = fd_len[idx];
+    for (i = 0; i < len; i++) {
+	fd_domain[idx] = i;
+	fd_consistent1(expr, i);
+    }
+
+    idx = GET_ARITY(var2);
+    len = fd_len[idx];
+    for (i = 0; i < len; i++) {
+	fd_domain[idx] = i;
+	fd_consistent1(expr, i);
+    }
+
+}
+
+void fd_propagate(int asets)
+{
+    while (!nullp(asets)) {
+	fd_consistent(car(asets));
+	asets = cdr(asets);
+    }
+}
+
 
 int b_label(int arglist, int rest, int th)
 {

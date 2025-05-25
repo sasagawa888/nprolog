@@ -372,6 +372,8 @@ extern int fd_selected[256];
 extern int fd_sel_idx;
 extern int fd_var_free;
 extern int fd_vars;
+extern int fd_removed[256][256];
+extern int fd_rem_idx[256];
 
 
 #ifdef __APPLE__

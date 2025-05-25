@@ -205,6 +205,8 @@ int fd_selected[256];
 int fd_sel_idx;
 int fd_var_free;
 int fd_vars = NIL;
+int fd_removed[256][256];
+int fd_rem_idx[256];
 
 
 //-----editor-----
