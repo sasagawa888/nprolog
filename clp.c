@@ -693,7 +693,7 @@ int fd_satisfiable(int expr)
     return (UNKNOWN);
 }
 
-int fd_propagate(int sets)
+int fd_generate(int sets)
 {
     int res;
 
@@ -702,7 +702,7 @@ int fd_propagate(int sets)
     else {
 	res = fd_satisfiable(car(sets));
 	if (res == YES || res == UNKNOWN)
-	    return (fd_propagate(cdr(sets)));
+	    return (fd_generate(cdr(sets)));
 	else if (res == NO)
 	    return (NO);
     }
@@ -715,8 +715,8 @@ int fd_solve()
 
   loop:
 
-    // constraint propagate
-    res = fd_propagate(fd_sets);
+    // constraint generate&test
+    res = fd_generate(fd_sets);
     if (res == YES) {
 	// if all variables are bounded, then success
 	if (fd_domain[0] != UNBOUND && fd_var_idx == fd_var_max - 1)
