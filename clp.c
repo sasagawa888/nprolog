@@ -752,6 +752,22 @@ int fd_solve()
 *  AC-3 
 */
 
+
+void fd_enqueue(int x){
+	// unimplemented
+}
+
+int fd_dequeue()
+{
+	// unimplemented
+}
+
+
+int fd_find_assoc_constraint(int idx)
+{
+	// unimplemented
+}
+
 void fd_remove(int idx, int x)
 {
 	int i;
@@ -765,6 +781,9 @@ void fd_remove(int idx, int x)
 
     fd_removed[idx][fd_rem_idx[idx]] = x;
     fd_rem_idx[idx]++;
+
+	
+	fd_enqueue(fd_find_assoc_constraint(idx));
 }
 
 
@@ -987,11 +1006,18 @@ void fd_consistent(int c)
 
 }
 
-void fd_propagate(int asets)
+int fd_empty()
 {
-    while (!nullp(asets)) {
-	fd_consistent(car(asets));
-	asets = cdr(asets);
+	// unimplemented
+}
+
+
+void fd_propagate()
+{	
+	int c;
+    while (!fd_empty()) {
+	c = fd_dequeue();
+	fd_consistent(c);
     }
 }
 

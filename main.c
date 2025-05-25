@@ -207,7 +207,8 @@ int fd_var_free;
 int fd_vars = NIL;
 int fd_removed[256][256];
 int fd_rem_idx[256];
-
+int fd_queue[256];
+int fd_que_idx;
 
 //-----editor-----
 char buffer[BUFSIZE][10];
