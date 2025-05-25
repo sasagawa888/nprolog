@@ -389,3 +389,47 @@ Summary
     Once the arc set is populated for all constraints, process it using the AC-3 loop above.
 
     This narrows down the domains of the variables.
+
+
+# Sketch
+
+void fd_propagate(int asets){
+    while(!nullp(asets)){
+           fd_consistent(car(asets));
+           asets = cdr(asets);
+    }
+}
+
+void fd_consistent(int c){
+    int var1,var2,form,min,len,i;
+
+    var1 = car(c);
+    var2 = cadr(c);
+    form = caddr(c);
+    idx = GET_ARITY(var1);
+    len = fd_len[idx];
+    for(i=0;i<len;i++){
+        fd_domain[idx] = i;
+        fd_consistent1(form,i);
+    }
+
+    idx = GET_ARITY(var2);
+    len = fd_len[idx];
+    for(i=0;i<len;i++){
+        fd_domain[idx] = i;
+        fd_consistent1(form,i);
+    }
+
+}
+
+
+void fd_consistent1(int form, int idx){
+
+    left = analyze(cadr(form));
+    right = analyze(caddr(form));
+
+    //many cases
+    if(！involve)
+        fd_remove(fd_min[idx]+fd_len);
+
+}
