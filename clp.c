@@ -752,7 +752,7 @@ int fd_solve()
 *  AC-3 
 */
 
-
+// each element [var1,var2,expr]
 void fd_enqueue(int x){
 	// unimplemented
 }
