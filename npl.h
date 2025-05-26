@@ -375,7 +375,8 @@ extern int fd_vars;
 extern int fd_removed[256][256];
 extern int fd_rem_idx[256];
 extern int fd_queue[256];
-extern int fd_que_idx;
+extern int fd_deque_idx;
+extern int fd_enque_idx;
 
 #ifdef __APPLE__
 #define FLUSH               fpurge(stdin);

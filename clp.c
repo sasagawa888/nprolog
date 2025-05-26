@@ -754,12 +754,17 @@ int fd_solve()
 
 // each element [var1,var2,expr]
 void fd_enqueue(int x){
-	// unimplemented
+	fd_queue[fd_enque_idx] = x;
+	fd_enque_idx++;
 }
 
 int fd_dequeue()
-{
-	// unimplemented
+{	
+	int res;
+
+	res = fd_queue[fd_deque_idx];
+	fd_deque_idx++;
+	return(res);
 }
 
 
@@ -1008,7 +1013,10 @@ void fd_consistent(int c)
 
 int fd_empty()
 {
-	// unimplemented
+	if(fd_deque_idx == fd_enque_idx)
+		return(1);
+	else 
+		return(0);
 }
 
 

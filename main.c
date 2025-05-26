@@ -208,7 +208,8 @@ int fd_vars = NIL;
 int fd_removed[256][256];
 int fd_rem_idx[256];
 int fd_queue[256];
-int fd_que_idx;
+int fd_deque_idx;
+int fd_enque_idx;
 
 //-----editor-----
 char buffer[BUFSIZE][10];
@@ -448,9 +449,12 @@ void init_repl(void)
     fd_var_idx = 0;
     fd_sel_idx = 0;
     fd_var_free = 0;
+	fd_deque_idx = 0;
+	fd_enque_idx = 0;
     for (i = 0; i < 256; i++) {
 	fd_domain[i] = -1;
 	fd_unique[i] = 0;
+	fd_rem_idx[i] = 0;
     }
     while (!nullp(fd_vars)) {
 	SET_ARITY(car(fd_vars), 0);
