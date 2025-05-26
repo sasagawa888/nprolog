@@ -791,6 +791,17 @@ void fd_remove(int idx, int x)
 	fd_enqueue(fd_find_assoc_constraint(idx));
 }
 
+int fd_find_variables(int expr)
+{
+	if(compiler_variable_p(expr))
+		return(expr);
+	else if(atomp(expr))
+		return(NIL);
+	else 
+		return(append(fd_find_variables(cadr(expr)),
+	                 (fd_find_variables(caddr(expr)))));
+}
+
 
 void fd_consistent1(int expr, int idx)
 {
