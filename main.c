@@ -450,8 +450,8 @@ void init_repl(void)
     fd_var_idx = 0;
     fd_sel_idx = 0;
     fd_var_free = 0;
-	fd_deque_idx = 0;
-	fd_enque_idx = 0;
+    fd_deque_idx = 0;
+    fd_enque_idx = 0;
     for (i = 0; i < 256; i++) {
 	fd_domain[i] = -1;
 	fd_unique[i] = 0;

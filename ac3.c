@@ -3,101 +3,100 @@
 */
 
 // each element [var1,var2,expr]
-void fd_enqueue(int x){
-	fd_queue[fd_enque_idx] = x;
-	fd_enque_idx++;
+void fd_enqueue(int x)
+{
+    fd_queue[fd_enque_idx] = x;
+    fd_enque_idx++;
 }
 
 int fd_dequeue()
-{	
-	int res;
+{
+    int res;
 
-	res = fd_queue[fd_deque_idx];
-	fd_deque_idx++;
-	return(res);
+    res = fd_queue[fd_deque_idx];
+    fd_deque_idx++;
+    return (res);
 }
 
 
 void fd_enqueue_affected_arcs(int idx)
 {
-	int i,arc;
+    int i, arc;
 
-	for(i=0;i<fd_deque_idx;i++){
-		arc = fd_queue[i];
-		if(GET_ARITY(car(arc)) == idx)
-			fd_enqueue(arc);
-	}
+    for (i = 0; i < fd_deque_idx; i++) {
+	arc = fd_queue[i];
+	if (GET_ARITY(car(arc)) == idx)
+	    fd_enqueue(arc);
+    }
 }
 
 void fd_remove(int idx, int x)
 {
-	int i;
+    int i;
 
-	// if already removed return
-	for(i=0;i<fd_rem_idx[idx];i++)
-	{
-		if(fd_removed[idx][i] == x)
-			return;
-	}
+    // if already removed return
+    for (i = 0; i < fd_rem_idx[idx]; i++) {
+	if (fd_removed[idx][i] == x)
+	    return;
+    }
 
     fd_removed[idx][fd_rem_idx[idx]] = x;
     fd_rem_idx[idx]++;
 
-	// for retest consistency for removed variable, enqueue arcs 
-	fd_enqueue_affected_arcs(idx);
+    // for retest consistency for removed variable, enqueue arcs 
+    fd_enqueue_affected_arcs(idx);
 }
 
 int fd_find_variables(int expr)
 {
-	if(compiler_variable_p(expr))
-		return(wlist1(expr,0));
-	else if (structurep(expr))
-		return(append(fd_find_variables(cadr(expr)),
-	                 (fd_find_variables(caddr(expr)))));
-	else 
-		return(NIL);
+    if (compiler_variable_p(expr))
+	return (wlist1(expr, 0));
+    else if (structurep(expr))
+	return (append(fd_find_variables(cadr(expr)),
+		       (fd_find_variables(caddr(expr)))));
+    else
+	return (NIL);
 }
 
 int pair_with(int x, int lst)
 {
-	if(nullp(lst))
-		return(NIL);
-	else 
-		return(wcons(wlist2(x,car(lst),0),
-	           pair_with(x,cdr(lst)),0));
+    if (nullp(lst))
+	return (NIL);
+    else
+	return (wcons(wlist2(x, car(lst), 0), pair_with(x, cdr(lst)), 0));
 }
 
 int comb_two1(int head, int tail)
 {
-	if(nullp(head))
-		return(NIL);
-	else 
-		return(append(pair_with(car(head),tail),
-		       comb_two1(cdr(head),cdr(tail))));
+    if (nullp(head))
+	return (NIL);
+    else
+	return (append(pair_with(car(head), tail),
+		       comb_two1(cdr(head), cdr(tail))));
 }
 
 
 // combination of 2 elements. [a,b,c] -> [[a,b],[a,c],[b.c]]
 int comb_two(int lst)
 {
-	return(comb_two1(lst,cdr(lst)));
+    return (comb_two1(lst, cdr(lst)));
 }
 
 void fd_enqueue_arc(int expr)
 {
-	int vars,pairs,pair,arc;
+    int vars, pairs, pair, arc;
 
-	vars = fd_find_variables(expr);
-	pairs = comb_two(vars);
+    vars = fd_find_variables(expr);
+    pairs = comb_two(vars);
 
-	while(!nullp(pairs)){
-		pair = car(pairs);
-		arc = wlist3(car(pair),cadr(pair),expr,0);
-		fd_enqueue(arc);
-		arc = wlist3(cadr(pair),car(pair),expr,0);
-		fd_enqueue(arc);
-		pairs = cdr(pairs);
-	}
+    while (!nullp(pairs)) {
+	pair = car(pairs);
+	arc = wlist3(car(pair), cadr(pair), expr, 0);
+	fd_enqueue(arc);
+	arc = wlist3(cadr(pair), car(pair), expr, 0);
+	fd_enqueue(arc);
+	pairs = cdr(pairs);
+    }
 
 }
 
@@ -142,7 +141,7 @@ void fd_consistent1(int expr, int idx)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 2) {
-		return;
+	    return;
 
 	}
     } else if (fd_neq(expr)) {	//#\=
@@ -171,7 +170,7 @@ void fd_consistent1(int expr, int idx)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 2) {
-		return;
+	    return;
 	}
     } else if (fd_smaller(expr)) {	//#<
 	if (length(left) == 1 && length(right) == 1) {
@@ -199,7 +198,7 @@ void fd_consistent1(int expr, int idx)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 2) {
-			return;
+	    return;
 	}
     } else if (fd_eqsmaller(expr)) {	//#<=
 	if (length(left) == 1 && length(right) == 1) {
@@ -227,7 +226,7 @@ void fd_consistent1(int expr, int idx)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 2) {
-		return;
+	    return;
 	}
     } else if (fd_greater(expr)) {	//#>
 	if (length(left) == 1 && length(right) == 1) {
@@ -255,7 +254,7 @@ void fd_consistent1(int expr, int idx)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 2) {
-		return;
+	    return;
 	}
     } else if (fd_eqgreater(expr)) {	//#>=
 	if (length(left) == 1 && length(right) == 1) {
@@ -283,7 +282,7 @@ void fd_consistent1(int expr, int idx)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 2) {
-		return;
+	    return;
 	}
     }
     return;
@@ -294,7 +293,7 @@ void fd_consistent(int c)
 {
     int var, expr, idx, len, i;
 
-	print(c);
+    print(c);
     var = car(c);
     expr = caddr(c);
     idx = GET_ARITY(var);
@@ -304,21 +303,21 @@ void fd_consistent(int c)
 	fd_rem_sw = 0;
 	fd_consistent1(expr, i);
     }
-	fd_domain[idx] = UNBOUND;
+    fd_domain[idx] = UNBOUND;
 }
 
 int fd_empty()
 {
-	if(fd_deque_idx == fd_enque_idx)
-		return(1);
-	else 
-		return(0);
+    if (fd_deque_idx == fd_enque_idx)
+	return (1);
+    else
+	return (0);
 }
 
 
 void fd_propagate()
-{	
-	int arc;
+{
+    int arc;
     while (!fd_empty()) {
 	arc = fd_dequeue();
 	fd_consistent(arc);
@@ -382,14 +381,14 @@ int b_ac3(int arglist, int rest, int th)
     ind = makeind("ac3", n, th);
     if (n == 0) {
 	sets = reverse(fd_sets);
-	while(!nullp(sets)){
-		fd_enqueue_arc(car(sets));
-		sets = cdr(sets);
+	while (!nullp(sets)) {
+	    fd_enqueue_arc(car(sets));
+	    sets = cdr(sets);
 	}
-	while(!fd_empty()){
-		int arc;
-		arc = fd_dequeue();
-		print(arc);
+	while (!fd_empty()) {
+	    int arc;
+	    arc = fd_dequeue();
+	    print(arc);
 	}
 	return (prove_all(rest, sp[th], th));
     }
