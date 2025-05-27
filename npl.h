@@ -374,6 +374,7 @@ extern int fd_var_free;
 extern int fd_vars;
 extern int fd_removed[256][256];
 extern int fd_rem_idx[256];
+extern int fd_rem_sw;
 extern int fd_queue[256];
 extern int fd_deque_idx;
 extern int fd_enque_idx;
@@ -1547,6 +1548,7 @@ int b_constraint_var(int arglist, int rest, int th);
 int b_constraint_vars(int arglist, int rest, int th);
 int b_label(int arglist, int rest, int th);
 int b_all_different(int arglist, int rest, int th);
+int b_ac3(int arglist, int rest, int th);
 
 // edit 
 struct position{

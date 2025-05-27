@@ -2,6 +2,12 @@
 
 :- use_module(clpfd).
 
+ac :-
+    X in 1..3,
+    Y in 1..3,
+    X+Y#=2,
+    ac3.
+
 foo(L) :-
     L = [A, B, C],
     L ins 1..3,
