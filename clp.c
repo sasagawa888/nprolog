@@ -780,7 +780,7 @@ void fd_enqueue_affected_arcs(int idx)
 	}
 }
 
-void fd_remove(int idx, int x)
+void fd_add_removed(int idx, int x)
 {
 	int i;
 
@@ -852,7 +852,20 @@ void fd_enqueue_arc(int expr)
 
 }
 
-void fd_consistent1(int expr, int idx1, int idx2)
+void fd_consistent1(int expr, int idx1, int idx2, int flag);
+void fd_check_removed(int expr, int idx1, int idx2)
+{
+	int i;
+
+	for(i=0;i<fd_rem_idx[idx2];i++){
+		fd_domain[idx2] = fd_removed[idx2][i];
+		fd_consistent1(expr,idx1,idx2,1);
+		fd_domain[idx2] = UNBOUND;
+	}
+}
+
+
+void fd_consistent1(int expr, int idx1, int idx2, int flag)
 {
     int left, right;
 
@@ -864,7 +877,7 @@ void fd_consistent1(int expr, int idx1, int idx2)
 	    if (car(left) == car(right))	// value left ==value right
 		return;
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		printf("remove val=%d\n", fd_min[idx1] + fd_domain[idx1]);
 		return;
@@ -875,19 +888,21 @@ void fd_consistent1(int expr, int idx1, int idx2)
 		fd_min[GET_ARITY(cadr(expr))] = 0;
 		fd_len[GET_ARITY(cadr(expr))] = 1;
 		return;
-	    } else if (in_interval(right, left))	// value right is in_interval range left
-		return;
+	    } else if (in_interval(right, left)){
+		//if(flag == 0) fd_check_removed(expr,idx1,idx2);
+		return;}
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		printf("remove val=%d\n", fd_min[idx1] + fd_domain[idx1]);
 		return;
 	    }
 	} else if (length(left) == 1 && length(right) == 2) {
-	    if (in_interval(left, right))	// value left is in_interval range right
-		return;
+	    if (in_interval(left, right)){
+		//if(flag == 0) fd_check_removed(expr,idx1,idx2);
+		return;}
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		printf("remove val=%d\n", fd_min[idx1] + fd_domain[idx1]);
 		return;
@@ -898,26 +913,28 @@ void fd_consistent1(int expr, int idx1, int idx2)
 	}
     } else if (fd_neq(expr)) {	//#\=
 	if (length(left) == 1 && length(right) == 1) {
-	    if (!(car(left) == car(right)))	// value left != value right
-		return;
+	    if (!(car(left) == car(right))){
+		return;}
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
-	    if (!in_interval(right, left))	// value right is not in_interval left range
-		return;
+	    if (!in_interval(right, left)){
+		//if(flag == 0) fd_check_removed(expr,idx1,idx2);
+		return;}
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
 	} else if (length(left) == 1 && length(right) == 2) {
-	    if (!in_interval(left, right))	// value left is not in_interval right range
-		return;
+	    if (!in_interval(left, right)){
+		//if(flag==0) fd_check_removed(expr,idx1,idx2);
+		return;}
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -929,7 +946,7 @@ void fd_consistent1(int expr, int idx1, int idx2)
 	    if (car(left) < car(right))	// value left < value right
 		return;
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -937,7 +954,7 @@ void fd_consistent1(int expr, int idx1, int idx2)
 	    if (cadr(left) < car(right))	//max of range < value
 		return;
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -945,7 +962,7 @@ void fd_consistent1(int expr, int idx1, int idx2)
 	    if (car(left) < car(right))	//min of range  < value
 		return;
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -957,7 +974,7 @@ void fd_consistent1(int expr, int idx1, int idx2)
 	    if (car(left) <= car(right))	//value left < value right
 		return;
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -965,7 +982,7 @@ void fd_consistent1(int expr, int idx1, int idx2)
 	    if (cadr(left) <= car(right))	//max of range <= value
 		return;
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -973,7 +990,7 @@ void fd_consistent1(int expr, int idx1, int idx2)
 	    if (car(left) <= car(right))	//min of range  <= value
 		return;
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -985,7 +1002,7 @@ void fd_consistent1(int expr, int idx1, int idx2)
 	    if (car(left) > car(right))	// value left > value right
 		return;
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -993,7 +1010,7 @@ void fd_consistent1(int expr, int idx1, int idx2)
 	    if (car(left) > car(right))	//min of range > value
 		return;
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -1001,7 +1018,7 @@ void fd_consistent1(int expr, int idx1, int idx2)
 	    if (car(left) > cadr(right))	//value of max of range
 		return;
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -1013,7 +1030,7 @@ void fd_consistent1(int expr, int idx1, int idx2)
 	    if (car(left) >= car(right))
 		return;
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -1021,7 +1038,7 @@ void fd_consistent1(int expr, int idx1, int idx2)
 	    if (car(left) >= car(right))	//min of range > value
 		return;
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -1029,7 +1046,7 @@ void fd_consistent1(int expr, int idx1, int idx2)
 	    if (car(left) >= cadr(right))	//value of max of range
 		return;
 	    else {
-		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
+		fd_add_removed(idx1, fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -1052,10 +1069,10 @@ void fd_consistent(int c)
     idx1 = GET_ARITY(var1);
 	idx2 = GET_ARITY(var2);
     len = fd_len[idx1];
-    for (i = 0; i < len; i++) {
+    for (i = 0; i <= len; i++) {
 	fd_domain[idx1] = i;
 	fd_rem_sw = 0;
-	fd_consistent1(expr, idx1, idx2);
+	fd_consistent1(expr, idx1, idx2,0);
     }
 	fd_domain[idx1] = UNBOUND;
 }
