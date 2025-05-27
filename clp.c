@@ -852,7 +852,7 @@ void fd_enqueue_arc(int expr)
 
 }
 
-void fd_consistent1(int expr, int idx)
+void fd_consistent1(int expr, int idx1, int idx2)
 {
     int left, right;
 
@@ -864,9 +864,9 @@ void fd_consistent1(int expr, int idx)
 	    if (car(left) == car(right))	// value left ==value right
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
-		printf("remove val=%d\n", fd_min[idx] + fd_domain[idx]);
+		printf("remove val=%d\n", fd_min[idx1] + fd_domain[idx1]);
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
@@ -878,18 +878,18 @@ void fd_consistent1(int expr, int idx)
 	    } else if (in_interval(right, left))	// value right is in_interval range left
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
-		printf("remove val=%d\n", fd_min[idx] + fd_domain[idx]);
+		printf("remove val=%d\n", fd_min[idx1] + fd_domain[idx1]);
 		return;
 	    }
 	} else if (length(left) == 1 && length(right) == 2) {
 	    if (in_interval(left, right))	// value left is in_interval range right
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
-		printf("remove val=%d\n", fd_min[idx] + fd_domain[idx]);
+		printf("remove val=%d\n", fd_min[idx1] + fd_domain[idx1]);
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 2) {
@@ -901,7 +901,7 @@ void fd_consistent1(int expr, int idx)
 	    if (!(car(left) == car(right)))	// value left != value right
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -909,7 +909,7 @@ void fd_consistent1(int expr, int idx)
 	    if (!in_interval(right, left))	// value right is not in_interval left range
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -917,7 +917,7 @@ void fd_consistent1(int expr, int idx)
 	    if (!in_interval(left, right))	// value left is not in_interval right range
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -929,7 +929,7 @@ void fd_consistent1(int expr, int idx)
 	    if (car(left) < car(right))	// value left < value right
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -937,7 +937,7 @@ void fd_consistent1(int expr, int idx)
 	    if (cadr(left) < car(right))	//max of range < value
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -945,7 +945,7 @@ void fd_consistent1(int expr, int idx)
 	    if (car(left) < car(right))	//min of range  < value
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -957,7 +957,7 @@ void fd_consistent1(int expr, int idx)
 	    if (car(left) <= car(right))	//value left < value right
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -965,7 +965,7 @@ void fd_consistent1(int expr, int idx)
 	    if (cadr(left) <= car(right))	//max of range <= value
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -973,7 +973,7 @@ void fd_consistent1(int expr, int idx)
 	    if (car(left) <= car(right))	//min of range  <= value
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -985,7 +985,7 @@ void fd_consistent1(int expr, int idx)
 	    if (car(left) > car(right))	// value left > value right
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -993,7 +993,7 @@ void fd_consistent1(int expr, int idx)
 	    if (car(left) > car(right))	//min of range > value
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -1001,7 +1001,7 @@ void fd_consistent1(int expr, int idx)
 	    if (car(left) > cadr(right))	//value of max of range
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -1013,7 +1013,7 @@ void fd_consistent1(int expr, int idx)
 	    if (car(left) >= car(right))
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -1021,7 +1021,7 @@ void fd_consistent1(int expr, int idx)
 	    if (car(left) >= car(right))	//min of range > value
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -1029,7 +1029,7 @@ void fd_consistent1(int expr, int idx)
 	    if (car(left) >= cadr(right))	//value of max of range
 		return;
 	    else {
-		fd_remove(idx, fd_min[idx] + fd_domain[idx]);
+		fd_remove(idx1, fd_min[idx1] + fd_domain[idx1]);
 		fd_rem_sw = 1;
 		return;
 	    }
@@ -1043,19 +1043,21 @@ void fd_consistent1(int expr, int idx)
 
 void fd_consistent(int c)
 {
-    int var, expr, idx, len, i;
+    int var1, var2, expr, idx1, idx2, len, i;
 
 	print(c);
-    var = car(c);
+    var1 = car(c);
+	var2 = cadr(c);
     expr = caddr(c);
-    idx = GET_ARITY(var);
-    len = fd_len[idx];
+    idx1 = GET_ARITY(var1);
+	idx2 = GET_ARITY(var2);
+    len = fd_len[idx1];
     for (i = 0; i < len; i++) {
-	fd_domain[idx] = i;
+	fd_domain[idx1] = i;
 	fd_rem_sw = 0;
-	fd_consistent1(expr, i);
+	fd_consistent1(expr, idx1, idx2);
     }
-	fd_domain[idx] = UNBOUND;
+	fd_domain[idx1] = UNBOUND;
 }
 
 int fd_empty()
@@ -1140,7 +1142,7 @@ int b_ac3(int arglist, int rest, int th)
 	while(!fd_empty()){
 		int arc;
 		arc = fd_dequeue();
-		print(arc);
+		fd_consistent(arc);
 	}
 	return (prove_all(rest, sp[th], th));
     }

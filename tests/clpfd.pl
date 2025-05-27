@@ -5,7 +5,8 @@
 ac :-
     X in 1..3,
     Y in 1..3,
-    X+Y#=2,
+    Z in 1..3,
+    X+Y+Z#=3,
     ac3.
 
 foo(L) :-
