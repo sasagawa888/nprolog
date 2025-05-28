@@ -965,29 +965,9 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
-	    if (cadr(left) < car(right)) {
-		if (flag == 1) {
-		    fd_add_removed(idx1, fd_domain[idx1]);
-		}
-		return;
-	    } else {
-		if (flag == 0) {
-		    fd_add_removed(idx1, fd_domain[idx1]);
-		}
-		return;
-	    }
+	   return;
 	} else if (length(left) == 1 && length(right) == 2) {
-	    if (car(left) < car(right)) {
-		if (flag == 1) {
-		    fd_add_removed(idx1, fd_domain[idx1]);
-		}
-		return;
-	    } else {
-		if (flag == 0) {
-		    fd_add_removed(idx1, fd_domain[idx1]);
-		}
-		return;
-	    }
+	    return;
 	} else if (length(left) == 2 && length(right) == 2) {
 	    return;
 	}
@@ -1005,29 +985,9 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
-	    if (cadr(left) <= car(right)) {
-		if (flag == 1) {
-		    fd_add_removed(idx1, fd_domain[idx1]);
-		}
-		return;
-	    } else {
-		if (flag == 0) {
-		    fd_add_removed(idx1, fd_domain[idx1]);
-		}
-		return;
-	    }
+	    return;
 	} else if (length(left) == 1 && length(right) == 2) {
-	    if (car(left) <= car(right)) {
-		if (flag == 1) {
-		    fd_add_removed(idx1, fd_domain[idx1]);
-		}
-		return;
-	    } else {
-		if (flag == 0) {
-		    fd_add_removed(idx1, fd_domain[idx1]);
-		}
-		return;
-	    }
+	    return;
 	} else if (length(left) == 2 && length(right) == 2) {
 	    return;
 	}
