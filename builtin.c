@@ -296,7 +296,6 @@ void init_builtin(void)
     defbuiltin("n_constraint_vars", b_constraint_vars, -1);
     defbuiltin("label", b_label, 1);
     defbuiltin("all_different", b_all_different, 1);
-    defbuiltin("ac3", b_ac3, 0);
 
 
 #ifdef __arm__

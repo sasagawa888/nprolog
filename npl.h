@@ -1549,7 +1549,6 @@ int b_constraint_var(int arglist, int rest, int th);
 int b_constraint_vars(int arglist, int rest, int th);
 int b_label(int arglist, int rest, int th);
 int b_all_different(int arglist, int rest, int th);
-int b_ac3(int arglist, int rest, int th);
 
 // edit 
 struct position{

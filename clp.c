@@ -1118,7 +1118,7 @@ void fd_propagate()
 
 int b_label(int arglist, int rest, int th)
 {
-    int n, ind, arg1, save1, save2, save3, res, sets;
+    int n, ind, arg1, arg2, save1, save2, save3, res, sets;
 
     n = length(arglist);
     ind = makeind("label", n, th);
@@ -1128,6 +1128,7 @@ int b_label(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 
+	label:
 	fd_sets = reverse(fd_sets);
 
 	/* AC-3 */
@@ -1141,7 +1142,8 @@ int b_label(int arglist, int rest, int th)
 	    arc = fd_dequeue();
 	    fd_consistent(arc);
 	}
-	
+	fd_trace = 0;
+
 	/* generate and test */
 	fd_var_idx = 0;
 	res = fd_solve();
@@ -1172,33 +1174,17 @@ int b_label(int arglist, int rest, int th)
 	else if (res == NO)
 	    return (NO);
     }
+	else if(n == 2){
+		arg1 = car(arglist);
+		arg2 = cadr(arglist);
+		if(!eqlp(arg2,makeconst("trace")))
+		exception(SYSTEM_ERR, ind, arg2,th);
+
+		fd_trace = 1;
+		goto label;
+	}
 
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
-
-int b_ac3(int arglist, int rest, int th)
-{
-    int n, ind, sets;
-
-    n = length(arglist);
-    ind = makeind("ac3", n, th);
-    if (n == 0) {
-	sets = reverse(fd_sets);
-	while (!nullp(sets)) {
-	    fd_enqueue_arc(car(sets));
-	    sets = cdr(sets);
-	}
-	fd_trace = 1;
-	while (!fd_empty()) {
-	    int arc;
-	    arc = fd_dequeue();
-	    fd_consistent(arc);
-	}
-	fd_trace = 0;
-	return (prove_all(rest, sp[th], th));
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
