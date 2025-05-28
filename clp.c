@@ -905,9 +905,6 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
 	    if (free_variablep(cadr(expr))) {
-		fd_domain[GET_ARITY(cadr(expr))] = car(right);
-		fd_min[GET_ARITY(cadr(expr))] = 0;
-		fd_len[GET_ARITY(cadr(expr))] = 1;
 		return;
 	    } else if (in_interval(right, left)) {
 		if (flag == 1) {
