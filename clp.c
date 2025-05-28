@@ -192,6 +192,17 @@ int fd_duplicate(int x)
     return (0);
 }
 
+int fd_removed_p(int idx, int x){
+	int i;
+
+	for (i = 0; i < fd_rem_idx[idx]; i++) {
+	if (fd_removed[idx][i] == x)
+	    return(1);
+    }
+
+	return(0);
+}
+
 int increment(int idx)
 {
     if (fd_unique[idx] == 0) {
@@ -199,6 +210,8 @@ int increment(int idx)
     } else {
 	while (1) {
 	    if (fd_duplicate(fd_domain[idx] + fd_min[idx]))
+		fd_domain[idx]++;
+		else if(fd_removed_p(idx,fd_domain[idx]))
 		fd_domain[idx]++;
 	    else
 		break;
