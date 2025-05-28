@@ -211,6 +211,7 @@ int fd_rem_sw;
 int fd_queue[256];
 int fd_deque_idx;
 int fd_enque_idx;
+int fd_trace;
 
 //-----editor-----
 char buffer[BUFSIZE][10];

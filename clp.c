@@ -796,6 +796,12 @@ void fd_add_removed(int idx, int x)
 
     // for retest consistency for removed variable, enqueue arcs 
     fd_enqueue_affected_arcs(idx);
+
+	fd_rem_sw = 1;
+	if(fd_trace){
+		 printf("remove val=%d\n",fd_min[idx] + fd_domain[idx]);
+	}
+
 }
 
 int fd_find_variables(int expr)
@@ -873,20 +879,14 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 
     if (fd_eq(expr)) {		//#=
 	if (length(left) == 1 && length(right) == 1) {
-	    if (car(left) == car(right)) {	// value left ==value right
+	    if (car(left) == car(right)) {	
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    }
@@ -899,17 +899,11 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    } else if (in_interval(right, left)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    }
@@ -917,17 +911,11 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    if (in_interval(left, right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    }
@@ -940,29 +928,21 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    if (!(car(left) == car(right))) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		fd_add_removed(idx1, fd_domain[idx1]);
-		fd_rem_sw = 1;
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
 	    if (!in_interval(right, left)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
 		}
 		return;
 	    }
@@ -970,15 +950,11 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    if (!in_interval(left, right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
 		}
 		return;
 	    }
@@ -990,15 +966,11 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    if (car(left) < car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
 		}
 		return;
 	    }
@@ -1006,15 +978,11 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    if (cadr(left) < car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
 		}
 		return;
 	    }
@@ -1022,15 +990,11 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    if (car(left) < car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
 		}
 		return;
 	    }
@@ -1042,15 +1006,11 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    if (car(left) <= car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
 		}
 		return;
 	    }
@@ -1058,15 +1018,11 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    if (cadr(left) <= car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
 		}
 		return;
 	    }
@@ -1074,15 +1030,11 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    if (car(left) <= car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
 		}
 		return;
 	    }
@@ -1094,15 +1046,11 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    if (car(left) > car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
 		}
 		return;
 	    }
@@ -1110,15 +1058,11 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    if (car(left) > car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
 		}
 		return;
 	    }
@@ -1126,15 +1070,11 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    if (car(left) > cadr(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
 		}
 		return;
 	    }
@@ -1146,15 +1086,11 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    if (car(left) >= car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
 		}
 		return;
 	    }
@@ -1162,15 +1098,11 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    if (car(left) >= car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
 		}
 		return;
 	    }
@@ -1178,15 +1110,11 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	    if (car(left) >= cadr(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
-		    printf("remove val=%d\n",
-			   fd_min[idx1] + fd_domain[idx1]);
 		}
 		return;
 	    } else {
 		if (flag == 0) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
-		    fd_rem_sw = 1;
 		}
 		return;
 	    }
@@ -1202,7 +1130,9 @@ void fd_consistent(int c)
 {
     int var1, var2, expr, idx1, idx2, len, i;
 
-    print(c);
+    if(fd_trace){
+		 print(c); printf("\n");
+	}
     var1 = car(c);
     var2 = cadr(c);
     expr = caddr(c);
@@ -1296,11 +1226,13 @@ int b_ac3(int arglist, int rest, int th)
 	    fd_enqueue_arc(car(sets));
 	    sets = cdr(sets);
 	}
+	fd_trace = 1;
 	while (!fd_empty()) {
 	    int arc;
 	    arc = fd_dequeue();
 	    fd_consistent(arc);
 	}
+	fd_trace = 0;
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
