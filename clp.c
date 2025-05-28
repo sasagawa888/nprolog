@@ -1068,7 +1068,7 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
-	    if (car(left) > car(right)) {
+	    if (cadr(left) > car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
 		}
@@ -1080,7 +1080,7 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 1 && length(right) == 2) {
-	    if (car(left) > cadr(right)) {
+	    if (car(left)  >= car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
 		}
@@ -1181,7 +1181,7 @@ void fd_propagate()
 
 int b_label(int arglist, int rest, int th)
 {
-    int n, ind, arg1, save1, save2, save3, res;
+    int n, ind, arg1, save1, save2, save3, res, sets;
 
     n = length(arglist);
     ind = makeind("label", n, th);
@@ -1192,6 +1192,22 @@ int b_label(int arglist, int rest, int th)
 	arg1 = car(arglist);
 
 	fd_sets = reverse(fd_sets);
+
+	/* AC-3 */
+	/*
+	sets = fd_sets;
+	while (!nullp(sets)) {
+	    fd_enqueue_arc(car(sets));
+	    sets = cdr(sets);
+	}
+	while (!fd_empty()) {
+	    int arc;
+	    arc = fd_dequeue();
+	    fd_consistent(arc);
+	}
+	*/
+
+	/* generate and test */
 	fd_var_idx = 0;
 	res = fd_solve();
 
