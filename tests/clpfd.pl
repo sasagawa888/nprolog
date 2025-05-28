@@ -126,7 +126,6 @@ magic(Xs) :-
 
 boo(Xs) :-
     Xs = [A,B,C],
-    
     Xs ins 1..9,
     all_different(Xs),
     N #= A+B,

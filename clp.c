@@ -1141,7 +1141,7 @@ int b_label(int arglist, int rest, int th)
 	    arc = fd_dequeue();
 	    fd_consistent(arc);
 	}
-
+	
 	/* generate and test */
 	fd_var_idx = 0;
 	res = fd_solve();
