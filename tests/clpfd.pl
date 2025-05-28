@@ -93,7 +93,7 @@ nqueens(Queens) :-
     length(Queens, 9),       
     Queens ins 1..9,         
     all_different(Queens),   
-    safe(Queens),       
+    safe(Queens),     
     label(Queens).
     
 safe([]).
