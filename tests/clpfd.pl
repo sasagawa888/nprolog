@@ -13,8 +13,8 @@ foo(L) :-
     L = [A, B, C],
     L ins 1..3,
     all_different(L),
-    A#>C,
-    label(L).
+    A#<C,
+    label(L,trace).
 
 n_factorial(0, 1).
 n_factorial(N, F) :-
