@@ -20,6 +20,8 @@ N-Prolog's CLPFD deliberately does not include heuristic optimizations. Experien
 - X in A..Z
 - Xs ins A..Z
 - all_different(Xs)
+- label(Xs).   
+- label(Xs,trace).  If the atom trace is given as the second argument to label/2, the process of reducing the solution space by the AC-3 algorithm will be displayed.
 
 # Function
 - + plus
@@ -51,6 +53,9 @@ CLP(FD): Organization of Algorithms and Data Structures
 
     fd_selected[256]  for all_different/1
     fd_sel_idx        index of selected stack
+
+    fd_removed[256][256]  removed domain 
+    fd_rem_idx[256]       index of removed erement.
     
 ```
 ## Domain generation
@@ -213,180 +218,41 @@ Constraint operators like #= are handled as infix operators using op/3.
 :- op(600, xfy, ins).
 ```
 
-Idea Memo: Handling Free Variables
+# Handling Free Variables
 free variable is Var in -999999999..999999999
 GET_VAR(x) == 2; distinguish normal var. normal var GET_VAR(x)==1.
 At first free variable's GET_VAR is 0. when find free var,SET_VAR(x,2),and -999999999..999999999
 satisficational find free variable, set fd_domain[idx] = value.
 when propagate get NO , unbind free variables.
 
-Idea Note
-labeling/2: There may be situations where it is effective to have an option that prunes the search tree without exploring branches when the value is UNKNOWN. For example, in the queens problem, the determined variables are more important, and computing satisfiability for undetermined variables is meaningless.
+I
 
-# ✅ fd_narrowing Algorithm Overview
+# AC-3
+In N-Prolog version 4.35, the AC-3 algorithm has been implemented. It is integrated into the label predicate.
+During preprocessing, label reduces the solution space using AC-3. After that, it performs generate-and-test while considering satisfiability within the reduced solution space.
+The code is shown below. For details, please refer to the file clp.c.
 
-## 🎯 Goal
-To iteratively **narrow the domain of finite-domain variables** by computing **min/max values of the overall expression**, thereby deducing constraints.
+```
+/* AC-3 */
+	sets = fd_sets;
+	while (!nullp(sets)) {
+	    fd_enqueue_arc(car(sets));
+	    sets = cdr(sets);
+	}
+	while (!fd_empty()) {
+	    int arc;
+	    arc = fd_dequeue();
+	    fd_consistent(arc);
+	}
+	fd_trace = 0;
 
----
+	/* generate and test */
+	fd_var_idx = 0;
+	res = fd_solve();
 
-## 🧠 Core Idea
-- Prioritize variables based on **coefficient magnitude** and **order of appearance**.
-- Use **min/max evaluation** of expressions to determine feasible value ranges.
-- If overlapping ranges between the left-hand side (LHS) and right-hand side (RHS) expressions shrink, restrict variable domains accordingly.
+	if (res == NO || res == COMPLETE)
+	    return (NO);
 
----
 
-## 📝 Example: SEND + MORE = MONEY
-
-### Setup
-
-**Expressions:**
-- LHS = `SEND + MORE`
-- RHS = `MONEY`
-- Each letter represents a digit with all values distinct (`all_different`).
-
-**Variable order (based on descending coefficient → then appearance):**
-- LHS variables: `[S, M, E, O, N, R, D]`
-- RHS variables: `[M, O, N, E, Y]`
-
----
-
-## 🔍 Step-by-Step Narrowing
-
-### Step 1: All variables undefined
-- Max(`SEND + MORE`) = `9999 + 9999 = 19998`
-- Max(`MONEY`) = `99999`
-- Min(`SEND + MORE`) = `0`
-- Min(`MONEY`) = `0`
-
-**Overlap:** `0 ~ 19998`  
-➡ `MONEY` starts with `M × 10000`. To stay within overlap, `M` must be ≤ 1 ⇒ **`M = 1`**
-
----
-
-### Step 2: `M = 1`
-- Max(`MORE`) = `1999`
-- Max(`SEND + MORE`) = `9999 + 1999 = 11998`
-- Min(`MONEY`) = `10000`
-
-**Overlap:** `10000 ~ 11998`  
-➡ Assign smallest available digit to `O` ⇒ **`O = 0`**
-
----
-
-### Step 3: `M = 1`, `O = 0`
-- `MORE` = `1000`
-- Max(`SEND`) = `9999`
-- `SEND + MORE` = `9999 + 1000 = 10999`
-➡ To match `MONEY = 10999`, `S` must be 9 ⇒ **`S = 9`**
-
----
-
-### Step 4: `M = 1`, `O = 0`, `S = 9`
-- `SEND + MORE = 10999`
-- `MONEY = 10999`
-
-➡ Both sides match ⇒ **Narrowing complete 🎉**
-
----
-
-## 🧩 Key Characteristics
-
-| Feature             | Description                                                                 |
-|---------------------|-----------------------------------------------------------------------------|
-| Heuristic-driven     | Prioritizes variables based on coefficient size and appearance order        |
-| Semantic narrowing   | Uses expression-level min/max evaluation instead of only local constraints  |
-| Decision mechanism   | Assumes a value → checks range consistency → narrows domain if necessary   |
-| Contrast with AC-3   | Goes beyond binary constraints to analyze global structure of expressions   |
-| Implementation ease  | Can be structured around symbolic expression evaluation and propagation     |
-
-Idea Memo
-Arc Consistency
-
-Given:
-[X, Y] ins 0..3
-X + Y #= 2
-as an example.
-
-Variables:
-[X, Y]
-Step 1: [X, Y]
-
-X → Y (propagation from X to Y)
-
-    X = 0
-
-        max: 0 + 9 = 9
-
-        min: 0 + 0 = 0
-
-        → 2 ∈ 0..9 → OK
-
-    X = 1
-
-        max: 1 + 9 = 10
-
-        min: 1 + 0 = 1
-
-        → 2 ∈ 1..10 → OK
-
-    X = 2
-
-        → 2 ∈ 2..11 → OK
-
-    X = 3
-
-        → 2 ∉ 3..12 → Invalid
-
-→ Thus, X ∈ 0..2 (remove 3)
-Reverse Direction: Y → X
-
-    Y = 0
-
-        max: 2 + 0 = 2
-
-        min: 0 + 0 = 0
-
-        Shared domain: 0..2 → OK
-
-    Y = 1
-
-        max: 2 + 1 = 3
-
-        min: 0 + 1 = 1
-
-        Shared domain: 1..3, intersects 0..2 → OK
-
-    Y = 2
-
-        Shared domain: 2..4, intersects 0..2 → OK
-
-    Y = 3
-
-        Shared domain: 3..5, does not intersect 0..2 → Invalid
-
-→ Thus, Y ∈ 0..2 (remove 3)
-AC-3
-
-Arc set:
-asets = [[X, Y]]
-
-while (asets != NIL) {
-  c = car(asets)
-  apply arc consistency to c
-  asets = cdr(asets)
-}
-
-As a result:
-→ X ∈ 0..2, Y ∈ 0..2
-Summary
-
-    For each constraint expression, extract all pairs of variables involved.
-
-    Add those pairs to the arc set asets.
-
-    Once the arc set is populated for all constraints, process it using the AC-3 loop above.
-
-    This narrows down the domains of the variables.
+```
 
