@@ -197,6 +197,7 @@ int fd_removed_p(int idx, int x){
 
 	for (i = 0; i < fd_rem_idx[idx]; i++) {
 	if (fd_removed[idx][i] == x)
+		printf("asdf");
 	    return(1);
     }
 
@@ -1037,7 +1038,7 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 1 && length(right) == 2) {
-	    if (car(left)  < car(right)) {
+	    if (car(left)  > car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
 		}
@@ -1065,19 +1066,9 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
-	    if (car(left) >= car(right)) {
-		if (flag == 1) {
-		    fd_add_removed(idx1, fd_domain[idx1]);
-		}
-		return;
-	    } else {
-		if (flag == 0) {
-		    fd_add_removed(idx1, fd_domain[idx1]);
-		}
-		return;
-	    }
+	    return;
 	} else if (length(left) == 1 && length(right) == 2) {
-	    if (car(left) >= cadr(right)) {
+	    if (car(left) >= car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
 		}
@@ -1101,7 +1092,8 @@ void fd_consistent(int c)
     int var1, var2, expr, idx1, idx2, len, i;
 
     if(fd_trace){
-		 print(c); printf("\n");
+		 print(car(c)); printf("->"); print(cadr(c));
+		 printf(": ");print(caddr(c)); printf("\n");
 	}
     var1 = car(c);
     var2 = cadr(c);
