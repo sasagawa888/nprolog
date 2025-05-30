@@ -38,3 +38,29 @@ test6(X,Y) :-
     Y in 1..5,
     X #>= Y,
     label([X,Y],trace). 
+
+test7(X,Y) :-
+    X in 1..10,
+    Y in 1..10,
+    X #= Y mod 3,
+    label([X,Y],trace).
+
+test8(X,Y) :-
+    X in 1..10,
+    Y in 1..10,
+    X #= Y ^ 3,
+    label([X,Y],trace).
+
+test9(X,Y) :-
+    X in 1..10,
+    Y in 1..10,
+    X #= Y ** 3,
+    label([X,Y],trace).
+
+
+test10(X,Y) :-
+    X in 1..10,
+    Y in 1..10,
+    X #= Y // 3,
+    label([X,Y],trace).
+

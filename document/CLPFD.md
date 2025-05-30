@@ -256,3 +256,7 @@ The code is shown below. For details, please refer to the file clp.c.
 
 ```
 
+## Limitation
+The number of variables that can be handled is limited to 32.
+
+The length of the queue for maintaining arc consistency is limited to 2024.
