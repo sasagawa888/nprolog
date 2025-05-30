@@ -552,6 +552,49 @@ int in_interval(int value, int range)
 	return (0);
 }
 
+int in_greater(int value, int range)
+{
+    if (car(range) <= car(value)+1
+	&& (cadr(range) >= car(value)+1))
+	return (1);
+    else
+	return (0);
+}
+
+int in_eqgreater(int value, int range)
+{
+    if (car(range) <= car(value)+1
+	&& (cadr(range) >= car(value)+1)){
+	return (1);}
+	else if (car(range) <= car(value)
+	&& (cadr(range) >= car(value))){
+	return (1);}
+    else
+	return (0);
+}
+
+int in_smaller(int value, int range)
+{
+    if (car(range) <= car(value)-1
+	&& (cadr(range) >= car(value)-1))
+	return (1);
+    else
+	return (0);
+}
+
+int in_eqsmaller(int value, int range)
+{
+    if (car(range) <= car(value)-1
+	&& (cadr(range) >= car(value)-1)){
+	return (1);}
+	if (car(range) <= car(value)
+	&& (cadr(range) >= car(value))){
+	return (1);}
+    else
+	return (0);
+}
+
+
 int overlap(int left, int right)
 {
     if (!(car(right) > cadr(left))
@@ -971,7 +1014,17 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
-	    return;
+		if (in_smaller(right,left)) {
+		if (flag == 1) {
+		    fd_add_removed(idx1, fd_domain[idx1]);
+		}
+		return;
+	    } else {
+		if (flag == 0) {
+		    fd_add_removed(idx1, fd_domain[idx1]);
+		}
+		return;
+	    }
 	} else if (length(left) == 1 && length(right) == 2) {
 	    if (car(left) < cadr(right)) {
 		if (flag == 1) {
@@ -1001,7 +1054,17 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
-	    return;
+		if (in_eqsmaller(right,left)) {
+		if (flag == 1) {
+		    fd_add_removed(idx1, fd_domain[idx1]);
+		}
+		return;
+	    } else {
+		if (flag == 0) {
+		    fd_add_removed(idx1, fd_domain[idx1]);
+		}
+		return;
+	    }
 	} else if (length(left) == 1 && length(right) == 2) {
 	    if (car(left) <= cadr(right)) {
 		if (flag == 1) {
@@ -1031,7 +1094,7 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
-	    if (cadr(left) > car(right)) {
+	    if (in_greater(right,left)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
 		}
@@ -1071,7 +1134,17 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
-	    return;
+		if (in_eqgreater(right,left)) {
+		if (flag == 1) {
+		    fd_add_removed(idx1, fd_domain[idx1]);
+		}
+		return;
+	    } else {
+		if (flag == 0) {
+		    fd_add_removed(idx1, fd_domain[idx1]);
+		}
+		return;
+	    }
 	} else if (length(left) == 1 && length(right) == 2) {
 	    if (car(left) >= car(right)) {
 		if (flag == 1) {
