@@ -64,3 +64,9 @@ test10(X,Y) :-
     X #= Y // 3,
     label([X,Y],trace).
 
+test11(X,Y) :-
+    X in 1..3,
+    Y in 1..3,
+    X #> Y,
+    Y #> X,
+    label([X,Y],trace). 
