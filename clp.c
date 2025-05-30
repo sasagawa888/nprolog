@@ -192,33 +192,38 @@ int fd_duplicate(int x)
     return (0);
 }
 
-int fd_removed_p(int idx, int x){
-	int i;
+int fd_removed_p(int idx, int x)
+{
+    int i;
 
-	for (i = 0; i < fd_rem_idx[idx]; i++) {
+    if (idx > fd_len[idx])
+	return (0);
+    for (i = 0; i < fd_rem_idx[idx]; i++) {
 	if (fd_removed[idx][i] == x)
-		printf("asdf");
-	    return(1);
+	    return (1);
     }
 
-	return(0);
+    return (0);
 }
 
-int increment(int idx)
+void increment(int idx)
 {
+    fd_domain[idx]++;
     if (fd_unique[idx] == 0) {
-	fd_domain[idx]++;
+	if (fd_removed_p(idx, fd_domain[idx]))
+	    fd_domain[idx]++;
+	return;
     } else {
 	while (1) {
 	    if (fd_duplicate(fd_domain[idx] + fd_min[idx]))
 		fd_domain[idx]++;
-		else if(fd_removed_p(idx,fd_domain[idx]))
+	    else if (fd_removed_p(idx, fd_domain[idx]))
 		fd_domain[idx]++;
 	    else
 		break;
 	}
     }
-    return (NO);
+
 }
 
 
@@ -811,10 +816,10 @@ void fd_add_removed(int idx, int x)
     // for retest consistency for removed variable, enqueue arcs 
     fd_enqueue_affected_arcs(idx);
 
-	fd_rem_sw = 1;
-	if(fd_trace){
-		 printf("remove val=%d\n",fd_min[idx] + fd_domain[idx]);
-	}
+    fd_rem_sw = 1;
+    if (fd_trace) {
+	printf("remove val=%d\n", fd_min[idx] + fd_domain[idx]);
+    }
 
 }
 
@@ -893,7 +898,7 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 
     if (fd_eq(expr)) {		//#=
 	if (length(left) == 1 && length(right) == 1) {
-	    if (car(left) == car(right)) {	
+	    if (car(left) == car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
 		}
@@ -948,7 +953,7 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	} else if (length(left) == 2 && length(right) == 1) {
 	    return;
 	} else if (length(left) == 1 && length(right) == 2) {
-		return;
+	    return;
 	} else if (length(left) == 2 && length(right) == 2) {
 	    return;
 	}
@@ -966,7 +971,7 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
-		return;
+	    return;
 	} else if (length(left) == 1 && length(right) == 2) {
 	    if (car(left) < cadr(right)) {
 		if (flag == 1) {
@@ -998,7 +1003,7 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 	} else if (length(left) == 2 && length(right) == 1) {
 	    return;
 	} else if (length(left) == 1 && length(right) == 2) {
-		if (car(left) <= cadr(right)) {
+	    if (car(left) <= cadr(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
 		}
@@ -1038,7 +1043,7 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 1 && length(right) == 2) {
-	    if (car(left)  > car(right)) {
+	    if (car(left) > car(right)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
 		}
@@ -1091,10 +1096,14 @@ void fd_consistent(int c)
 {
     int var1, var2, expr, idx1, idx2, len, i;
 
-    if(fd_trace){
-		 print(car(c)); printf("->"); print(cadr(c));
-		 printf(": ");print(caddr(c)); printf("\n");
-	}
+    if (fd_trace) {
+	print(car(c));
+	printf("->");
+	print(cadr(c));
+	printf(": ");
+	print(caddr(c));
+	printf("\n");
+    }
     var1 = car(c);
     var2 = cadr(c);
     expr = caddr(c);
@@ -1140,7 +1149,7 @@ int b_label(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 
-	label:
+      label:
 	fd_sets = reverse(fd_sets);
 
 	/* AC-3 */
@@ -1185,18 +1194,16 @@ int b_label(int arglist, int rest, int th)
 	    goto loop;
 	else if (res == NO)
 	    return (NO);
-    }
-	else if(n == 2){
-		arg1 = car(arglist);
-		arg2 = cadr(arglist);
-		if(!eqlp(arg2,makeconst("trace")))
-		exception(SYSTEM_ERR, ind, arg2,th);
+    } else if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	if (!eqlp(arg2, makeconst("trace")))
+	    exception(SYSTEM_ERR, ind, arg2, th);
 
-		fd_trace = 1;
-		goto label;
-	}
+	fd_trace = 1;
+	goto label;
+    }
 
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
-
