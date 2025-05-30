@@ -208,7 +208,7 @@ int fd_vars = NIL;
 int fd_removed[256][256];
 int fd_rem_idx[256];
 int fd_rem_sw;
-int fd_queue[256];
+int fd_queue[2048];
 int fd_deque_idx;
 int fd_enque_idx;
 int fd_trace;

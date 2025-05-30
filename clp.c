@@ -62,6 +62,8 @@ int b_constraint_var(int arglist, int rest, int th)
 	fd_max[fd_var_max] = max;
 	fd_len[fd_var_max] = max - min;
 	fd_var_max++;
+	if(fd_var_max > 32)
+			exception(SYSTEM_ERR,ind,arglist,th);
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -90,6 +92,8 @@ int b_constraint_vars(int arglist, int rest, int th)
 	    fd_max[fd_var_max] = max;
 	    fd_len[fd_var_max] = max - min;
 	    fd_var_max++;
+		if(fd_var_max > 32)
+			exception(SYSTEM_ERR,ind,arglist,th);
 	    arg1 = cdr(arg1);
 	}
 	return (prove_all(rest, sp[th], th));
@@ -820,6 +824,9 @@ void fd_enqueue(int x)
 {
     fd_queue[fd_enque_idx] = x;
     fd_enque_idx++;
+
+	if(fd_enque_idx > 2048)
+		exception(SYSTEM_ERR,makestr("fd_enque"),makeint(fd_enque_idx),0);
 }
 
 int fd_dequeue()
