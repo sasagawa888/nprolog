@@ -863,9 +863,6 @@ void fd_add_removed(int idx, int x)
     fd_removed[idx][fd_rem_idx[idx]] = x;
     fd_rem_idx[idx]++;
 
-    // for retest consistency for removed variable, enqueue arcs 
-    fd_enqueue_affected_arcs(idx);
-
     fd_rem_sw = 1;
     if (fd_trace) {
 	printf("remove val=%d\n", fd_min[idx] + fd_domain[idx]);
@@ -1190,12 +1187,20 @@ void fd_consistent(int c)
     idx1 = GET_ARITY(var1);
     idx2 = GET_ARITY(var2);
     len = fd_len[idx1];
+	fd_rem_sw = 0;
     for (i = 0; i <= len; i++) {
 	fd_domain[idx1] = i;
-	fd_rem_sw = 0;
 	fd_consistent1(expr, idx1, idx2, 0);
     }
     fd_domain[idx1] = UNBOUND;
+	// for retest consistency for removed variable, enqueue arcs 
+	if(fd_rem_sw == 1)
+    	fd_enqueue_affected_arcs(idx1);
+
+	/* in future implement
+	if(fd_rem_sw == 0)
+		fd_heuristic(expr,idx1,idx2);
+	*/
 }
 
 int fd_empty()
