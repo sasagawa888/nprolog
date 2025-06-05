@@ -230,3 +230,25 @@ mt_maplist([L|Ls],F,[M|Ms]) :-
 
 double(X,Y) :- Y is 2*X.
 
+
+%p148
+Y isl subset([A|X]) :-
+        memberd(A,Y),
+        Y0 isl Y / A,
+        Y0 isl subset(X).
+Y isl subset([A|X]) :-
+        Y isl subset(X).
+[] isl subset([]).
+
+%p153
+power0(Power1,Set) :-
+    bagof(X,(X isl subset(Set)),Power0),
+    sort(Power0,Power),
+    writeln(Power),
+    Power1 isl Power - [[],Set].
+
+%p194
+writeln(P) :-
+        write(P),nl.
+
+
