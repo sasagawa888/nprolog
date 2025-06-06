@@ -591,7 +591,7 @@ int b_bagofhelper(int arglist, int rest, int th)
 
     n = length(arglist);
     if (n == 1) {
-	arg1 = car(arglist);	//target var    
+	arg1 = car(arglist);	//target var  
 
 	nonfree = nonfree_list;
 	key = NIL;
@@ -599,7 +599,7 @@ int b_bagofhelper(int arglist, int rest, int th)
 	    key = cons(cons(car(nonfree), deref(car(nonfree), th)), key);
 	    nonfree = cdr(nonfree);
 	}
-	putinbag(key, deref(arg1, th));
+	putinbag(key, copy_heap(deref(arg1, th)));
 	return (NO);
     }
     return (NO);

@@ -1559,7 +1559,7 @@ int remove_duplicate(int x)
 {
     if (nullp(x))
 	return (NIL);
-    else if (memq(car(x), cdr(x)))
+    else if (memberp(car(x), cdr(x)))
 	return (remove_duplicate(cdr(x)));
     else
 	return (listcons(car(x), remove_duplicate(cdr(x))));
