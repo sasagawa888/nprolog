@@ -247,8 +247,38 @@ power0(Power1,Set) :-
     writeln(Power),
     Power1 isl Power - [[],Set].
 
+%p154
+topology_e(U,V,O) :-
+        (Z isl U+V,sort(Z,Zs), memberd(Za,O)),
+        (Z1 isl U*V,sort(Z1,Z1s),memberd(Z1s,O)).
+
+top_condition(O0,O) :-
+        for_any(memberr([U,V],O0,2),
+                topology_e(U,V,O)).
+
+ptop(Set0) :-
+        sort(Set0,Set),
+        ctr_set(0,1),
+        power0(Power,Set),
+        O0 isl suset(Power),
+        O isl [[]|O0] + [Set],
+        top_condition(O0,0),
+        write_count(O),
+        fail.
+
+
+
 %p194
 writeln(P) :-
         write(P),nl.
+write_count(O) :-
+        ctr_inc(0,N),
+        writeln(N = O).
+
+for_any(P,Q) :-
+        P,
+        ifthenelse(Q,fail,(!,fail)).
+for_any(P,Q).
+
 
 
