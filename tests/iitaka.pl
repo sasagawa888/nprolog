@@ -244,7 +244,6 @@ Y isl subset([A|X]) :-
 power0(Power1,Set) :-
     bagof(X,(X isl subset(Set)),Power0),
     sort(Power0,Power),
-    writeln(Power),
     Power1 isl Power - [[],Set].
 
 %p154

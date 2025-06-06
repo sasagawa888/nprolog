@@ -4918,7 +4918,7 @@ int b_sort(int arglist, int rest, int th)
 	if (!wide_variable_p(arg2) && !listp(arg2))
 	    exception(NOT_LIST, ind, arg2, th);
 
-	if (unify(arg2, sort(arg1), th) == YES)
+	if (unify(arg2, sort(remove_duplicate(arg1)), th) == YES)
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
