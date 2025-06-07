@@ -1294,7 +1294,7 @@ void print(int addr)
 	}
 	return;
     }
-    switch (GET_TAG(addr)) {
+    switch (GET_TAG(addr)) {    
     case INTN:
 	if (!bridge_flag)
 	    fprintf(GET_PORT(output_stream), "%d", GET_INT(addr));
@@ -1644,8 +1644,15 @@ void printinfix(int addr)
 	    printc('(');
 	    print(cadr(addr));
 	    printc(')');
-	} else
-	    print(cadr(addr));
+	} else{
+		if(structurep(cadr(addr)) && car(cadr(addr)) == AND){
+			printc('(');
+	    	print(cadr(addr));
+	    	printc(')');
+		}
+		else
+	    	print(cadr(addr));
+	}
 
 	print(car(addr));
 
@@ -1668,9 +1675,10 @@ void printinfix(int addr)
 	} else if (single_operation_p(caddr(addr))) {
 	    printc(' ');
 	    print(caddr(addr));
-	} else
+	} else {
 	    print(caddr(addr));
     }
+	}
 }
 
 
