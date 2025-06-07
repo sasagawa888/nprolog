@@ -671,12 +671,14 @@ int prove(int goal, int bindings, int rest, int th)
 	    prove_trace(DBCALL, goal, bindings, rest, th);
 
 	if (atomp(goal)) {
-		clauses = GET_CAR(goal);
+	    clauses = GET_CAR(goal);
 	    if (clauses != NIL && !memberp(makeint(0), GET_ARITY(goal)))
 		exception(ARITY_ERR, makestr("prove"), goal, th);
 	} else {
-		clauses = GET_CAR(car(goal));
-	    if (clauses != NIL && !memberp(makeint(length(cdr(goal))), GET_ARITY(car(goal))))
+	    clauses = GET_CAR(car(goal));
+	    if (clauses != NIL
+		&& !memberp(makeint(length(cdr(goal))),
+			    GET_ARITY(car(goal))))
 		exception(ARITY_ERR, makestr("prove"), goal, th);
 	}
 
@@ -1294,7 +1296,7 @@ void print(int addr)
 	}
 	return;
     }
-    switch (GET_TAG(addr)) {    
+    switch (GET_TAG(addr)) {
     case INTN:
 	if (!bridge_flag)
 	    fprintf(GET_PORT(output_stream), "%d", GET_INT(addr));
@@ -1644,14 +1646,13 @@ void printinfix(int addr)
 	    printc('(');
 	    print(cadr(addr));
 	    printc(')');
-	} else{
-		if(structurep(cadr(addr)) && car(cadr(addr)) == AND){
-			printc('(');
-	    	print(cadr(addr));
-	    	printc(')');
-		}
-		else
-	    	print(cadr(addr));
+	} else {
+	    if (structurep(cadr(addr)) && car(cadr(addr)) == AND) {
+		printc('(');
+		print(cadr(addr));
+		printc(')');
+	    } else
+		print(cadr(addr));
 	}
 
 	print(car(addr));
@@ -1677,8 +1678,8 @@ void printinfix(int addr)
 	    print(caddr(addr));
 	} else {
 	    print(caddr(addr));
-    }
 	}
+    }
 }
 
 

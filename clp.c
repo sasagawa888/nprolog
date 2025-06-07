@@ -62,8 +62,8 @@ int b_constraint_var(int arglist, int rest, int th)
 	fd_max[fd_var_max] = max;
 	fd_len[fd_var_max] = max - min;
 	fd_var_max++;
-	if(fd_var_max > 32)
-			exception(SYSTEM_ERR,ind,arglist,th);
+	if (fd_var_max > 32)
+	    exception(SYSTEM_ERR, ind, arglist, th);
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -92,8 +92,8 @@ int b_constraint_vars(int arglist, int rest, int th)
 	    fd_max[fd_var_max] = max;
 	    fd_len[fd_var_max] = max - min;
 	    fd_var_max++;
-		if(fd_var_max > 32)
-			exception(SYSTEM_ERR,ind,arglist,th);
+	    if (fd_var_max > 32)
+		exception(SYSTEM_ERR, ind, arglist, th);
 	    arg1 = cdr(arg1);
 	}
 	return (prove_all(rest, sp[th], th));
@@ -558,8 +558,7 @@ int in_interval(int value, int range)
 
 int in_greater(int value, int range)
 {
-    if (car(range) <= car(value)+1
-	&& (cadr(range) >= car(value)+1))
+    if (car(range) <= car(value) + 1 && (cadr(range) >= car(value) + 1))
 	return (1);
     else
 	return (0);
@@ -567,20 +566,18 @@ int in_greater(int value, int range)
 
 int in_eqgreater(int value, int range)
 {
-    if (car(range) <= car(value)+1
-	&& (cadr(range) >= car(value)+1)){
-	return (1);}
-	else if (car(range) <= car(value)
-	&& (cadr(range) >= car(value))){
-	return (1);}
-    else
+    if (car(range) <= car(value) + 1 && (cadr(range) >= car(value) + 1)) {
+	return (1);
+    } else if (car(range) <= car(value)
+	       && (cadr(range) >= car(value))) {
+	return (1);
+    } else
 	return (0);
 }
 
 int in_smaller(int value, int range)
 {
-    if (car(range) <= car(value)-1
-	&& (cadr(range) >= car(value)-1))
+    if (car(range) <= car(value) - 1 && (cadr(range) >= car(value) - 1))
 	return (1);
     else
 	return (0);
@@ -588,13 +585,13 @@ int in_smaller(int value, int range)
 
 int in_eqsmaller(int value, int range)
 {
-    if (car(range) <= car(value)-1
-	&& (cadr(range) >= car(value)-1)){
-	return (1);}
-	if (car(range) <= car(value)
-	&& (cadr(range) >= car(value))){
-	return (1);}
-    else
+    if (car(range) <= car(value) - 1 && (cadr(range) >= car(value) - 1)) {
+	return (1);
+    }
+    if (car(range) <= car(value)
+	&& (cadr(range) >= car(value))) {
+	return (1);
+    } else
 	return (0);
 }
 
@@ -825,8 +822,9 @@ void fd_enqueue(int x)
     fd_queue[fd_enque_idx] = x;
     fd_enque_idx++;
 
-	if(fd_enque_idx > 2048)
-		exception(SYSTEM_ERR,makestr("fd_enque"),makeint(fd_enque_idx),0);
+    if (fd_enque_idx > 2048)
+	exception(SYSTEM_ERR, makestr("fd_enque"), makeint(fd_enque_idx),
+		  0);
 }
 
 int fd_dequeue()
@@ -1018,7 +1016,7 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
-		if (in_smaller(right,left)) {
+	    if (in_smaller(right, left)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
 		}
@@ -1058,7 +1056,7 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
-		if (in_eqsmaller(right,left)) {
+	    if (in_eqsmaller(right, left)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
 		}
@@ -1098,7 +1096,7 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
-	    if (in_greater(right,left)) {
+	    if (in_greater(right, left)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
 		}
@@ -1138,7 +1136,7 @@ void fd_consistent1(int expr, int idx1, int idx2, int flag)
 		return;
 	    }
 	} else if (length(left) == 2 && length(right) == 1) {
-		if (in_eqgreater(right,left)) {
+	    if (in_eqgreater(right, left)) {
 		if (flag == 1) {
 		    fd_add_removed(idx1, fd_domain[idx1]);
 		}
@@ -1187,20 +1185,20 @@ void fd_consistent(int c)
     idx1 = GET_ARITY(var1);
     idx2 = GET_ARITY(var2);
     len = fd_len[idx1];
-	fd_rem_sw = 0;
+    fd_rem_sw = 0;
     for (i = 0; i <= len; i++) {
 	fd_domain[idx1] = i;
 	fd_consistent1(expr, idx1, idx2, 0);
     }
     fd_domain[idx1] = UNBOUND;
-	// for retest consistency for removed variable, enqueue arcs 
-	if(fd_rem_sw == 1)
-    	fd_enqueue_affected_arcs(idx1);
+    // for retest consistency for removed variable, enqueue arcs 
+    if (fd_rem_sw == 1)
+	fd_enqueue_affected_arcs(idx1);
 
-	/* in future implement
-	if(fd_rem_sw == 0)
-		fd_heuristic(expr,idx1,idx2);
-	*/
+    /* in future implement
+       if(fd_rem_sw == 0)
+       fd_heuristic(expr,idx1,idx2);
+     */
 }
 
 int fd_empty()
