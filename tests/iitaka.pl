@@ -48,12 +48,6 @@ set(L==M) :-
     sort(M,M0),
     L0 == M0.
 
-:- op(700,xfx,isl).
-
-Y isl [] + Y :- !.
-Z isl [A|X] + Y :- member(A,Y),!,Z isl X + Y.
-[A|Z] isl [A|X] + Y :- Z isl X + Y.
-
 %p131
 memberr([A],X,1) :- member(A,X).
 memberr([A|LA],[A|Y],R) :-
@@ -262,8 +256,8 @@ ptop(Set0) :-
         O0 isl subset(Power),
         O isl [[]|O0] + [Set],
         top_condition(O0,O),
-        write_count(O).
-        %fail.
+        write_count(O),
+        fail.
 
 
 
