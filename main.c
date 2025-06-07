@@ -671,13 +671,13 @@ int prove(int goal, int bindings, int rest, int th)
 	    prove_trace(DBCALL, goal, bindings, rest, th);
 
 	if (atomp(goal)) {
-	    if (!memberp(makeint(0), GET_ARITY(goal)))
+		clauses = GET_CAR(goal);
+	    if (clauses != NIL && !memberp(makeint(0), GET_ARITY(goal)))
 		exception(ARITY_ERR, makestr("prove"), goal, th);
-	    clauses = GET_CAR(goal);
 	} else {
-	    if (!memberp(makeint(length(cdr(goal))), GET_ARITY(car(goal))))
+		clauses = GET_CAR(car(goal));
+	    if (clauses != NIL && !memberp(makeint(length(cdr(goal))), GET_ARITY(car(goal))))
 		exception(ARITY_ERR, makestr("prove"), goal, th);
-	    clauses = GET_CAR(car(goal));
 	}
 
 	if (clauses == NIL) {
