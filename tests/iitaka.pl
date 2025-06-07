@@ -259,11 +259,11 @@ ptop(Set0) :-
         sort(Set0,Set),
         ctr_set(0,1),
         power0(Power,Set),
-        O0 isl suset(Power),
+        O0 isl subset(Power),
         O isl [[]|O0] + [Set],
-        top_condition(O0,0),
-        write_count(O),
-        fail.
+        top_condition(O0,O),
+        write_count(O).
+        %fail.
 
 
 
