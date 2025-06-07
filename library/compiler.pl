@@ -715,6 +715,16 @@ gen_body1(((D1;D2),Xs),N) :-
     write(',th),'),
     gen_body1(Xs,N),
     write(',th)').
+
+gen_body1(((C1,C2),Xs),N) :-
+    write('Jwlist3(Jmakeope(","),'),
+	write('Jwlist3(Jmakeope(","),'),
+	gen_body1(C1,N),
+    write(','),
+    gen_body1(C2,N),
+    write(',th),'),
+    gen_body1(Xs,N),
+    write(',th)').
     
 gen_body1((X,Xs),N) :-
 	write('Jwlist3(Jmakeope(","),'),
@@ -1259,6 +1269,14 @@ gen_a_argument(X) :-
     X =.. [F|Z],
 	write('Jwcons(Jmakefun("'),
     write(F),
+    write('"),'),
+    gen_argument(Z),
+    write(',th)').
+gen_a_argument(X) :-
+    n_defined_userop(X),
+    X =.. [Y|Z],
+    write('Jwcons(Jmakecomp("'),
+    write(Y),
     write('"),'),
     gen_argument(Z),
     write(',th)').

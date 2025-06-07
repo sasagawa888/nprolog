@@ -989,6 +989,13 @@ int exec_all(int goals, int bindings, int th)
 	    return (exec_all(caddr(goals), bindings, th));
 	else
 	    return (NO);
+    }
+	/* ((D1,D2),Xs) */
+    else if (structurep(goals) && car(goals) == AND && car(cadr(goals)) == AND) {
+	if (exec_all(cadr(goals), bindings, th) == YES)
+	    return (exec_all(caddr(goals), bindings, th));
+	else
+	    return (NO);
     } else if (car(goals) != AND)
 	return (exec(goals, bindings, NIL, th));
     else {
