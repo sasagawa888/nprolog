@@ -274,4 +274,59 @@ for_any(P,Q) :-
 for_any(P,Q).
 
 
+%p195
+smallbag(X,P,_) :-
+        end_rr([]),
+        call(P),
+        begin_rr(A),
+        small(X,A,A0),
+        end_rr(A0),
+        fail.
+smallbag(_,_,List) :-
+        begin_rr(List),!.
+
+small(X,A,A0) :-
+        ifthenelse(memberd(X,A),A0=A,A0=[X|A]).
+
+begin_rr(A) :-
+        recorded('0',A,Nref),erase(Nref).
+end_rr(A) :-
+        recorda('0',A,_).
+
+generate_e(N,E) :-
+        gene_e_aux(E,N,[]).
+gene_e_aux(L,0,L) :- !.
+gene_e_aux(Const,N,L) :-
+        N1 is N-1,
+        gene_e_aux(Const,N1,[N|l]).
+
+arg_list(X,Y,M) :-
+        PY =.. [prd|Y],arg(K,PY,M).
+
+Z isq 1//X :-
+        listr_map(X,Mapr),
+        map_list3(Mapr,Z).
+Z isq X/Y :-
+        !,Y1 isq 1//Y,Z isq X*Y1.
+E isq F^0 :- 
+        length(F,N0),
+        generate_e(N0,E),!.
+G isq F^N :-
+        N1 is -1*N,
+        G1 isq F^N1,
+        G isq 1//G1.
+
+powerq_aux([F,N,G],1,G).
+powerq_aux(Const,WN,WG) :-
+        Const = [F|_],
+        WN1 is WN-1,
+        write(WN1),
+        tab(3),
+        WG1 isq WG*F,
+        powerq_aux(Const,WN1,WG1).
+
+1 isq ord(E,E) :- !.
+N isq ord(X,E) :-
+        prder_aux([N,X,E],X,1).
+
 
