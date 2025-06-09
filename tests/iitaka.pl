@@ -177,6 +177,7 @@ arg_list(K,Y,M) :- PY =.. [prd|Y],arg(K,PY,M).
 
 
 :- op(700,xfx,isq).
+% product of permutation X isq [2,3,1]*[2,3,1]. X = [3,1,2]
 [J] isq X * [I] :-
     arg_list(I,X,J),!.
 [J|LJ] isq X * [I|LI] :-
@@ -293,6 +294,7 @@ begin_rr(A) :-
 end_rr(A) :-
         recorda('0',A,_).
 
+/* generate(10,X) -> [1,2,3,4,5,6,7,8,9,10] */
 generate_e(N,E) :-
         gene_e_aux(E,N,[]).
 gene_e_aux(L,0,L) :- !.
@@ -300,12 +302,10 @@ gene_e_aux(Const,N,L) :-
         N1 is N-1,
         gene_e_aux(Const,N1,[N|l]).
 
-arg_list(X,Y,M) :-
+/* arg_list(2,[1,2,3],M). M=2*/
+arg_list(K,Y,M) :-
         PY =.. [prd|Y],arg(K,PY,M).
 
-Z isq 1//X :-
-        listr_map(X,Mapr),
-        map_list3(Mapr,Z).
 Z isq X/Y :-
         !,Y1 isq 1//Y,Z isq X*Y1.
 E isq F^0 :- 
