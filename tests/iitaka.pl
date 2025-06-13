@@ -177,7 +177,7 @@ arg_list(K,Y,M) :- PY =.. [prd|Y],arg(K,PY,M).
 
 
 :- op(700,xfx,isq).
-% product of permutation X isq [2,3,1]*[2,3,1]. X = [3,1,2]
+% product of permutations X isq [2,3,1]*[2,3,1]. X = [3,1,2]
 [J] isq X * [I] :-
     arg_list(I,X,J),!.
 [J|LJ] isq X * [I|LI] :-
@@ -185,16 +185,14 @@ arg_list(K,Y,M) :- PY =.. [prd|Y],arg(K,PY,M).
 
 %p180
 :- op(700,xfx,:).
-Z isq 1//X :-
-        listr_map(X,Marpr),map_list3(Mapr,Z),!.
-
+% listr_map([a,b,c],X). X = [1:a,2:b,3:c]
 listr_map(List,Mapr) :- listr_map_aux(List,Mapr,1).
 listr_map_aux([],[],_) :- !.
 listr_map_aux([A|WL],[I:A | WMap1], I) :-
         I1 is I+1,!,
         listr_map_aux(WL,WMap1,I1).
 
-%p171
+%p171 delete1(X=[1,2,3]-2). X = [1,3]
 delete1(X = [A|X]-A) :- !.
 delete1([B|Y] = [B|X]-A) :- delete1(Y = X - A).
 
@@ -306,11 +304,22 @@ gene_e_aux(Const,N,L) :-
 arg_list(K,Y,M) :-
         PY =.. [prd|Y],arg(K,PY,M).
 
+% inverse Z isq 1//[1,2,3]. Z = [1,2,3]
+Z isq 1//X :-
+        listr_map(X,Mapr),
+        map_list3(Mapr,Z).
+% devide 
 Z isq X/Y :-
         !,Y1 isq 1//Y,Z isq X*Y1.
+
+% power
 E isq F^0 :- 
         length(F,N0),
         generate_e(N0,E),!.
+F isq F^1 :- !.
+G isq F^N :- 
+        N>0,gc(full),
+        powerq_aux([F,N,G],N,F),!.
 G isq F^N :-
         N1 is -1*N,
         G1 isq F^N1,
@@ -330,3 +339,12 @@ N isq ord(X,E) :-
         prder_aux([N,X,E],X,1).
 
 
+%p171 map_list3([a:1,b:2],X). X = [a,b] 
+map_list3(Map,List) :-
+        length(Map,N),
+        !,map_list3_aux(List,[],Map,N).
+map_list3_aux(WM,WM,[],0) :- !.
+map_list3_aux(Const,WM,WL,WN) :-
+        WN1 is WN - 1,
+        delete1(WL1 = WL - (Q:WN)),!,
+        map_list3_aux(Const,[Q|WM],WL1,WN1).
