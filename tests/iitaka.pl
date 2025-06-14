@@ -323,7 +323,8 @@ G isq F^N :-
 G isq F^N :-
         N1 is -1*N,
         G1 isq F^N1,
-        G isq 1//G1.
+        G isq 1//G1,
+        powerq_aux([F,N,G],1,G).
 
 powerq_aux([F,N,G],1,G).
 powerq_aux(Const,WN,WG) :-

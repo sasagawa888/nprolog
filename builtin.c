@@ -4603,6 +4603,12 @@ int b_gbc(int arglist, int rest, int th)
 	if (arg1 == makeconst("full")) {
 	    gbc();
 	    return (prove_all(rest, sp[th], th));
+	} else if (arg1 == makeconst("on")) {
+	    gbc_flag = 1;
+	    return (prove_all(rest, sp[th], th));
+	} else if (arg1 == makeconst("off")) {
+	    gbc_flag = 0;
+	    return (prove_all(rest, sp[th], th));
 	} else {
 	    exception(ILLEGAL_ARGS, ind, arglist, th);
 	}

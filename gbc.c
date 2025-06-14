@@ -58,6 +58,8 @@ void markcell(int addr)
     case SINGLE:
 	markcell(car(addr));
 	markcell(cdr(addr));
+    markcell(GET_AUX(addr));
+    markcell(GET_ARITY(addr));
 	markcell(GET_VAR(addr));
 	markcell(GET_RECORD(addr));
 	return;
@@ -67,6 +69,7 @@ void markcell(int addr)
     case STRUCT:
 	markcell(car(addr));
 	markcell(cdr(addr));
+    markcell(GET_AUX(addr));
 	markcell(GET_VAR(addr));
 	markcell(GET_RECORD(addr));
 	return;
@@ -98,7 +101,7 @@ void gbcmark(void)
     for (i = 0; i < HASHTBSIZE; i++)
 	markcell(cell_hash_table[i]);
 
-    //mard ley-list for key/1
+    //mark key-list for key/1
     markcell(key_list);
 
     //mark hash table of recordh term
