@@ -349,3 +349,25 @@ map_list3_aux(Const,WM,WL,WN) :-
         WN1 is WN - 1,
         delete1(WL1 = WL - (Q:WN)),!,
         map_list3_aux(Const,[Q|WM],WL1,WN1).
+
+%p165 map and function
+:- op(700,xfx,ism).
+% Y ism val([a:1,b:2,c:3], 2). Y = b 
+Y ism val([],X) :- !.
+Y ism val([Y:X |F],X) :- !.
+Y ism val([A|F],X) :- !,Y ism val(F,X).
+% Y ism set([a:1,b:2,c:3], [1,2]). Y = [a,b]
+[] ism set(F,[]) :- !.
+B ism set(F,[X|A0]) :- 
+        Y ism val(F,X),!,
+        B0 ism set(F,A0),
+        small(Y,B0,B).
+
+% C ism inv_set([a:1,b:2,c:3,d:2], [1,2,3], [a,b]). C = [1,2] 
+[] ism inv_set(F,S,[]) :- !.
+[] ism inv_set(F,[],A) :- !.
+C ism inv_set(F,[X|S0],A) :-
+        Y ism val(F,X),
+        C0 ism inv_set(F,S0,A),!,
+        ifthenelse(memberd(Y,A),small(X,C0,C),C=C0).
+
