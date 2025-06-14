@@ -288,6 +288,8 @@ Deconstruct the structure Struct into its name Name and arity Arity, or construc
 Launch garbage collection.
 When the argument is full, the cells that are no longer needed in the heap area are collected. 
 
+Extension: Providing the atom on as an argument enables message display upon garbage collection. Providing the atom off disables the message.
+
 ### □ get(Char)
 Read the next character from a standard input device, skipping unprinted characters,
 Unify the ASCII value with Char. 
@@ -905,7 +907,7 @@ fail/0
 float/1
 float_text/3
 flush/0 
-gc/0
+gc/1
 get/1
 get/2
 get0/1
