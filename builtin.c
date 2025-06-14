@@ -4601,6 +4601,7 @@ int b_gbc(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (arg1 == makeconst("full")) {
+		markcell(rest);
 	    gbc();
 	    return (prove_all(rest, sp[th], th));
 	} else if (arg1 == makeconst("on")) {
