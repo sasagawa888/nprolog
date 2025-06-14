@@ -371,3 +371,8 @@ C ism inv_set(F,[X|S0],A) :-
         C0 ism inv_set(F,S0,A),!,
         ifthenelse(memberd(Y,A),small(X,C0,C),C=C0).
 
+% compound function H ism [a:1,b:2] * [x:1,y:2]. H = [x:a,y:b] 
+[] ism [] * G :- !.
+[(Z:X)|H] ism [(X:A)|F] * G :-
+        Z ism val(G,A),!,
+        H ism F * G.
