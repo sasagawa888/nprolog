@@ -89,7 +89,7 @@ void gbcmark(void)
     MARK_CELL(UNDEF);
 
     //mark variable-list
-    for (i = 0; i > THREADSIZE; i++) {
+    for (i = 0; i < THREADSIZE; i++) {
 	markcell(variables[i]);
 	markcell(variables_save[i]);
     }
