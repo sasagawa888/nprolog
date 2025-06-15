@@ -376,3 +376,42 @@ C ism inv_set(F,[X|S0],A) :-
 [(Z:X)|H] ism [(X:A)|F] * G :-
         Z ism val(G,A),!,
         H ism F * G.
+
+%p171 surjection([a:1,b:2],[1,2],[a,b]). yes
+surjection(F,S,T) :-
+        ImS ism set(F,S),
+        set(ImS == T).
+
+list_all([],_,_) :- !,fail.
+list_all(T,[A],1) :- member(A,T).
+list_all(T,[A|LA],N) :- 
+        N>1,N1 is N-1,
+        member(A,T),
+        list_all(T,LA,N1).
+
+list_map(List,Map) :-
+        list_map_aux(List,Map,1),!.
+list_map_aux([A|L],X,I) :-
+        I1 is I+1,!,
+        X = [A:I|X0],
+        ifthenelse(L==[],X0=[],list_map_aux(L,X0,I1)).
+
+all_map(T,F,N) :-
+        list_all(T,A,N),
+        list_map(A,F).
+all_map(T,F,A,N) :-
+        list_all(T,A,N),
+        list_map(A,F).
+
+s(N,M) :-
+        generate_e(N,LN),
+        generate_e(M,LM),
+        all_map(LN,F,A,M),
+        surjection(F,LM,LN),
+        writeln(A),fail.
+
+%p173 
+injection(F,S,_) :-
+        for_any(memberr([X,Y],S,2),
+                (X1 ism val(F,X),Y1 ism val(F,Y), X1 \== Y1)).
+
