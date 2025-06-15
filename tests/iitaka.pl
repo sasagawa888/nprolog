@@ -241,7 +241,7 @@ power0(Power1,Set) :-
 
 %p154
 topology_c(U,V,O) :-
-        (Z isl U+V,sort(Z,Zs), memberd(Za,O)),
+        (Z isl U+V,sort(Z,Zs), memberd(Zs,O)),
         (Z1 isl U*V,sort(Z1,Z1s),memberd(Z1s,O)).
 
 top_condition(O0,O) :-
@@ -269,7 +269,7 @@ write_count(O) :-
 
 for_any(P,Q) :-
         P,
-        ifthenelse(Q,fail,(!,fail)).
+        (Q -> fail;(!,fail)).
 for_any(P,Q).
 
 
@@ -410,7 +410,8 @@ s(N,M) :-
         surjection(F,LM,LN),
         writeln(A),fail.
 
-%p173 
+%p173 injection([a:1,b:2,c:3],[1,2,3],_). yes
+% injection([a:1,a:2,c:3],[1,2,3],_). no(false)
 injection(F,S,_) :-
         for_any(memberr([X,Y],S,2),
                 (X1 ism val(F,X),Y1 ism val(F,Y), X1 \== Y1)).
