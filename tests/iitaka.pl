@@ -158,8 +158,8 @@ memberd(A,Y),!,Z isl X + Y.
 
 %p144
 [] isl [] * Y :-!.
-[A|Z] isl [A|Z] * Y :-
-memberd(A, X),!,Z isl X * Y.
+[A|Z] isl [A|X] * Y :-
+memberd(A, Y),!,Z isl X * Y.
 Z isl [A|X] * Y :- Z isl X * Y.
 
 %p147
@@ -269,7 +269,7 @@ write_count(O) :-
 
 for_any(P,Q) :-
         P,
-        (Q -> fail;(!,fail)).
+        ifthenelse(Q,fail,(!,fail)).
 for_any(P,Q).
 
 

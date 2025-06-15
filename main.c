@@ -597,8 +597,12 @@ int prove_all(int goals, int bindings, int th)
     else if (car(goals) != AND)
 	return (prove(goals, bindings, NIL, th));
     else {
-	if (!has_cut_p(goals)) {
-	    return (prove(cadr(goals), bindings, caddr(goals), th));
+	if(structurep(cadr(goals)) && car(cadr(goals)) == AND &&
+		   structurep(caddr(goals)) && car(caddr(goals)) == AND){
+		if(prove_all(cadr(goals),bindings,th) == YES)
+			return(prove_all(caddr(goals),bindings,th));
+	}else if (!has_cut_p(goals)) {
+		return (prove(cadr(goals), bindings, caddr(goals), th));
 	} else {
 	    if (prove_all(before_cut(goals), bindings, th) == YES) {
 		res = prove_all(after_cut(goals), sp[th], th);
