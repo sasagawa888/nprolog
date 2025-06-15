@@ -418,5 +418,5 @@ s(N,M) :-
 % injection([a:1,a:2,c:3],[1,2,3],_). no(false)
 injection(F,S,_) :-
         for_any(memberr([X,Y],S,2),
-                (X1 ism val(F,X),Y1 ism val(F,Y), X1 \== Y1)).
+                (X1 ism val(F,X),Y1 ism val(F,Y),write(X1),write(Y1), X1 \== Y1)).
 
