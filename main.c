@@ -147,7 +147,6 @@ int shutdown_flag = 0;		/* when receive dp_close, shutdown_flag = 1 */
 int active_thread = 0;		/* for mt_and/1 mt_or/1 */
 int dynamic_flag = 0;		/* for dynamic predicate. while assertz dynamic flag = 1 */
 int string_flag = 0;		/* ARITY/PROLOG mode 0, ISO mode 1 */
-int ifthenelse_hascut_flag; /* if ifthenelse has ! in execution flag = 1 */
 
 //stream
 int standard_input;
@@ -423,7 +422,6 @@ void init_repl(void)
     sskip_flag = OFF;
     xskip_flag = OFF;
     semiskip_flag = OFF;
-	ifthenelse_hascut_flag = 0;
     leap_point = NIL;
     left_margin = 4;
     big_pt0 = 0;
@@ -600,7 +598,12 @@ int prove_all(int goals, int bindings, int th)
 	if(structurep(cadr(goals)) && car(cadr(goals)) == AND &&
 		   structurep(caddr(goals)) && car(caddr(goals)) == AND){
 		if(prove_all(cadr(goals),bindings,th) == YES)
-			return(prove_all(caddr(goals),bindings,th));
+		     if(prove_all(caddr(goals),bindings,th) == YES)
+			 	return(YES);
+			else 
+				return(NO);
+		else 
+			return(NO);
 	}else if (!has_cut_p(goals)) {
 		return (prove(cadr(goals), bindings, caddr(goals), th));
 	} else {
@@ -745,14 +748,7 @@ int prove(int goal, int bindings, int rest, int th)
 			    wp[th] = save1;
 			    ac[th] = save2;
 			    unbind(bindings, th);
-				/* while executint ifthenelse/3 <!,fail> return(false)
-				 * becuase body must fail by cut & fail
-				 * but else case, body fail and return no.
-				*/
-				if(ifthenelse_hascut_flag)
-			    	return (NFALSE);
-				else 
-					return (NO);
+				return (NO);
 			}
 		    }
 		}

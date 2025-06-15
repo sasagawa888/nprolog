@@ -251,13 +251,17 @@ top_condition(O0,O) :-
 ptop(Set0) :-
         sort(Set0,Set),
         ctr_set(0,1),
-        power0(Power,Set),
+        power0(Power,Set),!,
         O0 isl subset(Power),
         O isl [[]|O0] + [Set],
         top_condition(O0,O),
         write_count(O),
         fail.
 
+top(O) :-
+        O0 isl O - [[1,2,3]],
+        O1 isl O0 - [[]],
+        top_condition(O1,O).
 
 
 %p194
@@ -265,7 +269,7 @@ writeln(P) :-
         write(P),nl.
 write_count(O) :-
         ctr_inc(0,N),
-        writeln(N = O).
+        writeln(N = O),!.
 
 for_any(P,Q) :-
         P,

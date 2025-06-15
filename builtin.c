@@ -3574,7 +3574,7 @@ int b_ifthen(int arglist, int rest, int th)
 
 int b_ifthenelse(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2, arg3, save;
+    int n, ind, arg1, arg2, arg3, save, res;
 
     n = length(arglist);
     ind = makeind("ifthenelse", n, th);
@@ -3592,14 +3592,18 @@ int b_ifthenelse(int arglist, int rest, int th)
 
 	save = sp[th];
 	if (prove_all(arg1, sp[th], th) == YES) {
-		if(has_cut_p(arg2))
-			ifthenelse_hascut_flag = 1;
-	    return (prove_all(addtail_body(rest, arg2, th), sp[th], th));
+	    res = prove_all(arg2,sp[th], th);
+		if(res == YES)
+			return(prove_all(rest,sp[th],th));
+		else 
+			return(res);
 	} else {
 	    unbind(save, th);
-		if(has_cut_p(arg3))
-			ifthenelse_hascut_flag = 1;
-	    return (prove_all(addtail_body(rest, arg3, th), sp[th], th));
+	    res = prove_all(arg3, sp[th], th);
+		if(res == YES)
+			return(prove_all(rest,sp[th],th));
+		else 
+			return(res);
 	}
     }
     exception(ARITY_ERR, ind, arglist, th);
