@@ -3574,7 +3574,7 @@ int b_ifthen(int arglist, int rest, int th)
 
 int b_ifthenelse(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2, arg3, save, res;
+    int n, ind, arg1, arg2, arg3, save, body, res;
 
     n = length(arglist);
     ind = makeind("ifthenelse", n, th);
@@ -3591,19 +3591,15 @@ int b_ifthenelse(int arglist, int rest, int th)
 	    exception(INSTANTATION_ERR, ind, arg3, th);
 
 	save = sp[th];
-	if (prove_all(arg1, sp[th], th) == YES) {
-	    res = prove_all(arg2,sp[th], th);
-		if(res == YES)
-			return(prove_all(rest,sp[th],th));
-		else 
-			return(res);
+	body = addtail_body(arg2,arg1,th);
+	if ((res = prove_all(body, sp[th], th)) == YES) {
+	    return(prove_all(rest,sp[th],th));
 	} else {
 	    unbind(save, th);
-	    res = prove_all(arg3, sp[th], th);
-		if(res == YES)
-			return(prove_all(rest,sp[th],th));
-		else 
+		if (res == NFALSE) 
 			return(res);
+		body = addtail_body(rest,arg3,th);
+	    return(prove_all(body, sp[th], th));
 	}
     }
     exception(ARITY_ERR, ind, arglist, th);
