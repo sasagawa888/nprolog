@@ -557,6 +557,7 @@ extern int shutdown_flag;
 extern int active_thread;
 extern int dynamic_flag;
 extern int string_flag;
+extern int ifthenelse_false_flag;
 
 //------pointer----
 extern int hp; 

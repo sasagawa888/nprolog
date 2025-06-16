@@ -241,8 +241,8 @@ power0(Power1,Set) :-
 
 %p154
 topology_c(U,V,O) :-
-        (Z isl U+V,sort(Z,Zs), memberd(Zs,O)),
-        (Z1 isl U*V,sort(Z1,Z1s),memberd(Z1s,O)).
+        (Z isl U+V,sort(Z,Zs), member(Zs,O)),
+        (Z1 isl U*V,sort(Z1,Z1s),member(Z1s,O)).
 
 top_condition(O0,O) :-
         for_any(memberr([U,V],O0,2),
@@ -418,5 +418,5 @@ s(N,M) :-
 % injection([a:1,a:2,c:3],[1,2,3],_). no(false)
 injection(F,S,_) :-
         for_any(memberr([X,Y],S,2),
-                (X1 ism val(F,X),Y1 ism val(F,Y),write(X1),write(Y1), X1 \== Y1)).
+                (X1 ism val(F,X),Y1 ism val(F,Y), X1 \== Y1)).
 

@@ -147,6 +147,7 @@ int shutdown_flag = 0;		/* when receive dp_close, shutdown_flag = 1 */
 int active_thread = 0;		/* for mt_and/1 mt_or/1 */
 int dynamic_flag = 0;		/* for dynamic predicate. while assertz dynamic flag = 1 */
 int string_flag = 0;		/* ARITY/PROLOG mode 0, ISO mode 1 */
+int ifthenelse_false_flag = 0; /* ifthenelse occures NFLASE set flag = 1 */
 
 //stream
 int standard_input;
@@ -740,7 +741,7 @@ int prove(int goal, int bindings, int rest, int th)
 			return (YES);
 		    } else {
 			nest--;
-			if (res == NFALSE) {	// when after cut occurs NO
+			if (res == NFALSE) {	// when after cut occurs cut off backtracking and return NO
 			    //trace
 			    if (debug_flag == ON)
 				prove_trace(DBCUTFAIL, goal, bindings,
@@ -748,6 +749,13 @@ int prove(int goal, int bindings, int rest, int th)
 			    wp[th] = save1;
 			    ac[th] = save2;
 			    unbind(bindings, th);
+				/* When a cut plus fail results in NFALSE within ifthenelse/3,
+				* the flag is turned off and NFALSE is returned to the caller.
+				*/
+				if(ifthenelse_false_flag){
+					ifthenelse_false_flag--;
+					return(NFALSE);
+				}
 				return (NO);
 			}
 		    }

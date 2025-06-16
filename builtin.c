@@ -3599,7 +3599,10 @@ int b_ifthenelse(int arglist, int rest, int th)
 		if (res == NFALSE) 
 			return(res);
 		body = addtail_body(rest,arg3,th);
-	    return(prove_all(body, sp[th], th));
+	    res = prove_all(body, sp[th], th);
+		if (res == NFALSE)
+			ifthenelse_false_flag = 2;
+		return(res);
 	}
     }
     exception(ARITY_ERR, ind, arglist, th);
