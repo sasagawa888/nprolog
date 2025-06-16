@@ -753,7 +753,7 @@ int prove(int goal, int bindings, int rest, int th)
 				* the flag is turned off and NFALSE is returned to the caller.
 				*/
 				if(ifthenelse_false_flag){
-					ifthenelse_false_flag--;
+					ifthenelse_false_flag = 0;
 					return(NFALSE);
 				}
 				return (NO);

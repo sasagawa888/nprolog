@@ -258,12 +258,6 @@ ptop(Set0) :-
         write_count(O),
         fail.
 
-top(O) :-
-        O0 isl O - [[1,2,3]],
-        O1 isl O0 - [[]],
-        top_condition(O1,O).
-
-
 %p194
 writeln(P) :-
         write(P),nl.

@@ -3601,7 +3601,7 @@ int b_ifthenelse(int arglist, int rest, int th)
 		body = addtail_body(rest,arg3,th);
 	    res = prove_all(body, sp[th], th);
 		if (res == NFALSE)
-			ifthenelse_false_flag = 2;
+			ifthenelse_false_flag = 1;
 		return(res);
 	}
     }
