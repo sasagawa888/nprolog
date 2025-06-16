@@ -1,6 +1,7 @@
 % sets library
 
-:- module(sets,[make_set/2,union/3,intersection/3,difference/3,subset/2,equal/2]).
+:- module(sets,[make_set/2,union/3,intersection/3,difference/3,subset/2,equal/2,
+                powerset/2]).
 
 make_set(X,Y) :- sort(X,Y).
 
@@ -39,3 +40,16 @@ subset([X|Xs],Y) :-
 equal(X,Y) :-
     subset(X,Y),
     subset(Y,X).
+
+powerset([], [[]]).
+
+powerset([X|Xs], P) :-
+    powerset(Xs, Ps),
+    add_elem(X, Ps, Ps1),
+    append(Ps, Ps1, P).
+
+
+add_elem(_, [], []).
+add_elem(X, [Set|Sets], [[X|Set]|Sets1]) :-
+    add_elem(X, Sets, Sets1).
+
