@@ -2389,10 +2389,10 @@ int copy_heap(int x)
 	return (x);
     else if (module_flag && predicatep(x) && !exportp(x))
 	return (add_prefix(x));
-	else if (module_flag && user_operation_p(x) && exportp(x))
-	return (x);
-    else if (module_flag && user_operation_p(x) && !exportp(x))
-	return (add_user_prefix(x));
+	//else if (module_flag && user_operation_p(x) && exportp(x))
+	//return (x);
+    //else if (module_flag && user_operation_p(x) && !exportp(x))
+	//return (add_user_prefix(x));
     else if (singlep(x))
 	return (x);
     else if (numberp(x))
