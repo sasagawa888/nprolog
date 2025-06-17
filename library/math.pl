@@ -1,6 +1,7 @@
 % mathematics library
 :- module(math,[union/3,intersection/3,difference/3,subset/2,eqset/2,
-                powerset/2,forall/2,topology/2,topology_space/2,surjection/3]).
+                powerset/2,forall/2,topology/2,topology_space/2,
+                mapval/3,mapset/3,mapcompose/3,surjection/3,injection/3]).
 
 %sets
 union(X,Y,Z1) :-
@@ -114,6 +115,8 @@ surjection(F,S,T) :-
     mapset(F,S,F1),
     eqset(F1,T).
 
+% injection([a:1,b:2,c:3],[1,2,3],_). yes
+% injection([a:1,a:2,c:3],[1,2,3],_). no(false)
 injection(F,S,_) :-
     forall(math_select2(S,[X,Y]),
            (mapval(F,X,X1),mapval(F,Y,Y1),X1 \== Y1)).

@@ -572,7 +572,7 @@ extern int cp[THREADSIZE];
 
 /* module */
 extern int module_name;
-extern int export_data[10][2];
+extern int export_data[256][2];
 extern int module_flag;
 extern int export_pt;
 

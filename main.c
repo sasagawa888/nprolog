@@ -184,7 +184,7 @@ size_t mt_para_size[PARASIZE];
 
 /* module */
 int module_name;		// module name
-int export_data[10][2];		// export name,arity
+int export_data[256][2];		// export name,arity
 int module_flag;		// inner module 1, else 0
 int export_pt;			// export data pointer
 
