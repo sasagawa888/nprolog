@@ -1,6 +1,7 @@
 % mathematics library
 :- module(math,[union/3,intersection/3,difference/3,subset/2,eqset/2,
-                powerset/2,forall/2,topology/2,topology_space/2,surjection/3]).
+                powerset/2,forall/2,topology/2,topology_space/2,
+                mapval/3,mapset/3,mapcompose/3,surjection/3,injection/3]).
 
 %sets
 union(X,Y,Z1) :-
@@ -68,7 +69,7 @@ forall(P, Q) :-
 topology(O,Z) :-
     member([],O),!,
     member(Z,O),!,
-    forall(math_select2(O,[X,Y]),math_topology1([X,Y],O)),!.
+    forall(select2(O,[X,Y]),math_topology1([X,Y],O)),!.
 
 select2(O,[X,Y]) :-
     select(X,O,O1),
@@ -84,7 +85,6 @@ topology_space(X,Z) :-
     powerset(X,Y),
     subset(Z,Y),
     topology(Z,X).
-
 
 % map function
 :- op(700,xfx,:).
