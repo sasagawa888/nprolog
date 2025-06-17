@@ -1,6 +1,6 @@
 % mathematics library
-:- module(sets,[union/3,intersection/3,difference/3,subset/2,eqset/2,
-                powerset/2,forall/2,select2/2,topology1/2,topology/2,topology_space/2]).
+:- module(math,[union/3,intersection/3,difference/3,subset/2,eqset/2,
+                powerset/2,forall/2,topology/2,topology_space/2]).
 
 %sets
 union(X,Y,Z1) :-
@@ -68,7 +68,7 @@ forall(P, Q) :-
 topology(O,Z) :-
     member([],O),!,
     member(Z,O),!,
-    forall(select2(O,[X,Y]),topology1([X,Y],O)),!.
+    forall(math_select2(O,[X,Y]),math_topology1([X,Y],O)),!.
 
 select2(O,[X,Y]) :-
     select(X,O,O1),
