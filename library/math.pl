@@ -65,9 +65,9 @@ forall(P, Q) :-
 
 
 % topology 
-topology(O,X) :-
+topology(O,Z) :-
     member([],O),!,
-    member(X,O),!,
+    member(Z,O),!,
     forall(select2(O,[X,Y]),topology1([X,Y],O)),!.
 
 select2(O,[X,Y]) :-
