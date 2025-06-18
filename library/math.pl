@@ -1,7 +1,8 @@
 % mathematics library
 :- module(math,[isl/2,union/3,intersection/3,difference/3,subset/2,eqset/2,
                 powerset/2,forall/2,topology/2,topology_space/2,
-                mapval/3,mapset/3,mapcompose/3,surjection/3,injection/3]).
+                map_val/3,map_set/3,map_compose/3,surjection/3,injection/3,
+                perm_prod/3,perm_inv/3]).
 
 % infix notation
 %:- op(700,xfx,isl).
@@ -97,29 +98,29 @@ topology_space(X,Z) :-
 % map function
 :- op(700,xfx,:).
 
-mapval([],X,Y) :- fail,!.
-mapval([Y:X|Fs],X,Y) :- !.
-mapval([F|Fs],X,Y) :-
-    mapval(Fs,X,Y).
+map_val([],X,Y) :- fail,!.
+map_val([Y:X|Fs],X,Y) :- !.
+map_val([F|Fs],X,Y) :-
+    map_val(Fs,X,Y).
 
-mapset(F,X,S) :-
-    mapset1(F,X,S1),
+map_set(F,X,S) :-
+    map_set1(F,X,S1),
     sort(S1,S).
-mapset1([],_,[]).
-mapset1([Y:X|Fs],[X|Xs],[Y|S]) :-
-    mapset1(Fs,Xs,S).
-mapset1([F|Fs],[X|Xs],S) :-
-    mapset1(Fs,Xs,S).
+map_set1([],_,[]).
+map_set1([Y:X|Fs],[X|Xs],[Y|S]) :-
+    map_set1(Fs,Xs,S).
+map_set1([F|Fs],[X|Xs],S) :-
+    map_set1(Fs,Xs,S).
 
-mapcompose([],[],[]) :- !.
-mapcompose([Y1:X1|Fs],[Y2:X2|Gs],[Y1:Y2|S]) :-
-    mapcompose(Fs,Gs,S).
-mapcompose([F|Fs],[G|Gs],S) :-
-    mapcompose(Fs,Gs,S).
+map_compose([],[],[]) :- !.
+map_compose([Y1:X1|Fs],[Y2:X2|Gs],[Y1:Y2|S]) :-
+    map_compose(Fs,Gs,S).
+map_compose([F|Fs],[G|Gs],S) :-
+    map_compose(Fs,Gs,S).
 
 % surjection([a:1,b:2],[1,2],[a,b]). yes
 surjection(F,S,T) :-
-    mapset(F,S,F1),
+    map_set(F,S,F1),
     eqset(F1,T).
 
 % injection([a:1,b:2,c:3],[1,2,3],_). yes
@@ -129,6 +130,19 @@ injection(F,S,_) :-
            (mapval(F,X,X1),mapval(F,Y,Y1),X1 \== Y1)).
 
 % groupe
-groupe_mult(X,Y,Z).
-groupe_inverse(X,Y,Z).
+
+
+% product of permutations perm_prod([2,3,1]*[2,3,1],X). X = [3,1,2]
+perm_prod(X,[I],[J]) :-
+    nth1(I,X,J),!.
+perm_prod(X,[I|Is],[J|Js]) :-
+    nth1(I,X,J),!,
+    perm_prod(X,Is,Js).
+
+nth1(1,[X|Xs],X).
+nth1(N,[X|Xs],Y) :-
+    N1 is N-1,
+    nth1(N1,Xs,Y).
+
+% inverse of permutation
 
