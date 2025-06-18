@@ -1,7 +1,7 @@
 % mathematics library
 :- module(math,[isl/2,union/3,intersection/3,difference/3,subset/2,eqset/2,
                 powerset/2,forall/2,topology/2,topology_space/2,
-                map_val/3,map_set/3,map_compose/3,surjection/3,injection/3,
+                map_val/3,map_set/3,map_prod/3,surjection/3,injection/3,
                 list_map/2,map_list/2,map_inv/2,map_list/2,
                 perm_prod/3,perm_inv/2,perm_div/3,perm_ident/2]).
 
@@ -113,11 +113,11 @@ map_set1([Y:X|Fs],[X|Xs],[Y|S]) :-
 map_set1([F|Fs],[X|Xs],S) :-
     map_set1(Fs,Xs,S).
 
-map_compose([],[],[]) :- !.
-map_compose([Y1:X1|Fs],[Y2:X2|Gs],[Y1:Y2|S]) :-
-    map_compose(Fs,Gs,S).
-map_compose([F|Fs],[G|Gs],S) :-
-    map_compose(Fs,Gs,S).
+map_prod([],[],[]) :- !.
+map_prod([Y1:X1|Fs],[Y2:X2|Gs],[Y1:Y2|S]) :-
+    map_prod(Fs,Gs,S).
+map_prod([F|Fs],[G|Gs],S) :-
+    map_prod(Fs,Gs,S).
 
 list_map(X,Y) :- 
     list_map1(X,1,Y).
