@@ -3,7 +3,7 @@
                 powerset/2,forall/2,topology/2,topology_space/2,
                 map_val/3,map_set/3,map_compose/3,surjection/3,injection/3,
                 list_map/2,map_list/2,map_inv/2,map_list/2,
-                perm_prod/3,perm_inv/2,perm_div/3]).
+                perm_prod/3,perm_inv/2,perm_div/3,perm_ident/2]).
 
 % infix notation
 %:- op(700,xfx,isl).
@@ -173,3 +173,10 @@ perm_inv(X,Z) :-
 perm_div(X,Y,Z) :-
     perm_inv(Y,Y1),
     perm_prod(X,Y1,Z).
+
+perm_ident(N,X) :-
+    perm_ident1(1,N,X).
+perm_ident1(N,N,[N]).
+perm_ident1(M,N,[M|X]) :-
+    M1 is M+1,
+    perm_ident1(M1,N,X).
