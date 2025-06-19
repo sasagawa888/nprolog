@@ -2335,24 +2335,6 @@ int add_prefix(int x)
 	return (add_prefix1(x));
 }
 
-int add_user_prefix1(int x)
-{
-    char str[STRSIZE];
-
-    strcpy(str, GET_NAME(module_name));
-    strcat(str, "_");
-    strcat(str, GET_NAME(x));
-    return (makeuser(str));
-}
-
-
-int add_user_prefix(int x)
-{
-    if (structurep(x))
-	return (cons(add_user_prefix1(car(x)), copy_heap(cdr(x))));
-    else
-	return (add_user_prefix1(x));
-}
 
 
 int exportp(int x)
@@ -2389,10 +2371,6 @@ int copy_heap(int x)
 	return (x);
     else if (module_flag && predicatep(x) && !exportp(x))
 	return (add_prefix(x));
-	//else if (module_flag && user_operation_p(x) && exportp(x))
-	//return (x);
-    //else if (module_flag && user_operation_p(x) && !exportp(x))
-	//return (add_user_prefix(x));
     else if (singlep(x))
 	return (x);
     else if (numberp(x))

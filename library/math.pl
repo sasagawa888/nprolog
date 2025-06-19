@@ -1,13 +1,13 @@
 % mathematics library
-:- module(math,[isl/2,union/3,intersection/3,difference/3,subset/2,eqset/2,
+:- module(math,[union/3,intersection/3,difference/3,subset/2,eqset/2,
                 powerset/2,forall/2,topology/2,topology_space/2,
                 map_val/3,map_set/3,map_prod/3,surjection/3,injection/3,
                 list_map/2,map_list/2,map_inv/2,map_list/2,
                 perm_prod/3,perm_inv/2,perm_div/3,perm_ident/2]).
 
 % infix notation
-%:- op(700,xfx,isl).
-%Z isl X + Y :- union(X,Y,Z).
+:- op(700,xfx,isl).
+Z isl X + Y :- union(X,Y,Z).
 %Z isl X - Y :- difference(X,Y,Z).
 %Z isl X * Y :- intersection(X,Y,Z).
 
