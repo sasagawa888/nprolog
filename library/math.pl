@@ -6,11 +6,11 @@
                 perm_prod/3,perm_inv/2,perm_div/3,perm_ident/2]).
 
 % infix notation
-:- op(700,xfx,isl).
+:- op(700,xfx,[isl,isq,isg]).
 Z isl X + Y :- union(X,Y,Z).
-%Z isl X - Y :- difference(X,Y,Z).
-%Z isl X * Y :- intersection(X,Y,Z).
-
+Z isl X - Y :- difference(X,Y,Z).
+Z isl X * Y :- intersection(X,Y,Z).
+Z isl subset(X) :- subset(Z,X).
 
 %sets
 union(X,Y,Z1) :-
