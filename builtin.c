@@ -1658,12 +1658,11 @@ int b_consult(int arglist, int rest, int th)
 
 int b_reconsult(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2, clause, head, atom, save;
+    int n, ind, arg1, clause, head, atom, save;
     char str[STRSIZE];
 
     n = length(arglist);
     ind = makeind("reconsult", n, th);
-    arg2 = NIL;
     if (n == 1) {
 	arg1 = car(arglist);
 
@@ -1706,15 +1705,13 @@ int b_reconsult(int arglist, int rest, int th)
 	    if (operationp(clause) && car(clause) == NECK
 		&& length(clause) == 2) {
 		clause = cadr(clause);
-		if (arg2 == NIL)
-		    prove_all(clause, sp[th], th);
-		else if (arg2 != NIL && !predicatep(cadr(clause)))
-		    prove_all(clause, sp[th], th);
-		else if (structurep(cadr(clause)
-				    && !eqlp(car(cadr(clause)),
-					     makesys("dynamic"))))
+		prove_all(clause, sp[th], th);
+		if (!(structurep(cadr(clause))
+				    && eqlp(car(cadr(clause)),
+					     makesys("dynamic")))){
 		    /* if execute predicate is dynamic not add to execute_list */
 		    execute_list = listcons(clause, execute_list);
+		}
 		goto skip;
 	    }
 	    // DCG syntax e.g. a-->b.
