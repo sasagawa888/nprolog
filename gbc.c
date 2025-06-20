@@ -58,7 +58,7 @@ void markcell(int addr)
     case SINGLE:
 	markcell(car(addr));
 	markcell(cdr(addr));
-    markcell(GET_ARITY(addr));
+	markcell(GET_ARITY(addr));
 	markcell(GET_VAR(addr));
 	markcell(GET_RECORD(addr));
 	return;

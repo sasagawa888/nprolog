@@ -1,16 +1,25 @@
 % mathematics library
 :- module(math,[union/3,intersection/3,difference/3,subset/2,eqset/2,
-                powerset/2,forall/2,topology/2,topology_space/2,
+                powerset/2,permutation/2,forall/2,topology/2,topology_space/2,
                 map_val/3,map_set/3,map_prod/3,surjection/3,injection/3,
                 list_map/2,map_list/2,map_inv/2,map_list/2,
-                perm_prod/3,perm_inv/2,perm_div/3,perm_ident/2]).
+                perm_prod/3,perm_inv/2,perm_div/3,perm_ident/2,perm_inversion/2,perm_sign/2]).
 
 % infix notation
-:- op(700,xfx,[isl,isq,isg]).
+:- op(700,xfx,[isl,ism,isq,isg]).
 Z isl X + Y :- union(X,Y,Z).
 Z isl X - Y :- difference(X,Y,Z).
 Z isl X * Y :- intersection(X,Y,Z).
 Z isl subset(X) :- subset(Z,X).
+
+Z ism val(F,X) :- map_val(F,X,Z).
+Z ism set(F,X) :- map_set(F,X,Z). 
+Z ism X * Y :- map_prod(X,Y,Z).
+Z ism 1//X :- map_inv(X,Z).
+
+Z isq X * Y :- perm_prod(X,Y,Z).
+Z isq 1 // X :- perm_inv(X,Z).
+Z isq X / Y :- perm_div(X,Y,Z).
 
 %sets
 union(X,Y,Z1) :-
@@ -68,6 +77,11 @@ powerset([X|Xs], P) :-
 add_elem(_, [], []).
 add_elem(X, [Set|Sets], [[X|Set]|Sets1]) :-
     add_elem(X, Sets, Sets1).
+
+permutation([], []).
+permutation(List, [Elem|Perm]) :-
+    select(Elem, List, Rest),
+    permutation(Rest, Perm).
 
 % control
 forall(P, Q) :-
@@ -180,3 +194,26 @@ perm_ident1(N,N,[N]).
 perm_ident1(M,N,[M|X]) :-
     M1 is M+1,
     perm_ident1(M1,N,X).
+
+
+perm_inversion([],0).
+perm_inversion([X|Xs],N) :-
+    perm_inversion1(X,Xs,N1),
+    perm_inversion(Xs,N2),
+    N is N1+N2.
+
+perm_inversion1(X,[],0).
+perm_inversion1(X,[Y|Ys],N) :-
+    Y < X,
+    perm_inversion1(X,Ys,N1),
+    N is N1+1. 
+perm_inversion1(X,[Y|Ys],N) :-
+    Y >= X,
+    perm_inversion1(X,Ys,N).
+
+perm_sign(X,-1) :-
+    perm_inversion(X,N1),
+    1 is N1 mod 2.
+perm_sign(X,1) :-
+    perm_inversion(X,N1),
+    0 is N1 mod 2. 

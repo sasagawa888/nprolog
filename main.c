@@ -147,7 +147,7 @@ int shutdown_flag = 0;		/* when receive dp_close, shutdown_flag = 1 */
 int active_thread = 0;		/* for mt_and/1 mt_or/1 */
 int dynamic_flag = 0;		/* for dynamic predicate. while assertz dynamic flag = 1 */
 int string_flag = 0;		/* ARITY/PROLOG mode 0, ISO mode 1 */
-int ifthenelse_false_flag = 0; /* ifthenelse occures NFLASE set flag = 1 */
+int ifthenelse_false_flag = 0;	/* ifthenelse occures NFLASE set flag = 1 */
 
 //stream
 int standard_input;
@@ -184,7 +184,7 @@ size_t mt_para_size[PARASIZE];
 
 /* module */
 int module_name;		// module name
-int export_data[256][2];		// export name,arity
+int export_data[256][2];	// export name,arity
 int module_flag;		// inner module 1, else 0
 int export_pt;			// export data pointer
 
@@ -253,7 +253,7 @@ void usage()
 int main(int argc, char *argv[])
 {
     int ch, input;
-    char *home, str[STRSIZE];
+    char *path;
     struct winsize w;
     FILE *fp;
 
@@ -274,40 +274,35 @@ int main(int argc, char *argv[])
     wp_max[0] = CELLSIZE;
     init_repl();
     int ret = setjmp(buf);
-    if (!init_flag)
+    if (!init_flag) {
 	goto repl;
-    home = getenv("HOME");
-    strcpy(str, home);
-    strcat(str, "/nprolog/library/startup.pl");
-    fp = fopen(str, "r");
-    if (fp != NULL) {
-	fclose(fp);
-	b_consult(list1(makeconst(str)), NIL, 0);
     }
+
+    path = prolog_file_name("library/startup.pl");
+    if (path)
+	b_consult(list1(makeconst("library/startup.pl")), NIL, 0);
 
     while ((ch = getopt(argc, argv, "c:s:rhvn")) != -1) {
 	switch (ch) {
 	case 'c':
-	    fp = fopen(optarg, "r");
-	    if (fp != NULL)
-		fclose(fp);
-	    else {
+	    path = prolog_file_name(optarg);
+	    if (path) {
+		b_consult(list1(makeconst(optarg)), NIL, 0);
+	    } else {
 		printf("Not exist %s\n", optarg);
 		exit(EXIT_FAILURE);
 	    }
-	    b_consult(list1(makeconst(optarg)), NIL, 0);
 	    break;
 	case 's':
-	    fp = fopen(optarg, "r");
-	    if (fp != NULL)
-		fclose(fp);
-	    else {
+	    path = prolog_file_name(optarg);
+	    if (path) {
+		script_flag = 1;
+		b_consult(list1(makeconst(optarg)), NIL, 0);
+		exit(EXIT_SUCCESS);
+	    } else {
 		printf("Not exist %s\n", optarg);
 		exit(EXIT_FAILURE);
 	    }
-	    script_flag = 1;
-	    b_consult(list1(makeconst(optarg)), NIL, 0);
-	    exit(EXIT_SUCCESS);
 	case 'r':
 	    repl_flag = 0;
 	    break;
@@ -596,17 +591,17 @@ int prove_all(int goals, int bindings, int th)
     else if (car(goals) != AND)
 	return (prove(goals, bindings, NIL, th));
     else {
-	if(structurep(cadr(goals)) && car(cadr(goals)) == AND &&
-		   structurep(caddr(goals)) && car(caddr(goals)) == AND){
-		if(prove_all(cadr(goals),bindings,th) == YES)
-		     if(prove_all(caddr(goals),bindings,th) == YES)
-			 	return(YES);
-			else 
-				return(NO);
-		else 
-			return(NO);
-	}else if (!has_cut_p(goals)) {
-		return (prove(cadr(goals), bindings, caddr(goals), th));
+	if (structurep(cadr(goals)) && car(cadr(goals)) == AND &&
+	    structurep(caddr(goals)) && car(caddr(goals)) == AND) {
+	    if (prove_all(cadr(goals), bindings, th) == YES)
+		if (prove_all(caddr(goals), bindings, th) == YES)
+		    return (YES);
+		else
+		    return (NO);
+	    else
+		return (NO);
+	} else if (!has_cut_p(goals)) {
+	    return (prove(cadr(goals), bindings, caddr(goals), th));
 	} else {
 	    if (prove_all(before_cut(goals), bindings, th) == YES) {
 		res = prove_all(after_cut(goals), sp[th], th);
@@ -749,14 +744,14 @@ int prove(int goal, int bindings, int rest, int th)
 			    wp[th] = save1;
 			    ac[th] = save2;
 			    unbind(bindings, th);
-				/* When a cut plus fail results in NFALSE within ifthenelse/3,
-				* the flag is turned off and NFALSE is returned to the caller.
-				*/
-				if(ifthenelse_false_flag){
-					ifthenelse_false_flag = 0;
-					return(NFALSE);
-				}
-				return (NO);
+			    /* When a cut plus fail results in NFALSE within ifthenelse/3,
+			     * the flag is turned off and NFALSE is returned to the caller.
+			     */
+			    if (ifthenelse_false_flag) {
+				ifthenelse_false_flag = 0;
+				return (NFALSE);
+			    }
+			    return (NO);
 			}
 		    }
 		}

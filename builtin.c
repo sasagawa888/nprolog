@@ -1707,8 +1707,7 @@ int b_reconsult(int arglist, int rest, int th)
 		clause = cadr(clause);
 		prove_all(clause, sp[th], th);
 		if (!(structurep(cadr(clause))
-				    && eqlp(car(cadr(clause)),
-					     makesys("dynamic")))){
+		      && eqlp(car(cadr(clause)), makesys("dynamic")))) {
 		    /* if execute predicate is dynamic not add to execute_list */
 		    execute_list = listcons(clause, execute_list);
 		}
@@ -3588,18 +3587,18 @@ int b_ifthenelse(int arglist, int rest, int th)
 	    exception(INSTANTATION_ERR, ind, arg3, th);
 
 	save = sp[th];
-	body = addtail_body(arg2,arg1,th);
+	body = addtail_body(arg2, arg1, th);
 	if ((res = prove_all(body, sp[th], th)) == YES) {
-	    return(prove_all(rest,sp[th],th));
+	    return (prove_all(rest, sp[th], th));
 	} else {
 	    unbind(save, th);
-		if (res == NFALSE) 
-			return(res);
-		body = addtail_body(rest,arg3,th);
+	    if (res == NFALSE)
+		return (res);
+	    body = addtail_body(rest, arg3, th);
 	    res = prove_all(body, sp[th], th);
-		if (res == NFALSE)
-			ifthenelse_false_flag = 1;
-		return(res);
+	    if (res == NFALSE)
+		ifthenelse_false_flag = 1;
+	    return (res);
 	}
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -4605,7 +4604,7 @@ int b_gbc(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (arg1 == makeconst("full")) {
-		markcell(rest);
+	    markcell(rest);
 	    gbc();
 	    return (prove_all(rest, sp[th], th));
 	} else if (arg1 == makeconst("on")) {
@@ -4747,16 +4746,56 @@ char *prolog_file_name(char *name)
     int n, i;
     static char str[STRSIZE];
 
+    const char *env_home = getenv("NPROLOG_HOME");
+    const char *home = getenv("HOME");
+
+
+    // 1. $NPROLOG_HOME/
+    if (env_home) {
+	strcpy(str, env_home);
+	strcat(str, "/");
+	strcat(str, name);
+	n = strlen(str);
+	for (i = 0; i < n; i++) {
+	    if (str[i] == '.')
+		goto exit1;
+	}
+	strcat(str, ".pl");
+      exit1:
+	if (access(str, F_OK) == 0)
+	    return (str);
+    }
+    // current directory
     strcpy(str, name);
-    n = strlen(name);
+    n = strlen(str);
 
     for (i = 0; i < n; i++) {
 	if (str[i] == '.')
-	    return (name);
+	    goto exit2;
+    }
+    strcat(str, ".pl");
+  exit2:
+    if (access(str, F_OK) == 0)
+	return (str);
+
+
+    // 3. $HOME/
+    if (home) {
+	strcpy(str, home);
+	strcat(str, "/nprolog/");
+	strcat(str, name);
+	n = strlen(str);
+	for (i = 0; i < n; i++) {
+	    if (str[i] == '.')
+		goto exit3;
+	}
+	strcat(str, ".pl");
+      exit3:
+	if (access(str, F_OK) == 0)
+	    return (str);
     }
 
-    strcat(str, ".pl");
-    return (str);
+    return (NULL);
 }
 
 int b_edit(int arglist, int rest, int th)
