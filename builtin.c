@@ -4750,6 +4750,12 @@ char *prolog_file_name(char *name)
     const char *home = getenv("HOME");
 
 
+	strcpy(str,name);
+	n = strlen(str);
+	if(str[0] == '.' && str[1] == '/'){
+		return(str);
+	}
+
     // 1. $NPROLOG_HOME/
     if (env_home) {
 	strcpy(str, env_home);
@@ -4762,23 +4768,9 @@ char *prolog_file_name(char *name)
 	}
 	strcat(str, ".pl");
       exit1:
-	if (access(str, F_OK) == 0)
-	    return (str);
-    }
-    // current directory
-    strcpy(str, name);
-    n = strlen(str);
-
-    for (i = 0; i < n; i++) {
-	if (str[i] == '.')
-	    goto exit2;
-    }
-    strcat(str, ".pl");
-  exit2:
-    if (access(str, F_OK) == 0)
 	return (str);
-
-
+    }
+    
     // 3. $HOME/
     if (home) {
 	strcpy(str, home);
@@ -4791,11 +4783,21 @@ char *prolog_file_name(char *name)
 	}
 	strcat(str, ".pl");
       exit3:
-	if (access(str, F_OK) == 0)
 	    return (str);
     }
 
-    return (NULL);
+	// current directory
+    strcpy(str, name);
+    n = strlen(str);
+
+    for (i = 0; i < n; i++) {
+	if (str[i] == '.')
+	    goto exit2;
+    }
+    strcat(str, ".pl");
+  exit2:
+	return (str);
+
 }
 
 int b_edit(int arglist, int rest, int th)
