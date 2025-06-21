@@ -4,7 +4,7 @@
                 map_val/3,map_set/3,map_prod/3,surjection/3,injection/3,
                 list_map/2,map_list/2,map_inv/2,map_list/2,
                 perm_prod/3,perm_inv/2,perm_div/3,perm_ident/2,perm_inversion/2,perm_sign/2,
-                perm_even/2,perm_odd/2]).
+                perm_even/2,perm_odd/2,groupe_prod,p/2,perm_expt/3]).
 
 % infix notation
 :- op(700,xfx,[isl,ism,isq,isg]).
@@ -21,6 +21,11 @@ Z ism 1//X :- map_inv(X,Z).
 Z isq X * Y :- perm_prod(X,Y,Z).
 Z isq 1 // X :- perm_inv(X,Z).
 Z isq X / Y :- perm_div(X,Y,Z).
+Z isq (A * B) * C :- perm_prod(A,B,X),perm_prod(X,C,Z).
+Z isq A * (B * C) :- perm_prod(B,C,X),perm_prod(A,X,Z).
+Z isq X ^ N :- perm_expt(X,N,Z).
+
+Z isg X * Y :- groupe_prod(X,Y,Z).
 
 %sets
 union(X,Y,Z1) :-
@@ -163,7 +168,6 @@ injection(F,S,_) :-
     forall(math_select2(S,[X,Y]),
            (mapval(F,X,X1),mapval(F,Y,Y1),X1 \== Y1)).
 
-% groupe
 
 
 % product of permutations perm_prod([2,3,1]*[2,3,1],X). X = [3,1,2]
@@ -227,3 +231,20 @@ perm_even(X,Y) :-
 perm_odd(X,Y) :-
     permutation(X,Y),
     perm_sign(Y,-1).
+
+perm_expt(X,0,E) :-
+    length(X,N),
+    perm_ident(N,E).
+perm_expt(X,N,Y) :-
+    N1 is N-1,
+    perm_expt(X,N1,Y1),
+    perm_prod(X,Y1,Y).
+
+% groupe
+
+groupe_prod(X,Y,Z) :-
+    p(GX,X),
+    p(GY,Y),
+    perm_prod(GX,GY,GZ),
+    p(GZ,Z),!.
+
