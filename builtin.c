@@ -4753,7 +4753,13 @@ char *prolog_file_name(char *name)
 	strcpy(str,name);
 	n = strlen(str);
 	if(str[0] == '.' && str[1] == '/'){
-		return(str);
+		for (i = 2; i < n; i++) {
+	    if (str[i] == '.')
+		goto exit0;
+	}
+	strcat(str, ".pl");
+      exit0:
+	return (str);
 	}
 
     // 1. $NPROLOG_HOME/
@@ -4771,7 +4777,7 @@ char *prolog_file_name(char *name)
 	return (str);
     }
     
-    // 3. $HOME/
+    // 2. $HOME/
     if (home) {
 	strcpy(str, home);
 	strcat(str, "/nprolog/");
@@ -4779,10 +4785,10 @@ char *prolog_file_name(char *name)
 	n = strlen(str);
 	for (i = 0; i < n; i++) {
 	    if (str[i] == '.')
-		goto exit3;
+		goto exit2;
 	}
 	strcat(str, ".pl");
-      exit3:
+      exit2:
 	    return (str);
     }
 
@@ -4792,10 +4798,10 @@ char *prolog_file_name(char *name)
 
     for (i = 0; i < n; i++) {
 	if (str[i] == '.')
-	    goto exit2;
+	    goto exit3;
     }
     strcat(str, ".pl");
-  exit2:
+  exit3:
 	return (str);
 
 }

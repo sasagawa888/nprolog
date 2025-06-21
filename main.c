@@ -285,29 +285,12 @@ int main(int argc, char *argv[])
     while ((ch = getopt(argc, argv, "c:s:rhvn")) != -1) {
 	switch (ch) {
 	case 'c':
-	    //path = prolog_file_name(optarg);
-		//fp = fopen(path, "r");
-	    //if (fp != NULL) {
-		//fclose(fp);
 		b_consult(list1(makeconst(optarg)), NIL, 0);
-	    //} else {
-		//fclose(fp);
-		//printf("Not exist %s\n", optarg);
-		//exit(EXIT_FAILURE);
-	    //}
 	    break;
 	case 's':
-	    path = prolog_file_name(optarg);
-		fp = fopen(path, "r");
-	    if (fp != NULL) {
-		fclose(fp);
-		b_consult(list1(makeconst(path)), NIL, 0);
+		b_consult(list1(makeconst(optarg)), NIL, 0);
 		exit(EXIT_SUCCESS);
-	    } else {
-		fclose(fp);
-		printf("Not exist %s\n", optarg);
-		exit(EXIT_FAILURE);
-	    }
+	    break;
 	case 'r':
 	    repl_flag = 0;
 	    break;
