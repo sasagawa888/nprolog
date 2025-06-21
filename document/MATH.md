@@ -67,6 +67,16 @@ Z isq 1 // X	perm_inv(X,Z)
 Z isq X / Y	perm_div(X,Y,Z)
 Z isq X ^ N perm_expt(X,N,Z)
 
+groupe
+Predicate	Description
+groupe_prod(X,Y,Z)	Z is the composition of ID-X and ID-Y
+
+Infix Notation for Groupe
+Operator	Meaning
+Z isg X * Y	groupe_prod(X,Y,Z)
+Z isg (X * Y) * Z
+Z isg X * (Y * Z)
+
 📌 Notes
 
 Sets are represented as sorted lists without duplicates.

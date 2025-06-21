@@ -26,6 +26,8 @@ Z isq A * (B * C) :- perm_prod(B,C,X),perm_prod(A,X,Z).
 Z isq X ^ N :- perm_expt(X,N,Z).
 
 Z isg X * Y :- groupe_prod(X,Y,Z).
+Z isg (A * B) * C :- groupe_prod(A,B,X),groupe_prod(X,C,Z).
+Z isg A * (B * C) :- groupe_prod(B,C,X),groupe_prod(A,X,Z).
 
 %sets
 union(X,Y,Z1) :-
