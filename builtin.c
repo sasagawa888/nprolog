@@ -1782,17 +1782,16 @@ int b_save(int arglist, int rest, int th)
 {
     int n, ind, arg1;
     static char str[STREAM];
-    char *home, str1[STRSIZE];
+    char str1[STRSIZE];
 
     n = length(arglist);
     ind = makeind("save", n, th);
     if (n == 0) {
 	arg1 = NIL;
-	home = getenv("HOME");
-	strcpy(str1, home);
-	strcat(str1, "/nprolog/library/startup.pl");
+	strcpy(str1, "library/startup.pl");
+	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	output_stream =
-	    makestream(fopen(str1, "w"), NPL_OUTPUT, NPL_TEXT, NIL, arg1);
+	    makestream(fopen(GET_NAME(arg1), "w"), NPL_OUTPUT, NPL_TEXT, NIL, arg1);
 	goto save;
     } else if (n == 1) {
 	arg1 = car(arglist);
