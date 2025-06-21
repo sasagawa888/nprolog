@@ -4749,10 +4749,11 @@ char *prolog_file_name(char *name)
     const char *env_home = getenv("NPROLOG_HOME");
     const char *home = getenv("HOME");
 
-
+   /* 0 relative path */
 	strcpy(str,name);
 	n = strlen(str);
-	if(str[0] == '.' && str[1] == '/'){
+	if((str[0] == '.' && str[1] == '/') || 
+       (str[0] == '.' && str[1] == '.' && str[2] == '/')){
 		for (i = 2; i < n; i++) {
 	    if (str[i] == '.')
 		goto exit0;
@@ -4762,7 +4763,7 @@ char *prolog_file_name(char *name)
 	return (str);
 	}
 
-    // 1. $NPROLOG_HOME/
+    /* 1. exist $NPROLOG_HOME */
     if (env_home) {
 	strcpy(str, env_home);
 	strcat(str, "/");
@@ -4777,7 +4778,7 @@ char *prolog_file_name(char *name)
 	return (str);
     }
     
-    // 2. $HOME/
+    /* 2. exist $HOME */
     if (home) {
 	strcpy(str, home);
 	strcat(str, "/nprolog/");
@@ -4792,7 +4793,7 @@ char *prolog_file_name(char *name)
 	    return (str);
     }
 
-	// current directory
+	/* absuolute path */
     strcpy(str, name);
     n = strlen(str);
 
