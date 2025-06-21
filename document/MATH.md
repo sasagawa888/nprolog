@@ -57,11 +57,15 @@ perm_div(X,Y,Z)	Z is the result of dividing X by Y
 perm_ident(N,X)	X is the identity permutation of size N
 perm_inversion(P,N)	N is the number of inversions in P
 perm_sign(P,Sign)	Sign is the sign of permutation P
+perm_expt(X,N,Z)    Z is the exponentation of X and N 
+perm_even(X,Z)      Z is even permutation of X.
+perm_odd(X,Z)       Z is odd permutation of X.   
 Infix Notation for Permutations
 Operator	Meaning
 Z isq X * Y	perm_prod(X,Y,Z)
 Z isq 1 // X	perm_inv(X,Z)
 Z isq X / Y	perm_div(X,Y,Z)
+Z isq X ^ N perm_expt(X,N,Z)
 
 📌 Notes
 
