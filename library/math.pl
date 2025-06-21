@@ -3,7 +3,8 @@
                 powerset/2,permutation/2,forall/2,topology/2,topology_space/2,
                 map_val/3,map_set/3,map_prod/3,surjection/3,injection/3,
                 list_map/2,map_list/2,map_inv/2,map_list/2,
-                perm_prod/3,perm_inv/2,perm_div/3,perm_ident/2,perm_inversion/2,perm_sign/2]).
+                perm_prod/3,perm_inv/2,perm_div/3,perm_ident/2,perm_inversion/2,perm_sign/2,
+                perm_even/2,perm_odd/2]).
 
 % infix notation
 :- op(700,xfx,[isl,ism,isq,isg]).
@@ -213,7 +214,16 @@ perm_inversion1(X,[Y|Ys],N) :-
 
 perm_sign(X,-1) :-
     perm_inversion(X,N1),
-    1 is N1 mod 2.
+    1 is N1 mod 2,!.
 perm_sign(X,1) :-
     perm_inversion(X,N1),
-    0 is N1 mod 2. 
+    0 is N1 mod 2,!. 
+
+
+perm_even(X,Y) :-
+    permutation(X,Y),
+    perm_sign(Y,1).
+
+perm_odd(X,Y) :-
+    permutation(X,Y),
+    perm_sign(Y,-1).
