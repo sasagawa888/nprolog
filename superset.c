@@ -1727,7 +1727,7 @@ int b_set_output(int arglist, int rest, int th)
 int b_use_module(int arglist, int rest, int th)
 {
     int n, ind, arg1;
-    char *home, str[STRSIZE];
+    char str[STRSIZE];
     FILE *fp;
 
     n = length(arglist);
@@ -1737,22 +1737,19 @@ int b_use_module(int arglist, int rest, int th)
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
-	home = getenv("HOME");
-	strcpy(str, home);
-	strcat(str, "/nprolog/library/");
+	strcpy(str, "library/");
 	strcat(str, GET_NAME(arg1));
 	strcat(str, ".o");
-	fp = fopen(str, "r");
+	fp = fopen(prolog_file_name(str), "r");
 	if (fp != NULL) {
 	    fclose(fp);
 	    b_reconsult(list1(makeconst(str)), NIL, 0);
 	    return (prove_all(rest, sp[th], th));
 	}
-	strcpy(str, home);
-	strcat(str, "/nprolog/library/");
+	strcpy(str, "library/");
 	strcat(str, GET_NAME(arg1));
 	strcat(str, ".pl");
-	fp = fopen(str, "r");
+	fp = fopen(prolog_file_name(str), "r");
 	if (fp != NULL) {
 	    fclose(fp);
 	    b_reconsult(list1(makeconst(str)), NIL, 0);
