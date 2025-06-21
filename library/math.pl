@@ -4,7 +4,7 @@
                 map_val/3,map_set/3,map_prod/3,surjection/3,injection/3,
                 list_map/2,map_list/2,map_inv/2,map_list/2,
                 perm_prod/3,perm_inv/2,perm_div/3,perm_ident/2,perm_inversion/2,perm_sign/2,
-                perm_even/2,perm_odd/2,groupe_prod,p/2,perm_expt/3]).
+                perm_even/2,perm_odd/2,groupe_prod,p/2,perm_expt/3,perm_conj/3]).
 
 % infix notation
 :- op(700,xfx,[isl,ism,isq,isg]).
@@ -239,6 +239,12 @@ perm_expt(X,N,Y) :-
     N1 is N-1,
     perm_expt(X,N1,Y1),
     perm_prod(X,Y1,Y).
+
+% conjugate
+perm_conj(G, X, Y) :-
+    perm_inv(G, GInv),
+    perm_prod(G, X, GX),
+    perm_prod(GX, GInv, Y).
 
 % groupe
 
