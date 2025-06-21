@@ -1,22 +1,74 @@
-# Sets
-This is a library for simple set operations.
+# N-Prolog Mathematics Library Reference
+This module provides basic mathematical and set-theoretical tools for symbolic computation, including sets, functions, topology, and permutations.
 
-# Usage
+---
 
-```
-?- use_module(sets).
-```
+## Module Declaration
 
-# predicates
+```prolog
+:- module(math, [...]).
 
-- make_set/2
+Exported Predicates (Grouped by Category):
+🔢 Set Operations
+Predicate	Description
+union(X,Y,Z)	Z is the union of sets X and Y
+intersection(X,Y,Z)	Z is the intersection of X and Y
+difference(X,Y,Z)	Z is the set difference X - Y
+subset(X,Y)	X is a subset of Y
+eqset(X,Y)	X and Y are equal sets
+powerset(X,P)	P is the powerset of set X
+permutation(X,Y)	Y is a permutation of list X
+✅ Set Notation (Infix Syntax)
+Operator	Meaning
+Z isl X + Y	Z is the union of X and Y
+Z isl X - Y	Z is the difference of X and Y
+Z isl X * Y	Z is the intersection of X and Y
+Z isl subset(X)	Z is a subset of X
+🧭 Map Functions
+Predicate	Description
+map_val(F,X,Y)	Y is the image of X under map F
+map_set(F,X,Ys)	Ys is the image set of X under map F
+map_prod(F,G,H)	H is the product (composition) of F and G
+map_inv(F,G)	G is the inverse of map F
+list_map(List,Map)	Converts a list into a map from index to value
+map_list(F,L)	Extracts the codomain of map F
+Infix Notation for Maps
+Operator	Meaning
+Z ism val(F,X)	map_val(F,X,Z)
+Z ism set(F,X)	map_set(F,X,Z)
+Z ism X * Y	map_prod(X,Y,Z)
+Z ism 1 // X	map_inv(X,Z)
+🎯 Logic Control
+Predicate	Description
+forall(P,Q)	Succeeds if Q holds for all P
+🔷 Topology
+Predicate	Description
+topology(O,Z)	Checks if O is a topology on set Z
+topology_space(X,O)	True if O is a topology on base set X
+🔁 Surjections and Injections
+Predicate	Description
+surjection(F, S, T)	F maps S onto T (surjective)
+injection(F, S, _)	F maps S injectively (distinct elements have distinct images)
+🔀 Permutations
+Predicate	Description
+perm_prod(X,Y,Z)	Z is the composition of X and Y
+perm_inv(X,Z)	Z is the inverse of permutation X
+perm_div(X,Y,Z)	Z is the result of dividing X by Y
+perm_ident(N,X)	X is the identity permutation of size N
+perm_inversion(P,N)	N is the number of inversions in P
+perm_sign(P,Sign)	Sign is the sign of permutation P
+Infix Notation for Permutations
+Operator	Meaning
+Z isq X * Y	perm_prod(X,Y,Z)
+Z isq 1 // X	perm_inv(X,Z)
+Z isq X / Y	perm_div(X,Y,Z)
 
-- union/3
+📌 Notes
 
-- intersection/3
+Sets are represented as sorted lists without duplicates.
 
-- difference/3
+Maps are represented as lists of value:key pairs (e.g., 1:a).
 
-- subset/2
+Permutations are lists of integers representing bijections.
 
-- equal/2
+Custom infix operators (isl, ism, isq) are defined for readable symbolic notation.
