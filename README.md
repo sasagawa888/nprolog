@@ -40,6 +40,18 @@ On MacOs be sure to install ncurses
   brew install ncurses
   export PATH=$PATH:/opt/homebrew/Cellar/ncurses/6.5/bin
 
+## File Path Resolution in N-Prolog
+
+When loading files, N-Prolog automatically resolves file paths based on the following rules:
+
+1. **Relative paths** (starting with `./` or `../`) are used directly. If no extension is present, `.pl` is appended.
+2. If the environment variable `NPROLOG_HOME` is set, files are loaded from that directory.
+3. If `NPROLOG_HOME` is not set but `HOME` is, files are loaded from `$HOME/nprolog/`.
+4. Otherwise, the given name is used as-is. If it lacks an extension, `.pl` is appended.
+
+In all cases, if the file name already contains a dot (`.`), it is assumed to include an extension and `.pl` will not be added.
+
+
 ## Uninstall
 On Linux type "sudo make uninstall" on terminal.
 
