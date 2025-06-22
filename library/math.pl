@@ -252,25 +252,25 @@ perm_conj(G, X, Y) :-
 % groupe
 
 groupe_prod(X,Y,Z) :-
-    p(GX,X),
-    p(GY,Y),
+    prem(GX,X),
+    perm(GY,Y),
     perm_prod(GX,GY,GZ),
-    p(GZ,Z),!.
+    prem(GZ,Z),!.
 
 groupe_create(p,N) :-
-    abolish(p/2),
+    abolish(perm/2),
     perm_ident(N,E),
     findall(X,permutation(E,X),L),
     groupe_create1(L,1).
 
 groupe_create(e,N) :-
-    abolish(p/2),
+    abolish(perm/2),
     perm_ident(N,E),
     findall(X,perm_even(E,X),L),
     groupe_create1(L,1).
 
 groupe_create(o,N) :-
-    abolish(p/2),
+    abolish(perm/2),
     perm_ident(N,E),
     findall(X,perm_odd(E,X),L),
     groupe_create1(L,1).
@@ -278,7 +278,7 @@ groupe_create(o,N) :-
 
 groupe_create1([],N) :- !.
 groupe_create1([L|Ls],N) :-
-    assert(p(L,N)),
+    assert(perm(L,N)),
     N1 is N+1,
     groupe_create1(Ls,N1).
     

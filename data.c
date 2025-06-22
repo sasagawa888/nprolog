@@ -2347,8 +2347,7 @@ int exportp(int x)
     } else {
 	name = car(x);
 	arity = length(cdr(x));
-    }
-
+    } 
 
     for (i = 0; i < export_pt; i++) {
 	if (eqlp(export_data[i][0], name) && export_data[i][1] == arity) {
