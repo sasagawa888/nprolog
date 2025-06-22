@@ -1,3 +1,3 @@
 % startup test
 
-foo(X) :- write(X).
+%foo(X) :- write(X).
