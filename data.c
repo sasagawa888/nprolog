@@ -2364,6 +2364,8 @@ int copy_heap(int x)
 	return (NIL);
     else if (IS_ALPHA(x))
 	return (alpha_to_variable(x));
+	else if (operationp(x) && car(x) == SLASH)
+	return (x);
     else if (predicatep(x) && car(x) == NCURL)
 	return (x);
     else if (module_flag && predicatep(x) && exportp(x))
@@ -2381,8 +2383,6 @@ int copy_heap(int x)
     else if (car(x) == NECK || car(x) == AND || car(x) == OR)
 	return (list3(car(x), copy_heap(cadr(x)), copy_heap(caddr(x))));
     else if (user_operation_p(x))
-	return (x);
-	else if (indicatorp(x))
 	return (x);
     return (cons(copy_heap(car(x)), copy_heap(cdr(x))));
     return (x);
