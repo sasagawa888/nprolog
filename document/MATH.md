@@ -70,6 +70,10 @@ Z isq X ^ N perm_expt(X,N,Z)
 groupe
 Predicate	Description
 groupe_prod(X,Y,Z)	Z is the composition of ID-X and ID-Y
+groupe_create(p,N)  assert(p(X,N)) X is permutation
+groupe_create(e,N)  assert(p(X,N)) X is even permutation
+groupe_create(o,N)  assert(p(X,N)) X is odd permutation
+
 
 Infix Notation for Groupe
 Operator	Meaning
