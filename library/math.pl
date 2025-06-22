@@ -101,7 +101,7 @@ forall(P, Q) :-
 topology(O,Z) :-
     member([],O),!,
     member(Z,O),!,
-    forall(select2(O,[X,Y]),topology1([X,Y],O)),!.
+    forall(math_select2(O,[X,Y]),math_topology1([X,Y],O)),!.
 
 select2(O,[X,Y]) :-
     select(X,O,O1),

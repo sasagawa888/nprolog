@@ -2335,13 +2335,7 @@ int add_prefix(int x)
 	return (add_prefix1(x));
 }
 
-int copy_pred(int x)
-{
-    if (structurep(x))
-	return (cons(car(x), copy_heap(cdr(x))));
-    else
-	return (x);
-}
+
 
 
 int exportp(int x)
@@ -2376,7 +2370,7 @@ int copy_heap(int x)
     else if (predicatep(x) && car(x) == NCURL)
 	return (x);
     else if (module_flag && predicatep(x) && exportp(x))
-	return (copy_pred(x));
+	return (x);
     else if (module_flag && predicatep(x) && !exportp(x))
 	return (add_prefix(x));
     else if (singlep(x))
