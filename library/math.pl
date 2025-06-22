@@ -101,7 +101,7 @@ forall(P, Q) :-
 topology(O,Z) :-
     member([],O),!,
     member(Z,O),!,
-    forall(math_select2(O,[X,Y]),math_topology1([X,Y],O)),!.
+    forall(select2(O,[X,Y]),topology1([X,Y],O)),!.
 
 select2(O,[X,Y]) :-
     select(X,O,O1),
@@ -257,19 +257,19 @@ groupe_prod(X,Y,Z) :-
     perm_prod(GX,GY,GZ),
     p(GZ,Z),!.
 
-groupe_create(p,N) :-
+groupe_create(perm,N) :-
     abolish(p/2),
     perm_ident(N,E),
     findall(X,permutation(E,X),L),
     groupe_create1(L,1).
 
-groupe_create(e,N) :-
+groupe_create(even,N) :-
     abolish(p/2),
     perm_ident(N,E),
     findall(X,perm_even(E,X),L),
     groupe_create1(L,1).
 
-groupe_create(o,N) :-
+groupe_create(odd,N) :-
     abolish(p/2),
     perm_ident(N,E),
     findall(X,perm_odd(E,X),L),
