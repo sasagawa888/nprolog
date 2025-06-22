@@ -5,7 +5,7 @@
                 list_map/2,map_list/2,map_inv/2,map_list/2,
                 perm_prod/3,perm_inv/2,perm_div/3,perm_ident/2,perm_inversion/2,perm_sign/2,
                 perm_even/2,perm_odd/2,groupe_prod,perm_expt/3,perm_conj/3,
-                groupe_create/2]).
+                groupe_create/2,p/2]).
 
 % infix notation
 :- op(700,xfx,[isl,ism,isq,isg]).
@@ -252,25 +252,25 @@ perm_conj(G, X, Y) :-
 % groupe
 
 groupe_prod(X,Y,Z) :-
-    prem(GX,X),
-    perm(GY,Y),
+    p(GX,X),
+    p(GY,Y),
     perm_prod(GX,GY,GZ),
-    prem(GZ,Z),!.
+    p(GZ,Z),!.
 
 groupe_create(p,N) :-
-    abolish(perm/2),
+    abolish(p/2),
     perm_ident(N,E),
     findall(X,permutation(E,X),L),
     groupe_create1(L,1).
 
 groupe_create(e,N) :-
-    abolish(perm/2),
+    abolish(p/2),
     perm_ident(N,E),
     findall(X,perm_even(E,X),L),
     groupe_create1(L,1).
 
 groupe_create(o,N) :-
-    abolish(perm/2),
+    abolish(p/2),
     perm_ident(N,E),
     findall(X,perm_odd(E,X),L),
     groupe_create1(L,1).
@@ -278,7 +278,7 @@ groupe_create(o,N) :-
 
 groupe_create1([],N) :- !.
 groupe_create1([L|Ls],N) :-
-    assert(perm(L,N)),
+    assert(p(L,N)),
     N1 is N+1,
     groupe_create1(Ls,N1).
     

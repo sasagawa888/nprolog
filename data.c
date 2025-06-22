@@ -2382,6 +2382,8 @@ int copy_heap(int x)
 	return (list3(car(x), copy_heap(cadr(x)), copy_heap(caddr(x))));
     else if (user_operation_p(x))
 	return (x);
+	else if (indicatorp(x))
+	return (x);
     return (cons(copy_heap(car(x)), copy_heap(cdr(x))));
     return (x);
 }
