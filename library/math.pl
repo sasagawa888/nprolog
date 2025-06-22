@@ -4,7 +4,7 @@
                 map_val/3,map_set/3,map_prod/3,surjection/3,injection/3,
                 list_map/2,map_list/2,map_inv/2,map_list/2,
                 perm_prod/3,perm_inv/2,perm_div/3,perm_ident/2,perm_inversion/2,perm_sign/2,
-                perm_even/2,perm_odd/2,groupe_prod,perm_expt/3,perm_conj/3,
+                perm_even/2,perm_odd/2,groupe_prod/3,perm_expt/3,perm_conj/3,
                 groupe_create/2,p/2]).
 
 % infix notation
