@@ -54,6 +54,12 @@ memberr([A|LA],[A|Y],R) :-
         R>1,R1 is R-1,memberr(LA,Y,R1).
 memberr(A,[_|Y],R) :-
         R>1,memberr(A,Y,R).
+
+% in N-Prolog memmberr -> select2
+select2(O,[X,Y]) :-
+    select(X,O,O1),
+    select(Y,O1,_).
+
         
 /* generate [1,2,3,4,...] */
 generate_e(N,E) :- gene_e_aux(E,N,[]).
@@ -245,7 +251,7 @@ topology_c(U,V,O) :-
         (Z1 isl U*V,sort(Z1,Z1s),member(Z1s,O)).
 
 top_condition(O0,O) :-
-        for_any(memberr([U,V],O0,2),
+        for_any(select2(O0,[U,V]),
                 topology_c(U,V,O)).
 
 ptop(Set0) :-
@@ -265,11 +271,15 @@ write_count(O) :-
         ctr_inc(0,N),
         writeln(N = O),!.
 
+/*
 for_any(P,Q) :-
         P,
         ifthenelse(Q,fail,(!,fail)).
 for_any(P,Q).
+*/
 
+for_any(P, Q) :-
+    \+ (P, \+ Q).
 
 %p195
 smallbag(X,P,_) :-
