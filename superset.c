@@ -2454,3 +2454,19 @@ int b_string_atom(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
+
+
+int b_initialization(int arglist, int rest, int th)
+{
+    int n, arg1, ind;
+
+    n = length(arglist);
+    ind = makeind("initialization", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+	execute_list = list1(copy_heap(arg1));
+	return(prove_all(rest,sp[th],th));
+	}
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}

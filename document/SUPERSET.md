@@ -97,6 +97,9 @@ The following extension functions respect ISO-Prolog as much as possible, but th
 - dynamic/1
 In N-Prolog, when foo/1 is given, the entire foo predicate is defined as dynamic.
 
+- initialization/1
+
+
 # Not ISO-Prolog
 N-Prolog is specialized for experimenting with and playing around with small-scale code. Therefore, the following features are not included.
 

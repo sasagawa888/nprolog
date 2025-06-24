@@ -105,19 +105,19 @@ pass1(X) :-
     nl(user_output),
     abolish(pred_data/3),
     assert(pred_data(dummy,-1,-1)),
-    reconsult(X),
+    reconsult(X,compiler),
     pass1_analize.
 
 pass2(X) :-
     write(user_output,'phase pass2'),
     nl(user_output),
-    reconsult(X),
+    reconsult(X,compiler),
     pass1_analize.
 
 pass3(X) :-
     write(user_output,'phase pass3'),
     nl(user_output),
-    reconsult(X),
+    reconsult(X,compiler),
     pass1_analize.
 
 

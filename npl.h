@@ -894,6 +894,7 @@ int b_halt(int arglist, int rest, int th);
 int b_has_cut(int arglist, int rest, int th);
 int b_heapdump(int arglist, int rest, int th);
 int b_inc(int arglist, int rest, int th);
+int b_initialization(int arglist, int rest, int th);
 int b_ifthen(int arglist, int rest, int th);
 int b_ifthenelse(int arglist, int rest, int th);
 int b_instance(int arglist, int rest, int th);

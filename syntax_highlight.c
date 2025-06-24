@@ -79,7 +79,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "create_client_socket" }, { "create_server_socket" },
     { "recv_socket" }, { "close_socket" },
     { "create_client_curl" }, { "send_curl" }, { "recv_curl" },
-    { "close_curl" },
+    { "close_curl" }, { "initialization" },
     { "set_curl_option" }, { "add_curl_header" }, { "string_atom" },
     { "label" }, { "all_different" },
 };

@@ -235,6 +235,7 @@ void init_builtin(void)
     defbuiltin("set_curl_option", b_set_curl_option, 2);
     defbuiltin("add_curl_header", b_add_curl_header, 2);
     defbuiltin("string_atom", b_string_atom, 2);
+	defbuiltin("initialization", b_initialization, 1);
     definfix("\\+", b_not, 900, FY);
 
     //-----Distributed parallel
@@ -1592,6 +1593,7 @@ int b_consult(int arglist, int rest, int th)
 
     n = length(arglist);
     ind = makeind("consult", n, th);
+	execute_list = NIL;
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -1649,6 +1651,9 @@ int b_consult(int arglist, int rest, int th)
 	input_stream = save;
 
       exit:
+	if(execute_list != NIL){
+		prove_all(execute_list,sp[th],th);
+	}
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -1658,12 +1663,15 @@ int b_consult(int arglist, int rest, int th)
 
 int b_reconsult(int arglist, int rest, int th)
 {
-    int n, ind, arg1, clause, clause1, head, atom, save;
+    int n, ind, arg1, clause, clause1, head, atom, save, compiler;
     char str[STRSIZE];
 
     n = length(arglist);
     ind = makeind("reconsult", n, th);
+	execute_list = NIL;
+	compiler = 0;
     if (n == 1) {
+	reconsult:
 	arg1 = car(arglist);
 
 	if (wide_variable_p(arg1))
@@ -1706,11 +1714,6 @@ int b_reconsult(int arglist, int rest, int th)
 		&& length(clause) == 2) {
 		clause = cadr(clause);
 		prove_all(clause, sp[th], th);
-		//if (!(structurep(cadr(clause))
-		//      && eqlp(car(cadr(clause)), makesys("dynamic")))) {
-		    /* if execute predicate is dynamic not add to execute_list */
-		//    execute_list = listcons(copy_heap(clause), execute_list);
-		//}
 		goto skip;
 	    }
 	    // DCG syntax e.g. a-->b.
@@ -1718,7 +1721,7 @@ int b_reconsult(int arglist, int rest, int th)
 		operate(clause, th);
 		goto skip;
 	    }
-	    //delete old definition
+	    //delete old definition and consult
 	    if (predicatep(clause) || user_operation_p(clause)) {
 		clause1 = copy_heap(clause);
 		if (atomp(clause1))
@@ -1747,8 +1750,15 @@ int b_reconsult(int arglist, int rest, int th)
 	module_flag = 0;
 
       exit:
+	if(compiler != 1){
+		prove_all(execute_list,sp[th],th);
+	}
 	return (prove_all(rest, sp[th], th));
-    }
+    } else if(n == 2){
+		arg1 = car(arglist);
+		compiler = 1;
+		goto reconsult;
+	}
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
