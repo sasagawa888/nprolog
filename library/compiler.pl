@@ -1556,7 +1556,7 @@ gen_exec2(X) :-
     write('body = '),
     gen_body1(X,0),
     write(';'),nl,
-    write('Jexec_all(body,Jget_sp(th),th);'),!.
+    write('Jprove_all(body,Jget_sp(th),th);'),!.
 
 
 analize(P) :-

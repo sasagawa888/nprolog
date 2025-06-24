@@ -1709,7 +1709,7 @@ int b_reconsult(int arglist, int rest, int th)
 		if (!(structurep(cadr(clause))
 		      && eqlp(car(cadr(clause)), makesys("dynamic")))) {
 		    /* if execute predicate is dynamic not add to execute_list */
-		    execute_list = listcons(clause, execute_list);
+		    execute_list = listcons(copy_heap(clause), execute_list);
 		}
 		goto skip;
 	    }

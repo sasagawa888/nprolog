@@ -395,6 +395,11 @@ static inline int Jexec_all(int x, int y, int th) {
     return f3[EXEC_ALL_IDX](x, y, th);
 }
 
+static inline int Jprove_all(int x, int y, int th) {
+    return f3[PROVE_ALL_IDX](x, y, th);
+}
+
+
 static inline int Jwcons(int x, int y, int th) {
     return f3[WCONS_IDX](x, y, th);
 }
