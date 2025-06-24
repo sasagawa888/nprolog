@@ -1658,7 +1658,7 @@ int b_consult(int arglist, int rest, int th)
 
 int b_reconsult(int arglist, int rest, int th)
 {
-    int n, ind, arg1, clause, head, atom, save;
+    int n, ind, arg1, clause, clause1, head, atom, save;
     char str[STRSIZE];
 
     n = length(arglist);
@@ -1720,12 +1720,14 @@ int b_reconsult(int arglist, int rest, int th)
 	    }
 	    //delete old definition
 	    if (predicatep(clause) || user_operation_p(clause)) {
-		if (atomp(clause))
-		    atom = clause;
+		clause1 = copy_heap(clause);
+		if (atomp(clause1))
+		    atom = clause1;
 		else
-		    atom = car(clause);
+		    atom = car(clause1);
 	    } else {
-		head = cadr(clause);
+		clause1 = copy_heap(clause);
+		head = cadr(clause1);
 		if (atomp(head))
 		    atom = head;
 		else
