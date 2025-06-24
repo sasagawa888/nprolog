@@ -1785,6 +1785,8 @@ int b_module(int arglist, int rest, int th)
 	    export_data[export_pt][1] = GET_INT(caddr(car(arg2)));
 	    arg2 = cdr(arg2);
 	    export_pt++;
+		if(export_pt >= 256)
+			exception(RESOURCE_ERR, NIL, ind, th);
 	}
 	return (prove_all(rest, sp[th], th));
     }
