@@ -1706,11 +1706,11 @@ int b_reconsult(int arglist, int rest, int th)
 		&& length(clause) == 2) {
 		clause = cadr(clause);
 		prove_all(clause, sp[th], th);
-		if (!(structurep(cadr(clause))
-		      && eqlp(car(cadr(clause)), makesys("dynamic")))) {
+		//if (!(structurep(cadr(clause))
+		//      && eqlp(car(cadr(clause)), makesys("dynamic")))) {
 		    /* if execute predicate is dynamic not add to execute_list */
-		    execute_list = listcons(copy_heap(clause), execute_list);
-		}
+		//    execute_list = listcons(copy_heap(clause), execute_list);
+		//}
 		goto skip;
 	    }
 	    // DCG syntax e.g. a-->b.
