@@ -2464,7 +2464,7 @@ int b_initialization(int arglist, int rest, int th)
     ind = makeind("initialization", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
-	execute_list = list1(copy_heap(arg1));
+	execute_list = listcons(copy_heap(arg1),execute_list);
 	return(prove_all(rest,sp[th],th));
 	}
     exception(ARITY_ERR, ind, arglist, th);

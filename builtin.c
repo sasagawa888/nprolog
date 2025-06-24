@@ -1652,7 +1652,11 @@ int b_consult(int arglist, int rest, int th)
 
       exit:
 	if(execute_list != NIL){
-		prove_all(execute_list,sp[th],th);
+		execute_list = reverse(execute_list);
+		while(!nullp(execute_list)){
+			prove_all(car(execute_list),sp[th],th);
+			execute_list = cdr(execute_list);
+		}
 	}
 	return (prove_all(rest, sp[th], th));
     }
@@ -1750,8 +1754,12 @@ int b_reconsult(int arglist, int rest, int th)
 	module_flag = 0;
 
       exit:
-	if(compiler != 1){
-		prove_all(execute_list,sp[th],th);
+	if(compiler != 1 && execute_list != NIL){
+		execute_list = reverse(execute_list);
+		while(!nullp(execute_list)){
+			prove_all(car(execute_list),sp[th],th);
+			execute_list = cdr(execute_list);
+		}
 	}
 	return (prove_all(rest, sp[th], th));
     } else if(n == 2){
