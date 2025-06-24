@@ -302,7 +302,7 @@ gen_c_exec :-
 /*
 parts for gen_predicate
 C type declare.
-int b_foo(int arglist, int rest);
+static int b_foo(int arglist, int rest);
 */
 gen_type_declare(P) :-
 	write('static int b_'),
@@ -350,7 +350,7 @@ gen_var_declare1(S,E) :-
 
 /*
 generate predicate for not tail recursive
-int b_<name>(int arglist, int rest){
+static int b_<name>(int arglist, int rest){
 int varX,varY,...
 save2 = Jget_sp(th);
 save3 = Jget_ac(th);
