@@ -1388,7 +1388,7 @@ int indicatorp(int addr)
 	(atomp(caddr(addr)) || variablep(caddr(addr))))
 	return (1);
     else
-	return (NO);
+	return (0);
 }
 
 
