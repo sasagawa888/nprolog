@@ -1,4 +1,4 @@
-% CLP-test 
+% CLP-test  
 
 :- use_module(clpfd).
 
