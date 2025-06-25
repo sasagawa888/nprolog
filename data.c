@@ -1385,7 +1385,7 @@ int indicatorp(int addr)
 {
     if (structurep(addr) && length(addr) == 3 && eqlp(car(addr), SLASH) &&
 	(atomp(cadr(addr)) || variablep(cadr(addr))) &&
-	(atomp(caddr(addr)) || variablep(caddr(addr))))
+	(integerp(caddr(addr)) || variablep(caddr(addr))))
 	return (1);
     else
 	return (0);
