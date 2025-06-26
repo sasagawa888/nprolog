@@ -597,4 +597,6 @@ test(select) :-
     select(1,[1|2],2),
     not(select(X,a,Y)).
      
-:- alltest,write('All tests are done'),nl.
+main :- alltest,write('All tests are done'),nl.
+
+:- initialization(main).
