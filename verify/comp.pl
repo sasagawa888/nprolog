@@ -20,5 +20,5 @@ dyn :- asserta(fact(0,0)),
        write(dyn_test_ok).
 
 :- initialization(main).
-%:- initialization(dyn).
+:- initialization(dyn).
 

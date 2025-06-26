@@ -111,13 +111,11 @@ pass1(X) :-
 pass2(X) :-
     write(user_output,'phase pass2'),
     nl(user_output),
-    reconsult(X,compiler),
     pass1_analize.
 
 pass3(X) :-
     write(user_output,'phase pass3'),
     nl(user_output),
-    reconsult(X,compiler),
     pass1_analize.
 
 

@@ -79,7 +79,7 @@ listperf([_|T], Z) :-
 
 %generate one list of N numbers.
 %genList(10, L).
-generateList(0, []).
+generateList(0, []) :- !.
 generateList(N, [X|Xs]) :-
 	N > 0,
 	X is N+1,
