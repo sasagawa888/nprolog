@@ -758,7 +758,9 @@ void gettoken(int th)
 		unreadc(c);
 	} else {
 	    unreadc(c);
-	    stok.type = SHARP;
+	    stok.buf[0] = '#';
+		stok.buf[1] = NUL;
+		stok.type = ATOMOBJ;
 	    return;
 	}
     }
