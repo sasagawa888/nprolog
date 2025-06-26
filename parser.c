@@ -1395,19 +1395,7 @@ int readitem1(int th)
 	}
     case SHARP:
 	gettoken(th);
-	switch (stok.type) {
-    case COMMA:
-    case SEMICOLON:
-    case LPAREN:
-    case RPAREN:
-    case LCURL:
-	case RCURL:
-	case PERIOD:
-	stok.flag = BACK;
-	return makeconst("#");
-	default:
 	return (makeint(utf8_to_ucs4(stok.buf)));
-	}
     case BUILTIN:
 	temp = makeatom(stok.buf, SYS);
 	if (temp == makesys("="))
