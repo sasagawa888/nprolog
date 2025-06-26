@@ -471,6 +471,7 @@ int b_op(int arglist, int rest, int th)
 	    exception(OPE_SPEC_ERR, ind, arg2, th);
 
 	if (singlep(arg3)) {
+		print(arg3);
 	    if (operatorp(arg3))
 		defoperator(GET_NAME(arg3), NIL, weight, type, 0);
 	    else if (builtinp(arg3))

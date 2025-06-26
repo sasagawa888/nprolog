@@ -22,6 +22,11 @@ yes
     ተንቀሳቃሽ(X).
 
 ```
+# Sharp
+When a # appears at the beginning, it represents the Unicode value of the following character.
 
-
+```
+?- X = #あ.
+X = 12354 .
+```
 
