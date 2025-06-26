@@ -35,10 +35,11 @@ top :-
     abolish_all_tables,
     \+ \+ (path(a, e, T), ok_path(T)).
 
+/*
 :- table
     path(_,_,lattice(or/3)),
     edge(_,_,lattice(or/3)).
-
+*/
 path(X,X,one).
 path(X,Y,C):-
     edge(X,Z,A),
