@@ -703,64 +703,6 @@ void gettoken(int th)
 	    unreadc(c);
 	    return;
 	}
-    case '#':
-	c = readc();
-	if (c == '=') {
-	    stok.buf[0] = '#';
-	    stok.buf[1] = '=';
-	    stok.buf[2] = NUL;
-	    stok.type = ATOMOBJ;
-	    return;
-	} else if (c == '<') {
-	    c = readc();
-	    if (c == '=') {
-		stok.buf[0] = '#';
-		stok.buf[1] = '<';
-		stok.buf[2] = '=';
-		stok.buf[3] = NUL;
-		stok.type = ATOMOBJ;
-		return;
-	    } else {
-		unreadc(c);
-		stok.buf[0] = '#';
-		stok.buf[1] = '<';
-		stok.buf[2] = NUL;
-		stok.type = ATOMOBJ;
-		return;
-	    }
-	} else if (c == '>') {
-	    c = readc();
-	    if (c == '=') {
-		stok.buf[0] = '#';
-		stok.buf[1] = '>';
-		stok.buf[2] = '=';
-		stok.buf[3] = NUL;
-		stok.type = ATOMOBJ;
-		return;
-	    } else {
-		unreadc(c);
-		stok.buf[0] = '#';
-		stok.buf[1] = '>';
-		stok.buf[2] = NUL;
-		stok.type = ATOMOBJ;
-		return;
-	    }
-	} else if (c == '\\') {
-	    c = readc();
-	    if (c == '=') {
-		stok.buf[0] = '#';
-		stok.buf[1] = '\\';
-		stok.buf[2] = '=';
-		stok.buf[3] = NUL;
-		stok.type = ATOMOBJ;
-		return;
-	    } else
-		unreadc(c);
-	} else {
-	    unreadc(c);
-		stok.type = SHARP;
-	    return;
-	}
     }
     //variant
     if (c == 'v') {
@@ -1393,9 +1335,6 @@ int readitem1(int th)
 	    stok.flag = BACK;
 	    return (DOTOBJ);
 	}
-    case SHARP:
-	gettoken(th);
-	return (makeint(utf8_to_ucs4(stok.buf)));
     case BUILTIN:
 	temp = makeatom(stok.buf, SYS);
 	if (temp == makesys("="))

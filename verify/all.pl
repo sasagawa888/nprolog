@@ -76,10 +76,6 @@ test(radix) :-
     verify(0o77 == 63),
     verify(0b1111 == 15).
 
-test(sharp) :-
-    verify(#x == 120),
-    verify(#0 == 48),
-    verify(#夢 == 22818).
 
 test(arithmetic) :-
     verify(2 is 1+1),
