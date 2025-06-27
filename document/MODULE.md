@@ -29,12 +29,20 @@ N-Prolog has several modularized libraries.
  remove_at/3,insert_at/4,qsort/2,permutation/2,flatten/2
 ```
 
-- Sets
-use_module(sets).
-
-```
-make_set/2,union/3,intersection/3,difference/3,subset/2,equal/2
-```
-
 - tcltk
 see TCLTK.md
+
+# module/2
+module/2 is a predicate used to create a module. The first argument is the module name, and the second argument is a list of predicate names with arities to be exported to the outside. Modules are defined on a per-file basis. Specifically, predicates not included in the list given as the second argument are prefixed with the module name followed by an underscore. This mechanism hides internal predicates and prevents name collisions.
+
+In directives such as :-op/3 or :-dynamic, atoms are executed as-is. When referring to hidden predicates, you need to explicitly add the module name prefix to their names.
+
+## example
+```
+:- module(test,[foo/1]).
+:- dynamic(test_bar/1).
+
+foo(X) :- bar(X).
+
+bar(X) :- write(X).
+```
