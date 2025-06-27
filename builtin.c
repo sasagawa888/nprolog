@@ -3157,7 +3157,7 @@ int b_atom_string(int arglist, int rest, int th)
 int b_char_code(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, code, res;
-    char str[2];
+    char str[16];
 
     n = length(arglist);
     ind = makeind("char_code", n, th);
@@ -3194,7 +3194,7 @@ int b_char_code(int arglist, int rest, int th)
 		    exception(ILLEGAL_ARGS, ind, arg1, th);
 	    }
 	    //unicode
-	    code = makeint(utf8_to_ucs4(GET_NAME(arg1)));
+	    code = makeint(utf8_to_ucs4(str));
 	    res = unify(arg2, code, th);
 	    if (res == YES)
 		return (prove_all(rest, sp[th], th));
