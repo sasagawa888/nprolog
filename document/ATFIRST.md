@@ -53,8 +53,8 @@ This is a library for interfacing with Gnuplot.
 ![Python](PYTHON.md)
 This is a library for using TensorFlow via Python.
 
-![Sets](SETS.md)
-This is a description of the Sets library.
+![Math](MATH.md)
+This is a description of the Math library.
 
 ![SuperSet](SUPERSET.md)
 This is a description of ISO-style predicates and other modern extended predicates.
