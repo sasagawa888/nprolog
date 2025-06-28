@@ -309,6 +309,11 @@ int b_member(int arglist, int rest, int th)
 
 //---------extention--------
 
+/*
+	append([],X,X).
+	append([X|Ls],Ys,[X|Zs]):-
+        	append(Ls,Ys,Zs).
+*/
 int b_append(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, arg3, x, ls, ys, zs, save1, save2, body;
@@ -331,14 +336,12 @@ int b_append(int arglist, int rest, int th)
 
 	save1 = wp[th];
 	if (unify_nil(arg1, th) == YES && unify(arg2, arg3, th) == YES) {
-	    if (prove(NIL, sp[th], rest, th) == YES)
+	    if (prove_all(rest, sp[th], th) == YES)
 		return (YES);
-	    else
-		return (NO);
 	}
 	wp[th] = save1;
 	unbind(save2, th);
-
+	
 	save1 = wp[th];
 	x = makevariant(th);
 	ls = makevariant(th);
@@ -346,10 +349,9 @@ int b_append(int arglist, int rest, int th)
 	zs = makevariant(th);
 	if (unify_pair(arg1, wlistcons(x, ls, th), th) == YES &&
 	    unify_var(arg2, ys, th) == YES
-	    && unify_pair(arg3, wlistcons(x, zs, th), th) == YES) {
+	    && unify(arg3, wlistcons(x, zs, th), th) == YES) {
 	    body = wlist4(makeatom("append", SYS), ls, ys, zs, th);
-	    if (prove(body, sp[th], rest, th) == YES)
-		return (YES);
+	    return (prove_all(addtail_body(rest,body,th), sp[th], th));
 	}
 	wp[th] = save1;
 	unbind(save2, th);
