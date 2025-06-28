@@ -1866,7 +1866,13 @@ int unify(int x, int y, int th)
 int unify_pair(int x, int y, int th)
 {	
     if (variablep(x)) {
-		return(unify_var(x,y,th));
+		//bindsym(x, y, th);
+	if (alpha_variable_p(x))
+	    variant[x - CELLSIZE][th] = y;
+	else if (atom_variable_p(x))
+	    SET_CAR(x, y);
+		push_stack(x, th);
+	return (YES);
     } else if (!listp(x))
 	return (NO);
     else if (listp(x) && x != NIL && unify_var(car(x), car(y), th) == YES
