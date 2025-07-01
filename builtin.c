@@ -3589,7 +3589,7 @@ int b_ifthen(int arglist, int rest, int th)
 
 int b_ifthenelse(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2, arg3, body, res;
+    int n, ind, arg1, arg2, arg3, save1, body, res;
 
     n = length(arglist);
     ind = makeind("ifthenelse", n, th);
@@ -3597,6 +3597,7 @@ int b_ifthenelse(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
+	save1 = sp[th];
 
 	if (variablep(arg1))
 	    exception(INSTANTATION_ERR, ind, arg1, th);
@@ -3611,6 +3612,7 @@ int b_ifthenelse(int arglist, int rest, int th)
 	if ((res = prove_all(body, sp[th], th)) == YES) {
 	    return (prove_all(rest, sp[th], th));
 	} else {
+		unbind(save1, th);
 	    return(res);
 	}
     }

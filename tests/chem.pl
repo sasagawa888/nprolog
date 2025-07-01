@@ -122,6 +122,82 @@ element(unbinilium, 120, 320).
 
 shell_data([2, 8, 8, 18, 18, 32 ,32]).
 
+groupe(X,G) :-
+    period(X,P),
+    groupe1(X,P,G).
+
+groupe1(X,P,G) :-
+    P == 1,
+    X == 1,G = 1.
+grouep1(X,P,G) :-
+    P == 1,
+    X == 2,G = 18.
+groupe1(X,P,G) :-
+    P == 2,
+    X =< 4,
+    G is X - 2.
+groupe1(X,P,G) :-
+    P == 2,
+    X > 4,
+    G is X + 8.
+groupe1(X,P,G) :-
+    P == 3,
+    X =< 12,
+    G is X - 10.
+groupe1(X,P,G) :-
+    P == 3,
+    X > 12,
+    G is X.
+groupe1(X,P,G) :-
+    P == 4,
+    G is X - 18.
+groupe1(X,P,G) :-
+    P == 5,
+    G is X - 36.
+groupe1(X,P,G) :-
+    P == 6,
+    X >= 57, X =< 71,
+    G = 3.
+groupe1(X,P,G) :-
+    P == 6,
+    X =< 56,
+    G is X - 54.
+groupe1(X,P,G) :-
+    P == 6,
+    X >= 72,
+    G is X - 68.
+groupe1(X,P,G) :-
+    P == 7,
+    X >= 89, X =< 103,
+    G is 3.
+groupe1(X,P,G) :-
+    P == 7,
+    X =< 88,
+    G is X - 86.
+groupe1(X,P,G) :-
+    P == 7,
+    X =< 104,
+    G is X - 100.
+groupe1(X,P,G) :-
+    P == 8,
+    X >= 139, X =< 153,
+    G = 3.
+groupe1(X,P,G) :-
+    P == 8,
+    X =< 120,
+    G is X - 118.
+groupe1(X,P,G) :-
+    P == 8,
+    X >= 154,
+    G is X - 150.
+groupe1(X,P,G) :-
+    P == 9,
+    X >= 171, X =< 173,
+    G is 3.
+groupe1(X,P,G) :-
+    P == 9,
+    G is X - 168.
+
 period(X,P) :-
     shell_data(S),
     period1(X,S,1,P).
