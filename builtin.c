@@ -2646,8 +2646,9 @@ int b_asserta(int arglist, int rest, int th)
 		exception(BUILTIN_EXIST, ind, arg1, th);
 
 	    SET_VAR(arg1, unique(varslist(arg1)));
+		assert_flag = 1;
 	    operate(arg1, th);
-	    assert_flag = 0;
+		assert_flag = 0;
 	    checkgbc();
 	    return (prove_all(rest, sp[th], th));
 	}
