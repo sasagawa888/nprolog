@@ -3,15 +3,22 @@
 resolve(true,Env,Cont) :- !.
 resolve((P, Q),Env,Cont) :- !, resolve(P,Env,Cont), resolve(Q,Env,Cont).
 resolve((P; Q),Env,Cont) :- !, resolve(P,Env,Cont) ; resolve(Q,Env,Cont).
+% builtin
 resolve(Goal,Env,Cont) :-
     predicate_property(Goal, built_in), !,
     call(Goal).    
+% predicate
+resolve(Head,Env,Cont) :-
+    functor(Head, F, N),
+    functor(Copy, F, N),
+    clause(Copy, true).
+% clause
 resolve(Head,Env,Cont) :-
     functor(Head, F, N),
     functor(Copy, F, N),
     clause(Copy, Body),
     unify(Head, Copy, Env),
-    resolve(Body,Env, Cont).
+    resolve(Body, Env, Cont).
 
 
 repl :- 
