@@ -95,7 +95,7 @@ unify(X,Y,Env) :-
     deref(Y,Y1,Env),
     X1 == Y1.
 
-
+% unify list
 unify1([X|Xs],[Y|Ys],Env) :-
     unify(X,Y,Env),
     unify1(Xs,Ys,Env).
