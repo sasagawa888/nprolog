@@ -51,7 +51,7 @@ findvar(X,Y,[[X,Y]|_]) :- !.
 findvar(X,Y,[L|Ls]) :-
     findvar(X,Y,Ls).
 
-% prefix v is variable. e.g. vX vY
+% prefix v is variable. e.g. vX, vY
 variable(X) :-  
     atom(X),
     atom_codes(X,[118|_]).
@@ -73,7 +73,7 @@ deref(X,Y,Env) :-
     deref1(L,L1,Env),
     Y =.. L1.
 
-% derefernece list
+% dereference list
 deref1([],[],Env).
 deref1([X|Xs],[Y|Ys],Env) :-
     deref(X,Y,Env),
@@ -89,7 +89,7 @@ unify(X,Y,Env,[[X,Y1]|Env]) :-
     variable(X),
     variable(Y),
     findvar(X,X,Env),
-    finvar(Y,Y1,Env).
+    findvar(Y,Y1,Env).
 unify(X,Y,Env,[[Y,X1]|Env]) :-
     variable(X),
     variable(Y),
