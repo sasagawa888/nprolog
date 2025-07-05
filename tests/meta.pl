@@ -22,8 +22,8 @@ resolve(Goal,Env,Cont) :-
 % other builtin
 resolve(Goal,Env,Cont) :-
     predicate_property(Goal, built_in), !,
-    deref(Goal,Goal1,Env), write(Goal),
-    call(Goal),
+    deref(Goal,Goal1,Env),
+    call(Goal1),
     resolve(Cont, Env, true).    
 % predicate
 resolve(Head,Env,Cont) :-
@@ -70,7 +70,7 @@ deref(X,Y,Env) :-
 deref(X,Y,Env) :-
     compound(X),
     X =.. L,
-    deref1(L,L1,Env), write(L),
+    deref1(L,L1,Env),
     Y =.. L1.
 
 % derefernece list
