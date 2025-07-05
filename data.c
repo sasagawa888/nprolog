@@ -2274,8 +2274,6 @@ int structure_to_list(int x)
 	res = listcons(car(x), res);
 	x = cdr(x);
     }
-    if (operatorp(car(res)))
-	res = listcons(makeconst(GET_NAME(car(res))), cdr(res));
 
     return (res);
 }

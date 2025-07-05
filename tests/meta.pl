@@ -1,5 +1,9 @@
-% meta interpreter
-
+/* meta interpreter
+*  by kenichi sasagawa
+*  Env is assoc list e.g. [[vX,2],[vY,3]...]
+*  Cont is continuation conjunction.
+*  [-'./tests/meta']  -? prolog. change prompt to ?>
+*/
 resolve(true,Env,Cont) :- !.
 resolve((P, Q),Env,Cont) :- 
     connect(Q,Cont,Cont1),
@@ -18,8 +22,8 @@ resolve(Goal,Env,Cont) :-
 % other builtin
 resolve(Goal,Env,Cont) :-
     predicate_property(Goal, built_in), !,
-    deref(Goal,Goal1,Env), 
-    call(Goal1),
+    deref(Goal,Goal1,Env), write(Goal),
+    call(Goal),
     resolve(Cont, Env, true).    
 % predicate
 resolve(Head,Env,Cont) :-
@@ -52,6 +56,7 @@ variable(X) :-
     atom(X),
     atom_codes(X,[118|_]).
 
+% dereference
 deref(X,Y,Env) :-
     variable(X),
     findvar(X,Y,Env).
@@ -65,7 +70,7 @@ deref(X,Y,Env) :-
 deref(X,Y,Env) :-
     compound(X),
     X =.. L,
-    deref1(L,L1,Env),
+    deref1(L,L1,Env), write(L),
     Y =.. L1.
 
 % derefernece list
@@ -74,7 +79,7 @@ deref1([X|Xs],[Y|Ys],Env) :-
     deref(X,Y,Env),
     deref1(Xs,Ys,Env).
 
-
+% unify X and Y in Env(arg3) return new env(arg4)
 unify(X,Y,Env,[[X,Y]|Env]) :-
     variable(X),
     variable(Y),
@@ -129,7 +134,7 @@ unify1([X|Xs],[Y|Ys],Env,Env2) :-
     unify(X,Y,Env,Env1),
     unify1(Xs,Ys,Env1,Env2).
 
-
+% evaluate X in Env
 eval(X,X,Env) :-
     number(X).
 eval(X,X1,Env) :-
@@ -164,6 +169,7 @@ eval(X,Y,Env) :-
     eval(X2,X4,Env),
     Y is X3/X4.
 
+% connect conjunction
 connect((A,B),C,(A,Z)) :-
     connect(B,C,Z).
 connect(A,B,(A,B)).
