@@ -14,11 +14,15 @@ fact(vN,vX) :-
 
 resolve(true,Env,Cont,N) :- !.
 resolve((P, Q),Env,Cont,N) :- 
+    deref(P,P1,Env),
+    write(P1),write(in),write(Env),get(_),nl,
     connect(Q,Cont,Cont1),
     N1 is N+1,
-    resolve(P,Env,Cont1,N1).
+    resolve(P1,Env,Cont1,N1).
 resolve((P; Q),Env,Cont,N) :- 
-    !, resolve(P,Env,Cont,N) ; resolve(Q,Env,Cont,N).
+    deref(P,P1,Env),
+    deref(Q,Q1,Env),
+    !, resolve(P1,Env,Cont,N) ; resolve(Q1,Env,Cont,N).
 
 % is builtin
 resolve(Goal,Env,Cont,N) :-
@@ -52,7 +56,7 @@ resolve(Head,Env,Cont,N) :-
     alpha_rename(Body,Body1,N),
     unify(Head1, Copy1, Env, Env1),
     Body = true, %Copy is base
-    N1 is N+1, write(asdf1),write(Copy),write(Body),write(Cont),nl,
+    N1 is N+1,
     resolve(Cont, Env1, [],N1),!.
 
 resolve(Head,Env,Cont,N) :-
@@ -64,7 +68,7 @@ resolve(Head,Env,Cont,N) :-
     alpha_rename(Body,Body1,N),
     unify(Head1, Copy1, Env, Env1),
     connect(Body1,Cont,Body2),
-    N1 is N+1,write(asdf2),write(Copy),write(Body),nl,
+    N1 is N+1,
     resolve(Body2, Env1, [],N1),!.
 
 prolog :- 
