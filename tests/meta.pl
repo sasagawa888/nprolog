@@ -51,10 +51,9 @@ resolve(Head,Env,Cont,N) :-
     functor(Head, F, A), 
     functor(Copy, F, A), 
     clause(Copy, Body), 
-    alpha_rename(Head,Head1,N),
     alpha_rename(Copy,Copy1,N),
     alpha_rename(Body,Body1,N),
-    unify(Head1, Copy1, Env, Env1),
+    unify(Head, Copy1, Env, Env1),
     Body = true, %Copy is base
     N1 is N+1,
     resolve(Cont, Env1, [],N1),!.
@@ -63,10 +62,9 @@ resolve(Head,Env,Cont,N) :-
     functor(Head, F, A), 
     functor(Copy, F, A), 
     clause(Copy, Body), 
-    alpha_rename(Head,Head1,N),
     alpha_rename(Copy,Copy1,N),
     alpha_rename(Body,Body1,N),
-    unify(Head1, Copy1, Env, Env1),
+    unify(Head, Copy1, Env, Env1),
     connect(Body1,Cont,Body2),
     N1 is N+1,
     resolve(Body2, Env1, [],N1),!.
