@@ -35,12 +35,13 @@ resolve(Head,Env,Cont,N) :-
     resolve(Cont,Env,true,N1).
 % clause
 resolve(Head,Env,Cont,N) :-
-    functor(Head, F, A),
+    functor(Head, F, A), 
     functor(Copy, F, A), 
-    clause(Copy, Body), 
+    clause(Copy, Body),
     alpha_rename(Head,Head1,N),
+    alpha_rename(Copy,Copy1,N),
     alpha_rename(Body,Body1,N),
-    unify(Head1, Copy, Env, Env1),
+    unify(Head1, Copy1, Env, Env1),
     connect(Body1,Cont,Body2),
     N1 is N+1,
     resolve(Body2, Env1, true,N1).
@@ -54,7 +55,8 @@ prolog :-
     fail.
 
 findvar(X,X,Env) :-
-    findvar1(X,X,Env),!.
+    findvar1(X,Y,Env),
+    X == Y.
 findvar(X,Z,Env) :-
     findvar1(X,Y,Env),
     variable(Y),
@@ -62,6 +64,7 @@ findvar(X,Z,Env) :-
 findvar(X,Y,Env) :-
     findvar1(X,Y,Env),
     not(variable(Y)),!.
+
 
 findvar1(X,X,[]) :- !.
 findvar1(X,Y,[[X,Y]|_]) :- !.
@@ -78,7 +81,7 @@ deref(X,Y,Env) :-
     variable(X),
     findvar(X,Y,Env).
 deref(X,X,Env) :-
-    atom(X).
+    atomic(X).
 deref(X,Y,Env) :-
     list(X),
     deref1(X,Y,Env).
@@ -133,8 +136,8 @@ unify(X,Y,Env,[[Y,X]|Env]) :-
     findvar(Y,Y1,Env),
     variable(Y1).
 unify(X,Y,Env,Env) :-
-    atom(X),
-    atom(Y),
+    atomic(X),
+    atomic(Y),
     X == Y.
 unify(X,Y,Env,Env1) :-
     list(X),
@@ -205,7 +208,7 @@ alpha_rename(X,Y,N) :-
     variable(X),
     uniqulify(X,Y,N).
 alpha_rename(X,X,N) :-
-    atom(X).
+    atomic(X).
 alpha_rename(X,Y,N) :-
     list(X),
     alpha_rename1(X,Y,N).
