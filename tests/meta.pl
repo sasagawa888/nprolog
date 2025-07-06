@@ -4,52 +4,69 @@
 *  Cont is continuation conjunction.
 *  [-'./tests/meta']  -? prolog. change prompt to ?>
 */
-resolve(true,Env,Cont) :- !.
-resolve((P, Q),Env,Cont) :- 
+resolve(true,Env,Cont,N) :- !.
+resolve((P, Q),Env,Cont,N) :- 
     connect(Q,Cont,Cont1),
-    resolve(P,Env,Cont1).
-resolve((P; Q),Env,Cont) :- 
-    !, resolve(P,Env,Cont) ; resolve(Q,Env,Cont).
+    N1 is N+1,
+    resolve(P,Env,Cont1,N1).
+resolve((P; Q),Env,Cont,N) :- 
+    !, resolve(P,Env,Cont,N) ; resolve(Q,Env,Cont,N).
 
 % is builtin
-resolve(Goal,Env,Cont) :-
+resolve(Goal,Env,Cont,N) :-
     functor(Goal,is,2), 
     arg(1,Goal,X),
     arg(2,Goal,Y),
     eval(Y,Y1,Env),
     unify(X,Y1,Env,Env1),
-    resolve(Cont, Env1, true).
+    N1 is N+1,
+    resolve(Cont, Env1, true,N1).
 % other builtin
-resolve(Goal,Env,Cont) :-
+resolve(Goal,Env,Cont,N) :-
     predicate_property(Goal, built_in), !,
     deref(Goal,Goal1,Env),
     call(Goal1),
-    resolve(Cont, Env, true).    
+    N1 is N+1,
+    resolve(Cont, Env, true,N1).    
 % predicate
-resolve(Head,Env,Cont) :-
+resolve(Head,Env,Cont,N) :-
     clause(Head, true),
-    resolve(Cont,Env,true).
+    N1 is N+1,
+    resolve(Cont,Env,true,N1).
 % clause
-resolve(Head,Env,Cont) :-
-    functor(Head, F, N),
-    functor(Copy, F, N), 
+resolve(Head,Env,Cont,N) :-
+    functor(Head, F, A),
+    functor(Copy, F, A), 
     clause(Copy, Body), 
-unify(Head, Copy, Env, Env1),
-    connect(Body,Cont,Body1),
-    resolve(Body1, Env1, true).
+    alpha_rename(Head,Head1,N),
+    alpha_rename(Body,Body1,N),
+    unify(Head1, Copy, Env, Env1),
+    connect(Body1,Cont,Body2),
+    N1 is N+1,
+    resolve(Body2, Env1, true,N1).
 
 prolog :- 
     repeat,
     nl,write('?> '),
     read(X),
     (X=halt -> (get(_),abort);true),
-    (resolve(X,[],true) -> write(yes);write(no)),
+    (resolve(X,[],true,0) -> write(yes);write(no)),
     fail.
 
-findvar(X,X,[]) :- !.
-findvar(X,Y,[[X,Y]|_]) :- !.
-findvar(X,Y,[L|Ls]) :-
-    findvar(X,Y,Ls).
+findvar(X,unbind,Env) :-
+    findvar1(X,X,Env),!.
+findvar(X,Z,Env) :-
+    findvar1(X,Y,Env),
+    variable(Y),
+    findvar(Y,Z,Env),!.
+findvar(X,Y,Env) :-
+    findvar1(X,Y,Env),
+    not(variable(Y)),!.
+
+findvar1(X,X,[]) :- !.
+findvar1(X,Y,[[X,Y]|_]) :- !.
+findvar1(X,Y,[L|Ls]) :-
+    findvar1(X,Y,Ls).
 
 % prefix v is variable. e.g. vX, vY
 variable(X) :-  
@@ -62,8 +79,6 @@ deref(X,Y,Env) :-
     findvar(X,Y,Env).
 deref(X,X,Env) :-
     atom(X).
-deref(X,X,Env) :-
-    atomic(X).
 deref(X,Y,Env) :-
     list(X),
     deref1(X,Y,Env).
@@ -83,18 +98,18 @@ deref1([X|Xs],[Y|Ys],Env) :-
 unify(X,Y,Env,[[X,Y]|Env]) :-
     variable(X),
     variable(Y),
-    findvar(X,X,Env),
-    findvar(Y,Y,Env).
+    findvar(X,unbind,Env),
+    findvar(Y,unbind,Env).
 unify(X,Y,Env,[[X,Y1]|Env]) :-
     variable(X),
     variable(Y),
-    findvar(X,X,Env),
+    findvar(X,unbind,Env),
     findvar(Y,Y1,Env).
 unify(X,Y,Env,[[Y,X1]|Env]) :-
     variable(X),
     variable(Y),
     findvar(X,X1,Env),
-    findvar(Y,Y,Env).
+    findvar(Y,unbind,Env).
 unify(X,Y,Env,Env) :-
     variable(X),
     variable(Y),
@@ -104,18 +119,14 @@ unify(X,Y,Env,Env) :-
 unify(X,Y,Env,[[X,Y]|Env]) :-
     variable(X),
     not(variable(Y)),
-    findvar(X,X,Env).
+    findvar(X,unbind,Env).
 unify(X,Y,Env,[[Y,X]|Env]) :-
     not(variable(X)),
     variable(Y),
-    findvar(Y,Y,Env).
+    findvar(Y,unbind,Env).
 unify(X,Y,Env,Env) :-
     atom(X),
     atom(Y),
-    X == Y.
-unify(X,Y,Env,Env) :-
-    atomic(X),
-    atomic(Y),
     X == Y.
 unify(X,Y,Env,Env1) :-
     list(X),
@@ -173,3 +184,31 @@ eval(X,Y,Env) :-
 connect((A,B),C,(A,Z)) :-
     connect(B,C,Z).
 connect(A,B,(A,B)).
+
+%  e.g. vX -> vX0
+uniqulify(V,V1,N) :-
+    atom_codes(V,L),
+    number_codes(N,L1),
+    append(L,L1,L2),
+    atom_codes(V1,L2).
+
+% alpha convert term
+alpha_rename(X,Y,N) :-
+    variable(X),
+    uniqulify(X,Y,N).
+alpha_rename(X,X,N) :-
+    atom(X).
+alpha_rename(X,Y,N) :-
+    list(X),
+    alpha_rename1(X,Y,N).
+alpha_rename(X,Y,N) :-
+    compound(X),
+    X =.. L,
+    alpha_rename1(L,L1,N),
+    Y =.. L1.
+
+% rename list
+alpha_rename1([],[],N).
+alpha_rename1([X|Xs],[Y|Ys],N) :-
+    alpha_rename(X,Y,N),
+    alpha_rename1(Xs,Ys,N).
