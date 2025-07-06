@@ -4,6 +4,14 @@
 *  Cont is continuation conjunction.
 *  [-'./tests/meta']  -? prolog. change prompt to ?>
 */
+
+%test case
+fact(0,1).
+fact(vN,vX) :-
+    vN1 is vN-1,
+    fact(vN1,vX1),
+    vX is vN*vX1.
+
 resolve(true,Env,Cont,N) :- !.
 resolve((P, Q),Env,Cont,N) :- 
     connect(Q,Cont,Cont1),
@@ -20,31 +28,44 @@ resolve(Goal,Env,Cont,N) :-
     eval(Y,Y1,Env),
     unify(X,Y1,Env,Env1),
     N1 is N+1,
-    resolve(Cont, Env1, true,N1).
+    resolve(Cont, Env1, [],N1),!.
 % other builtin
 resolve(Goal,Env,Cont,N) :-
     predicate_property(Goal, built_in), !,
     deref(Goal,Goal1,Env),
     call(Goal1),
     N1 is N+1,
-    resolve(Cont, Env, true,N1).    
+    resolve(Cont, Env, [],N1),!.    
 % predicate
 resolve(Head,Env,Cont,N) :-
     clause(Head, true),
     N1 is N+1,
-    resolve(Cont,Env,true,N1).
+    resolve(Cont,Env,[],N1),!.
+
 % clause
 resolve(Head,Env,Cont,N) :-
     functor(Head, F, A), 
     functor(Copy, F, A), 
-    clause(Copy, Body),
+    clause(Copy, Body), 
+    alpha_rename(Head,Head1,N),
+    alpha_rename(Copy,Copy1,N),
+    alpha_rename(Body,Body1,N),
+    unify(Head1, Copy1, Env, Env1),
+    Body = true, %Copy is base
+    N1 is N+1, write(asdf1),write(Copy),write(Body),write(Cont),nl,
+    resolve(Cont, Env1, [],N1),!.
+
+resolve(Head,Env,Cont,N) :-
+    functor(Head, F, A), 
+    functor(Copy, F, A), 
+    clause(Copy, Body), 
     alpha_rename(Head,Head1,N),
     alpha_rename(Copy,Copy1,N),
     alpha_rename(Body,Body1,N),
     unify(Head1, Copy1, Env, Env1),
     connect(Body1,Cont,Body2),
-    N1 is N+1,
-    resolve(Body2, Env1, true,N1).
+    N1 is N+1,write(asdf2),write(Copy),write(Body),nl,
+    resolve(Body2, Env1, [],N1),!.
 
 prolog :- 
     repeat,
@@ -192,6 +213,7 @@ eval(X,Y,Env) :-
     Y is X3/X4.
 
 % connect conjunction
+connect(A,[],A).
 connect((A,B),C,(A,Z)) :-
     connect(B,C,Z).
 connect(A,B,(A,B)).
