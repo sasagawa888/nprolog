@@ -53,7 +53,7 @@ prolog :-
     (resolve(X,[],true,0) -> write(yes);write(no)),
     fail.
 
-findvar(X,unbind,Env) :-
+findvar(X,X,Env) :-
     findvar1(X,X,Env),!.
 findvar(X,Z,Env) :-
     findvar1(X,Y,Env),
@@ -98,18 +98,24 @@ deref1([X|Xs],[Y|Ys],Env) :-
 unify(X,Y,Env,[[X,Y]|Env]) :-
     variable(X),
     variable(Y),
-    findvar(X,unbind,Env),
-    findvar(Y,unbind,Env).
+    findvar(X,X1,Env),
+    findvar(Y,Y1,Env),
+    variable(X1),
+    variable(Y1).
 unify(X,Y,Env,[[X,Y1]|Env]) :-
     variable(X),
     variable(Y),
-    findvar(X,unbind,Env),
-    findvar(Y,Y1,Env).
+    findvar(X,X1,Env),
+    findvar(Y,Y1,Env),
+    variable(X1),
+    not(variable(Y1)).
 unify(X,Y,Env,[[Y,X1]|Env]) :-
     variable(X),
     variable(Y),
     findvar(X,X1,Env),
-    findvar(Y,unbind,Env).
+    findvar(Y,Y1,Env),
+    not(variable(X1)),
+    variable(Y1).
 unify(X,Y,Env,Env) :-
     variable(X),
     variable(Y),
@@ -119,11 +125,13 @@ unify(X,Y,Env,Env) :-
 unify(X,Y,Env,[[X,Y]|Env]) :-
     variable(X),
     not(variable(Y)),
-    findvar(X,unbind,Env).
+    findvar(X,X1,Env),
+    variable(X1).
 unify(X,Y,Env,[[Y,X]|Env]) :-
     not(variable(X)),
     variable(Y),
-    findvar(Y,unbind,Env).
+    findvar(Y,Y1,Env),
+    variable(Y1).
 unify(X,Y,Env,Env) :-
     atom(X),
     atom(Y),
