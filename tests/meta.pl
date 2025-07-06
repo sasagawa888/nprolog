@@ -15,7 +15,7 @@ fact(vN,vX) :-
 resolve(true,Env,Cont,N) :- !.
 resolve((P, Q),Env,Cont,N) :- 
     deref(P,P1,Env),
-    write(P1),write(in),write(Env),get(_),nl,
+    %write(P1),write(in),write(Env),get(_),nl,
     connect(Q,Cont,Cont1),
     N1 is N+1,
     resolve(P1,Env,Cont1,N1).
@@ -47,6 +47,7 @@ resolve(Head,Env,Cont,N) :-
     resolve(Cont,Env,[],N1),!.
 
 % clause
+% base case.
 resolve(Head,Env,Cont,N) :-
     functor(Head, F, A), 
     functor(Copy, F, A), 
@@ -58,6 +59,7 @@ resolve(Head,Env,Cont,N) :-
     N1 is N+1,
     resolve(Cont, Env1, [],N1),!.
 
+% general clause.
 resolve(Head,Env,Cont,N) :-
     functor(Head, F, A), 
     functor(Copy, F, A), 
