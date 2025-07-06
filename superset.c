@@ -1806,6 +1806,7 @@ int b_copy_term(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
+	unique_num++;
 	if (unify(arg2, copy_term(arg1), th) == YES)
 	    return (prove_all(rest, sp[th], th));
 	else

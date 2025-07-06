@@ -91,14 +91,15 @@ int system_tag;
 
 //------pointer----
 int hp;				//heap pointer
-int sp[THREADSIZE];		//stack pointer
+int sp[THREADSIZE];	//stack pointer
 int fc;				//free counter
-int ac[THREADSIZE];		//alpha conversion variable count
-int wp[THREADSIZE];		//working pointer
+int ac[THREADSIZE];	//alpha conversion variable count
+int wp[THREADSIZE];	//working pointer
 int gc;				//invoked GC count
 int wp_min[THREADSIZE];		// start wp point in each thread
 int wp_max[THREADSIZE];		// end wp point in each thread
-int cp[THREADSIZE];		// catch pointer
+int cp[THREADSIZE];		    // catch pointer
+int unique_num = 0;             // for copy_term/2        
 
 // bignum pointer
 int big_pt0 = 0;		// pointer of temporaly bignum

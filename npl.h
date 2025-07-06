@@ -569,6 +569,7 @@ extern int gc;
 extern int wp_min[THREADSIZE];
 extern int wp_max[THREADSIZE];
 extern int cp[THREADSIZE];
+extern int unique_num;
 
 /* module */
 extern int module_name;

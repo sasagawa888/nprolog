@@ -2294,7 +2294,18 @@ int list_to_structure(int x)
     return (res);
 }
 
+int unique_variable(int x)
+{
+	char str[256];
+	int res;
 
+	sprintf(str,"_G%d", unique_num);
+	strcat(str,GET_NAME(x));
+	res = makeatom(str, VAR);
+	SET_CAR(res,UNBIND);
+	SET_CDR(res,UNBIND);
+	return(res);
+}
 
 int copy_term(int x)
 {
@@ -2303,7 +2314,7 @@ int copy_term(int x)
     if (nullp(x))
 	return (NIL);
     else if (variablep(x))
-	return (x);
+	return (unique_variable(x));
     else if (!structurep(x))
 	return (x);
     else {
