@@ -15,6 +15,7 @@ fact(vN,vX) :-
 resolve(true,Env,Cont,N) :- !.
 resolve((P, Q),Env,Cont,N) :- 
     deref(P,P1,Env),
+    %trace print
     %write(P1),write(in),write(Env),get(_),nl,
     connect(Q,Cont,Cont1),
     N1 is N+1,
