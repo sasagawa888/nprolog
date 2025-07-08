@@ -3,7 +3,6 @@
 
 */
 
-
 % simple version
 polar(c(R,I),p(A,S)) :-
     A is sqrt(R^2+I^2),
@@ -56,21 +55,27 @@ cnot([[c(1,0), c(0,0), c(0,0), c(0,0)],
 
 amplitude([],[]).
 amplitude([c(R,I)|Vs],[Y|Ys]) :-
-    Y is R^2,
+    Y is R^2+I^2,
     amplitude(Vs,Ys).
 
-probability(V,V1) :-
+sum([],0).
+sum([X|Xs],Y) :-
+    sum(Xs,Y1),
+    Y is X+Y1.
+
+probability(V,P) :-
     amplitude(V,A),
-    probability1(V,V1,A).
+    sum(A,S),
+    probability1(A,P,S).
 
 probability1([],[],A).
-probabirity1([V|Vs],[P|Ps],A) :-
+probability1([V|Vs],[P|Ps],A) :-
     P is V / A,
     probability1(Vs,Ps,A).
 
 test(I) :-
     state(S),
-    hadamard1(H),
+    hadamard(H),
     mprod(H, S, R),
     interference(R,I).
 
@@ -80,3 +85,11 @@ test1(V) :-
     mprod(H, S, R),
     cnot(C),
     mprod(C,R,V).
+
+test2(P) :-
+    state(S),
+    hadamard(H),
+    mprod(H, S, R),
+    cnot(C),
+    mprod(C,R,V),
+    probability(V,P).
