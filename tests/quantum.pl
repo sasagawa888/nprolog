@@ -42,12 +42,45 @@ interference1([V|Vs],Z) :-
     interference1(Vs,Z1),
     cadd(V,Z1,Z).
 
-state([c(1, 0), c(0, 0)]).
-hadamard([[c(0.707107,0), c(0.707107,0)],
-          [c(0.707107,0), c(-0.707107,0)]]).
+state([c(1,0), c(0,0), c(0,0), c(0,0)]).
+hadamard([[c(0.5, 0), c(0.5, 0), c(0.5, 0), c(0.5, 0)],
+          [c(0.5, 0), c(-0.5, 0), c(0.5, 0), c(-0.5, 0)],
+          [c(0.5, 0), c(0.5, 0), c(-0.5, 0), c(-0.5, 0)],
+          [c(0.5, 0), c(-0.5, 0), c(-0.5, 0), c(0.5, 0)]]).
+
+hadamard1([[c(0.7071,0), c(0.0,0),   c(0.7071,0), c(0.0,0)],
+          [c(0.0,0),   c(0.7071,0), c(0.0,0),    c(0.7071,0)],
+          [c(0.7071,0), c(0.0,0),   c(-0.7071,0), c(0.0,0)],
+          [c(0.0,0),   c(0.7071,0), c(0.0,0),    c(-0.7071,0)]]).
+
+cnot([[c(1,0), c(0,0), c(0,0), c(0,0)],
+      [c(0,0), c(1,0), c(0,0), c(0,0)],
+      [c(0,0), c(0,0), c(0,0), c(1,0)],
+      [c(0,0), c(0,0), c(1,0), c(0,0)]]).
+
+amplitude([],[]).
+amplitude([c(R,I)|Vs],[Y|Ys]) :-
+    Y is r^2,
+    amplitude(Vs,Ys).
+
+probability(V,V1) :-
+    amplitude(V,A),
+    probability1(V,V1,A).
+
+probarbility1([],[],A).
+probarbirity1([V|Vs],[P|Ps],A) :-
+    P is V / A,
+    probarbility1(Vs,Ps,A).
 
 test(I) :-
     state(S),
-    hadamard(H),
+    hadamard1(H),
     mprod(H, S, R),
     interference(R,I).
+
+test1(V) :-
+    state(S),
+    hadamard1(H),
+    mprod(H, S, R),
+    cnot(C),
+    mprod(C,R,V).
