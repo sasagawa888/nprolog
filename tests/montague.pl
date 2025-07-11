@@ -35,6 +35,7 @@ beta(A,B,R,B) :-
     atom(B).
 
 beta(A,B,R,X) :-
+    compound(B),
     B =.. B1,
     beta_list(A,B1,R,X1),
     X =.. X1.
