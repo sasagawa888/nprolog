@@ -26,21 +26,22 @@ reduce(lam(A,B),lam(A,B1)) :-
     reduce(B,B1).
 reduce([lam(A,B),R],X) :-
     reduce(R,R1),
-    beta(A,B,R,B1),
+    beta(A,B,R1,B1),
     reduce(B1,X).
 
 beta(A,A,R,R) :-
-  atom(A),
-  atom(R).
+    atom(A).
+beta(A,B,R,B) :-
+    atom(A).
 
 beta(A,B,R,X) :-
-  B =.. B1,
-  beta_list(A,B1,R,X1),
-  X =.. X1.
+    B =.. B1,
+    beta_list(A,B1,R,X1),
+    X =.. X1.
 
 beta_list((A,[],R,[])).
 beta_list(A,[B|Bs],R,[X1|X]) :-
-  beta(A,B,R,X1),
-  beta_list(A,Bs,R,X).
+    beta(A,B,R,X1),
+    beta_list(A,Bs,R,X).
 
 
