@@ -32,7 +32,7 @@ reduce([lam(A,B),R],X) :-
 beta(A,A,R,R) :-
     atom(A).
 beta(A,B,R,B) :-
-    atom(A).
+    atom(B).
 
 beta(A,B,R,X) :-
     B =.. B1,
