@@ -6,25 +6,25 @@ sentence(Sem) -->
     verb_phrase(VP),
     { Sem = [NP, VP] }.
 
-% every man → lam(P, forall(X, implies(man(X), [P, X])))
-noun_phrase(lam(P, forall(X, implies(man(X), [P, X])))) -->
+% every man → l(P, forall(X, implies(man(X), [P, X])))
+noun_phrase(l(P, forall(X, implies(man(X), [P, X])))) -->
     [every, man].
 
-% loves Mary → lam(X, loves(X, mary))
-verb_phrase(lam(X, loves(X, mary))) -->
+% loves Mary → l(X, loves(X, mary))
+verb_phrase(l(X, loves(X, mary))) -->
     [loves, mary].
 
 % ?- phrase(sentence(S), [every, man, loves, mary]).
 
 /*
 * lambda calculas for Montague
-* e.g. ?- reduce([lam(x,x),y],X). X = y .
+* e.g. ?- reduce([l(x,x),y],X). X = y .
 */
 reduce(X,X) :-
     atom(X).
-reduce(lam(A,B),lam(A,B1)) :-
+reduce(l(A,B),l(A,B1)) :-
     reduce(B,B1).
-reduce([lam(A,B),R],X) :-
+reduce([l(A,B),R],X) :-
     reduce(R,R1),
     beta(A,B,R1,B1),
     reduce(B1,X).
