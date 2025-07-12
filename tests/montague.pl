@@ -35,9 +35,14 @@ reduce([L,R],X) :-
     reduce([L1,R],X).
 
 alpha(A,B,N,X) :-
+    compound(B),
     B =.. B1,
     alpha_list(A,B1,N,X1),
     X =.. X1.
+
+alpha(A,B,N,X) :-
+    list(B),
+    alpha_list(A,B,N,X).
 
 alpha_list(A,[],N,[]) :- !.
 alpha_list(A,[A|Bs],N,[A1|X]) :-
@@ -50,6 +55,10 @@ alpha_list(A,[l(A1,B1)|Bs],N,[B3|X]) :-
     N1 is N+1,
     alpha(A1,l(A1,B1),N1,B2),
     alpha(A,B2,N,B3),
+    alpha_list(A,Bs,N,X),!.
+alpha_list(A,[B|Bs],N,[B1|X]) :-
+    list(B),
+    alpha_list(A,B,N,B1),
     alpha_list(A,Bs,N,X),!.
 alpha_list(A,[B|Bs],N,[B|X]) :-
     alpha_list(A,Bs,N,X),!.
@@ -77,7 +86,7 @@ beta_list(A,[B|Bs],R,[X1|X]) :-
 % tests
 test(identity) :- reduce([l(x,x), a], a).
 test(constant) :- reduce([l(x,y), a], y).
-test(nested1)  :- reduce([l(x, l(y, x)), a], l(y, a)).
+test(nested1)  :- reduce([l(x, l(y, x)), a], l(y1, a)).
 test(nested2)  :- reduce([[l(x, l(y, x)), a], b], a).
 test(non_app)  :- reduce(a, a).
 test(lambda_only) :- reduce(l(x, x), l(x, x)).
