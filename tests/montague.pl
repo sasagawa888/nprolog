@@ -48,7 +48,6 @@ alpha_list(A,[A|Bs],N,[A1|X]) :-
     alpha_list(A,Bs,N,X),!.
 alpha_list(A,[l(A1,B1)|Bs],N,[B3|X]) :-
     N1 is N+1,
-    %alpha(A,l(A1,B1),N,B2),
     alpha(A1,l(A1,B1),N1,B2),
     alpha(A,B2,N,B3),
     alpha_list(A,Bs,N,X),!.
