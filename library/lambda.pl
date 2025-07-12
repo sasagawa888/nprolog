@@ -2,7 +2,7 @@
 * lambda calculas for Montague
 * e.g. ?- reduce([l(x,x),y],X). X = y .
 */
-:- module(lambda,[reduce/2]).
+:- module(lambda,[reduce/2,l/2]).
 
 reduce(X,X) :-
     atom(X).
