@@ -22,9 +22,9 @@ verb_phrase(l(X, loves(X, mary))) -->
 */
 reduce(X,X) :-
     atom(X).
-reduce(l(A,B),l(A,B1)) :-
+reduce(l(A,B),l(A1,B1)) :-
     compound(B),
-    alpha(A,B,0,B1).
+    alpha(A,l(A,B),0,l(A1,B1)).
 reduce(l(A,B),l(A,B)). 
 reduce([l(A,B),R],X) :-
     reduce(l(A,B),l(A1,B1)),
@@ -46,13 +46,13 @@ alpha_list(A,[A|Bs],N,[A1|X]) :-
     append(L,[N1],L1),
     atom_codes(A1,L1),
     alpha_list(A,Bs,N,X),!.
-alpha_list(A,[l(A1,B1)|Bs],N,[B2|X]) :-
+alpha_list(A,[l(A1,B1)|Bs],N,[B3|X]) :-
     N1 is N+1,
-    alpha(A1,l(A1,B1),N1,B2),
+    alpha(A,l(A1,B1),N,B2),
+    alpha(A1,B2,N1,B3),
     alpha_list(A,Bs,N,X),!.
 alpha_list(A,[B|Bs],N,[B|X]) :-
     alpha_list(A,Bs,N,X),!.
-
 
 beta(A,A,R,R) :-
     atom(A),!.
