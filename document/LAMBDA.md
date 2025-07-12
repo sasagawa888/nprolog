@@ -14,6 +14,7 @@ R = a.
 
 ?- reduce([l(p, forall(x, implies(man(x), [p,x]))), l(x, loves(x,mary))], R).
 R = forall(x, implies(man(x), loves(x, mary))).
+```
 
 ## 🛠️ Specification
 reduce(+Exp, -Result)
