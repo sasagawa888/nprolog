@@ -7,11 +7,11 @@ sentence(Sem) -->
     { Sem = [NP, VP] }.
 
 % every man → l(P, forall(X, implies(man(X), [P, X])))
-noun_phrase(l(P, forall(X, implies(man(X), [P, X])))) -->
+noun_phrase(l(p, forall(x, implies(man(x), [p, x])))) -->
     [every, man].
 
 % loves Mary → l(X, loves(X, mary))
-verb_phrase(l(X, loves(X, mary))) -->
+verb_phrase(l(x, loves(x, mary))) -->
     [loves, mary].
 
 % ?- phrase(sentence(S), [every, man, loves, mary]).
@@ -68,15 +68,18 @@ beta(A,A,R,R) :-
 beta(A,B,R,B) :-
     atom(B),!.
 
+beta(A,[A1,B1],R,X) :-
+    beta_list(A,[A1,B1],R,X1),
+    reduce(X1,X).
+
+
 beta(A,B,R,X) :-
     compound(B),
     B =.. B1,
     beta_list(A,B1,R,X1),
     X =.. X1.
 
-beta(A,B,R,X) :-
-    list(B),
-    beta_list(A,B,R,X).
+
 
 beta_list(A,[],R,[]).
 beta_list(A,[B|Bs],R,[X1|X]) :-
