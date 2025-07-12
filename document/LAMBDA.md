@@ -76,9 +76,11 @@ Recursive reductions ensure full normalization.
 
 ## ✅ Tests
 
+```
 test(identity)    :- reduce([l(x, x), a], a).
 test(constant)    :- reduce([l(x, y), a], y).
 test(nested)      :- reduce([[l(x, l(y, x)), a], b], a).
 test(app_in_arg)  :- reduce([l(x, [x, z]), [l(y, y), a]], [[l(y, y), a], z]).
 test(shadowing)   :- reduce([l(x, l(x, x)), a], l(x1, x1)).
+```
 
