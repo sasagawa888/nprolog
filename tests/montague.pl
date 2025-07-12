@@ -48,8 +48,9 @@ alpha_list(A,[A|Bs],N,[A1|X]) :-
     alpha_list(A,Bs,N,X),!.
 alpha_list(A,[l(A1,B1)|Bs],N,[B3|X]) :-
     N1 is N+1,
-    alpha(A,l(A1,B1),N,B2),
-    alpha(A1,B2,N1,B3),
+    %alpha(A,l(A1,B1),N,B2),
+    alpha(A1,l(A1,B1),N1,B2),
+    alpha(A,B2,N,B3),
     alpha_list(A,Bs,N,X),!.
 alpha_list(A,[B|Bs],N,[B|X]) :-
     alpha_list(A,Bs,N,X),!.
@@ -82,4 +83,4 @@ test(nested2)  :- reduce([[l(x, l(y, x)), a], b], a).
 test(non_app)  :- reduce(a, a).
 test(lambda_only) :- reduce(l(x, x), l(x, x)).
 test(app_in_arg) :- reduce([l(x, [x, z]), [l(y, y), a]], [[l(y, y), a], z]).
-test(shadowing) :- reduce([l(x, l(x, x)), a], l(x0, x0)).
+test(shadowing) :- reduce([l(x, l(x, x)), a], l(x1, x1)).
