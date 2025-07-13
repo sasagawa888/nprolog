@@ -18,8 +18,3 @@ verb_phrase(l(x, loves(x, mary))) -->
 % ?- phrase(sentence(S), [every, man, loves, mary]),reduce(S,X).
 
 
-beta_list(A,[],R,[]).
-beta_list(A,[B|Bs],R,[X1|X]) :-
-    beta(A,B,R,X1),
-    beta_list(A,Bs,R,X).
-
