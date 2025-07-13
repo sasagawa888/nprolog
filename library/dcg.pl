@@ -1,5 +1,6 @@
 %ISO/IEC DTR 13211-3
 
+:- module(dcg,[phrase/2,dcg_expand/1]).
 
 :- op(1105,xfy,'|').
 
