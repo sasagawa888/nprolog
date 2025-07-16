@@ -44,6 +44,12 @@ alpha_list(A,[B|Bs],N,[B1|X]) :-
     list(B),
     alpha_list(A,B,N,B1),
     alpha_list(A,Bs,N,X),!.
+alpha_list(A,[B|Bs],N,[B3|X]) :-
+    compound(B),
+    B =.. B1, 
+    alpha_list(A,B1,N,B2),
+    B3 =.. B2,
+    alpha_list(A,Bs,N,X),!.
 alpha_list(A,[B|Bs],N,[B|X]) :-
     alpha_list(A,Bs,N,X),!.
 
