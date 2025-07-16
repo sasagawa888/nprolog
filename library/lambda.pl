@@ -17,6 +17,8 @@ reduce([L,R],X) :-
     list(L),
     reduce(L,L1),
     reduce([L1,R],X).
+reduce([L,R],[L,R]) :-
+    atom(L).
 
 alpha(A,B,N,X) :-
     compound(B),

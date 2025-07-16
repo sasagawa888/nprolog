@@ -1,5 +1,4 @@
 
-
 reduce(X,X) :-
     atom(X).
 reduce(l(A,B),l(A1,B1)) :-
@@ -13,17 +12,18 @@ reduce([L,R],X) :-
     list(L),
     reduce(L,L1),
     reduce([L1,R],X).
-
-
-alpha(A,B,N,X) :-
-    list(B),
-    alpha_list(A,B,N,X).
+reduce([L,R],[L,R]) :-
+    atom(L).
 
 alpha(A,B,N,X) :-
     compound(B),
     B =.. B1,
     alpha_list(A,B1,N,X1),
     X =.. X1.
+
+alpha(A,B,N,X) :-
+    list(B),
+    alpha_list(A,B,N,X).
 
 alpha_list(A,[],N,[]) :- !.
 alpha_list(A,[A|Bs],N,[A1|X]) :-
@@ -56,7 +56,8 @@ beta(A,B,R,B) :-
     atom(B),!.
 
 beta(A,[A1,B1],R,X) :-
-    reduce([A1,B1],X).
+    beta_list(A,[A1,B1],R,X1),
+    reduce(X1,X).
 
 
 beta(A,B,R,X) :-
@@ -73,3 +74,6 @@ beta_list(A,[B|Bs],R,[X1|X]) :-
     beta_list(A,Bs,R,X).
 
 
+
+
+test(Y) :- reduce([l(x, [x, z]), [l(y, y), a]], Y).
