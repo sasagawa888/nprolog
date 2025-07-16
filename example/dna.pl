@@ -32,82 +32,82 @@ rna_amino([],[]) :-
     assert(trans(off)).
 
 rna_amino([A,B,C|Xs],[Z|Zs]) :-
-    dnaward([A,B,C],Z),
+    dnaword([A,B,C],Z),
     trans(on),
     rna_amino(Xs,Zs).
 
 rna_amino([A,B,C|Xs],[Z|Zs]) :-
-    dnaward([A,B,C],Z),
+    dnaword([A,B,C],Z),
     abolish(trans/1),
     assert(trans(on)),
     rna_amino(Xs,Zs).
 
 %RNA and its corresponding amino acid name
-dnaward([u,u,u],phe).
-dnaward([u,u,c],ala).
-dnaward([u,u,a],leu).
-dnaward([u,u,g],leu).
-dnaward([c,u,u],leu).
-dnaward([c,u,c],leu).
-dnaward([c,u,a],leu).
-dnaward([c,u,g],leu).
-dnaward([a,u,u],ile).
-dnaward([a,u,c],ile).
-dnaward([a,u,a],ile).
-dnaward([a,u,g],met) :- trans(on).
-dnaward([a,u,g],begin).
-dnaward([g,u,u],val).
-dnaward([g,u,c],val).
-dnaward([g,u,a],val).
-dnaward([g,u,g],val).
-dnaward([u,c,u],ser).
-dnaward([u,c,c],ser).
-dnaward([u,c,a],ser).
-dnaward([u,c,g],ser).
-dnaward([c,c,u],pro).
-dnaward([c,c,c],pro).
-dnaward([c,c,a],pro).
-dnaward([c,c,g],pro).
-dnaward([a,c,u],thr).
-dnaward([a,c,c],thr).
-dnaward([a,c,a],thr).
-dnaward([a,c,g],thr).
-dnaward([g,c,u],ala).
-dnaward([g,c,c],ala).
-dnaward([g,c,a],ala).
-dnaward([g,c,g],ala).
-dnaward([u,a,u],tyr).
-dnaward([u,a,c],thr).
-dnaward([u,a,a],end).
-dnaward([u,a,g],end).
-dnaward([c,a,u],his).
-dnaward([c,a,c],his).
-dnaward([c,a,a],gln).
-dnaward([c,a,g],gln).
-dnaward([a,a,u],asn).
-dnaward([a,a,c],asn).
-dnaward([a,a,a],lys).
-dnaward([a,a,g],lys).
-dnaward([g,a,u],asp).
-dnaward([g,a,c],asp).
-dnaward([g,a,a],glu).
-dnaward([g,a,g],glu).
-dnaward([u,g,u],cys).
-dnaward([u,g,c],cys).
-dnaward([u,g,a],end).
-dnaward([u,g,g],trp).
-dnaward([c,g,u],arg).
-dnaward([c,g,c],arg).
-dnaward([c,g,a],arg).
-dnaward([c,g,g],arg).
-dnaward([a,g,u],ser).
-dnaward([a,g,c],ser).
-dnaward([a,g,a],arg).
-dnaward([a,g,g],arg).
-dnaward([g,g,u],gly).
-dnaward([g,g,c],gly).
-dnaward([g,g,a],gly).
-dnaward([g,g,g],gly).
+dnaword([u,u,u],phe).
+dnaword([u,u,c],ala).
+dnaword([u,u,a],leu).
+dnaword([u,u,g],leu).
+dnaword([c,u,u],leu).
+dnaword([c,u,c],leu).
+dnaword([c,u,a],leu).
+dnaword([c,u,g],leu).
+dnaword([a,u,u],ile).
+dnaword([a,u,c],ile).
+dnaword([a,u,a],ile).
+dnaword([a,u,g],met) :- trans(on).
+dnaword([a,u,g],begin).
+dnaword([g,u,u],val).
+dnaword([g,u,c],val).
+dnaword([g,u,a],val).
+dnaword([g,u,g],val).
+dnaword([u,c,u],ser).
+dnaword([u,c,c],ser).
+dnaword([u,c,a],ser).
+dnaword([u,c,g],ser).
+dnaword([c,c,u],pro).
+dnaword([c,c,c],pro).
+dnaword([c,c,a],pro).
+dnaword([c,c,g],pro).
+dnaword([a,c,u],thr).
+dnaword([a,c,c],thr).
+dnaword([a,c,a],thr).
+dnaword([a,c,g],thr).
+dnaword([g,c,u],ala).
+dnaword([g,c,c],ala).
+dnaword([g,c,a],ala).
+dnaword([g,c,g],ala).
+dnaword([u,a,u],tyr).
+dnaword([u,a,c],thr).
+dnaword([u,a,a],end).
+dnaword([u,a,g],end).
+dnaword([c,a,u],his).
+dnaword([c,a,c],his).
+dnaword([c,a,a],gln).
+dnaword([c,a,g],gln).
+dnaword([a,a,u],asn).
+dnaword([a,a,c],asn).
+dnaword([a,a,a],lys).
+dnaword([a,a,g],lys).
+dnaword([g,a,u],asp).
+dnaword([g,a,c],asp).
+dnaword([g,a,a],glu).
+dnaword([g,a,g],glu).
+dnaword([u,g,u],cys).
+dnaword([u,g,c],cys).
+dnaword([u,g,a],end).
+dnaword([u,g,g],trp).
+dnaword([c,g,u],arg).
+dnaword([c,g,c],arg).
+dnaword([c,g,a],arg).
+dnaword([c,g,g],arg).
+dnaword([a,g,u],ser).
+dnaword([a,g,c],ser).
+dnaword([a,g,a],arg).
+dnaword([a,g,g],arg).
+dnaword([g,g,u],gly).
+dnaword([g,g,c],gly).
+dnaword([g,g,a],gly).
+dnaword([g,g,g],gly).
 
 %Convert DNA sequence (divided into one) to RNA sequence, reverse conversion possible
 dna_rna([],[]).
