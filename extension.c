@@ -979,7 +979,7 @@ int b_pair_list(int arglist, int rest, int th)
 int exec_all(int goals, int bindings, int th)
 {
 
-    if (nullp(goals))
+    if (IS_NIL(goals))
 	return (YES);
     /* ,(;(D1;D2),Xs) */
     else if (structurep(goals) && car(cadr(goals)) == OR) {
@@ -1013,9 +1013,9 @@ int exec(int goal, int bindings, int rest, int th)
     proof[th]++;
     goal = deref(goal, th);
 
-    if (nullp(goal)) {
+    if (IS_NIL(goal)) {
 	return (exec_all(rest, bindings, th));
-    } else if (builtinp(goal)) {
+    } else if (builtinp(goal) || compiledp(goal)) {
 	if (atomp(goal)) {
 	    if ((res = (GET_SUBR(goal)) (NIL, rest, th)) == YES)
 		return (YES);
@@ -1026,18 +1026,6 @@ int exec(int goal, int bindings, int rest, int th)
 		return (YES);
 
 	    return (res);
-	}
-    } else if (compiledp(goal)) {
-	if (atomp(goal)) {
-	    if ((GET_SUBR(goal)) (NIL, rest, th) == YES)
-		return (YES);
-
-	    return (NO);
-	} else {
-	    if ((GET_SUBR(car(goal))) (cdr(goal), rest, th) == YES)
-		return (YES);
-
-	    return (NO);
 	}
     } else if (predicatep(goal)) {
 	return (prove(goal, sp[th], rest, th));

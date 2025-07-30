@@ -1700,7 +1700,7 @@ int deref(int x, int th)
 {
     int temp;
 
-    if (nullp(x))
+    if (IS_NIL(x))
 	return (NIL);
     else if (!structurep(x))
 	return (deref1(x, th));
