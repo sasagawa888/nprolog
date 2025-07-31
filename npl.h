@@ -558,6 +558,7 @@ extern int active_thread;
 extern int dynamic_flag;
 extern int string_flag;
 extern int ifthenelse_false_flag;
+extern int compiled_flag;
 
 //------pointer----
 extern int hp; 

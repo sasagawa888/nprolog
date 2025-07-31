@@ -149,6 +149,7 @@ int active_thread = 0;		/* for mt_and/1 mt_or/1 */
 int dynamic_flag = 0;		/* for dynamic predicate. while assertz dynamic flag = 1 */
 int string_flag = 0;		/* ARITY/PROLOG mode 0, ISO mode 1 */
 int ifthenelse_false_flag = 0;	/* ifthenelse occures NFLASE set flag = 1 */
+int compiled_flag = 0;      /* while execute compiled code falg = 1, else 0*/
 
 //stream
 int standard_input;
@@ -403,6 +404,7 @@ void init_repl(void)
 	wp[i] = wp_min[i];
     }
     ctrl_c_flag = 0;
+	compiled_flag = 0;
     fskip_flag = OFF;
     sskip_flag = OFF;
     xskip_flag = OFF;
@@ -574,6 +576,10 @@ int addtail_body(int x, int y, int th)
 int prove_all(int goals, int bindings, int th)
 {
     int res;
+
+	if(compiled_flag)
+		return(exec_all(goals, bindings, th));
+
 
     if (nullp(goals))
 	return (YES);

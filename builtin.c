@@ -321,6 +321,8 @@ void init_builtin(void)
 /* for compiled code runtime routin exec_all, exec*/
 int exec_all(int goals, int bindings, int th)
 {
+	compiled_flag = 1;
+
 
     if (IS_NIL(goals))
 	return (YES);
@@ -371,7 +373,13 @@ int exec(int goal, int bindings, int rest, int th)
 	    return (res);
 	}
     } else if (predicatep(goal)) {
-	return (prove(goal, sp[th], rest, th));
+		compiled_flag = 0;
+		res = prove(goal, sp[th], NIL, th);
+		compiled_flag = 1;
+		if(res == YES)
+			return(exec_all(rest, sp[th],th));
+		else 
+			return(res);
     }
 
     return (NO);
