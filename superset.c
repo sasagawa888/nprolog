@@ -341,7 +341,7 @@ int b_append(int arglist, int rest, int th)
 	}
 	wp[th] = save1;
 	unbind(save2, th);
-	
+
 	save1 = wp[th];
 	x = makevariant(th);
 	ls = makevariant(th);
@@ -351,7 +351,7 @@ int b_append(int arglist, int rest, int th)
 	    unify_var(arg2, ys, th) == YES
 	    && unify(arg3, wlistcons(x, zs, th), th) == YES) {
 	    body = wlist4(makeatom("append", SYS), ls, ys, zs, th);
-	    return (prove_all(addtail_body(rest,body,th), sp[th], th));
+	    return (prove_all(addtail_body(rest, body, th), sp[th], th));
 	}
 	wp[th] = save1;
 	unbind(save2, th);
@@ -1787,8 +1787,8 @@ int b_module(int arglist, int rest, int th)
 	    export_data[export_pt][1] = GET_INT(caddr(car(arg2)));
 	    arg2 = cdr(arg2);
 	    export_pt++;
-		if(export_pt >= 256)
-			exception(RESOURCE_ERR, NIL, ind, th);
+	    if (export_pt >= 256)
+		exception(RESOURCE_ERR, NIL, ind, th);
 	}
 	return (prove_all(rest, sp[th], th));
     }
@@ -2469,9 +2469,9 @@ int b_initialization(int arglist, int rest, int th)
     ind = makeind("initialization", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
-	execute_list = listcons(copy_heap(arg1),execute_list);
-	return(prove_all(rest,sp[th],th));
-	}
+	execute_list = listcons(copy_heap(arg1), execute_list);
+	return (prove_all(rest, sp[th], th));
+    }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }

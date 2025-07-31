@@ -235,7 +235,7 @@ void init_builtin(void)
     defbuiltin("set_curl_option", b_set_curl_option, 2);
     defbuiltin("add_curl_header", b_add_curl_header, 2);
     defbuiltin("string_atom", b_string_atom, 2);
-	defbuiltin("initialization", b_initialization, 1);
+    defbuiltin("initialization", b_initialization, 1);
     definfix("\\+", b_not, 900, FY);
 
     //-----Distributed parallel
@@ -321,7 +321,7 @@ void init_builtin(void)
 /* for compiled code runtime routin exec_all, exec*/
 int exec_all(int goals, int bindings, int th)
 {
-	compiled_flag = 1;
+    compiled_flag = 1;
 
 
     if (IS_NIL(goals))
@@ -373,13 +373,13 @@ int exec(int goal, int bindings, int rest, int th)
 	    return (res);
 	}
     } else if (predicatep(goal)) {
-		compiled_flag = 0;
-		res = prove(goal, sp[th], NIL, th);
-		compiled_flag = 1;
-		if(res == YES)
-			return(exec_all(rest, sp[th],th));
-		else 
-			return(res);
+	compiled_flag = 0;
+	res = prove(goal, sp[th], NIL, th);
+	compiled_flag = 1;
+	if (res == YES)
+	    return (exec_all(rest, sp[th], th));
+	else
+	    return (res);
     }
 
     return (NO);
@@ -1661,7 +1661,7 @@ int b_consult(int arglist, int rest, int th)
 
     n = length(arglist);
     ind = makeind("consult", n, th);
-	execute_list = NIL;
+    execute_list = NIL;
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -1719,12 +1719,12 @@ int b_consult(int arglist, int rest, int th)
 	input_stream = save;
 
       exit:
-	if(execute_list != NIL){
-		execute_list = reverse(execute_list);
-		while(!nullp(execute_list)){
-			prove_all(car(execute_list),sp[th],th);
-			execute_list = cdr(execute_list);
-		}
+	if (execute_list != NIL) {
+	    execute_list = reverse(execute_list);
+	    while (!nullp(execute_list)) {
+		prove_all(car(execute_list), sp[th], th);
+		execute_list = cdr(execute_list);
+	    }
 	}
 	return (prove_all(rest, sp[th], th));
     }
@@ -1740,10 +1740,10 @@ int b_reconsult(int arglist, int rest, int th)
 
     n = length(arglist);
     ind = makeind("reconsult", n, th);
-	execute_list = NIL;
-	compiler = 0;
+    execute_list = NIL;
+    compiler = 0;
     if (n == 1) {
-	reconsult:
+      reconsult:
 	arg1 = car(arglist);
 
 	if (wide_variable_p(arg1))
@@ -1822,19 +1822,19 @@ int b_reconsult(int arglist, int rest, int th)
 	module_flag = 0;
 
       exit:
-	if(compiler != 1 && execute_list != NIL){
-		execute_list = reverse(execute_list);
-		while(!nullp(execute_list)){
-			prove_all(car(execute_list),sp[th],th);
-			execute_list = cdr(execute_list);
-		}
+	if (compiler != 1 && execute_list != NIL) {
+	    execute_list = reverse(execute_list);
+	    while (!nullp(execute_list)) {
+		prove_all(car(execute_list), sp[th], th);
+		execute_list = cdr(execute_list);
+	    }
 	}
 	return (prove_all(rest, sp[th], th));
-    } else if(n == 2){
-		arg1 = car(arglist);
-		compiler = 1;
-		goto reconsult;
-	}
+    } else if (n == 2) {
+	arg1 = car(arglist);
+	compiler = 1;
+	goto reconsult;
+    }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
@@ -1879,7 +1879,8 @@ int b_save(int arglist, int rest, int th)
 	strcpy(str1, "library/startup.pl");
 	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	output_stream =
-	    makestream(fopen(GET_NAME(arg1), "w"), NPL_OUTPUT, NPL_TEXT, NIL, arg1);
+	    makestream(fopen(GET_NAME(arg1), "w"), NPL_OUTPUT, NPL_TEXT,
+		       NIL, arg1);
 	goto save;
     } else if (n == 1) {
 	arg1 = car(arglist);
@@ -2714,9 +2715,9 @@ int b_asserta(int arglist, int rest, int th)
 		exception(BUILTIN_EXIST, ind, arg1, th);
 
 	    SET_VAR(arg1, unique(varslist(arg1)));
-		assert_flag = 1;
+	    assert_flag = 1;
 	    operate(arg1, th);
-		assert_flag = 0;
+	    assert_flag = 0;
 	    checkgbc();
 	    return (prove_all(rest, sp[th], th));
 	}
@@ -3676,13 +3677,13 @@ int b_ifthenelse(int arglist, int rest, int th)
 	    exception(INSTANTATION_ERR, ind, arg3, th);
 
 	body = addtail_body(arg2, arg1, th);
-	body = list3(OR,body,arg3);
+	body = list3(OR, body, arg3);
 	/* body = (arg1,arg2);arg3 */
 	if ((res = prove_all(body, sp[th], th)) == YES) {
 	    return (prove_all(rest, sp[th], th));
 	} else {
-		unbind(save1, th);
-	    return(res);
+	    unbind(save1, th);
+	    return (res);
 	}
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -4833,19 +4834,19 @@ char *prolog_file_name(char *name)
     const char *env_home = getenv("NPROLOG_HOME");
     const char *home = getenv("HOME");
 
-   /* 0 relative path */
-	strcpy(str,name);
-	n = strlen(str);
-	if((str[0] == '.' && str[1] == '/') || 
-       (str[0] == '.' && str[1] == '.' && str[2] == '/')){
-		for (i = 2; i < n; i++) {
+    /* 0 relative path */
+    strcpy(str, name);
+    n = strlen(str);
+    if ((str[0] == '.' && str[1] == '/') ||
+	(str[0] == '.' && str[1] == '.' && str[2] == '/')) {
+	for (i = 2; i < n; i++) {
 	    if (str[i] == '.')
 		goto exit0;
 	}
 	strcat(str, ".pl");
       exit0:
 	return (str);
-	}
+    }
 
     /* 1. exist $NPROLOG_HOME */
     if (env_home) {
@@ -4861,7 +4862,7 @@ char *prolog_file_name(char *name)
       exit1:
 	return (str);
     }
-    
+
     /* 2. exist $HOME */
     if (home) {
 	strcpy(str, home);
@@ -4874,10 +4875,10 @@ char *prolog_file_name(char *name)
 	}
 	strcat(str, ".pl");
       exit2:
-	    return (str);
+	return (str);
     }
 
-	/* absuolute path */
+    /* absuolute path */
     strcpy(str, name);
     n = strlen(str);
 
@@ -4887,7 +4888,7 @@ char *prolog_file_name(char *name)
     }
     strcat(str, ".pl");
   exit3:
-	return (str);
+    return (str);
 
 }
 

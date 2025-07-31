@@ -91,15 +91,15 @@ int system_tag;
 
 //------pointer----
 int hp;				//heap pointer
-int sp[THREADSIZE];	//stack pointer
+int sp[THREADSIZE];		//stack pointer
 int fc;				//free counter
-int ac[THREADSIZE];	//alpha conversion variable count
-int wp[THREADSIZE];	//working pointer
+int ac[THREADSIZE];		//alpha conversion variable count
+int wp[THREADSIZE];		//working pointer
 int gc;				//invoked GC count
 int wp_min[THREADSIZE];		// start wp point in each thread
 int wp_max[THREADSIZE];		// end wp point in each thread
-int cp[THREADSIZE];		    // catch pointer
-int unique_num = 0;             // for copy_term/2        
+int cp[THREADSIZE];		// catch pointer
+int unique_num = 0;		// for copy_term/2        
 
 // bignum pointer
 int big_pt0 = 0;		// pointer of temporaly bignum
@@ -149,7 +149,7 @@ int active_thread = 0;		/* for mt_and/1 mt_or/1 */
 int dynamic_flag = 0;		/* for dynamic predicate. while assertz dynamic flag = 1 */
 int string_flag = 0;		/* ARITY/PROLOG mode 0, ISO mode 1 */
 int ifthenelse_false_flag = 0;	/* ifthenelse occures NFLASE set flag = 1 */
-int compiled_flag = 0;      /* while execute compiled code falg = 1, else 0*/
+int compiled_flag = 0;		/* while execute compiled code falg = 1, else 0 */
 
 //stream
 int standard_input;
@@ -287,11 +287,11 @@ int main(int argc, char *argv[])
     while ((ch = getopt(argc, argv, "c:s:rhvn")) != -1) {
 	switch (ch) {
 	case 'c':
-		b_consult(list1(makeconst(optarg)), NIL, 0);
+	    b_consult(list1(makeconst(optarg)), NIL, 0);
 	    break;
 	case 's':
-		b_consult(list1(makeconst(optarg)), NIL, 0);
-		exit(EXIT_SUCCESS);
+	    b_consult(list1(makeconst(optarg)), NIL, 0);
+	    exit(EXIT_SUCCESS);
 	    break;
 	case 'r':
 	    repl_flag = 0;
@@ -404,7 +404,7 @@ void init_repl(void)
 	wp[i] = wp_min[i];
     }
     ctrl_c_flag = 0;
-	compiled_flag = 0;
+    compiled_flag = 0;
     fskip_flag = OFF;
     sskip_flag = OFF;
     xskip_flag = OFF;
@@ -577,8 +577,8 @@ int prove_all(int goals, int bindings, int th)
 {
     int res;
 
-	if(compiled_flag)
-		return(exec_all(goals, bindings, th));
+    if (compiled_flag)
+	return (exec_all(goals, bindings, th));
 
 
     if (nullp(goals))

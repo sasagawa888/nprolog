@@ -1864,14 +1864,14 @@ int unify(int x, int y, int th)
 
 //typed unify. y is a pair list e.g. [L|Ls]
 int unify_pair(int x, int y, int th)
-{	
+{
     if (variablep(x)) {
-		//bindsym(x, y, th);
+	//bindsym(x, y, th);
 	if (alpha_variable_p(x))
 	    variant[x - CELLSIZE][th] = y;
 	else if (atom_variable_p(x))
 	    SET_CAR(x, y);
-		push_stack(x, th);
+	push_stack(x, th);
 	return (YES);
     } else if (!listp(x))
 	return (NO);
@@ -2296,15 +2296,15 @@ int list_to_structure(int x)
 
 int unique_variable(int x)
 {
-	char str[256];
-	int res;
+    char str[256];
+    int res;
 
-	sprintf(str,"_G%d", unique_num);
-	strcat(str,GET_NAME(x));
-	res = makeatom(str, VAR);
-	SET_CAR(res,UNBIND);
-	SET_CDR(res,UNBIND);
-	return(res);
+    sprintf(str, "_G%d", unique_num);
+    strcat(str, GET_NAME(x));
+    res = makeatom(str, VAR);
+    SET_CAR(res, UNBIND);
+    SET_CDR(res, UNBIND);
+    return (res);
 }
 
 int copy_term(int x)
@@ -2364,7 +2364,7 @@ int exportp(int x)
     } else {
 	name = car(x);
 	arity = length(cdr(x));
-    } 
+    }
 
     for (i = 0; i < export_pt; i++) {
 	if (eqlp(export_data[i][0], name) && export_data[i][1] == arity) {
@@ -2381,7 +2381,7 @@ int copy_heap(int x)
 	return (NIL);
     else if (IS_ALPHA(x))
 	return (alpha_to_variable(x));
-	else if (operationp(x) && car(x) == SLASH)
+    else if (operationp(x) && car(x) == SLASH)
 	return (x);
     else if (predicatep(x) && car(x) == NCURL)
 	return (x);
