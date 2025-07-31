@@ -616,6 +616,7 @@ int prove(int goal, int bindings, int rest, int th)
 {
     int clause, clauses, clause1, varlis, save1, save2, res;
 
+
     proof[th]++;
     if (ctrl_c_flag) {
 	printf("ctrl+C\n");
