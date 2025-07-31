@@ -318,6 +318,66 @@ void init_builtin(void)
     return;
 }
 
+/* for compiled code runtime routin exec_all, exec*/
+int exec_all(int goals, int bindings, int th)
+{
+
+    if (IS_NIL(goals))
+	return (YES);
+    // ,(;(D1;D2),Xs) 
+    else if (structurep(goals) && car(cadr(goals)) == OR) {
+	if (exec_all(cadr(cadr(goals)), bindings, th) == YES)
+	    return (exec_all(caddr(goals), bindings, th));
+	else if (exec_all(caddr(cadr(goals)), bindings, th) == YES)
+	    return (exec_all(caddr(goals), bindings, th));
+	else
+	    return (NO);
+    }
+    // ((D1,D2),Xs) 
+    else if (structurep(goals) && car(goals) == AND
+	     && car(cadr(goals)) == AND) {
+	if (exec_all(cadr(goals), bindings, th) == YES)
+	    return (exec_all(caddr(goals), bindings, th));
+	else
+	    return (NO);
+    } else if (car(goals) != AND)
+	return (exec(goals, bindings, NIL, th));
+    else {
+	return (exec(cadr(goals), bindings, caddr(goals), th));
+    }
+
+    return (NO);
+}
+
+int exec(int goal, int bindings, int rest, int th)
+{
+    int res;
+
+    proof[th]++;
+    goal = deref(goal, th);
+
+    if (IS_NIL(goal)) {
+	return (exec_all(rest, bindings, th));
+    } else if (builtinp(goal) || compiledp(goal)) {
+	if (atomp(goal)) {
+	    if ((res = (GET_SUBR(goal)) (NIL, rest, th)) == YES)
+		return (YES);
+
+	    return (res);
+	} else {
+	    if ((res = (GET_SUBR(car(goal))) (cdr(goal), rest, th)) == YES)
+		return (YES);
+
+	    return (res);
+	}
+    } else if (predicatep(goal)) {
+	return (prove(goal, sp[th], rest, th));
+    }
+
+    return (NO);
+}
+
+
 int b_length(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, i, ls, res, save1, save2;
