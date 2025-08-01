@@ -313,13 +313,6 @@ void check_token_buffer(int col)
 	    return;		//builtin token
 	}
     }
-    for (i = 0; i < COMPILED_NUMBER; i++) {
-	if (strcmp(compiled[i], str) == 0) {
-	    rtok.type = 2;
-	    rtok.length = strlen(str);
-	    return;		//compiled token same as builtin
-	}
-    }
     for (i = 0; i < EXTENDED_NUMBER; i++) {
 	if (strcmp(extended[i], str) == 0) {
 	    rtok.type = 5;

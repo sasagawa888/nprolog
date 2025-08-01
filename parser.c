@@ -777,7 +777,7 @@ void gettoken(int th)
 	}
 	for (i = 0; i < COMPILED_NUMBER; i++) {
 	    if (strcmp(compiled[i], stok.buf) == 0) {
-		stok.type = COMPILED;
+		stok.type = BUILTIN;
 		return;
 	    }
 	}

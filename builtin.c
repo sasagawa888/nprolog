@@ -289,6 +289,7 @@ void init_builtin(void)
     defbuiltin("n_before_cut", b_before_cut, -1);
     defbuiltin("n_after_cut", b_after_cut, -1);
     defbuiltin("n_pair_list", b_pair_list, -1);
+	defbuiltin("n_exec_is", b_exec_is, -1);
 
     //------CLPFD--------------------------
     defbuiltin("n_add_constraint", b_add_constraint, -1);
@@ -2041,6 +2042,32 @@ int b_is(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
+
+
+int b_exec_is(int arglist, int rest, int th)
+{
+    int n, ind, arg1, arg2, res;
+
+    n = length(arglist);
+    ind = makeind("is", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+	if (wide_variable_p(arg2))
+	    exception(INSTANTATION_ERR, ind, arg2, th);
+
+	res = unify(arg1, arg2, th);
+
+	if (res == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
 
 
 int b_greater(int arglist, int rest, int th)

@@ -871,6 +871,7 @@ int b_eraseall(int arglist, int rest, int th);
 int b_errcode(int arglist, int rest, int th);
 int b_error(int arglist, int rest, int th);
 int b_existerrors(int arglist, int rest, int th);
+int b_exec_is(int arglist, int rest, int th);
 int b_fail(int arglist, int rest, int th);
 int b_findall(int arglist, int rest, int th);
 int b_findatom(int arglist, int rest, int th);

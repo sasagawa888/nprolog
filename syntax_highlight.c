@@ -84,8 +84,9 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "label" }, { "all_different" },
 };
 
-//compiled predicate
+//for compiled predicate
 char compiled[COMPILED_NUMBER][30] = {
+    { "n_exec_is"},
 };
 
 //extened predicate
