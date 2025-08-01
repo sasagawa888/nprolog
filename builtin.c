@@ -389,6 +389,7 @@ int exec(int goal, int bindings, int rest, int th)
 int b_length(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, i, ls, res, save1, save2;
+	int list_length,properp,improper_last_not_var,improper_last_var;
     save2 = sp[th];
     n = length(arglist);
     ind = makeind("length", n, th);
@@ -396,10 +397,23 @@ int b_length(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
+	// pre check
+	properp = 0;
+	improper_last_not_var = 0;
+	improper_last_var = 0;
+	if(listp(arg1)){
+		list_length = length(arg1);
+		if(list_length != -1 && list_length != -2)
+			properp = 1;
+		else if(list_length == -1)
+			improper_last_not_var = 1;
+		else if(list_length == -2)
+			improper_last_var = 1; 
+	}
+
 	if (!listp(arg1) && !wide_variable_p(arg1))
 	    exception(NOT_LIST, ind, arg1, th);
-	if (listp(arg1) && length(arg1) == -1
-	    && !wide_variable_p(improper_last(arg1)))
+	if (listp(arg1) && improper_last_not_var)
 	    exception(NOT_LIST, ind, arg1, th);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
 	    exception(LESS_THAN_ZERO, ind, arg2, th);
@@ -409,11 +423,10 @@ int b_length(int arglist, int rest, int th)
 	    exception(INSTANTATION_ERR, ind, arglist, th);
 
 	save1 = wp[th];
-	if ((listp(arg1) && length(arg1) != -1)) {
+	if (listp(arg1) && properp) {
 	    if (unify(arg2, makeint(length(arg1)), th) == YES)
 		return (prove_all(rest, sp[th], th));
-	} else if (listp(arg1) && length(arg1) == -1
-		   && wide_variable_p(improper_last(arg1))) {
+	} else if (listp(arg1) && improper_last_var) {
 	    if (unify(improper_last(arg1), NIL, th) == YES
 		&& unify(arg2, makeint(length(improper_butlast(arg1))),
 			 th) == YES)

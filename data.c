@@ -169,7 +169,8 @@ int replace(int x, int lis)
 
 
 
-//if improper list return -1
+//if improper and last is not variable return -1
+//if improper and last is variable return -2
 int length(int addr)
 {
     int len = 0;
@@ -178,8 +179,12 @@ int length(int addr)
 	return (0);
 
     while (!(nullp(addr))) {
-	if (!structurep(addr))
-	    return (-1);
+	if (!structurep(addr)){
+		if(variablep(addr))
+			return(-2);
+		else
+	    	return (-1);
+		}
 	len++;
 	addr = cdr(addr);
     }
