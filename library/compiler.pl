@@ -781,6 +781,17 @@ gen_a_body(X) :-
     write('"),'),
     gen_argument(L),
     write(',th)').
+% is 
+gen_a_body(X is Y) :-
+    n_findatom(n_exec_is,builtin,A),
+    write('Jwcons('),
+    write(A),
+    write(','),
+    write('Jwlist2('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th),th)').
 % atom builtin e.g. nl fail
 gen_a_body(X) :-
     n_property(X,builtin),
@@ -1791,6 +1802,9 @@ det_builtin(length(X,Y)) :-
 det_builtin(append(X,Y,_)) :-
     n_compiler_variable(X),
     n_compiler_variable(Y),!,fail.
+
+det_builtin(member(X,_)) :-
+    n_compiler_variable(X),!,fail.
 
 det_builtin(X) :-
     n_property(X,builtin).

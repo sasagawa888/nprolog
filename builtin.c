@@ -2049,7 +2049,7 @@ int b_exec_is(int arglist, int rest, int th)
     int n, ind, arg1, arg2, res;
 
     n = length(arglist);
-    ind = makeind("is", n, th);
+    ind = makeind("nis", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
