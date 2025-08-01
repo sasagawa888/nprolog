@@ -568,20 +568,13 @@ test(atom_length) :-
      atom_length('', Length6),
      Length6 = 0.
 
+
 test(copy_term) :-
-    copy_term(f(a, b), Copy1), 
-    Copy1 = f(a, b),       
+    copy_term(f(a, b), a(a, b)), 
+    copy_term(p(X, 1), p(_G1X,1)),
+    copy_term([], []),             
+    copy_term(f(X, Y),f(_G2X, _G2Y)).         
 
-    copy_term(p(X, 1), Copy2),  
-    Copy2 = p(X, 1),           
-
-    copy_term([], Copy4),      
-    Copy4 = [],           
-    [] = Copy4,                
-
-    copy_term(f(X, Y), Copy5),  
-    Copy5 = f(X, Y).         
-                      
 test(compare) :-
     compare(=,1,1),
     not(compare(=,1,2)),
