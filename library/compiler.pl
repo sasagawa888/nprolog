@@ -432,7 +432,7 @@ gen_var_assign(S,E) :-
 
 
 % generate each clause in CPS
-gen_a_pred4([],N).
+gen_a_pred4([],_).
 gen_a_pred4([C|Cs],N) :-
 	n_variable_convert(C,X),
     n_generate_variable(X,V),
@@ -465,7 +465,7 @@ gen_tail_restore_args([A|As],N) :-
 
 
 % clause sa tail recursive base
-gen_a_pred5((Head :- !),N) :-
+gen_a_pred5((Head :- !),_) :-
     optimize(tail),
     gen_head(Head),
     Head =.. [_|A],
@@ -487,16 +487,16 @@ gen_a_pred5((Head :- Body),N) :-
 gen_a_pred5((Head :- Body),N) :-
     write('save1 = Jget_wp(th);'),nl,
 	gen_head(Head),
-    gen_body(Body,0).
+    gen_body(Body,N).
 
 % predicate with no arity
-gen_a_pred5(P,N) :-
+gen_a_pred5(P,_) :-
 	n_property(P,predicate),
     functor(P,_,0),
     not(n_dynamic_predicate(P)),
     write('return(Jexec_all(rest,Jget_sp(th),th));'),nl.
 
-gen_a_pred5(P,N) :-
+gen_a_pred5(P,_) :-
     n_property(P,predicate),
     functor(P,_,0),
     n_dynamic_predicate(P),
@@ -505,7 +505,7 @@ gen_a_pred5(P,N) :-
     write(')'),nl.
 
 % predicate
-gen_a_pred5(P,N) :-
+gen_a_pred5(P,_) :-
 	n_property(P,predicate),
     P =.. [P1|_],
     not(n_dynamic_predicate(P1)),
@@ -516,9 +516,9 @@ gen_a_pred5(P,N) :-
     write('Junbind(save2,th);'),nl,
     write('Jset_wp(save1,th);'),nl.
 
-gen_a_pred5(P,N) :-
+gen_a_pred5(P,_) :-
     n_property(P,predicate),
-    P =.. [P1|_],
+    P =.. [P1|L],
     n_dynamic_predicate(P),
     write('Jwcons(Jmakepred("'),
     write(P1),
@@ -529,7 +529,7 @@ gen_a_pred5(P,N) :-
 
 
 % user ope
-gen_a_pred5(P,N) :-
+gen_a_pred5(P,_) :-
 	n_property(P,userop),
     write('save1 = Jget_wp(th);'),nl,
 	gen_head(P),
@@ -742,7 +742,7 @@ gen_a_body((X;Xs)) :-
 	write('Jwlist3(Jmakeope(";"),'),
 	gen_a_body(X),
     write(','),
-    gen_body1(Xs),
+    gen_body1(Xs,0),
     write(',th)').
 
 
@@ -857,7 +857,7 @@ gen_a_body(X) :-
     write(',th)').
 gen_a_body(X) :-
     n_property(X,operation),
-    gen_body1(X).
+    gen_body1(X,0).
 gen_a_body(X) :-
     n_property(X,compiled),
     X =.. [P|L],
@@ -1800,12 +1800,12 @@ halt_check([C|Cs],D,P,A) :-
 
 % deterministic body case. Each has cut or each is builtin or each is recur 
 % G is gournd_variable
-det_body(Head,(X;Y),G) :- fail.
-det_body(Head,!,G).
-det_body(Head,(X,!),G).
-det_body(Head,(X,(!,Y)),G) :-
+det_body(_,(_;_),_) :- fail.
+det_body(_,!,_).
+det_body(_,(_,!),_).
+det_body(Head,(_,(!,Y)),G) :-
     det_body(Head,Y,G).
-det_body(Head,(V is E,Y),G) :-
+det_body(Head,(V is _,Y),G) :-
     det_body(Head,Y,[V|G]).
 det_body(Head,(X,Y),G) :-
     det_builtin(X,G),
@@ -1823,11 +1823,11 @@ det_body(Head,(X,Y),G) :-
     (retract(P);true),
     asserta(pred_data(Pred1,Arity1,det)),
     det_body(Head,Y,G).
-det_body(Head,X,G) :-
+det_body(_,X,G) :-
     det_builtin(X,G).
-det_body(Head,X,G) :-
+det_body(_,X,_) :-
     det_pass1(X).
-det_body(Head,X,G) :-
+det_body(Head,X,_) :-
     functor(Head,Pred1,Arity1),
     functor(X,Pred2,Arity2),
     Pred1 == Pred2,
