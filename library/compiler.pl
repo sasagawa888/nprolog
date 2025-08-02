@@ -108,12 +108,12 @@ pass1(X) :-
     reconsult(X,compiler),
     pass1_analize.
 
-pass2(X) :-
+pass2(_) :-
     write(user_output,'phase pass2'),
     nl(user_output),
     pass1_analize.
 
-pass3(X) :-
+pass3(_) :-
     write(user_output,'phase pass3'),
     nl(user_output),
     pass1_analize.
@@ -2144,7 +2144,7 @@ eval_form(X /\ Y) :-
     eval_form(Y),
     write(',th)').
 eval_form(X \/ Y) :-
-	  write('Jlogicalor('),
+	write('Jlogicalor('),
     eval_form(X),
     write(','),
     eval_form(Y),

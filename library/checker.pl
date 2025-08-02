@@ -178,6 +178,7 @@ get_body_variable(X,V) :-
 
 single_variable(Xs, X) :-
     select(X, Xs, Rest),
+    \+ n_compiler_anonymous(X),
     \+ member(X, Rest).
 
         

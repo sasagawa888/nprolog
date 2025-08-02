@@ -65,7 +65,7 @@ void init_builtin(void)
     defbuiltin("clause", b_clause, 2);
     defbuiltin("compare", b_compare, 2);
     defbuiltin("concat", b_concat, 3);
-    defbuiltin("consult", b_consult, 1);
+    defbuiltin("consult", b_consult, list2(1,2));
     defbuiltin("create", b_create, 2);
     defbuiltin("ctr_set", b_ctr_set, 2);
     defbuiltin("ctr_dec", b_ctr_dec, 2);
@@ -129,7 +129,7 @@ void init_builtin(void)
     defbuiltin("predicate_property", b_predicate_property, 2);
     defbuiltin("pref", b_pref, 2);
     defbuiltin("put", b_put, 1);
-    defbuiltin("reconsult", b_reconsult, 1);
+    defbuiltin("reconsult", b_reconsult, list2(1,2));
     defbuiltin("read", b_read, list2(1, 2));
     defbuiltin("read_line", b_read_line, 2);
     defbuiltin("read_string", b_read_string, list2(2, 3));
