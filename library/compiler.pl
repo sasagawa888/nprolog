@@ -1694,7 +1694,6 @@ deterministic([C|Cs],D,P,H,A) :-
 
 % arguments = [clauses],tail_count,pred_count, halt_base_count,all_count, arity
 tail_recursive([],T,P,H,A,N) :-
-    %write(user_output,T),write(user_output,P),write(user_output,H),write(user_output,A),nl,
     T > 0,
     P == 0,
     H >= 1,
