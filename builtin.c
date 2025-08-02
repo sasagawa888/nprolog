@@ -263,39 +263,7 @@ void init_builtin(void)
     defbuiltin("mt_or", b_mt_or, 1);
     defbuiltin("mt_prove", b_mt_prove, 2);
 
-    //-----JUMP project---------
-    defbuiltin("n_reconsult_predicate", b_reconsult_predicate, -1);
-    defbuiltin("n_reconsult_abolish", b_reconsult_abolish, -1);
-    defbuiltin("n_dynamic_predicate", b_dynamic_predicate, -1);
-    defbuiltin("n_filename", b_filename, -1);
-    defbuiltin("n_atom_convert", b_atom_convert, -1);
-    defbuiltin("n_arity_count", b_arity_count, -1);
-    defbuiltin("n_compiler_anonymous", b_compiler_anonymous, -1);
-    defbuiltin("n_compiler_variable", b_compiler_variable, -1);
-    defbuiltin("n_variable_convert", b_variable_convert, -1);
-    defbuiltin("n_generate_all_variable", b_generate_all_variable, -1);
-    defbuiltin("n_generate_variable", b_generate_variable, -1);
-    defbuiltin("n_clause_with_arity", b_clause_with_arity, -1);
-    defbuiltin("n_property", b_property, -1);
-    defbuiltin("n_bignum", b_bignum, -1);
-    defbuiltin("n_longnum", b_longnum, -1);
-    defbuiltin("n_findatom", b_findatom, -1);
-    defbuiltin("n_defined_predicate", b_defined_predicate, -1);
-    defbuiltin("n_defined_userop", b_defined_userop, -1);
-    defbuiltin("n_get_execute", b_get_execute, -1);
-    defbuiltin("n_get_dynamic", b_get_dynamic, -1);
-    defbuiltin("n_error", b_error, -1);
-    defbuiltin("n_has_cut", b_has_cut, -1);
-    defbuiltin("n_before_cut", b_before_cut, -1);
-    defbuiltin("n_after_cut", b_after_cut, -1);
-    defbuiltin("n_pair_list", b_pair_list, -1);
-    defbuiltin("n_exec_is", b_exec_is, -1);
-	defbuiltin("n_exec_smaller", b_exec_smaller, -1);
-	defbuiltin("n_exec_greater", b_exec_greater, -1);
-	defbuiltin("n_exec_eqsmaller", b_exec_eqsmaller, -1);
-	defbuiltin("n_exec_eqgreater", b_exec_eqgreater, -1);
-
-
+   
     //------CLPFD--------------------------
     defbuiltin("n_add_constraint", b_add_constraint, -1);
     defbuiltin("n_constraint_set", b_constraint_set, -1);
@@ -321,6 +289,43 @@ void init_builtin(void)
     defbuiltin("delay_microseconds", b_delay_microseconds, 1);
     defbuiltin("timer_microseconds", b_timer_microseconds, 1);
 #endif
+	
+	
+	//-----JUMP project---------
+    defbuiltin("n_reconsult_predicate", b_reconsult_predicate, 1);
+    defbuiltin("n_reconsult_abolish", b_reconsult_abolish, 0);
+    defbuiltin("n_dynamic_predicate", b_dynamic_predicate, 1);
+    defbuiltin("n_filename", b_filename, 2);
+    defbuiltin("n_atom_convert", b_atom_convert, 2);
+    defbuiltin("n_arity_count", b_arity_count, 2);
+    defbuiltin("n_compiler_anonymous", b_compiler_anonymous, 1);
+    defbuiltin("n_compiler_variable", b_compiler_variable, 1);
+    defbuiltin("n_variable_convert", b_variable_convert, 2);
+    defbuiltin("n_generate_all_variable", b_generate_all_variable, 2);
+    defbuiltin("n_generate_variable", b_generate_variable, 2);
+    defbuiltin("n_clause_with_arity", b_clause_with_arity, 3);
+    defbuiltin("n_property", b_property, 2);
+    defbuiltin("n_bignum", b_bignum, 1);
+    defbuiltin("n_longnum", b_longnum, 1);
+    defbuiltin("n_findatom", b_findatom, 3);
+    defbuiltin("n_defined_predicate", b_defined_predicate, 1);
+    defbuiltin("n_defined_userop", b_defined_userop, 1);
+    defbuiltin("n_get_execute", b_get_execute, 1);
+    defbuiltin("n_get_dynamic", b_get_dynamic, 1);
+    defbuiltin("n_error", b_error, 2);
+    defbuiltin("n_has_cut", b_has_cut, 1);
+    defbuiltin("n_before_cut", b_before_cut, 2);
+    defbuiltin("n_after_cut", b_after_cut, 2);
+    defbuiltin("n_pair_list", b_pair_list, 1);
+    defbuiltin("n_exec_is", b_exec_is, 2);
+	defbuiltin("n_exec_smaller", b_exec_smaller, 2);
+	defbuiltin("n_exec_greater", b_exec_greater, 2);
+	defbuiltin("n_exec_eqsmaller", b_exec_eqsmaller, 2);
+	defbuiltin("n_exec_eqgreater", b_exec_eqgreater, 2);
+	defbuiltin("%ask", b_ask, 0);
+	
+	builtins = reverse(builtins);
+
     return;
 }
 
@@ -4153,7 +4158,7 @@ int b_system(int arglist, int rest, int th)
 	if (!wide_variable_p(arg1) && !structurep(arg1))
 	    exception(NOT_COMPOUND, ind, arg1, th);
 
-	syslist = reverse(builtins);
+	syslist = builtins;
 	save1 = wp[th];
 	save2 = sp[th];
 	while (!nullp(syslist)) {

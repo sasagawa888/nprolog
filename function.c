@@ -428,7 +428,7 @@ void defbuiltin(char *name, int (*func)(int, int, int), int arity)
 	    builtins =
 		cons(list3(SLASH, atom, makeint(car(arity))), builtins);
 	    arity = cdr(arity);
-    } else if (arity != -1)
+    } else
 	builtins = cons(list3(SLASH, atom, makeint(arity)), builtins);
     return;
 }

@@ -398,7 +398,7 @@ int compiler_anonymous_p(int x)
 	return (0);
     strcpy(str, GET_NAME(x));
     str[4] = NUL;
-    if (strcmp(str, "var_") == 0)
+    if (strcmp(str, "ano_") == 0)
 	return (1);
     else
 	return (0);
