@@ -1819,7 +1819,7 @@ det_body(Head,(X,Y),G) :-
     Pred1 == Pred2,
     Arity1 == Arity2,
     pred_data(Pred1,Arity1,halt),
-    P =.. [pred_data,Pred1,A1,A2],
+    P =.. [pred_data,Pred1,_,_],
     (retract(P);true),
     asserta(pred_data(Pred1,Arity1,det)),
     det_body(Head,Y,G).
@@ -1833,7 +1833,7 @@ det_body(Head,X,G) :-
     Pred1 == Pred2,
     Arity1 == Arity2,
     pred_data(Pred1,Arity1,halt),
-    P =.. [pred_data,Pred1,A1,A2],
+    P =.. [pred_data,Pred1,_,_],
     (retract(P);true),
     asserta(pred_data(Pred1,Arity1,det)).
 det_pass1(X) :-
