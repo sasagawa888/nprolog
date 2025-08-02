@@ -2110,12 +2110,12 @@ int b_set_prolog_flag(int arglist, int rest, int th)
 	    string_flag = 1;
 	    return (prove_all(rest, sp[th], th));
 	} else if (eqlp(arg1, makeconst("expression"))
-	       && eqlp(arg2, makeconst("canonical"))) {
-		sexp_flag = 0;
+		   && eqlp(arg2, makeconst("canonical"))) {
+	    sexp_flag = 0;
 	    return (prove_all(rest, sp[th], th));
 	} else if (eqlp(arg1, makeconst("expression"))
-	       && eqlp(arg2, makeconst("sexp"))) {
-		sexp_flag = 1;
+		   && eqlp(arg2, makeconst("sexp"))) {
+	    sexp_flag = 1;
 	    return (prove_all(rest, sp[th], th));
 	}
 

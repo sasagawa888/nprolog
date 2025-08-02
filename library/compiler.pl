@@ -781,7 +781,7 @@ gen_a_body(X) :-
     write('"),'),
     gen_argument(L),
     write(',th)').
-% is 
+% is/2 
 gen_a_body(X is Y) :-
     n_findatom(n_exec_is,builtin,A),
     write('Jwcons('),
@@ -792,6 +792,54 @@ gen_a_body(X is Y) :-
     write(','),
     eval_form(Y),
     write(',th),th)').
+% </2 
+gen_a_body(X < Y) :-
+    n_findatom(n_exec_smaller,builtin,A),
+    write('Jwcons('),
+    write(A),
+    write(','),
+    write('Jwlist2('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th),th)').
+
+% >/2 
+gen_a_body(X > Y) :-
+    n_findatom(n_exec_greater,builtin,A),
+    write('Jwcons('),
+    write(A),
+    write(','),
+    write('Jwlist2('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th),th)').
+
+% =</2 
+gen_a_body(X =< Y) :-
+    n_findatom(n_exec_eqsmaller,builtin,A),
+    write('Jwcons('),
+    write(A),
+    write(','),
+    write('Jwlist2('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th),th)').
+
+% >=/2 
+gen_a_body(X >= Y) :-
+    n_findatom(n_exec_eqgreater,builtin,A),
+    write('Jwcons('),
+    write(A),
+    write(','),
+    write('Jwlist2('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th),th)').
+
 % atom builtin e.g. nl fail
 gen_a_body(X) :-
     n_property(X,builtin),

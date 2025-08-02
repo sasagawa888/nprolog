@@ -289,7 +289,12 @@ void init_builtin(void)
     defbuiltin("n_before_cut", b_before_cut, -1);
     defbuiltin("n_after_cut", b_after_cut, -1);
     defbuiltin("n_pair_list", b_pair_list, -1);
-	defbuiltin("n_exec_is", b_exec_is, -1);
+    defbuiltin("n_exec_is", b_exec_is, -1);
+	defbuiltin("n_exec_smaller", b_exec_smaller, -1);
+	defbuiltin("n_exec_greater", b_exec_greater, -1);
+	defbuiltin("n_exec_eqsmaller", b_exec_eqsmaller, -1);
+	defbuiltin("n_exec_eqgreater", b_exec_eqgreater, -1);
+
 
     //------CLPFD--------------------------
     defbuiltin("n_add_constraint", b_add_constraint, -1);
@@ -390,7 +395,7 @@ int exec(int goal, int bindings, int rest, int th)
 int b_length(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, i, ls, res, save1, save2;
-	int list_length,properp,improper_last_not_var,improper_last_var;
+    int list_length, properp, improper_last_not_var, improper_last_var;
     save2 = sp[th];
     n = length(arglist);
     ind = makeind("length", n, th);
@@ -402,14 +407,14 @@ int b_length(int arglist, int rest, int th)
 	properp = 0;
 	improper_last_not_var = 0;
 	improper_last_var = 0;
-	if(listp(arg1)){
-		list_length = length(arg1);
-		if(list_length != -1 && list_length != -2)
-			properp = 1;
-		else if(list_length == -1)
-			improper_last_not_var = 1;
-		else if(list_length == -2)
-			improper_last_var = 1; 
+	if (listp(arg1)) {
+	    list_length = length(arg1);
+	    if (list_length != -1 && list_length != -2)
+		properp = 1;
+	    else if (list_length == -1)
+		improper_last_not_var = 1;
+	    else if (list_length == -2)
+		improper_last_var = 1;
 	}
 
 	if (!listp(arg1) && !wide_variable_p(arg1))
@@ -2049,7 +2054,7 @@ int b_exec_is(int arglist, int rest, int th)
     int n, ind, arg1, arg2, res;
 
     n = length(arglist);
-    ind = makeind("nis", n, th);
+    ind = makeind("is", n, th);
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -2098,6 +2103,32 @@ int b_greater(int arglist, int rest, int th)
     return (NO);
 }
 
+
+int b_exec_greater(int arglist, int rest, int th)
+{
+    int n, ind, arg1, arg2;
+
+    n = length(arglist);
+    ind = makeind(">", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+	if (wide_variable_p(arg1))
+	    exception(INSTANTATION_ERR, ind, arg1, th);
+	if (wide_variable_p(arg2))
+	    exception(INSTANTATION_ERR, ind, arg2, th);
+
+	if (greaterp(arg1, arg2))
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+
 int b_smaller(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
@@ -2126,6 +2157,33 @@ int b_smaller(int arglist, int rest, int th)
     return (NO);
 }
 
+
+int b_exec_smaller(int arglist, int rest, int th)
+{
+    int n, ind, arg1, arg2;
+
+    n = length(arglist);
+    ind = makeind("<", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+	if (wide_variable_p(arg1))
+	    exception(INSTANTATION_ERR, ind, arg1, th);
+	if (wide_variable_p(arg2))
+	    exception(INSTANTATION_ERR, ind, arg2, th);
+
+	
+	if (smallerp(arg1, arg2))
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+
 int b_eqsmaller(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
@@ -2152,6 +2210,31 @@ int b_eqsmaller(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
+
+
+int b_exec_eqsmaller(int arglist, int rest, int th)
+{
+    int n, ind, arg1, arg2;
+
+    n = length(arglist);
+    ind = makeind("=<", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	if (wide_variable_p(arg1))
+	    exception(INSTANTATION_ERR, ind, arg1, th);
+	if (wide_variable_p(arg2))
+	    exception(INSTANTATION_ERR, ind, arg2, th);
+
+	if (eqsmallerp(arg1, arg2))
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
 
 int b_eqgreater(int arglist, int rest, int th)
 {
@@ -2180,6 +2263,32 @@ int b_eqgreater(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
+
+
+int b_exec_eqgreater(int arglist, int rest, int th)
+{
+    int n, ind, arg1, arg2;
+
+    n = length(arglist);
+    ind = makeind(">=", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+	if (wide_variable_p(arg1))
+	    exception(INSTANTATION_ERR, ind, arg1, th);
+	if (wide_variable_p(arg2))
+	    exception(INSTANTATION_ERR, ind, arg2, th);
+
+	if (eqgreaterp(arg1, arg2))
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
 
 int b_numeq(int arglist, int rest, int th)
 {

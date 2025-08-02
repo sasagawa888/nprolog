@@ -179,12 +179,12 @@ int length(int addr)
 	return (0);
 
     while (!(nullp(addr))) {
-	if (!structurep(addr)){
-		if(variablep(addr))
-			return(-2);
-		else
-	    	return (-1);
-		}
+	if (!structurep(addr)) {
+	    if (variablep(addr))
+		return (-2);
+	    else
+		return (-1);
+	}
 	len++;
 	addr = cdr(addr);
     }

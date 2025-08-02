@@ -11,7 +11,7 @@ safe(R,C) :-
     C >= 1,C =< 5.
 
 move(R,C,P,P) :-
-    length(P,25).
+    length(P,25),!.
 
 
 move(R,C,P,A) :-
