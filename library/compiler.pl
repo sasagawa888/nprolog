@@ -1682,7 +1682,7 @@ deterministic([(Head :- !)|Cs],D,P,H,A) :-
     H1 is H+1,!,
     deterministic(Cs,D,P,H1,A).
 deterministic([(Head :- Body)|Cs],D,P,H,A) :-
-    det_body(Head,Body),
+    det_body(Head,Body,[]),
     D1 is D+1,!,
     deterministic(Cs,D1,P,H,A).
 deterministic([X|Cs],D,P,H,A) :-
@@ -1708,7 +1708,7 @@ tail_recursive([(Head :- !)|Cs],T,P,H,A,N) :-
 tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
     independ(Head),
     butlast_body(Body,Body1),
-    det_body(Head,Body1),
+    det_body(Head,Body1,[]),
     tail_body(Head,Body),
     not(tail_body(Head,Body1)), % ...,qsort(),qsort(). not tco
     T1 is T+1,!,
@@ -1800,18 +1800,21 @@ halt_check([C|Cs],D,P,A) :-
 
 
 % deterministic body case. Each has cut or each is builtin or each is recur 
-det_body(Head,(X;Y)) :- fail.
-det_body(Head,!).
-det_body(Head,(X,!)).
-det_body(Head,(X,(!,Y))) :-
-    det_body(Head,Y).
-det_body(Head,(X,Y)) :-
-    det_builtin(X),
-    det_body(Head,Y).
-det_body(Head,(X,Y)) :-
+% G is gournd_variable
+det_body(Head,(X;Y),G) :- fail.
+det_body(Head,!,G).
+det_body(Head,(X,!),G).
+det_body(Head,(X,(!,Y)),G) :-
+    det_body(Head,Y,G).
+det_body(Head,(V is E,Y),G) :-
+    det_body(Head,Y,[V|G]).
+det_body(Head,(X,Y),G) :-
+    det_builtin(X,G),
+    det_body(Head,Y,G).
+det_body(Head,(X,Y),G) :-
     det_pass1(X),
-    det_body(Head,Y).
-det_body(Head,(X,Y)) :-
+    det_body(Head,Y,G).
+det_body(Head,(X,Y),G) :-
     functor(Head,Pred1,Arity1),
     functor(X,Pred2,Arity2),
     Pred1 == Pred2,
@@ -1820,12 +1823,12 @@ det_body(Head,(X,Y)) :-
     P =.. [pred_data,Pred1,A1,A2],
     (retract(P);true),
     asserta(pred_data(Pred1,Arity1,det)),
-    det_body(Head,Y).
-det_body(Head,X) :-
-    det_builtin(X).
-det_body(Head,X) :-
+    det_body(Head,Y,G).
+det_body(Head,X,G) :-
+    det_builtin(X,G).
+det_body(Head,X,G) :-
     det_pass1(X).
-det_body(Head,X) :-
+det_body(Head,X,G) :-
     functor(Head,Pred1,Arity1),
     functor(X,Pred2,Arity2),
     Pred1 == Pred2,
@@ -1843,18 +1846,23 @@ det_pass1(X) :-
 
 
 % generaly builtin is deterministic. but some cases is non deterministic.
-det_builtin(length(X,Y)) :-
+det_builtin(length(X,Y),G) :-
     n_compiler_variable(X),
-    n_compiler_variable(Y),!,fail.
+    not(member(X,G)),
+    n_compiler_variable(Y),
+    not(member(Y,G)),!,fail.
 
-det_builtin(append(X,Y,_)) :-
+det_builtin(append(X,Y,_),G) :-
     n_compiler_variable(X),
-    n_compiler_variable(Y),!,fail.
+    not(member(X,G)),
+    n_compiler_variable(Y),
+    not(member(Y,G)),!,fail.
 
-det_builtin(member(X,_)) :-
-    n_compiler_variable(X),!,fail.
+det_builtin(member(_,X),G) :-
+    n_compiler_variable(X),
+    not(member(X,G)),!,fail.
 
-det_builtin(X) :-
+det_builtin(X,G) :-
     n_property(X,builtin).
 
 
