@@ -78,6 +78,10 @@ detect_arity([C|Cs]) :-
 detect_body_arity(Head,(X;Y)) :-
     detect_body_arity(Head,X),
     detect_body_arity(Head,Y).
+detect_body_arity(Head,((X;Y),Z)) :-
+    detect_body_arity(Head,X),
+    detect_body_arity(Head,Y),
+    detect_body_arity(Head,Z).
 detect_body_arity(Head,(X,Y)) :-
     n_property(X,predicate),
     functor(X,P,N),

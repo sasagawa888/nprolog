@@ -1861,7 +1861,7 @@ det_builtin(member(_,X),G) :-
     n_compiler_variable(X),
     not(member(X,G)),!,fail.
 
-det_builtin(X,G) :-
+det_builtin(X,_) :-
     n_property(X,builtin).
 
 
@@ -1911,7 +1911,7 @@ gen_tail_body(X,N) :-
     write('goto loop'),write(N),write(';'),nl,
     write('}'),nl.
 
-gen_tail_args([],N).
+gen_tail_args([],_).
 gen_tail_args([A|As],N) :-
     write('arg'),write(N),write(' = '),
     write('Jcopy_work(Jderef('),
