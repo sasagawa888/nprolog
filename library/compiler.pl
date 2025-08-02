@@ -1689,7 +1689,7 @@ deterministic([X|Cs],D,P,H,A) :-
     n_property(X,predicate),
     P1 is P+1,!,
     deterministic(Cs,D,P1,H,A).
-dterministic([C|Cs],D,P,H,A) :-
+deterministic([C|Cs],D,P,H,A) :-
     deterministic(Cs,D,P,H,A).
 
 % arguments = [clauses],tail_count,pred_count, halt_base_count,all_count, arity
