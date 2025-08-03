@@ -1405,7 +1405,7 @@ gen_dynamic(P) :-
     gen_dynamics(P,L),
     write('}'),!.
 
-gen_dynamics(P,[]).
+gen_dynamics(_,[]).
 gen_dynamics(P,[L|Ls]) :-
     gen_dyn(P,L),
     gen_dynamics(P,Ls).
@@ -1693,12 +1693,12 @@ deterministic([C|Cs],D,P,H,A) :-
     deterministic(Cs,D,P,H,A).
 
 % arguments = [clauses],tail_count,pred_count, halt_base_count,all_count, arity
-tail_recursive([],T,P,H,A,N) :-
+tail_recursive([],T,P,H,A,_) :-
     T > 0,
     P == 0,
     H >= 1,
     A =:= T+P+H,!.
-tail_recursive(_,T,P,H,A,N) :-
+tail_recursive(_,_,P,_,_,_) :-
     P > 1,
     !,fail.
 tail_recursive([(Head :- !)|Cs],T,P,H,A,N) :-
@@ -1722,7 +1722,7 @@ tail_recursive([X|Cs],D,P,H,A,N) :-
     n_property(X,predicate),
     P1 is P+1,!,
     tail_recursive(Cs,D,P1,H,A,N).
-tail_recursive([C|Cs],D,P,H,A,N) :-
+tail_recursive([_|Cs],D,P,H,A,N) :-
     tail_recursive(Cs,D,P,H,A,N).
 
 independ(Head) :-
@@ -1738,22 +1738,22 @@ independ1([X|Xs]) :-
     flatten(Xs,F),
     independ2(X,F),
     independ1(Xs).
-independ1([X|Xs]) :-
+independ1([_|Xs]) :-
     independ1(Xs).
-independ1(X).        
+independ1(_).        
     
-independ2([],F).
-independ2([X|Xs],F) :-
+independ2([],_).
+independ2([X|_],F) :-
     n_compiler_variable(X),
     member(X,F),
     !,fail.
-independ2([X|Xs],F) :-
+independ2([_|Xs],F) :-
     independ2(Xs,F).
 independ2(X,F) :-
     n_compiler_variable(X),
     member(X,F),
     !,fail.
-independ2(X,F) :-
+independ2(X,_) :-
     atomic(X).
             
                 
@@ -1772,11 +1772,11 @@ flatten([L|Ls],Z) :-
             
     
 % arguments = [clauses],det_count,pred_count,all_count
-halt_check([],H,P,A) :-
+halt_check([],H,P,_) :-
     %write(user_output,H),write(user_output,P),write(user_output,A),
     P == 0,
     H == 1,!.
-halt_check(_,H,P,A) :-
+halt_check(_,_,P,_) :-
     P > 1,
     !,fail.
 halt_check([(Head :- !)|Cs],H,P,A) :-
@@ -1793,7 +1793,7 @@ halt_check([X|Cs],D,P,A) :-
     n_property(X,predicate),
     P1 is P+1,!,
     halt_check(Cs,D,P1,A).
-halt_check([C|Cs],D,P,A) :-
+halt_check([_|Cs],D,P,A) :-
     halt_check(Cs,D,P,A).
 
 
