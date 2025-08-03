@@ -10,7 +10,7 @@ safe(R,C) :-
     R >= 1,R =< 5,
     C >= 1,C =< 5.
 
-move(R,C,P,P) :-
+move(_,_,P,P) :-
     length(P,25).
 
 
