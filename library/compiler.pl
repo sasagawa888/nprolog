@@ -463,7 +463,7 @@ gen_tail_restore_args([A|As],N) :-
     write(',th);'),nl,
     N1 is N+1,
     gen_tail_restore_args(As,N1).
-gen_tail_restore_args([A|As],N) :-
+gen_tail_restore_args([_|As],N) :-
     N1 is N+1,
     gen_tail_restore_args(As,N1).
 
@@ -590,7 +590,7 @@ gen_body(X,_) :-
 
 
 % disjunction
-gen_body(((_;_);Y),N) :-
+gen_body(((X;_);Y),N) :-
     write('{dp['),write(N),write(']=Jget_sp(th);'),nl,
     N1 is N+1,
     gen_body(X,N1),
@@ -1706,7 +1706,7 @@ tail_recursive([],T,P,H,A,_) :-
 tail_recursive(_,_,P,_,_,_) :-
     P > 1,
     !,fail.
-tail_recursive([(Head :- !)|Cs],T,P,H,A,N) :-
+tail_recursive([(_ :- !)|Cs],T,P,H,A,N) :-
     H1 is H+1,!,
     tail_recursive(Cs,T,P,H1,A,N).
 tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
@@ -1784,10 +1784,10 @@ halt_check([],H,P,_) :-
 halt_check(_,_,P,_) :-
     P > 1,
     !,fail.
-halt_check([(Head :- !)|Cs],H,P,A) :-
+halt_check([(_ :- !)|Cs],H,P,A) :-
     H1 is H+1,!,
     halt_check(Cs,H1,P,A).
-halt_check([(Head :- Body)|Cs],H,P,A) :-
+halt_check([(_ :- _)|Cs],H,P,A) :-
     halt_check(Cs,H,P,A).
 halt_check([X|Cs],H,P,A) :-
     X =.. [_|Args],
