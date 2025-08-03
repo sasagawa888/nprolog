@@ -13,28 +13,28 @@
 
 void init_builtin(void)
 {
-    definfix(">", b_greater, 700, XFX);
-    definfix("<", b_smaller, 700, XFX);
-    definfix("=<", b_eqsmaller, 700, XFX);
-    definfix(">=", b_eqgreater, 700, XFX);
-    definfix("=:=", b_numeq, 700, XFX);
-    definfix("=\\=", b_notnumeq, 700, XFX);
-    definfix("=/=", b_notnumeq, 700, XFX);
-    definfix("@<", b_atsmaller, 700, XFX);
-    definfix("@=<", b_ateqsmaller, 700, XFX);
-    definfix("@>", b_atgreater, 700, XFX);
-    definfix("@>=", b_ateqgreater, 700, XFX);
+    definfix(">", b_n_greater, 700, XFX);
+    definfix("<", b_n_smaller, 700, XFX);
+    definfix("=<", b_n_eqsmaller, 700, XFX);
+    definfix(">=", b_n_eqgreater, 700, XFX);
+    definfix("=:=", b_n_numeq, 700, XFX);
+    definfix("=\\=", b_n_notnumeq, 700, XFX);
+    definfix("=/=", b_n_notnumeq, 700, XFX);
+    definfix("@<", b_n_atsmaller, 700, XFX);
+    definfix("@=<", b_n_ateqsmaller, 700, XFX);
+    definfix("@>", b_n_atgreater, 700, XFX);
+    definfix("@>=", b_n_ateqgreater, 700, XFX);
     definfix("is", b_is, 700, XFX);
-    definfix("=", b_unify, 700, XFX);
-    definfix("==", b_equalp, 700, XFX);
-    definfix("\\==", b_notequalp, 700, XFX);
-    definfix("\\=", b_notunify, 700, XFX);
-    definfix("=..", b_univ, 700, XFX);
+    definfix("=", b_n_unify, 700, XFX);
+    definfix("==", b_n_equalp, 700, XFX);
+    definfix("\\==", b_n_notequalp, 700, XFX);
+    definfix("\\=", b_n_notunify, 700, XFX);
+    definfix("=..", b_n_univ, 700, XFX);
     definfix("->", b_ifthen, 1050, XFY);
     definfix("not", b_not, 900, FY);
 
-    defbuiltin("!", b_cut, 0);
-    defbuiltin("%ask", b_ask, -1);
+    defbuiltin("!", b_n_cut, 0);
+    defbuiltin("%ask", b_n_ask, -1);
     defbuiltin("abolish", b_abolish, 1);
     defbuiltin("abort", b_abort, 0);
     defbuiltin("ansi_cup", b_ansi_cup, 2);
@@ -292,37 +292,37 @@ void init_builtin(void)
 	
 	
 	//-----JUMP project---------
-    defbuiltin("n_reconsult_predicate", b_reconsult_predicate, 1);
-    defbuiltin("n_reconsult_abolish", b_reconsult_abolish, 0);
-    defbuiltin("n_dynamic_predicate", b_dynamic_predicate, 1);
-    defbuiltin("n_filename", b_filename, 2);
-    defbuiltin("n_atom_convert", b_atom_convert, 2);
-    defbuiltin("n_arity_count", b_arity_count, 2);
-    defbuiltin("n_compiler_anonymous", b_compiler_anonymous, 1);
-    defbuiltin("n_compiler_variable", b_compiler_variable, 1);
-    defbuiltin("n_variable_convert", b_variable_convert, 2);
-    defbuiltin("n_generate_all_variable", b_generate_all_variable, 2);
-    defbuiltin("n_generate_variable", b_generate_variable, 2);
-    defbuiltin("n_clause_with_arity", b_clause_with_arity, 3);
-    defbuiltin("n_property", b_property, 2);
-    defbuiltin("n_bignum", b_bignum, 1);
-    defbuiltin("n_longnum", b_longnum, 1);
-    defbuiltin("n_findatom", b_findatom, 3);
-    defbuiltin("n_defined_predicate", b_defined_predicate, 1);
-    defbuiltin("n_defined_userop", b_defined_userop, 1);
-    defbuiltin("n_get_execute", b_get_execute, 1);
-    defbuiltin("n_get_dynamic", b_get_dynamic, 1);
-    defbuiltin("n_error", b_error, 2);
-    defbuiltin("n_has_cut", b_has_cut, 1);
-    defbuiltin("n_before_cut", b_before_cut, 2);
-    defbuiltin("n_after_cut", b_after_cut, 2);
-    defbuiltin("n_pair_list", b_pair_list, 1);
-    defbuiltin("n_exec_is", b_exec_is, 2);
-	defbuiltin("n_exec_smaller", b_exec_smaller, 2);
-	defbuiltin("n_exec_greater", b_exec_greater, 2);
-	defbuiltin("n_exec_eqsmaller", b_exec_eqsmaller, 2);
-	defbuiltin("n_exec_eqgreater", b_exec_eqgreater, 2);
-	defbuiltin("%ask", b_ask, 0);
+    defbuiltin("n_reconsult_predicate", b_n_reconsult_predicate, 1);
+    defbuiltin("n_reconsult_abolish", b_n_reconsult_abolish, 0);
+    defbuiltin("n_dynamic_predicate", b_n_dynamic_predicate, 1);
+    defbuiltin("n_filename", b_n_filename, 2);
+    defbuiltin("n_atom_convert", b_n_atom_convert, 2);
+    defbuiltin("n_arity_count", b_n_arity_count, 2);
+    defbuiltin("n_compiler_anonymous", b_n_compiler_anonymous, 1);
+    defbuiltin("n_compiler_variable", b_n_compiler_variable, 1);
+    defbuiltin("n_variable_convert", b_n_variable_convert, 2);
+    defbuiltin("n_generate_all_variable", b_n_generate_all_variable, 2);
+    defbuiltin("n_generate_variable", b_n_generate_variable, 2);
+    defbuiltin("n_clause_with_arity", b_n_clause_with_arity, 3);
+    defbuiltin("n_property", b_n_property, 2);
+    defbuiltin("n_bignum", b_n_bignum, 1);
+    defbuiltin("n_longnum", b_n_longnum, 1);
+    defbuiltin("n_findatom", b_n_findatom, 3);
+    defbuiltin("n_defined_predicate", b_n_defined_predicate, 1);
+    defbuiltin("n_defined_userop", b_n_defined_userop, 1);
+    defbuiltin("n_get_execute", b_n_get_execute, 1);
+    defbuiltin("n_get_dynamic", b_n_get_dynamic, 1);
+    defbuiltin("n_error", b_n_error, 2);
+    defbuiltin("n_has_cut", b_n_has_cut, 1);
+    defbuiltin("n_before_cut", b_n_before_cut, 2);
+    defbuiltin("n_after_cut", b_n_after_cut, 2);
+    defbuiltin("n_pair_list", b_n_pair_list, 1);
+    defbuiltin("n_exec_is", b_n_exec_is, 2);
+	defbuiltin("n_exec_smaller", b_n_exec_smaller, 2);
+	defbuiltin("n_exec_greater", b_n_exec_greater, 2);
+	defbuiltin("n_exec_eqsmaller", b_n_exec_eqsmaller, 2);
+	defbuiltin("n_exec_eqgreater", b_n_exec_eqgreater, 2);
+
 	
 	builtins = reverse(builtins);
 
@@ -597,7 +597,7 @@ int o_cons(int x, int y, int th)
     return (listcons(x, y));
 }
 
-int b_ask(int arglist, int rest, int th)
+int b_n_ask(int arglist, int rest, int th)
 {
     int n, ind, x1, x2, x3;
     char c;
@@ -679,7 +679,7 @@ int b_ask(int arglist, int rest, int th)
 }
 
 
-int b_unify(int arglist, int rest, int th)
+int b_n_unify(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, res;
 
@@ -698,7 +698,7 @@ int b_unify(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_notunify(int arglist, int rest, int th)
+int b_n_notunify(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, res;
 
@@ -2054,7 +2054,7 @@ int b_is(int arglist, int rest, int th)
 }
 
 
-int b_exec_is(int arglist, int rest, int th)
+int b_n_exec_is(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, res;
 
@@ -2080,7 +2080,7 @@ int b_exec_is(int arglist, int rest, int th)
 
 
 
-int b_greater(int arglist, int rest, int th)
+int b_n_greater(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -2109,7 +2109,7 @@ int b_greater(int arglist, int rest, int th)
 }
 
 
-int b_exec_greater(int arglist, int rest, int th)
+int b_n_exec_greater(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -2134,7 +2134,7 @@ int b_exec_greater(int arglist, int rest, int th)
 }
 
 
-int b_smaller(int arglist, int rest, int th)
+int b_n_smaller(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -2163,7 +2163,7 @@ int b_smaller(int arglist, int rest, int th)
 }
 
 
-int b_exec_smaller(int arglist, int rest, int th)
+int b_n_exec_smaller(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -2189,7 +2189,7 @@ int b_exec_smaller(int arglist, int rest, int th)
 }
 
 
-int b_eqsmaller(int arglist, int rest, int th)
+int b_n_eqsmaller(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -2217,7 +2217,7 @@ int b_eqsmaller(int arglist, int rest, int th)
 }
 
 
-int b_exec_eqsmaller(int arglist, int rest, int th)
+int b_n_exec_eqsmaller(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -2241,7 +2241,7 @@ int b_exec_eqsmaller(int arglist, int rest, int th)
 }
 
 
-int b_eqgreater(int arglist, int rest, int th)
+int b_n_eqgreater(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -2270,7 +2270,7 @@ int b_eqgreater(int arglist, int rest, int th)
 }
 
 
-int b_exec_eqgreater(int arglist, int rest, int th)
+int b_n_exec_eqgreater(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -2295,7 +2295,7 @@ int b_exec_eqgreater(int arglist, int rest, int th)
 }
 
 
-int b_numeq(int arglist, int rest, int th)
+int b_n_numeq(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -2315,7 +2315,7 @@ int b_numeq(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_notnumeq(int arglist, int rest, int th)
+int b_n_notnumeq(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -2335,7 +2335,7 @@ int b_notnumeq(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_equalp(int arglist, int rest, int th)
+int b_n_equalp(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -2356,7 +2356,7 @@ int b_equalp(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_notequalp(int arglist, int rest, int th)
+int b_n_notequalp(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -2432,7 +2432,7 @@ int b_compare(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_atsmaller(int arglist, int rest, int th)
+int b_n_atsmaller(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -2532,7 +2532,7 @@ int ateqsmaller(int x, int y)
 }
 
 
-int b_ateqsmaller(int arglist, int rest, int th)
+int b_n_ateqsmaller(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -2553,7 +2553,7 @@ int b_ateqsmaller(int arglist, int rest, int th)
 
 
 
-int b_atgreater(int arglist, int rest, int th)
+int b_n_atgreater(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -2573,7 +2573,7 @@ int b_atgreater(int arglist, int rest, int th)
 }
 
 
-int b_ateqgreater(int arglist, int rest, int th)
+int b_n_ateqgreater(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
 
@@ -3769,7 +3769,7 @@ int b_int_text(int arglist, int rest, int th)
 
 
 //controle
-int b_cut(int arglist, int rest, int th)
+int b_n_cut(int arglist, int rest, int th)
 {
     int n, ind;
 
@@ -4505,7 +4505,7 @@ int b_listing(int arglist, int rest, int th)
 
 
 //transform bwtween predicate and data
-int b_univ(int arglist, int rest, int th)
+int b_n_univ(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, res;
 

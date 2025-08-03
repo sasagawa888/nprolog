@@ -9,12 +9,12 @@
 
 //-----------JUMP project(builtin for compiler)------------
 
-int b_reconsult_predicate(int arglist, int rest, int th)
+int b_n_reconsult_predicate(int arglist, int rest, int th)
 {
     int n, ind, arg1, lis, save1;
 
     n = length(arglist);
-    ind = makeind("reconsult_predicate", n, th);
+    ind = makeind("n_reconsult_predicate", n, th);
     if (n == 1) {
 	save1 = sp[th];
 	arg1 = deref(car(arglist), th);
@@ -36,7 +36,7 @@ int b_reconsult_predicate(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_reconsult_abolish(int arglist, int rest, int th)
+int b_n_reconsult_abolish(int arglist, int rest, int th)
 {
     int n, lis, pred;
 
@@ -54,7 +54,7 @@ int b_reconsult_abolish(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_dynamic_predicate(int arglist, int rest, int th)
+int b_n_dynamic_predicate(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -69,7 +69,7 @@ int b_dynamic_predicate(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_filename(int arglist, int rest, int th)
+int b_n_filename(int arglist, int rest, int th)
 {
     int n, arg1, arg2, pos, len;
     char str1[STRSIZE];
@@ -101,7 +101,7 @@ int b_filename(int arglist, int rest, int th)
 }
 
 //convert atom for C language function name
-int b_atom_convert(int arglist, int rest, int th)
+int b_n_atom_convert(int arglist, int rest, int th)
 {
     int n, arg1, arg2, pos1;
     char str1[ATOMSIZE], str2[ATOMSIZE], str3[ATOMSIZE], str4[ATOMSIZE];
@@ -272,7 +272,7 @@ int b_atom_convert(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_arity_count(int arglist, int rest, int th)
+int b_n_arity_count(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -290,7 +290,7 @@ int b_arity_count(int arglist, int rest, int th)
 }
 
 
-int b_generate_all_variable(int arglist, int rest, int th)
+int b_n_generate_all_variable(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -306,7 +306,7 @@ int b_generate_all_variable(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_generate_variable(int arglist, int rest, int th)
+int b_n_generate_variable(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -373,7 +373,7 @@ int generate_variable1(int x, int y)
 	return (generate_variable1(car(x), generate_variable1(cdr(x), y)));
 }
 
-int b_compiler_anonymous(int arglist, int rest, int th)
+int b_n_compiler_anonymous(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -406,7 +406,7 @@ int compiler_anonymous_p(int x)
 
 
 
-int b_compiler_variable(int arglist, int rest, int th)
+int b_n_compiler_variable(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -437,7 +437,7 @@ int compiler_variable_p(int x)
 	return (0);
 }
 
-int b_variable_convert(int arglist, int rest, int th)
+int b_n_variable_convert(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -548,12 +548,12 @@ int rev_variable_convert(int x)
 
 
 
-int b_clause_with_arity(int arglist, int rest, int th)
+int b_n_clause_with_arity(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, arg3, l, clause, clauses, res;
 
     n = length(arglist);
-    ind = makeind("clause_with_arity", n, th);
+    ind = makeind("n_clause_with_arity", n, th);
     if (n == 3) {
 	arg1 = deref(car(arglist), th);
 	arg2 = deref(cadr(arglist), th);
@@ -589,7 +589,7 @@ int b_clause_with_arity(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_error(int arglist, int rest, int th)
+int b_n_error(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -626,7 +626,7 @@ int b_error(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_property(int arglist, int rest, int th)
+int b_n_property(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -694,7 +694,7 @@ int b_property(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_bignum(int arglist, int rest, int th)
+int b_n_bignum(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -710,7 +710,7 @@ int b_bignum(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_longnum(int arglist, int rest, int th)
+int b_n_longnum(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -726,7 +726,7 @@ int b_longnum(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_findatom(int arglist, int rest, int th)
+int b_n_findatom(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, arg3, res;
 
@@ -761,7 +761,7 @@ int b_findatom(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_defined_predicate(int arglist, int rest, int th)
+int b_n_defined_predicate(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -782,7 +782,7 @@ int b_defined_predicate(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_defined_userop(int arglist, int rest, int th)
+int b_n_defined_userop(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -803,7 +803,7 @@ int b_defined_userop(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_get_execute(int arglist, int rest, int th)
+int b_n_get_execute(int arglist, int rest, int th)
 {
     int n, arg1, pos, res;
 
@@ -825,7 +825,7 @@ int b_get_execute(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_get_dynamic(int arglist, int rest, int th)
+int b_n_get_dynamic(int arglist, int rest, int th)
 {
     int n, arg1, pos, res;
 
@@ -908,7 +908,7 @@ int b_existerrors(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_has_cut(int arglist, int rest, int th)
+int b_n_has_cut(int arglist, int rest, int th)
 {
     int n, arg1;
 
@@ -923,7 +923,7 @@ int b_has_cut(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_before_cut(int arglist, int rest, int th)
+int b_n_before_cut(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -940,7 +940,7 @@ int b_before_cut(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_after_cut(int arglist, int rest, int th)
+int b_n_after_cut(int arglist, int rest, int th)
 {
     int n, arg1, arg2;
 
@@ -958,7 +958,7 @@ int b_after_cut(int arglist, int rest, int th)
 }
 
 
-int b_pair_list(int arglist, int rest, int th)
+int b_n_pair_list(int arglist, int rest, int th)
 {
     int n, arg1;
 
