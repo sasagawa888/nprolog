@@ -58,12 +58,17 @@ Junify_var(head,arg,th)    for variable term
 Junify_nil(arg,th)    for [] check.
 */
 
-:- module(jump,[compile_file/1,compile_file1/1,compile_file/2]).
+:- module(jump,[compile_file/1,compile_file1/1,compile_file/2,option/2,pred_data/3,optimize/1]).
+
+option(_,_).
+pred_data(_,_,_).
+optimize(_).
 
 % main
 compile_file(X) :-
     abolish(option/2),
     assert(option(dummy,-1)),
+    abolish(pred_data/3),
     pass1(X),
     pass2(X),
     pass3(X),
@@ -585,7 +590,7 @@ gen_body(X,_) :-
 
 
 % disjunction
-gen_body(((X1;X2);Y),N) :-
+gen_body(((_;_);Y),N) :-
     write('{dp['),write(N),write(']=Jget_sp(th);'),nl,
     N1 is N+1,
     gen_body(X,N1),
@@ -695,7 +700,7 @@ gen_after_body(X,N) :-
     write('return(NO);}'),nl.
 
 
-gen_body1([],N) :-
+gen_body1([],_) :-
     write('NIL').
 
 gen_body1((D1;D2),N) :-
@@ -731,7 +736,7 @@ gen_body1((X,Xs),N) :-
     gen_body1(Xs,N),
     write(',th)').
 
-gen_body1(X,N) :-
+gen_body1(X,_) :-
 	gen_a_body(X).
 
 /*
@@ -1357,7 +1362,7 @@ gen_a_argument(X) :-
     write(',th)').
 gen_a_argument(X) :-
     n_property(X,userop),
-    functor(X,Y,0),
+    functor(X,_,0),
     write('Jmakeuser("'),
     write(X),
     write('")').
@@ -1645,21 +1650,21 @@ analize1(P,N,C) :-
     not(n_dynamic_predicate(P)),
     length(C,M),
     tail_recursive(C,0,0,0,M,N),
-    P1 =.. [pred_data,P,A1,A2],
+    P1 =.. [pred_data,P,_,_],
     (retract(P1);true),
     asserta(pred_data(P,N,tail)),!.
 analize1(P,N,C) :-
     not(n_dynamic_predicate(P)),
     length(C,M),
     deterministic(C,0,0,0,M),
-    P1 =.. [pred_data,P,A1,A2],
+    P1 =.. [pred_data,P,_,_],
     (retract(P1);true),
     asserta(pred_data(P,N,det)),!.
 analize1(P,N,C) :-
     not(n_dynamic_predicate(P)),
     length(C,M),
     halt_check(C,0,0,M),
-    P1 =.. [pred_data,P,A1,A2],
+    P1 =.. [pred_data,P,_,_],
     (retract(P1);true),
     asserta(pred_data(P,N,halt)),!.
 
@@ -1675,10 +1680,10 @@ deterministic([],D,P,H,A) :-
     P == 0,
     D == 1,
     A =:= D+P+H,!.
-deterministic(_,D,P,H,A) :-
+deterministic(_,_,P,_,_) :-
     P > 1,
     !,fail.
-deterministic([(Head :- !)|Cs],D,P,H,A) :-
+deterministic([(_ :- !)|Cs],D,P,H,A) :-
     H1 is H+1,!,
     deterministic(Cs,D,P,H1,A).
 deterministic([(Head :- Body)|Cs],D,P,H,A) :-
@@ -1689,7 +1694,7 @@ deterministic([X|Cs],D,P,H,A) :-
     n_property(X,predicate),
     P1 is P+1,!,
     deterministic(Cs,D,P1,H,A).
-deterministic([C|Cs],D,P,H,A) :-
+deterministic([_|Cs],D,P,H,A) :-
     deterministic(Cs,D,P,H,A).
 
 % arguments = [clauses],tail_count,pred_count, halt_base_count,all_count, arity
