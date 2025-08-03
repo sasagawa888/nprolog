@@ -173,6 +173,7 @@ get_pred_variable1([A|As],V) :-
     n_compiler_anonymous(A),
     get_pred_variable1(As,V),!.
 
+
 get_body_variable((X,Y),V) :-
     get_pred_variable(X,V1),
     get_body_variable(Y,V2),
@@ -187,6 +188,8 @@ single_variable(Xs, X) :-
 
         
 flatten([],[]).
+flatten(X,[X]) :-
+    atomic(X).
 flatten([L|Ls],[L,Ls]) :-
     atomic(L),
     atomic(Ls).
@@ -195,7 +198,14 @@ flatten([L|Ls],[L|Y]) :-
     flatten(Ls,Y).
 flatten([L|Ls],[L|Y]) :-
     n_property(L,predicate),
-    flatten(Ls,Y).
+    L =.. [_|L1],
+    flatten(Ls,Y),
+    append(L1,Y,Z).
+flatten([L|Ls],Z) :-
+    n_property(L,operation),
+    L =.. [_|L1],
+    flatten(Ls,Y),
+    append(L1,Y,Z).
 flatten([L|Ls],Z) :-
     list(L),
     flatten(L,Y1),
