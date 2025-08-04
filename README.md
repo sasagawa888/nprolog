@@ -36,7 +36,7 @@ sudo apt install libcurl4-openssl-dev
 sudo apt install libncurses-dev
 ```
 
-On MacOs be sure to install ncurses 
+- On MacOs be sure to install ncurses 
 
 ```
   brew install ncurses
