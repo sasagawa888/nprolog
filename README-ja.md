@@ -36,12 +36,20 @@ ver4.08からcurlライブラリが必要となりました。
 ```
 sudo apt update
 sudo apt install libcurl4-openssl-dev
+sudo apt install libncurses-dev
 ```
 
-macOSにおいてはncursesが必要となります。
+- macOSにおいてはncursesが必要となります。
 
+```
 brew install ncurses
   export PATH=$PATH:/opt/homebrew/Cellar/ncurses/6.5/bin
+```
+
+- ラズベリーパイ
+最近のラズパイOSにはWiringPIが標準装備されていないことがわかりました。
+WiringPiのgithubからクローンをつくり、./buildでインストールしてください。
+
 
 ## N-Prolog のファイルパス解決ルール
 

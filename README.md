@@ -33,12 +33,18 @@ If it is not installed by default, please install it using the following command
 ```
 sudo apt update
 sudo apt install libcurl4-openssl-dev
+sudo apt install libncurses-dev
 ```
 
 On MacOs be sure to install ncurses 
 
+```
   brew install ncurses
   export PATH=$PATH:/opt/homebrew/Cellar/ncurses/6.5/bin
+```
+- Raspberry Pi
+It has been found that recent Raspberry Pi OS versions do not come with WiringPi pre-installed.
+Please clone it from the WiringPi GitHub repository and install it using ./build.
 
 ## File Path Resolution in N-Prolog
 
