@@ -109,17 +109,16 @@ N-Prolog is specialized for experimenting with and playing around with small-sca
  Please use open/3 compatible with Arity/Prolog.
 - multifile/1 
  For now, we are not considering complex libraries.
-- initialization/1 
 - include/1
 - ensure_loaded/1
 
 - set_prolog_flag/2
 The set_prolog_flag exists, but it is different from ISO.
 
-- set_prolog_flag(string,arity). e.g. $hello world$
-- set_prolog_flag(string,iso).   e.g. "hello world"
-- set_prolog_flag(expression,canonical). e.g.  foo(1)
-- set_prolog_flag(expression,sexp).      e.g.  (foo 1) 
+ - set_prolog_flag(string,arity). e.g. $hello world$
+ - set_prolog_flag(string,iso).   e.g. "hello world"
+ - set_prolog_flag(expression,canonical). e.g.  foo(1)
+ - set_prolog_flag(expression,sexp).      e.g.  (foo 1) 
 
  
 - current_prolog_flag/2 
