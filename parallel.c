@@ -477,12 +477,14 @@ int b_dp_create(int arglist, int rest, int th)
 // close all distributed child 
 int b_dp_close(int arglist, int rest, int th)
 {
-    int n, ind, i, exp;
+    int n, ind, arg1, i, exp, flag;
 
     n = length(arglist);
     ind = makeind("dp_close", n, th);
+	flag = 0;
     if (n == 0) {
-
+	
+	dp_close:
 	if (parent_flag) {
 	    exp = makestr("dp_close.");
 	    for (i = 0; i < child_num; i++) {
@@ -500,14 +502,22 @@ int b_dp_close(int arglist, int rest, int th)
 	    close(parent_sockfd[0]);
 	    close(parent_sockfd[1]);
 	    receiver_exit_flag = 1;
-	    shutdown_flag = 1;
+		if(flag == 1)
+	    	shutdown_flag = 1;
 	    longjmp(buf, 2);
 	}
 
 	child_num = 0;
 	parent_flag = 0;
 	return (prove_all(rest, sp[th], th));
-    }
+    } else if(n == 1){
+		arg1 = car(arglist);
+		if(unify(arg1,makeconst("shutdown"),th) == YES){
+			flag = 1;
+			goto dp_close;
+		} else 
+			return(NO);
+	}
     exception(ARITY_ERR, ind, arglist, 0);
     return (NO);
 
