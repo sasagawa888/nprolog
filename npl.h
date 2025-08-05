@@ -843,6 +843,7 @@ int b_display(int arglist, int rest, int th);
 int b_dp_countup(int arglist, int rest, int th);
 int b_dp_create(int arglist, int rest, int th);
 int b_dp_close(int arglist, int rest, int th);
+int b_dp_halt(int arglist, int rest, int th);
 int b_dp_prove(int arglist ,int rest, int th);
 int b_dp_and(int arglist, int rest, int th);
 int b_dp_or(int arglist, int rest, int th);

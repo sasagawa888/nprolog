@@ -241,6 +241,7 @@ void init_builtin(void)
     //-----Distributed parallel
     defbuiltin("dp_create", b_dp_create, 1);
     defbuiltin("dp_close", b_dp_close, 0);
+	defbuiltin("dp_halt", b_dp_halt, 0);
     defbuiltin("dp_prove", b_dp_prove, 1);
     defbuiltin("dp_and", b_dp_and, 1);
     defbuiltin("dp_or", b_dp_or, 1);

@@ -477,14 +477,12 @@ int b_dp_create(int arglist, int rest, int th)
 // close all distributed child 
 int b_dp_close(int arglist, int rest, int th)
 {
-    int n, ind, i, exp, flag;
+    int n, ind, i, exp;
 
     n = length(arglist);
     ind = makeind("dp_close", n, th);
-	flag = 0;
     if (n == 0) {
 	
-	dp_close:
 	if (parent_flag) {
 	    exp = makestr("dp_close.");
 	    for (i = 0; i < child_num; i++) {
@@ -502,18 +500,52 @@ int b_dp_close(int arglist, int rest, int th)
 	    close(parent_sockfd[0]);
 	    close(parent_sockfd[1]);
 	    receiver_exit_flag = 1;
-		if(flag == 1)
-	    	shutdown_flag = 1;
 	    longjmp(buf, 2);
 	}
 
 	child_num = 0;
 	parent_flag = 0;
 	return (prove_all(rest, sp[th], th));
-    } else if(n == 1){
-			flag = 1;
-			goto dp_close;
+    } 
+    exception(ARITY_ERR, ind, arglist, 0);
+    return (NO);
+
+}
+
+// close all distributed child and shutdown 
+int b_dp_halt(int arglist, int rest, int th)
+{
+    int n, ind, i, exp;
+
+    n = length(arglist);
+    ind = makeind("dp_halt", n, th);
+    if (n == 0) {
+	
+	if (parent_flag) {
+	    exp = makestr("dp_halt.");
+	    for (i = 0; i < child_num; i++) {
+		send_to_child(i, exp);
+	    }
 	}
+
+	if (parent_flag) {
+	    for (i = 0; i < child_num; i++)
+		close(child_sockfd[i]);
+	}
+
+	if (child_flag) {
+	    printf("N-Prolog exit network mode.\n");
+	    close(parent_sockfd[0]);
+	    close(parent_sockfd[1]);
+	    receiver_exit_flag = 1;
+		shutdown_flag = 1;
+	    longjmp(buf, 2);
+	}
+
+	child_num = 0;
+	parent_flag = 0;
+	return (prove_all(rest, sp[th], th));
+    } 
     exception(ARITY_ERR, ind, arglist, 0);
     return (NO);
 
