@@ -1898,7 +1898,6 @@ int b_save(int arglist, int rest, int th)
 
     n = length(arglist);
     ind = makeind("save", n, th);
-	str = NULL;
     if (n == 0) {
 	arg1 = NIL;
 	strcpy(str1, "library/startup.pl");
