@@ -55,3 +55,11 @@ Key points:
 - After=network-online.target ensures the script runs after the network is up.
 
 - Wants=network-online.target requests the network to be brought up before starting
+
+
+## restore child 
+
+```
+git fetch origin
+git reset --hard origin/master
+```
