@@ -180,7 +180,6 @@ void send_to_parent_buffer(void)
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent buffer"), NIL, 0);
     }
-    memset(bridge, 0, sizeof(bridge));
 }
 
 void send_to_child(int n, int x)

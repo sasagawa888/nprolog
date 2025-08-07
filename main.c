@@ -357,9 +357,9 @@ int main(int argc, char *argv[])
 		child_busy_flag = 1;
 		query(input, 0);
 		child_busy_flag = 0;
-		printf("Send to parent ");
-		printf("\n");
+		printf("Send to parent %s\n", bridge);
 		fflush(stdout);
+		memset(bridge, 0, sizeof(bridge));
 	    }
     } else if (ret == 1) {
 	ret = 0;
