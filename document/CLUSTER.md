@@ -56,6 +56,7 @@ Key points:
 
 - Wants=network-online.target requests the network to be brought up before starting
 
+sudo systemctl enable npl.service
 
 ## restore child 
 
@@ -67,8 +68,8 @@ git reset --hard origin/master
 ## systemctl
 
 ```
-systemctl enable npl.service
+sudo systemctl enable npl.service
 
-systemctl enable npl.service
+sudo systemctl enable npl.service
 
 ```

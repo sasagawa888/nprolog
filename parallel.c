@@ -589,6 +589,7 @@ int b_dp_transfer(int arglist, int rest, int th)
     ind = makeind("dp_transfer", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
+	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
@@ -671,6 +672,7 @@ int b_dp_consult(int arglist, int rest, int th)
     ind = makeind("dp_consult", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
+	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
@@ -698,6 +700,7 @@ int b_dp_compile(int arglist, int rest, int th)
     ind = makeind("dp_compile", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
+	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
