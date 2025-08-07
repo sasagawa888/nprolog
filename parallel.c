@@ -580,7 +580,7 @@ int b_dp_prove(int arglist, int rest, int th)
 // parent Prolog
 int b_dp_transfer(int arglist, int rest, int th)
 {
-    int n, ind, arg1, pred1, pred2, i, m;
+    int n, ind, arg1, pred1, i, m;
     FILE *file;
 
     n = length(arglist);
@@ -610,7 +610,7 @@ int b_dp_transfer(int arglist, int rest, int th)
 		}
 	    }
 	    memset(transfer, 0, sizeof(transfer));
-	    transfer[0] = 0x15;
+	    transfer[0] = 0x16;
 	    m = write(child_sockfd[i], transfer, 1);
 	    if (m < 0) {
 		exception(SYSTEM_ERR, makestr("dp_transfer"), NIL, th);
@@ -619,11 +619,6 @@ int b_dp_transfer(int arglist, int rest, int th)
 	    fseek(file, 0, SEEK_SET);
 	}
 	fclose(file);
-	if (parent_flag) {
-	    pred2 = list2(makeatom("dp_transfer", SYS), arg1);
-	    for (i = 0; i < child_num; i++)
-		send_to_child(i, pred_to_str(pred2));
-	}
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -651,7 +646,7 @@ int b_dp_receive(int arglist, int rest, int th)
 	int bytes_received;
 	while ((bytes_received =
 		read(parent_sockfd[1], transfer, sizeof(transfer))) > 0) {
-	    if (transfer[bytes_received - 1] == 0x15) {
+	    if (transfer[bytes_received - 1] == 0x16) {
 		transfer[bytes_received - 1] = 0;
 		fwrite(transfer, sizeof(char), bytes_received - 1, file);
 		break;
@@ -815,7 +810,7 @@ int b_dp_countup(int arglist, int rest, int th)
     ind = makeind("dp_countup", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
-
+	
 	proof[th] = proof[th] + GET_INT(arg1);
 	return (prove_all(rest, sp[th], th));
     }

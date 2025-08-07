@@ -38,7 +38,7 @@ address
 #define FUNCTION_NUMBER 22
 #define BUILTIN_NUMBER 220
 #define COMPILED_NUMBER 23
-#define EXTENDED_NUMBER 41
+#define EXTENDED_NUMBER 42
 #define NIL         0
 #define YES         2
 #define NO          4
