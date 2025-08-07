@@ -63,3 +63,12 @@ Key points:
 git fetch origin
 git reset --hard origin/master
 ```
+
+## systemctl
+
+```
+systemctl enable npl.service
+
+systemctl enable npl.service
+
+```
