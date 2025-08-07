@@ -572,7 +572,9 @@ int b_dp_prove(int arglist, int rest, int th)
 			       (receive_from_child(GET_INT(arg1))), th);
 	if (prove_all(res, sp[th], th) == YES)
 	    return (prove_all(rest, sp[th], th));
-    }
+	else 
+		return (NO);
+    } 
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
