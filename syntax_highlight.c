@@ -98,7 +98,7 @@ char extended[EXTENDED_NUMBER][30] = {
     { "pwm_write" }, { "pull_up_dn_control" }, { "digital_read" },
     { "delay" }, { "delay_microseconds" },
     { "compile_file" }, { "timer_microseconds" }, { "with" },
-    { "existerrors" }, { "dp_create" }, { "dp_consult" },
+    { "existerrors" }, { "dp_create" }, { "dp_consult" }, { "dp_countup" },
     { "dp_transfer" }, { "dp_and" }, { "dp_or" }, {"dp_halt"},
     { "dp_compile" }, { "dp_prove" }, { "dp_close" }, { "dp_parent" },
     { "dp_child" }, { "dp_wait" }, { "dp_pause" }, { "dp_resume" },
