@@ -26,6 +26,8 @@ N-Prolog on parent machine terminal. and dp_create/1 to establish TCP/IP between
     dp_compile(Fn): Compiles file Fn on both parent and child machines.
 
     dp_consult(Fn): Loads file Fn on both parent and child machines.
+    
+    dp_reconsult(Fn): Loads file Fn on both parent and child machines.
     (Note) Internally, reconsult/1 is used. Existing predicates will be overwritten.
 
     dp_prove(Nth,Pred): Prove Predicate on the Nth child Prolog for testing.
@@ -91,7 +93,7 @@ Communication between the parent and child processes is conducted via a buffer c
 
 The child process sends the control code 0x15 to the parent process if an error occurs. Upon receiving this code, the parent process displays that an error has occurred in the nth child process and triggers the error handling mechanism. The child process automatically recovers from the error and waits for further instructions from the parent process in the REPL.
 
-In dp_transfer/1, the control code 0x15 is sent as a signal to indicate the end of file transmission during file transfers. Initially, EOF was used for this purpose, but it was not recognized on Raspberry Pi systems. Therefore, it was decided to switch to using 0x15.
+In dp_transfer/1, the control code 0x16 is sent as a signal to indicate the end of file transmission during file transfers. Initially, EOF was used for this purpose, but it was not recognized on Raspberry Pi systems. Therefore, it was decided to switch to using 0x15.
 
 # Error Handling
 This section concerns cases where an error occurs on a child device. When a child device encounters an error, it notifies the parent device via TCP/IP communication. Subsequently, the child device recovers from the error and resumes its role as a child in network mode. Upon receiving an error notification from a child device, the parent device triggers a system error and displays which child device encountered the error. Since the communication between the parent and child devices remains intact, the distributed parallel computation continues uninterrupted.

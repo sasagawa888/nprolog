@@ -249,6 +249,7 @@ void init_builtin(void)
     defbuiltin("dp_receive", b_dp_receive, -1);
     defbuiltin("dp_compile", b_dp_compile, 1);
     defbuiltin("dp_consult", b_dp_consult, 1);
+	defbuiltin("dp_reconsult", b_dp_reconsult, 1);
     defbuiltin("dp_report", b_dp_report, 1);
     defbuiltin("dp_countup", b_dp_countup, -1);
     defbuiltin("dp_parent", b_dp_parent, 0);

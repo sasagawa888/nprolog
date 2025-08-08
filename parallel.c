@@ -525,7 +525,7 @@ int b_dp_consult(int arglist, int rest, int th)
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
-	pred1 = list2(makeatom("reconsult", SYS), arg1);
+	pred1 = list2(makeatom("consult", SYS), arg1);
 	prove_all(pred1, sp[th], th);
 
 	if (parent_flag) {
@@ -540,6 +540,36 @@ int b_dp_consult(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
+
+
+int b_dp_reconsult(int arglist, int rest, int th)
+{
+    int n, ind, arg1, pred1, pred2, i;
+
+    n = length(arglist);
+    ind = makeind("dp_reconsult", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
+	if (!atomp(arg1))
+	    exception(NOT_ATOM, ind, arg1, th);
+
+	pred1 = list2(makeatom("reconsult", SYS), arg1);
+	prove_all(pred1, sp[th], th);
+
+	if (parent_flag) {
+	    pred2 = list2(makeatom("dp_reconsult", SYS), arg1);
+	    for (i = 0; i < child_num; i++) {
+		send_to_child(i, pred_to_str(pred2));
+		receive_from_child(i);
+	    }
+	}
+	return (YES);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
 
 int b_dp_compile(int arglist, int rest, int th)
 {
