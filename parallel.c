@@ -133,7 +133,8 @@ void init_child(int n, int x)
 
 int receive_from_parent(void)
 {
-    int n;
+    int n,i,j;
+	char buffer[BUFSIZE];
 
     if (!connect_flag) {
 	//wait conneting
@@ -155,8 +156,46 @@ int receive_from_parent(void)
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("receive from parent"), NIL, 0);
     }
-    return (makestr(bridge));
+
+	memset(buffer, 0, sizeof(buffer));
+	j = 0;
+	for(i=0;i<n;i++){
+		if(bridge[i] != 0x11 && bridge[i] != 0x12 && bridge[i] != 0x13){
+			buffer[j] = bridge[i];
+			j++;
+		}
+	}
+    return (makestr(buffer));
 }
+
+
+void receive_from_parent_buffer(void)
+{
+    int n;
+
+    if (!connect_flag) {
+	//wait conneting
+	listen(parent_sockfd[0], 5);
+	parent_len = sizeof(parent_addr);
+	connect_flag = 1;
+
+	// connection from parent
+	parent_sockfd[1] =
+	    accept(parent_sockfd[0], (struct sockaddr *) &parent_addr,
+		   &parent_len);
+	if (parent_sockfd[1] < 0) {
+	    exception(SYSTEM_ERR, makestr("receive from parent buffer"), NIL, 0);
+	}
+    }
+    // read message from parent
+    memset(bridge, 0, sizeof(bridge));
+    n = read(parent_sockfd[1], bridge, sizeof(bridge) - 1);
+    if (n < 0) {
+	exception(SYSTEM_ERR, makestr("receive from parent buffer"), NIL, 0);
+    }
+
+}
+
 
 void send_to_parent(int x)
 {
@@ -242,63 +281,13 @@ int receive_from_child(int n)
 	else
 	    goto retry;
     } else if (bridge[0] == 0x15) {
-	exception(SYSTEM_ERR, makestr("in child"), makeint(n), 0);
+	exception(SYSTEM_ERR, makestr(" receive from child"), makeint(n), 0);
 
     } else {
 	return (makestr(bridge));
     }
 
     return (0);
-}
-
-
-// Thread for child receiver
-void *receiver(void *arg)
-{
-
-    while (1) {
-	if (receiver_exit_flag)
-	    goto exit;
-
-	if (child_busy_flag) {
-	    receive_from_parent();
-	  retry:
-	    if (bridge[0] == 0x11) {
-		// child stop 
-		ctrl_c_flag = 1;
-	    } else if (bridge[0] == 0x12) {
-		// child pause 
-		pause_flag = 1;
-	    } else if (bridge[0] == 0x13) {
-		// child resume 
-		pause_flag = 0;
-	    }
-
-	    if (bridge[1] != 0) {
-		int i;
-		i = 0;
-		while (bridge[i + 1] != 0) {
-		    bridge[i] = bridge[i + 1];
-		    i++;
-		}
-		bridge[i] = 0;
-		goto retry;
-	    }
-
-	}
-
-    }
-
-  exit:
-    pthread_exit(NULL);
-}
-
-
-void init_receiver(void)
-{
-    // create child receiver thread 
-    pthread_create(&receiver_thread, NULL, receiver, NULL);
-
 }
 
 
@@ -624,12 +613,14 @@ int b_dp_and(int arglist, int rest, int th)
 	    res =
 		convert_to_variant(str_to_pred(receive_from_child(i)), th);
 	    if (prove_all(res, sp[th], th) == NO) {
-		for (j = i; j < m; j++) {
+		/*
+		for (j = i+1; j < m; j++) {
 		    memset(bridge, 0, sizeof(bridge));
 		    bridge[0] = 0x11; // stop signal
 		    send_to_child_buffer(j);
 		}
-		for (j = i; j < m; j++) {
+		*/
+		for (j = i+1; j < m; j++) {
 		    receive_from_child(j);
 		}
 		return (NO);
@@ -664,19 +655,20 @@ int b_dp_or(int arglist, int rest, int th)
 	    res =
 		convert_to_variant(str_to_pred(receive_from_child(i)), th);
 	    if (prove_all(res, sp[th], th) == YES) {
-		for (j = i; j < m; j++) {
+		/*
+		for (j = i+1; j < m; j++) {
 		    memset(bridge, 0, sizeof(bridge));
 		    bridge[0] = 0x11; // stop signal
 		    send_to_child_buffer(j);
 		}
-		for (j = i; j < m; j++) {
+		*/
+		for (j = i+1; j < m; j++) {
 		    receive_from_child(j);
 		}
-		return (YES);
+		return (prove_all(rest, sp[th], th));
 	    }
 	}
-	return (prove_all(rest, sp[th], th));
-
+	return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -1066,3 +1058,55 @@ int b_mt_prove(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
+
+
+
+// Thread for child receiver
+void *receiver(void *arg)
+{
+
+    while (1) {
+	if (receiver_exit_flag)
+	    goto exit;
+
+	if (child_busy_flag) {
+	    receive_from_parent_buffer();
+	  retry:
+	    if (bridge[0] == 0x11) {
+		// child stop 
+		ctrl_c_flag = 1;
+	    } else if (bridge[0] == 0x12) {
+		// child pause 
+		pause_flag = 1;
+	    } else if (bridge[0] == 0x13) {
+		// child resume 
+		pause_flag = 0;
+	    }
+
+	    if (bridge[1] != 0) {
+		int i;
+		i = 0;
+		while (bridge[i + 1] != 0) {
+		    bridge[i] = bridge[i + 1];
+		    i++;
+		}
+		bridge[i] = 0;
+		goto retry;
+	    }
+
+	}
+
+    }
+
+  exit:
+    pthread_exit(NULL);
+}
+
+
+void init_receiver(void)
+{
+    // create child receiver thread 
+    pthread_create(&receiver_thread, NULL, receiver, NULL);
+
+}
+
