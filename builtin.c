@@ -608,7 +608,7 @@ int b_n_ask(int arglist, int rest, int th)
     if (n == 0) {
 	x1 = variables[th];
 	if (child_flag)
-	    memset(bridge, 0, sizeof(bridge));
+	    memset(output_buffer, 0, sizeof(output_buffer));
 	if (nullp(x1) || has_no_value_p(x1, th)) {
 	    if (thread_flag)
 		proof[0] = proof[0] + proof[th];
@@ -635,7 +635,7 @@ int b_n_ask(int arglist, int rest, int th)
 	}
 
 	if (child_flag) {
-	    bridge_flag = 1;
+	    dialog_flag = 1;
 	}
 	/* if network-mode write to buffer e.g. X = 1,Y = 2,
 	 * normal-mode write to termial 
@@ -653,7 +653,7 @@ int b_n_ask(int arglist, int rest, int th)
 	    x2 = cdr(x2);
 	}
 	if (child_flag) {
-	    bridge_flag = 0;
+	    dialog_flag = 0;
 	    return (YES);
 	}
 
@@ -3558,24 +3558,24 @@ int b_string_term(int arglist, int rest, int th)
 	    memset(str, '\0', STRSIZE);
 	    strcpy(str, GET_NAME(arg1));
 	    for (i = 0; i < l; i++)
-		bridge[i] = str[i];
+		input_buffer[i] = str[i];
 
-	    bridge[l] = '.';
-	    bridge[l + 1] = 0;
+	    input_buffer[l] = '.';
+	    input_buffer[l + 1] = 0;
 	    read_string_term(0);	//initilize 
-	    bridge_flag = 1;
+	    dialog_flag = 1;
 	    res = readparse(th);
-	    bridge_flag = 0;
+	    dialog_flag = 0;
 	    if (unify(arg2, res, th) == YES)
 		return (prove_all(rest, sp[th], th));
 	    else
 		return (NO);
 	} else if (wide_variable_p(arg1)) {
-	    memset(bridge, '\0', sizeof(bridge));
-	    bridge_flag = 1;
+	    memset(output_buffer, '\0', sizeof(output_buffer));
+	    dialog_flag = 1;
 	    print(arg2);
-	    bridge_flag = 0;
-	    res = makestr(bridge);
+	    dialog_flag = 0;
+	    res = makestr(output_buffer);
 	    if (unify(arg1, res, th) == YES)
 		return (prove_all(rest, sp[th], th));
 	    else
@@ -3600,7 +3600,7 @@ int read_string_term(int flag)
     }
 
 
-    return (bridge[pos++]);
+    return (input_buffer[pos++]);
 }
 
 int b_substring(int arglist, int rest, int th)

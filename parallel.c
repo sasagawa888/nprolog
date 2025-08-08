@@ -15,12 +15,12 @@ int pred_to_str(int x)
 {
     int res;
 
-    memset(bridge, '\0', sizeof(bridge));
-    bridge_flag = 1;
+    memset(output_buffer, '\0', sizeof(output_buffer));
+    dialog_flag = 1;
     print(x);
     printstr(".\n");
-    bridge_flag = 0;
-    res = makestr((char *) bridge);
+    dialog_flag = 0;
+    res = makestr((char *) output_buffer);
     return (res);
 }
 
@@ -28,13 +28,13 @@ int str_to_pred(int x)
 {
     int res;
 
-    bridge_flag = 1;
-    memset(bridge, '\0', sizeof(bridge));
-    strcpy(bridge, GET_NAME(x));
+    dialog_flag = 1;
+    memset(input_buffer, '\0', sizeof(input_buffer));
+    strcpy(input_buffer, GET_NAME(x));
     read_string_term(0);
     res = variable_to_call(readparse(0));
-    memset(bridge, 0, sizeof(bridge));
-    bridge_flag = 0;
+    memset(input_buffer, 0, sizeof(input_buffer));
+    dialog_flag = 0;
     return (res);
 }
 
@@ -151,8 +151,8 @@ int receive_from_parent(void)
 	}
     }
     // read message from parent
-    memset(bridge, 0, sizeof(bridge));
-    n = read(parent_sockfd[1], bridge, sizeof(bridge) - 1);
+    memset(input_buffer, 0, sizeof(input_buffer));
+    n = read(parent_sockfd[1], input_buffer, sizeof(input_buffer) - 1);
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("receive from parent"), NIL, 0);
     }
@@ -161,8 +161,8 @@ int receive_from_parent(void)
 	memset(buffer, 0, sizeof(buffer));
 	j = 0;
 	for(i=0;i<n;i++){
-		if(bridge[i] != 0x11 && bridge[i] != 0x12 && bridge[i] != 0x13){
-			buffer[j] = bridge[i];
+		if(input_buffer[i] != 0x11 && input_buffer[i] != 0x12 && input_buffer[i] != 0x13){
+			buffer[j] = input_buffer[i];
 			j++;
 		}
 	}
@@ -189,8 +189,8 @@ void receive_from_parent_buffer(void)
 	}
     }
     // read message from parent
-    memset(bridge, 0, sizeof(bridge));
-    n = read(parent_sockfd[1], bridge, sizeof(bridge) - 1);
+    memset(input_buffer, 0, sizeof(input_buffer));
+    n = read(parent_sockfd[1], input_buffer, sizeof(input_buffer) - 1);
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("receive from parent buffer"), NIL, 0);
     }
@@ -203,10 +203,10 @@ void send_to_parent(int x)
     int n;
 
     // send message to parent
-    memset(bridge, 0, sizeof(bridge));
-    strcpy(bridge, GET_NAME(x));
-    n = write(parent_sockfd[1], bridge, strlen(bridge));
-    memset(bridge, 0, sizeof(bridge));
+    memset(output_buffer, 0, sizeof(output_buffer));
+    strcpy(output_buffer, GET_NAME(x));
+    n = write(parent_sockfd[1], output_buffer, strlen(output_buffer));
+    memset(output_buffer, 0, sizeof(output_buffer));
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent"), x, 0);
     }
@@ -216,7 +216,7 @@ void send_to_parent_buffer(void)
 {
     int n;
 
-    n = write(parent_sockfd[1], bridge, strlen(bridge));
+    n = write(parent_sockfd[1], output_buffer, strlen(output_buffer));
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent buffer"), NIL, 0);
     }
@@ -226,10 +226,10 @@ void send_to_child(int n, int x)
 {
     int m;
 
-    memset(bridge, 0, sizeof(bridge));
-    strcpy(bridge, GET_NAME(x));
-    m = write(child_sockfd[n], bridge, strlen(bridge));
-    memset(bridge, 0, sizeof(bridge));
+    memset(output_buffer, 0, sizeof(output_buffer));
+    strcpy(output_buffer, GET_NAME(x));
+    m = write(child_sockfd[n], output_buffer, strlen(output_buffer));
+    memset(output_buffer, 0, sizeof(output_buffer));
     if (m < 0) {
 	exception(SYSTEM_ERR, makestr("send to child"), NIL, 0);
     }
@@ -239,7 +239,7 @@ void send_to_child_buffer(int n)
 {
     int m;
 
-    m = write(child_sockfd[n], bridge, strlen(bridge));
+    m = write(child_sockfd[n], output_buffer, strlen(output_buffer));
     if (m < 0) {
 	exception(SYSTEM_ERR, makestr("send to child buffer"), NIL, 0);
     }
@@ -253,18 +253,18 @@ int receive_from_child(int n)
 
     // receive from child
   reread:
-    memset(bridge, 0, sizeof(bridge));
-    m = read(child_sockfd[n], bridge, sizeof(bridge) - 1);
+    memset(input_buffer, 0, sizeof(input_buffer));
+    m = read(child_sockfd[n], input_buffer, sizeof(input_buffer) - 1);
     if (m < 0) {
 	exception(SYSTEM_ERR, makestr("receive from child"), makeint(n),
 		  0);
     }
 
   retry:
-    if (bridge[0] == 0x02) {
+    if (input_buffer[0] == 0x02) {
 	i = 0;
-	while (bridge[i + 1] != 0x03) {
-	    sub_buffer[i] = bridge[i + 1];
+	while (input_buffer[i + 1] != 0x03) {
+	    sub_buffer[i] = input_buffer[i + 1];
 	    i++;
 	}
 	sub_buffer[i] = 0;
@@ -272,20 +272,20 @@ int receive_from_child(int n)
 
 	j = 0;
 	i = i + 2;
-	while (bridge[j + i] != 0) {
-	    bridge[j] = bridge[j + i];
+	while (input_buffer[j + i] != 0) {
+	    input_buffer[j] = input_buffer[j + i];
 	    j++;
 	}
-	bridge[j] = 0;
-	if (bridge[0] == 0)
+	input_buffer[j] = 0;
+	if (input_buffer[0] == 0)
 	    goto reread;
 	else
 	    goto retry;
-    } else if (bridge[0] == 0x15) {
+    } else if (input_buffer[0] == 0x15) {
 	exception(SYSTEM_ERR, makestr(" receive from child"), makeint(n), 0);
 
     } else {
-	return (makestr(bridge));
+	return (makestr(input_buffer));
     }
 
     return (0);
@@ -615,8 +615,8 @@ int b_dp_and(int arglist, int rest, int th)
 		convert_to_variant(str_to_pred(receive_from_child(i)), th);
 	    if (prove_all(res, sp[th], th) == NO) {
 		for (j = i+1; j < m; j++) {
-		    memset(bridge, 0, sizeof(bridge));
-		    bridge[0] = 0x11; // stop signal
+		    memset(output_buffer, 0, sizeof(output_buffer));
+		    output_buffer[0] = 0x11; // stop signal
 		    send_to_child_buffer(j);
 		}
 		for (j = i+1; j < m; j++) {
@@ -655,8 +655,8 @@ int b_dp_or(int arglist, int rest, int th)
 		convert_to_variant(str_to_pred(receive_from_child(i)), th);
 	    if (prove_all(res, sp[th], th) == YES) {
 		for (j = i+1; j < m; j++) {
-		    memset(bridge, 0, sizeof(bridge));
-		    bridge[0] = 0x11; // stop signal
+		    memset(output_buffer, 0, sizeof(output_buffer));
+		    output_buffer[0] = 0x11; // stop signal
 		    send_to_child_buffer(j);
 		}
 		for (j = i+1; j < m; j++) {
@@ -759,8 +759,8 @@ int b_dp_pause(int arglist, int rest, int th)
 	if (GET_INT(arg1) >= child_num)
 	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
 
-	memset(bridge, 0, sizeof(bridge));
-	bridge[0] = 0x12;
+	memset(output_buffer, 0, sizeof(output_buffer));
+	output_buffer[0] = 0x12;
 	send_to_child_buffer(GET_INT(arg1));
 	return (prove_all(rest, sp[th], th));
     }
@@ -783,8 +783,8 @@ int b_dp_resume(int arglist, int rest, int th)
 	if (GET_INT(arg1) >= child_num)
 	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
 
-	memset(bridge, 0, sizeof(bridge));
-	bridge[0] = 0x13;
+	memset(output_buffer, 0, sizeof(output_buffer));
+	output_buffer[0] = 0x13;
 	send_to_child_buffer(GET_INT(arg1));
 	return (prove_all(rest, sp[th], th));
     }
@@ -1069,25 +1069,25 @@ void *receiver(void *arg)
 	if (child_busy_flag) {
 	    receive_from_parent_buffer();
 	  retry:
-	    if (bridge[0] == 0x11) {
+	    if (input_buffer[0] == 0x11) {
 		// child stop 
 		ctrl_c_flag = 1;
-	    } else if (bridge[0] == 0x12) {
+	    } else if (input_buffer[0] == 0x12) {
 		// child pause 
 		pause_flag = 1;
-	    } else if (bridge[0] == 0x13) {
+	    } else if (input_buffer[0] == 0x13) {
 		// child resume 
 		pause_flag = 0;
 	    }
 
-	    if (bridge[1] != 0) {
+	    if (input_buffer[1] != 0) {
 		int i;
 		i = 0;
-		while (bridge[i + 1] != 0) {
-		    bridge[i] = bridge[i + 1];
+		while (input_buffer[i + 1] != 0) {
+		    input_buffer[i] = input_buffer[i + 1];
 		    i++;
 		}
-		bridge[i] = 0;
+		input_buffer[i] = 0;
 		goto retry;
 	    }
 

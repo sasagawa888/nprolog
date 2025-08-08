@@ -482,7 +482,7 @@ int readc(void)
 {
     int c;
 
-    if (bridge_flag == 1)
+    if (dialog_flag == 1)
 	return (read_string_term(1));
     else if (input_stream == standard_input && repl_flag)
 	c = read_line(0);
@@ -500,7 +500,7 @@ int readc(void)
 
 void unreadc(char c)
 {
-    if (bridge_flag == 1) {
+    if (dialog_flag == 1) {
 	read_string_term(-1);
 	return;
     }

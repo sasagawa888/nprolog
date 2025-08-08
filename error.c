@@ -484,8 +484,8 @@ void exception(int errnum, int ind, int arg, int th)
     read_line(-2);		// clear buffer
 
     if (child_flag) {
-	memset(bridge, 0, sizeof(bridge));
-	bridge[0] = 0x15;
+	memset(output_buffer, 0, sizeof(output_buffer));
+	output_buffer[0] = 0x15;
 	send_to_parent_buffer();
 	child_busy_flag = 0;
     }

@@ -32,8 +32,9 @@ int record_hash_table[HASHTBSIZE][RECORDMAX];	// for hash record database
 int record_pt = 1;		// current index of record database
 int counter[31];		// counter str_set,str_dec ... 
 int catch_data[CTRLSTK][2][THREADSIZE];	//catch tag,sp,wp
-char bridge[BUFSIZE];		// for string_term/2 and parallel buffer
 char transfer[BUFSIZE];		// buffer for dp_transfer
+char input_buffer[BUFSIZE]; // parallel input buffer
+char output_buffer[BUFSIZE];// parallel output buffer
 token stok = { GO, OTHER };
 
 jmp_buf catch_buf[CTRLSTK][THREADSIZE];	// catch jump buffer
@@ -129,7 +130,7 @@ int prefix_flag = 0;		//for parser 0=not prefix, 1=prefix
 int syntax_flag = YES;		//syntaxerrors/2 YES=normal. NO=ignore syntax-errors
 int fileerr_flag = YES;		//fileerrors/2 YES=normal. NO=ignore file-errors
 int exist_flag = YES;		//existerrors/2 YES=normal, NO=ignore existance_errors
-int bridge_flag = 0;		//for string_term/2 0=normal, 1=readparse from bridge
+int dialog_flag = 0;		//for string_term/2 0=normal, 1=readparse from input output buffer
 int ctrl_c_flag = 0;		//for ctrl_c  to stop prove
 int init_flag = 1;		//for halt
 int script_flag = 0;		// script mode, 0=not scriplt-mode, 1=script-mode.
@@ -357,9 +358,9 @@ int main(int argc, char *argv[])
 		child_busy_flag = 1;
 		query(input, 0);
 		child_busy_flag = 0;
-		printf("Send to parent %s\n", bridge);
+		printf("Send to parent %s\n", output_buffer);
 		fflush(stdout);
-		memset(bridge, 0, sizeof(bridge));
+		memset(output_buffer, 0, sizeof(output_buffer));
 	    }
     } else if (ret == 1) {
 	ret = 0;
@@ -481,7 +482,7 @@ void query(int x, int th)
 	print(res);
 	printf("\n");
     } else {
-	bridge_flag = 1;
+	dialog_flag = 1;
 	if (res == YES) {
 	    printstr("dp_countup(");
 	    printint(proof[th]);
@@ -493,7 +494,7 @@ void query(int x, int th)
 	    printstr("),");
 	    printstr("fail.\n");
 	}
-	bridge_flag = 0;
+	dialog_flag = 0;
 	send_to_parent_buffer();
     }
     return;
@@ -623,7 +624,7 @@ int prove(int goal, int bindings, int rest, int th)
 	    printf("ctrl+C\n");
 	    longjmp(buf, 1);
 	} else {
-	    strcpy(bridge, "ctrl+C");
+	    strcpy(output_buffer, "ctrl+C");
 	    send_to_parent_buffer();
 	    longjmp(buf, 1);
 	}
@@ -1302,38 +1303,38 @@ void print(int addr)
     char str1[STRSIZE];
 
     if (IS_ALPHA(addr)) {
-	if (!bridge_flag)
+	if (!dialog_flag)
 	    fprintf(GET_PORT(output_stream), "v_%d", addr - CELLSIZE);
 	else {
 	    sprintf(str1, "v_%d", addr - CELLSIZE);
-	    strcat(bridge, str1);
+	    strcat(output_buffer, str1);
 	}
 	return;
     }
     switch (GET_TAG(addr)) {
     case INTN:
-	if (!bridge_flag)
+	if (!dialog_flag)
 	    fprintf(GET_PORT(output_stream), "%d", GET_INT(addr));
 	else {
 	    sprintf(str1, "%d", GET_INT(addr));
-	    strcat(bridge, str1);
+	    strcat(output_buffer, str1);
 	}
 	break;
     case FLTN:
 	x = GET_FLT(addr);
 	if (x - (int) x != 0.0) {
-	    if (!bridge_flag)
+	    if (!dialog_flag)
 		fprintf(GET_PORT(output_stream), "%g", x);
 	    else {
 		sprintf(str1, "%g", x);
-		strcat(bridge, str1);
+		strcat(output_buffer, str1);
 	    }
 	} else {
-	    if (!bridge_flag)
+	    if (!dialog_flag)
 		fprintf(GET_PORT(output_stream), "%0.1f", x);
 	    else {
 		sprintf(str1, "%0.1f", x);
-		strcat(bridge, str1);
+		strcat(output_buffer, str1);
 	    }
 	}
 	break;
@@ -1347,11 +1348,11 @@ void print(int addr)
 	if (addr == NIL) {
 	    printstr("[]");
 	} else if (variablep(addr)) {
-	    if (!bridge_flag)
+	    if (!dialog_flag)
 		fprintf(GET_PORT(output_stream), "%s", GET_NAME(addr));
 	    else {
 		sprintf(str1, "%s", GET_NAME(addr));
-		strcat(bridge, str1);
+		strcat(output_buffer, str1);
 	    }
 	} else if (quoted_flag && atom_quote_p(addr))
 	    print_quoted(addr);
@@ -1434,25 +1435,25 @@ void print(int addr)
 	} else if (addr == standard_error) {
 	    printstr("<stderr>");
 	} else {
-	    if (!bridge_flag)
+	    if (!dialog_flag)
 		fprintf(GET_PORT(output_stream), "<stream%d>", addr);
 	    else {
 		sprintf(str1, "<stream%d>", addr);
-		strcat(bridge, str1);
+		strcat(output_buffer, str1);
 	    }
 	}
 	break;
     case SOCKET:
-	if (!bridge_flag)
+	if (!dialog_flag)
 	    fprintf(GET_PORT(output_stream), "<socket%d>", addr);
 	else {
 	    sprintf(str1, "<socket%d>", addr);
-	    strcat(bridge, str1);
+	    strcat(output_buffer, str1);
 	}
 	break;
     case STR:
 	if (quoted_flag) {
-	    if (!bridge_flag) {
+	    if (!dialog_flag) {
 		if (!string_flag)
 		    fprintf(GET_PORT(output_stream), "$%s$",
 			    GET_NAME(addr));
@@ -1464,7 +1465,7 @@ void print(int addr)
 		    sprintf(str1, "$%s$", GET_NAME(addr));
 		else
 		    sprintf(str1, "\"%s\"", GET_NAME(addr));
-		strcat(bridge, str1);
+		strcat(output_buffer, str1);
 	    }
 	} else {
 	    printstr(GET_NAME(addr));
@@ -1588,11 +1589,11 @@ void printc(char c)
 {
     char str1[STRSIZE];
 
-    if (!bridge_flag)
+    if (!dialog_flag)
 	fprintf(GET_PORT(output_stream), "%c", c);
     else {
 	sprintf(str1, "%c", c);
-	strcat(bridge, str1);
+	strcat(output_buffer, str1);
     }
 }
 
@@ -1600,11 +1601,11 @@ void printstr(char *s)
 {
     char str1[STRSIZE];
 
-    if (!bridge_flag)
+    if (!dialog_flag)
 	fprintf(GET_PORT(output_stream), "%s", s);
     else {
 	sprintf(str1, "%s", s);
-	strcat(bridge, str1);
+	strcat(output_buffer, str1);
     }
 }
 
@@ -1612,11 +1613,11 @@ void printint(int n)
 {
     char str1[STRSIZE];
 
-    if (!bridge_flag)
+    if (!dialog_flag)
 	fprintf(GET_PORT(output_stream), "%d", n);
     else {
 	sprintf(str1, "%d", n);
-	strcat(bridge, str1);
+	strcat(output_buffer, str1);
     }
 }
 
@@ -1625,11 +1626,11 @@ void printlong(int addr)
 {
     char str1[STRSIZE];
 
-    if (!bridge_flag)
+    if (!dialog_flag)
 	fprintf(GET_PORT(output_stream), "%lld", GET_LONG(addr));
     else {
 	sprintf(str1, "%lld", GET_LONG(addr));
-	strcat(bridge, str1);
+	strcat(output_buffer, str1);
     }
 }
 
@@ -1808,35 +1809,35 @@ void printlist_canonical(int addr)
     if (nullp(addr))
 	print(NIL);
     else if (!listp(cdr(addr))) {
-	if (!bridge_flag)
+	if (!dialog_flag)
 	    fprintf(GET_PORT(output_stream), "'.'(");
 	else
-	    strcat(bridge, "'.'(");
+	    strcat(output_buffer, "'.'(");
 	print(car(addr));
-	if (!bridge_flag)
+	if (!dialog_flag)
 	    fprintf(GET_PORT(output_stream), ",");
 	else
-	    strcat(bridge, ",");
+	    strcat(output_buffer, ",");
 	print(cdr(addr));
-	if (!bridge_flag)
+	if (!dialog_flag)
 	    fprintf(GET_PORT(output_stream), ")");
 	else
-	    strcat(bridge, ")");
+	    strcat(output_buffer, ")");
     } else {
-	if (!bridge_flag)
+	if (!dialog_flag)
 	    fprintf(GET_PORT(output_stream), "'.'(");
 	else
-	    strcat(bridge, "'.'(");
+	    strcat(output_buffer, "'.'(");
 	print(car(addr));
-	if (!bridge_flag)
+	if (!dialog_flag)
 	    fprintf(GET_PORT(output_stream), ",");
 	else
-	    strcat(bridge, ",");
+	    strcat(output_buffer, ",");
 	printlist_canonical(cdr(addr));
-	if (!bridge_flag)
+	if (!dialog_flag)
 	    fprintf(GET_PORT(output_stream), ")");
 	else
-	    strcat(bridge, ")");
+	    strcat(output_buffer, ")");
     }
 }
 
@@ -1844,18 +1845,18 @@ void printcurl(int addr)
 {
     arguments_flag = 0;		//(1,2,3) -> 1,2,3
     if (nullp(addr)) {
-	if (!bridge_flag)
+	if (!dialog_flag)
 	    fprintf(GET_PORT(output_stream), "}");
 	else
-	    strcat(bridge, "}");
+	    strcat(output_buffer, "}");
 	arguments_flag = 1;
     } else {
 	print(car(addr));
 	if (!nullp(cdr(addr))) {
-	    if (!bridge_flag)
+	    if (!dialog_flag)
 		fprintf(GET_PORT(output_stream), ",");
 	    else
-		strcat(bridge, ",");
+		strcat(output_buffer, ",");
 	}
 	printcurl(cdr(addr));
     }
@@ -1864,16 +1865,16 @@ void printcurl(int addr)
 void printtuple(int addr)
 {
     if (nullp(addr)) {
-	if (!bridge_flag)
+	if (!dialog_flag)
 	    fprintf(GET_PORT(output_stream), ")");
 	else
-	    strcat(bridge, ")");
+	    strcat(output_buffer, ")");
     } else {
 	print(car(addr));
 	if (!nullp(cdr(addr))) {
-	    if (!bridge_flag)
+	    if (!dialog_flag)
 		fprintf(GET_PORT(output_stream), ",");
-	    strcat(bridge, ",");
+	    strcat(output_buffer, ",");
 	}
 	printtuple(cdr(addr));
     }
@@ -1884,65 +1885,65 @@ void printclause(int addr)
 
     if (listing_flag) {
 	if (nullp(caddr(addr))) {	// e.g. :- foo(x).
-	    if (!bridge_flag)
+	    if (!dialog_flag)
 		fprintf(GET_PORT(output_stream), "(:- ");
 	    else
-		strcat(bridge, "(:- ");
+		strcat(output_buffer, "(:- ");
 	    print(cadr(addr));
-	    if (!bridge_flag)
+	    if (!dialog_flag)
 		fprintf(GET_PORT(output_stream), ")");
 	    else
-		strcat(bridge, ")");
+		strcat(output_buffer, ")");
 	} else {		// e.g. foo(x) :- boo(x).
 	    print(cadr(addr));
-	    if (!bridge_flag)
+	    if (!dialog_flag)
 		fprintf(GET_PORT(output_stream), " :-\n    ");
 	    else
-		strcat(bridge, " :-\n    ");
+		strcat(output_buffer, " :-\n    ");
 	    printbody(caddr(addr));
 	}
     } else {
 	if (!ignore_flag) {
 	    if (nullp(caddr(addr))) {	// e.g :- foo(x).
-		if (!bridge_flag)
+		if (!dialog_flag)
 		    fprintf(GET_PORT(output_stream), ":- ");
 		else
-		    strcat(bridge, ":- ");
+		    strcat(output_buffer, ":- ");
 		print(cadr(addr));
 	    } else {		//normal case  foo(X) :- bar(X).
 		print(cadr(addr));
-		if (!bridge_flag)
+		if (!dialog_flag)
 		    fprintf(GET_PORT(output_stream), ":-");
 		else
-		    strcat(bridge, ":-");
+		    strcat(output_buffer, ":-");
 		print(caddr(addr));
 	    }
 	} else {
 	    if (nullp(caddr(addr))) {	// e.g :- foo(x).
-		if (!bridge_flag)
+		if (!dialog_flag)
 		    fprintf(GET_PORT(output_stream), ":-(");
 		else
-		    strcat(bridge, ":-(");
+		    strcat(output_buffer, ":-(");
 		print(cadr(addr));
-		if (!bridge_flag)
+		if (!dialog_flag)
 		    fprintf(GET_PORT(output_stream), ")");
 		else
-		    strcat(bridge, ")");
+		    strcat(output_buffer, ")");
 	    } else {		// normal case foo(X) :- bar(X).
-		if (!bridge_flag)
+		if (!dialog_flag)
 		    fprintf(GET_PORT(output_stream), ":-(");
 		else
-		    strcat(bridge, ":-(");
+		    strcat(output_buffer, ":-(");
 		print(cadr(addr));
-		if (!bridge_flag)
+		if (!dialog_flag)
 		    fprintf(GET_PORT(output_stream), ",");
 		else
-		    strcat(bridge, ",");
+		    strcat(output_buffer, ",");
 		print(caddr(addr));
-		if (!bridge_flag)
+		if (!dialog_flag)
 		    fprintf(GET_PORT(output_stream), ")");
 		else
-		    strcat(bridge, ")");
+		    strcat(output_buffer, ")");
 	    }
 	}
     }
@@ -1954,22 +1955,22 @@ void printbody(int addr)
     if (operationp(addr) && car(addr) == AND) {
 	printbody(cadr(addr));
 	print(car(addr));
-	if (!bridge_flag)
+	if (!dialog_flag)
 	    fprintf(GET_PORT(output_stream), "\n    ");
-	strcat(bridge, "\n    ");
+	strcat(output_buffer, "\n    ");
 	printbody(caddr(addr));
     } else if (operationp(addr) && car(addr) == OR) {
-	if (!bridge_flag)
+	if (!dialog_flag)
 	    fprintf(GET_PORT(output_stream), "(");
 	else
-	    strcat(bridge, "(");
+	    strcat(output_buffer, "(");
 	printbody1(cadr(addr));
 	print(car(addr));
 	printbody1(caddr(addr));
-	if (!bridge_flag)
+	if (!dialog_flag)
 	    fprintf(GET_PORT(output_stream), ")");
 	else
-	    strcat(bridge, ")");
+	    strcat(output_buffer, ")");
     } else {
 	print(addr);
     }

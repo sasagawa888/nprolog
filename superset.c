@@ -1446,11 +1446,11 @@ int b_number_codes(int arglist, int rest, int th)
 		ls = cdr(ls);
 	    }
 	    strcat(str1, ".");
-	    strcpy(bridge, str1);
+	    strcpy(input_buffer, str1);
 	    read_string_term(0);	//initilize 
-	    bridge_flag = 1;
+	    dialog_flag = 1;
 	    num = readparse(th);
-	    bridge_flag = 0;
+	    dialog_flag = 0;
 	    res = unify(arg1, num, th);
 	    if (res == YES)
 		return (prove_all(rest, sp[th], th));
@@ -1511,11 +1511,11 @@ int b_number_chars(int arglist, int rest, int th)
 		ls = cdr(ls);
 	    }
 	    strcat(str1, ".");
-	    strcpy(bridge, str1);
+	    strcpy(input_buffer, str1);
 	    read_string_term(0);	//initilize 
-	    bridge_flag = 1;
+	    dialog_flag = 1;
 	    num = readparse(th);
-	    bridge_flag = 0;
+	    dialog_flag = 0;
 	    res = unify(arg1, num, th);
 	    if (res == YES)
 		return (prove_all(rest, sp[th], th));
