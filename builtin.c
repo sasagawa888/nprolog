@@ -1926,7 +1926,7 @@ int b_save(int arglist, int rest, int th)
 	return (prove_all(rest, sp[th], th));
 
     } else if (n == 0) {
-	if (str == NULL) {
+	if (str[0] == NUL) {
 	    exception(ILLEGAL_ARGS, ind, NIL, th);
 	}
 
