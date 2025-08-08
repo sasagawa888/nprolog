@@ -619,8 +619,14 @@ int prove(int goal, int bindings, int rest, int th)
 
     proof[th]++;
     if (ctrl_c_flag) {
-	printf("ctrl+C\n");
-	longjmp(buf, 1);
+	if (!child_flag) {
+	    printf("ctrl+C\n");
+	    longjmp(buf, 1);
+	} else {
+	    strcpy(bridge, "ctrl+C");
+	    send_to_parent_buffer();
+	    longjmp(buf, 1);
+	}
     }
 
     if (pause_flag) {

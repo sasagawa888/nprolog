@@ -65,7 +65,7 @@ void init_builtin(void)
     defbuiltin("clause", b_clause, 2);
     defbuiltin("compare", b_compare, 2);
     defbuiltin("concat", b_concat, 3);
-    defbuiltin("consult", b_consult, list2(1,2));
+    defbuiltin("consult", b_consult, list2(1, 2));
     defbuiltin("create", b_create, 2);
     defbuiltin("ctr_set", b_ctr_set, 2);
     defbuiltin("ctr_dec", b_ctr_dec, 2);
@@ -129,7 +129,7 @@ void init_builtin(void)
     defbuiltin("predicate_property", b_predicate_property, 2);
     defbuiltin("pref", b_pref, 2);
     defbuiltin("put", b_put, 1);
-    defbuiltin("reconsult", b_reconsult, list2(1,2));
+    defbuiltin("reconsult", b_reconsult, list2(1, 2));
     defbuiltin("read", b_read, list2(1, 2));
     defbuiltin("read_line", b_read_line, 2);
     defbuiltin("read_string", b_read_string, list2(2, 3));
@@ -241,7 +241,7 @@ void init_builtin(void)
     //-----Distributed parallel
     defbuiltin("dp_create", b_dp_create, 1);
     defbuiltin("dp_close", b_dp_close, 0);
-	defbuiltin("dp_halt", b_dp_halt, 0);
+    defbuiltin("dp_halt", b_dp_halt, 0);
     defbuiltin("dp_prove", b_dp_prove, 1);
     defbuiltin("dp_and", b_dp_and, 1);
     defbuiltin("dp_or", b_dp_or, 1);
@@ -264,7 +264,7 @@ void init_builtin(void)
     defbuiltin("mt_or", b_mt_or, 1);
     defbuiltin("mt_prove", b_mt_prove, 2);
 
-   
+
     //------CLPFD--------------------------
     defbuiltin("n_add_constraint", b_add_constraint, -1);
     defbuiltin("n_constraint_set", b_constraint_set, -1);
@@ -290,9 +290,9 @@ void init_builtin(void)
     defbuiltin("delay_microseconds", b_delay_microseconds, 1);
     defbuiltin("timer_microseconds", b_timer_microseconds, 1);
 #endif
-	
-	
-	//-----JUMP project---------
+
+
+    //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_n_reconsult_predicate, 1);
     defbuiltin("n_reconsult_abolish", b_n_reconsult_abolish, 0);
     defbuiltin("n_dynamic_predicate", b_n_dynamic_predicate, 1);
@@ -319,13 +319,13 @@ void init_builtin(void)
     defbuiltin("n_after_cut", b_n_after_cut, 2);
     defbuiltin("n_pair_list", b_n_pair_list, 1);
     defbuiltin("n_exec_is", b_n_exec_is, 2);
-	defbuiltin("n_exec_smaller", b_n_exec_smaller, 2);
-	defbuiltin("n_exec_greater", b_n_exec_greater, 2);
-	defbuiltin("n_exec_eqsmaller", b_n_exec_eqsmaller, 2);
-	defbuiltin("n_exec_eqgreater", b_n_exec_eqgreater, 2);
+    defbuiltin("n_exec_smaller", b_n_exec_smaller, 2);
+    defbuiltin("n_exec_greater", b_n_exec_greater, 2);
+    defbuiltin("n_exec_eqsmaller", b_n_exec_eqsmaller, 2);
+    defbuiltin("n_exec_eqgreater", b_n_exec_eqgreater, 2);
 
-	
-	builtins = reverse(builtins);
+
+    builtins = reverse(builtins);
 
     return;
 }
@@ -2179,7 +2179,7 @@ int b_n_exec_smaller(int arglist, int rest, int th)
 	if (wide_variable_p(arg2))
 	    exception(INSTANTATION_ERR, ind, arg2, th);
 
-	
+
 	if (smallerp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
 	else

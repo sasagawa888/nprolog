@@ -376,8 +376,6 @@ int receive_from_child_or2(int n)
 // Thread for child receiver
 void *receiver(void *arg)
 {
-    int i;
-    char sub_buffer[BUFSIZE];
 
     while (1) {
 	if (receiver_exit_flag)
@@ -463,7 +461,7 @@ int b_dp_close(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("dp_close", n, th);
     if (n == 0) {
-	
+
 	if (parent_flag) {
 	    exp = makestr("dp_close.");
 	    for (i = 0; i < child_num; i++) {
@@ -487,7 +485,7 @@ int b_dp_close(int arglist, int rest, int th)
 	child_num = 0;
 	parent_flag = 0;
 	return (prove_all(rest, sp[th], th));
-    } 
+    }
     exception(ARITY_ERR, ind, arglist, 0);
     return (NO);
 
@@ -501,7 +499,7 @@ int b_dp_halt(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("dp_halt", n, th);
     if (n == 0) {
-	
+
 	if (parent_flag) {
 	    exp = makestr("dp_halt.");
 	    for (i = 0; i < child_num; i++) {
@@ -519,14 +517,14 @@ int b_dp_halt(int arglist, int rest, int th)
 	    close(parent_sockfd[0]);
 	    close(parent_sockfd[1]);
 	    receiver_exit_flag = 1;
-		shutdown_flag = 1;
+	    shutdown_flag = 1;
 	    longjmp(buf, 2);
 	}
 
 	child_num = 0;
 	parent_flag = 0;
 	return (prove_all(rest, sp[th], th));
-    } 
+    }
     exception(ARITY_ERR, ind, arglist, 0);
     return (NO);
 
@@ -554,9 +552,9 @@ int b_dp_prove(int arglist, int rest, int th)
 			       (receive_from_child(GET_INT(arg1))), th);
 	if (prove_all(res, sp[th], th) == YES)
 	    return (prove_all(rest, sp[th], th));
-	else 
-		return (NO);
-    } 
+	else
+	    return (NO);
+    }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
@@ -797,7 +795,7 @@ int b_dp_countup(int arglist, int rest, int th)
     ind = makeind("dp_countup", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
-	
+
 	proof[th] = proof[th] + GET_INT(arg1);
 	return (prove_all(rest, sp[th], th));
     }
