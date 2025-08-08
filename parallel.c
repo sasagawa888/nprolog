@@ -189,8 +189,8 @@ void receive_from_parent_buffer(void)
 	}
     }
     // read message from parent
-    memset(input_buffer, 0, sizeof(input_buffer));
-    n = read(parent_sockfd[1], input_buffer, sizeof(input_buffer) - 1);
+    memset(thread_buffer, 0, sizeof(thread_buffer));
+    n = read(parent_sockfd[1], thread_buffer, sizeof(thread_buffer) - 1);
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("receive from parent buffer"), NIL, 0);
     }
@@ -235,11 +235,12 @@ void send_to_child(int n, int x)
     }
 }
 
+// send one control code
 void send_to_child_buffer(int n)
 {
     int m;
 
-    m = write(child_sockfd[n], output_buffer, strlen(output_buffer));
+    m = write(child_sockfd[n], output_buffer, 1);
     if (m < 0) {
 	exception(SYSTEM_ERR, makestr("send to child buffer"), NIL, 0);
     }
@@ -1098,32 +1099,22 @@ void *receiver(void *arg)
 
 	if (child_busy_flag) {
 	    receive_from_parent_buffer();
-	  retry:
-	    if (input_buffer[0] == 0x11) {
+	  
+	    if (thread_buffer[0] == 0x11) {
 		// child stop 
 		ctrl_c_flag = 1;
-	    } else if (input_buffer[0] == 0x12) {
+	    } else if (thread_buffer[0] == 0x12) {
 		// child pause 
 		pause_flag = 1;
-	    } else if (input_buffer[0] == 0x13) {
+	    } else if (thread_buffer[0] == 0x13) {
 		// child resume 
 		pause_flag = 0;
 	    }
-
-	    if (input_buffer[1] != 0) {
-		int i;
-		i = 0;
-		while (input_buffer[i + 1] != 0) {
-		    input_buffer[i] = input_buffer[i + 1];
-		    i++;
+		
 		}
-		input_buffer[i] = 0;
-		goto retry;
-	    }
 
 	}
 
-    }
 
   exit:
     pthread_exit(NULL);

@@ -234,6 +234,7 @@ extern int catch_data[CTRLSTK][2][THREADSIZE];
 extern char transfer[BUFSIZE];
 extern char input_buffer[BUFSIZE];
 extern char output_buffer[BUFSIZE];
+extern char thread_buffer[BUFSIZE];
 extern int variables[THREADSIZE];
 extern int variables_save[THREADSIZE];
 extern int end_of_file_answer;

@@ -35,6 +35,7 @@ int catch_data[CTRLSTK][2][THREADSIZE];	//catch tag,sp,wp
 char transfer[BUFSIZE];		// buffer for dp_transfer
 char input_buffer[BUFSIZE]; // parallel input buffer
 char output_buffer[BUFSIZE];// parallel output buffer
+char thread_buffer[BUFSIZE];// parallel input buffer in thread
 token stok = { GO, OTHER };
 
 jmp_buf catch_buf[CTRLSTK][THREADSIZE];	// catch jump buffer
