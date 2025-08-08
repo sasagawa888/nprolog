@@ -613,13 +613,11 @@ int b_dp_and(int arglist, int rest, int th)
 	    res =
 		convert_to_variant(str_to_pred(receive_from_child(i)), th);
 	    if (prove_all(res, sp[th], th) == NO) {
-		/*
 		for (j = i+1; j < m; j++) {
 		    memset(bridge, 0, sizeof(bridge));
 		    bridge[0] = 0x11; // stop signal
 		    send_to_child_buffer(j);
 		}
-		*/
 		for (j = i+1; j < m; j++) {
 		    receive_from_child(j);
 		}
@@ -655,13 +653,11 @@ int b_dp_or(int arglist, int rest, int th)
 	    res =
 		convert_to_variant(str_to_pred(receive_from_child(i)), th);
 	    if (prove_all(res, sp[th], th) == YES) {
-		/*
 		for (j = i+1; j < m; j++) {
 		    memset(bridge, 0, sizeof(bridge));
 		    bridge[0] = 0x11; // stop signal
 		    send_to_child_buffer(j);
 		}
-		*/
 		for (j = i+1; j < m; j++) {
 		    receive_from_child(j);
 		}
