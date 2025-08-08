@@ -157,6 +157,7 @@ int receive_from_parent(void)
 	exception(SYSTEM_ERR, makestr("receive from parent"), NIL, 0);
     }
 
+	// remove control code
 	memset(buffer, 0, sizeof(buffer));
 	j = 0;
 	for(i=0;i<n;i++){

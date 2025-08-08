@@ -1197,6 +1197,7 @@ void gettoken(int th)
 	return;
 
     }
+	printf("%d ", stok.buf[0]);
     exception(SYNTAX_ERR, makestr("illegal token"), makestr(stok.buf), th);
 }
 
