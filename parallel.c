@@ -195,10 +195,21 @@ void send_to_child(int n, int x)
     }
 }
 
+void send_to_child_buffer(int n)
+{
+    int m;
+
+    m = write(child_sockfd[n], bridge, strlen(bridge));
+    if (m < 0) {
+	exception(SYSTEM_ERR, makestr("send to child buffer"), NIL, 0);
+    }
+}
+
+
 int receive_from_child(int n)
 {
     int m, i, j;
-    char sub_buffer[256], sub_buffer1[256 + 2];
+    char sub_buffer[BUFSIZE];
 
     // receive from child
   reread:
@@ -210,20 +221,15 @@ int receive_from_child(int n)
     }
 
   retry:
-    if (bridge[0] == '\x02') {
+    if (bridge[0] == 0x02) {
 	i = 0;
-	while (bridge[i + 1] != '\x03') {
+	while (bridge[i + 1] != 0x03) {
 	    sub_buffer[i] = bridge[i + 1];
 	    i++;
 	}
-	if (!(child_flag && parent_flag)) {
-	    sub_buffer[i] = 0;
-	    printf("%s", sub_buffer);
-	} else {
-	    memset(sub_buffer1, 0, sizeof(sub_buffer1));
-	    sprintf(sub_buffer1, "\x02%s\x03", sub_buffer);
-	    send_to_parent(makestr(sub_buffer1));
-	}
+	sub_buffer[i] = 0;
+	printf("%s", sub_buffer);
+
 	j = 0;
 	i = i + 2;
 	while (bridge[j + i] != 0) {
@@ -235,142 +241,15 @@ int receive_from_child(int n)
 	    goto reread;
 	else
 	    goto retry;
-    } else if (bridge[0] == '\x15') {
-	if (!(child_flag && parent_flag)) {
-	    exception(SYSTEM_ERR, makestr("in child"), makeint(n), 0);
-	} else {
-	    memset(sub_buffer1, 0, sizeof(sub_buffer1));
-	    sub_buffer1[0] = '\x15';
-	    send_to_parent(makestr(sub_buffer1));
-	}
+    } else if (bridge[0] == 0x15) {
+	exception(SYSTEM_ERR, makestr("in child"), makeint(n), 0);
+
     } else {
 	return (makestr(bridge));
     }
 
     return (0);
 }
-
-
-
-
-int receive_from_child_or(int n)
-{
-    int i, m, res;
-
-    //initialize -1 (not received)
-    for (i = 0; i < n; i++) {
-	child_result[i] = -1;
-    }
-    res = receive_from_child_or1(n);
-
-    // kill not received child
-    for (i = 0; i < n; i++) {
-	if (child_result[i] == -1) {
-	    // send child stop signal
-	    memset(bridge, 0, sizeof(bridge));
-	    bridge[0] = '\x11';
-	    m = write(child_sockfd[i], bridge, strlen(bridge));
-	    if (m < 0) {
-		exception(SYSTEM_ERR, makestr("receive from child"), NIL,
-			  0);
-	    }
-	    // receive result and ignore
-	    while ((m =
-		    read(child_sockfd[i], bridge,
-			 sizeof(bridge) - 1)) == 0) {
-	    }
-	}
-    }
-
-    return (res);
-}
-
-
-int receive_from_child_or1(int n)
-{
-    int m, i;
-
-    // receive from child
-    m = 0;
-  retry:
-    memset(bridge, 0, sizeof(bridge));
-    for (i = 0; i < n; i++) {
-	if (child_result[i] == -1) {
-	    m = read(child_sockfd[i], bridge, sizeof(bridge));
-	}
-	if (m < 0) {
-	    exception(SYSTEM_ERR, makestr("receive from child"),
-		      makeint(i), 0);
-	} else if (m > 0) {
-	    child_result[i] = receive_from_child_or2(i);
-	}
-    }
-
-    //if find true return it.
-    for (i = 0; i < n; i++) {
-	if (child_result[i] != -1
-	    && strcmp(GET_NAME(child_result[i]), "fail.") != 0)
-	    return (child_result[i]);
-    }
-
-
-    //if exist not received result, goto retry
-    for (i = 0; i < n; i++) {
-	if (child_result[i] == -1)
-	    goto retry;
-    }
-
-    // if not exist YES, return fail.
-    return (makeatom("fail", SYS));
-}
-
-int receive_from_child_or2(int n)
-{
-    char sub_buffer[256], sub_buffer1[256 + 2];
-    int i, j;
-
-  retry:
-    if (bridge[0] == '\x02') {
-	i = 0;
-	while (bridge[i + 1] != '\x03') {
-	    sub_buffer[i] = bridge[i + 1];
-	    i++;
-	}
-	if (!(child_flag && parent_flag)) {
-	    sub_buffer[i] = 0;
-	    printf("%s", sub_buffer);
-	} else {
-	    memset(sub_buffer1, 0, sizeof(sub_buffer1));
-	    sprintf(sub_buffer1, "\x02%s\x03", sub_buffer);
-	    send_to_parent(makestr(sub_buffer1));
-	}
-	j = 0;
-	i = i + 2;
-	while (bridge[j + i] != 0) {
-	    bridge[j] = bridge[j + i];
-	    j++;
-	}
-	bridge[j] = 0;
-	if (bridge[0] == 0)
-	    return (-1);
-	else
-	    goto retry;
-
-    } else if (bridge[0] == '\x15') {
-	if (!(child_flag && parent_flag)) {
-	    exception(SYSTEM_ERR, makestr("in child"), makeint(n), 0);
-	} else {
-	    memset(sub_buffer1, 0, sizeof(sub_buffer1));
-	    sub_buffer1[0] = '\x15';
-	    send_to_parent(makestr(sub_buffer1));
-	}
-    } else {
-	return (makestr(bridge));
-    }
-
-    return (0);
-}
-
 
 
 // Thread for child receiver
@@ -384,13 +263,13 @@ void *receiver(void *arg)
 	if (child_busy_flag) {
 	    receive_from_parent();
 	  retry:
-	    if (bridge[0] == '\x11') {
+	    if (bridge[0] == 0x11) {
 		// child stop 
 		ctrl_c_flag = 1;
-	    } else if (bridge[0] == '\x12') {
+	    } else if (bridge[0] == 0x12) {
 		// child pause 
 		pause_flag = 1;
-	    } else if (bridge[0] == '\x13') {
+	    } else if (bridge[0] == 0x13) {
 		// child resume 
 		pause_flag = 0;
 	    }
@@ -746,9 +625,12 @@ int b_dp_and(int arglist, int rest, int th)
 		convert_to_variant(str_to_pred(receive_from_child(i)), th);
 	    if (prove_all(res, sp[th], th) == NO) {
 		for (j = i; j < m; j++) {
-		    res =
-			convert_to_variant(str_to_pred
-					   (receive_from_child(j)), th);
+		    memset(bridge, 0, sizeof(bridge));
+		    bridge[0] = 0x11; // stop signal
+		    send_to_child_buffer(j);
+		}
+		for (j = i; j < m; j++) {
+		    receive_from_child(j);
 		}
 		return (NO);
 	    }
@@ -761,10 +643,10 @@ int b_dp_and(int arglist, int rest, int th)
 
 int b_dp_or(int arglist, int rest, int th)
 {
-    int n, ind, arg1, m, i, pred, res;
+    int n, ind, arg1, m, i, j, pred, res;
 
     n = length(arglist);
-    ind = makeind("do_or", n, th);
+    ind = makeind("dp_or", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	m = length(arg1);
@@ -778,10 +660,23 @@ int b_dp_or(int arglist, int rest, int th)
 	    arg1 = cdr(arg1);
 	    i++;
 	}
-	res =
-	    convert_to_variant(str_to_pred(receive_from_child_or(m)), th);
-	if (prove_all(res, sp[th], th) == YES)
-	    return (prove_all(rest, sp[th], th));
+	for (i = 0; i < m; i++) {
+	    res =
+		convert_to_variant(str_to_pred(receive_from_child(i)), th);
+	    if (prove_all(res, sp[th], th) == YES) {
+		for (j = i; j < m; j++) {
+		    memset(bridge, 0, sizeof(bridge));
+		    bridge[0] = 0x11; // stop signal
+		    send_to_child_buffer(j);
+		}
+		for (j = i; j < m; j++) {
+		    receive_from_child(j);
+		}
+		return (YES);
+	    }
+	}
+	return (prove_all(rest, sp[th], th));
+
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -863,7 +758,6 @@ int b_dp_wait(int arglist, int rest, int th)
 int b_dp_pause(int arglist, int rest, int th)
 {
     int n, ind, arg1;
-    char sub_buffer[256];
 
     n = length(arglist);
     ind = makeind("dp_pause", n, th);
@@ -876,10 +770,9 @@ int b_dp_pause(int arglist, int rest, int th)
 	if (GET_INT(arg1) >= child_num)
 	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
 
-
-	memset(sub_buffer, 0, sizeof(sub_buffer));
-	sub_buffer[0] = 0x11;
-	send_to_child(GET_INT(arg1), makestr(sub_buffer));
+	memset(bridge, 0, sizeof(bridge));
+	bridge[0] = 0x12;
+	send_to_child_buffer(GET_INT(arg1));
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -889,7 +782,6 @@ int b_dp_pause(int arglist, int rest, int th)
 int b_dp_resume(int arglist, int rest, int th)
 {
     int n, ind, arg1;
-    char sub_buffer[256];
 
     n = length(arglist);
     ind = makeind("dp_resume", n, th);
@@ -902,9 +794,9 @@ int b_dp_resume(int arglist, int rest, int th)
 	if (GET_INT(arg1) >= child_num)
 	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
 
-	memset(sub_buffer, 0, sizeof(sub_buffer));
-	sub_buffer[0] = 0x11;
-	send_to_child(GET_INT(arg1), makestr(sub_buffer));
+	memset(bridge, 0, sizeof(bridge));
+	bridge[0] = 0x13;
+	send_to_child_buffer(GET_INT(arg1));
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
