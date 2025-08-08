@@ -373,11 +373,11 @@ int receive_from_child_or2(int n)
 
 
 
-// Thread for child lisp receiver
+// Thread for child receiver
 void *receiver(void *arg)
 {
     int i;
-    char sub_buffer[256];
+    char sub_buffer[BUFSIZE];
 
     while (1) {
 	if (receiver_exit_flag)
@@ -388,30 +388,12 @@ void *receiver(void *arg)
 	  retry:
 	    if (bridge[0] == '\x11') {
 		// child stop 
-		if (!(child_flag && parent_flag)) {
-		    memset(sub_buffer, 0, sizeof(sub_buffer));
-		    sub_buffer[0] = '\x11';
-		    for (i = 0; i < child_num; i++)
-			send_to_child(i, makestr(sub_buffer));
-		}
 		ctrl_c_flag = 1;
 	    } else if (bridge[0] == '\x12') {
 		// child pause 
-		if (!(child_flag && parent_flag)) {
-		    memset(sub_buffer, 0, sizeof(sub_buffer));
-		    sub_buffer[0] = '\x12';
-		    for (i = 0; i < child_num; i++)
-			send_to_child(i, makestr(sub_buffer));
-		}
 		pause_flag = 1;
 	    } else if (bridge[0] == '\x13') {
 		// child resume 
-		if (!(child_flag && parent_flag)) {
-		    memset(sub_buffer, 0, sizeof(sub_buffer));
-		    sub_buffer[0] = '\x11';
-		    for (i = 0; i < child_num; i++)
-			send_to_child(i, makestr(sub_buffer));
-		}
 		pause_flag = 0;
 	    }
 
