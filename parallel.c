@@ -133,8 +133,7 @@ void init_child(int n, int x)
 
 int receive_from_parent(void)
 {
-    int n,i,j;
-	char buffer[BUFSIZE];
+    int n;
 
     if (!connect_flag) {
 	//wait conneting
@@ -151,22 +150,17 @@ int receive_from_parent(void)
 	}
     }
     // read message from parent
+	retry:
     memset(input_buffer, 0, sizeof(input_buffer));
     n = read(parent_sockfd[1], input_buffer, sizeof(input_buffer) - 1);
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("receive from parent"), NIL, 0);
     }
-
-	// remove control code
-	memset(buffer, 0, sizeof(buffer));
-	j = 0;
-	for(i=0;i<n;i++){
-		if(input_buffer[i] != 0x11 && input_buffer[i] != 0x12 && input_buffer[i] != 0x13){
-			buffer[j] = input_buffer[i];
-			j++;
-		}
+	if(input_buffer[0] == 0x11 || input_buffer[0] == 0x12 || input_buffer[0] == 0x13){
+		goto retry;
 	}
-    return (makestr(buffer));
+	
+    return (makestr(input_buffer));
 }
 
 
