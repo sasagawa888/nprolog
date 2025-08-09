@@ -238,7 +238,7 @@ void send_to_child_buffer(int n)
     if (m < 0) {
 	exception(SYSTEM_ERR, makestr("send to child buffer"), NIL, 0);
     }
-	printf("send ctrl %d", n);
+	printf("send ctrl %d", n); fflush(stdout);
 }
 
 
@@ -1092,6 +1092,7 @@ void *receiver(void *arg)
 	    goto exit;
 
 	if (child_busy_flag) {
+		receive_from_parent_buffer();
 	    if (thread_buffer[0] == 0x11) {
 		// child stop 
 		ctrl_c_flag = 1;
