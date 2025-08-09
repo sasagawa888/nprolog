@@ -1085,8 +1085,11 @@ int b_mt_prove(int arglist, int rest, int th)
 // Thread for child receiver
 void *receiver(void *arg)
 {
-
+	printf("*receiver start\n");fflush(stdout);
     while (1) {
+	printf("exit=%d busy=%d\n",receiver_exit_flag, child_busy_flag);
+	fflush(stdout);
+	
 	if (receiver_exit_flag)
 	    goto exit;
 
