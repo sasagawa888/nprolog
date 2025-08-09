@@ -210,7 +210,7 @@ void send_to_parent_buffer(void)
 {
     int n;
 
-    n = write(parent_sockfd[1], output_buffer, strlen(output_buffer));
+    n = write(parent_sockfd[1], output_buffer, 10);
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent buffer"), NIL, 0);
     }
