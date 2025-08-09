@@ -625,9 +625,8 @@ int prove(int goal, int bindings, int rest, int th)
 	    printf("ctrl+C\n");
 	    longjmp(buf, 1);
 	} else {
-	    strcpy(output_buffer, "ctrl+C");
-	    send_to_parent_buffer();
-	    //longjmp(buf, 1);
+	    send_to_parent(makeconst("ctrl"));
+	    longjmp(buf, 1);
 	}
     }
 
