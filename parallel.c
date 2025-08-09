@@ -1093,6 +1093,7 @@ void *receiver(void *arg)
 
 	if (child_busy_flag) {
 		receive_from_parent_buffer();
+		printf("receive halt signal %s\n",thread_buffer);fflush(stdout);
 	    if (thread_buffer[0] == 0x11) {
 		// child stop 
 		ctrl_c_flag = 1;
