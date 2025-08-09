@@ -659,7 +659,7 @@ int b_dp_or(int arglist, int rest, int th)
 	    if (prove_all(res, sp[th], th) == YES) {
 		for (j = i+1; j < m; j++) {
 		    memset(output_buffer, 0, sizeof(output_buffer));
-		    output_buffer[0] = 0x11; // stop signal
+		    output_buffer[0] = 'z'; // stop signal
 		    send_to_child_buffer(j);
 		}
 		for (j = i+1; j < m; j++) {
@@ -1071,7 +1071,7 @@ void *receiver(void *arg)
 	if (child_busy_flag) {
 		receive_from_parent_buffer();
 		printf("receive halt signal %s\n",thread_buffer);fflush(stdout);
-	    if (thread_buffer[0] == 0x11) {
+	    if (thread_buffer[0] == 'z') {
 		// child stop 
 		ctrl_c_flag = 1;
 	    } else if (thread_buffer[0] == 0x12) {
