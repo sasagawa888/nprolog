@@ -204,6 +204,7 @@ void send_to_parent(int x)
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent"), x, 0);
     }
+	printf("send to parent %d\n", n);fflush(stdout);
 }
 
 void send_to_parent_buffer(void)
