@@ -627,7 +627,7 @@ int prove(int goal, int bindings, int rest, int th)
 	} else {
 	    strcpy(output_buffer, "ctrl+C");
 	    send_to_parent_buffer();
-	    longjmp(buf, 1);
+	    //longjmp(buf, 1);
 	}
     }
 
