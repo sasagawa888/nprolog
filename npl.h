@@ -552,7 +552,7 @@ extern int thread_flag;
 extern int child_flag;
 extern int connect_flag;
 extern int receiver_exit_flag;
-extern int child_busy_flag;
+extern volatile int child_busy_flag;
 extern int parent_flag;
 extern int pause_flag;
 extern int shutdown_flag;

@@ -234,10 +234,11 @@ void send_to_child_buffer(int n)
 {
     int m;
 
-    m = write(child_sockfd[n], output_buffer, 1);
+    m = write(child_sockfd[n], output_buffer, 10);
     if (m < 0) {
 	exception(SYSTEM_ERR, makestr("send to child buffer"), NIL, 0);
     }
+	printf("send ctrl %d", n);
 }
 
 
@@ -1081,8 +1082,6 @@ int b_mt_prove(int arglist, int rest, int th)
     return (NO);
 }
 
-
-
 // Thread for child receiver
 void *receiver(void *arg)
 {
@@ -1092,8 +1091,6 @@ void *receiver(void *arg)
 	    goto exit;
 
 	if (child_busy_flag) {
-	    receive_from_parent_buffer();
-	  
 	    if (thread_buffer[0] == 0x11) {
 		// child stop 
 		ctrl_c_flag = 1;

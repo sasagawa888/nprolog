@@ -143,7 +143,7 @@ int thread_flag = 0;		/* when invoke as multi thread, flag is 1 */
 int child_flag = 0;		/* when invoke as network child, flag is 1 */
 int connect_flag = 0;		/* when child listen, connect_flag is 1 */
 int receiver_exit_flag = 0;	/* TO exit child TCP/IP receiver */
-int child_busy_flag = 0;	/* while executing in child, child_busy_flag is 1 */
+volatile int child_busy_flag = 0;	/* while executing in child, child_busy_flag is 1 */
 int parent_flag = 0;		/* while comunicating child, parent_flag = 1 */
 int pause_flag = 0;		/* while pause in child, pause_flag = 1 */
 int shutdown_flag = 0;		/* when receive dp_close, shutdown_flag = 1 */
