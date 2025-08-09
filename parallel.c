@@ -244,11 +244,9 @@ void send_to_child_buffer(int n)
 
 int receive_from_child(int n)
 {
-    int m, i, j;
-    char sub_buffer[BUFSIZE];
+    int m;
 
     // receive from child
-  reread:
     memset(input_buffer, 0, sizeof(input_buffer));
     m = read(child_sockfd[n], input_buffer, sizeof(input_buffer) - 1);
     if (m < 0) {
@@ -256,28 +254,7 @@ int receive_from_child(int n)
 		  0);
     }
 
-  retry:
-    if (input_buffer[0] == 0x02) {
-	i = 0;
-	while (input_buffer[i + 1] != 0x03) {
-	    sub_buffer[i] = input_buffer[i + 1];
-	    i++;
-	}
-	sub_buffer[i] = 0;
-	printf("%s", sub_buffer);
-
-	j = 0;
-	i = i + 2;
-	while (input_buffer[j + i] != 0) {
-	    input_buffer[j] = input_buffer[j + i];
-	    j++;
-	}
-	input_buffer[j] = 0;
-	if (input_buffer[0] == 0)
-	    goto reread;
-	else
-	    goto retry;
-    } else if (input_buffer[0] == 0x15) {
+    if (input_buffer[0] == 0x15) {
 	exception(SYSTEM_ERR, makestr(" receive from child"), makeint(n), 0);
 
     } else {
