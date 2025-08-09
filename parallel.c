@@ -228,6 +228,7 @@ void send_to_child(int n, int x)
     if (m < 0) {
 	exception(SYSTEM_ERR, makestr("send to child"), NIL, 0);
     }
+	printf("send to child %d\n",m);
 }
 
 // send one control code
@@ -659,7 +660,7 @@ int b_dp_or(int arglist, int rest, int th)
 		convert_to_variant(str_to_pred(receive_from_child(i)), th);
 	    if (prove_all(res, sp[th], th) == YES) {
 		for (j = i+1; j < m; j++) {
-		    send_to_child(j,makeconst("z"));
+		    send_to_child(j,makeconst("zzzzzzzzzzzzzzzzzzzzzzzzzz"));
 		}
 		for (j = i+1; j < m; j++) {
 		    receive_from_child(j);
