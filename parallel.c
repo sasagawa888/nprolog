@@ -1045,6 +1045,8 @@ void *receiver(void *arg)
 	if (n < 0) {
 	    exception(SYSTEM_ERR, makestr("*receiver"), NIL, 0);
 	}
+	printf("%s\n",sub_buffer);
+
 	strcat(buffer,sub_buffer);
 	if(sub_buffer[n-1] != 0x16)
 		goto reread;
@@ -1079,6 +1081,8 @@ void *receiver(void *arg)
 
 	child_buffer_pos = 0;
 	child_buffer_end = j;
+
+	printf("child = %s\n",child_buffer);
 
 	child_buffer_ready = 1;
 	pthread_cond_signal(&md_cond);

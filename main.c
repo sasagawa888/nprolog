@@ -360,6 +360,8 @@ int main(int argc, char *argv[])
 		pthread_mutex_unlock(&mutex2);
 		strcpy(output_buffer,child_buffer);
 		send_to_parent_buffer();
+		child_buffer_pos = 0;
+		child_buffer_end = 0;
 		/*
 		input =
 		    variable_to_call(convert_to_variable
