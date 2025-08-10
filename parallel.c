@@ -140,12 +140,15 @@ int receive_from_parent(void)
 
 void send_to_parent(int x)
 {
-    int n;
+    int n,i;
 
     // send message to parent
     memset(output_buffer, 0, sizeof(output_buffer));
     strcpy(output_buffer, GET_NAME(x));
-    n = write(parent_sockfd[1], output_buffer, strlen(output_buffer));
+	i = strlen(output_buffer);
+	output_buffer[i] = 0x16;
+	output_buffer[i+1] = NUL;
+    n = write(parent_sockfd[1], output_buffer, i+1);
     memset(output_buffer, 0, sizeof(output_buffer));
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent"), x, 0);
@@ -156,9 +159,12 @@ void send_to_parent(int x)
 
 void send_to_parent_buffer(void)
 {
-    int n;
+    int n,i;
 
-    n = write(parent_sockfd[1], output_buffer, strlen(output_buffer));
+	i = strlen(output_buffer);
+	output_buffer[i] = 0x16;
+	output_buffer[i+1] = NUL;
+    n = write(parent_sockfd[1], output_buffer, i+1);
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent buffer"), NIL, 0);
     }
@@ -329,15 +335,16 @@ int b_dp_prove(int arglist, int rest, int th)
 	i = GET_INT(arg1);
 	memset(parent_buffer[i],0,sizeof(parent_buffer[i]));
 
-	while(parent_buffer[0][i] == 0){
+	while(parent_buffer[i][0] == 0){
 
 	}
-	res =
-	    convert_to_variant(str_to_pred(receive_from_child(i)), th);
-	if (prove_all(res, sp[th], th) == YES)
+	print(receive_from_child(i));
+	//res =
+	//    convert_to_variant(str_to_pred(receive_from_child(i)), th);
+	//if (prove_all(res, sp[th], th) == YES)
 	    return (prove_all(rest, sp[th], th));
-	else
-	    return (NO);
+	//else
+	    //return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -1005,6 +1012,7 @@ void *preceiver(void *arg)
 
 	n = *(int *) arg;
 
+	printf("parent rev %d\n", n);
     while (1) {
 
 	if (receiver_exit_flag)
@@ -1019,17 +1027,17 @@ void *preceiver(void *arg)
 	exception(SYSTEM_ERR, makestr("receive from child"), makeint(n),
 		  0);
     }
-	printf("%s\n",sub_buffer);
+	printf("recv %s\n",sub_buffer);
 
 	strcat(buffer,sub_buffer);
-	if(sub_buffer[n-1] != 0x16)
+	if(sub_buffer[m-1] != 0x16)
 		goto reread;
 
 	i = strlen(buffer);
 	buffer[i-1] = 0;
 	strcpy(parent_buffer[n],buffer); 
 
-	
+	printf("parent %s\n",parent_buffer[n]);
     }
 
     pthread_exit(NULL);
@@ -1125,8 +1133,11 @@ void init_preceiver(int n)
 {	
 	int i;
     // create parent receiver thread 
-	for(i=0;i<n;i++)
-    	pthread_create(&preceiver_thread[i], NULL, preceiver, &i);
+	for(i=0;i<n;i++){
+		int *arg = malloc(sizeof(int));
+        *arg = i;
+    	pthread_create(&preceiver_thread[i], NULL, preceiver, arg);
+	}
 
 }
 
