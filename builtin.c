@@ -3590,16 +3590,17 @@ int b_string_term(int arglist, int rest, int th)
 
 int read_string_term(int flag)
 {
-
+	static int pos;
+	
     if (flag == 0) {
-	input_buffer_pos = 0;
+	pos = 0;
 	return (0);
     } else if (flag == -1) {
-	input_buffer_pos--;
+	pos--;
 	return (-1);
     }
 
-    return (input_buffer[input_buffer_pos++]);
+    return (input_buffer[pos++]);
 }
 
 int b_substring(int arglist, int rest, int th)

@@ -133,35 +133,7 @@ void init_child(int n, int x)
 
 int receive_from_parent(void)
 {
-    int n;
-
-    if (!connect_flag) {
-	//wait conneting
-	listen(parent_sockfd[0], 5);
-	parent_len = sizeof(parent_addr);
-	connect_flag = 1;
-
-	// connection from parent
-	parent_sockfd[1] =
-	    accept(parent_sockfd[0], (struct sockaddr *) &parent_addr,
-		   &parent_len);
-	if (parent_sockfd[1] < 0) {
-	    exception(SYSTEM_ERR, makestr("receive from parent"), NIL, 0);
-	}
-    }
-    // read message from parent
-  retry:
-    memset(input_buffer, 0, sizeof(input_buffer));
-    n = read(parent_sockfd[1], input_buffer, sizeof(input_buffer) - 1);
-    if (n < 0) {
-	exception(SYSTEM_ERR, makestr("receive from parent"), NIL, 0);
-    }
-    if (input_buffer[0] == 0x11 || input_buffer[0] == 0x12
-	|| input_buffer[0] == 0x13) {
-	goto retry;
-    }
-
-    return (makestr(input_buffer));
+    return (makestr(child_buffer));
 }
 
 
@@ -1097,7 +1069,7 @@ void *receiver(void *arg)
 	    exception(SYSTEM_ERR, makestr("*receiver"), NIL, 0);
 	}
 
-	if (input_buffer_end + n > sizeof(thread_buffer)) {
+	if (child_buffer_end + n > sizeof(thread_buffer)) {
 	    exception(SYSTEM_ERR, makestr("*receiver"), NIL, 0);
 	}
 
@@ -1106,19 +1078,19 @@ void *receiver(void *arg)
 	pthread_mutex_lock(&mutex2);
 
 	j = 0;
-	for (i = input_buffer_pos; i < input_buffer_end; i++) {
-	    input_buffer[j] = input_buffer[i];
+	for (i = child_buffer_pos; i < child_buffer_end; i++) {
+	    child_buffer[j] = child_buffer[i];
 	    j++;
 	}
 	for (i = 0; i < n; i++) {
-	    input_buffer[j] = thread_buffer[i];
+	    child_buffer[j] = thread_buffer[i];
 	    j++;
 	}
 
-	input_buffer_pos = 0;
-	input_buffer_end = j;
+	child_buffer_pos = 0;
+	child_buffer_end = j;
 
-	printf("buffer %s %d %d \n",input_buffer,input_buffer_pos, input_buffer_end);
+	printf("buffer %s %d %d \n",child_buffer,child_buffer_pos, child_buffer_end);
 	fflush(stdout);
 
 	pthread_mutex_unlock(&mutex2);

@@ -36,8 +36,9 @@ char transfer[BUFSIZE];		// buffer for dp_transfer
 char input_buffer[BUFSIZE];	// parallel input buffer
 char output_buffer[BUFSIZE];	// parallel output buffer
 char thread_buffer[BUFSIZE];	// parallel input buffer in thread
-int input_buffer_pos;		// position of input_buffer
-int input_buffer_end;		// end of input_buffer
+char child_buffer[BUFSIZE];     // input buffer for child
+int child_buffer_pos;		// position of child_buffer
+int child_buffer_end;		// end of child_buffer
 token stok = { GO, OTHER };
 
 jmp_buf catch_buf[CTRLSTK][THREADSIZE];	// catch jump buffer
