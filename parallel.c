@@ -262,12 +262,12 @@ int b_dp_close(int arglist, int rest, int th)
 	    printf("N-Prolog exit network mode.\n");
 	    close(parent_sockfd[0]);
 	    close(parent_sockfd[1]);
-	    receiver_exit_flag = 1;
 	    longjmp(buf, 2);
 	}
 
 	child_num = 0;
 	parent_flag = 0;
+	receiver_exit_flag = 1;
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, 0);
@@ -334,17 +334,16 @@ int b_dp_prove(int arglist, int rest, int th)
 	memset(parent_buffer[i],0,sizeof(parent_buffer[i]));
 	send_to_child(GET_INT(arg1), pred_to_str(arg2));
 	while(parent_buffer[i][0] == 0){
+	usleep(1000);
 	}
-	print(receive_from_child(i));
-	/*
+	//print(receive_from_child(i));
 	res =
 	    convert_to_variant(str_to_pred(receive_from_child(i)), th);
 	
-		if (prove_all(res, sp[th], th) == YES)
-	*/
+	if (prove_all(res, sp[th], th) == YES)
 		return (prove_all(rest, sp[th], th));
-	//else
-	//    return (NO);
+	else
+	    return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -1036,10 +1035,11 @@ void *preceiver(void *arg)
 		}
 	}
 	
-	
+	if(sub_buffer[m-1] != 0x16)
+		goto reread;
 
 	i = strlen(buffer);
-	//buffer[i-1] = 0;
+	buffer[i] = 0;
 	strcpy(parent_buffer[n],buffer); 
 
 	printf("parent %s\n",parent_buffer[n]);
