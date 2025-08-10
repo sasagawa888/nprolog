@@ -484,6 +484,8 @@ void exception(int errnum, int ind, int arg, int th)
     read_line(-2);		// clear buffer
 
     if (child_flag) {
+	printf("send to parent error code\n");
+	fflush(stdout);
 	send_to_parent_control(0x15);
     }
 

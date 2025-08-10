@@ -1032,8 +1032,10 @@ void *preceiver(void *arg)
 	if(sub_buffer[m-1] != 0x16)
 		goto reread;
 
-	if(sub_buffer[m] == 0x15)
+	for(i=0;i<m;i++){
+		if(sub_buffer[i] == 0x15)
 		exception(SYSTEM_ERR, NIL, makestr("receive from child error"), 0);
+	}
 	
 	i = strlen(buffer);
 	buffer[i] = 0;
