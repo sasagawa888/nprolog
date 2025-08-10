@@ -33,11 +33,6 @@ int record_pt = 1;		// current index of record database
 int counter[31];		// counter str_set,str_dec ... 
 int catch_data[CTRLSTK][2][THREADSIZE];	//catch tag,sp,wp
 char transfer[BUFSIZE];		// buffer for dp_transfer
-char input_buffer[BUFSIZE];	// parallel input buffer
-char output_buffer[BUFSIZE];	// parallel output buffer
-char child_buffer[BUFSIZE];     // input buffer for child
-int child_buffer_pos;		// position of child_buffer
-int child_buffer_end;		// end of child_buffer
 token stok = { GO, OTHER };
 
 jmp_buf catch_buf[CTRLSTK][THREADSIZE];	// catch jump buffer
@@ -171,8 +166,14 @@ int child_sockfd[PARASIZE];
 socklen_t parent_len;
 struct sockaddr_in parent_addr, child_addr[PARASIZE];
 int child_num;
-pthread_t receiver_thread;
-int child_result[PARASIZE];
+pthread_t preceiver_thread[PARASIZE];
+pthread_t creceiver_thread;
+char input_buffer[BUFSIZE];	
+char output_buffer[BUFSIZE];
+char parent_buffer[BUFSIZE][PARASIZE];
+char child_buffer[BUFSIZE]; 
+int child_buffer_pos;
+int child_buffer_end;	
 
 /* multi thread */
 pthread_mutex_t mutex;
@@ -317,7 +318,7 @@ int main(int argc, char *argv[])
 	    }
 	    child_flag = 1;
 	    init_parent();
-	    init_receiver();
+	    init_creceiver();
 	    break;
 	default:
 	    usage();

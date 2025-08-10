@@ -196,25 +196,7 @@ void send_to_child_buffer(int n)
 
 int receive_from_child(int n)
 {
-    int m;
-
-    // receive from child
-    memset(input_buffer, 0, sizeof(input_buffer));
-    m = read(child_sockfd[n], input_buffer, sizeof(input_buffer) - 1);
-    if (m < 0) {
-	exception(SYSTEM_ERR, makestr("receive from child"), makeint(n),
-		  0);
-    }
-
-    if (input_buffer[0] == 0x15) {
-	exception(SYSTEM_ERR, makestr(" receive from child"), makeint(n),
-		  0);
-
-    } else {
-	return (makestr(input_buffer));
-    }
-
-    return (0);
+	return (makestr(parent_buffer[n]));
 }
 
 
@@ -242,6 +224,7 @@ int b_dp_create(int arglist, int rest, int th)
 	    arg1 = cdr(arg1);
 	    child_num++;
 	}
+	init_preceiver(child_num);
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -329,7 +312,7 @@ int b_dp_halt(int arglist, int rest, int th)
 
 int b_dp_prove(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2, res;
+    int n, ind, arg1, arg2, res ,i;
 
     n = length(arglist);
     ind = makeind("dp_prove", n, th);
@@ -342,16 +325,19 @@ int b_dp_prove(int arglist, int rest, int th)
 	    exception(NOT_CALLABLE, ind, arg2, th);
 
 	send_to_child(GET_INT(arg1), pred_to_str(arg2));
-	/*
+	
+	i = GET_INT(arg1);
+	memset(parent_buffer[i],0,sizeof(parent_buffer[i]));
+
+	while(parent_buffer[0][i] == 0){
+
+	}
 	res =
-	    convert_to_variant(str_to_pred
-			       (receive_from_child(GET_INT(arg1))), th);
-	*/
-	//if (prove_all(res, sp[th], th) == YES)
-	print(receive_from_child(GET_INT(arg1)));
+	    convert_to_variant(str_to_pred(receive_from_child(i)), th);
+	if (prove_all(res, sp[th], th) == YES)
 	    return (prove_all(rest, sp[th], th));
-	//else
-	//    return (NO);
+	else
+	    return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -1011,8 +997,46 @@ int b_mt_prove(int arglist, int rest, int th)
     return (NO);
 }
 
+// Thread for parent receiver
+void *preceiver(void *arg)
+{
+	int n, m, i;
+	char buffer[BUFSIZE],sub_buffer[BUFSIZE];
+
+	n = *(int *) arg;
+
+    while (1) {
+
+	if (receiver_exit_flag)
+	    break;
+
+	// read message from parent
+	memset(buffer, 0, sizeof(buffer));
+	reread:
+	memset(sub_buffer, 0, sizeof(sub_buffer));
+    m = read(child_sockfd[n], sub_buffer, sizeof(sub_buffer));
+    if (m < 0) {
+	exception(SYSTEM_ERR, makestr("receive from child"), makeint(n),
+		  0);
+    }
+	printf("%s\n",sub_buffer);
+
+	strcat(buffer,sub_buffer);
+	if(sub_buffer[n-1] != 0x16)
+		goto reread;
+
+	i = strlen(buffer);
+	buffer[i-1] = 0;
+	strcpy(parent_buffer[n],buffer); 
+
+	
+    }
+
+    pthread_exit(NULL);
+}
+
 // Thread for child receiver
-void *receiver(void *arg)
+void *creceiver(void *arg)
 {
     int n, m, i, j;
 	char buffer[BUFSIZE],sub_buffer[BUFSIZE];
@@ -1028,7 +1052,7 @@ void *receiver(void *arg)
 	    accept(parent_sockfd[0], (struct sockaddr *) &parent_addr,
 		   &parent_len);
 	if (parent_sockfd[1] < 0) {
-	    exception(SYSTEM_ERR, makestr("*receiver"), NIL, 0);
+	    exception(SYSTEM_ERR, makestr("*creceiver"), NIL, 0);
 	}
     }
 
@@ -1045,7 +1069,7 @@ void *receiver(void *arg)
 	memset(sub_buffer, 0, sizeof(sub_buffer));
 	n = read(parent_sockfd[1], sub_buffer, sizeof(sub_buffer));
 	if (n < 0) {
-	    exception(SYSTEM_ERR, makestr("*receiver"), NIL, 0);
+	    exception(SYSTEM_ERR, makestr("*creceiver"), NIL, 0);
 	}
 	printf("%s\n",sub_buffer);
 
@@ -1097,9 +1121,18 @@ void *receiver(void *arg)
 }
 
 
-void init_receiver(void)
+void init_preceiver(int n)
+{	
+	int i;
+    // create parent receiver thread 
+	for(i=0;i<n;i++)
+    	pthread_create(&preceiver_thread[i], NULL, preceiver, &i);
+
+}
+
+void init_creceiver(void)
 {
     // create child receiver thread 
-    pthread_create(&receiver_thread, NULL, receiver, NULL);
+    pthread_create(&creceiver_thread, NULL, creceiver, NULL);
 
 }
