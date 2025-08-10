@@ -256,6 +256,7 @@ int b_dp_close(int arglist, int rest, int th)
 
 	if (child_flag) {
 	    printf("N-Prolog exit network mode.\n");
+		receiver_exit_flag = 1;
 	    //close(parent_sockfd[0]);
 	    //close(parent_sockfd[1]);
 		//receiver_exit_flag = 1;
