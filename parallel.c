@@ -369,13 +369,15 @@ int b_dp_prove(int arglist, int rest, int th)
 	    exception(NOT_CALLABLE, ind, arg2, th);
 
 	send_to_child(GET_INT(arg1), pred_to_str(arg2));
+	/*
 	res =
 	    convert_to_variant(str_to_pred
 			       (receive_from_child(GET_INT(arg1))), th);
-	if (prove_all(res, sp[th], th) == YES)
+	*/
+	//if (prove_all(res, sp[th], th) == YES)
 	    return (prove_all(rest, sp[th], th));
-	else
-	    return (NO);
+	//else
+	//    return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -1047,7 +1049,7 @@ void *receiver(void *arg)
 
 	if (receiver_exit_flag)
 	    break;
-	
+
 	if (!connect_flag) {
 	//wait conneting
 	listen(parent_sockfd[0], 5);
@@ -1084,6 +1086,19 @@ void *receiver(void *arg)
 	    j++;
 	}
 	for (i = 0; i < n; i++) {
+		if (thread_buffer[i] == 0x11) {
+	    // child stop 
+	    ctrl_c_flag = 1;
+		i++;
+		} else if (thread_buffer[i] == 0x12) {
+	    // child pause 
+	    pause_flag = 1;
+		i++;
+		} else if (thread_buffer[i] == 0x13) {
+	    // child resume 
+	    pause_flag = 0;
+		i++;
+		} else 
 	    child_buffer[j] = thread_buffer[i];
 	    j++;
 	}
@@ -1098,17 +1113,7 @@ void *receiver(void *arg)
 	pthread_cond_signal(&md_cond);
 	pthread_mutex_unlock(&mutex2);
 
-	if (thread_buffer[0] == 0x11) {
-	    // child stop 
-	    ctrl_c_flag = 1;
-	} else if (thread_buffer[0] == 0x12) {
-	    // child pause 
-	    pause_flag = 1;
-	} else if (thread_buffer[0] == 0x13) {
-	    // child resume 
-	    pause_flag = 0;
-	}
-
+	
     }
 
     pthread_exit(NULL);
