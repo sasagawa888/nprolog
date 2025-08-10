@@ -375,6 +375,7 @@ int b_dp_prove(int arglist, int rest, int th)
 			       (receive_from_child(GET_INT(arg1))), th);
 	*/
 	//if (prove_all(res, sp[th], th) == YES)
+	print(receive_from_child(GET_INT(arg1)));
 	    return (prove_all(rest, sp[th], th));
 	//else
 	//    return (NO);

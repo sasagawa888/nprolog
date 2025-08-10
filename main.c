@@ -359,6 +359,8 @@ int main(int argc, char *argv[])
         }
 		child_buffer_ready = 0;
 		pthread_mutex_unlock(&mutex2);
+		strcpy(output_buffer,child_buffer);
+		send_to_parent_buffer();
 		/*
 		input =
 		    variable_to_call(convert_to_variable
