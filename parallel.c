@@ -1092,7 +1092,7 @@ void *receiver(void *arg)
 
 	printf("buffer %s %d %d \n",child_buffer,child_buffer_pos, child_buffer_end);
 	fflush(stdout);
-
+	pthread_cond_signal(&md_cond);
 	pthread_mutex_unlock(&mutex2);
 
 	if (thread_buffer[0] == 0x11) {
