@@ -162,7 +162,7 @@ void send_to_parent_buffer(void)
 
 	i = strlen(output_buffer);
 	output_buffer[i] = 0x16;
-	output_buffer[i+1] = NUL;
+	output_buffer[i+1] = 0;
     n = write(parent_sockfd[1], output_buffer, i+1);
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent buffer"), NIL, 0);
@@ -175,7 +175,9 @@ void send_to_parent_control(int code)
 
 	memset(output_buffer,0,sizeof(output_buffer));
 	output_buffer[0] = code;
-    n = write(parent_sockfd[1], output_buffer, 1);
+	output_buffer[1] = 0x16;
+	output_buffer[2] = 0;
+    n = write(parent_sockfd[1], output_buffer, 3);
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent code"), NIL, 0);
     }
@@ -1028,16 +1030,16 @@ void *preceiver(void *arg)
     }
 
 	strcat(buffer,sub_buffer);
-	
-	for(i=0;i<m;i++){
-		if(sub_buffer[i] == 0x15)
-		exception(SYSTEM_ERR, NIL, makestr("receive from child error"), 0);
-	}
-	
 
 	if(sub_buffer[m-1] != 0x16)
 		goto reread;
 
+	m = strlen(buffer);
+	for(i=0;i<m;i++){
+		if(buffer[i] == 0x15)
+		exception(SYSTEM_ERR, NIL, makestr("receive from child error"), 0);
+	}
+	
 	
 	i = strlen(buffer);
 	buffer[i] = 0;
