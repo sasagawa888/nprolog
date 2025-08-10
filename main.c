@@ -358,11 +358,10 @@ int main(int argc, char *argv[])
         }
 		child_buffer_ready = 0;
 		pthread_mutex_unlock(&mutex2);
-		strcpy(output_buffer,child_buffer);
-		send_to_parent_buffer();
-		child_buffer_pos = 0;
-		child_buffer_end = 0;
-		/*
+		//strcpy(output_buffer,child_buffer);
+		//send_to_parent_buffer();
+		//child_buffer_pos = 0;
+		//child_buffer_end = 0;
 		input =
 		    variable_to_call(convert_to_variable
 				     (str_to_pred(receive_from_parent()),
@@ -375,7 +374,6 @@ int main(int argc, char *argv[])
 		printf("Send to parent %s\n", output_buffer);
 		fflush(stdout);
 		memset(output_buffer, 0, sizeof(output_buffer));
-	    */
 		}
     } else if (ret == 1) {
 	ret = 0;

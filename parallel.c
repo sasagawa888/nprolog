@@ -133,6 +133,8 @@ void init_child(int n, int x)
 
 int receive_from_parent(void)
 {
+	child_buffer_pos = 0;
+	child_buffer_end = 0;
     return (makestr(child_buffer));
 }
 
