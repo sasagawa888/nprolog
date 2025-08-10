@@ -166,6 +166,7 @@ int error_stream;
 /* -----distributed parallel & TCPIP------*/
 pthread_mutex_t mutex2;
 pthread_cond_t md_cond; 
+int child_buffer_ready;
 int parent_sockfd[2];
 int child_sockfd[PARASIZE];
 socklen_t parent_len;
@@ -348,14 +349,16 @@ int main(int argc, char *argv[])
 		//printf("proof = %d\n", proof);
 		fflush(stdout);
 	    } else if (child_flag) {
-		pthread_mutex_lock(&mutex2);
-		while (1) {
-            pthread_cond_wait(&md_cond, &mutex2);
-        }
 		input_stream = standard_input;
 		output_stream = standard_output;
 		error_stream = standard_error;
 		init_repl();
+		pthread_mutex_lock(&mutex2);
+		while (!child_buffer_ready) {
+            pthread_cond_wait(&md_cond, &mutex2);
+        }
+		child_buffer_ready = 0;
+		pthread_mutex_unlock(&mutex2);
 		input =
 		    variable_to_call(convert_to_variable
 				     (str_to_pred(receive_from_parent()),
@@ -368,7 +371,6 @@ int main(int argc, char *argv[])
 		printf("Send to parent %s\n", output_buffer);
 		fflush(stdout);
 		memset(output_buffer, 0, sizeof(output_buffer));
-		pthread_mutex_unlock(&mutex2);
 	    }
     } else if (ret == 1) {
 	ret = 0;

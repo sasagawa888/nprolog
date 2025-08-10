@@ -337,6 +337,7 @@ enum Type {
 #define PORT 5000 
 extern pthread_mutex_t mutex2;
 extern pthread_cond_t md_cond;
+extern int child_buffer_ready;
 extern int parent_sockfd[2];
 extern int child_sockfd[PARASIZE];
 extern socklen_t parent_len;

@@ -1092,6 +1092,8 @@ void *receiver(void *arg)
 
 	printf("buffer %s %d %d \n",child_buffer,child_buffer_pos, child_buffer_end);
 	fflush(stdout);
+
+	child_buffer_ready = 1;
 	pthread_cond_signal(&md_cond);
 	pthread_mutex_unlock(&mutex2);
 
