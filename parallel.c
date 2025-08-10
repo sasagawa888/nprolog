@@ -153,8 +153,7 @@ void send_to_parent(int x)
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent"), x, 0);
     }
-    printf("send to parent %d\n", n);
-    fflush(stdout);
+
 }
 
 void send_to_parent_buffer(void)
@@ -183,7 +182,6 @@ void send_to_child(int n, int x)
     if (m < 0) {
 	exception(SYSTEM_ERR, makestr("send to child"), NIL, 0);
     }
-    printf("send to child %d\n", m);
 }
 
 // send one control code
@@ -195,8 +193,6 @@ void send_to_child_buffer(int n)
     if (m < 0) {
 	exception(SYSTEM_ERR, makestr("send to child buffer"), NIL, 0);
     }
-    printf("send ctrl %d", n);
-    fflush(stdout);
 }
 
 
@@ -262,6 +258,7 @@ int b_dp_close(int arglist, int rest, int th)
 	    printf("N-Prolog exit network mode.\n");
 	    close(parent_sockfd[0]);
 	    close(parent_sockfd[1]);
+		receiver_exit_flag = 1;
 	    longjmp(buf, 2);
 	}
 
@@ -1011,7 +1008,6 @@ void *preceiver(void *arg)
 
 	n = *(int *) arg;
 
-	printf("parent rev %d\n", n);
     while (1) {
 
 	if (receiver_exit_flag)
@@ -1026,14 +1022,8 @@ void *preceiver(void *arg)
 	exception(SYSTEM_ERR, makestr("receive from child"), makeint(n),
 		  0);
     }
-	printf("recv %s\n",sub_buffer);
 
 	strcat(buffer,sub_buffer);
-	for(i=0;i<m;i++){
-		if(sub_buffer[i] == 0x16){
-			printf("0x16 %d %d", i,m); fflush(stdout);
-		}
-	}
 	
 	if(sub_buffer[m-1] != 0x16)
 		goto reread;
@@ -1041,8 +1031,6 @@ void *preceiver(void *arg)
 	i = strlen(buffer);
 	buffer[i] = 0;
 	strcpy(parent_buffer[n],buffer); 
-
-	printf("parent %s\n",parent_buffer[n]);
     }
 
     pthread_exit(NULL);
