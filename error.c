@@ -484,9 +484,7 @@ void exception(int errnum, int ind, int arg, int th)
     read_line(-2);		// clear buffer
 
     if (child_flag) {
-	memset(output_buffer, 0, sizeof(output_buffer));
-	output_buffer[0] = 0x15;
-	send_to_parent_buffer();
+	send_to_parent_control(0x15);
     }
 
     if (init_flag) {

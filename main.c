@@ -349,20 +349,16 @@ int main(int argc, char *argv[])
 		//printf("proof = %d\n", proof);
 		fflush(stdout);
 	    } else if (child_flag) {
-		//input_stream = standard_input;
-		//output_stream = standard_output;
-		//error_stream = standard_error;
-		//init_repl();
+		input_stream = standard_input;
+		output_stream = standard_output;
+		error_stream = standard_error;
+		init_repl();
 		pthread_mutex_lock(&mutex2);
 		while (!child_buffer_ready) {
             pthread_cond_wait(&md_cond, &mutex2);
         }
 		child_buffer_ready = 0;
 		pthread_mutex_unlock(&mutex2);
-		//strcpy(output_buffer,child_buffer);
-		//send_to_parent_buffer();
-		//child_buffer_pos = 0;
-		//child_buffer_end = 0;
 		input =
 		    variable_to_call(convert_to_variable
 				     (str_to_pred(receive_from_parent()),

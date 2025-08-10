@@ -169,6 +169,19 @@ void send_to_parent_buffer(void)
     }
 }
 
+void send_to_parent_control(int code)
+{
+    int n;
+
+	memset(output_buffer,0,sizeof(output_buffer));
+	output_buffer[0] = code;
+    n = write(parent_sockfd[1], output_buffer, 1);
+    if (n < 0) {
+	exception(SYSTEM_ERR, makestr("send to parent code"), NIL, 0);
+    }
+}
+
+
 void send_to_child(int n, int x)
 {
     int m,i;
@@ -185,15 +198,18 @@ void send_to_child(int n, int x)
 }
 
 // send one control code
-void send_to_child_buffer(int n)
+void send_to_child_control(int n, int code)
 {
     int m;
 
-    m = write(child_sockfd[n], output_buffer, 10);
+	memset(output_buffer,0,sizeof(output_buffer));
+	output_buffer[0] = code;
+    m = write(child_sockfd[n], output_buffer, 1);
     if (m < 0) {
 	exception(SYSTEM_ERR, makestr("send to child buffer"), NIL, 0);
     }
 }
+
 
 
 int receive_from_child(int n)
@@ -249,19 +265,10 @@ int b_dp_close(int arglist, int rest, int th)
 	    }
 	}
 
-	/*
-	if (parent_flag) {
-	    for (i = 0; i < child_num; i++)
-		close(child_sockfd[i]);
-	}
-	*/
+
 
 	if (child_flag) {
 	    printf("N-Prolog exit network mode.\n");
-		//receiver_exit_flag = 1;
-	    //close(parent_sockfd[0]);
-	    //close(parent_sockfd[1]);
-		//receiver_exit_flag = 1;
 	    longjmp(buf, 2);
 	}
 
@@ -563,9 +570,7 @@ int b_dp_and(int arglist, int rest, int th)
 		convert_to_variant(str_to_pred(receive_from_child(i)), th);
 	    if (prove_all(res, sp[th], th) == NO) {
 		for (j = i + 1; j < m; j++) {
-		    memset(output_buffer, 0, sizeof(output_buffer));
-		    output_buffer[0] = 0x11;	// stop signal
-		    send_to_child_buffer(j);
+		    send_to_child_control(j,0x11); // stop signal
 		}
 		for (j = i + 1; j < m; j++) {
 		    receive_from_child(j);
@@ -706,9 +711,7 @@ int b_dp_pause(int arglist, int rest, int th)
 	if (GET_INT(arg1) >= child_num)
 	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
 
-	memset(output_buffer, 0, sizeof(output_buffer));
-	output_buffer[0] = 0x12;
-	send_to_child_buffer(GET_INT(arg1));
+	send_to_child_control(GET_INT(arg1),0x12);
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -730,9 +733,7 @@ int b_dp_resume(int arglist, int rest, int th)
 	if (GET_INT(arg1) >= child_num)
 	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
 
-	memset(output_buffer, 0, sizeof(output_buffer));
-	output_buffer[0] = 0x13;
-	send_to_child_buffer(GET_INT(arg1));
+	send_to_child_control(GET_INT(arg1),0x13);
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -1031,6 +1032,9 @@ void *preceiver(void *arg)
 	if(sub_buffer[m-1] != 0x16)
 		goto reread;
 
+	if(sub_buffer[m] == 0x15)
+		exception(SYSTEM_ERR, NIL, makestr("receive from child error"), 0);
+	
 	i = strlen(buffer);
 	buffer[i] = 0;
 	strcpy(parent_buffer[n],buffer); 
