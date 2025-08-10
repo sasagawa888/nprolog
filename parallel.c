@@ -1118,6 +1118,9 @@ void *receiver(void *arg)
 	input_buffer_pos = 0;
 	input_buffer_end = j;
 
+	printf("buffer %s %d %d \n",input_buffer,input_buffer_pos, input_buffer_end);
+	fflush(stdout);
+
 	pthread_mutex_unlock(&mutex2);
 
 	if (thread_buffer[0] == 0x11) {
