@@ -1042,7 +1042,13 @@ void *receiver(void *arg)
 
 	printf("thread start\n");fflush(stdout);
 
-    if (!connect_flag) {
+    
+    while (1) {
+
+	if (receiver_exit_flag)
+	    break;
+	
+	if (!connect_flag) {
 	//wait conneting
 	listen(parent_sockfd[0], 5);
 	parent_len = sizeof(parent_addr);
@@ -1056,11 +1062,6 @@ void *receiver(void *arg)
 	    exception(SYSTEM_ERR, makestr("*receiver"), NIL, 0);
 	}
     }
-
-    while (1) {
-
-	if (receiver_exit_flag)
-	    break;
 
 	// read message from parent
 	memset(thread_buffer, 0, sizeof(thread_buffer));
