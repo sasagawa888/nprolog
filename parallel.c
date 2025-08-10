@@ -330,21 +330,21 @@ int b_dp_prove(int arglist, int rest, int th)
 	if (!callablep(arg2))
 	    exception(NOT_CALLABLE, ind, arg2, th);
 
-	send_to_child(GET_INT(arg1), pred_to_str(arg2));
-	
 	i = GET_INT(arg1);
 	memset(parent_buffer[i],0,sizeof(parent_buffer[i]));
-
+	send_to_child(GET_INT(arg1), pred_to_str(arg2));
 	while(parent_buffer[i][0] == 0){
-
 	}
 	print(receive_from_child(i));
-	//res =
-	//    convert_to_variant(str_to_pred(receive_from_child(i)), th);
-	//if (prove_all(res, sp[th], th) == YES)
-	    return (prove_all(rest, sp[th], th));
+	/*
+	res =
+	    convert_to_variant(str_to_pred(receive_from_child(i)), th);
+	
+		if (prove_all(res, sp[th], th) == YES)
+	*/
+		return (prove_all(rest, sp[th], th));
 	//else
-	    //return (NO);
+	//    return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -1030,7 +1030,13 @@ void *preceiver(void *arg)
 	printf("recv %s\n",sub_buffer);
 
 	strcat(buffer,sub_buffer);
-	if(sub_buffer[m-1] != 0x16)
+	for(i=0;i<m;i++){
+		if(sub_buffer[i] == 0x16){
+			printf("0x16 %d %d", i,m);
+		}
+	}
+	
+	if(sub_buffer[m] != 0x16)
 		goto reread;
 
 	i = strlen(buffer);
