@@ -487,7 +487,6 @@ void exception(int errnum, int ind, int arg, int th)
 	memset(output_buffer, 0, sizeof(output_buffer));
 	output_buffer[0] = 0x15;
 	send_to_parent_buffer();
-	child_busy_flag = 0;
     }
 
     if (init_flag) {

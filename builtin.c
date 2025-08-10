@@ -249,7 +249,7 @@ void init_builtin(void)
     defbuiltin("dp_receive", b_dp_receive, -1);
     defbuiltin("dp_compile", b_dp_compile, 1);
     defbuiltin("dp_consult", b_dp_consult, 1);
-	defbuiltin("dp_reconsult", b_dp_reconsult, 1);
+    defbuiltin("dp_reconsult", b_dp_reconsult, 1);
     defbuiltin("dp_report", b_dp_report, 1);
     defbuiltin("dp_countup", b_dp_countup, -1);
     defbuiltin("dp_parent", b_dp_parent, 0);
@@ -3590,18 +3590,16 @@ int b_string_term(int arglist, int rest, int th)
 
 int read_string_term(int flag)
 {
-    static int pos = 0;
 
     if (flag == 0) {
-	pos = 0;
+	input_buffer_pos = 0;
 	return (0);
     } else if (flag == -1) {
-	pos--;
+	input_buffer_pos--;
 	return (-1);
     }
 
-
-    return (input_buffer[pos++]);
+    return (input_buffer[input_buffer_pos++]);
 }
 
 int b_substring(int arglist, int rest, int th)

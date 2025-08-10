@@ -150,16 +150,17 @@ int receive_from_parent(void)
 	}
     }
     // read message from parent
-	retry:
+  retry:
     memset(input_buffer, 0, sizeof(input_buffer));
     n = read(parent_sockfd[1], input_buffer, sizeof(input_buffer) - 1);
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("receive from parent"), NIL, 0);
     }
-	if(input_buffer[0] == 0x11 || input_buffer[0] == 0x12 || input_buffer[0] == 0x13){
-		goto retry;
-	}
-	
+    if (input_buffer[0] == 0x11 || input_buffer[0] == 0x12
+	|| input_buffer[0] == 0x13) {
+	goto retry;
+    }
+
     return (makestr(input_buffer));
 }
 
@@ -179,14 +180,16 @@ void receive_from_parent_buffer(void)
 	    accept(parent_sockfd[0], (struct sockaddr *) &parent_addr,
 		   &parent_len);
 	if (parent_sockfd[1] < 0) {
-	    exception(SYSTEM_ERR, makestr("receive from parent buffer"), NIL, 0);
+	    exception(SYSTEM_ERR, makestr("receive from parent buffer"),
+		      NIL, 0);
 	}
     }
     // read message from parent
     memset(thread_buffer, 0, sizeof(thread_buffer));
     n = read(parent_sockfd[1], thread_buffer, sizeof(thread_buffer) - 1);
     if (n < 0) {
-	exception(SYSTEM_ERR, makestr("receive from parent buffer"), NIL, 0);
+	exception(SYSTEM_ERR, makestr("receive from parent buffer"), NIL,
+		  0);
     }
 
 }
@@ -204,7 +207,8 @@ void send_to_parent(int x)
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent"), x, 0);
     }
-	printf("send to parent %d\n", n);fflush(stdout);
+    printf("send to parent %d\n", n);
+    fflush(stdout);
 }
 
 void send_to_parent_buffer(void)
@@ -228,7 +232,7 @@ void send_to_child(int n, int x)
     if (m < 0) {
 	exception(SYSTEM_ERR, makestr("send to child"), NIL, 0);
     }
-	printf("send to child %d\n",m);
+    printf("send to child %d\n", m);
 }
 
 // send one control code
@@ -240,7 +244,8 @@ void send_to_child_buffer(int n)
     if (m < 0) {
 	exception(SYSTEM_ERR, makestr("send to child buffer"), NIL, 0);
     }
-	printf("send ctrl %d", n); fflush(stdout);
+    printf("send ctrl %d", n);
+    fflush(stdout);
 }
 
 
@@ -257,7 +262,8 @@ int receive_from_child(int n)
     }
 
     if (input_buffer[0] == 0x15) {
-	exception(SYSTEM_ERR, makestr(" receive from child"), makeint(n), 0);
+	exception(SYSTEM_ERR, makestr(" receive from child"), makeint(n),
+		  0);
 
     } else {
 	return (makestr(input_buffer));
@@ -461,9 +467,7 @@ int b_dp_receive(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("dp_recieve", n, th);
     if (n == 1) {
-	child_busy_flag = 0;
 	arg1 = car(arglist);
-
 
 	file = fopen(GET_NAME(arg1), "w");
 	if (!file) {
@@ -480,7 +484,6 @@ int b_dp_receive(int arglist, int rest, int th)
 	    }
 	    fwrite(transfer, sizeof(char), bytes_received, file);
 	}
-	child_busy_flag = 1;
 	fclose(file);
 	return (YES);
     }
@@ -619,12 +622,12 @@ int b_dp_and(int arglist, int rest, int th)
 	    res =
 		convert_to_variant(str_to_pred(receive_from_child(i)), th);
 	    if (prove_all(res, sp[th], th) == NO) {
-		for (j = i+1; j < m; j++) {
+		for (j = i + 1; j < m; j++) {
 		    memset(output_buffer, 0, sizeof(output_buffer));
-		    output_buffer[0] = 0x11; // stop signal
+		    output_buffer[0] = 0x11;	// stop signal
 		    send_to_child_buffer(j);
 		}
-		for (j = i+1; j < m; j++) {
+		for (j = i + 1; j < m; j++) {
 		    receive_from_child(j);
 		}
 		return (NO);
@@ -659,10 +662,11 @@ int b_dp_or(int arglist, int rest, int th)
 	    res =
 		convert_to_variant(str_to_pred(receive_from_child(i)), th);
 	    if (prove_all(res, sp[th], th) == YES) {
-		for (j = i+1; j < m; j++) {
-		    send_to_child(j,makeconst("zzzzzzzzzzzzzzzzzzzzzzzzzz"));
+		for (j = i + 1; j < m; j++) {
+		    send_to_child(j,
+				  makeconst("zzzzzzzzzzzzzzzzzzzzzzzzzz"));
 		}
-		for (j = i+1; j < m; j++) {
+		for (j = i + 1; j < m; j++) {
 		    receive_from_child(j);
 		}
 		return (prove_all(rest, sp[th], th));
@@ -1062,32 +1066,69 @@ int b_mt_prove(int arglist, int rest, int th)
 // Thread for child receiver
 void *receiver(void *arg)
 {
-	
+    int n, i, j;
+
+    if (!connect_flag) {
+	//wait conneting
+	listen(parent_sockfd[0], 5);
+	parent_len = sizeof(parent_addr);
+	connect_flag = 1;
+
+	// connection from parent
+	parent_sockfd[1] =
+	    accept(parent_sockfd[0], (struct sockaddr *) &parent_addr,
+		   &parent_len);
+	if (parent_sockfd[1] < 0) {
+	    exception(SYSTEM_ERR, makestr("*receiver"), NIL, 0);
+	}
+    }
+
     while (1) {
-	
+
 	if (receiver_exit_flag)
-	    goto exit;
+	    break;
 
-	if (child_busy_flag) {
-		receive_from_parent_buffer();
-		printf("receive halt signal %s\n",thread_buffer);fflush(stdout);
-	    if (thread_buffer[0] == 'z') {
-		// child stop 
-		ctrl_c_flag = 1;
-	    } else if (thread_buffer[0] == 0x12) {
-		// child pause 
-		pause_flag = 1;
-	    } else if (thread_buffer[0] == 0x13) {
-		// child resume 
-		pause_flag = 0;
-	    }
-		
-		}
-
+	// read message from parent
+	memset(thread_buffer, 0, sizeof(thread_buffer));
+	n = read(parent_sockfd[1], thread_buffer, sizeof(thread_buffer));
+	if (n < 0) {
+	    exception(SYSTEM_ERR, makestr("*receiver"), NIL, 0);
 	}
 
+	if (input_buffer_end + n > sizeof(input_buffer)) {
+	    exception(SYSTEM_ERR, makestr("*receiver"), NIL, 0);
+	}
 
-  exit:
+	pthread_mutex_lock(&mutex2);
+
+	j = 0;
+	for (i = input_buffer_pos; i < input_buffer_end; i++) {
+	    input_buffer[j] = input_buffer[i];
+	    j++;
+	}
+	for (i = 0; i < n; i++) {
+	    input_buffer[j] = thread_buffer[i];
+	    j++;
+	}
+
+	input_buffer_pos = 0;
+	input_buffer_end = j;
+
+	pthread_mutex_unlock(&mutex2);
+
+	if (thread_buffer[0] == 0x11) {
+	    // child stop 
+	    ctrl_c_flag = 1;
+	} else if (thread_buffer[0] == 0x12) {
+	    // child pause 
+	    pause_flag = 1;
+	} else if (thread_buffer[0] == 0x13) {
+	    // child resume 
+	    pause_flag = 0;
+	}
+
+    }
+
     pthread_exit(NULL);
 }
 
@@ -1098,4 +1139,3 @@ void init_receiver(void)
     pthread_create(&receiver_thread, NULL, receiver, NULL);
 
 }
-

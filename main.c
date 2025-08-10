@@ -33,9 +33,11 @@ int record_pt = 1;		// current index of record database
 int counter[31];		// counter str_set,str_dec ... 
 int catch_data[CTRLSTK][2][THREADSIZE];	//catch tag,sp,wp
 char transfer[BUFSIZE];		// buffer for dp_transfer
-char input_buffer[BUFSIZE]; // parallel input buffer
-char output_buffer[BUFSIZE];// parallel output buffer
-char thread_buffer[BUFSIZE];// parallel input buffer in thread
+char input_buffer[BUFSIZE];	// parallel input buffer
+char output_buffer[BUFSIZE];	// parallel output buffer
+char thread_buffer[BUFSIZE];	// parallel input buffer in thread
+int input_buffer_pos;		// position of input_buffer
+int input_buffer_end;		// end of input_buffer
 token stok = { GO, OTHER };
 
 jmp_buf catch_buf[CTRLSTK][THREADSIZE];	// catch jump buffer
@@ -143,7 +145,6 @@ int thread_flag = 0;		/* when invoke as multi thread, flag is 1 */
 int child_flag = 0;		/* when invoke as network child, flag is 1 */
 int connect_flag = 0;		/* when child listen, connect_flag is 1 */
 int receiver_exit_flag = 0;	/* TO exit child TCP/IP receiver */
-int child_busy_flag = 0;	/* while executing in child, child_busy_flag is 1 */
 int parent_flag = 0;		/* while comunicating child, parent_flag = 1 */
 int pause_flag = 0;		/* while pause in child, pause_flag = 1 */
 int shutdown_flag = 0;		/* when receive dp_close, shutdown_flag = 1 */
@@ -162,6 +163,7 @@ int output_stream;
 int error_stream;
 
 /* -----distributed parallel & TCPIP------*/
+pthread_mutex_t mutex2;
 int parent_sockfd[2];
 int child_sockfd[PARASIZE];
 socklen_t parent_len;
@@ -356,9 +358,7 @@ int main(int argc, char *argv[])
 		sprint(input);
 		printf("\n");
 		fflush(stdout);
-		child_busy_flag = 1;
 		query(input, 0);
-		child_busy_flag = 0;
 		printf("Send to parent %s\n", output_buffer);
 		fflush(stdout);
 		memset(output_buffer, 0, sizeof(output_buffer));
@@ -626,7 +626,8 @@ int prove(int goal, int bindings, int rest, int th)
 	    longjmp(buf, 1);
 	} else {
 	    send_to_parent(makeconst("ctrl"));
-		printf("ctrl+c\n");fflush(stdout);
+	    printf("ctrl+c\n");
+	    fflush(stdout);
 	    longjmp(buf, 1);
 	}
     }

@@ -38,7 +38,7 @@ address
 #define FUNCTION_NUMBER 22
 #define BUILTIN_NUMBER 220
 #define COMPILED_NUMBER 23
-#define EXTENDED_NUMBER 42
+#define EXTENDED_NUMBER 43
 #define NIL         0
 #define YES         2
 #define NO          4
@@ -235,6 +235,8 @@ extern char transfer[BUFSIZE];
 extern char input_buffer[BUFSIZE];
 extern char output_buffer[BUFSIZE];
 extern char thread_buffer[BUFSIZE];
+extern int input_buffer_pos;
+extern int input_buffer_end;
 extern int variables[THREADSIZE];
 extern int variables_save[THREADSIZE];
 extern int end_of_file_answer;
@@ -332,6 +334,7 @@ enum Type {
     
 /* distributed parallel */
 #define PORT 5000 
+extern pthread_mutex_t mutex2;
 extern int parent_sockfd[2];
 extern int child_sockfd[PARASIZE];
 extern socklen_t parent_len;
@@ -552,7 +555,6 @@ extern int thread_flag;
 extern int child_flag;
 extern int connect_flag;
 extern int receiver_exit_flag;
-extern int child_busy_flag;
 extern int parent_flag;
 extern int pause_flag;
 extern int shutdown_flag;
