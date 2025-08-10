@@ -147,8 +147,8 @@ void send_to_parent(int x)
     strcpy(output_buffer, GET_NAME(x));
 	i = strlen(output_buffer);
 	output_buffer[i] = 0x16;
-	output_buffer[i+1] = NUL;
-    n = write(parent_sockfd[1], output_buffer, i+1);
+	output_buffer[i+1] = 0;
+    n = write(parent_sockfd[1], output_buffer, i+2);
     memset(output_buffer, 0, sizeof(output_buffer));
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent"), x, 0);
@@ -164,7 +164,7 @@ void send_to_parent_buffer(void)
 	i = strlen(output_buffer);
 	output_buffer[i] = 0x16;
 	output_buffer[i+1] = NUL;
-    n = write(parent_sockfd[1], output_buffer, i+1);
+    n = write(parent_sockfd[1], output_buffer, i+2);
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent buffer"), NIL, 0);
     }
