@@ -258,8 +258,8 @@ int b_dp_close(int arglist, int rest, int th)
 	    printf("N-Prolog exit network mode.\n");
 	    //close(parent_sockfd[0]);
 	    //close(parent_sockfd[1]);
-		receiver_exit_flag = 1;
-	    longjmp(buf, 2);
+		//receiver_exit_flag = 1;
+	    longjmp(buf, 1);
 	}
 
 	child_num = 0;
