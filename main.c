@@ -35,7 +35,6 @@ int catch_data[CTRLSTK][2][THREADSIZE];	//catch tag,sp,wp
 char transfer[BUFSIZE];		// buffer for dp_transfer
 char input_buffer[BUFSIZE];	// parallel input buffer
 char output_buffer[BUFSIZE];	// parallel output buffer
-char thread_buffer[BUFSIZE];	// parallel input buffer in thread
 char child_buffer[BUFSIZE];     // input buffer for child
 int child_buffer_pos;		// position of child_buffer
 int child_buffer_end;		// end of child_buffer
