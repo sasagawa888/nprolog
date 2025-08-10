@@ -1068,6 +1068,8 @@ void *receiver(void *arg)
 {
     int n, i, j;
 
+	printf("thread start\n");fflush(stdout);
+
     if (!connect_flag) {
 	//wait conneting
 	listen(parent_sockfd[0], 5);
@@ -1095,9 +1097,11 @@ void *receiver(void *arg)
 	    exception(SYSTEM_ERR, makestr("*receiver"), NIL, 0);
 	}
 
-	if (input_buffer_end + n > sizeof(input_buffer)) {
+	if (input_buffer_end + n > sizeof(thread_buffer)) {
 	    exception(SYSTEM_ERR, makestr("*receiver"), NIL, 0);
 	}
+
+	printf("*receive %s",thread_buffer); fflush(stdout);
 
 	pthread_mutex_lock(&mutex2);
 
