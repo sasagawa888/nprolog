@@ -177,7 +177,7 @@ void send_to_parent_control(int code)
 	output_buffer[0] = code;
 	output_buffer[1] = 0x16;
 	output_buffer[2] = 0;
-    n = write(parent_sockfd[1], output_buffer, 3);
+    n = write(parent_sockfd[1], output_buffer, 2);
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent code"), NIL, 0);
     }
@@ -1006,6 +1006,15 @@ int b_mt_prove(int arglist, int rest, int th)
     return (NO);
 }
 
+void print_ascii(char *str) {
+	int i;
+    for (i = 0; i < strlen(str); i++) {
+        printf("0x%02X ", (unsigned char)str[i]);
+    }
+    printf("\n");
+}
+
+
 // Thread for parent receiver
 void *preceiver(void *arg)
 {
@@ -1029,11 +1038,14 @@ void *preceiver(void *arg)
 		  0);
     }
 
+	print_ascii(sub_buffer);printf("m=%d",m);fflush(stdout);
 	strcat(buffer,sub_buffer);
 
+	// normal message  0x16 is at m-1
 	if(sub_buffer[m-1] != 0x16)
 		goto reread;
 
+	print_ascii(buffer); 
 	m = strlen(buffer);
 	for(i=0;i<m;i++){
 		if(buffer[i] == 0x15)
