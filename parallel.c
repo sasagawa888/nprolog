@@ -148,7 +148,7 @@ void send_to_parent(int x)
 	i = strlen(output_buffer);
 	output_buffer[i] = 0x16;
 	output_buffer[i+1] = 0;
-    n = write(parent_sockfd[1], output_buffer, i+2);
+    n = write(parent_sockfd[1], output_buffer, i+1);
     memset(output_buffer, 0, sizeof(output_buffer));
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent"), x, 0);
@@ -164,7 +164,7 @@ void send_to_parent_buffer(void)
 	i = strlen(output_buffer);
 	output_buffer[i] = 0x16;
 	output_buffer[i+1] = NUL;
-    n = write(parent_sockfd[1], output_buffer, i+2);
+    n = write(parent_sockfd[1], output_buffer, i+1);
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent buffer"), NIL, 0);
     }
@@ -1032,15 +1032,14 @@ void *preceiver(void *arg)
 	strcat(buffer,sub_buffer);
 	for(i=0;i<m;i++){
 		if(sub_buffer[i] == 0x16){
-			printf("0x16 %d %d", i,m);
+			printf("0x16 %d %d", i,m); fflush(stdout);
 		}
 	}
 	
-	if(sub_buffer[m] != 0x16)
-		goto reread;
+	
 
 	i = strlen(buffer);
-	buffer[i-1] = 0;
+	//buffer[i-1] = 0;
 	strcpy(parent_buffer[n],buffer); 
 
 	printf("parent %s\n",parent_buffer[n]);
