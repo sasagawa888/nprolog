@@ -559,7 +559,6 @@ extern int child_flag;
 extern int connect_flag;
 extern int receiver_exit_flag;
 extern int parent_flag;
-extern int pause_flag;
 extern int shutdown_flag;
 extern int active_thread;
 extern int dynamic_flag;

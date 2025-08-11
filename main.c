@@ -141,7 +141,6 @@ int child_flag = 0;		/* when invoke as network child, flag is 1 */
 int connect_flag = 0;		/* when child listen, connect_flag is 1 */
 int receiver_exit_flag = 0;	/* TO exit child TCP/IP receiver */
 int parent_flag = 0;		/* while comunicating child, parent_flag = 1 */
-int pause_flag = 0;		/* while pause in child, pause_flag = 1 */
 int shutdown_flag = 0;		/* when receive dp_close, shutdown_flag = 1 */
 int active_thread = 0;		/* for mt_and/1 mt_or/1 */
 int dynamic_flag = 0;		/* for dynamic predicate. while assertz dynamic flag = 1 */
@@ -641,17 +640,7 @@ int prove(int goal, int bindings, int rest, int th)
 	}
     }
 
-    if (pause_flag) {
-	printf("pause\n");
-	while (1) {
-	    sleep(1);
-	    if (!pause_flag)
-		break;
-	}
-	printf("resume\n");
-    }
-
-
+    
     if (nest > 40000)
 	exception(RESOURCE_ERR, NIL, makestr("prove recursion over max"),
 		  th);
