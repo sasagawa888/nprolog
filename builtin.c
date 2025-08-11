@@ -251,6 +251,8 @@ void init_builtin(void)
     defbuiltin("dp_consult", b_dp_consult, 1);
     defbuiltin("dp_reconsult", b_dp_reconsult, 1);
     defbuiltin("dp_countup", b_dp_countup, -1);
+	defbuiltin("dp_setid", b_dp_setid, -1);
+	defbuiltin("dp_senderr", b_dp_senderr, -1);
 
     //------multi thread--------------------
     defbuiltin("mt_create", b_mt_create, 1);

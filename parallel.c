@@ -252,6 +252,39 @@ int b_dp_create(int arglist, int rest, int th)
     return (NO);
 }
 
+int b_dp_setid(int arglist, int rest, int th)
+{
+	int n, arg1, ind;
+
+    n = length(arglist);
+    ind = makeind("dp_setid", n, th);
+    if (n == 1) {
+		arg1 = car(arglist);
+		child_id = GET_INT(arg1);
+		return (prove_all(rest, sp[th], th));
+	}
+	exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+int b_dp_senderr(int arglist, int rest, int th)
+{
+	int n, arg1, ind;
+
+    n = length(arglist);
+    ind = makeind("dp_senderr", n, th); 
+    if (n == 1) {
+		arg1 = car(arglist);
+		
+		printf("occured an error in child %d\n",GET_INT(arg1));
+		fflush(stdout);
+		return (prove_all(rest, sp[th], th));
+	}
+	exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+
 // close all distributed child 
 int b_dp_close(int arglist, int rest, int th)
 {
@@ -338,8 +371,12 @@ int b_dp_prove(int arglist, int rest, int th)
 	send_to_child(GET_INT(arg1), pred_to_str(arg2));
 	while(parent_buffer[i][0] == 0){
 	usleep(1000);
+	if(ctrl_c_flag == 1){
+		send_to_child_control(GET_INT(arg1),0x11);
+		printf("ctrl+C\n");
+	    longjmp(buf, 1);
 	}
-	//print(receive_from_child(i));
+	}
 	res =
 	    convert_to_variant(str_to_pred(receive_from_child(i)), th);
 	
@@ -556,6 +593,14 @@ int b_dp_and(int arglist, int rest, int th)
 	}
 	
 	while(!all_received(result,m)){
+		if(ctrl_c_flag == 1){
+			for(i=0;i<m;i++){
+				if(result[i] == 0)
+				send_to_child_control(i,0x11);
+			}
+			printf("ctrl+C\n");
+	    	longjmp(buf, 1);
+		}
 		for (i = 0; i < m; i++) {
 			if(parent_buffer[i][0] != 0 && result[i] == 0){
 				result[i] = 1;
@@ -603,6 +648,14 @@ int b_dp_or(int arglist, int rest, int th)
 	}
 	
 	while(!all_received(result,m)){
+		if(ctrl_c_flag == 1){
+			for(i=0;i<m;i++){
+				if(result[i] == 0)
+				send_to_child_control(i,0x11);
+			}
+			printf("ctrl+C\n");
+	    	longjmp(buf, 1);
+		}
 		for (i = 0; i < m; i++) {
 			if(parent_buffer[i][0] != 0 && result[i] == 0){
 				result[i] = 1;

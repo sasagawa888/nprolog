@@ -100,7 +100,7 @@ char extended[EXTENDED_NUMBER][30] = {
     { "compile_file" }, { "timer_microseconds" }, { "with" },
     { "existerrors" }, { "dp_create" }, { "dp_consult" }, { "dp_countup" },
     { "dp_transfer" }, { "dp_and" }, { "dp_or" }, { "dp_halt" },
-    { "dp_receive" }, { "dp_reconsult" },
+    { "dp_receive" }, { "dp_reconsult" }, { "dp_setid" }, { "dp_senderr" },
     { "dp_compile" }, { "dp_prove" }, { "dp_close" }, 
     { "mt_create" }, { "mt_close" }, { "mt_and" }, { "mt_or" },
     { "mt_prove" }, { "cinline" }, { "check_file" }, { "cdeclare" },
