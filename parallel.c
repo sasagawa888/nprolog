@@ -1066,8 +1066,6 @@ void *creceiver(void *arg)
 
 	for (i = 0; i < m-1; i++) {
 		if(buffer[i] == 0x11){
-			//child_buffer_pos = 0;
-			//child_buffer_end = 0;
 			ctrl_c_flag = 1;
 		}
 	    else { 
