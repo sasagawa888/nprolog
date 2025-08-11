@@ -528,27 +528,6 @@ int b_dp_compile(int arglist, int rest, int th)
 }
 
 
-int b_dp_report(int arglist, int rest, int th)
-{
-    int n, ind, arg1;
-    char sub_buffer[STRSIZE];
-
-    n = length(arglist);
-    ind = makeind("dp_report", n, th);
-    if (n == 1) {
-	arg1 = car(arglist);
-	if (!stringp(arg1))
-	    exception(NOT_STR, ind, arg1, th);
-
-	memset(sub_buffer, 0, sizeof(sub_buffer));
-	sprintf(sub_buffer, "\x02%s\x03", GET_NAME(arg1));
-	send_to_parent(makestr(sub_buffer));
-	return (prove_all(rest, sp[th], th));
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-
 int all_received(int *result, int size) {
     for (int i = 0; i < size; i++) {
         if (result[i] == 0)  
@@ -697,72 +676,6 @@ int b_dp_child(int arglist, int rest, int th)
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-
-int b_dp_wait(int arglist, int rest, int th)
-{
-    int n, ind, arg1;
-
-    n = length(arglist);
-    ind = makeind("dp_wait", n, th);
-    if (n == 1) {
-	arg1 = car(arglist);
-	if (!integerp(arg1))
-	    exception(NOT_INT, ind, arg1, th);
-	if (negativep(arg1))
-	    exception(LESS_THAN_ZERO, ind, arg1, th);
-	if (GET_INT(arg1) > 60)
-	    exception(RESOURCE_ERR, ind, makestr("over 60"), th);
-
-	sleep(GET_INT(arg1));
-	return (prove_all(rest, sp[th], th));
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-
-int b_dp_pause(int arglist, int rest, int th)
-{
-    int n, ind, arg1;
-
-    n = length(arglist);
-    ind = makeind("dp_pause", n, th);
-    if (n == 1) {
-	arg1 = car(arglist);
-	if (!integerp(arg1))
-	    exception(NOT_INT, ind, arg1, th);
-	if (negativep(arg1))
-	    exception(LESS_THAN_ZERO, ind, arg1, th);
-	if (GET_INT(arg1) >= child_num)
-	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
-
-	send_to_child_control(GET_INT(arg1),0x12);
-	return (prove_all(rest, sp[th], th));
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-
-int b_dp_resume(int arglist, int rest, int th)
-{
-    int n, ind, arg1;
-
-    n = length(arglist);
-    ind = makeind("dp_resume", n, th);
-    if (n == 1) {
-	arg1 = car(arglist);
-	if (!integerp(arg1))
-	    exception(NOT_INT, ind, arg1, th);
-	if (negativep(arg1))
-	    exception(LESS_THAN_ZERO, ind, arg1, th);
-	if (GET_INT(arg1) >= child_num)
-	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
-
-	send_to_child_control(GET_INT(arg1),0x13);
-	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);

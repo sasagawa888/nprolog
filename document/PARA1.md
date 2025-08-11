@@ -32,11 +32,6 @@ N-Prolog on parent machine terminal. and dp_create/1 to establish TCP/IP between
 
     dp_prove(Nth,Pred): Prove Predicate on the Nth child Prolog for testing.
 
-    dp_report(Str): Display String on parent terminal.
-    e.g. dp_report($Hello World$').
-         string_term(X,1+2),dp_repoert(X).
-    If the child process is a grandchild process or belongs to a lower level, the information is relayed through the higher-level nodes to the top-level parent process and displayed on its terminal."
-
     dp_close/0: Sends termination command to child machines and closes communication.In the case of a child device.
     (Note) If halt is executed without performing dp_close, an error will occur. To terminate properly, dp_close is required.
 
@@ -46,13 +41,7 @@ N-Prolog on parent machine terminal. and dp_create/1 to establish TCP/IP between
 
     dp_child: Returns YES if it is a pure child machine without any child machines. Otherwise, returns NO.
 
-    dp_wait(Time): Wait for Time seconds.Time is greater than 0 and less than 60. This predicate is intended to wait for the preparation of launching the grandchild process when starting the child process.
-
-    dp_pause(Nth): Send a wait command to the Nth child and its child machines in the hierarchy.
-    This predicate functions when the child process is busy. Otherwise, it returns NO.
-
-    dp_resume(Nth): Cancel the wait command for the Nth child and its child machines int the hierarchy.This predicate functions when the child process is busy. Otherwise, it returns NO.
-
+    
 # Example
 
 ```

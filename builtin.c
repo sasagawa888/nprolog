@@ -250,13 +250,9 @@ void init_builtin(void)
     defbuiltin("dp_compile", b_dp_compile, 1);
     defbuiltin("dp_consult", b_dp_consult, 1);
     defbuiltin("dp_reconsult", b_dp_reconsult, 1);
-    defbuiltin("dp_report", b_dp_report, 1);
     defbuiltin("dp_countup", b_dp_countup, -1);
     defbuiltin("dp_parent", b_dp_parent, 0);
     defbuiltin("dp_child", b_dp_child, 0);
-    defbuiltin("dp_wait", b_dp_wait, 1);
-    defbuiltin("dp_pause", b_dp_pause, 1);
-    defbuiltin("dp_resume", b_dp_resume, 1);
 
     //------multi thread--------------------
     defbuiltin("mt_create", b_mt_create, 1);
