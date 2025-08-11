@@ -308,9 +308,6 @@ int b_dp_halt(int arglist, int rest, int th)
 
 	if (child_flag) {
 	    printf("N-Prolog exit network mode.\n");
-	    close(parent_sockfd[0]);
-	    close(parent_sockfd[1]);
-	    receiver_exit_flag = 1;
 	    shutdown_flag = 1;
 	    longjmp(buf, 2);
 	}
@@ -977,7 +974,7 @@ void *preceiver(void *arg)
 		  0);
     }
 
-	print_ascii(sub_buffer);printf("m=%d",m);fflush(stdout);
+	//print_ascii(sub_buffer);printf("m=%d",m);fflush(stdout);
 	strcat(buffer,sub_buffer);
 
 	// normal message  0x16 is at m-1
