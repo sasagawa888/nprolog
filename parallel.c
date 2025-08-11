@@ -301,11 +301,7 @@ int b_dp_halt(int arglist, int rest, int th)
 	    }
 	}
 
-	if (parent_flag) {
-	    for (i = 0; i < child_num; i++)
-		close(child_sockfd[i]);
-	}
-
+	
 	if (child_flag) {
 	    printf("N-Prolog exit network mode.\n");
 	    shutdown_flag = 1;
@@ -508,8 +504,8 @@ int b_dp_compile(int arglist, int rest, int th)
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
-	pred1 = list3(AND ,list2(makeatom("compile_file", PRED), arg1),
-	                   list2(makeatom("use_module",PRED),makeconst("compiler")));
+	pred1 = list3(AND ,list2(makeatom("use_module",PRED),makeconst("compiler")),
+		               list2(makeatom("compile_file", PRED), arg1));
 	prove_all(pred1, sp[th], th);
 
 	if (parent_flag) {
