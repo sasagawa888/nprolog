@@ -223,7 +223,7 @@ int receive_from_child(int n)
 
 int b_dp_create(int arglist, int rest, int th)
 {
-    int n, ind, arg1;
+    int n, ind, arg1, i, pred;
 
     n = length(arglist);
     ind = makeind("dp_create", n, th);
@@ -246,6 +246,11 @@ int b_dp_create(int arglist, int rest, int th)
 	    child_num++;
 	}
 	init_preceiver(child_num);
+
+	for(i=0;i<child_num;i++){
+		pred = list2(makeatom("dp_setid",SYS),makeint(i));
+		send_to_child(i, pred_to_str(pred));
+	}
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -278,7 +283,7 @@ int b_dp_senderr(int arglist, int rest, int th)
 		
 		printf("occured an error in child %d\n",GET_INT(arg1));
 		fflush(stdout);
-		return (prove_all(rest, sp[th], th));
+		return (NO);
 	}
 	exception(ARITY_ERR, ind, arglist, th);
     return (NO);
