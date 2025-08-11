@@ -1046,12 +1046,17 @@ void *preceiver(void *arg)
 		goto reread;
 
 	print_ascii(buffer); 
+	/*
 	m = strlen(buffer);
 	for(i=0;i<m;i++){
-		if(buffer[i] == 0x15)
-		exception(SYSTEM_ERR, NIL, makestr("receive from child error"), 0);
+		if(buffer[i] == 0x15){
+			printf("catch error");fflush(stdout);
+			strcpy(parent_buffer[n],"fail.");
+			break;
+		}
+		
 	}
-	
+	*/
 	
 	i = strlen(buffer);
 	buffer[i] = 0;

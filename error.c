@@ -486,7 +486,7 @@ void exception(int errnum, int ind, int arg, int th)
     if (child_flag) {
 	printf("send to parent error code\n");
 	fflush(stdout);
-	send_to_parent_control(0x15);
+	send_to_parent(makeconst("fail."));
     }
 
     if (init_flag) {
