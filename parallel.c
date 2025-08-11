@@ -206,7 +206,8 @@ void send_to_child_control(int n, int code)
 
 	memset(output_buffer,0,sizeof(output_buffer));
 	output_buffer[0] = code;
-    m = write(child_sockfd[n], output_buffer, 1);
+	output_buffer[1] = 0x16;
+    m = write(child_sockfd[n], output_buffer, 2);
     if (m < 0) {
 	exception(SYSTEM_ERR, makestr("send to child buffer"), NIL, 0);
     }
@@ -548,9 +549,17 @@ int b_dp_report(int arglist, int rest, int th)
     return (NO);
 }
 
+int all_received(int *result, int size) {
+    for (int i = 0; i < size; i++) {
+        if (result[i] == 0)  
+            return 0;   
+    }
+    return 1;             
+}
+
 int b_dp_and(int arglist, int rest, int th)
 {
-    int n, ind, arg1, m, i, j, pred, res;
+    int n, ind, arg1, m, i, j, pred, res , result[PARASIZE];
 
     n = length(arglist);
     ind = makeind("dp_and", n, th);
@@ -567,17 +576,26 @@ int b_dp_and(int arglist, int rest, int th)
 	    arg1 = cdr(arg1);
 	    i++;
 	}
-	for (i = 0; i < m; i++) {
-	    res =
-		convert_to_variant(str_to_pred(receive_from_child(i)), th);
-	    if (prove_all(res, sp[th], th) == NO) {
-		for (j = i + 1; j < m; j++) {
-		    send_to_child_control(j,0x11); // stop signal
-		}
-		for (j = i + 1; j < m; j++) {
-		    receive_from_child(j);
-		}
-		return (NO);
+
+	for(i=0;i<m;i++){
+		result[i] = 0;
+		memset(parent_buffer[i],0,sizeof(parent_buffer[i]));
+	}
+	
+	while(!all_received(result,m)){
+		for (i = 0; i < m; i++) {
+			if(parent_buffer[i][0] != 0 && result[i] == 0){
+				result[i] = 1;
+				res = convert_to_variant(str_to_pred(receive_from_child(i)), th);
+				if (prove_all(res, sp[th], th) == NO){
+					for(j=0;j<m;j++){
+						if(result[j] == 0){
+							send_to_child_control(j,0x11); // stop signal
+						}
+					}
+					return(NO);
+	            }
+		   }
 	    }
 	}
 	return (prove_all(rest, sp[th], th));
@@ -588,7 +606,7 @@ int b_dp_and(int arglist, int rest, int th)
 
 int b_dp_or(int arglist, int rest, int th)
 {
-    int n, ind, arg1, m, i, j, pred, res;
+    int n, ind, arg1, m, i, j, pred, res, result[PARASIZE];
 
     n = length(arglist);
     ind = makeind("dp_or", n, th);
@@ -605,21 +623,29 @@ int b_dp_or(int arglist, int rest, int th)
 	    arg1 = cdr(arg1);
 	    i++;
 	}
-	for (i = 0; i < m; i++) {
-	    res =
-		convert_to_variant(str_to_pred(receive_from_child(i)), th);
-	    if (prove_all(res, sp[th], th) == YES) {
-		for (j = i + 1; j < m; j++) {
-		    send_to_child(j,
-				  makeconst("zzzzzzzzzzzzzzzzzzzzzzzzzz"));
-		}
-		for (j = i + 1; j < m; j++) {
-		    receive_from_child(j);
-		}
-		return (prove_all(rest, sp[th], th));
-	    }
+
+	for(i=0;i<m;i++){
+		result[i] = 0;
+		memset(parent_buffer[i],0,sizeof(parent_buffer[i]));
 	}
-	return (NO);
+	
+	while(!all_received(result,m)){
+		for (i = 0; i < m; i++) {
+			if(parent_buffer[i][0] != 0 && result[i] == 0){
+				result[i] = 1;
+				res = convert_to_variant(str_to_pred(receive_from_child(i)), th);
+				if(prove_all(res, sp[th], th) == YES){
+					for(j=0;j<m;j++){
+						if(result[j] == 0){
+							send_to_child_control(j,0x11); // stop signal
+						}
+					}
+					return (prove_all(rest, sp[th], th));
+				} 
+			}
+		}
+	}
+	return(NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -1045,18 +1071,7 @@ void *preceiver(void *arg)
 	if(sub_buffer[m-1] != 0x16)
 		goto reread;
 
-	print_ascii(buffer); 
-	/*
-	m = strlen(buffer);
-	for(i=0;i<m;i++){
-		if(buffer[i] == 0x15){
-			printf("catch error");fflush(stdout);
-			strcpy(parent_buffer[n],"fail.");
-			break;
-		}
-		
-	}
-	*/
+	//print_ascii(buffer); 
 	
 	i = strlen(buffer);
 	buffer[i] = 0;
@@ -1110,6 +1125,7 @@ void *creceiver(void *arg)
 
 	pthread_mutex_lock(&mutex2);
 
+	
 	j = 0;
 	for (i = child_buffer_pos; i < child_buffer_end; i++) {
 	    child_buffer[j] = child_buffer[i];
@@ -1119,27 +1135,19 @@ void *creceiver(void *arg)
 	m = strlen(buffer);
 
 	for (i = 0; i < m; i++) {
-		if (buffer[i] == 0x11) {
-	    // child stop 
-	    ctrl_c_flag = 1;
-		i++;
-		} else if (buffer[i] == 0x12) {
-	    // child pause 
-	    pause_flag = 1;
-		i++;
-		} else if (buffer[i] == 0x13) {
-	    // child resume 
-	    pause_flag = 0;
-		i++;
-		} else 
-	    child_buffer[j] = buffer[i];
-	    j++;
+		if(buffer[i] == 0x11){
+			ctrl_c_flag = 1;
+		}
+	    else { 
+			child_buffer[j] = buffer[i];
+	    	j++;
+		}
 	}
 
 	child_buffer_pos = 0;
 	child_buffer_end = j;
 
-	printf("child = %s\n",child_buffer);
+	printf("receive from parent %s\n",child_buffer);
 
 	child_buffer_ready = 1;
 	pthread_cond_signal(&md_cond);
