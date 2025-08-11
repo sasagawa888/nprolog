@@ -62,8 +62,8 @@ qsort([Pivot|Tail], Sorted) :-
 ```
 
 # Protocol
-
+When communicating between the parent and child machines over TCP/IP, 0x16 is appended to the end of the text. Each side's reading process is handled by threads. Since TCP/IP delivers data in fragments, 0x16 is used as a marker to aggregate the data.
 
 # Error Handling
-
+When an error occurs on a child machine, it displays a message on the child's terminal and sends fail to the parent machine. At present, there is no distinction between an error on the child machine and a normal failure.
 
