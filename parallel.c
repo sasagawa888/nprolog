@@ -641,41 +641,6 @@ int b_dp_countup(int arglist, int rest, int th)
 }
 
 
-int b_dp_parent(int arglist, int rest, int th)
-{
-    int n, ind;
-
-    n = length(arglist);
-    ind = makeind("dp_parent", n, th);
-    if (n == th) {
-
-	if (parent_flag)
-	    return (prove_all(rest, sp[th], th));
-	else
-	    return (NO);
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-
-int b_dp_child(int arglist, int rest, int th)
-{
-    int n, ind;
-
-    n = length(arglist);
-    ind = makeind("dp_child", n, th);
-    if (n == th) {
-
-	if (!parent_flag && child_flag)
-	    return (prove_all(rest, sp[th], th));
-	else
-	    return (NO);
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-
-
 // multi thread parallel functions 
 void mt_enqueue(int n)
 {

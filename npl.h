@@ -858,8 +858,6 @@ int b_dp_receive(int arglist ,int rest, int th);
 int b_dp_compile(int arglist, int rest, int th);
 int b_dp_consult(int arglist, int rest, int th);
 int b_dp_reconsult(int arglist, int rest, int th);
-int b_dp_parent(int arglist, int rest, int th);
-int b_dp_child(int arglist, int rest, int th);
 int b_dup(int arglist, int rest, int th);
 int b_dynamic(int arglist, int rest, int th);
 int b_n_dynamic_predicate(int arglist, int rest, int th);
