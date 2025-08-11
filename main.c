@@ -634,7 +634,7 @@ int prove(int goal, int bindings, int rest, int th)
 	    longjmp(buf, 1);
 	} else {
 	    send_to_parent(makeconst("ctrl"));
-	    printf("ctrl+c\n");
+	    printf("ctrl+C\n");fflush(stdout);
 	    fflush(stdout);
 	    longjmp(buf, 1);
 	}
