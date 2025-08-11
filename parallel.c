@@ -1047,7 +1047,6 @@ void *creceiver(void *arg)
 	if (n < 0) {
 	    exception(SYSTEM_ERR, makestr("*creceiver"), NIL, 0);
 	}
-	printf("%s\n",sub_buffer);
 
 	strcat(buffer,sub_buffer);
 	if(sub_buffer[n-1] != 0x16)
