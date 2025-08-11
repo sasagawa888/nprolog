@@ -1011,7 +1011,7 @@ void *creceiver(void *arg)
 			child_buffer_pos = 0;
 			child_buffer_end = 0;
 			child_buffer_ready = 0;
-			ctrl_c_flag = 0;
+			ctrl_c_flag = 1;
 		}
 	    else { 
 			child_buffer[j] = buffer[i];
