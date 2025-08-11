@@ -508,7 +508,8 @@ int b_dp_compile(int arglist, int rest, int th)
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
-	pred1 = list2(makeatom("compile_file", PRED), arg1);
+	pred1 = list3(AND ,list2(makeatom("compile_file", PRED), arg1),
+	                   list2(makeatom("use_module",PRED),makeconst("compiler")));
 	prove_all(pred1, sp[th], th);
 
 	if (parent_flag) {
