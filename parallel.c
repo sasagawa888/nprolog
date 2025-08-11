@@ -504,12 +504,12 @@ int b_dp_compile(int arglist, int rest, int th)
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
-	pred1 = list3(AND ,list2(makeatom("use_module",PRED),makeconst("compiler")),
-		               list2(makeatom("compile_file", PRED), arg1));
+	pred1 = list2(makeatom("compile_file", PRED), arg1);
 	prove_all(pred1, sp[th], th);
 
 	if (parent_flag) {
-	    pred2 = list2(makeatom("dp_compile", SYS), arg1);
+	    pred2 = list3(AND ,list2(makeatom("use_module",SYS),makeconst("compiler")),
+		                   list2(makeatom("compile_file", PRED), arg1));
 	    for (i = 0; i < child_num; i++) {
 		send_to_child(i, pred_to_str(pred2));
 		receive_from_child(i);
