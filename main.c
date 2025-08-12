@@ -264,7 +264,6 @@ int main(int argc, char *argv[])
     int ch, input;
     char *path;
     struct winsize w;
-    FILE *fp;
 
     signal(SIGINT, reset);
     init_cell();
@@ -311,11 +310,6 @@ int main(int argc, char *argv[])
 	    exit(EXIT_SUCCESS);
 	case 'n':
 	    printf("N-Prolog runs with network mode.\n");
-	    fp = fopen("network.pl", "r");
-	    if (fp != NULL) {
-		fclose(fp);
-		b_consult(list1(makeconst("network.pl")), NIL, 0);
-	    }
 	    child_flag = 1;
 	    init_parent();
 	    init_creceiver();
@@ -379,8 +373,6 @@ int main(int argc, char *argv[])
 	if (shutdown_flag) {
 	    printf("Shutting down the system...\n");
 	    int ret = system("sudo shutdown now");
-		//close(parent_sockfd[0]);
-		//close(parent_sockfd[1]);
 	    if (ret == -1)
 		exception(SYSTEM_ERR, makestr("dp_halt shatdown"), NIL,
 			  0);

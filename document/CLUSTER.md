@@ -58,18 +58,26 @@ Key points:
 
 sudo systemctl enable npl.service
 
-## restore child 
+## update child 
 
 ```
-git fetch origin
-git reset --hard origin/master
+sudo systemctl1 stop npl.service
+cd nprolog
+git pull
+sudo make clean
+sudo make install
 ```
+
+and reboot PIs
+
 
 ## systemctl
 
 ```
 sudo systemctl enable npl.service
 
-sudo systemctl enable npl.service
+sudo systemctl stop npl.service
+
+sudo systemctl status npl.service
 
 ```
