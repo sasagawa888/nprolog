@@ -617,18 +617,6 @@ gen_body((X;(Y1;Y2)),N) :-
 
 
 gen_body((X;Y),N) :-
-    n_has_cut(X),
-    write('{dp['),write(N),write(']=Jget_sp(th);'),nl,
-    gen_body(X,N),
-    write('Junbind(dp['),write(N),write('],th);'),nl,
-    write('body = '),nl,
-    gen_body1(Y,N),
-    write(';'),nl,
-    write('if(Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th) == YES)'),nl,
-    write('return(YES);'),nl,
-    write('Junbind(dp['),write(N),write('],th);}'),nl.
-
-gen_body((X;Y),N) :-
     write('{dp['),write(N),write(']=Jget_sp(th);'),nl,
     write('body = '),nl,
     gen_body1(X,N),
