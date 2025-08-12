@@ -1057,10 +1057,10 @@ void *creceiver(void *arg)
 
 	
 	j = 0;
-	for (i = child_buffer_pos; i < child_buffer_end; i++) {
-	    child_buffer[j] = child_buffer[i];
-	    j++;
-	}
+	//for (i = child_buffer_pos; i < child_buffer_end; i++) {
+	//    child_buffer[j] = child_buffer[i];
+	//    j++;
+	//}
 	
 	m = strlen(buffer);
 
