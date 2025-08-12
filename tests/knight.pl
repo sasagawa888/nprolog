@@ -2,7 +2,7 @@
 % 5*5
 
 ptour(R,C,X) :-
-    dp_or([pmove1(R,C,X),pmove2(R,C,X),pmove3(R,C,X),move4(R,C,X)]).
+    dp_or([pmove1(R,C,X),pmove2(R,C,X),pmove3(R,C,X),pmove4(R,C,X)]).
 
 pmove1(R,C,X) :-
     (R1 is R+2,C1 is C+1,move(R1,C1,[[R1,C1],[R,C]],X);
