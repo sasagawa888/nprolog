@@ -300,9 +300,9 @@ int b_dp_close(int arglist, int rest, int th)
     if (n == 0) {
 
 	if (parent_flag) {
-	    exp = makestr("dp_close");
+	    exp = makeatom("dp_close",SYS);
 	    for (i = 0; i < child_num; i++) {
-		send_to_child(i, exp);
+		send_to_child(i, pred_to_str(exp));
 	    }
 	}
 
@@ -333,9 +333,9 @@ int b_dp_halt(int arglist, int rest, int th)
     if (n == 0) {
 
 	if (parent_flag) {
-	    exp = makestr("dp_halt");
+	    exp = makeatom("dp_halt",SYS);
 	    for (i = 0; i < child_num; i++) {
-		send_to_child(i, exp);
+		send_to_child(i, pred_to_str(exp));
 	    }
 	}
 
