@@ -342,6 +342,9 @@ int b_dp_halt(int arglist, int rest, int th)
 	
 	if (child_flag) {
 	    printf("N-Prolog exit network mode.\n");
+		close(parent_sockfd[0]);
+	    close(parent_sockfd[1]);
+	    receiver_exit_flag = 1;
 	    shutdown_flag = 1;
 	    longjmp(buf, 2);
 	}

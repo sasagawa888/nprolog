@@ -379,8 +379,8 @@ int main(int argc, char *argv[])
 	if (shutdown_flag) {
 	    printf("Shutting down the system...\n");
 	    int ret = system("sudo shutdown now");
-		close(parent_sockfd[0]);
-		close(parent_sockfd[1]);
+		//close(parent_sockfd[0]);
+		//close(parent_sockfd[1]);
 	    if (ret == -1)
 		exception(SYSTEM_ERR, makestr("dp_halt shatdown"), NIL,
 			  0);
