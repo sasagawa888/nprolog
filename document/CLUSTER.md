@@ -5,6 +5,7 @@ Running boot.sh at Boot on Raspberry Pi (Network-Ready)
 
 This document explains how to automatically run your boot.sh script at boot time on a Raspberry Pi, ensuring the network is fully up before execution.
 
+## Install
 1. Prepare the boot.sh Script
 Place your script in /home/username/nprolog/boot.sh with the following content:
 
@@ -58,13 +59,12 @@ Key points:
 
 sudo systemctl enable npl.service
 
-## update child 
+## Update child 
 
 ```
 sudo systemctl1 stop npl.service
 cd nprolog
 git pull
-sudo make clean
 sudo make install
 ```
 
