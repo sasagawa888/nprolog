@@ -1,5 +1,5 @@
 # Cluster
-
+By using the distributed parallel features of N-Prolog, you can use a Raspberry Pi cluster machine as a parallel Prolog machine. Below is a memo for that.
 
 Running boot.sh at Boot on Raspberry Pi (Network-Ready)
 
@@ -50,6 +50,8 @@ Restart=on-failure
 WantedBy=multi-user.target
 ```
 
+sudo systemctl enable npl.service
+
 
 Key points:
 
@@ -57,9 +59,9 @@ Key points:
 
 - Wants=network-online.target requests the network to be brought up before starting
 
-sudo systemctl enable npl.service
-
 ## Update child 
+
+When upgrading the child machine, please follow the procedure below.
 
 ```
 sudo systemctl1 stop npl.service
@@ -73,6 +75,8 @@ and reboot PIs
 
 ## systemctl
 
+Be sure to run enable; without doing this, automatic startup will not work. stop is used for temporarily stopping the service, for example when upgrading the child machine. The stop state will be cleared upon reboot. status can be used to check the situation when automatic startup is not working properly.
+
 ```
 sudo systemctl enable npl.service
 
@@ -81,3 +85,7 @@ sudo systemctl stop npl.service
 sudo systemctl status npl.service
 
 ```
+
+# Troubleshooting
+
+When running a time-consuming computation, if it is forcibly stopped midway using Ctrl+C, the next input may sometimes fail to be sent correctly. In such cases, try sending something like dp_prove(0, yes) to the child machine on its own. This should restore normal operation. The cause is currently under investigation
