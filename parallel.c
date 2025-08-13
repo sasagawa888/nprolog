@@ -1057,16 +1057,18 @@ void *creceiver(void *arg)
 
 	
 	j = 0;
-	//for (i = child_buffer_pos; i < child_buffer_end; i++) {
-	//    child_buffer[j] = child_buffer[i];
-	//    j++;
-	//}
+	
 	
 	m = strlen(buffer);
 
 	for (i = 0; i < m-1; i++) {
 		if(buffer[i] == 0x11){
+			memset(child_buffer,0,sizeof(child_buffer));
+			strcpy(child_buffer,"fail.");
+			child_buffer_pos = 0;
+			child_buffer_end = 5;
 			ctrl_c_flag = 1;
+			goto exit;
 		}
 	    else { 
 			child_buffer[j] = buffer[i];
@@ -1077,6 +1079,7 @@ void *creceiver(void *arg)
 	child_buffer_pos = 0;
 	child_buffer_end = j;
 
+	exit:
 	printf("receive from parent %s\n",child_buffer);
 
 	child_buffer_ready = 1;
