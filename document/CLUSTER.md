@@ -86,6 +86,3 @@ sudo systemctl status npl.service
 
 ```
 
-# Troubleshooting
-
-When running a time-consuming computation, if it is forcibly stopped midway using Ctrl+C, the next input may sometimes fail to be sent correctly. In such cases, try sending something like dp_prove(0, yes) to the child machine on its own. This should restore normal operation. The cause is currently under investigation
