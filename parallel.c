@@ -1053,6 +1053,8 @@ void *creceiver(void *arg)
 		*/
 	    printf("dp_transfer");
 	    fflush(stdout);
+		child_buffer_pos = 0;
+		child_buffer_end = 0;
 	    goto retry;
 	}
 
