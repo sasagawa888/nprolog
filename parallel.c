@@ -605,6 +605,7 @@ int b_dp_and(int arglist, int rest, int th)
 				send_to_child_control(i,0x11);
 			}
 			printf("ctrl+C\n");
+			ctrl_c_flag = 0;
 	    	longjmp(buf, 1);
 		}
 		for (i = 0; i < m; i++) {
@@ -660,6 +661,7 @@ int b_dp_or(int arglist, int rest, int th)
 				send_to_child_control(i,0x11);
 			}
 			printf("ctrl+C\n");
+			ctrl_c_flag = 0;
 	    	longjmp(buf, 1);
 		}
 		for (i = 0; i < m; i++) {
