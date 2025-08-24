@@ -1053,6 +1053,7 @@ void *creceiver(void *arg)
 		*/
 	    printf("dp_transfer");
 	    fflush(stdout);
+		memset(buffer, 0, sizeof(buffer));
 	    strcpy(buffer,"true.");
 	}
 
