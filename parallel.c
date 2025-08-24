@@ -1047,7 +1047,7 @@ void *creceiver(void *arg)
 	    i = strlen(sub_buffer);
 	    fwrite(sub_buffer, sizeof(char), i, file);
 	    fclose(file);
-	    printf("dp_transfer");
+	    printf("dp_transfer\n");
 	    fflush(stdout);
 		memset(buffer, 0, sizeof(buffer));
 	    strcpy(buffer,"true.\n");
