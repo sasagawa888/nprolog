@@ -1024,7 +1024,6 @@ void *creceiver(void *arg)
 		goto reread;
 
 	if (buffer[0] == 0x15) {	// dp-treansfer
-		/*
 	    i = 2;
 	    j = 0;
 	    while (buffer[i] != 0x16) { // get file name
@@ -1033,7 +1032,7 @@ void *creceiver(void *arg)
 		j++;
 	    }
 	    sub_buffer[j - 1] = 0;	// \n -> '0'
-
+		/*
 	    file = fopen(sub_buffer, "w");
 	    if (!file) {
 		exception(CANT_OPEN, makestr("dp_transfer"), NIL, 0);
@@ -1055,6 +1054,7 @@ void *creceiver(void *arg)
 	    fflush(stdout);
 		memset(buffer, 0, sizeof(buffer));
 	    strcpy(buffer,"true.\n");
+		memset(child_buffer, 0, sizeof(child_buffer));
 	}
 
 	pthread_mutex_lock(&mutex2);
