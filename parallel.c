@@ -1010,7 +1010,6 @@ void *creceiver(void *arg)
 
 	
 	// read message from parent
-	retry:
 	memset(buffer, 0, sizeof(buffer));
 	reread:
 	memset(sub_buffer, 0, sizeof(sub_buffer));
@@ -1032,12 +1031,12 @@ void *creceiver(void *arg)
 		j++;
 	    }
 	    sub_buffer[j - 1] = 0;	// \n -> '0'
-		/*
+		
 	    file = fopen(sub_buffer, "w");
 	    if (!file) {
 		exception(CANT_OPEN, makestr("dp_transfer"), NIL, 0);
 	    }
-
+		/*
 	    i++;
 	    j = 0;
 	    while (buffer[i] != 0x16) { // get file data
@@ -1048,8 +1047,8 @@ void *creceiver(void *arg)
 	    sub_buffer[j] = 0;
 	    i = strlen(sub_buffer);
 	    fwrite(sub_buffer, sizeof(char), i, file);
-	    fclose(file);
 		*/
+	    fclose(file);
 	    printf("dp_transfer");
 	    fflush(stdout);
 		memset(buffer, 0, sizeof(buffer));
