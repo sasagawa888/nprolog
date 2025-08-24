@@ -398,7 +398,7 @@ int b_dp_prove(int arglist, int rest, int th)
 // parent Prolog
 int b_dp_transfer(int arglist, int rest, int th)
 {
-    int n, ind, arg1, pred1, i, m;
+    int n, ind, arg1, i, m;
     FILE *file;
 
     n = length(arglist);
@@ -414,10 +414,10 @@ int b_dp_transfer(int arglist, int rest, int th)
 	    exception(CANT_OPEN, ind, arg1, th);
 	}
 
-	pred1 = list2(makeatom("dp_receive", SYS), arg1);
 
 	for (i = 0; i < child_num; i++) {
-	    send_to_child(i, pred_to_str(pred1));
+	    send_to_child_control(i, 0x15);
+		send_to_child(i, arg1);
 
 	    int bytes_read;
 	    while ((bytes_read =
@@ -428,8 +428,7 @@ int b_dp_transfer(int arglist, int rest, int th)
 		    exception(SYSTEM_ERR, makestr("dp_transfer"), NIL, th);
 		}
 	    }
-	    memset(transfer, 0, sizeof(transfer));
-	    transfer[0] = 0x16;
+	    send_to_child_control(i, 0x16);
 	    m = write(child_sockfd[i], transfer, 1);
 	    if (m < 0) {
 		exception(SYSTEM_ERR, makestr("dp_transfer"), NIL, th);
@@ -439,39 +438,6 @@ int b_dp_transfer(int arglist, int rest, int th)
 	}
 	fclose(file);
 	return (prove_all(rest, sp[th], th));
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-
-// child Prolog
-int b_dp_receive(int arglist, int rest, int th)
-{
-    int n, ind, arg1;
-    FILE *file;
-
-    n = length(arglist);
-    ind = makeind("dp_recieve", n, th);
-    if (n == 1) {
-	arg1 = car(arglist);
-
-	file = fopen(GET_NAME(arg1), "w");
-	if (!file) {
-	    exception(CANT_OPEN, ind, arg1, th);
-	}
-
-	int bytes_received;
-	while ((bytes_received =
-		read(parent_sockfd[1], transfer, sizeof(transfer))) > 0) {
-	    if (transfer[bytes_received - 1] == 0x16) {
-		transfer[bytes_received - 1] = 0;
-		fwrite(transfer, sizeof(char), bytes_received - 1, file);
-		break;
-	    }
-	    fwrite(transfer, sizeof(char), bytes_received, file);
-	}
-	fclose(file);
-	return (YES);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -1019,6 +985,7 @@ void *creceiver(void *arg)
 {
     int n, m, i, j;
 	char buffer[BUFSIZE],sub_buffer[BUFSIZE];
+	FILE *file;
 
 	if (!connect_flag) {
 	//wait conneting
@@ -1043,6 +1010,7 @@ void *creceiver(void *arg)
 
 	
 	// read message from parent
+	retry:
 	memset(buffer, 0, sizeof(buffer));
 	reread:
 	memset(sub_buffer, 0, sizeof(sub_buffer));
@@ -1055,12 +1023,39 @@ void *creceiver(void *arg)
 	if(sub_buffer[n-1] != 0x16)
 		goto reread;
 
-	pthread_mutex_lock(&mutex2);
+	if (buffer[0] == 0x15) {	// dp-treansfer
+	    i = 2;
+	    j = 0;
+	    while (buffer[i] != 0x16) { // get file name
+		sub_buffer[j] = buffer[i];
+		i++;
+		j++;
+	    }
+	    sub_buffer[j - 1] = 0;	// \n -> '0'
 
-	
-	j = 0;
-	
-	
+	    file = fopen(sub_buffer, "w");
+	    if (!file) {
+		exception(CANT_OPEN, makestr("dp_transfer"), NIL, 0);
+	    }
+
+	    i++;
+	    j = 0;
+	    while (buffer[i] != 0x16) { // get file data
+		sub_buffer[j] = buffer[i];
+		i++;
+		j++;
+	    }
+	    sub_buffer[j] = 0;
+	    i = strlen(sub_buffer);
+	    fwrite(sub_buffer, sizeof(char), i, file);
+	    fclose(file);
+	    printf("dp_transfer");
+	    fflush(stdout);
+	    goto retry;
+	}
+
+	pthread_mutex_lock(&mutex2);
+	j = 0;	
 	m = strlen(buffer);
 
 	for (i = 0; i < m-1; i++) {

@@ -246,7 +246,6 @@ void init_builtin(void)
     defbuiltin("dp_and", b_dp_and, 1);
     defbuiltin("dp_or", b_dp_or, 1);
     defbuiltin("dp_transfer", b_dp_transfer, 1);
-    defbuiltin("dp_receive", b_dp_receive, -1);
     defbuiltin("dp_compile", b_dp_compile, 1);
     defbuiltin("dp_consult", b_dp_consult, 1);
     defbuiltin("dp_reconsult", b_dp_reconsult, 1);

@@ -855,7 +855,6 @@ int b_dp_prove(int arglist ,int rest, int th);
 int b_dp_and(int arglist, int rest, int th);
 int b_dp_or(int arglist, int rest, int th);
 int b_dp_transfer(int arglist, int rest, int th);
-int b_dp_receive(int arglist ,int rest, int th);
 int b_dp_compile(int arglist, int rest, int th);
 int b_dp_consult(int arglist, int rest, int th);
 int b_dp_reconsult(int arglist, int rest, int th);
