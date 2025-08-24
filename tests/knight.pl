@@ -1,6 +1,9 @@
 % Knight tour
 % 5*5
 
+fastest([R1,C1],[R2,C2],[R3,C3],[R4,C4],X) :-
+    dp_or([tour(R1,C1,X),tour(R2,C2,X),tour(R3,C3,X),tour(R4,C4,X)]).
+
 ptour8(R,C,X) :-
     dp_or([pmove81(R,C,X),pmove82(R,C,X),pmove83(R,C,X),pmove84(R,C,X),
            pmove85(R,C,X),pmove86(R,C,X),pmove87(R,C,X),pmove88(R,C,X)]).

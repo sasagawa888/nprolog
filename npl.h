@@ -17,7 +17,7 @@ address
  5,000,001 - 30,000,000  working area 
 30,000,001 - 32,000,000  variant area
 */
-#define VERSION     4.61
+#define VERSION     4.62
 #define CELLSIZE    30000000  // if raspberry PI set smaller size.
 #define HEAPSIZE     5000000
 #define FREESIZE         500
@@ -28,7 +28,7 @@ address
 #define NTTBASE 1000
 #define RECORDMAX 12
 #define ATOMSIZE 2048
-#define BUFSIZE 2048
+#define BUFSIZE 65536
 #define STRSIZE 2048
 #define CTRLSTK 10
 #define PARASIZE 100
