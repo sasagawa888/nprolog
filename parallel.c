@@ -1105,7 +1105,6 @@ void *creceiver(void *arg)
 	child_buffer_end = j;
 
 	exit:
-	printf("receive from parent %s\n",child_buffer);
 
 	child_buffer_ready = 1;
 	pthread_cond_signal(&md_cond);
