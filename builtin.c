@@ -228,12 +228,6 @@ void init_builtin(void)
     defbuiltin("set_prolog_flag", b_set_prolog_flag, 2);
     defbuiltin("cinline", b_cinline, 1);
     defbuiltin("format", b_format, 3);
-    defbuiltin("create_client_curl", b_create_client_curl, 2);
-    defbuiltin("send_curl", b_send_curl, 2);
-    defbuiltin("recv_curl", b_recv_curl, 2);
-    defbuiltin("close_curl", b_close_curl, 1);
-    defbuiltin("set_curl_option", b_set_curl_option, 2);
-    defbuiltin("add_curl_header", b_add_curl_header, 2);
     defbuiltin("string_atom", b_string_atom, 2);
     defbuiltin("initialization", b_initialization, 1);
     definfix("\\+", b_not, 900, FY);

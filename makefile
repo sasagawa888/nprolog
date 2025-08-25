@@ -1,8 +1,8 @@
 CC   = gcc
-LIBS = -lm -ldl -pthread -lcurl
-LIBSRASPI = -lm -ldl -lwiringPi -pthread -lcurl
+LIBS = -lm -ldl -pthread 
+LIBSRASPI = -lm -ldl -lwiringPi -pthread 
 INCS =  
-CFLAGS = $(INCS) -Wall -O3 -flto
+CFLAGS = $(INCS) -Wall -O3 
 LDFLAGS :=
 DESTDIR :=
 PREFIX  := /usr/local

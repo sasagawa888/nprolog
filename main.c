@@ -17,7 +17,6 @@ written by kenichi sasagawa 2016/8~
 #include <netdb.h>
 #include <pthread.h>
 #include <unistd.h>
-#include <curl/curl.h>
 #include "npl.h"
 
 //global vers

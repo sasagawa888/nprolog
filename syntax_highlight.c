@@ -77,10 +77,8 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "peek_code" }, { "peek_char" }, { "peek_byte" },
     { "stream_property" }, { "dynamic" },
     { "create_client_socket" }, { "create_server_socket" },
-    { "recv_socket" }, { "close_socket" },
-    { "create_client_curl" }, { "send_curl" }, { "recv_curl" },
-    { "close_curl" }, { "initialization" },
-    { "set_curl_option" }, { "add_curl_header" }, { "string_atom" },
+    { "recv_socket" }, { "close_socket" }, { "initialization" },
+    { "string_atom" },
     { "label" }, { "all_different" },
 };
 

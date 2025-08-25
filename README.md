@@ -27,15 +27,6 @@ On Linux  type "make" on terminal. and type "sudo make install" on terminal.
 
 see https://www.youtube.com/watch?v=36vUd8ThMF0
 
-Starting from version 4.08, the CURL library is required.
-If it is not installed by default, please install it using the following commands:
-
-```
-sudo apt update
-sudo apt install libcurl4-openssl-dev
-sudo apt install libncurses-dev
-```
-
 - On MacOs be sure to install ncurses 
 
 ```
