@@ -9,33 +9,35 @@ Note: We later became aware that another system with the same name, N-Prolog, al
 ![npl](npl.png)
 
 
-## OS
-We have confirmed the operation on the following OS.
-
-- Ubuntu
-- Linux MINT
-- RaspberryPI Raspbian
-- OpenBSD
-- FreeBSD
-- MacOS
-
-Please use WSL when using it on Windows. 
-
 ## Installation
 In home directory ,make clone or download zip file from github.
-On Linux  type "make" on terminal. and type "sudo make install" on terminal. 
+Change to the git cloned or downloaded N-Prolog directory.
 
-see https://www.youtube.com/watch?v=36vUd8ThMF0
+- Type "sudo make install".
 
-- On MacOs be sure to install ncurses 
+Update N-Prolog
+- Type "sudo make clean".
+- Type "sudo make install".
 
+You may get an error that the curses.h file cannot be found when compiling NPL & Edlog.
+In this case, enter the following from the terminal
+
+```sh
+sudo apt install libncurses-dev
 ```
-  brew install ncurses
-  export PATH=$PATH:/opt/homebrew/Cellar/ncurses/6.5/bin
-```
-- Raspberry Pi
-It has been found that recent Raspberry Pi OS versions do not come with WiringPi pre-installed.
-Please clone it from the WiringPi GitHub repository and install it using ./build.
+
+# Supported OS:
+
+- Raspberry Pi OS
+- Ubuntu
+- Linux Mint
+
+- Use of other operating systems is at your own discretion.
+Unsupported Operating Systems
+Operating systems other than the officially supported ones (Raspberry Pi OS, Ubuntu, Mint) are not officially supported, as I do not have the hardware or sufficient experience to properly test them.
+If you wish to run this project on an unsupported OS, please feel free to adapt the code on your own.
+If your modifications are successful, we encourage you to publish a branch so that others can benefit from your work.
+
 
 ## File Path Resolution in N-Prolog
 
