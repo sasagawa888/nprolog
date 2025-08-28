@@ -1,6 +1,5 @@
 CC   = gcc
 LIBS = -lm -ldl -pthread 
-LIBSRASPI = -lm -ldl -lwiringPi -pthread 
 INCS =  
 CFLAGS = $(INCS) -Wall -O3 
 LDFLAGS :=
@@ -19,7 +18,6 @@ ifeq  ($(shell uname -n),raspberrypi)
 		LIBS += -lwiringPi
 	endif
 endif
-
 
 
 NPL_OBJS = main.o \
@@ -53,9 +51,9 @@ OBJ_PROLOG := $(SRC_PROLOG:.pl=.o)
 	echo "use_module(compiler),compile_file('./$<')." | ./npl -r
 	touch $@
 
-all: $(NPL_OBJS) $(NPL) $(EDLOG) $(OBJ_PROLOG)
+all: $(NPL_OBJS) $(NPL) $(EDLOG)
 $(NPL): $(NPL_OBJS)
-	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBS) $(LDFLAGS)
+	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBS) $(CFLAGS)
 
 
 $(EDLOG): $(EDLOG_OBJS)
