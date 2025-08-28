@@ -4026,7 +4026,9 @@ int b_end_of_file(int arglist, int rest, int th)
 	    variables[th] = variables_save[th];
 	    break_flag = 0;
 	    longjmp(buf2, 1);
-	} else
+	} else if (!isatty(fileno(stdin))) {
+		longjmp(buf, 2);
+	} else 
 	    return (YES);
     }
     exception(ARITY_ERR, ind, arglist, th);

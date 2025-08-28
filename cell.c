@@ -33,7 +33,7 @@ void init_cell(void)
     makeatom("nil", SIMP);	//address = 0
     makeatom("yes", SIMP);	//address = 2
     makeatom("no", SIMP);	//address = 4
-    makeatom("end_of_file", SIMP);	//address = 6
+    makeatom("end_of_file", SYS);	//address = 6
     makeatom("<undef>", SIMP);	//address = 8
     makeatom("!", SYS);		//address = 10
     makeatom(",", OPE);		//address = 12

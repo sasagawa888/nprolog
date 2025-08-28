@@ -75,8 +75,7 @@ other option
 ```
 $ npl -h
 List of options:
--c            -- NPL start with compiler.
--l filename   -- NPL starts after reading the file.
+-c filename   -- NPL starts after reading the file.
 -h            -- display help.
 -r            -- NPL does not use editable REPL.
 -s filename   -- NPL run file with script mode.
