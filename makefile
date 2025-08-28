@@ -1,3 +1,6 @@
+USE_WIRINGPI ?= 0
+USE_FLTO ?= 0
+
 CC   = gcc
 LIBS = -lm -ldl -pthread 
 INCS =  
@@ -19,6 +22,9 @@ ifeq  ($(shell uname -n),raspberrypi)
 	endif
 endif
 
+ifeq ($(USE_FLTO),1)
+	CFLAGS += -flto
+endif 
 
 NPL_OBJS = main.o \
 	parser.o \

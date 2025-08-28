@@ -1,7 +1,30 @@
 # AtFirst
-This document provides an overview of many documents. Please read it first.
+
+# Common
+Please do as follows:
+
+```
+sudo make install
+```
+
+Some libraries need to be compiled. They use a C wrapper and will not work unless compiled. 
+Please do as follows:
+
+```
+make prolog
+```
+
+By default, the installation is kept light by compiling without the -flto option. To enable faster performance with -flto, please recompile as follows:
+
+```
+sudo make clean
+sudo make install USE_FLTO=1
+
+```
 
 # Dosuments
+This document provides an overview of many documents. Please read it first.
+
 ![UserManual](MANUAL.md)
 This is the user manual for N-Prolog.
 
