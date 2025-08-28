@@ -14,6 +14,14 @@ CURSES_LIBS := $(shell ncursesw6-config --libs)
 NPL = npl
 EDLOG = edlog
 
+ifeq  ($(shell uname -n),raspberrypi)
+	ifeq ($(USE_WIRINGPI),1)
+		LIBS += -lwiringPi
+	endif
+endif
+
+
+
 NPL_OBJS = main.o \
 	parser.o \
 	function.o \
@@ -34,15 +42,21 @@ NPL_OBJS = main.o \
 
 EDLOG_OBJS = edlog.o syntax_highlight.o
 
-ifeq  ($(shell uname -n),raspberrypi)
-all: $(NPL_OBJS) $(NPL)
-$(NPL): $(NPL_OBJS)
-	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBSRASPI)
-else
-all: $(NPL_OBJS) $(NPL) $(EDLOG)
+# Files in library/ that need to be compiled 
+SRC_PROLOG := library/opengl.pl \
+	library/plot.pl \
+	library/python.pl \
+	library/tcltk.pl
+
+OBJ_PROLOG := $(SRC_PROLOG:.pl=.o) 
+./library/%.o: ./library/%.pl npl
+	echo "use_module(compiler),compile_file('./$<')." | ./npl -r
+	touch $@
+
+all: $(NPL_OBJS) $(NPL) $(EDLOG) $(OBJ_PROLOG)
 $(NPL): $(NPL_OBJS)
 	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBS) $(LDFLAGS)
-endif
+
 
 $(EDLOG): $(EDLOG_OBJS)
 	$(CC) $(LDFLAGS) $^ -o $@ $(CURSES_LIBS)
@@ -50,10 +64,12 @@ $(EDLOG): $(EDLOG_OBJS)
 edlog.o: edlog.c edlog.h term.h
 	$(CC) $(CFLAGS) -c edlog.c $(CURSES_CFLAGS)
 
-install: $(NPL) $(EDLOG)
+install: $(NPL) $(EDLOG) 
 	mkdir -p $(DEST)
 	install -s $(NPL) $(DEST)
 	install -s $(EDLOG) $(DEST)
+
+prolog: $(OBJ_PROLOG)
 
 uninstall:
 	rm -f $(DEST)/npl $(DEST)/edlog
@@ -64,6 +80,6 @@ uninstall:
 .PHONY: clean all
 
 clean: 
-	rm -f *.o $(NPL) $(EDLOG)
+	rm -f *.o $(NPL) $(EDLOG) $(OBJ_PROLOG)
 
 
