@@ -289,9 +289,12 @@ int main(int argc, char *argv[])
     if (path)
 	b_consult(list1(makeconst("library/startup.pl")), NIL, 0);
 
-    while ((ch = getopt(argc, argv, "c:s:rhvn")) != -1) {
+    while ((ch = getopt(argc, argv, "l:s:crhvn")) != -1) {
 	switch (ch) {
 	case 'c':
+		b_consult(list1(makeconst("library/compiler.pl")), NIL, 0);
+		break;
+	case 'l':
 	    b_consult(list1(makeconst(optarg)), NIL, 0);
 	    break;
 	case 's':
