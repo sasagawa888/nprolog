@@ -1,3 +1,6 @@
+.POSIX:
+.DELETE_ON_ERROR:
+
 USE_WIRINGPI ?= 0
 USE_FLTO ?= 0
 
@@ -5,7 +8,6 @@ CC   = gcc
 LIBS = -lm -ldl -pthread 
 INCS =  
 CFLAGS = $(INCS) -Wall -O3 
-LDFLAGS :=
 DESTDIR :=
 PREFIX  := /usr/local
 BINDIR  := /bin
@@ -68,13 +70,16 @@ $(EDLOG): $(EDLOG_OBJS)
 edlog.o: edlog.c edlog.h term.h
 	$(CC) $(CFLAGS) -c edlog.c $(CURSES_CFLAGS)
 
+.PHONY:install
 install: $(NPL) $(EDLOG) 
 	mkdir -p $(DEST)
 	install -s $(NPL) $(DEST)
 	install -s $(EDLOG) $(DEST)
 
+.PHONY:prolog
 prolog: $(OBJ_PROLOG)
 
+.PHONY:uninstall
 uninstall:
 	rm -f $(DEST)/npl $(DEST)/edlog
 
