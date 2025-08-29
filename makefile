@@ -33,7 +33,10 @@ ifeq ($(shell uname -n),raspberrypi)
 endif
 
 ifeq ($(USE_FLTO),1)
-	CFLAGS += -flto
+CFLAGS += -flto
+endif
+ifeq ($(USE_GDB),1)
+CFLAGS += -O0 -g
 endif
 
 NPL_OBJS := main.o \
