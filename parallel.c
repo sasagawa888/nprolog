@@ -645,15 +645,6 @@ int b_dp_and(int arglist, int rest, int th)
 		}
 		printf("ctrl+C\n");
 		ctrl_c_flag = 0;
-		while (!all_received(result, m)) {
-		    for (i = 0; i < m; i++) {
-			if (parent_buffer[i][0] != 0 && result[i] == 0) {
-			    result[i] = 1;
-			}
-		    }
-		    usleep(1000);
-		}
-		child_pt = save;
 		longjmp(buf, 1);
 	    }
 	    for (i = 0; i < m; i++) {
@@ -668,6 +659,16 @@ int b_dp_and(int arglist, int rest, int th)
 				send_to_child_control(j, 0x11);	// stop signal
 			    }
 			}
+			while (!all_received(result, m)) {
+			    for (i = 0; i < m; i++) {
+				if (parent_buffer[i][0] != 0
+				    && result[i] == 0) {
+				    result[i] = 1;
+				}
+			    }
+			    usleep(1000);
+			}
+			child_pt = save;
 			return (NO);
 		    }
 		}
@@ -714,15 +715,6 @@ int b_dp_or(int arglist, int rest, int th)
 		}
 		printf("ctrl+C\n");
 		ctrl_c_flag = 0;
-		while (!all_received(result, m)) {
-		    for (i = 0; i < m; i++) {
-			if (parent_buffer[i][0] != 0 && result[i] == 0) {
-			    result[i] = 1;
-			}
-		    }
-		    usleep(1000);
-		}
-		child_pt = save;
 		longjmp(buf, 1);
 	    }
 	    for (i = 0; i < m; i++) {
@@ -737,6 +729,16 @@ int b_dp_or(int arglist, int rest, int th)
 				send_to_child_control(j, 0x11);	// stop signal
 			    }
 			}
+			while (!all_received(result, m)) {
+			    for (i = 0; i < m; i++) {
+				if (parent_buffer[i][0] != 0
+				    && result[i] == 0) {
+				    result[i] = 1;
+				}
+			    }
+			    usleep(1000);
+			}
+			child_pt = save;
 			return (prove_all(rest, sp[th], th));
 		    }
 		}

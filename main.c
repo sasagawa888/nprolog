@@ -416,7 +416,7 @@ void init_repl(void)
     leap_point = NIL;
     left_margin = 4;
     big_pt0 = 0;
-	child_pt = 0;
+    child_pt = 0;
     //initialize variant variable
     for (i = 0; i < VARIANTSIZE; i++) {
 	for (j = 0; j < THREADSIZE; j++) {
