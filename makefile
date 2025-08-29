@@ -4,21 +4,29 @@
 USE_WIRINGPI ?= 0
 USE_FLTO ?= 0
 
-CC   = gcc
-LIBS = -lm -ldl -pthread 
-INCS =  
-CFLAGS = $(INCS) -Wall -O3 
+CC   := gcc
+LIBS := -lm -ldl -pthread
+INCS :=
+CFLAGS := $(INCS) -Wall -O3
 DESTDIR :=
 PREFIX  := /usr/local
 BINDIR  := /bin
-DEST     = $(DESTDIR)$(PREFIX)$(BINDIR)
-CURSES_CFLAGS := $(shell ncursesw6-config --cflags)
-CURSES_LIBS := $(shell ncursesw6-config --libs)
+DEST    := $(DESTDIR)$(PREFIX)$(BINDIR)
 
-NPL = npl
-EDLOG = edlog
+CURSES_CFLAGS := $(shell command -v ncursesw6-config >/dev/null 2>&1 && ncursesw6-config --cflags || echo "")
+CURSES_LIBS   := $(shell command -v ncursesw6-config >/dev/null 2>&1 && ncursesw6-config --libs || echo "-lncurses")
 
-ifeq  ($(shell uname -n),raspberrypi)
+
+NPROLOG ?= $(CURDIR)
+export NPROLOG
+
+SHAREDIR ?= $(PREFIX)/share/nprolog
+export SHAREDIR
+
+NPL   := npl
+EDLOG := edlog
+
+ifeq ($(shell uname -n),raspberrypi)
 	ifeq ($(USE_WIRINGPI),1)
 		LIBS += -lwiringPi
 	endif
@@ -26,9 +34,9 @@ endif
 
 ifeq ($(USE_FLTO),1)
 	CFLAGS += -flto
-endif 
+endif
 
-NPL_OBJS = main.o \
+NPL_OBJS := main.o \
 	parser.o \
 	function.o \
 	builtin.o \
@@ -46,49 +54,59 @@ NPL_OBJS = main.o \
 	edit.o \
 	syntax_highlight.o
 
-EDLOG_OBJS = edlog.o syntax_highlight.o
 
-# Files in library/ that need to be compiled 
+EDLOG_OBJS := edlog.o syntax_highlight.o
+
+
 SRC_PROLOG := library/opengl.pl \
 	library/plot.pl \
 	library/python.pl \
 	library/tcltk.pl
 
-OBJ_PROLOG := $(SRC_PROLOG:.pl=.o) 
-./library/%.o: ./library/%.pl npl
-	echo "use_module(compiler),compile_file('./$<')." | ./npl -r
+OBJ_PROLOG := $(SRC_PROLOG:.pl=.o)
+
+
+./library/%.o: ./library/%.pl $(NPL)
+	echo "use_module(compiler),compile_file('./$<')." | ./$(NPL) -r
 	touch $@
 
-all: $(NPL_OBJS) $(NPL) $(EDLOG)
+TARGETS := $(NPL) $(EDLOG)
+
+all: $(TARGETS)
+
+
 $(NPL): $(NPL_OBJS)
-	$(CC) $(NPL_OBJS) -o $(NPL) $(LIBS) $(CFLAGS)
+	$(CC) $(CFLAGS) $^ -o $@ $(LIBS)
 
 
 $(EDLOG): $(EDLOG_OBJS)
-	$(CC) $(LDFLAGS) $^ -o $@ $(CURSES_LIBS)
+	$(CC) $(CFLAGS) $^ -o $@ $(CURSES_LIBS)
 
 edlog.o: edlog.c edlog.h term.h
-	$(CC) $(CFLAGS) -c edlog.c $(CURSES_CFLAGS)
+	$(CC) $(CFLAGS) -c $< $(CURSES_CFLAGS)
 
-.PHONY:install
-install: $(NPL) $(EDLOG) 
+
+%.o: %.c npl.h
+	$(CC) $(CFLAGS) -c $< -o $@
+
+
+.PHONY: install
+install: $(NPL) $(EDLOG)
 	mkdir -p $(DEST)
 	install -s $(NPL) $(DEST)
 	install -s $(EDLOG) $(DEST)
+	mkdir -p $(DESTDIR)$(SHAREDIR)
+	install -m 644 library/* $(DESTDIR)$(SHAREDIR)
 
-.PHONY:prolog
+
+.PHONY: prolog
 prolog: $(OBJ_PROLOG)
 
-.PHONY:uninstall
+.PHONY: uninstall
 uninstall:
-	rm -f $(DEST)/npl $(DEST)/edlog
+	rm -f $(DEST)/$(NPL) $(DEST)/$(EDLOG)
 
-%.o: %.c npl.h
-	$(CC) -c $< -o $@ $(CFLAGS)
-
+# clean
 .PHONY: clean all
-
-clean: 
+clean:
 	rm -f *.o $(NPL) $(EDLOG) $(OBJ_PROLOG)
-
-
