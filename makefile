@@ -27,9 +27,9 @@ NPL   := npl
 EDLOG := edlog
 
 ifeq ($(shell uname -n),raspberrypi)
-	ifeq ($(USE_WIRINGPI),1)
-		LIBS += -lwiringPi
-	endif
+ifeq ($(USE_WIRINGPI),1)
+LIBS += -lwiringPi
+endif
 endif
 
 ifeq ($(USE_FLTO),1)
