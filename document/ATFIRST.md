@@ -22,6 +22,14 @@ sudo make install USE_FLTO=1
 
 ```
 
+To enable GDB with -g -O0 option.
+
+```
+sudo make clean
+sudo make install USE_GDB=1
+
+```
+
 # Dosuments
 This document provides an overview of many documents. Please read it first.
 
