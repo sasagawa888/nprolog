@@ -157,7 +157,7 @@ int error_stream;
 
 /* -----distributed parallel & TCPIP------*/
 pthread_mutex_t mutex2;
-pthread_cond_t md_cond; 
+pthread_cond_t md_cond;
 int child_buffer_ready;
 int parent_sockfd[2];
 int child_sockfd[PARASIZE];
@@ -167,12 +167,12 @@ int child_num;
 int child_id;
 pthread_t preceiver_thread[PARASIZE];
 pthread_t creceiver_thread;
-char input_buffer[BUFSIZE];	
+char input_buffer[BUFSIZE];
 char output_buffer[BUFSIZE];
 char parent_buffer[BUFSIZE][PARASIZE];
-char child_buffer[BUFSIZE]; 
+char child_buffer[BUFSIZE];
 int child_buffer_pos;
-int child_buffer_end;	
+int child_buffer_end;
 
 /* multi thread */
 pthread_mutex_t mutex;
@@ -348,8 +348,8 @@ int main(int argc, char *argv[])
 		init_repl();
 		pthread_mutex_lock(&mutex2);
 		while (!child_buffer_ready) {
-            pthread_cond_wait(&md_cond, &mutex2);
-        }
+		    pthread_cond_wait(&md_cond, &mutex2);
+		}
 		child_buffer_ready = 0;
 		pthread_mutex_unlock(&mutex2);
 		input =
@@ -364,7 +364,7 @@ int main(int argc, char *argv[])
 		printf("Send to parent %s\n", output_buffer);
 		fflush(stdout);
 		memset(output_buffer, 0, sizeof(output_buffer));
-		}
+	    }
     } else if (ret == 1) {
 	ret = 0;
 	goto repl;
@@ -373,8 +373,7 @@ int main(int argc, char *argv[])
 	    printf("Shutting down the system...\n");
 	    int ret = system("sudo shutdown now");
 	    if (ret == -1)
-		exception(SYSTEM_ERR, makestr("dp_halt shatdown"), NIL,
-			  0);
+		exception(SYSTEM_ERR, makestr("dp_halt shatdown"), NIL, 0);
 	}
 	return 0;
     }
@@ -628,13 +627,14 @@ int prove(int goal, int bindings, int rest, int th)
 	    longjmp(buf, 1);
 	} else {
 	    send_to_parent(makeconst("ctrl"));
-	    printf("ctrl+C\n");fflush(stdout);
+	    printf("ctrl+C\n");
+	    fflush(stdout);
 	    fflush(stdout);
 	    longjmp(buf, 1);
 	}
     }
 
-    
+
     if (nest > 40000)
 	exception(RESOURCE_ERR, NIL, makestr("prove recursion over max"),
 		  th);

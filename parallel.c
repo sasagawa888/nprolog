@@ -133,22 +133,22 @@ void init_child(int n, int x)
 
 int receive_from_parent(void)
 {
-	child_buffer_pos = 0;
-	child_buffer_end = 0;
+    child_buffer_pos = 0;
+    child_buffer_end = 0;
     return (makestr(child_buffer));
 }
 
 void send_to_parent(int x)
 {
-    int n,i;
+    int n, i;
 
     // send message to parent
     memset(output_buffer, 0, sizeof(output_buffer));
     strcpy(output_buffer, GET_NAME(x));
-	i = strlen(output_buffer);
-	output_buffer[i] = 0x16;
-	output_buffer[i+1] = 0;
-    n = write(parent_sockfd[1], output_buffer, i+1);
+    i = strlen(output_buffer);
+    output_buffer[i] = 0x16;
+    output_buffer[i + 1] = 0;
+    n = write(parent_sockfd[1], output_buffer, i + 1);
     memset(output_buffer, 0, sizeof(output_buffer));
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent"), x, 0);
@@ -158,12 +158,12 @@ void send_to_parent(int x)
 
 void send_to_parent_buffer(void)
 {
-    int n,i;
+    int n, i;
 
-	i = strlen(output_buffer);
-	output_buffer[i] = 0x16;
-	output_buffer[i+1] = 0;
-    n = write(parent_sockfd[1], output_buffer, i+1);
+    i = strlen(output_buffer);
+    output_buffer[i] = 0x16;
+    output_buffer[i + 1] = 0;
+    n = write(parent_sockfd[1], output_buffer, i + 1);
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent buffer"), NIL, 0);
     }
@@ -173,10 +173,10 @@ void send_to_parent_control(int code)
 {
     int n;
 
-	memset(output_buffer,0,sizeof(output_buffer));
-	output_buffer[0] = code;
-	output_buffer[1] = 0x16;
-	output_buffer[2] = 0;
+    memset(output_buffer, 0, sizeof(output_buffer));
+    output_buffer[0] = code;
+    output_buffer[1] = 0x16;
+    output_buffer[2] = 0;
     n = write(parent_sockfd[1], output_buffer, 2);
     if (n < 0) {
 	exception(SYSTEM_ERR, makestr("send to parent code"), NIL, 0);
@@ -186,12 +186,12 @@ void send_to_parent_control(int code)
 
 void send_to_child(int n, int x)
 {
-    int m,i;
+    int m, i;
 
     memset(output_buffer, 0, sizeof(output_buffer));
     strcpy(output_buffer, GET_NAME(x));
-	i = strlen(output_buffer);
-	output_buffer[i] = 0x16;
+    i = strlen(output_buffer);
+    output_buffer[i] = 0x16;
     m = write(child_sockfd[n], output_buffer, strlen(output_buffer));
     memset(output_buffer, 0, sizeof(output_buffer));
     if (m < 0) {
@@ -202,12 +202,12 @@ void send_to_child(int n, int x)
 
 void send_to_child_without_0x16(int n, int x)
 {
-    int m,i;
+    int m, i;
 
     memset(output_buffer, 0, sizeof(output_buffer));
     strcpy(output_buffer, GET_NAME(x));
-	i = strlen(output_buffer);
-	output_buffer[i] = '\n';
+    i = strlen(output_buffer);
+    output_buffer[i] = '\n';
     m = write(child_sockfd[n], output_buffer, strlen(output_buffer));
     memset(output_buffer, 0, sizeof(output_buffer));
     if (m < 0) {
@@ -221,9 +221,9 @@ void send_to_child_control(int n, int code)
 {
     int m;
 
-	memset(output_buffer,0,sizeof(output_buffer));
-	output_buffer[0] = code;
-	output_buffer[1] = 0x16;
+    memset(output_buffer, 0, sizeof(output_buffer));
+    output_buffer[0] = code;
+    output_buffer[1] = 0x16;
     m = write(child_sockfd[n], output_buffer, 2);
     if (m < 0) {
 	exception(SYSTEM_ERR, makestr("send to child buffer"), NIL, 0);
@@ -234,8 +234,8 @@ void send_to_child_control_without_0x16(int n, int code)
 {
     int m;
 
-	memset(output_buffer,0,sizeof(output_buffer));
-	output_buffer[0] = code;
+    memset(output_buffer, 0, sizeof(output_buffer));
+    output_buffer[0] = code;
     m = write(child_sockfd[n], output_buffer, 1);
     if (m < 0) {
 	exception(SYSTEM_ERR, makestr("send to child buffer"), NIL, 0);
@@ -245,7 +245,7 @@ void send_to_child_control_without_0x16(int n, int code)
 
 int receive_from_child(int n)
 {
-	return (makestr(parent_buffer[n]));
+    return (makestr(parent_buffer[n]));
 }
 
 
@@ -275,9 +275,9 @@ int b_dp_create(int arglist, int rest, int th)
 	}
 	init_preceiver(child_num);
 
-	for(i=0;i<child_num;i++){
-		pred = list2(makeatom("dp_setid",SYS),makeint(i));
-		send_to_child(i, pred_to_str(pred));
+	for (i = 0; i < child_num; i++) {
+	    pred = list2(makeatom("dp_setid", SYS), makeint(i));
+	    send_to_child(i, pred_to_str(pred));
 	}
 	return (prove_all(rest, sp[th], th));
     }
@@ -287,33 +287,33 @@ int b_dp_create(int arglist, int rest, int th)
 
 int b_dp_setid(int arglist, int rest, int th)
 {
-	int n, arg1, ind;
+    int n, arg1, ind;
 
     n = length(arglist);
     ind = makeind("dp_setid", n, th);
     if (n == 1) {
-		arg1 = car(arglist);
-		child_id = GET_INT(arg1);
-		return (prove_all(rest, sp[th], th));
-	}
-	exception(ARITY_ERR, ind, arglist, th);
+	arg1 = car(arglist);
+	child_id = GET_INT(arg1);
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
 int b_dp_senderr(int arglist, int rest, int th)
 {
-	int n, arg1, ind;
+    int n, arg1, ind;
 
     n = length(arglist);
-    ind = makeind("dp_senderr", n, th); 
+    ind = makeind("dp_senderr", n, th);
     if (n == 1) {
-		arg1 = car(arglist);
-		
-		printf("occured an error in child %d\n",GET_INT(arg1));
-		fflush(stdout);
-		return (NO);
-	}
-	exception(ARITY_ERR, ind, arglist, th);
+	arg1 = car(arglist);
+
+	printf("occured an error in child %d\n", GET_INT(arg1));
+	fflush(stdout);
+	return (NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
 
@@ -328,7 +328,7 @@ int b_dp_close(int arglist, int rest, int th)
     if (n == 0) {
 
 	if (parent_flag) {
-	    exp = makeatom("dp_close",SYS);
+	    exp = makeatom("dp_close", SYS);
 	    for (i = 0; i < child_num; i++) {
 		send_to_child(i, pred_to_str(exp));
 	    }
@@ -361,13 +361,13 @@ int b_dp_halt(int arglist, int rest, int th)
     if (n == 0) {
 
 	if (parent_flag) {
-	    exp = makeatom("dp_halt",SYS);
+	    exp = makeatom("dp_halt", SYS);
 	    for (i = 0; i < child_num; i++) {
 		send_to_child(i, pred_to_str(exp));
 	    }
 	}
 
-	
+
 	if (child_flag) {
 	    printf("N-Prolog exit network mode.\n");
 	    receiver_exit_flag = 1;
@@ -388,7 +388,7 @@ int b_dp_halt(int arglist, int rest, int th)
 
 int b_dp_prove(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2, res ,i;
+    int n, ind, arg1, arg2, res, i;
 
     n = length(arglist);
     ind = makeind("dp_prove", n, th);
@@ -401,21 +401,20 @@ int b_dp_prove(int arglist, int rest, int th)
 	    exception(NOT_CALLABLE, ind, arg2, th);
 
 	i = GET_INT(arg1);
-	memset(parent_buffer[i],0,sizeof(parent_buffer[i]));
+	memset(parent_buffer[i], 0, sizeof(parent_buffer[i]));
 	send_to_child(GET_INT(arg1), pred_to_str(arg2));
-	while(parent_buffer[i][0] == 0){
-	usleep(1000);
-	if(ctrl_c_flag == 1){
-		send_to_child_control(GET_INT(arg1),0x11);
+	while (parent_buffer[i][0] == 0) {
+	    usleep(1000);
+	    if (ctrl_c_flag == 1) {
+		send_to_child_control(GET_INT(arg1), 0x11);
 		printf("ctrl+C\n");
-	    longjmp(buf, 1);
+		longjmp(buf, 1);
+	    }
 	}
-	}
-	res =
-	    convert_to_variant(str_to_pred(receive_from_child(i)), th);
-	
+	res = convert_to_variant(str_to_pred(receive_from_child(i)), th);
+
 	if (prove_all(res, sp[th], th) == YES)
-		return (prove_all(rest, sp[th], th));
+	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
     }
@@ -423,10 +422,19 @@ int b_dp_prove(int arglist, int rest, int th)
     return (NO);
 }
 
+int all_received(int *result, int size)
+{
+    for (int i = 0; i < size; i++) {
+	if (result[i] == 0)
+	    return 0;
+    }
+    return 1;
+}
+
 // parent Prolog
 int b_dp_transfer(int arglist, int rest, int th)
 {
-    int n, ind, arg1, i, m;
+    int n, ind, arg1, i, m, result[PARASIZE];
     FILE *file;
 
     n = length(arglist);
@@ -442,10 +450,14 @@ int b_dp_transfer(int arglist, int rest, int th)
 	    exception(CANT_OPEN, ind, arg1, th);
 	}
 
+	for (i = 0; i < child_num; i++) {
+	    result[i] = 0;
+	    memset(parent_buffer[i], 0, sizeof(parent_buffer[i]));
+	}
 
 	for (i = 0; i < child_num; i++) {
 	    send_to_child_control_without_0x16(i, 0x15);
-		send_to_child_without_0x16(i, arg1);
+	    send_to_child_without_0x16(i, arg1);
 
 	    int bytes_read;
 	    while ((bytes_read =
@@ -461,10 +473,17 @@ int b_dp_transfer(int arglist, int rest, int th)
 	    if (m < 0) {
 		exception(SYSTEM_ERR, makestr("dp_transfer"), NIL, th);
 	    }
-	    receive_from_child(i);
 	    fseek(file, 0, SEEK_SET);
 	}
 	fclose(file);
+	while (!all_received(result, child_num)) {
+	    for (i = 0; i < child_num; i++) {
+		if (parent_buffer[i][0] != 0 && result[i] == 0) {
+		    result[i] = 1;
+		}
+	    }
+	    usleep(1000);
+	}
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -473,7 +492,7 @@ int b_dp_transfer(int arglist, int rest, int th)
 
 int b_dp_consult(int arglist, int rest, int th)
 {
-    int n, ind, arg1, pred1, pred2, i;
+    int n, ind, arg1, pred1, pred2, i, result[PARASIZE];
 
     n = length(arglist);
     ind = makeind("dp_consult", n, th);
@@ -485,12 +504,22 @@ int b_dp_consult(int arglist, int rest, int th)
 
 	pred1 = list2(makeatom("consult", SYS), arg1);
 	prove_all(pred1, sp[th], th);
-
+	for (i = 0; i < child_num; i++) {
+	    result[i] = 0;
+	    memset(parent_buffer[i], 0, sizeof(parent_buffer[i]));
+	}
 	if (parent_flag) {
 	    pred2 = list2(makeatom("dp_consult", SYS), arg1);
 	    for (i = 0; i < child_num; i++) {
 		send_to_child(i, pred_to_str(pred2));
-		receive_from_child(i);
+	    }
+	    while (!all_received(result, child_num)) {
+		for (i = 0; i < n; i++) {
+		    if (parent_buffer[i][0] != 0 && result[i] == 0) {
+			result[i] = 1;
+		    }
+		}
+		usleep(1000);
 	    }
 	}
 	return (YES);
@@ -502,7 +531,7 @@ int b_dp_consult(int arglist, int rest, int th)
 
 int b_dp_reconsult(int arglist, int rest, int th)
 {
-    int n, ind, arg1, pred1, pred2, i;
+    int n, ind, arg1, pred1, pred2, i, result[PARASIZE];
 
     n = length(arglist);
     ind = makeind("dp_reconsult", n, th);
@@ -514,12 +543,22 @@ int b_dp_reconsult(int arglist, int rest, int th)
 
 	pred1 = list2(makeatom("reconsult", SYS), arg1);
 	prove_all(pred1, sp[th], th);
-
+	for (i = 0; i < child_num; i++) {
+	    result[i] = 0;
+	    memset(parent_buffer[i], 0, sizeof(parent_buffer[i]));
+	}
 	if (parent_flag) {
 	    pred2 = list2(makeatom("dp_reconsult", SYS), arg1);
 	    for (i = 0; i < child_num; i++) {
 		send_to_child(i, pred_to_str(pred2));
-		receive_from_child(i);
+	    }
+	    while (!all_received(result, child_num)) {
+		for (i = 0; i < child_num; i++) {
+		    if (parent_buffer[i][0] != 0 && result[i] == 0) {
+			result[i] = 1;
+		    }
+		}
+		usleep(1000);
 	    }
 	}
 	return (YES);
@@ -531,7 +570,7 @@ int b_dp_reconsult(int arglist, int rest, int th)
 
 int b_dp_compile(int arglist, int rest, int th)
 {
-    int n, ind, arg1, pred1, pred2, i;
+    int n, ind, arg1, pred1, pred2, i, result[PARASIZE];
 
     n = length(arglist);
     ind = makeind("dp_compile", n, th);
@@ -543,13 +582,26 @@ int b_dp_compile(int arglist, int rest, int th)
 
 	pred1 = list2(makeatom("compile_file", PRED), arg1);
 	prove_all(pred1, sp[th], th);
-
+	for (i = 0; i < child_num; i++) {
+	    result[i] = 0;
+	    memset(parent_buffer[i], 0, sizeof(parent_buffer[i]));
+	}
 	if (parent_flag) {
-	    pred2 = list3(AND ,list2(makeatom("use_module",SYS),makeconst("compiler")),
-		                   list2(makeatom("compile_file", PRED), arg1));
+	    pred2 =
+		list3(AND,
+		      list2(makeatom("use_module", SYS),
+			    makeconst("compiler")),
+		      list2(makeatom("compile_file", PRED), arg1));
 	    for (i = 0; i < child_num; i++) {
 		send_to_child(i, pred_to_str(pred2));
-		receive_from_child(i);
+	    }
+	    while (!all_received(result, child_num)) {
+		for (i = 0; i < child_num; i++) {
+		    if (parent_buffer[i][0] != 0 && result[i] == 0) {
+			result[i] = 1;
+		    }
+		}
+		usleep(1000);
 	    }
 	}
 	return (YES);
@@ -559,17 +611,9 @@ int b_dp_compile(int arglist, int rest, int th)
 }
 
 
-int all_received(int *result, int size) {
-    for (int i = 0; i < size; i++) {
-        if (result[i] == 0)  
-            return 0;   
-    }
-    return 1;             
-}
-
 int b_dp_and(int arglist, int rest, int th)
 {
-    int n, ind, arg1, m, i, j, pred, res , result[PARASIZE];
+    int n, ind, arg1, m, i, j, pred, res, result[PARASIZE];
 
     n = length(arglist);
     ind = makeind("dp_and", n, th);
@@ -587,34 +631,44 @@ int b_dp_and(int arglist, int rest, int th)
 	    i++;
 	}
 
-	for(i=0;i<m;i++){
-		result[i] = 0;
-		memset(parent_buffer[i],0,sizeof(parent_buffer[i]));
+	for (i = 0; i < m; i++) {
+	    result[i] = 0;
+	    memset(parent_buffer[i], 0, sizeof(parent_buffer[i]));
 	}
-	
-	while(!all_received(result,m)){
-		if(ctrl_c_flag == 1){
-			for(i=0;i<m;i++){
-				if(result[i] == 0)
-				send_to_child_control(i,0x11);
-			}
-			printf("ctrl+C\n");
-			ctrl_c_flag = 0;
-	    	longjmp(buf, 1);
-		}
+
+	while (!all_received(result, m)) {
+	    if (ctrl_c_flag == 1) {
 		for (i = 0; i < m; i++) {
-			if(parent_buffer[i][0] != 0 && result[i] == 0){
-				result[i] = 1;
-				res = convert_to_variant(str_to_pred(receive_from_child(i)), th);
-				if (prove_all(res, sp[th], th) == NO){
-					for(j=0;j<m;j++){
-						if(result[j] == 0){
-							send_to_child_control(j,0x11); // stop signal
-						}
-					}
-					return(NO);
-	            }
-		   }
+		    if (result[i] == 0)
+			send_to_child_control(i, 0x11);
+		}
+		printf("ctrl+C\n");
+		ctrl_c_flag = 0;
+		while (!all_received(result, m)) {
+		    for (i = 0; i < m; i++) {
+			if (parent_buffer[i][0] != 0 && result[i] == 0) {
+			    result[i] = 1;
+			}
+		    }
+		    usleep(1000);
+		}
+		longjmp(buf, 1);
+	    }
+	    for (i = 0; i < m; i++) {
+		if (parent_buffer[i][0] != 0 && result[i] == 0) {
+		    result[i] = 1;
+		    res =
+			convert_to_variant(str_to_pred
+					   (receive_from_child(i)), th);
+		    if (prove_all(res, sp[th], th) == NO) {
+			for (j = 0; j < m; j++) {
+			    if (result[j] == 0) {
+				send_to_child_control(j, 0x11);	// stop signal
+			    }
+			}
+			return (NO);
+		    }
+		}
 	    }
 	}
 	return (prove_all(rest, sp[th], th));
@@ -643,37 +697,47 @@ int b_dp_or(int arglist, int rest, int th)
 	    i++;
 	}
 
-	for(i=0;i<m;i++){
-		result[i] = 0;
-		memset(parent_buffer[i],0,sizeof(parent_buffer[i]));
+	for (i = 0; i < m; i++) {
+	    result[i] = 0;
+	    memset(parent_buffer[i], 0, sizeof(parent_buffer[i]));
 	}
-	
-	while(!all_received(result,m)){
-		if(ctrl_c_flag == 1){
-			for(i=0;i<m;i++){
-				if(result[i] == 0)
-				send_to_child_control(i,0x11);
-			}
-			printf("ctrl+C\n");
-			ctrl_c_flag = 0;
-	    	longjmp(buf, 1);
-		}
+
+	while (!all_received(result, m)) {
+	    if (ctrl_c_flag == 1) {
 		for (i = 0; i < m; i++) {
-			if(parent_buffer[i][0] != 0 && result[i] == 0){
-				result[i] = 1;
-				res = convert_to_variant(str_to_pred(receive_from_child(i)), th);
-				if(prove_all(res, sp[th], th) == YES){
-					for(j=0;j<m;j++){
-						if(result[j] == 0){
-							send_to_child_control(j,0x11); // stop signal
-						}
-					}
-					return (prove_all(rest, sp[th], th));
-				} 
-			}
+		    if (result[i] == 0)
+			send_to_child_control(i, 0x11);
 		}
+		printf("ctrl+C\n");
+		ctrl_c_flag = 0;
+		while (!all_received(result, m)) {
+		    for (i = 0; i < m; i++) {
+			if (parent_buffer[i][0] != 0 && result[i] == 0) {
+			    result[i] = 1;
+			}
+		    }
+		    usleep(1000);
+		}
+		longjmp(buf, 1);
+	    }
+	    for (i = 0; i < m; i++) {
+		if (parent_buffer[i][0] != 0 && result[i] == 0) {
+		    result[i] = 1;
+		    res =
+			convert_to_variant(str_to_pred
+					   (receive_from_child(i)), th);
+		    if (prove_all(res, sp[th], th) == YES) {
+			for (j = 0; j < m; j++) {
+			    if (result[j] == 0) {
+				send_to_child_control(j, 0x11);	// stop signal
+			    }
+			}
+			return (prove_all(rest, sp[th], th));
+		    }
+		}
+	    }
 	}
-	return(NO);
+	return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -959,10 +1023,11 @@ int b_mt_prove(int arglist, int rest, int th)
     return (NO);
 }
 
-void print_ascii(char *str) {
-	int i;
+void print_ascii(char *str)
+{
+    int i;
     for (i = 0; i < strlen(str); i++) {
-        printf("0x%02X ", (unsigned char)str[i]);
+	printf("0x%02X ", (unsigned char) str[i]);
     }
     printf("\n");
 }
@@ -971,10 +1036,10 @@ void print_ascii(char *str) {
 // Thread for parent receiver
 void *preceiver(void *arg)
 {
-	int n, m, i;
-	char buffer[BUFSIZE],sub_buffer[BUFSIZE];
+    int n, m, i;
+    char buffer[BUFSIZE], sub_buffer[BUFSIZE];
 
-	n = *(int *) arg;
+    n = *(int *) arg;
 
     while (1) {
 
@@ -983,26 +1048,25 @@ void *preceiver(void *arg)
 
 	// read message from parent
 	memset(buffer, 0, sizeof(buffer));
-	reread:
+      reread:
 	memset(sub_buffer, 0, sizeof(sub_buffer));
-    m = read(child_sockfd[n], sub_buffer, sizeof(sub_buffer));
-    if (m < 0) {
-	exception(SYSTEM_ERR, makestr("receive from child"), makeint(n),
-		  0);
-    }
-
+	m = read(child_sockfd[n], sub_buffer, sizeof(sub_buffer));
+	if (m < 0) {
+	    exception(SYSTEM_ERR, makestr("receive from child"),
+		      makeint(n), 0);
+	}
 	//print_ascii(sub_buffer);printf("m=%d",m);fflush(stdout);
-	strcat(buffer,sub_buffer);
+	strcat(buffer, sub_buffer);
 
 	// normal message  0x16 is at m-1
-	if(sub_buffer[m-1] != 0x16)
-		goto reread;
+	if (sub_buffer[m - 1] != 0x16)
+	    goto reread;
 
 	//print_ascii(buffer); 
-	
+
 	i = strlen(buffer);
 	buffer[i] = 0;
-	strcpy(parent_buffer[n],buffer); 
+	strcpy(parent_buffer[n], buffer);
     }
 
     pthread_exit(NULL);
@@ -1012,10 +1076,10 @@ void *preceiver(void *arg)
 void *creceiver(void *arg)
 {
     int n, m, i, j;
-	char buffer[BUFSIZE],sub_buffer[BUFSIZE];
-	FILE *file;
+    char buffer[BUFSIZE], sub_buffer[BUFSIZE];
+    FILE *file;
 
-	if (!connect_flag) {
+    if (!connect_flag) {
 	//wait conneting
 	listen(parent_sockfd[0], 5);
 	parent_len = sizeof(parent_addr);
@@ -1030,43 +1094,43 @@ void *creceiver(void *arg)
 	}
     }
 
-    
+
     while (1) {
 
 	if (receiver_exit_flag)
 	    break;
 
-	
+
 	// read message from parent
 	memset(buffer, 0, sizeof(buffer));
-	reread:
+      reread:
 	memset(sub_buffer, 0, sizeof(sub_buffer));
 	n = read(parent_sockfd[1], sub_buffer, sizeof(sub_buffer));
 	if (n < 0) {
 	    exception(SYSTEM_ERR, makestr("*creceiver"), NIL, 0);
 	}
 
-	strcat(buffer,sub_buffer);
-	if(sub_buffer[n-1] != 0x16)
-		goto reread;
+	strcat(buffer, sub_buffer);
+	if (sub_buffer[n - 1] != 0x16)
+	    goto reread;
 
 	if (buffer[0] == 0x15) {	// dp-treansfer
 	    i = 1;
 	    j = 0;
-	    while (buffer[i] != '\n') { // get file name
+	    while (buffer[i] != '\n') {	// get file name
 		sub_buffer[j] = buffer[i];
 		i++;
 		j++;
 	    }
 	    sub_buffer[j] = 0;	// \n -> '0'
-		
+
 	    file = fopen(sub_buffer, "w");
 	    if (!file) {
 		exception(CANT_OPEN, makestr("dp_transfer"), NIL, 0);
 	    }
 	    i++;
 	    j = 0;
-	    while (buffer[i] != 0x16) { // get file data
+	    while (buffer[i] != 0x16) {	// get file data
 		sub_buffer[j] = buffer[i];
 		i++;
 		j++;
@@ -1077,40 +1141,39 @@ void *creceiver(void *arg)
 	    fclose(file);
 	    printf("dp_transfer\n");
 	    fflush(stdout);
-		memset(buffer, 0, sizeof(buffer));
-	    strcpy(buffer,"true.\n");
-		memset(child_buffer, 0, sizeof(child_buffer));
+	    memset(buffer, 0, sizeof(buffer));
+	    strcpy(buffer, "true.\n");
+	    memset(child_buffer, 0, sizeof(child_buffer));
 	}
 
 	pthread_mutex_lock(&mutex2);
-	j = 0;	
+	j = 0;
 	m = strlen(buffer);
 
-	for (i = 0; i < m-1; i++) {
-		if(buffer[i] == 0x11){
-			memset(child_buffer,0,sizeof(child_buffer));
-			strcpy(child_buffer,"fail.");
-			child_buffer_pos = 0;
-			child_buffer_end = 5;
-			ctrl_c_flag = 1;
-			goto exit;
-		}
-	    else { 
-			child_buffer[j] = buffer[i];
-	    	j++;
-		}
+	for (i = 0; i < m - 1; i++) {
+	    if (buffer[i] == 0x11) {
+		memset(child_buffer, 0, sizeof(child_buffer));
+		strcpy(child_buffer, "fail.");
+		child_buffer_pos = 0;
+		child_buffer_end = 5;
+		ctrl_c_flag = 1;
+		goto exit;
+	    } else {
+		child_buffer[j] = buffer[i];
+		j++;
+	    }
 	}
 
 	child_buffer_pos = 0;
 	child_buffer_end = j;
 
-	exit:
+      exit:
 
 	child_buffer_ready = 1;
 	pthread_cond_signal(&md_cond);
 	pthread_mutex_unlock(&mutex2);
 
-	
+
     }
 
     pthread_exit(NULL);
@@ -1118,14 +1181,14 @@ void *creceiver(void *arg)
 
 
 void init_preceiver(int n)
-{	
-	int i;
+{
+    int i;
     // create parent receiver thread 
-	for(i=0;i<n;i++){
-		int *arg = malloc(sizeof(int));
-        *arg = i;
-    	pthread_create(&preceiver_thread[i], NULL, preceiver, arg);
-	}
+    for (i = 0; i < n; i++) {
+	int *arg = malloc(sizeof(int));
+	*arg = i;
+	pthread_create(&preceiver_thread[i], NULL, preceiver, arg);
+    }
 
 }
 

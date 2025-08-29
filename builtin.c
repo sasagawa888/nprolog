@@ -244,8 +244,8 @@ void init_builtin(void)
     defbuiltin("dp_consult", b_dp_consult, 1);
     defbuiltin("dp_reconsult", b_dp_reconsult, 1);
     defbuiltin("dp_countup", b_dp_countup, -1);
-	defbuiltin("dp_setid", b_dp_setid, -1);
-	defbuiltin("dp_senderr", b_dp_senderr, -1);
+    defbuiltin("dp_setid", b_dp_setid, -1);
+    defbuiltin("dp_senderr", b_dp_senderr, -1);
 
     //------multi thread--------------------
     defbuiltin("mt_create", b_mt_create, 1);
@@ -3579,8 +3579,8 @@ int b_string_term(int arglist, int rest, int th)
 
 int read_string_term(int flag)
 {
-	static int pos;
-	
+    static int pos;
+
     if (flag == 0) {
 	pos = 0;
 	return (0);
@@ -4027,8 +4027,8 @@ int b_end_of_file(int arglist, int rest, int th)
 	    break_flag = 0;
 	    longjmp(buf2, 1);
 	} else if (!isatty(fileno(stdin))) {
-		longjmp(buf, 2);
-	} else 
+	    longjmp(buf, 2);
+	} else
 	    return (YES);
     }
     exception(ARITY_ERR, ind, arglist, th);

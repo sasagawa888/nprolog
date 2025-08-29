@@ -487,7 +487,7 @@ void exception(int errnum, int ind, int arg, int th)
 	printf("send to parent dp_senderr/1\n");
 	fflush(stdout);
 	int pred;
-	pred = list2(makeatom("dp_senderr",SYS),makeint(child_id));
+	pred = list2(makeatom("dp_senderr", SYS), makeint(child_id));
 	send_to_parent(pred_to_str(pred));
     }
 
