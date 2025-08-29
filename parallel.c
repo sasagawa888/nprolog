@@ -613,23 +613,24 @@ int b_dp_compile(int arglist, int rest, int th)
 
 int b_dp_and(int arglist, int rest, int th)
 {
-    int n, ind, arg1, m, i, j, pred, res, result[PARASIZE];
+    int n, ind, arg1, m, i, j, save, pred, res, result[PARASIZE];
 
     n = length(arglist);
     ind = makeind("dp_and", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	m = length(arg1);
-	if (m > child_num)
+	if (m + child_pt > child_num)
 	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
 
-	i = 0;
+	i = save = child_pt;
 	while (!nullp(arg1)) {
 	    pred = deref(car(arg1), th);
 	    send_to_child(i, pred_to_str(pred));
 	    arg1 = cdr(arg1);
 	    i++;
 	}
+	child_pt = i;
 
 	for (i = 0; i < m; i++) {
 	    result[i] = 0;
@@ -652,6 +653,7 @@ int b_dp_and(int arglist, int rest, int th)
 		    }
 		    usleep(1000);
 		}
+		child_pt = save;
 		longjmp(buf, 1);
 	    }
 	    for (i = 0; i < m; i++) {
@@ -671,6 +673,7 @@ int b_dp_and(int arglist, int rest, int th)
 		}
 	    }
 	}
+	child_pt = save;
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -679,23 +682,24 @@ int b_dp_and(int arglist, int rest, int th)
 
 int b_dp_or(int arglist, int rest, int th)
 {
-    int n, ind, arg1, m, i, j, pred, res, result[PARASIZE];
+    int n, ind, arg1, m, i, j, save, pred, res, result[PARASIZE];
 
     n = length(arglist);
     ind = makeind("dp_or", n, th);
     if (n == 1) {
 	arg1 = car(arglist);
 	m = length(arg1);
-	if (m > child_num)
+	if (m + child_pt > child_num)
 	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
 
-	i = 0;
+	i = save = child_pt;
 	while (!nullp(arg1)) {
 	    pred = deref(car(arg1), th);
 	    send_to_child(i, pred_to_str(pred));
 	    arg1 = cdr(arg1);
 	    i++;
 	}
+	child_pt = i;
 
 	for (i = 0; i < m; i++) {
 	    result[i] = 0;
@@ -718,6 +722,7 @@ int b_dp_or(int arglist, int rest, int th)
 		    }
 		    usleep(1000);
 		}
+		child_pt = save;
 		longjmp(buf, 1);
 	    }
 	    for (i = 0; i < m; i++) {
@@ -737,6 +742,7 @@ int b_dp_or(int arglist, int rest, int th)
 		}
 	    }
 	}
+	child_pt = save;
 	return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
