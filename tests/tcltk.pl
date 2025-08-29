@@ -40,3 +40,4 @@ hello :-
     tk_label(hello,[text('hello world'),width(50),height(15),foreground(red),background(green)]),
     tk_pack(hello),  
     tk_mainloop.
+
