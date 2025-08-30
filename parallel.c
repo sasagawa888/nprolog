@@ -510,7 +510,7 @@ int b_dp_consult(int arglist, int rest, int th)
 		send_to_child(i, pred_to_str(pred2));
 	    }
 	    while (!all_received(result, child_num)) {
-		for (i = 0; i < n; i++) {
+		for (i = 0; i < child_num; i++) {
 		    if (parent_buffer[i][0] != 0 && result[i] == 0) {
 			result[i] = 1;
 		    }
