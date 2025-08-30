@@ -19,8 +19,7 @@ Update N-Prolog
 - Type "sudo make clean".
 - Type "sudo make install".
 
-You may get an error that the curses.h file cannot be found when compiling NPL & Edlog.
-In this case, enter the following from the terminal
+N-Prolog requires ncurses library. Please install ncurses.
 
 ```sh
 sudo apt install libncurses-dev
