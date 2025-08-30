@@ -165,7 +165,6 @@ socklen_t parent_len;
 struct sockaddr_in parent_addr, child_addr[PARASIZE];
 int child_num;
 int child_id;
-int child_pt;
 pthread_t preceiver_thread[PARASIZE];
 pthread_t creceiver_thread;
 char input_buffer[BUFSIZE];
@@ -416,7 +415,6 @@ void init_repl(void)
     leap_point = NIL;
     left_margin = 4;
     big_pt0 = 0;
-    child_pt = 0;
     //initialize variant variable
     for (i = 0; i < VARIANTSIZE; i++) {
 	for (j = 0; j < THREADSIZE; j++) {
