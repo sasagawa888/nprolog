@@ -450,10 +450,12 @@ int b_dp_transfer(int arglist, int rest, int th)
 	    exception(CANT_OPEN, ind, arg1, th);
 	}
 
+	/*
 	for (i = 0; i < child_num; i++) {
 	    result[i] = 0;
 	    memset(parent_buffer[i], 0, sizeof(parent_buffer[i]));
 	}
+	*/
 
 	for (i = 0; i < child_num; i++) {
 	    send_to_child_control_without_0x16(i, 0x15);
@@ -476,6 +478,7 @@ int b_dp_transfer(int arglist, int rest, int th)
 	    fseek(file, 0, SEEK_SET);
 	}
 	fclose(file);
+	/*
 	while (!all_received(result, child_num)) {
 	    for (i = 0; i < child_num; i++) {
 		if (parent_buffer[i][0] != 0 && result[i] == 0) {
@@ -484,6 +487,7 @@ int b_dp_transfer(int arglist, int rest, int th)
 	    }
 	    usleep(1000);
 	}
+	*/
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -1117,7 +1121,8 @@ void *creceiver(void *arg)
 	if (n < 0) {
 	    exception(SYSTEM_ERR, makestr("*creceiver"), NIL, 0);
 	}
-
+	print_ascii(sub_buffer);
+	
 	strcat(buffer, sub_buffer);
 	if (sub_buffer[n - 1] != 0x16)
 	    goto reread;
