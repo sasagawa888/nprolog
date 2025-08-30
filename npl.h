@@ -8,7 +8,6 @@ written by kenichi sasagawa 2016/9~
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <netdb.h>
-#include <curl/curl.h>
 
 /*
 memory map
@@ -119,7 +118,6 @@ typedef struct {
                 FILE    *port;
                 int record;
                 int socket;
-                CURL *curl;
             } car;
             union{
                 int intnum;
@@ -764,7 +762,6 @@ int ateqsmaller(int x, int y);
 int bcons(int car, int cdr);
 int b_abolish(int arglist, int rest, int th);
 int b_abort(int arglist, int rest, int th);
-int b_add_curl_header(int arglist, int rest, int th);
 int b_n_after_cut(int arglist, int rest, int th);
 int b_ansi_cup(int arglist, int rest, int th);
 int b_ansi_cuu(int arglist, int rest, int th);
@@ -816,7 +813,6 @@ int b_clause(int arglist, int rest, int th);
 int b_n_clause_with_arity(int arglist, int rest, int th);
 int b_create_client_socket(int arglist, int rest, int th);
 int b_close(int arglist, int rest, int th);
-int b_close_curl(int arglist, int rest, int th);
 int b_close_socket(int arglist, int rest, int th);
 int b_compare(int arglist, int rest, int th);
 int b_n_compiler_anonymous(int arglist, int rest, int th);
@@ -827,7 +823,6 @@ int b_consult(int arglist, int rest, int th);
 int b_constant(int arglist, int rest, int th);
 int b_copy_term(int arglist, int rest, int th);
 int b_create(int arglist, int rest, int th);
-int b_create_client_curl(int arglist, int rest, int th);
 int b_create_server_socket(int arglist, int rest, int th);
 int b_ctr_set(int arglist, int rest, int th);
 int b_ctr_dec(int arglist, int rest, int th);
@@ -980,7 +975,6 @@ int b_repeat(int arglist, int rest, int th);
 int b_reset_op(int arglist, int rest, int th);
 int b_retract(int arglist, int rest, int th);
 int b_retrieveh(int arglist, int rest, int th);
-int b_recv_curl(int arglist, int rest, int th);
 int b_recv_socket(int arglist, int rest, int th);
 int b_n_reconsult_predicate(int arglist, int rest, int th);
 int b_n_reconsult_abolish(int arglist, int rest, int th);
@@ -993,10 +987,8 @@ int b_see(int arglist, int rest, int th);
 int b_seeing(int arglist, int rest, int th);
 int b_seen(int arglist, int rest, int th);
 int b_select(int arglist, int rest, int th);
-int b_send_curl(int arglist, int rest, int th);
 int b_send_socket(int arglist, int rest, int th);
 int b_setof(int arglist, int rest, int th);
-int b_set_curl_option(int arglist, int rest, int th);
 int b_set_input(int arglist, int rest, int th);
 int b_set_output(int arglist, int rest, int th);
 int b_set_prolog_flag(int arglist, int rest, int th);
@@ -1258,7 +1250,6 @@ int makeope(char *name);
 int makebinbigx(char *bignum);
 int makecomp(char *name);
 int makecopy(int x);
-int makecurl(CURL *curl, int type, const char *name);
 int makeexspec(int old_spec, int spec);
 int makeflt(double floatn);
 int makeint(int num);

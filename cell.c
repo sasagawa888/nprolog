@@ -413,24 +413,6 @@ int makesocket(int sockfd, int type, const char *name, int listenfd)
     return (addr);
 }
 
-int makecurl(CURL * curl, int type, const char *name)
-{
-    int addr;
-    char *str;
-
-    addr = freshcell();
-    SET_TAG(addr, STREAM);
-    SET_CURL(addr, curl);	/* curl */
-    SET_OPT(addr, type);	/* NPL_CURL */
-    str = (char *) malloc(strlen(name) + 1);
-    if (str == NULL)
-	exception(SYSTEM_ERR, makestr("makecurl"), NIL, 0);
-    heap[addr].name = str;
-    strcpy(heap[addr].name, name);	/* ip address */
-    SET_AUX(addr, NPL_OPEN);	/* NPL_OPEN/NPL_CLOSE initial value is NPL_OPEN */
-    return (addr);
-}
-
 
 
 //stack
