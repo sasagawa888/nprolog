@@ -41,9 +41,9 @@ Up to 100 child devices can be connected.
 
 - dp_child/0: Returns YES if it is a pure child machine without any child machines. Otherwise, returns NO.
 
-- dp_trace/0:
+- dp_trace/0: Print received child data.
 
-- dp_notrace/0:
+- dp_notrace/0: not print receved child data.
     
 # Example
 
