@@ -1098,7 +1098,7 @@ void *preceiver(void *arg)
 	strcpy(parent_buffer[n], buffer);
 
 	if(dp_trace){
-		printf("From child %d: %s\n", n, parent_buffer[n]);
+		printf("From child %d: %s", n, parent_buffer[n]);
 		fflush(stdout);
 	}
     }
