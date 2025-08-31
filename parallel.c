@@ -619,6 +619,11 @@ int b_dp_and(int arglist, int rest, int th)
 	if (m > child_num)
 	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
 
+	for (i = 0; i < m; i++) {
+	    result[i] = 0;
+	    memset(parent_buffer[i], 0, sizeof(parent_buffer[i]));
+	}
+
 	i = 0;
 	while (!nullp(arg1)) {
 	    pred = deref(car(arg1), th);
@@ -627,11 +632,7 @@ int b_dp_and(int arglist, int rest, int th)
 	    i++;
 	}
 
-	for (i = 0; i < m; i++) {
-	    result[i] = 0;
-	    memset(parent_buffer[i], 0, sizeof(parent_buffer[i]));
-	}
-
+	
 	while (!all_received(result, m)) {
 	    if (ctrl_c_flag == 1) {
 		for (i = 0; i < m; i++) {
@@ -687,6 +688,11 @@ int b_dp_or(int arglist, int rest, int th)
 	if (m > child_num)
 	    exception(RESOURCE_ERR, ind, makestr("child_num"), th);
 
+	for (i = 0; i < m; i++) {
+	    result[i] = 0;
+	    memset(parent_buffer[i], 0, sizeof(parent_buffer[i]));
+	}
+
 	i = 0;
 	while (!nullp(arg1)) {
 	    pred = deref(car(arg1), th);
@@ -695,11 +701,7 @@ int b_dp_or(int arglist, int rest, int th)
 	    i++;
 	}
 
-	for (i = 0; i < m; i++) {
-	    result[i] = 0;
-	    memset(parent_buffer[i], 0, sizeof(parent_buffer[i]));
-	}
-
+	
 	while (!all_received(result, m)) {
 	    if (ctrl_c_flag == 1) {
 		for (i = 0; i < m; i++) {
