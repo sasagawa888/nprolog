@@ -173,6 +173,7 @@ char parent_buffer[BUFSIZE][PARASIZE];
 char child_buffer[BUFSIZE];
 int child_buffer_pos;
 int child_buffer_end;
+int dp_trace = 0;
 
 /* multi thread */
 pthread_mutex_t mutex;

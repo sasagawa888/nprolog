@@ -16,7 +16,7 @@ address
  5,000,001 - 30,000,000  working area 
 30,000,001 - 32,000,000  variant area
 */
-#define VERSION     4.70
+#define VERSION     4.71
 #define CELLSIZE    30000000  // if raspberry PI set smaller size.
 #define HEAPSIZE     5000000
 #define FREESIZE         500
@@ -344,6 +344,7 @@ extern char parent_buffer[BUFSIZE][PARASIZE];
 extern char child_buffer[BUFSIZE];
 extern int child_buffer_pos;
 extern int child_buffer_end;
+extern int dp_trace;
 
 /* multi-thread */
 extern pthread_mutex_t mutex;
@@ -855,6 +856,8 @@ int b_dp_consult(int arglist, int rest, int th);
 int b_dp_reconsult(int arglist, int rest, int th);
 int b_dp_setid(int arglist, int rest, int th);
 int b_dp_senderr(int arglist, int rest, int th);
+int b_dp_trace(int arglist, int rest, int th);
+int b_dp_notrace(int arglist, int rest, int th);
 int b_dup(int arglist, int rest, int th);
 int b_dynamic(int arglist, int rest, int th);
 int b_n_dynamic_predicate(int arglist, int rest, int th);

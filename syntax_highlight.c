@@ -99,7 +99,7 @@ char extended[EXTENDED_NUMBER][30] = {
     { "existerrors" }, { "dp_create" }, { "dp_consult" }, { "dp_countup" },
     { "dp_transfer" }, { "dp_and" }, { "dp_or" }, { "dp_halt" },
     { "dp_reconsult" }, { "dp_setid" }, { "dp_senderr" },
-    { "dp_compile" }, { "dp_prove" }, { "dp_close" },
+    { "dp_compile" }, { "dp_prove" }, { "dp_close" }, { "dp_trace" }, { "dp_notrace" },
     { "mt_create" }, { "mt_close" }, { "mt_and" }, { "mt_or" },
     { "mt_prove" }, { "cinline" }, { "check_file" }, { "cdeclare" },
     { "clibrary" },

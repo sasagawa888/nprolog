@@ -246,6 +246,8 @@ void init_builtin(void)
     defbuiltin("dp_countup", b_dp_countup, -1);
     defbuiltin("dp_setid", b_dp_setid, -1);
     defbuiltin("dp_senderr", b_dp_senderr, -1);
+	defbuiltin("dp_trace", b_dp_trace, 0);
+	defbuiltin("dp_notrace", b_dp_notrace, 0);
 
     //------multi thread--------------------
     defbuiltin("mt_create", b_mt_create, 1);
