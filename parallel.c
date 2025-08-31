@@ -667,6 +667,7 @@ int b_dp_and(int arglist, int rest, int th)
 		    }
 		}
 	    }
+		usleep(1000);
 	}
 	return (prove_all(rest, sp[th], th));
     }
@@ -734,6 +735,7 @@ int b_dp_or(int arglist, int rest, int th)
 		    }
 		}
 	    }
+		usleep(1000);
 	}
 	return (NO);
     }
