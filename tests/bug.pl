@@ -26,7 +26,7 @@ fact(N,X) :-
     fact(N1,X1),
     X is N*X1.
 
-/*
+
 safe(R,C) :- 
     R >= 1,R =< 5,
     C >= 1,C =< 5.
@@ -41,4 +41,3 @@ move(R,C,P,A) :-
     safe(R1,C1),
     not(member([R1,C1],P)),
     move(R1,C1,[[R1,C1]|P],A).
-*/

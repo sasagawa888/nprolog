@@ -344,9 +344,6 @@ gen_var_declare1(S,E) :-
 	write(arg),
     write(S),
     write(','),
-    write(targ),
-    write(S),
-    write(','),
     S1 is S+1,
     gen_var_declare1(S1,E).
 
@@ -427,8 +424,6 @@ gen_var_assign(S,E) :-
 gen_var_assign(S,E) :-
 	write(arg),
     write(S),
-    write(' = targ'),
-    write(S),
     write(' = Jnth(arglist,'),
     write(S),
     write(');\n'),
@@ -454,28 +449,6 @@ if( )... head
 {body = }
 ...
 */
-
-gen_tail_restore_args([],_).
-gen_tail_restore_args([A|As],N) :-
-    n_compiler_variable(A),
-    not(n_compiler_anonymous(A)),
-    write('Junify(targ'),write(N),write(',arg'),write(N),
-    write(',th);'),nl,
-    N1 is N+1,
-    gen_tail_restore_args(As,N1).
-gen_tail_restore_args([_|As],N) :-
-    N1 is N+1,
-    gen_tail_restore_args(As,N1).
-
-
-
-% clause sa tail recursive base
-gen_a_pred5((Head :- !),_) :-
-    optimize(tail),
-    gen_head(Head),
-    Head =.. [_|A],
-    gen_tail_restore_args(A,1),
-    write('return(Jexec_all(rest,Jget_sp(th),th));'),nl.
 
 % clause as tail recursive
 gen_a_pred5((Head :- Body),N) :-
@@ -1688,12 +1661,12 @@ deterministic([_|Cs],D,P,H,A) :-
 % arguments = [clauses],tail_count,pred_count, halt_base_count,all_count, arity
 tail_recursive([],T,P,H,A,_) :-
     %write(user_output,T),write(user_output,P),write(user_output,H),write(user_output,A),nl,
-    T > 0,
+    T == 1,
     P == 1,
     A =:= T+P+H,!.
 tail_recursive([],T,P,H,A,_) :-
     %write(user_output,T),write(user_output,P),write(user_output,H),write(user_output,A),nl,
-    T > 0,
+    T == 1,
     P == 0,
     H >= 1,
     A =:= T+P+H,!.
@@ -1702,6 +1675,11 @@ tail_recursive(_,_,P,_,_,_) :-
     P > 1,
     !,fail.
 tail_recursive([(_ :- !)|Cs],T,P,H,A,N) :-
+    H1 is H+1,!,
+    tail_recursive(Cs,T,P,H1,A,N).
+tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
+    not(tail_body(Head,Body)),
+    det_body(Head,Body,[]),
     H1 is H+1,!,
     tail_recursive(Cs,T,P,H1,A,N).
 tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
@@ -1930,7 +1908,7 @@ gen_a_det_body(X is Y) :-
     eval_form(Y),
     write(','),
     write(th),
-    write(')==YES && Jinc_proof(th))').
+    write(')==YES && Jinc_proof(th))'),nl.
 
 gen_a_det_body(X = Y) :-
     write('if(Junify('),
@@ -1939,49 +1917,49 @@ gen_a_det_body(X = Y) :-
     gen_a_argument(Y),
     write(','),
     write(th),
-    write(')==YES && Jinc_proof(th))').
+    write(')==YES && Jinc_proof(th))'),nl.
 
 gen_a_det_body(X =:= Y) :-
     write('if(Jnumeqp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write(') && Jinc_proof(th))').
+    write(') && Jinc_proof(th))'),nl.
 
 gen_a_det_body(X =\= Y) :-
     write('if(Jnot_numeqp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write(') && Jinc_proof(th))').
+    write(') && Jinc_proof(th))'),nl.
 
 gen_a_det_body(X < Y) :-
     write('if(Jsmallerp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write(') && Jinc_proof(th))').
+    write(') && Jinc_proof(th))'),nl.
 
 gen_a_det_body(X =< Y) :-
     write('if(Jeqsmallerp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write(') && Jinc_proof(th))').
+    write(') && Jinc_proof(th))'),nl.
 
 gen_a_det_body(X > Y) :-
     write('if(Jgreaterp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write(') && Jinc_proof(th))').
+    write(') && Jinc_proof(th))'),nl.
 
 gen_a_det_body(X >= Y) :-
     write('if(Jeqgreaterp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write(') && Jinc_proof(th))').
+    write(') && Jinc_proof(th))'),nl.
 
 gen_a_det_body(X) :-
     X =.. [P|A],
@@ -1989,7 +1967,7 @@ gen_a_det_body(X) :-
     gen_a_body(P),
     write(','),
     gen_a_argument(A),
-    write(',th) == YES)').
+    write(',th) == YES)'),nl.
 
 
 /*
