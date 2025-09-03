@@ -1687,11 +1687,18 @@ deterministic([_|Cs],D,P,H,A) :-
 
 % arguments = [clauses],tail_count,pred_count, halt_base_count,all_count, arity
 tail_recursive([],T,P,H,A,_) :-
+    %write(user_output,T),write(user_output,P),write(user_output,H),write(user_output,A),nl,
+    T > 0,
+    P == 1,
+    A =:= T+P+H,!.
+tail_recursive([],T,P,H,A,_) :-
+    %write(user_output,T),write(user_output,P),write(user_output,H),write(user_output,A),nl,
     T > 0,
     P == 0,
     H >= 1,
     A =:= T+P+H,!.
 tail_recursive(_,_,P,_,_,_) :-
+    %write(user_output,P),nl,
     P > 1,
     !,fail.
 tail_recursive([(_ :- !)|Cs],T,P,H,A,N) :-
@@ -1791,7 +1798,7 @@ halt_check([_|Cs],D,P,A) :-
 
 
 
-% deterministic body case. Each has cut or each is builtin or each is recur 
+% deterministic body case. Each has cut or each is builtin or each is tail-recur 
 % G is gournd_variable
 det_body(_,(_;_),_) :- fail.
 det_body(_,!,_).
