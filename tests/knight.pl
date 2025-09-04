@@ -1,5 +1,5 @@
 % Knight tour
-% 5*5
+% 6*6
 
 fastest([R1,C1],[R2,C2],[R3,C3],[R4,C4],X) :-
     dp_or([tour(R1,C1,X),tour(R2,C2,X),tour(R3,C3,X),tour(R4,C4,X)]).
@@ -57,11 +57,11 @@ tour(R,C,X) :-
     move(R,C,[[R,C]],X).
 
 safe(R,C) :- 
-    R >= 1,R =< 5,
-    C >= 1,C =< 5.
+    R >= 1,R =< 6,
+    C >= 1,C =< 6.
 
 move(_,_,P,P) :-
-    length(P,25).
+    length(P,36).
 
 
 move(R,C,P,A) :-
