@@ -1874,7 +1874,10 @@ gen_det_body((X,Y)) :-
 gen_det_body(X) :-
     gen_a_det_body(X),
     nl,
-    write('return(Jexec_all(rest,Jget_sp(th),th));').
+    write('return(Jexec_all(rest,Jget_sp(th),th));'),nl,
+    write('Jset_ac(save3,th);'),nl,
+    write('Junbind(save2,th);'),nl,
+    write('Jset_wp(save1,th);'),nl.
 
 gen_tail_body((X,Y),N) :-
     gen_a_det_body(X),
