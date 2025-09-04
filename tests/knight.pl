@@ -1,6 +1,6 @@
 % Knight tour
 % 5*5
-
+/*
 fastest([R1,C1],[R2,C2],[R3,C3],[R4,C4],X) :-
     dp_or([tour(R1,C1,X),tour(R2,C2,X),tour(R3,C3,X),tour(R4,C4,X)]).
 
@@ -50,7 +50,7 @@ pmove87(R,C,X) :-
 
 pmove88(R,C,X) :-
     R1 is R-1,C1 is C+2,move(R1,C1,[[R1,C1],[R,C]],X).
-
+*/
     
 % tour start from (R,C), X is path
 tour(R,C,X) :-
@@ -61,6 +61,7 @@ safe(R,C) :-
     C >= 1,C =< 5.
 
 move(_,_,P,P) :-
+    write(P),
     length(P,25).
 
 

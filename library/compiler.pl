@@ -1637,10 +1637,10 @@ deterministic([],D,P,H,A) :-
     H == 1,
     A =:= D+P+H,!.
 deterministic([],D,P,H,A) :-
-    %write(user_output,D),write(user_output,P),write(user_output,H),write(user_output,A),
+    %write(user_output,D),write(user_output,P),write(user_output,H),write(user_output,A),nl,
     P == 0,
-    D == 1,
-    A =:= D+P+H,!.
+    D >= 1,!.
+    %A =:= D+P+H,!.
 deterministic(_,_,P,_,_) :-
     P > 1,
     !,fail.
@@ -1908,7 +1908,7 @@ gen_a_det_body(X is Y) :-
     eval_form(Y),
     write(','),
     write(th),
-    write(')==YES && Jinc_proof(th))'),nl.
+    write(')==YES && Jinc_proof(th))').
 
 gen_a_det_body(X = Y) :-
     write('if(Junify('),
@@ -1917,28 +1917,28 @@ gen_a_det_body(X = Y) :-
     gen_a_argument(Y),
     write(','),
     write(th),
-    write(')==YES && Jinc_proof(th))'),nl.
+    write(')==YES && Jinc_proof(th))').
 
 gen_a_det_body(X =:= Y) :-
     write('if(Jnumeqp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write(') && Jinc_proof(th))'),nl.
+    write(') && Jinc_proof(th))').
 
 gen_a_det_body(X =\= Y) :-
     write('if(Jnot_numeqp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write(') && Jinc_proof(th))'),nl.
+    write(') && Jinc_proof(th))').
 
 gen_a_det_body(X < Y) :-
     write('if(Jsmallerp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write(') && Jinc_proof(th))'),nl.
+    write(') && Jinc_proof(th))').
 
 gen_a_det_body(X =< Y) :-
     write('if(Jeqsmallerp('),
@@ -1952,14 +1952,14 @@ gen_a_det_body(X > Y) :-
     eval_form(X),
     write(','),
     eval_form(Y),
-    write(') && Jinc_proof(th))'),nl.
+    write(') && Jinc_proof(th))').
 
 gen_a_det_body(X >= Y) :-
     write('if(Jeqgreaterp('),
     eval_form(X),
     write(','),
     eval_form(Y),
-    write(') && Jinc_proof(th))'),nl.
+    write(') && Jinc_proof(th))').
 
 gen_a_det_body(X) :-
     X =.. [P|A],
@@ -1967,7 +1967,7 @@ gen_a_det_body(X) :-
     gen_a_body(P),
     write(','),
     gen_a_argument(A),
-    write(',th) == YES)'),nl.
+    write(',th) == YES)').
 
 
 /*
