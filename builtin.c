@@ -1752,13 +1752,13 @@ int b_consult(int arglist, int rest, int th)
 
 int b_reconsult(int arglist, int rest, int th)
 {
-    int n, ind, arg1, clause, clause1, head, atom, save, compiler;
+    int n, ind, arg1, clause, clause1, head, atom, save;
     char str[STRSIZE];
 
     n = length(arglist);
     ind = makeind("reconsult", n, th);
     execute_list = NIL;
-    compiler = 0;
+    compiler_flag = 0;
     if (n == 1) {
       reconsult:
 	arg1 = car(arglist);
@@ -1810,6 +1810,12 @@ int b_reconsult(int arglist, int rest, int th)
 		operate(clause, th);
 		goto skip;
 	    }
+
+		// ignore compiled code
+		if(compiledp(clause)){
+		goto skip;
+		}
+
 	    //delete old definition and consult
 	    if (predicatep(clause) || user_operation_p(clause)) {
 		clause1 = copy_heap(clause);
@@ -1839,7 +1845,7 @@ int b_reconsult(int arglist, int rest, int th)
 	module_flag = 0;
 
       exit:
-	if (compiler != 1 && execute_list != NIL) {
+	if (compiler_flag != 1 && execute_list != NIL) {
 	    execute_list = reverse(execute_list);
 	    while (!nullp(execute_list)) {
 		prove_all(car(execute_list), sp[th], th);
@@ -1849,7 +1855,7 @@ int b_reconsult(int arglist, int rest, int th)
 	return (prove_all(rest, sp[th], th));
     } else if (n == 2) {
 	arg1 = car(arglist);
-	compiler = 1;
+	compiler_flag  = 1;
 	goto reconsult;
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -2810,14 +2816,12 @@ int b_assert(int arglist, int rest, int th)
 	    if (operationp(cadr(arg1)))
 		exception(BUILTIN_EXIST, ind, arg1, th);
 
-
-
 	    SET_VAR(arg1, unique(varslist(arg1)));
 	    operate(arg1, th);
 	    checkgbc();
 	    return (prove_all(rest, sp[th], th));
-	}
-	exception(NOT_CALLABLE, ind, arg1, th);
+	} else
+	exception(ARITY_ERR, ind, arglist, th);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
