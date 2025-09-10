@@ -1381,9 +1381,9 @@ int b_gpio_read(int arglist, int rest, int th)
         exception(WRONG_ARGS, ind, arg1, th); 
 
 	 struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
-    if (!line) 
-        error(SYSTEM_ERR,"gpio-read ", arglist, th);
-
+    if (!line) {
+        exception(SYSTEM_ERR,ind, arglist, th);
+	}
     res = gpiod_line_get_value(line);
 	if(unify(arg1,makeint(res),th) == YES)
 		return (prove_all(rest, sp[th], th));
@@ -1412,9 +1412,10 @@ int b_gpio_event_request(int arglist, int rest, int th)
         eqp(arg2,makeconst("both"))))
         exception(WRONG_ARGS,ind, arglist, th);
     struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
-    if (!line)
-        exception(SYSTEM_ERR, ind, arglist, th);
 
+    if (!line){
+        exception(SYSTEM_ERR, ind, arglist, th);
+	}
     if (eqp(arg2,makeconst("rising")))
         res = gpiod_line_request_rising_edge_events(line, "nprolog");
     else if (eqp(arg2,makeconst("falling")))
@@ -1493,7 +1494,7 @@ int b_gpio_event_read(int arglist, int rest, int th)
     else 
         exception(SYSTEM_ERR, ind, arglist,th);
 
-	if(unify(arg2,res,th) == YES)
+	if(unify(arg1,res,th) == YES)
 		return (prove_all(rest, sp[th], th));
 	else 
 		return(NO);
