@@ -36,8 +36,8 @@ address
 #define OPERATOR_NUMBER 24
 #define FUNCTION_NUMBER 22
 #define BUILTIN_NUMBER 220
-#define COMPILED_NUMBER 23
-#define EXTENDED_NUMBER 43
+#define COMPILED_NUMBER 10
+#define EXTENDED_NUMBER 53
 #define NIL         0
 #define YES         2
 #define NO          4

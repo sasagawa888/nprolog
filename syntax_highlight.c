@@ -104,9 +104,11 @@ char extended[EXTENDED_NUMBER][30] = {
     { "mt_create" }, { "mt_close" }, { "mt_and" }, { "mt_or" },
     { "mt_prove" }, { "cinline" }, { "check_file" }, { "cdeclare" },
     { "clibrary" },
+    { "gpio_init" }, { "gpio_set_mode" }, { "gpio_write" },{ "gpio_read" },
+    { "gpio_read" }, { "gpio_read" }, { "gpio_event_request" },
+    { "gpio_event_wait" },{ "gpio_event_read" }, { "gpio_close"},
     { "format" },
 };
-
 
 static bool in_operator_table(const char *str)
 {
