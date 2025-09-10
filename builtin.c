@@ -246,8 +246,8 @@ void init_builtin(void)
     defbuiltin("dp_countup", b_dp_countup, -1);
     defbuiltin("dp_setid", b_dp_setid, -1);
     defbuiltin("dp_senderr", b_dp_senderr, -1);
-	defbuiltin("dp_trace", b_dp_trace, 0);
-	defbuiltin("dp_notrace", b_dp_notrace, 0);
+    defbuiltin("dp_trace", b_dp_trace, 0);
+    defbuiltin("dp_notrace", b_dp_notrace, 0);
 
     //------multi thread--------------------
     defbuiltin("mt_create", b_mt_create, 1);
@@ -284,16 +284,16 @@ void init_builtin(void)
 #endif
 
 #ifdef __rpigpio__
-    defbuiltin("gpio_init", b_gpio_init,0);
-    defbuiltin("gpio_set_mode", b_gpio_set_mode,2);
-    defbuiltin("gpio_write", b_gpio_write,2);
-    defbuiltin("gpio_read", b_gpio_read,1);
-    defbuiltin("gpio_event_request", b_gpio_event_request,2);
-    defbuiltin("gpio_event_wait", b_gpio_event_wait,2);
-    defbuiltin("gpio_event_read", b_gpio_event_read,1);
-    defbuiltin("gpio_close", b_gpio_close,0);
+    defbuiltin("gpio_init", b_gpio_init, 0);
+    defbuiltin("gpio_set_mode", b_gpio_set_mode, 2);
+    defbuiltin("gpio_write", b_gpio_write, 2);
+    defbuiltin("gpio_read", b_gpio_read, 1);
+    defbuiltin("gpio_event_request", b_gpio_event_request, 2);
+    defbuiltin("gpio_event_wait", b_gpio_event_wait, 2);
+    defbuiltin("gpio_event_read", b_gpio_event_read, 1);
+    defbuiltin("gpio_close", b_gpio_close, 0);
 #endif
-	
+
 
     //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_n_reconsult_predicate, 1);
@@ -1821,12 +1821,10 @@ int b_reconsult(int arglist, int rest, int th)
 		operate(clause, th);
 		goto skip;
 	    }
-
-		// ignore compiled code
-		if(compiledp(clause)){
+	    // ignore compiled code
+	    if (compiledp(clause)) {
 		goto skip;
-		}
-
+	    }
 	    //delete old definition and consult
 	    if (predicatep(clause) || user_operation_p(clause)) {
 		clause1 = copy_heap(clause);
@@ -1866,7 +1864,7 @@ int b_reconsult(int arglist, int rest, int th)
 	return (prove_all(rest, sp[th], th));
     } else if (n == 2) {
 	arg1 = car(arglist);
-	compiler_flag  = 1;
+	compiler_flag = 1;
 	goto reconsult;
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -2832,7 +2830,7 @@ int b_assert(int arglist, int rest, int th)
 	    checkgbc();
 	    return (prove_all(rest, sp[th], th));
 	} else
-	exception(ARITY_ERR, ind, arglist, th);
+	    exception(ARITY_ERR, ind, arglist, th);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);

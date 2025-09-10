@@ -632,7 +632,7 @@ int b_dp_and(int arglist, int rest, int th)
 	    i++;
 	}
 
-	
+
 	while (!all_received(result, m)) {
 	    if (ctrl_c_flag == 1) {
 		for (i = 0; i < m; i++) {
@@ -668,7 +668,7 @@ int b_dp_and(int arglist, int rest, int th)
 		    }
 		}
 	    }
-		usleep(1000);
+	    usleep(1000);
 	}
 	return (prove_all(rest, sp[th], th));
     }
@@ -701,7 +701,7 @@ int b_dp_or(int arglist, int rest, int th)
 	    i++;
 	}
 
-	
+
 	while (!all_received(result, m)) {
 	    if (ctrl_c_flag == 1) {
 		for (i = 0; i < m; i++) {
@@ -737,7 +737,7 @@ int b_dp_or(int arglist, int rest, int th)
 		    }
 		}
 	    }
-		usleep(1000);
+	    usleep(1000);
 	}
 	return (NO);
     }
@@ -1101,9 +1101,9 @@ void *preceiver(void *arg)
 	buffer[i] = 0;
 	strcpy(parent_buffer[n], buffer);
 
-	if(dp_trace){
-		printf("From child %d: %s", n, parent_buffer[n]);
-		fflush(stdout);
+	if (dp_trace) {
+	    printf("From child %d: %s", n, parent_buffer[n]);
+	    fflush(stdout);
 	}
     }
 
@@ -1148,7 +1148,7 @@ void *creceiver(void *arg)
 	    exception(SYSTEM_ERR, makestr("*creceiver"), NIL, 0);
 	}
 	//print_ascii(sub_buffer);
-	
+
 	strcat(buffer, sub_buffer);
 	if (sub_buffer[n - 1] != 0x16)
 	    goto reread;

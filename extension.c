@@ -1288,10 +1288,10 @@ int b_gpio_init(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("gpio_init", n, th);
     if (n == 0) {
-	 chip = gpiod_chip_open("/dev/gpiochip0");
+	chip = gpiod_chip_open("/dev/gpiochip0");
 
-    if( chip == NULL){
-        return(NO);
+	if (chip == NULL) {
+	    return (NO);
 	}
 	return (prove_all(rest, sp[th], th));
     }
@@ -1302,30 +1302,32 @@ int b_gpio_init(int arglist, int rest, int th)
 
 int b_gpio_set_mode(int arglist, int rest, int th)
 {
-    int n, arg1,arg2,ind, res;
+    int n, arg1, arg2, ind, res;
 
     n = length(arglist);
     ind = makeind("gpio_set_mode", n, th);
     if (n == 2) {
-	arg1 = car(arglist);  //pin
-    arg2 = cadr(arglist); //mode
-	if(!integerp(arg1))
-        exception(NOT_INT, ind, arg1, th);
-    if(!(eqp(arg2,makeconst("input")) || eqp(arg2,makeconst("output")))){
-        exception(WRONG_ARGS, ind, arg2, th); 
+	arg1 = car(arglist);	//pin
+	arg2 = cadr(arglist);	//mode
+	if (!integerp(arg1))
+	    exception(NOT_INT, ind, arg1, th);
+	if (!
+	    (eqp(arg2, makeconst("input"))
+	     || eqp(arg2, makeconst("output")))) {
+	    exception(WRONG_ARGS, ind, arg2, th);
 	}
 
 	struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
-    if (!line){
-        exception(SYSTEM_ERR, ind, arglist, th);
+	if (!line) {
+	    exception(SYSTEM_ERR, ind, arglist, th);
 	}
-	if (eqp(arg2,makeconst("input"))) // input
-        res = gpiod_line_request_input(line, "nprolog");
-    else // output
-        res = gpiod_line_request_output(line, "nprolog", 0);
+	if (eqp(arg2, makeconst("input")))	// input
+	    res = gpiod_line_request_input(line, "nprolog");
+	else			// output
+	    res = gpiod_line_request_output(line, "nprolog", 0);
 
-    if(res < 0){
-        exception(SYSTEM_ERR,ind, arglist, th);
+	if (res < 0) {
+	    exception(SYSTEM_ERR, ind, arglist, th);
 	}
 	return (prove_all(rest, sp[th], th));
     }
@@ -1336,29 +1338,31 @@ int b_gpio_set_mode(int arglist, int rest, int th)
 
 int b_gpio_write(int arglist, int rest, int th)
 {
-    int n, arg1,arg2,ind, res;
+    int n, arg1, arg2, ind, res;
 
     n = length(arglist);
     ind = makeind("gpio_write", n, th);
     if (n == 2) {
-	arg1 = car(arglist);  //pin
-    arg2 = cadr(arglist); //value
-	if(!integerp(arg1))
-        exception(NOT_INT, ind, arg1, th);
-    if(!(eqp(arg2,makeconst("input")) || eqp(arg2,makeconst("output"))))
-        exception(WRONG_ARGS, ind, arg2, th); 
+	arg1 = car(arglist);	//pin
+	arg2 = cadr(arglist);	//value
+	if (!integerp(arg1))
+	    exception(NOT_INT, ind, arg1, th);
+	if (!
+	    (eqp(arg2, makeconst("input"))
+	     || eqp(arg2, makeconst("output"))))
+	    exception(WRONG_ARGS, ind, arg2, th);
 
 	struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
-    if (!line)
-        exception(SYSTEM_ERR, ind, arglist, th);
-	
-	if (eqp(arg2,makeconst("input"))) // input
-        res = gpiod_line_request_input(line, "nprolog");
-    else // output
-        res = gpiod_line_request_output(line, "nprolog", 0);
+	if (!line)
+	    exception(SYSTEM_ERR, ind, arglist, th);
 
-    if(res < 0){
-        exception(SYSTEM_ERR,ind, arglist, th);
+	if (eqp(arg2, makeconst("input")))	// input
+	    res = gpiod_line_request_input(line, "nprolog");
+	else			// output
+	    res = gpiod_line_request_output(line, "nprolog", 0);
+
+	if (res < 0) {
+	    exception(SYSTEM_ERR, ind, arglist, th);
 	}
 	return (prove_all(rest, sp[th], th));
     }
@@ -1374,21 +1378,21 @@ int b_gpio_read(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("gpio_read", n, th);
     if (n == 1) {
-	arg1 = car(arglist); //pin
-    if(!integerp(arg1))
-        exception(NOT_INT, ind, arg1, th);
-    if(GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
-        exception(WRONG_ARGS, ind, arg1, th); 
+	arg1 = car(arglist);	//pin
+	if (!integerp(arg1))
+	    exception(NOT_INT, ind, arg1, th);
+	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
+	    exception(WRONG_ARGS, ind, arg1, th);
 
-	 struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
-    if (!line) {
-        exception(SYSTEM_ERR,ind, arglist, th);
+	struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
+	if (!line) {
+	    exception(SYSTEM_ERR, ind, arglist, th);
 	}
-    res = gpiod_line_get_value(line);
-	if(unify(arg1,makeint(res),th) == YES)
-		return (prove_all(rest, sp[th], th));
-	else 
-		return(NO);
+	res = gpiod_line_get_value(line);
+	if (unify(arg1, makeint(res), th) == YES)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -1396,37 +1400,37 @@ int b_gpio_read(int arglist, int rest, int th)
 
 int b_gpio_event_request(int arglist, int rest, int th)
 {
-    int n, arg1,arg2,ind, res;
+    int n, arg1, arg2, ind, res;
 
     n = length(arglist);
     ind = makeind("gpio_event_request", n, th);
     if (n == 2) {
-	arg1 = car(arglist);  // pin
-    arg2 = cadr(arglist); // mode
-    if(!integerp(arg1))
-        exception(NOT_INT,ind, arglist, th);
-    if(GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
-        exception(WRONG_ARGS, ind, arg1, th); 
-    if(!(eqp(arg2,makeconst("rising")) || 
-        eqp(arg2,makeconst("falling")) ||
-        eqp(arg2,makeconst("both"))))
-        exception(WRONG_ARGS,ind, arglist, th);
-    struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
+	arg1 = car(arglist);	// pin
+	arg2 = cadr(arglist);	// mode
+	if (!integerp(arg1))
+	    exception(NOT_INT, ind, arglist, th);
+	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
+	    exception(WRONG_ARGS, ind, arg1, th);
+	if (!(eqp(arg2, makeconst("rising")) ||
+	      eqp(arg2, makeconst("falling")) ||
+	      eqp(arg2, makeconst("both"))))
+	    exception(WRONG_ARGS, ind, arglist, th);
+	struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
 
-    if (!line){
-        exception(SYSTEM_ERR, ind, arglist, th);
+	if (!line) {
+	    exception(SYSTEM_ERR, ind, arglist, th);
 	}
-    if (eqp(arg2,makeconst("rising")))
-        res = gpiod_line_request_rising_edge_events(line, "nprolog");
-    else if (eqp(arg2,makeconst("falling")))
-        res = gpiod_line_request_falling_edge_events(line, "nprolog");
-    else 
-        res = gpiod_line_request_both_edges_events(line, "nprolog");
+	if (eqp(arg2, makeconst("rising")))
+	    res = gpiod_line_request_rising_edge_events(line, "nprolog");
+	else if (eqp(arg2, makeconst("falling")))
+	    res = gpiod_line_request_falling_edge_events(line, "nprolog");
+	else
+	    res = gpiod_line_request_both_edges_events(line, "nprolog");
 
-	if(res==0)
-		return (prove_all(rest, sp[th], th));
-	else 
-		return(NO);
+	if (res == 0)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -1435,33 +1439,34 @@ int b_gpio_event_request(int arglist, int rest, int th)
 
 int b_gpio_event_wait(int arglist, int rest, int th)
 {
-    int n, arg1,arg2,ind, res;
+    int n, arg1, arg2, ind, res;
 
     n = length(arglist);
     ind = makeind("gpio_event_wait", n, th);
     if (n == 2) {
-	arg1 = car(arglist);  //pin
-    arg2 = cadr(arglist); //timeout
-    if(!integerp(arg1))
-        exception(NOT_INT,ind, arg1, th);
-    if(GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
-        exception(WRONG_ARGS, ind, arg1, th); 
-    if(!integerp(arg2))
-        exception(NOT_INT, ind, arg2, th);
+	arg1 = car(arglist);	//pin
+	arg2 = cadr(arglist);	//timeout
+	if (!integerp(arg1))
+	    exception(NOT_INT, ind, arg1, th);
+	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
+	    exception(WRONG_ARGS, ind, arg1, th);
+	if (!integerp(arg2))
+	    exception(NOT_INT, ind, arg2, th);
 
-    struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
-    if (!line)
-        exception(SYSTEM_ERR, ind, arglist, th);
-    struct timespec ts = { GET_INT(arg2)/1000, (GET_INT(arg2)%1000)*1000000 };
-    res = gpiod_line_event_wait(line, &ts);
-    if(res < 0){
-        exception(SYSTEM_ERR, ind,arglist,th);
+	struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
+	if (!line)
+	    exception(SYSTEM_ERR, ind, arglist, th);
+	struct timespec ts =
+	    { GET_INT(arg2) / 1000, (GET_INT(arg2) % 1000) * 1000000 };
+	res = gpiod_line_event_wait(line, &ts);
+	if (res < 0) {
+	    exception(SYSTEM_ERR, ind, arglist, th);
 	}
-   
-	if(res==0)
-		return (prove_all(rest, sp[th], th));
-	else 
-		return(NO);
+
+	if (res == 0)
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -1471,35 +1476,35 @@ int b_gpio_event_wait(int arglist, int rest, int th)
 
 int b_gpio_event_read(int arglist, int rest, int th)
 {
-    int n, arg1,ind, res;
+    int n, arg1, ind, res;
 
     n = length(arglist);
     ind = makeind("gpio_event_read", n, th);
     if (n == 1) {
-	arg1 = car(arglist); //pin
-    if (length(arglist) != 1)
+	arg1 = car(arglist);	//pin
+	if (length(arglist) != 1)
 	    exception(WRONG_ARGS, ind, arglist, th);
-    if(!integerp(arg1))
-        exception(NOT_INT, ind, arglist, th);
+	if (!integerp(arg1))
+	    exception(NOT_INT, ind, arglist, th);
 
-    struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
-    if (!line) {
-        exception(SYSTEM_ERR, ind, arglist, th);
+	struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
+	if (!line) {
+	    exception(SYSTEM_ERR, ind, arglist, th);
 	}
-    struct gpiod_line_event event;
-    gpiod_line_event_read(line, &event);
+	struct gpiod_line_event event;
+	gpiod_line_event_read(line, &event);
 	res = NIL;
-    if (event.event_type == GPIOD_LINE_EVENT_RISING_EDGE) 
-        res = makeconst("rising");
-    else if (event.event_type == GPIOD_LINE_EVENT_FALLING_EDGE)
-        res = makeconst("falling");
-    else 
-        exception(SYSTEM_ERR, ind, arglist,th);
+	if (event.event_type == GPIOD_LINE_EVENT_RISING_EDGE)
+	    res = makeconst("rising");
+	else if (event.event_type == GPIOD_LINE_EVENT_FALLING_EDGE)
+	    res = makeconst("falling");
+	else
+	    exception(SYSTEM_ERR, ind, arglist, th);
 
-	if(unify(arg1,res,th) == YES)
-		return (prove_all(rest, sp[th], th));
-	else 
-		return(NO);
+	if (unify(arg1, res, th) == YES) {
+	    return (prove_all(rest, sp[th], th));
+	} else
+	    return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
@@ -1513,8 +1518,8 @@ int b_gpio_close(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("gpio_close", n, th);
     if (n == 0) {
-    gpiod_chip_close(chip);
-    chip = NULL;
+	gpiod_chip_close(chip);
+	chip = NULL;
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);

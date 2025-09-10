@@ -1418,13 +1418,12 @@ int readitem1(int th)
 	if (stok.type == LPAREN) {
 	    if (getatom(str, SYS, hash(str)))
 		temp = makeatom(str, SYS);
-	    else if (getatom(str, COMP, hash(str))){
-			if(compiler_flag)
-				temp = makeatom(str, PRED);
-			else
-				temp = makeatom(str, COMP);
-		}
-	    else if (getatom(str, OPE, hash(str)))
+	    else if (getatom(str, COMP, hash(str))) {
+		if (compiler_flag)
+		    temp = makeatom(str, PRED);
+		else
+		    temp = makeatom(str, COMP);
+	    } else if (getatom(str, OPE, hash(str)))
 		temp = makeatom(str, OPE);
 	    else if (getatom(str, USER, hash(str)))
 		goto elseexit;

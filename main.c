@@ -146,7 +146,7 @@ int dynamic_flag = 0;		/* for dynamic predicate. while assertz dynamic flag = 1 
 int string_flag = 0;		/* ARITY/PROLOG mode 0, ISO mode 1 */
 int ifthenelse_false_flag = 0;	/* ifthenelse occures NFLASE set flag = 1 */
 int compiled_flag = 0;		/* while execute compiled code flag = 1, else 0 */
-int compiler_flag =0;       /* while reconult to compile flag = 1 */
+int compiler_flag = 0;		/* while reconult to compile flag = 1 */
 
 //stream
 int standard_input;
