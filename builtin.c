@@ -283,6 +283,17 @@ void init_builtin(void)
     defbuiltin("timer_microseconds", b_timer_microseconds, 1);
 #endif
 
+#ifdef __rpigpio__
+    defbuiltin("gpio_init", b_gpio_init);
+    defbuiltin("gpio_set_mode", b_gpio_set_mode);
+    defbuiltin("gpio_write", b_gpio_write);
+    defbuiltin("gpio_read", b_gpio_read);
+    defbuiltin("gpio_event_request", b_gpio_event_request);
+    defbuiltin("gpio_event_wait", b_gpio_event_wait);
+    defbuiltin("gpio_event_read", b_gpio_event_read);
+    defbuiltin("gpio_close", b_gpio_close);
+#endif
+	
 
     //-----JUMP project---------
     defbuiltin("n_reconsult_predicate", b_n_reconsult_predicate, 1);

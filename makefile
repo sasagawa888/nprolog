@@ -2,6 +2,7 @@
 .DELETE_ON_ERROR:
 
 USE_WIRINGPI ?= 0
+USE_GPIO ?= 0
 USE_FLTO ?= 0
 
 CC   := gcc
@@ -31,6 +32,15 @@ ifeq ($(USE_WIRINGPI),1)
 LIBS += -lwiringPi
 endif
 endif
+
+
+ifeq  ($(shell uname -n),raspberrypi)
+ifeq ($(USE_GPIO),1)
+CFLAGS += -D__rpigpio__
+LIBS += -lgpiod
+endif
+endif
+
 
 ifeq ($(USE_FLTO),1)
 CFLAGS += -flto
