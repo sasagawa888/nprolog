@@ -1357,9 +1357,9 @@ int b_gpio_write(int arglist, int rest, int th)
     else // output
         res = gpiod_line_request_output(line, "nprolog", 0);
 
-    if(res < 0)
+    if(res < 0){
         exception(SYSTEM_ERR,ind, arglist, th);
-	
+	}
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -1454,9 +1454,9 @@ int b_gpio_event_wait(int arglist, int rest, int th)
         exception(SYSTEM_ERR, ind, arglist, th);
     struct timespec ts = { GET_INT(arg2)/1000, (GET_INT(arg2)%1000)*1000000 };
     res = gpiod_line_event_wait(line, &ts);
-    if(res < 0)
+    if(res < 0){
         exception(SYSTEM_ERR, ind,arglist,th);
-
+	}
    
 	if(res==0)
 		return (prove_all(rest, sp[th], th));
@@ -1483,10 +1483,12 @@ int b_gpio_event_read(int arglist, int rest, int th)
         exception(NOT_INT, ind, arglist, th);
 
     struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
-    if (!line) 
+    if (!line) {
         exception(SYSTEM_ERR, ind, arglist, th);
+	}
     struct gpiod_line_event event;
     gpiod_line_event_read(line, &event);
+	res = NIL;
     if (event.event_type == GPIOD_LINE_EVENT_RISING_EDGE) 
         res = makeconst("rising");
     else if (event.event_type == GPIOD_LINE_EVENT_FALLING_EDGE)
