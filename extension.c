@@ -1347,23 +1347,22 @@ int b_gpio_write(int arglist, int rest, int th)
 	arg2 = cadr(arglist);	//value
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
-	if (!
-	    (eqp(arg2, makeconst("input"))
-	     || eqp(arg2, makeconst("output"))))
-	    exception(WRONG_ARGS, ind, arg2, th);
+	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
+	    exception(WRONG_ARGS, ind, arg1, th);
+	 if(!integerp(arg2))
+        exception(NOT_INT,ind, arg2, th);
+    if(!(GET_INT(arg2) == 1 || GET_INT(arg2) == 0))
+        exception(WRONG_ARGS, ind, arg2, th); 
 
-	struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
-	if (!line)
-	    exception(SYSTEM_ERR, ind, arglist, th);
-
-	if (eqp(arg2, makeconst("input")))	// input
-	    res = gpiod_line_request_input(line, "nprolog");
-	else			// output
-	    res = gpiod_line_request_output(line, "nprolog", 0);
-
-	if (res < 0) {
-	    exception(SYSTEM_ERR, ind, arglist, th);
+	
+    struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
+    if (!line){
+        exception(SYSTEM_ERR, ind, arglist,th);
 	}
+    res = gpiod_line_set_value(line, GET_INT(arg2));
+    if(res < 0)
+        exception(SYSTEM_ERR, ind, arglist, th);
+	
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
