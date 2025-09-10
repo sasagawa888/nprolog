@@ -1501,9 +1501,9 @@ int b_gpio_event_read(int arglist, int rest, int th)
 	else
 	    exception(SYSTEM_ERR, ind, arglist, th);
 
-	if (unify(arg1, res, th) == YES) {
+	if (unify(arg1, res, th) == YES) 
 	    return (prove_all(rest, sp[th], th));
-	} else
+	else
 	    return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
