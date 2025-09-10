@@ -30,6 +30,20 @@ sudo make install USE_GDB=1
 
 ```
 
+When using gpio on Raspberry Pi: please install gpio and compile with the following options.
+
+```
+sudo apt update
+sudo apt install libgpiod-dev
+sudo make install USE_GPIO=1
+```
+
+When using wiringPi on Raspberry Pi: please install wiringPi and compile with the following options.
+
+```
+sudo make install USE_WIRINGPI=1
+```
+
 # Dosuments
 This document provides an overview of many documents. Please read it first.
 
