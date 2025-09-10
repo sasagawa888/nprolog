@@ -1,6 +1,6 @@
 # GPIO (libgpiod)
 
-On Raspberry Pi, Easy-ISLisp can access GPIO through libgpiod. If libgpiod-dev is installed, these functions are available. Otherwise they are disabled.
+On Raspberry Pi, N-Prolog can access GPIO through libgpiod. If libgpiod-dev is installed, these functions are available. Otherwise they are disabled.
 
 # Spec
 
@@ -41,4 +41,22 @@ gpio_event_wait(Pin ,Timeout-ms) <===> gpiod_line_event_wait(line, &ts)
 gpio_event_read(Pin,Event) <===> gpiod_line_event_read(line, &event)
 ;; Returns: Event rising or falling for the detected event.
 ;; Raises error if no valid event.
+
+;; Start hardware PWM on a servo
+gpio_servo_start(Pin, Angle) <===> gpioServo(Pin, pulse_width)
+;; Pin: GPIO number (must support hardware PWM)
+;; Angle: 0-180 degrees
+;; pulse_width: automatically converted 1000us (0°) - 2000us (180°)
+;; Returns: YES on success. Raises error on invalid args.
+;; Note: Only the following GPIO pins support hardware PWM:
+;;       PWM0: 12, 18
+;;       PWM1: 13, 19
+;;       Using other pins will result in an error.
+
+;; Stop hardware PWM on a servo
+gpio_servo_stop(Pin) <===> gpioServo(Pin, 0)
+;; Pin: GPIO number
+;; Stops PWM output on the given pin.
+;; Returns: YES on success. Raises error on invalid args.
 ```
+

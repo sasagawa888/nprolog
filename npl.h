@@ -895,6 +895,8 @@ int b_gpio_read(int arglist, int rest, int th);
 int b_gpio_event_request(int arglist, int rest, int th);
 int b_gpio_event_wait(int arglist, int rest, int th);
 int b_gpio_event_read(int arglist, int rest, int th);
+int b_gpio_servo_start(int arglist, int rest, int th);
+int b_gpio_servo_stop(int arglist, int rest, int th);
 int b_gpio_close(int arglist, int rest, int th);
 int b_n_generate_all_variable(int arglist, int rest, int th);
 int b_n_generate_variable(int arglist, int rest, int th);

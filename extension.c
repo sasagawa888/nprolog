@@ -1509,6 +1509,70 @@ int b_gpio_event_read(int arglist, int rest, int th)
     return (NO);
 }
 
+const int pwm_pins[] = {12, 13, 18, 19};
+const int num_pwm_pins = 4;
+
+int is_pwm_pin(int pin) {
+    for(int i=0; i<num_pwm_pins; i++)
+        if(pwm_pins[i] == pin) return 1;
+    return 0;
+}
+
+
+int b_gpio_servo_start(int arglist, int rest, int th)
+{
+	int n,ind,arg1,arg2;
+    
+	n = length(arglist);
+    ind = makeind("gpio_servo_start", n, th);
+    if(n == 2) {
+    arg1 = car(arglist);  //pin
+	arg2 = cadr(arglist); //angle
+    
+    if(!integerp(arg1)) 
+		exception(NOT_INT, ind, arg1, th);
+    if(!integerp(arg2))
+		exception(NOT_INT, ind, arg2, th);
+	if(!is_pwm_pin(GET_INT(arg1))) 
+		exception(RESOURCE_ERR, ind, arg1, th); 
+    if(GET_INT(arg2) < 0 || GET_INT(arg2) > 180)
+		exception(RESOURCE_ERR, ind, arg2, th);
+
+    int pulse_width = 1000 + (GET_INT(arg2) * 1000 / 180); // 0°=1000us, 180°=2000us
+
+    if(gpioServo(GET_INT(arg1), pulse_width) != 0){
+        exception(SYSTEM_ERR, ind, arglist, th);
+    }
+
+    
+    return prove_all(rest, sp[th], th);
+	}
+	exception(ARITY_ERR, ind, arglist, th);
+    return(NO);
+}
+
+
+int b_gpio_servo_stop(int arglist, int rest, int th)
+{
+	int n,ind,arg1;
+    
+	n = length(arglist);
+    ind = makeind("gpio_servo_stop", n, th);
+    if(n == 1) {
+    arg1 = car(arglist);  //pin
+    if(!integerp(arg1)) 
+		exception(NOT_INT, ind, arg1, th);
+	if(!is_pwm_pin(GET_INT(arg1))) 
+		exception(RESOURCE_ERR, ind, arg1, th); 
+    
+
+    gpioServo(GET_INT(arg1), 0);
+
+    return prove_all(rest, sp[th], th);
+	}
+	exception(ARITY_ERR, ind, arglist, th);
+    return(NO);
+}
 
 int b_gpio_close(int arglist, int rest, int th)
 {
