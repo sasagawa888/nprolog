@@ -1360,9 +1360,9 @@ int b_gpio_write(int arglist, int rest, int th)
         exception(SYSTEM_ERR, ind, arglist,th);
 	}
     res = gpiod_line_set_value(line, GET_INT(arg2));
-    if(res < 0)
+    if(res < 0){
         exception(SYSTEM_ERR, ind, arglist, th);
-	
+	}
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
