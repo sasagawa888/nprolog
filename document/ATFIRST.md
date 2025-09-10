@@ -115,3 +115,6 @@ This is a description of how Unicode is handled in N-Prolog.
 
 ![WiringPI](WIRINGPI.md)
 On Raspberry Pi, predicates for WiringPi are installed. This is their description.
+
+![GPIO](GPIO.md)
+On Raspberry Pi, predicates for libgpiod are installed. This is their description.
