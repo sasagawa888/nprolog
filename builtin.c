@@ -284,14 +284,14 @@ void init_builtin(void)
 #endif
 
 #ifdef __rpigpio__
-    defbuiltin("gpio_init", b_gpio_init);
-    defbuiltin("gpio_set_mode", b_gpio_set_mode);
-    defbuiltin("gpio_write", b_gpio_write);
-    defbuiltin("gpio_read", b_gpio_read);
-    defbuiltin("gpio_event_request", b_gpio_event_request);
-    defbuiltin("gpio_event_wait", b_gpio_event_wait);
-    defbuiltin("gpio_event_read", b_gpio_event_read);
-    defbuiltin("gpio_close", b_gpio_close);
+    defbuiltin("gpio_init", b_gpio_init,0);
+    defbuiltin("gpio_set_mode", b_gpio_set_mode,2);
+    defbuiltin("gpio_write", b_gpio_write,2);
+    defbuiltin("gpio_read", b_gpio_read,1);
+    defbuiltin("gpio_event_request", b_gpio_event_request,2);
+    defbuiltin("gpio_event_wait", b_gpio_event_wait,2);
+    defbuiltin("gpio_event_read", b_gpio_event_read,1);
+    defbuiltin("gpio_close", b_gpio_close,0);
 #endif
 	
 
