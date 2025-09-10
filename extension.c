@@ -1314,7 +1314,7 @@ int b_gpio_set_mode(int arglist, int rest, int th)
 	if (!
 	    (eqp(arg2, makeconst("input"))
 	     || eqp(arg2, makeconst("output")))) {
-	    exception(WRONG_ARGS, ind, arg2, th);
+	    exception(RESOURCE_ERR, ind, arg2, th);
 	}
 
 	struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
@@ -1348,11 +1348,11 @@ int b_gpio_write(int arglist, int rest, int th)
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
-	    exception(WRONG_ARGS, ind, arg1, th);
+	    exception(RESOURCE_ERR, ind, arg1, th);
 	 if(!integerp(arg2))
         exception(NOT_INT,ind, arg2, th);
     if(!(GET_INT(arg2) == 1 || GET_INT(arg2) == 0))
-        exception(WRONG_ARGS, ind, arg2, th); 
+        exception(RESOURCE_ERR, ind, arg2, th); 
 
 	
     struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
@@ -1382,7 +1382,7 @@ int b_gpio_read(int arglist, int rest, int th)
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
-	    exception(WRONG_ARGS, ind, arg1, th);
+	    exception(RESOURCE_ERR, ind, arg1, th);
 
 	struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
 	if (!line) {
@@ -1410,11 +1410,11 @@ int b_gpio_event_request(int arglist, int rest, int th)
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arglist, th);
 	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
-	    exception(WRONG_ARGS, ind, arg1, th);
+	    exception(RESOURCE_ERR, ind, arg1, th);
 	if (!(eqp(arg2, makeconst("rising")) ||
 	      eqp(arg2, makeconst("falling")) ||
 	      eqp(arg2, makeconst("both"))))
-	    exception(WRONG_ARGS, ind, arglist, th);
+	    exception(RESOURCE_ERR, ind, arglist, th);
 	struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
 
 	if (!line) {
@@ -1449,7 +1449,7 @@ int b_gpio_event_wait(int arglist, int rest, int th)
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
-	    exception(WRONG_ARGS, ind, arg1, th);
+	    exception(RESOURCE_ERR, ind, arg1, th);
 	if (!integerp(arg2))
 	    exception(NOT_INT, ind, arg2, th);
 
@@ -1482,8 +1482,7 @@ int b_gpio_event_read(int arglist, int rest, int th)
     ind = makeind("gpio_event_read", n, th);
     if (n == 1) {
 	arg1 = car(arglist);	//pin
-	if (length(arglist) != 1)
-	    exception(WRONG_ARGS, ind, arglist, th);
+	
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arglist, th);
 

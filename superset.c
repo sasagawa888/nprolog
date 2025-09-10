@@ -153,7 +153,7 @@ int b_maplist(int arglist, int rest, int th)
 	if (!listp(arg2) && !nullp(arg2))
 	    exception(NOT_LIST, ind, arg2, th);
 	if (listp(arg2) && length(arg2) == -1)
-	    exception(WRONG_ARGS, ind, arg2, th);
+	    exception(NOT_LIST, ind, arg2, th);
 
 	varP = makevariant(th);
 	save1 = wp[th];

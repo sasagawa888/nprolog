@@ -522,7 +522,7 @@ int eval(int x, int th)
 	if (eqp(x, makefunc("pi")))
 	    return (makeflt(3.14159265358979323846));
 	else if (eqlp(x, makefunc("random")))
-	    return (f_random(NIL, th));
+	    return (f_random(th));
 	else
 	    exception(NOT_NUM, eval_context, x, th);
     } else if (eqlp(car(x), makeatom("abs", FUNC))) {
@@ -1137,12 +1137,9 @@ int f_randi(int x, int th)
     return (makeint(rand() & x));
 }
 
-int f_random(int x, int th)
+int f_random(int th)
 {
     double d;
-
-    if (!nullp(x))
-	exception(WRONG_ARGS, makeind("random", 1, th), x, th);
 
     d = (double) rand() / RAND_MAX;
     return (makeflt(d));

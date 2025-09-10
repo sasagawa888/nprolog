@@ -687,7 +687,6 @@ enum Error {
     NOT_COMPUTABLE,
     OUT_OF_RANGE,
     MALLOC_OVERF,
-    WRONG_ARGS,
     NOT_NUM,
     NOT_STR,
     NOT_LIST,
@@ -1157,7 +1156,7 @@ int f_exp(int x, int th);
 int f_ln(int x,int th);
 int f_log(int x,int th);
 int f_randi(int x,int th);
-int f_random(int x, int th);
+int f_random(int th);
 int findatom(int x, int property);
 int findvar(int sym, int th);
 int floatp(int x);
