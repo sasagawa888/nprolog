@@ -35,6 +35,7 @@ When using gpio on Raspberry Pi: please install gpio and compile with the follow
 ```
 sudo apt update
 sudo apt install libgpiod-dev
+sudo apt install pigpio
 sudo make install USE_GPIO=1
 ```
 

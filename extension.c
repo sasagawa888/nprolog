@@ -5,6 +5,7 @@
 #endif
 #ifdef __rpigpio__
 #include <gpiod.h>
+#include <pigpio.h>
 #endif
 #include <unistd.h>
 #include <stdlib.h>
