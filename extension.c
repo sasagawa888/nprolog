@@ -1290,9 +1290,9 @@ int b_gpio_init(int arglist, int rest, int th)
     if (n == 0) {
 	 chip = gpiod_chip_open("/dev/gpiochip0");
 
-    if( chip == NULL)
+    if( chip == NULL){
         return(NO);
-
+	}
 	return (prove_all(rest, sp[th], th));
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -1302,7 +1302,7 @@ int b_gpio_init(int arglist, int rest, int th)
 
 int b_gpio_set_mode(int arglist, int rest, int th)
 {
-    int n, ind, res;
+    int n, arg1,arg2,ind, res;
 
     n = length(arglist);
     ind = makeind("gpio_set_mode", n, th);
@@ -1335,7 +1335,7 @@ int b_gpio_set_mode(int arglist, int rest, int th)
 
 int b_gpio_write(int arglist, int rest, int th)
 {
-    int n, ind, res;
+    int n, arg1,arg2,ind, res;
 
     n = length(arglist);
     ind = makeind("gpio_set_mode", n, th);
@@ -1368,7 +1368,7 @@ int b_gpio_write(int arglist, int rest, int th)
 
 int b_gpio_write(int arglist, int rest, int th)
 {
-    int n, ind, res;
+    int n, arg1,arg2,ind, res;
 
     n = length(arglist);
     ind = makeind("gpio_set_mode", n, th);
@@ -1400,7 +1400,7 @@ int b_gpio_write(int arglist, int rest, int th)
 
 int b_gpio_read(int arglist, int rest, int th)
 {
-    int n, ind, res;
+    int n, arg1, ind, res;
 
     n = length(arglist);
     ind = makeind("gpio_read", n, th);
@@ -1427,7 +1427,7 @@ int b_gpio_read(int arglist, int rest, int th)
 
 int b_gpio_event_request(int arglist, int rest, int th)
 {
-    int n, ind, res;
+    int n, arg1,arg2,ind, res;
 
     n = length(arglist);
     ind = makeind("gpio_event_request", n, th);
@@ -1465,7 +1465,7 @@ int b_gpio_event_request(int arglist, int rest, int th)
 
 int b_gpio_event_wait(int arglist, int rest, int th)
 {
-    int n, ind, res;
+    int n, arg1,arg2,ind, res;
 
     n = length(arglist);
     ind = makeind("gpio_event_wait", n, th);
@@ -1501,7 +1501,7 @@ int b_gpio_event_wait(int arglist, int rest, int th)
 
 int b_gpio_event_read(int arglist, int rest, int th)
 {
-    int n, ind, res;
+    int n, arg1,ind, res;
 
     n = length(arglist);
     ind = makeind("gpio_event_read", n, th);
