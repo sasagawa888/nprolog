@@ -1373,12 +1373,13 @@ int b_gpio_write(int arglist, int rest, int th)
 
 int b_gpio_read(int arglist, int rest, int th)
 {
-    int n, arg1, ind, res;
+    int n, arg1, arg2, ind, res;
 
     n = length(arglist);
     ind = makeind("gpio_read", n, th);
-    if (n == 1) {
+    if (n == 2) {
 	arg1 = car(arglist);	//pin
+	arg2 = cadr(arglist);   //value
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
@@ -1389,7 +1390,7 @@ int b_gpio_read(int arglist, int rest, int th)
 	    exception(SYSTEM_ERR, ind, arglist, th);
 	}
 	res = gpiod_line_get_value(line);
-	if (unify(arg1, makeint(res), th) == YES)
+	if (unify(arg2, makeint(res), th) == YES)
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
