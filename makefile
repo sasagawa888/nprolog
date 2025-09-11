@@ -37,7 +37,7 @@ endif
 ifeq  ($(shell uname -n),raspberrypi)
 ifeq ($(USE_GPIO),1)
 CFLAGS += -D__rpigpio__
-LIBS += -lpigpio
+LIBS += -lpigpio -lpigpio
 endif
 endif
 
