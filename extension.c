@@ -1286,7 +1286,8 @@ int b_gpio_init(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("gpio_init", n, th);
     if (n == 0) {
-	if (gpioInitialise() < 0) return (NO);
+	if (gpioInitialise() < 0)
+	    return (NO);
 
 	return (prove_all(rest, sp[th], th));
     }
@@ -1306,15 +1307,14 @@ int b_gpio_set_mode(int arglist, int rest, int th)
 	arg2 = cadr(arglist);	//mode
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
-	if (!
-	    (eqp(arg2, makeconst("input"))
-	     || eqp(arg2, makeconst("output")))) {
+	if (!(eqp(arg2, makeconst("input"))
+	      || eqp(arg2, makeconst("output")))) {
 	    exception(RESOURCE_ERR, ind, arg2, th);
 	}
 
 	mode = eqp(arg2, makeconst("input")) ? PI_INPUT : PI_OUTPUT;
-    if (gpioSetMode(GET_INT(arg1), mode) != 0)
-        exception(SYSTEM_ERR, ind, arglist, th);
+	if (gpioSetMode(GET_INT(arg1), mode) != 0)
+	    exception(SYSTEM_ERR, ind, arglist, th);
 
 	return (prove_all(rest, sp[th], th));
     }
@@ -1336,14 +1336,14 @@ int b_gpio_write(int arglist, int rest, int th)
 	    exception(NOT_INT, ind, arg1, th);
 	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
 	    exception(RESOURCE_ERR, ind, arg1, th);
-	 if(!integerp(arg2))
-        exception(NOT_INT,ind, arg2, th);
-    if(!(GET_INT(arg2) == 1 || GET_INT(arg2) == 0))
-        exception(RESOURCE_ERR, ind, arg2, th); 
+	if (!integerp(arg2))
+	    exception(NOT_INT, ind, arg2, th);
+	if (!(GET_INT(arg2) == 1 || GET_INT(arg2) == 0))
+	    exception(RESOURCE_ERR, ind, arg2, th);
 
-	
+
 	if (gpioWrite(GET_INT(arg1), GET_INT(arg2)) != 0)
-        exception(SYSTEM_ERR, ind, arglist, th);
+	    exception(SYSTEM_ERR, ind, arglist, th);
 
 	return (prove_all(rest, sp[th], th));
     }
@@ -1360,15 +1360,14 @@ int b_gpio_read(int arglist, int rest, int th)
     ind = makeind("gpio_read", n, th);
     if (n == 2) {
 	arg1 = car(arglist);	//pin
-	arg2 = cadr(arglist);   //value
+	arg2 = cadr(arglist);	//value
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
 	    exception(RESOURCE_ERR, ind, arg1, th);
 
-	
+
 	res = gpioRead(GET_INT(arg1));
-	res = gpiod_line_get_value(line);
 	if (unify(arg2, makeint(res), th) == YES)
 	    return (prove_all(rest, sp[th], th));
 	else
@@ -1379,69 +1378,72 @@ int b_gpio_read(int arglist, int rest, int th)
 }
 
 
-const int pwm_pins[] = {12, 13, 18, 19};
+const int pwm_pins[] = { 12, 13, 18, 19 };
+
 const int num_pwm_pins = 4;
 
-int is_pwm_pin(int pin) {
-    for(int i=0; i<num_pwm_pins; i++)
-        if(pwm_pins[i] == pin) return 1;
+int is_pwm_pin(int pin)
+{
+    for (int i = 0; i < num_pwm_pins; i++)
+	if (pwm_pins[i] == pin)
+	    return 1;
     return 0;
 }
 
 
 int b_gpio_servo_start(int arglist, int rest, int th)
 {
-	int n,ind,arg1,arg2;
-    
-	n = length(arglist);
+    int n, ind, arg1, arg2;
+
+    n = length(arglist);
     ind = makeind("gpio_servo_start", n, th);
-    if(n == 2) {
-    arg1 = car(arglist);  //pin
-	arg2 = cadr(arglist); //angle
-    
-    if(!integerp(arg1)) 
-		exception(NOT_INT, ind, arg1, th);
-    if(!integerp(arg2))
-		exception(NOT_INT, ind, arg2, th);
-	if(!is_pwm_pin(GET_INT(arg1))) 
-		exception(RESOURCE_ERR, ind, arg1, th); 
-    if(GET_INT(arg2) < 0 || GET_INT(arg2) > 180)
-		exception(RESOURCE_ERR, ind, arg2, th);
+    if (n == 2) {
+	arg1 = car(arglist);	//pin
+	arg2 = cadr(arglist);	//angle
 
-    int pulse_width = 1000 + (GET_INT(arg2) * 1000 / 180); // 0°=1000us, 180°=2000us
+	if (!integerp(arg1))
+	    exception(NOT_INT, ind, arg1, th);
+	if (!integerp(arg2))
+	    exception(NOT_INT, ind, arg2, th);
+	if (!is_pwm_pin(GET_INT(arg1)))
+	    exception(RESOURCE_ERR, ind, arg1, th);
+	if (GET_INT(arg2) < 0 || GET_INT(arg2) > 180)
+	    exception(RESOURCE_ERR, ind, arg2, th);
 
-    if(gpioServo(GET_INT(arg1), pulse_width) != 0){
-        exception(SYSTEM_ERR, ind, arglist, th);
-    }
+	int pulse_width = 1000 + (GET_INT(arg2) * 1000 / 180);	// 0°=1000us, 180°=2000us
 
-    
-    return prove_all(rest, sp[th], th);
+	if (gpioServo(GET_INT(arg1), pulse_width) != 0) {
+	    exception(SYSTEM_ERR, ind, arglist, th);
 	}
-	exception(ARITY_ERR, ind, arglist, th);
-    return(NO);
+
+
+	return prove_all(rest, sp[th], th);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
 
 int b_gpio_servo_stop(int arglist, int rest, int th)
 {
-	int n,ind,arg1;
-    
-	n = length(arglist);
+    int n, ind, arg1;
+
+    n = length(arglist);
     ind = makeind("gpio_servo_stop", n, th);
-    if(n == 1) {
-    arg1 = car(arglist);  //pin
-    if(!integerp(arg1)) 
-		exception(NOT_INT, ind, arg1, th);
-	if(!is_pwm_pin(GET_INT(arg1))) 
-		exception(RESOURCE_ERR, ind, arg1, th); 
-    
+    if (n == 1) {
+	arg1 = car(arglist);	//pin
+	if (!integerp(arg1))
+	    exception(NOT_INT, ind, arg1, th);
+	if (!is_pwm_pin(GET_INT(arg1)))
+	    exception(RESOURCE_ERR, ind, arg1, th);
 
-    gpioServo(GET_INT(arg1), 0);
 
-    return prove_all(rest, sp[th], th);
-	}
-	exception(ARITY_ERR, ind, arglist, th);
-    return(NO);
+	gpioServo(GET_INT(arg1), 0);
+
+	return prove_all(rest, sp[th], th);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
 int b_gpio_close(int arglist, int rest, int th)
