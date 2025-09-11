@@ -1325,7 +1325,7 @@ int b_gpio_set_mode(int arglist, int rest, int th)
 
 int b_gpio_write(int arglist, int rest, int th)
 {
-    int n, arg1, arg2, ind, res;
+    int n, arg1, arg2, ind;
 
     n = length(arglist);
     ind = makeind("gpio_write", n, th);
