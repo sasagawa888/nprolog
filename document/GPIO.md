@@ -1,7 +1,16 @@
-GPIO (libgpiod)
+# GPIO (libgpiod)
 
 On Raspberry Pi, N-Prolog can access GPIO through libgpiod. If libgpiod-dev is installed, these functions are available. Otherwise they are disabled.
-Spec
+
+# Spec
+- gpio_init/0
+- gpio_close/0
+- gpio_set_mode/2
+- gpio_write/2
+- gpio_read/2
+- gpio_event_request/2
+- gpio_event_wait/2
+- gpio_event_read/2
 
 NPL <==================================> C (libgpiod)
 
