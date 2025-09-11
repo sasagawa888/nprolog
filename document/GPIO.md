@@ -28,27 +28,18 @@ gpio_write(Pin, Value) <===> gpioWrite(Pin, Value)
 gpio_read(Pin, Value) <===> gpioRead(Pin)
 ;; Returns: Value 0 or 1. Raises error on failure.
 
-;; Start hardware PWM on a servo
-gpio_servo_start(Pin, Angle) <===> gpioServo(Pin, pulse_width)
-;; Pin: GPIO number (must support hardware PWM)
-;; Angle: 0-180 degrees
-;; pulse_width: automatically converted 1000us (0°) - 2000us (180°)
-;; Returns: YES on success. Raises error on invalid args.
-;; Note:
-;;   - Only the following GPIO pins support hardware PWM:
-;;       PWM0: 12, 18
-;;       PWM1: 13, 19
-;;   - Pin number is checked. Using non-PWM pins will raise an error.
-;;   - Angle out of range (0-180°) will raise an error.
+;; Request event detection on pin
+gpio_event_request(Pin, rising | falling | both) <===> gpiod_line_request_*_edge_events(line, "nprolog")
+;; Returns: YES on success, NO on failure. Raises error on invalid args.
 
-;; Stop hardware PWM on a servo
-gpio_servo_stop(Pin) <===> gpioServo(Pin, 0)
-;; Pin: GPIO number
-;; Stops PWM output on the given pin.
-;; Returns: YES on success. Raises error on invalid args.
+;; Wait for event with timeout
+gpio_event_wait(Pin ,Timeout-ms) <===> gpiod_line_event_wait(line, &ts)
+;; timeout-ms: integer, milliseconds
+;; Returns: YES if event occurred, NO if timeout, negative on error.
 
-;; Optional delays
-sleep(Seconds) <===> sleep(Seconds)
-usleep(Microseconds) <===> usleep(Microseconds)
-;; Provides simple blocking delays.
+;; Read last event
+gpio_event_read(Pin,Event) <===> gpiod_line_event_read(line, &event)
+;; Returns: Event rising or falling for the detected event.
+;; Raises error if no valid event.
+
 ```
