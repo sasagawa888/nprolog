@@ -1458,4 +1458,43 @@ int b_gpio_close(int arglist, int rest, int th)
     return (NO);
 }
 
+int b_sleep(int arglist, int rest, int th)
+{
+    int n, ind, arg1, x;
+
+    n = length(arglist);
+    ind = makeind("sleep", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if (!integerp(arg1))
+	    exception(NOT_INT, ind, arg1, th);
+
+	x = GET_INT(arg1);
+	sleep(x);
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+int b_usleep(int arglist, int rest, int th)
+{
+    int n, ind, arg1, x;
+
+    n = length(arglist);
+    ind = makeind("usleep", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if (!integerp(arg1))
+	    exception(NOT_INT, ind, arg1, th);
+
+	x = GET_INT(arg1);
+	usleep(x);
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+
 #endif
