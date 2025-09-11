@@ -111,6 +111,8 @@ N-Prolog is specialized for experimenting with and playing around with small-sca
  For now, we are not considering complex libraries.
 - include/1
 - ensure_loaded/1
+- write_term/2
+- current_prolog_flag/2
 
 - set_prolog_flag/2 The set_prolog_flag exists, but it is different from ISO.
   - set_prolog_flag(string,arity). e.g. $hello world$
@@ -119,9 +121,6 @@ N-Prolog is specialized for experimenting with and playing around with small-sca
   - set_prolog_flag(expression,sexp).      e.g.  (foo 1) 
 
  
-- current_prolog_flag/2 
-not exist.
-
 - long atom with '\\' 
  Excessively long atoms hinder code readability.
 
