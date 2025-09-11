@@ -1283,14 +1283,14 @@ static struct gpiod_chip *chip = NULL;
 
 int b_gpio_init(int arglist, int rest, int th)
 {
-    int n, ind;
+    int n, ind, res;
 
     n = length(arglist);
     ind = makeind("gpio_init", n, th);
     if (n == 0) {
 	chip = gpiod_chip_open("/dev/gpiochip0");
-
-	if (chip == NULL) {
+	res= gpioInitialise();
+	if (chip == NULL || res < 0) {
 	    return (NO);
 	}
 	return (prove_all(rest, sp[th], th));
