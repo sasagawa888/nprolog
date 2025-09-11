@@ -11,6 +11,8 @@ On Raspberry Pi, N-Prolog can access GPIO through libgpiod. If libgpiod-dev is i
 - gpio_event_request/2
 - gpio_event_wait/2
 - gpio_event_read/2
+- sleep/1
+- usleep/1
 
 NPL <==================================> C (libgpiod)
 

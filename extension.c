@@ -5,7 +5,6 @@
 #endif
 #ifdef __rpigpio__
 #include <gpiod.h>
-#include <pigpio.h>
 #endif
 #include <unistd.h>
 #include <stdlib.h>
@@ -1310,9 +1309,8 @@ int b_gpio_set_mode(int arglist, int rest, int th)
 	arg2 = cadr(arglist);	//mode
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
-	if (!
-	    (eqp(arg2, makeconst("input"))
-	     || eqp(arg2, makeconst("output")))) {
+	if (!(eqp(arg2, makeconst("input"))
+	      || eqp(arg2, makeconst("output")))) {
 	    exception(RESOURCE_ERR, ind, arg2, th);
 	}
 
@@ -1348,19 +1346,19 @@ int b_gpio_write(int arglist, int rest, int th)
 	    exception(NOT_INT, ind, arg1, th);
 	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
 	    exception(RESOURCE_ERR, ind, arg1, th);
-	 if(!integerp(arg2))
-        exception(NOT_INT,ind, arg2, th);
-    if(!(GET_INT(arg2) == 1 || GET_INT(arg2) == 0))
-        exception(RESOURCE_ERR, ind, arg2, th); 
+	if (!integerp(arg2))
+	    exception(NOT_INT, ind, arg2, th);
+	if (!(GET_INT(arg2) == 1 || GET_INT(arg2) == 0))
+	    exception(RESOURCE_ERR, ind, arg2, th);
 
-	
-    struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
-    if (!line){
-        exception(SYSTEM_ERR, ind, arglist,th);
+
+	struct gpiod_line *line = gpiod_chip_get_line(chip, GET_INT(arg1));
+	if (!line) {
+	    exception(SYSTEM_ERR, ind, arglist, th);
 	}
-    res = gpiod_line_set_value(line, GET_INT(arg2));
-    if(res < 0){
-        exception(SYSTEM_ERR, ind, arglist, th);
+	res = gpiod_line_set_value(line, GET_INT(arg2));
+	if (res < 0) {
+	    exception(SYSTEM_ERR, ind, arglist, th);
 	}
 	return (prove_all(rest, sp[th], th));
     }
@@ -1377,7 +1375,7 @@ int b_gpio_read(int arglist, int rest, int th)
     ind = makeind("gpio_read", n, th);
     if (n == 2) {
 	arg1 = car(arglist);	//pin
-	arg2 = cadr(arglist);   //value
+	arg2 = cadr(arglist);	//value
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (GET_INT(arg1) < 0 || GET_INT(arg1) > 27)
@@ -1481,7 +1479,7 @@ int b_gpio_event_read(int arglist, int rest, int th)
     ind = makeind("gpio_event_read", n, th);
     if (n == 1) {
 	arg1 = car(arglist);	//pin
-	
+
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arglist, th);
 
@@ -1499,7 +1497,7 @@ int b_gpio_event_read(int arglist, int rest, int th)
 	else
 	    exception(SYSTEM_ERR, ind, arglist, th);
 
-	if (unify(arg1, res, th) == YES) 
+	if (unify(arg1, res, th) == YES)
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
@@ -1522,5 +1520,37 @@ int b_gpio_close(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
+
+int b_sleep(int arglist, int rest, int th)
+{
+    int n, ind, arg1;
+
+    n = length(arglist);
+    ind = makeind("sleep", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+	sleep(GET_INT(arg1));
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+int b_usleep(int arglist, int rest, int th)
+{
+    int n, ind, arg1;
+
+    n = length(arglist);
+    ind = makeind("usleep", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+	usleep(GET_INT(arg1));
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+
 
 #endif

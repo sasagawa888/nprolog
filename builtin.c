@@ -290,8 +290,10 @@ void init_builtin(void)
     defbuiltin("gpio_read", b_gpio_read, 1);
     defbuiltin("gpio_event_request", b_gpio_event_request, 2);
     defbuiltin("gpio_event_wait", b_gpio_event_wait, 2);
-	defbuiltin("gpio_event_read", b_gpio_event_read, 2);
+    defbuiltin("gpio_event_read", b_gpio_event_read, 2);
     defbuiltin("gpio_close", b_gpio_close, 0);
+    defbuiltin("sleep", b_sleep, 1);
+    defbuiltin("usleep", b_usleep, 1);
 #endif
 
 
