@@ -30,12 +30,9 @@ sudo make install USE_GDB=1
 
 ```
 
-When using gpio on Raspberry Pi: please install gpio and compile with the following options.
+When using gpio on Raspberry Pi: please compile with the following options.
 
 ```
-sudo apt update
-sudo apt install libgpiod-dev
-sudo apt install pigpio
 sudo make install USE_GPIO=1
 ```
 
