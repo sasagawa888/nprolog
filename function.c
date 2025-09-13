@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <float.h>
+#include <string.h>
 #include "npl.h"
 
 void
@@ -13,8 +14,11 @@ defoperator(char *name, int (*func)(int, int, int), int weight, int spec,
 	atom = makeatom(name, OPE);
     else if (opt == 1)
 	atom = makeatom(name, SYS);
-    else
+    else {
 	atom = makeatom(name, USER);
+	if (strcmp(name, "|") == 0)
+	    virtical_flag = 1;
+    }
 
     old_spec = GET_OPT(atom);
     if (old_spec == FX ||

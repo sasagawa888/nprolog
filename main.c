@@ -124,6 +124,7 @@ int link_flag = 0;		// 0=not-link, 1=linked
 int listing_flag = 0;		//for print clause, 0=normal, 1=format print
 int colon_sets_calling_context_flag = 1;	//1=true, 0=false
 int prefix_flag = 0;		//for parser 0=not prefix, 1=prefix
+int virtical_flag = 0;		//for parser 0='|' is only virtical, 1='|' is defined as user operator
 int syntax_flag = YES;		//syntaxerrors/2 YES=normal. NO=ignore syntax-errors
 int fileerr_flag = YES;		//fileerrors/2 YES=normal. NO=ignore file-errors
 int exist_flag = YES;		//existerrors/2 YES=normal, NO=ignore existance_errors

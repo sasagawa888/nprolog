@@ -1380,7 +1380,10 @@ int readitem1(int th)
 	    return (temp);
 	}
     case VERTICAL:
-	return (makeatom("|", SIMP));
+	if (!virtical_flag)
+	    return (makeatom("|", SIMP));
+	else
+	    return (makeatom("|", USER));
     case INTEGER:
 	return (makeint(atoi(stok.buf)));
     case OCTNUM:

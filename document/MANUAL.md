@@ -771,18 +771,16 @@ You can check if the sentence is correct with the predicate phrase.
 
 
 ```
-| ?- phrase(s,[a,dog,bites,a,postman]).
+?- phrase(s,[a,dog,bites,a,postman]).
 yes
-| 
 ```
 
 In this way, it was confirmed that the sentence given in the list has the given sentence structure. What if you give the wrong sentence? 
 
 
 ```
-| ?- phrase(s,[bites,a,dog,a,postman]).
+?- phrase(s,[bites,a,dog,a,postman]).
 no
-|
 ```
 
 False is returned. It violates the grammar rules.
@@ -790,13 +788,12 @@ False is returned. It violates the grammar rules.
 Interestingly, you can also generate sentences that meet grammatical rules. 
 
 ```
-| ?- phrase(s,X).
+?- phrase(s,X).
 X = [a,dog,bites,a,dog];
 X = [a,dog,bites,a,postman];
 X = [a,postman,bites,a,dog];
 X = [a,postman,bites,a,postman];
 no
-| 
 ```
 
 When I typed a semicolon and backtracked, some sentences came out.

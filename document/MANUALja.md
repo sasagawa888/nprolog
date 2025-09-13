@@ -784,9 +784,9 @@ phraseという述語で文が正しいかどうかを確認することがで�
 
 
 ```
-| ?- phrase(s,[a,dog,bites,a,postman]).
+?- phrase(s,[a,dog,bites,a,postman]).
 yes
-| 
+
 ```
 
 
@@ -794,9 +794,9 @@ yes
 
 
 ```
-| ?- phrase(s,[bites,a,dog,a,postman]).
+?- phrase(s,[bites,a,dog,a,postman]).
 no
-|
+
 ```
 
 偽が返っています。文法規則に反しています。
@@ -806,13 +806,12 @@ no
 
 
 ```
-| ?- phrase(s,X).
+?- phrase(s,X).
 X = [a,dog,bites,a,dog];
 X = [a,dog,bites,a,postman];
 X = [a,postman,bites,a,dog];
 X = [a,postman,bites,a,postman];
 no
-| 
 ```
 
 セミコロンを入力しバックトラックさせるといくつかの文がでてきました。
