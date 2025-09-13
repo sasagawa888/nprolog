@@ -124,6 +124,9 @@ N-Prolog is specialized for experimenting with and playing around with small-sca
 - long atom with '\\' 
  Excessively long atoms hinder code readability.
 
+- char-code with '\0x23\' 
+ Use char_code/2. ?- char_code(X,0x23). X = '#' .
+
 # String
 Strings are enclosed in dollar signs, similar to ARITY/PROLOG. However, they can be changed to double quotes using set_prolog_flag.
 
