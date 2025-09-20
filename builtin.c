@@ -4475,6 +4475,17 @@ int b_listing(int arglist, int rest, int th)
 	arg1 = car(arglist);
 
 	if (atomp(arg1)) {
+		 if (builtinp(arg1)){
+			printf("%% builtin predicate: ");
+			print(arg1);
+			printf("\n");
+			return (prove_all(rest, sp[th], th));
+		} else if (compiledp(arg1)){
+			printf("%% compiled predicate: ");
+			print(arg1);
+			printf("\n");
+			return (prove_all(rest, sp[th], th));
+		}
 	    clauses = GET_CAR(arg1);
 	    listing_flag = 1;
 	    while (!nullp(clauses)) {
@@ -4486,6 +4497,17 @@ int b_listing(int arglist, int rest, int th)
 	    return (prove_all(rest, sp[th], th));
 	} else if (structurep(arg1) && eqlp(car(arg1), makeope("/")) &&
 		   atomp(cadr(arg1)) && integerp(caddr(arg1))) {
+		if (builtinp(cadr(arg1))){
+			printf("%% builtin predicate: ");
+			print(arg1);
+			printf("\n");
+			return (prove_all(rest, sp[th], th));
+		} else if (compiledp(cadr(arg1))){
+			printf("%% compiled predicate: ");
+			print(arg1);
+			printf("\n");
+			return (prove_all(rest, sp[th], th));
+		}
 	    clauses = GET_CAR(cadr(arg1));
 	    listing_flag = 1;
 	    while (!nullp(clauses)) {
@@ -4499,7 +4521,7 @@ int b_listing(int arglist, int rest, int th)
 			   GET_INT(caddr(arg1))) {
 		    print(temp);
 		    fprintf(GET_PORT(output_stream), ".\n");
-		}
+		} 
 		clauses = cdr(clauses);
 	    }
 	    listing_flag = 0;
