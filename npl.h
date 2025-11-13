@@ -1,6 +1,7 @@
 /* N-Prolog
 written by kenichi sasagawa 2016/9~
 */
+
 #include <setjmp.h>
 #include <stdio.h>
 #include <sys/ioctl.h>
