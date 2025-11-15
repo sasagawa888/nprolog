@@ -120,7 +120,7 @@ void gbcmark(void)
     for (i = 0; i < thread_num; i++) {
 	for (j = 0; j < sp[i]; j++) {
 	    if (alpha_variable_p(stack[j][i]))
-		markcell(variant[stack[j][i] - CELLSIZE][j]);
+		markcell(variant[stack[j][i] - cell_size][j]);
 	    else
 		markcell(stack[j][i]);
 	}

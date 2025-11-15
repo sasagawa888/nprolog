@@ -214,8 +214,9 @@ enum { GET_FLT_IDX,
 
 
 
-
-extern cell heap[CELLSIZE];
+extern cell *heap;
+extern int cell_size;
+//extern cell heap[CELLSIZE];
 extern int variant[VARIANTSIZE][THREADSIZE];
 extern int bigcell[BIGSIZE];
 extern int stack[STACKSIZE][THREADSIZE];

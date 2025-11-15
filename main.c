@@ -22,7 +22,6 @@ written by kenichi sasagawa 2016/8~
 //global vers
 int proof[THREADSIZE];
 int nest = 0;
-cell heap[CELLSIZE];
 int cell_hash_table[HASHTBSIZE];
 int variant[VARIANTSIZE][THREADSIZE];
 int bigcell[BIGSIZE];
@@ -250,14 +249,38 @@ int ed_hight;
 int ed_width;
 result rtok;			// token type and length for editable REPL
 
+/* Dynamic cell */
+cell *cell_area;
+cell *heap;
+int cell_size;
+#define DEFAULT_CELL_SIZE 30000000
+
+void alloc_cell(int requested_size)
+{
+    if (requested_size <= 0)
+	requested_size = DEFAULT_CELL_SIZE;
+
+    cell_area = malloc(sizeof(cell) * requested_size);
+    if (!cell_area) {
+	fprintf(stderr, "Cannot allocate cell_area\n");
+	exit(1);
+    }
+
+    heap = cell_area;
+    cell_size = requested_size;
+
+}
+
+
 void usage()
 {
     printf("List of options:\n");
     printf("-c filename -- NPL starts after reading the file.\n");
     printf("-h          -- display help.\n");
-    printf("-n          -- NPL run with network mode.\n");
+	printf("-m N        -- NPL runs with N(30>=N>=10) mega cells.\n");
+    printf("-n          -- NPL runs with network mode.\n");
     printf("-r          -- NPL does not use editable REPL.\n");
-    printf("-s filename -- NPL run file with script mode.\n");
+    printf("-s filename -- NPL runs file with script mode.\n");
     printf("-v          -- dislplay version number.\n");
 }
 
@@ -268,6 +291,7 @@ int main(int argc, char *argv[])
     struct winsize w;
 
     signal(SIGINT, reset);
+	alloc_cell(cell_size);
     init_cell();
     init_builtin();
     init_operator();
@@ -281,7 +305,7 @@ int main(int argc, char *argv[])
     error_stream = standard_error;
     wp[0] = HEAPSIZE + 1;
     wp_min[0] = HEAPSIZE + 1;
-    wp_max[0] = CELLSIZE;
+    wp_max[0] = cell_size;
     init_repl();
     int ret = setjmp(buf);
     if (!init_flag) {
@@ -292,7 +316,7 @@ int main(int argc, char *argv[])
     if (path)
 	b_consult(list1(makeconst("library/startup.pl")), NIL, 0);
 
-    while ((ch = getopt(argc, argv, "c:s:rhvn")) != -1) {
+    while ((ch = getopt(argc, argv, "c:s:m:rhvn")) != -1) {
 	switch (ch) {
 	case 'c':
 	    b_consult(list1(makeconst(optarg)), NIL, 0);
@@ -310,6 +334,11 @@ int main(int argc, char *argv[])
 	case 'h':
 	    usage();
 	    exit(EXIT_SUCCESS);
+	case 'm':
+		cell_size = strtol(optarg, NULL, 10) * 1000000;
+		if (cell_size < 10000000 || cell_size > 30000000)
+		    cell_size = DEFAULT_CELL_SIZE;
+		break;
 	case 'n':
 	    printf("N-Prolog runs with network mode.\n");
 	    child_flag = 1;
@@ -323,7 +352,7 @@ int main(int argc, char *argv[])
     }
 
     if (init_flag) {
-	printf("N-Prolog Ver %1.2f\n", VERSION);
+	printf("N-Prolog Ver %1.2f [%dM cells]\n", VERSION, cell_size/1000000);
 	init_flag = 0;
     }
 
@@ -403,7 +432,7 @@ void init_repl(void)
     for (i = 0; i < THREADSIZE; i++) {
 	sp[i] = 0;
 	proof[i] = 0;
-	ac[i] = CELLSIZE + 1;
+	ac[i] = cell_size + 1;
 	cp[i] = 0;
     }
     for (i = 0; i <= thread_num; i++) {
@@ -1301,9 +1330,9 @@ void print(int addr)
 
     if (IS_ALPHA(addr)) {
 	if (!dialog_flag)
-	    fprintf(GET_PORT(output_stream), "v_%d", addr - CELLSIZE);
+	    fprintf(GET_PORT(output_stream), "v_%d", addr - cell_size);
 	else {
-	    sprintf(str1, "v_%d", addr - CELLSIZE);
+	    sprintf(str1, "v_%d", addr - cell_size);
 	    strcat(output_buffer, str1);
 	}
 	return;

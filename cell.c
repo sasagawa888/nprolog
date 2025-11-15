@@ -98,7 +98,7 @@ void bindsym(int x, int val, int th)
 {
 
     if (alpha_variable_p(x))
-	variant[x - CELLSIZE][th] = val;
+	variant[x - cell_size][th] = val;
     else if (atom_variable_p(x))
 	SET_CAR(x, val);
     else
@@ -113,7 +113,7 @@ int findvar(int x, int th)
 {
 
     if (alpha_variable_p(x))
-	return (variant[x - CELLSIZE][th]);
+	return (variant[x - cell_size][th]);
     else if (atom_variable_p(x))
 	return (GET_CAR(x));
     else

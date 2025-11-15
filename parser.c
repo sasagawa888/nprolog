@@ -1489,7 +1489,7 @@ int readitem1(int th)
 	return (makeatom(stok.buf, ANOY));
     case VARIANT:
 	temp = atoi(stok.buf);
-	temp = temp + CELLSIZE;
+	temp = temp + cell_size;
 	return (temp);
     case STRING:
 	return (makestr(stok.buf));

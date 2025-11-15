@@ -1728,7 +1728,7 @@ int deref1(int x, int th)
       loop:
 	// findvar(x);
 	if (alpha_variable_p(x))
-	    res = variant[x - CELLSIZE][th];
+	    res = variant[x - cell_size][th];
 	else if (atom_variable_p(x))
 	    res = GET_CAR(x);
 	if (res == UNBIND)
@@ -1775,8 +1775,8 @@ int revderef1(int x, int th)
 	y = x;
       loop:
 	y--;
-	while (y > CELLSIZE) {
-	    if (variant[y - CELLSIZE][th] == x) {
+	while (y > cell_size) {
+	    if (variant[y - cell_size][th] == x) {
 		x = y;
 		goto loop;
 	    }
@@ -1873,7 +1873,7 @@ int unify_pair(int x, int y, int th)
     if (variablep(x)) {
 	//bindsym(x, y, th);
 	if (alpha_variable_p(x))
-	    variant[x - CELLSIZE][th] = y;
+	    variant[x - cell_size][th] = y;
 	else if (atom_variable_p(x))
 	    SET_CAR(x, y);
 	push_stack(x, th);
@@ -1994,7 +1994,7 @@ int unify_var(int x, int y, int th)
     if (variablep(x)) {
 	//bindsym(x, y, th);
 	if (alpha_variable_p(x))
-	    variant[x - CELLSIZE][th] = y;
+	    variant[x - cell_size][th] = y;
 	else if (atom_variable_p(x))
 	    SET_CAR(x, y);
 	push_stack(x, th);
@@ -2002,7 +2002,7 @@ int unify_var(int x, int y, int th)
     } else {
 	//bindsym(y, x, th);
 	if (alpha_variable_p(y))
-	    variant[y - CELLSIZE][th] = x;
+	    variant[y - cell_size][th] = x;
 	else if (atom_variable_p(y))
 	    SET_CAR(y, x);
 	push_stack(y, th);
@@ -2038,11 +2038,11 @@ void unbind(int x, int th)
     for (i = x; i < sp[th]; i++) {
 	int stack_index = stack[i][th];
 	if (alpha_variable_p(stack_index)) {
-	    int variant_index = stack_index - CELLSIZE;
+	    int variant_index = stack_index - cell_size;
 	    variant[variant_index][th] = UNBIND;
 	} else if (atom_variable_p(stack_index)) {
 	    if (alpha_variable_p(GET_CAR(stack_index))) {
-		int variant_index = GET_CAR(stack_index) - CELLSIZE;
+		int variant_index = GET_CAR(stack_index) - cell_size;
 		variant[variant_index][th] = UNBIND;
 	    }
 	    SET_CAR(stack_index, UNBIND);
@@ -2177,7 +2177,7 @@ void printenv(int th)
 	    if (alpha_variable_p(stack[i][th])) {
 		print(stack[i][th]);
 		printf("=");
-		print(variant[stack[i][th] - CELLSIZE][j]);
+		print(variant[stack[i][th] - cell_size][j]);
 	    } else if (atom_variable_p(stack[i][th])) {
 		print(stack[i][th]);
 		printf("=");
@@ -2442,7 +2442,7 @@ int alpha_to_variable(int x)
     int res;
     char str[ATOMSIZE];
 
-    sprintf(str, "_v%d", x - CELLSIZE);
+    sprintf(str, "_v%d", x - cell_size);
     res = makeatom(str, VAR);
     return (res);
 }

@@ -532,7 +532,7 @@ int variable_convert5(int x)
     char str1[STRSIZE], str2[STRSIZE];
 
     strcpy(str1, "var_");
-    sprintf(str2, "%d", x - CELLSIZE);
+    sprintf(str2, "%d", x - cell_size);
     strcat(str1, str2);
     res = makeconst(str1);
     return (res);
@@ -545,7 +545,7 @@ int rev_variable_convert(int x)
     char str[STRSIZE];
 
     strcpy(str, GET_NAME(x));
-    res = atoi(str + 4) + CELLSIZE;
+    res = atoi(str + 4) + cell_size;
     return (res);
 }
 

@@ -50,7 +50,7 @@ int convert_to_variant(int x, int th)
 	var = GET_NAME(x);
 	substr = &var[2];
 	i = atoi(substr);
-	i = i + CELLSIZE;
+	i = i + cell_size;
 	return (i);
     }
     if (listp(x)) {
@@ -71,7 +71,7 @@ int convert_to_variable(int x, int th)
     if (nullp(x))
 	return (NIL);
     else if (IS_ALPHA(x)) {
-	sprintf(str, "V_%d", x - CELLSIZE);
+	sprintf(str, "V_%d", x - cell_size);
 	return (makevar(str));
     } else if (listp(x)) {
 	return (x);
@@ -931,8 +931,8 @@ int b_mt_create(int arglist, int rest, int th)
 	init_para();
 	m = thread_num + 1;
 	for (i = 0; i < m; i++) {
-	    wp_min[i] = HEAPSIZE + 1 + (CELLSIZE - HEAPSIZE) / m * i;
-	    wp_max[i] = wp_min[i] + (CELLSIZE - HEAPSIZE) / m;
+	    wp_min[i] = HEAPSIZE + 1 + (cell_size - HEAPSIZE) / m * i;
+	    wp_max[i] = wp_min[i] + (cell_size - HEAPSIZE) / m;
 	}
 	return (prove_all(rest, sp[th], th));
     }

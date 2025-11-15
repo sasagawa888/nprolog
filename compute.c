@@ -7,7 +7,7 @@
 //immediate small integer
 int get_tag(int addr)
 {
-    if (addr >= 0 && addr < CELLSIZE)
+    if (addr >= 0 && addr < cell_size)
 	return (heap[addr].tag);
     else
 	return (INTN);
