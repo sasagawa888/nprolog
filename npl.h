@@ -18,12 +18,12 @@ address
 30,000,001 - 32,000,000  variant area
 */
 #define VERSION     4.76
-#define CELLSIZE    30000000  // if raspberry PI set smaller size.
+//#define CELLSIZE    30000000  // if raspberry PI set smaller size.
 #define HEAPSIZE     5000000
 #define FREESIZE         500
 #define STACKSIZE    2000000
 #define VARIANTSIZE  2000000
-#define VARIANTMAX  CELLSIZE + VARIANTSIZE
+//#define VARIANTMAX  CELLSIZE + VARIANTSIZE
 #define BIGSIZE 20000000
 #define NTTBASE 1000
 #define RECORDMAX 12
@@ -216,7 +216,7 @@ enum { GET_FLT_IDX,
 
 extern cell *heap;
 extern int cell_size;
-//extern cell heap[CELLSIZE];
+extern int variant_max;
 extern int variant[VARIANTSIZE][THREADSIZE];
 extern int bigcell[BIGSIZE];
 extern int stack[STACKSIZE][THREADSIZE];
@@ -438,9 +438,9 @@ extern int fd_trace;
 #define SET_RECORD(addr,x)  heap[addr].val.car.record = x
 #define SET_SOCKET(addr,x)  heap[addr].val.car.socket = x
 #define SET_CURL(addr,x)    heap[addr].val.car.curl = x
-#define IS_INCELL(addr)     (addr >= 0 && addr < CELLSIZE)
-#define IS_OUTCELL(addr)    (addr < 0 || addr >= CELLSIZE)
-#define IS_ALPHA(addr)      (addr < VARIANTMAX && addr > CELLSIZE)
+int IS_INCELL(int addr);
+int IS_OUTCELL(int addr);
+int IS_ALPHA(int addr);
 #define IS_SINGLE(addr)     heap[addr].tag == SINGLE
 #define IS_BIGXNUM(addr)    heap[addr].tag == BIGX
 #define IS_LONGNUM(addr)    heap[addr].tag == LONGN

@@ -253,7 +253,29 @@ result rtok;			// token type and length for editable REPL
 cell *cell_area;
 cell *heap;
 int cell_size;
+int variant_max;
 #define DEFAULT_CELL_SIZE 30000000
+
+int IS_INCELL(int addr){
+	if(addr >= 0 && addr < cell_size)
+	return(1);
+	else
+	return(0);
+} 
+
+int IS_OUTCELL(int addr){
+	if(addr < 0 || addr >= cell_size)
+	return(1);
+	else 
+	return(0);
+}   
+
+int IS_ALPHA(int addr){
+	if(addr < variant_max && addr > cell_size)
+	return(1);
+	else 
+	return(0);
+}      
 
 void alloc_cell(int requested_size)
 {
@@ -268,6 +290,7 @@ void alloc_cell(int requested_size)
 
     heap = cell_area;
     cell_size = requested_size;
+	variant_max = cell_size + VARIANTSIZE;
 
 }
 
