@@ -8,6 +8,11 @@
 #endif
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/mman.h>
+#include <linux/fb.h>
+#include <sys/ioctl.h>
+#include <unistd.h>  
+#include <fcntl.h>    
 #include "npl.h"
 
 //-----------JUMP project(builtin for compiler)------------
@@ -1554,3 +1559,319 @@ int b_usleep(int arglist, int rest, int th)
 
 
 #endif
+
+
+
+
+//-------/dev/fb0------------------------
+
+#define BLACK       0x000000  
+#define BLUE        0x0000FF 
+#define RED         0xFF0000  
+#define MAGENTA     0xFF00FF  
+#define GREEN       0x00FF00 
+#define CYAN        0x00FFFF  
+#define YELLOW      0xFFFF00 
+#define WHITE       0xFFFFFF 
+
+static int fb = -1;
+static char *fbp = NULL;
+static struct fb_var_screeninfo vinfo;
+static long screensize = 0;
+
+int fb_open()
+{
+    fb = open("/dev/fb0", O_RDWR);
+    if (fb < 0)
+	return -1;
+
+    if (ioctl(fb, FBIOGET_VSCREENINFO, &vinfo)) {
+	close(fb);
+	return -1;
+    }
+
+    screensize =
+	vinfo.yres_virtual * vinfo.xres_virtual * vinfo.bits_per_pixel / 8;
+    fbp = mmap(0, screensize, PROT_READ | PROT_WRITE, MAP_SHARED, fb, 0);
+    if (fbp == MAP_FAILED) {
+	close(fb);
+	return -1;
+    }
+    return 0;
+}
+
+void fb_flush()
+{
+    if (fb != -1) {
+        if (ioctl(fb, FBIOPAN_DISPLAY, &vinfo)) {
+            perror("FBIOPAN_DISPLAY failed");
+        }
+    }
+}
+
+void fb_close()
+{
+    if (fbp)
+	munmap(fbp, screensize);
+    if (fb >= 0)
+	close(fb);
+}
+
+
+void fb_draw_pixel(int x, int y, unsigned int color)
+{
+    if (x < 0 || y < 0 || x >= vinfo.xres_virtual
+	|| y >= vinfo.yres_virtual)
+	return;
+    long location = (x + vinfo.xoffset) * (vinfo.bits_per_pixel / 8) +
+	(y +
+	 vinfo.yoffset) * vinfo.xres_virtual * (vinfo.bits_per_pixel / 8);
+    *((unsigned int *) (fbp + location)) = color;
+}
+
+
+void fb_clear_screen(unsigned int color)
+{
+    for (int y = 0; y < vinfo.yres_virtual; y++) {
+	for (int x = 0; x < vinfo.xres_virtual; x++) {
+	    fb_draw_pixel(x, y, color);
+	}
+    }
+}
+
+void fb_draw_circle(int cx, int cy, int r, unsigned int color, int fill) {
+    int x = 0;
+    int y = r;
+    int d = 3 - 2 * r;
+
+    while (y >= x) {
+        if (fill) {
+            // scanline 塗りつぶし
+            for (int i = cx - x; i <= cx + x; i++) {
+                fb_draw_pixel(i, cy + y, color);
+                fb_draw_pixel(i, cy - y, color);
+            }
+            for (int i = cx - y; i <= cx + y; i++) {
+                fb_draw_pixel(i, cy + x, color);
+                fb_draw_pixel(i, cy - x, color);
+            }
+        } else {
+            // 円周だけ
+            fb_draw_pixel(cx + x, cy + y, color);
+            fb_draw_pixel(cx - x, cy + y, color);
+            fb_draw_pixel(cx + x, cy - y, color);
+            fb_draw_pixel(cx - x, cy - y, color);
+            fb_draw_pixel(cx + y, cy + x, color);
+            fb_draw_pixel(cx - y, cy + x, color);
+            fb_draw_pixel(cx + y, cy - x, color);
+            fb_draw_pixel(cx - y, cy - x, color);
+        }
+
+        if (d <= 0) {
+            d = d + 4*x + 6;
+        } else {
+            d = d + 4*(x - y) + 10;
+            y--;
+        }
+        x++;
+    }
+}
+
+
+void fb_draw_rect(int x0, int y0, int x1, int y1, unsigned int color, int fill) {
+    if (x0 > x1) { int t=x0; x0=x1; x1=t; }
+    if (y0 > y1) { int t=y0; y0=y1; y1=t; }
+
+    if (fill) {
+        for (int y = y0; y <= y1; y++) {
+            for (int x = x0; x <= x1; x++) {
+                fb_draw_pixel(x, y, color);
+            }
+        }
+    } else {
+        for (int x = x0; x <= x1; x++) {
+            fb_draw_pixel(x, y0, color);
+            fb_draw_pixel(x, y1, color);
+        }
+        for (int y = y0+1; y < y1; y++) {
+            fb_draw_pixel(x0, y, color);
+            fb_draw_pixel(x1, y, color);
+        }
+    }
+}
+
+void fb_draw_line(int x0, int y0, int x1, int y1, unsigned int color) {
+    int dx = abs(x1 - x0);
+    int sx = x0 < x1 ? 1 : -1;
+    int dy = -abs(y1 - y0);
+    int sy = y0 < y1 ? 1 : -1;
+    int err = dx + dy;
+    while(1) {
+        fb_draw_pixel(x0, y0, color);
+        if(x0 == x1 && y0 == y1) break;
+        int e2 = 2 * err;
+        if(e2 >= dy) { err += dy; x0 += sx; }
+        if(e2 <= dx) { err += dx; y0 += sy; }
+    }
+}
+
+int color_to_number(int symbol)
+{
+    if(eqp(symbol,makeconst("BLACK")))
+        return(BLACK);
+    else if(eqp(symbol,makeconst("BLUE")))
+        return(BLUE);
+    else if(eqp(symbol,makeconst("RED")))
+        return(RED);
+    else if(eqp(symbol,makeconst("MAGENTA")))
+        return(MAGENTA);
+    else if(eqp(symbol,makeconst("GREEN")))
+        return(GREEN);
+    else if(eqp(symbol,makeconst("CYAN")))
+        return(CYAN);
+    else if(eqp(symbol,makeconst("YELLOW")))
+        return(YELLOW);
+    else if(eqp(symbol,makeconst("WHITE")))
+        return(WHITE);
+    
+    return(0);
+}
+
+/*
+int f_gr_open(int arglist, int th)
+{
+    int res;
+    if (!nullp(arglist))
+	error(WRONG_ARGS, "GR-OPEN", arglist, th);
+
+    res = fb_open();
+    if(res==0)
+    return(T);
+    else if(res == -1)
+    return(NIL);
+
+    return(NIL);
+}
+
+int f_gr_close(int arglist, int th)
+{
+    if (!nullp(arglist))
+	error(WRONG_ARGS, "GR-CLOSE", arglist, th);
+
+    fb_close();
+    return(T);
+}
+
+int f_gr_cls(int arglist, int th)
+{
+    int arg1;
+    arg1 = car(arglist);
+    if(!symbolp(arg1))
+    error(NOT_SYM,"GR-CLS",arg1,th);
+
+    fb_clear_screen(color_to_number(arg1));
+    return(T);
+}
+
+
+
+int f_gr_pset(int arglist, int th)
+{
+    int arg1,arg2,arg3;
+    arg1 = car(arglist);
+    arg2 = cadr(arglist);
+    arg3 = caddr(arglist);
+    if(!integerp(arg1))
+    error(NOT_INT,"GR-PSET",arg1,th);
+    if(!integerp(arg2))
+    error(NOT_INT,"GR-PSET",arg2,th);
+    if(!symbolp(arg3))
+    error(NOT_SYM,"GR-PSET",arg3,th);
+
+    fb_draw_pixel(GET_INT(arg1),GET_INT(arg2),color_to_number(arg3));
+    return(T);
+}
+
+
+
+
+int f_gr_circle(int arglist, int th)
+{
+    int arg1,arg2,arg3,arg4,arg5;
+    arg1 = car(arglist);
+    arg2 = cadr(arglist);
+    arg3 = caddr(arglist);
+    arg4 = car(cdddr(arglist));
+    arg5 = car(cdr(cdddr(arglist)));
+    if(!integerp(arg1))
+    error(NOT_INT,"GR-CIRCLE",arg1,th);
+    if(!integerp(arg2))
+    error(NOT_INT,"GR-CIRCLE",arg2,th);
+    if(!integerp(arg3))
+    error(NOT_INT,"GR-CIRCLE",arg3,th);
+    if(!symbolp(arg4))
+    error(NOT_SYM,"GR-CIRCLE",arg4,th);
+
+    if(nullp(arg5))
+    fb_draw_circle(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),color_to_number(arg4),0);
+    else if(eqp(arg5,make_sym("FILL")))
+    fb_draw_circle(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),color_to_number(arg4),1);
+
+    return(T);
+}
+
+
+int f_gr_rect(int arglist, int th)
+{
+    int arg1,arg2,arg3,arg4,arg5,arg6;
+    arg1 = car(arglist);
+    arg2 = cadr(arglist);
+    arg3 = caddr(arglist);
+    arg4 = car(cdddr(arglist));
+    arg5 = car(cdr(cdddr(arglist)));
+    arg6 = car(cddr(cdddr(arglist)));
+    
+    if(!integerp(arg1))
+    error(NOT_INT,"GR-RECT",arg1,th);
+    if(!integerp(arg2))
+    error(NOT_INT,"GR-RECT",arg2,th);
+    if(!integerp(arg3))
+    error(NOT_INT,"GR-RECT",arg3,th);
+    if(!integerp(arg4))
+    error(NOT_INT,"GR-RECT",arg4,th);
+    if(!symbolp(arg5))
+    error(NOT_SYM,"GR-RECT",arg5,th);
+
+    if(nullp(arg6))
+    fb_draw_rect(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),GET_INT(arg4),color_to_number(arg5),0);
+    else if(eqp(arg6,make_sym("FILL")))
+    fb_draw_rect(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),GET_INT(arg4),color_to_number(arg5),1);
+
+    return(T);
+}
+
+
+
+int f_gr_line(int arglist, int th)
+{
+    int arg1,arg2,arg3,arg4,arg5;
+    arg1 = car(arglist);
+    arg2 = cadr(arglist);
+    arg3 = caddr(arglist);
+    arg4 = car(cdddr(arglist));
+    arg5 = car(cdr(cdddr(arglist)));
+    if(!integerp(arg1))
+    error(NOT_INT,"GR-LINE",arg1,th);
+    if(!integerp(arg2))
+    error(NOT_INT,"GR-LINE",arg2,th);
+    if(!integerp(arg3))
+    error(NOT_INT,"GR-LINE",arg3,th);
+    if(!integerp(arg4))
+    error(NOT_INT,"GR-LINE",arg4,th);
+    if(!symbolp(arg5))
+    error(NOT_SYM,"GR-LINE",arg5,th);
+
+    fb_draw_line(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),GET_INT(arg4),color_to_number(arg5));
+    return(T);
+}
+*/
