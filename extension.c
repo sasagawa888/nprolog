@@ -1646,7 +1646,6 @@ void fb_draw_circle(int cx, int cy, int r, unsigned int color, int fill) {
 
     while (y >= x) {
         if (fill) {
-            // scanline 塗りつぶし
             for (int i = cx - x; i <= cx + x; i++) {
                 fb_draw_pixel(i, cy + y, color);
                 fb_draw_pixel(i, cy - y, color);
@@ -1656,7 +1655,6 @@ void fb_draw_circle(int cx, int cy, int r, unsigned int color, int fill) {
                 fb_draw_pixel(i, cy - x, color);
             }
         } else {
-            // 円周だけ
             fb_draw_pixel(cx + x, cy + y, color);
             fb_draw_pixel(cx - x, cy + y, color);
             fb_draw_pixel(cx + x, cy - y, color);
@@ -1737,121 +1735,176 @@ int color_to_number(int symbol)
     return(0);
 }
 
-/*
-int f_gr_open(int arglist, int th)
+int b_gr_open(int arglist, int rest, int th)
 {
-    int res;
-    if (!nullp(arglist))
-	error(WRONG_ARGS, "GR-OPEN", arglist, th);
+    int n,ind;
 
-    res = fb_open();
-    if(res==0)
-    return(T);
-    else if(res == -1)
-    return(NIL);
-
-    return(NIL);
+    n = length(arglist);
+    ind = makeind("gr_open", n, th);
+    if (n == 0) {
+	fb_open();
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
-int f_gr_close(int arglist, int th)
+int b_gr_close(int arglist, int rest, int th)
 {
-    if (!nullp(arglist))
-	error(WRONG_ARGS, "GR-CLOSE", arglist, th);
+    int n,ind;
 
-    fb_close();
-    return(T);
+    n = length(arglist);
+    ind = makeind("gr_close", n, th);
+    if (n == 0) {
+	fb_close();
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
-int f_gr_cls(int arglist, int th)
+int b_gr_cls(int arglist, int rest, int th)
 {
-    int arg1;
-    arg1 = car(arglist);
-    if(!symbolp(arg1))
-    error(NOT_SYM,"GR-CLS",arg1,th);
+    int n,ind,arg1;
 
-    fb_clear_screen(color_to_number(arg1));
-    return(T);
+    n = length(arglist);
+    ind = makeind("gr_cls", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if(!atomp(arg1))
+    exception(NOT_ATOM, ind, arg1,th);
+	fb_clear_screen(color_to_number(arg1));
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+int b_gr_pset(int arglist, int rest, int th)
+{
+    int n,ind,arg1,arg2,arg3;
+
+    n = length(arglist);
+    ind = makeind("gr_pset", n, th);
+    if (n == 3) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	arg3 = caddr(arglist);
+	if(!integerp(arg1))
+    exception(NOT_INT, ind, arg1,th);
+	if(!integerp(arg2))
+    exception(NOT_INT, ind, arg2,th);
+	if(!atomp(arg3))
+    exception(NOT_ATOM, ind, arg3,th);
+	
+	fb_draw_pixel(GET_INT(arg1),GET_INT(arg2),color_to_number(arg3));
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
 
-
-int f_gr_pset(int arglist, int th)
+int b_gr_circle(int arglist, int rest, int th)
 {
-    int arg1,arg2,arg3;
-    arg1 = car(arglist);
-    arg2 = cadr(arglist);
-    arg3 = caddr(arglist);
-    if(!integerp(arg1))
-    error(NOT_INT,"GR-PSET",arg1,th);
-    if(!integerp(arg2))
-    error(NOT_INT,"GR-PSET",arg2,th);
-    if(!symbolp(arg3))
-    error(NOT_SYM,"GR-PSET",arg3,th);
+    int n,ind,arg1,arg2,arg3,arg4,arg5;
 
-    fb_draw_pixel(GET_INT(arg1),GET_INT(arg2),color_to_number(arg3));
-    return(T);
-}
-
-
-
-
-int f_gr_circle(int arglist, int th)
-{
-    int arg1,arg2,arg3,arg4,arg5;
-    arg1 = car(arglist);
-    arg2 = cadr(arglist);
-    arg3 = caddr(arglist);
-    arg4 = car(cdddr(arglist));
-    arg5 = car(cdr(cdddr(arglist)));
-    if(!integerp(arg1))
-    error(NOT_INT,"GR-CIRCLE",arg1,th);
-    if(!integerp(arg2))
-    error(NOT_INT,"GR-CIRCLE",arg2,th);
-    if(!integerp(arg3))
-    error(NOT_INT,"GR-CIRCLE",arg3,th);
-    if(!symbolp(arg4))
-    error(NOT_SYM,"GR-CIRCLE",arg4,th);
-
-    if(nullp(arg5))
+    n = length(arglist);
+    ind = makeind("gr_circle", n, th);
+    if (n == 5) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	arg3 = caddr(arglist);
+	arg4 = car(cddr(cdr(arglist)));
+    arg5 = car(cddr(cddr(arglist)));
+	if(!integerp(arg1))
+    exception(NOT_INT, ind, arg1,th);
+	if(!integerp(arg2))
+    exception(NOT_INT, ind, arg2,th);
+	if(!integerp(arg3))
+    exception(NOT_INT, ind, arg3,th);
+	if(!atomp(arg4))
+    exception(NOT_ATOM, ind, arg4,th);
+	
+	if(nullp(arg5))
     fb_draw_circle(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),color_to_number(arg4),0);
-    else if(eqp(arg5,make_sym("FILL")))
+    else if(eqp(arg5,makeatom("fill",th)))
     fb_draw_circle(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),color_to_number(arg4),1);
-
-    return(T);
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
 
-int f_gr_rect(int arglist, int th)
+int b_gr_rect(int arglist, int rest, int th)
 {
-    int arg1,arg2,arg3,arg4,arg5,arg6;
-    arg1 = car(arglist);
-    arg2 = cadr(arglist);
-    arg3 = caddr(arglist);
-    arg4 = car(cdddr(arglist));
-    arg5 = car(cdr(cdddr(arglist)));
-    arg6 = car(cddr(cdddr(arglist)));
-    
-    if(!integerp(arg1))
-    error(NOT_INT,"GR-RECT",arg1,th);
-    if(!integerp(arg2))
-    error(NOT_INT,"GR-RECT",arg2,th);
-    if(!integerp(arg3))
-    error(NOT_INT,"GR-RECT",arg3,th);
-    if(!integerp(arg4))
-    error(NOT_INT,"GR-RECT",arg4,th);
-    if(!symbolp(arg5))
-    error(NOT_SYM,"GR-RECT",arg5,th);
+    int n,ind,arg1,arg2,arg3,arg4,arg5,arg6;
 
-    if(nullp(arg6))
+    n = length(arglist);
+    ind = makeind("gr_rect", n, th);
+    if (n == 5) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	arg3 = caddr(arglist);
+	arg4 = car(cddr(cdr(arglist)));
+    arg5 = car(cddr(cddr(arglist)));
+	arg6 = car(cdr(cddr(cddr(arglist))));
+	if(!integerp(arg1))
+    exception(NOT_INT, ind, arg1,th);
+	if(!integerp(arg2))
+    exception(NOT_INT, ind, arg2,th);
+	if(!integerp(arg3))
+    exception(NOT_INT, ind, arg3,th);
+	if(!atomp(arg4))
+    exception(NOT_ATOM, ind, arg4,th);
+	
+	 if(nullp(arg6))
     fb_draw_rect(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),GET_INT(arg4),color_to_number(arg5),0);
-    else if(eqp(arg6,make_sym("FILL")))
+    else if(eqp(arg6,makeatom("fill",th)))
     fb_draw_rect(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),GET_INT(arg4),color_to_number(arg5),1);
 
-    return(T);
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+
+int b_gr_line(int arglist, int rest, int th)
+{
+    int n,ind,arg1,arg2,arg3,arg4,arg5;
+
+    n = length(arglist);
+    ind = makeind("gr_line", n, th);
+    if (n == 5) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	arg3 = caddr(arglist);
+	arg4 = car(cddr(cdr(arglist)));
+    arg5 = car(cddr(cddr(arglist)));
+	if(!integerp(arg1))
+    exception(NOT_INT, ind, arg1,th);
+	if(!integerp(arg2))
+    exception(NOT_INT, ind, arg2,th);
+	if(!integerp(arg3))
+    exception(NOT_INT, ind, arg3,th);
+	if(!integerp(arg4))
+    exception(NOT_INT, ind, arg4,th);
+	if(!atomp(arg5))
+    exception(NOT_ATOM, ind, arg5,th);
+	
+    fb_draw_line(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),GET_INT(arg4),color_to_number(arg5));
+	return (prove_all(rest, sp[th], th));
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
 }
 
 
 
+
+/*
 int f_gr_line(int arglist, int th)
 {
     int arg1,arg2,arg3,arg4,arg5;
