@@ -38,7 +38,7 @@ address
 #define FUNCTION_NUMBER 22
 #define BUILTIN_NUMBER 220
 #define COMPILED_NUMBER 10
-#define EXTENDED_NUMBER 53
+#define EXTENDED_NUMBER 60
 #define NIL         0
 #define YES         2
 #define NO          4
@@ -913,6 +913,12 @@ int b_n_get_dynamic(int arglist, int rest, int th);
 int b_n_get_execute(int arglist, int rest, int th);
 int b_n_greater(int arglist, int rest, int th);
 int b_ground(int arglist, int rest, int th);
+int b_gr_open(int arglist, int rest, int th);
+int b_gr_close(int arglist, int rest, int th);
+int b_gr_pset(int arglist, int rest, int th);
+int b_gr_circle(int arglist, int rest, int th);
+int b_gr_rect(int arglist, int rest, int th);
+int b_gr_line(int arglist, int rest, int th);
 int b_halt(int arglist, int rest, int th);
 int b_n_has_cut(int arglist, int rest, int th);
 int b_heapdump(int arglist, int rest, int th);
