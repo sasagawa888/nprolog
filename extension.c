@@ -1812,11 +1812,12 @@ int b_gr_circle(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("gr_circle", n, th);
     if (n == 5) {
+	gr_circle:
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 	arg4 = car(cddr(cdr(arglist)));
-    arg5 = car(cddr(cddr(arglist)));
+    arg5 = NIL;
 	if(!integerp(arg1))
     exception(NOT_INT, ind, arg1,th);
 	if(!integerp(arg2))
@@ -1831,7 +1832,10 @@ int b_gr_circle(int arglist, int rest, int th)
     else if(eqp(arg5,makeatom("fill",th)))
     fb_draw_circle(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),color_to_number(arg4),1);
 	return (prove_all(rest, sp[th], th));
-    }
+    } else if(n == 5){
+	arg5 = car(cddr(cddr(arglist)));
+	goto gr_circle;
+	}
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
@@ -1844,12 +1848,13 @@ int b_gr_rect(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("gr_rect", n, th);
     if (n == 5) {
+	gr_rect:
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 	arg4 = car(cddr(cdr(arglist)));
     arg5 = car(cddr(cddr(arglist)));
-	arg6 = car(cdr(cddr(cddr(arglist))));
+	arg6 = NIL;
 	if(!integerp(arg1))
     exception(NOT_INT, ind, arg1,th);
 	if(!integerp(arg2))
@@ -1858,14 +1863,16 @@ int b_gr_rect(int arglist, int rest, int th)
     exception(NOT_INT, ind, arg3,th);
 	if(!atomp(arg4))
     exception(NOT_ATOM, ind, arg4,th);
-	
-	 if(nullp(arg6))
-    fb_draw_rect(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),GET_INT(arg4),color_to_number(arg5),0);
+	if(nullp(arg6))
+	fb_draw_rect(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),GET_INT(arg4),color_to_number(arg5),0);
     else if(eqp(arg6,makeatom("fill",th)))
     fb_draw_rect(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),GET_INT(arg4),color_to_number(arg5),1);
-
+	} else if(n == 6){
+	arg6 = car(cdr(cddr(cddr(arglist))));
+	goto gr_rect;
+	}
+	
 	return (prove_all(rest, sp[th], th));
-    }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }

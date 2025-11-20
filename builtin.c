@@ -269,8 +269,8 @@ void init_builtin(void)
 	defbuiltin("gr_open", b_gr_open, 0);
     defbuiltin("gr_close", b_gr_close, 0);
     defbuiltin("gr_pset", b_gr_pset, 3);
-    defbuiltin("gr_circle", b_gr_circle, 5);
-	defbuiltin("gr_rect", b_gr_rect, 5);
+    defbuiltin("gr_circle", b_gr_circle, list2(4,5));
+	defbuiltin("gr_rect", b_gr_rect, list2(5,6));
 	defbuiltin("gr_line", b_gr_line, 5);
 
 
