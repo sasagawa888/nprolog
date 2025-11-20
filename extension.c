@@ -1812,12 +1812,12 @@ int b_gr_circle(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("gr_circle", n, th);
     if (n == 4) {
+	arg5 = NIL;
 	gr_circle:
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 	arg4 = car(cddr(cdr(arglist)));
-    arg5 = NIL;
 	if(!integerp(arg1))
     exception(NOT_INT, ind, arg1,th);
 	if(!integerp(arg2))
@@ -1848,13 +1848,13 @@ int b_gr_rect(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("gr_rect", n, th);
     if (n == 5) {
+	arg6 = NIL;
 	gr_rect:
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 	arg4 = car(cddr(cdr(arglist)));
     arg5 = car(cddr(cddr(arglist)));
-	arg6 = NIL;
 	if(!integerp(arg1))
     exception(NOT_INT, ind, arg1,th);
 	if(!integerp(arg2))
