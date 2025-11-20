@@ -25,3 +25,20 @@ draw :-
     gr_cls(black),
     draw_c_curve(900, 300, 1300, 300, 12, blue),
     gr_close.
+
+
+japan :-
+    gr_open,
+    gr_(black),
+    draw_flag(900,300,400),
+    gr_close.
+
+draw_flag(X0,Y0,W) :-
+    X1 is X0 + W,
+    Y1 is Y0 + W*2//3,
+    gr_rect(X0,Y0,X1,Y1,white),
+    H is Y1 - Y0,
+    Cx is W // 2 + X0,
+    Cy is H // 2 + Y0,
+    R is H * 3 //10,
+    gr_circle(Cx,Cy,R,red). 
