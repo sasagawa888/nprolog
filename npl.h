@@ -915,6 +915,7 @@ int b_n_greater(int arglist, int rest, int th);
 int b_ground(int arglist, int rest, int th);
 int b_gr_open(int arglist, int rest, int th);
 int b_gr_close(int arglist, int rest, int th);
+int b_gr_cls(int arglist, int rest, int th);
 int b_gr_pset(int arglist, int rest, int th);
 int b_gr_circle(int arglist, int rest, int th);
 int b_gr_rect(int arglist, int rest, int th);
