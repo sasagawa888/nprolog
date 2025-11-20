@@ -1811,7 +1811,7 @@ int b_gr_circle(int arglist, int rest, int th)
 
     n = length(arglist);
     ind = makeind("gr_circle", n, th);
-    if (n == 5) {
+    if (n == 4) {
 	gr_circle:
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
