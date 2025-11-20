@@ -310,7 +310,6 @@ void usage()
 int main(int argc, char *argv[])
 {
     int ch, input;
-    char *path;
     struct winsize w;
 
     signal(SIGINT, reset);
@@ -334,10 +333,6 @@ int main(int argc, char *argv[])
     if (!init_flag) {
 	goto repl;
     }
-
-    path = prolog_file_name("library/startup.pl");
-    if (path)
-	b_consult(list1(makeconst("library/startup.pl")), NIL, 0);
 
     while ((ch = getopt(argc, argv, "c:s:m:rhvn")) != -1) {
 	switch (ch) {
