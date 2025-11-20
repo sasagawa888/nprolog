@@ -1715,21 +1715,21 @@ void fb_draw_line(int x0, int y0, int x1, int y1, unsigned int color) {
 
 int color_to_number(int symbol)
 {
-    if(eqp(symbol,makeconst("BLACK")))
+    if(eqp(symbol,makeconst("black")))
         return(BLACK);
-    else if(eqp(symbol,makeconst("BLUE")))
+    else if(eqp(symbol,makeconst("blue")))
         return(BLUE);
-    else if(eqp(symbol,makeconst("RED")))
+    else if(eqp(symbol,makeconst("red")))
         return(RED);
-    else if(eqp(symbol,makeconst("MAGENTA")))
+    else if(eqp(symbol,makeconst("magenta")))
         return(MAGENTA);
-    else if(eqp(symbol,makeconst("GREEN")))
+    else if(eqp(symbol,makeconst("green")))
         return(GREEN);
-    else if(eqp(symbol,makeconst("CYAN")))
+    else if(eqp(symbol,makeconst("cyan")))
         return(CYAN);
-    else if(eqp(symbol,makeconst("YELLOW")))
+    else if(eqp(symbol,makeconst("yellow")))
         return(YELLOW);
-    else if(eqp(symbol,makeconst("WHITE")))
+    else if(eqp(symbol,makeconst("white")))
         return(WHITE);
     
     return(0);
@@ -1829,7 +1829,7 @@ int b_gr_circle(int arglist, int rest, int th)
 	
 	if(nullp(arg5))
     fb_draw_circle(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),color_to_number(arg4),0);
-    else if(eqp(arg5,makeatom("fill",th)))
+    else if(eqp(arg5,makeconst("fill")))
     fb_draw_circle(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),color_to_number(arg4),1);
 	return (prove_all(rest, sp[th], th));
     } else if(n == 5){
@@ -1865,7 +1865,7 @@ int b_gr_rect(int arglist, int rest, int th)
     exception(NOT_ATOM, ind, arg4,th);
 	if(nullp(arg6))
 	fb_draw_rect(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),GET_INT(arg4),color_to_number(arg5),0);
-    else if(eqp(arg6,makeatom("fill",th)))
+    else if(eqp(arg6,makeconst("fill")))
     fb_draw_rect(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),GET_INT(arg4),color_to_number(arg5),1);
 	} else if(n == 6){
 	arg6 = car(cdr(cddr(cddr(arglist))));
