@@ -23,5 +23,5 @@ draw_c_curve(X0, Y0, X1, Y1, Depth, Color) :-
 draw :-
     gr_open,
     gr_cls(black),
-    draw_c_curve(100, 300, 500, 300, 12, blue),
+    draw_c_curve(600, 300, 1000, 300, 12, blue),
     gr_close.
