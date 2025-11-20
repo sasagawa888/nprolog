@@ -9,7 +9,7 @@ To use this feature, you need to switch to a physical terminal. You can switch b
 You need to use sudo when starting it.
 
 ```
-sudo eisl
+sudo npl
 ```
 
 The default font on the TTY is small and hard to read. Therefore, please change the settings as follows next.
