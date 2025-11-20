@@ -11,8 +11,8 @@ draw_c_curve(X0, Y0, X1, Y1, Depth, Color) :-
     DY is Y1 - Y0,
 
     % Compute midpoint rotated by +90 degrees
-    MX is X0 + DX/2 - DY/2,
-    MY is Y0 + DY/2 + DX/2,
+    MX is X0 + DX//2 - DY//2,
+    MY is Y0 + DY//2 + DX//2,
 
     D1 is Depth - 1,
 
