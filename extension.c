@@ -1829,7 +1829,7 @@ int b_gr_circle(int arglist, int rest, int th)
 	
 	if(nullp(arg5))
     fb_draw_circle(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),color_to_number(arg4),0);
-    else if(eqp(arg5,makeconst("fill")))
+    else if(eqlp(arg5,makeconst("fill")))
     fb_draw_circle(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),color_to_number(arg4),1);
 	return (prove_all(rest, sp[th], th));
     } else if(n == 5){
@@ -1867,7 +1867,7 @@ int b_gr_rect(int arglist, int rest, int th)
     exception(NOT_ATOM, ind, arg5,th);
 	if(nullp(arg6))
 	fb_draw_rect(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),GET_INT(arg4),color_to_number(arg5),0);
-    else if(eqp(arg6,makeconst("fill")))
+    else if(eqlp(arg6,makeconst("fill")))
     fb_draw_rect(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),GET_INT(arg4),color_to_number(arg5),1);
 	} else if(n == 6){
 	arg6 = car(cdr(cddr(cddr(arglist))));
