@@ -1861,8 +1861,10 @@ int b_gr_rect(int arglist, int rest, int th)
     exception(NOT_INT, ind, arg2,th);
 	if(!integerp(arg3))
     exception(NOT_INT, ind, arg3,th);
-	if(!atomp(arg4))
-    exception(NOT_ATOM, ind, arg4,th);
+	if(!integerp(arg4))
+    exception(NOT_INT, ind, arg4,th);
+	if(!atomp(arg5))
+    exception(NOT_ATOM, ind, arg5,th);
 	if(nullp(arg6))
 	fb_draw_rect(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),GET_INT(arg4),color_to_number(arg5),0);
     else if(eqp(arg6,makeconst("fill")))
