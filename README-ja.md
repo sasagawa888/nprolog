@@ -81,13 +81,13 @@ npl -l init.pl
 
 ```
 $ npl -h
-List of options:
--c filename   -- NPL starts after reading the file.
--h            -- display help.
--r            -- NPL does not use editable REPL.
--s filename   -- NPL run file with script mode.
--v            -- dislplay version number.
-
+-c filename -- NPL starts after reading the file.
+-h          -- display help.
+-m N        -- NPL runs with N(30>=N>=10) mega cells.
+-n          -- NPL runs with network mode.
+-r          -- NPL does not use editable REPL.
+-s filename -- NPL runs file with script mode.
+-v          -- dislplay version number.
 ```
 
 
