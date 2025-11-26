@@ -504,7 +504,7 @@ void init_operator(void)
 int eval(int x, int th)
 {
     int function, arg1, arg2;
-    int result[3];
+    int result[3] = {0};
 
     if (nullp(x))
 	return (NIL);

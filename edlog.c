@@ -1781,7 +1781,7 @@ char *getname()
 	    cancel_flag = true;
 	    return (buf);
 	default:
-	    if (pos > SHORT_STR_MAX)
+	    if (pos >= SHORT_STR_MAX)
 		break;
 	    else if (c < 20)
 		break;
@@ -1836,7 +1836,7 @@ char *getword1()
 	    cancel_flag = true;
 	    return (buf);
 	default:
-	    if (pos > SHORT_STR_MAX)
+	    if (pos >= SHORT_STR_MAX)
 		break;
 	    else if (c < 20)
 		break;
@@ -1890,7 +1890,7 @@ char *getword2()
 	    cancel_flag = true;
 	    return (buf);
 	default:
-	    if (pos > SHORT_STR_MAX)
+	    if (pos >= SHORT_STR_MAX)
 		break;
 	    else if (c < 20)
 		break;

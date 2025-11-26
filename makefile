@@ -123,3 +123,8 @@ uninstall:
 .PHONY: clean all
 clean:
 	rm -f *.o $(NPL) $(EDLOG) $(OBJ_PROLOG)
+
+
+.PHONY: check
+check:
+	cppcheck --enable=warning,performance,portability --std=c17 --library=posix -j4 .
