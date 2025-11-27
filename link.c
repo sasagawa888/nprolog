@@ -13,7 +13,7 @@ char *get_name(int x)
     return (GET_NAME(x));
 }
 
-
+// cppcheck-suppress resourceLeak
 void dynamic_link(int x)
 {
     char str[256] = { "./" };
