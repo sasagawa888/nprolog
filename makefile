@@ -27,8 +27,14 @@ export SHAREDIR
 NPL   := npl
 EDLOG := edlog
 
+
+ifeq ($(shell uname -n),raspberrypi)
+CFLAGS += -D__rpi__
+endif
+
 ifeq ($(shell uname -n),raspberrypi)
 ifeq ($(USE_WIRINGPI),1)
+CFLAGS += -D__rpiwiring__
 LIBS += -lwiringPi
 endif
 endif

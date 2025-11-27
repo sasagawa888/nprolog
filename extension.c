@@ -1,5 +1,5 @@
 #include <string.h>
-#ifdef __arm__
+#ifdef __rpiwiring__
 #include <wiringPi.h>
 #include <wiringPiSPI.h>
 #endif
