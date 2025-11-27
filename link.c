@@ -188,6 +188,5 @@ void dynamic_link(int x)
     init_tpredicate();
     init_declare();
     link_flag = 1;
-    dlclose(hmod);
     return;
 }
