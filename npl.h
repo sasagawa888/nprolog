@@ -328,7 +328,9 @@ enum Type {
 //debugger
 #define OFF     0
 #define ON      1
-    
+
+
+
 /* distributed parallel */
 #define PORT 5000 
 extern pthread_mutex_t mutex2;

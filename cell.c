@@ -285,7 +285,7 @@ int makestr(char *name)
 
 
 
-int makestream(FILE * port, int i_o, int type, int action, int fname)
+int makestream(FILE *port, int i_o, int type, int action, int fname)
 {
     int addr;
 

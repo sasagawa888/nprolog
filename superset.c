@@ -1399,7 +1399,7 @@ int b_atom_chars(int arglist, int rest, int th)
 int b_number_codes(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, ls, num, pos, code, res;
-    char str1[STRSIZE], str2[10];
+    char str1[STRSIZE] = { 0 }, str2[10];
 
     n = length(arglist);
     ind = makeind("number_codes", n, th);
@@ -1465,7 +1465,7 @@ int b_number_codes(int arglist, int rest, int th)
 int b_number_chars(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, ls, num, pos, c, res;
-    char str1[STRSIZE], str2[10];
+    char str1[STRSIZE] = { 0 }, str2[10];
 
     n = length(arglist);
     ind = makeind("number_chars", n, th);
@@ -1941,6 +1941,7 @@ int b_create_server_socket(int arglist, int rest, int th)
 	sock0 = socket(AF_INET, SOCK_STREAM, 0);
 	if (sock0 < 0) {
 	    exception(SYSTEM_ERR, ind, NIL, th);
+	    return (0);
 	}
 
 	memset((char *) &server_addr, 0, sizeof(server_addr));
@@ -1952,6 +1953,8 @@ int b_create_server_socket(int arglist, int rest, int th)
 	    (sock0, (struct sockaddr *) &server_addr,
 	     sizeof(server_addr)) < 0) {
 	    exception(SYSTEM_ERR, ind, NIL, th);
+	    close(sock0);
+	    return (0);
 	}
 
 	listen(sock0, 5);

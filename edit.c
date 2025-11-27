@@ -665,7 +665,7 @@ void backspace_buffer(int col)
 {
     int i;
 
-    for (i = col; i < BUFSIZE; i++)
+    for (i = col; i < BUFSIZE - 1; i++)
 	buffer[i][0] = buffer[i + 1][0];
 }
 
@@ -818,9 +818,15 @@ int read_line(int flag)
 		ESCMVLEFT(j + left_margin);
 		break;
 	    }
-	    for (j = 0; j < BUFSIZE; j++)
+	    for (j = 0; j < BUFSIZE; j++) {
 		if (buffer[j][0] == 0)
 		    break;
+	    }
+	    if (j == BUFSIZE) {
+		// buffer is full
+		fprintf(stderr, "buffer overflow!\n");
+		goto exit;
+	    }
 	    buffer[j][0] = c;
 	    restore_paren_buffer(j);
 	    printf("%c", c);

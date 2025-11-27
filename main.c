@@ -256,26 +256,29 @@ int cell_size;
 int variant_max;
 #define DEFAULT_CELL_SIZE 30000000
 
-int IS_INCELL(int addr){
-	if(addr >= 0 && addr < cell_size)
-	return(1);
-	else
-	return(0);
-} 
+int IS_INCELL(int addr)
+{
+    if (addr >= 0 && addr < cell_size)
+	return (1);
+    else
+	return (0);
+}
 
-int IS_OUTCELL(int addr){
-	if(addr < 0 || addr >= cell_size)
-	return(1);
-	else 
-	return(0);
-}   
+int IS_OUTCELL(int addr)
+{
+    if (addr < 0 || addr >= cell_size)
+	return (1);
+    else
+	return (0);
+}
 
-int IS_ALPHA(int addr){
-	if(addr < variant_max && addr > cell_size)
-	return(1);
-	else 
-	return(0);
-}      
+int IS_ALPHA(int addr)
+{
+    if (addr < variant_max && addr > cell_size)
+	return (1);
+    else
+	return (0);
+}
 
 void alloc_cell(int requested_size)
 {
@@ -290,7 +293,7 @@ void alloc_cell(int requested_size)
 
     heap = cell_area;
     cell_size = requested_size;
-	variant_max = cell_size + VARIANTSIZE;
+    variant_max = cell_size + VARIANTSIZE;
 
 }
 
@@ -300,7 +303,7 @@ void usage()
     printf("List of options:\n");
     printf("-c filename -- NPL starts after reading the file.\n");
     printf("-h          -- display help.\n");
-	printf("-m N        -- NPL runs with N(30>=N>=10) mega cells.\n");
+    printf("-m N        -- NPL runs with N(30>=N>=10) mega cells.\n");
     printf("-n          -- NPL runs with network mode.\n");
     printf("-r          -- NPL does not use editable REPL.\n");
     printf("-s filename -- NPL runs file with script mode.\n");
@@ -313,7 +316,7 @@ int main(int argc, char *argv[])
     struct winsize w;
 
     signal(SIGINT, reset);
-	alloc_cell(cell_size);
+    alloc_cell(cell_size);
     init_cell();
     init_builtin();
     init_operator();
@@ -353,10 +356,10 @@ int main(int argc, char *argv[])
 	    usage();
 	    exit(EXIT_SUCCESS);
 	case 'm':
-		cell_size = strtol(optarg, NULL, 10) * 1000000;
-		if (cell_size < 10000000 || cell_size > 30000000)
-		    cell_size = DEFAULT_CELL_SIZE;
-		break;
+	    cell_size = strtol(optarg, NULL, 10) * 1000000;
+	    if (cell_size < 10000000 || cell_size > 30000000)
+		cell_size = DEFAULT_CELL_SIZE;
+	    break;
 	case 'n':
 	    printf("N-Prolog runs with network mode.\n");
 	    child_flag = 1;
@@ -370,7 +373,8 @@ int main(int argc, char *argv[])
     }
 
     if (init_flag) {
-	printf("N-Prolog Ver %1.2f [%dM cells]\n", VERSION, cell_size/1000000);
+	printf("N-Prolog Ver %1.2f [%dM cells]\n", VERSION,
+	       cell_size / 1000000);
 	init_flag = 0;
     }
 
@@ -1181,7 +1185,6 @@ void debugger(int goal, int bindings, int rest)
 	printf("w: write goal\n");
 	printf("@: invoke REPL once\n");
 	printf(";: skip to next REDO port (only in EXIT port)\n");
-	fflush(stdin);
 	goto loop;
     case 'l':
 	leap_point = list3(SLASH, car(goal), makeint(length(goal) - 1));

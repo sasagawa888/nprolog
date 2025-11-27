@@ -4,8 +4,8 @@
 #include "npl.h"
 
 
-typedef void (*tpred)(char *, int(*pred)(int, int));
-typedef void (*tuser)(char *, int(*user)(int, int), int weight, int spec);
+typedef void (*tpred)(char *, int (*pred)(int, int));
+typedef void (*tuser)(char *, int (*user)(int, int), int weight, int spec);
 
 
 char *get_name(int x)
@@ -38,8 +38,9 @@ void dynamic_link(int x)
 	strcat(str, GET_NAME(x));
 
     hmod = dlopen(str, RTLD_LAZY);
-    if (hmod == NULL)
+    if (hmod == NULL) {
 	exception(SYSTEM_ERR, makestr("load"), x, 0);
+    }
 
     init_f0 = dlsym(hmod, "init0");
     init_f1 = dlsym(hmod, "init1");
@@ -187,5 +188,6 @@ void dynamic_link(int x)
     init_tpredicate();
     init_declare();
     link_flag = 1;
+    dlclose(hmod);
     return;
 }

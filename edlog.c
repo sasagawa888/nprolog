@@ -2298,7 +2298,7 @@ void help(void)
 */
 void display_unicode(int line, int col)
 {
-    char mb[10];
+    char mb[10] = { 0 };
     wchar_t wch[10];
     if (isUni1(ed_data[line][col])) {
 	mb[0] = ed_data[line][col];
@@ -2742,6 +2742,8 @@ int find_eol(int row)
 {
     int i;
 
+    if (row < 0)
+	return (-1);
     for (i = 0; i < COL_SIZE; i++) {
 	if (ed_data[row][i] == EOL || ed_data[row][i] == 0)
 	    return (i);
@@ -2755,6 +2757,9 @@ int find_eol(int row)
 int find_eol1(int row)
 {
     int col, col1;		// col1 is position of display terminal
+
+    if (row < 0)
+	return (-1);
     col = col1 = 0;
     while (col < COL_SIZE) {
 	if (ed_data[row][col] == EOL)

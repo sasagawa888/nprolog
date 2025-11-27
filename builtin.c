@@ -9,6 +9,7 @@
 #include <sys/time.h>
 #include <sys/stat.h>
 #include <dirent.h>
+#include <pthread.h>
 #include "npl.h"
 
 void init_builtin(void)
@@ -265,14 +266,14 @@ void init_builtin(void)
     defbuiltin("label", b_label, 1);
     defbuiltin("all_different", b_all_different, 1);
 
-	//------dev/fb0-------------------------
-	defbuiltin("gr_open", b_gr_open, 0);
+    //------dev/fb0-------------------------
+    defbuiltin("gr_open", b_gr_open, 0);
     defbuiltin("gr_close", b_gr_close, 0);
-	defbuiltin("gr_cls", b_gr_cls, 0);
+    defbuiltin("gr_cls", b_gr_cls, 0);
     defbuiltin("gr_pset", b_gr_pset, 3);
-    defbuiltin("gr_circle", b_gr_circle, list2(4,5));
-	defbuiltin("gr_rect", b_gr_rect, list2(5,6));
-	defbuiltin("gr_line", b_gr_line, 5);
+    defbuiltin("gr_circle", b_gr_circle, list2(4, 5));
+    defbuiltin("gr_rect", b_gr_rect, list2(5, 6));
+    defbuiltin("gr_line", b_gr_line, 5);
 
 
 #ifdef __arm__
@@ -674,7 +675,6 @@ int b_n_ask(int arglist, int rest, int th)
 	putchar(' ');
 
 	fflush(stdout);
-	fflush(stdin);
 
       loop:
 	c = n_getch();
@@ -1995,10 +1995,13 @@ int b_directory(int arglist, int rest, int th)
 
 	save = sp[th];
 	dir = opendir(GET_NAME(arg1));
-	if (dir == NULL)
+	if (dir == NULL) {
 	    exception(SYSTEM_ERR, ind, makestr("opendir"), th);
+	    return (0);
+	}
 
-	dp = readdir(dir);
+	dp = readdir(dir);	// cppcheck-suppress readdirCalled
+
 	while (dp != NULL) {
 	    if (stat(dp->d_name, &stat_buf) == 0) {
 		if (S_ISREG(stat_buf.st_mode))
@@ -2031,7 +2034,7 @@ int b_directory(int arglist, int rest, int th)
 		exception(SYSTEM_ERR, ind, makestr("readdir"), th);
 
 	    unbind(save, th);
-	    dp = readdir(dir);
+	    dp = readdir(dir);	// cppcheck-suppress readdirCalled
 	}
 	if (dir != NULL)
 	    closedir(dir);
@@ -4484,17 +4487,17 @@ int b_listing(int arglist, int rest, int th)
 	arg1 = car(arglist);
 
 	if (atomp(arg1)) {
-		 if (builtinp(arg1)){
-			printf("%% builtin predicate: ");
-			print(arg1);
-			printf("\n");
-			return (prove_all(rest, sp[th], th));
-		} else if (compiledp(arg1)){
-			printf("%% compiled predicate: ");
-			print(arg1);
-			printf("\n");
-			return (prove_all(rest, sp[th], th));
-		}
+	    if (builtinp(arg1)) {
+		printf("%% builtin predicate: ");
+		print(arg1);
+		printf("\n");
+		return (prove_all(rest, sp[th], th));
+	    } else if (compiledp(arg1)) {
+		printf("%% compiled predicate: ");
+		print(arg1);
+		printf("\n");
+		return (prove_all(rest, sp[th], th));
+	    }
 	    clauses = GET_CAR(arg1);
 	    listing_flag = 1;
 	    while (!nullp(clauses)) {
@@ -4506,17 +4509,17 @@ int b_listing(int arglist, int rest, int th)
 	    return (prove_all(rest, sp[th], th));
 	} else if (structurep(arg1) && eqlp(car(arg1), makeope("/")) &&
 		   atomp(cadr(arg1)) && integerp(caddr(arg1))) {
-		if (builtinp(cadr(arg1))){
-			printf("%% builtin predicate: ");
-			print(arg1);
-			printf("\n");
-			return (prove_all(rest, sp[th], th));
-		} else if (compiledp(cadr(arg1))){
-			printf("%% compiled predicate: ");
-			print(arg1);
-			printf("\n");
-			return (prove_all(rest, sp[th], th));
-		}
+	    if (builtinp(cadr(arg1))) {
+		printf("%% builtin predicate: ");
+		print(arg1);
+		printf("\n");
+		return (prove_all(rest, sp[th], th));
+	    } else if (compiledp(cadr(arg1))) {
+		printf("%% compiled predicate: ");
+		print(arg1);
+		printf("\n");
+		return (prove_all(rest, sp[th], th));
+	    }
 	    clauses = GET_CAR(cadr(arg1));
 	    listing_flag = 1;
 	    while (!nullp(clauses)) {
@@ -4530,7 +4533,7 @@ int b_listing(int arglist, int rest, int th)
 			   GET_INT(caddr(arg1))) {
 		    print(temp);
 		    fprintf(GET_PORT(output_stream), ".\n");
-		} 
+		}
 		clauses = cdr(clauses);
 	    }
 	    listing_flag = 0;
@@ -5883,8 +5886,10 @@ int b_retrieveh(int arglist, int rest, int th)
 
 	save1 = sp[th];
 	record_id = GET_ARITY(arg1) - 1;	//id starts from 1
-	if (record_id < 0)
+	if (record_id < 0) {
 	    exception(NOT_RECORD, ind, arg1, th);
+	    return (0);
+	}
 	index = hash(GET_NAME(arg2));
 	lis = record_hash_table[index][record_id];
 	while (lis != NIL) {
@@ -6284,8 +6289,10 @@ int b_removeh(int arglist, int rest, int th)
 
 	save1 = sp[th];
 	record_id = GET_ARITY(arg1) - 1;	//id starts from 1
-	if (record_id < 0)
+	if (record_id < 0) {
 	    exception(NOT_RECORD, ind, arg1, th);
+	    return (0);
+	}
 	index = hash(GET_NAME(arg2));
       repeat:
 	lis = record_hash_table[index][record_id];
