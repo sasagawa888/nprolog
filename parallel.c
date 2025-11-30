@@ -1087,7 +1087,9 @@ void *preceiver(void *arg)
 	if (m < 0) {
 	    exception(SYSTEM_ERR, makestr("receive from child"),
 		      makeint(n), 0);
-	    return (0);
+	    return (NULL);
+	} else if(m == 0){
+		return (NULL);
 	}
 	//print_ascii(sub_buffer);printf("m=%d",m);fflush(stdout);
 	strcat(buffer, sub_buffer);
@@ -1147,7 +1149,9 @@ void *creceiver(void *arg)
 	n = read(parent_sockfd[1], sub_buffer, sizeof(sub_buffer));
 	if (n < 0) {
 	    exception(SYSTEM_ERR, makestr("*creceiver"), NIL, 0);
-	    return (0);
+	    return (NULL);
+	} else if(n == 0){
+		return (NULL);
 	}
 	//print_ascii(sub_buffer);
 
