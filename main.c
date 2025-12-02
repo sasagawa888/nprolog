@@ -302,6 +302,7 @@ void usage()
 {
     printf("List of options:\n");
     printf("-c filename -- NPL starts after reading the file.\n");
+	printf("-d          -- string is double quote.\n");
     printf("-h          -- display help.\n");
     printf("-m N        -- NPL runs with N(30>=N>=10) mega cells.\n");
     printf("-n          -- NPL runs with network mode.\n");
@@ -337,7 +338,7 @@ int main(int argc, char *argv[])
 	goto repl;
     }
 
-    while ((ch = getopt(argc, argv, "c:s:m:rhvn")) != -1) {
+    while ((ch = getopt(argc, argv, "c:s:m:rhdvn")) != -1) {
 	switch (ch) {
 	case 'c':
 	    b_consult(list1(makeconst(optarg)), NIL, 0);
@@ -366,6 +367,9 @@ int main(int argc, char *argv[])
 	    init_parent();
 	    init_creceiver();
 	    break;
+	case 'd':
+		string_flag = 1;
+		break;
 	default:
 	    usage();
 	    exit(EXIT_FAILURE);
