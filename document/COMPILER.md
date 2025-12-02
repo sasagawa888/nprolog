@@ -17,6 +17,9 @@ yes
 
 ```
 
+# Note
+Please terminate the interpreter once before consulting compiled code.
+
 # Option
 
 - compile_file(F,c)
