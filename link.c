@@ -155,6 +155,7 @@ void dynamic_link(int x)
     init_f3(RIGHTSHIFT_IDX, (tpred) f_rightshift);
     init_f3(LOGICALAND_IDX, (tpred) f_logicaland);
     init_f3(LOGICALOR_IDX, (tpred) f_logicalor);
+    init_f3(XOR_IDX, (tpred) f_xor);
     init_f3(ROUND_IDX, (tpred) f_round);
     init_f3(DIV_IDX, (tpred) f_div);
     init_f3(CALL_IDX, (tpred) call);

@@ -598,6 +598,7 @@ An error message is output with yes, and no error message is output with no.
 - X /\ Y Logical AND.
 - X \/ Y Logical OR.
 - \X Complement (bitwise NOT).
+- X xor Y Exlusive OR.
 - abs(X) Absolute value of X.
 - sin(X) Sine of X.
 - asin(X) Arcsine (inverse sine) of X.

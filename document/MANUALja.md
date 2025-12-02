@@ -589,6 +589,7 @@ Xが代入された変数かどうかを調べる。
 - X /\ Y         論理積
 - X \/ Y         論理和
 - \X  complement
+- X xor Y        排他的論理和
 - abs(X)         Xの値の絶対値
 - sin(X)　       Xの正弦関数
 - asin(X)　      Xの逆正弦関数

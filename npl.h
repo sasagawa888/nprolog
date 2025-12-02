@@ -187,7 +187,7 @@ enum { LIST3_IDX, ERRORCOMP_IDX, WLISTCONS_IDX,UNIFY_IDX, UNIFY_PAIR_IDX,
        UNIFY_INT_IDX, UNIFY_FLT_IDX, UNIFY_LONG_IDX, UNIFY_BIG_IDX, UNIFY_STR_IDX,
        UNIFY_VAR_IDX, UNIFY_ATOM_IDX, EXEC_ALL_IDX, PROVE_ALL_IDX, WCONS_IDX,
        WLIST2_IDX, ADDTAIL_BODY_IDX, PLUS_IDX, MINUS_IDX, MULT_IDX, DIVIDE_IDX, REMAINDER_IDX,
-       QUOTIENT_IDX,  MOD_IDX, EXPT_IDX, DIV_IDX,
+       QUOTIENT_IDX,  MOD_IDX, EXPT_IDX, DIV_IDX, XOR_IDX,
        LEFTSHIFT_IDX, RIGHTSHIFT_IDX, LOGICALAND_IDX, LOGICALOR_IDX, ROUND_IDX,
        CALL_IDX,
        NUM_FN3S,
@@ -1158,6 +1158,7 @@ int f_mod(int x, int y, int th);
 int f_mult(int x, int y, int th);
 int f_plus(int x, int y, int th);
 int f_rightshift(int x, int y, int th);
+int f_xor(int x, int y, int th);
 int f_round(int x, int y, int th);
 int f_sqrt(int x, int th);
 int f_sin(int x, int th);

@@ -2130,6 +2130,12 @@ eval_form(X \/ Y) :-
     write(','),
     eval_form(Y),
     write(',th)').
+eval_form(X xor Y) :-
+	write('Jxor('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th)').
 eval_form(\ X) :-
 	write('Jcomplement('),
     eval_form(X),

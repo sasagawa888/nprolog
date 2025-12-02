@@ -462,6 +462,12 @@ static inline int Jlogicalor(int x, int y, int th) {
     return f3[LOGICALOR_IDX](x, y, th);
 }
 
+
+static inline int Jxor(int x, int y, int th) {
+    return f3[XOR_IDX](x, y, th);
+}
+
+
 static inline int Jround(int x, int y, int th) {
     return f3[ROUND_IDX](x, y, th);
 }

@@ -495,6 +495,7 @@ void init_operator(void)
     defoperator("/\\", f_logicaland, 500, YFX, 0);
     defoperator("\\/", f_logicalor, 500, YFX, 0);
     defoperator("\\", f_complement, 200, FY, 0);
+	defoperator("xor", f_xor, 400, YFX, 0);
     return;
 }
 
@@ -976,6 +977,24 @@ int f_complement(int x, int y, int th)
     x = GET_INT(x);
     return (makeint(~x));
 }
+
+
+int f_xor(int x, int y, int th)
+{
+
+    if (wide_variable_p(x))
+	exception(INSTANTATION_ERR, eval_context, x, th);
+    if (wide_variable_p(y))
+	exception(INSTANTATION_ERR, eval_context, y, th);
+    if (!integerp(x))
+	exception(NOT_INT, eval_context, x, th);
+    if (!integerp(y)){
+	exception(NOT_INT, eval_context, y, th);
+	}
+
+	return(makeint(get_int(x) ^ get_int(y)));
+}
+
 
 /* The following function ensures that each argument is a number in eval when executed
 * in the interpreter. However, the function is also called when tail recursion optimization 
