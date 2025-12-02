@@ -1132,7 +1132,12 @@ eval_form(X >> Y) :-
     write(','),
     eval_form(Y),
     write(',th)').
-
+eval_form(X xor Y) :-
+	write('Jxor('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th)').
 eval_form(X /\ Y) :-
 	write('Jlogicaland('),
     eval_form(X),
@@ -1971,184 +1976,6 @@ gen_a_det_body(X) :-
     write(','),
     gen_a_argument(A),
     write(',th) == YES)').
-
-
-/*
-generate evauation code
-e.g.  X is 1+2.  X == 3*4.
-*/
-eval_form([]) :-
-	write('NIL').
-eval_form([X]) :-
-	write('Jmakeconst("'),
-    write(X),
-    write('")').
-eval_form(pi) :-
-	write('Jmakestrflt("3.14159265358979")').
-eval_form(random) :-
-	write('Jrandom()').    
-eval_form(X) :-
-	n_bignum(X),
-    write('Jmakebig("'),
-    write(X),
-    write('")').
-eval_form(X) :-
-	n_longnum(X),
-    write('Jmakestrlong("'),
-    write(X),
-    write('")').
-eval_form(X) :-
-	integer(X),
-    write('Jmakeint('),
-    write(X),
-    write(')').
-eval_form(X) :-
-	float(X),
-    write('Jmakestrflt("'),
-    write(X),
-    write('")').
-eval_form(X) :-
-	atom(X),
-    n_compiler_variable(X),
-    n_atom_convert(X,X1),
-    write('Jderef('),
-    write(X1),
-    write(','),
-    write(th),
-    write(')').
-eval_form(X) :-
-	atom(X),
-    write('Jmakeconst("'),
-    write(X),
-    write('")').
-eval_form(X) :-
-    list(X),
-    gen_a_argument(X).
-eval_form(X + Y) :-
-	write('Jplus('),
-    eval_form(X),
-    write(','),
-    eval_form(Y),
-    write(',th)').
-eval_form(X - Y) :-
-	write('Jminus('),
-    eval_form(X),
-    write(','),
-    eval_form(Y),
-    write(',th)').
-eval_form(X * Y) :-
-	write('Jmult('),
-    eval_form(X),
-    write(','),
-    eval_form(Y),
-    write(',th)').
-eval_form(X / Y) :-
-	write('Jdivide('),
-    eval_form(X),
-    write(','),
-    eval_form(Y),
-    write(',th)').
-eval_form(X//Y) :-
-	write('Jdiv('),
-    eval_form(X),
-    write(','),
-    eval_form(Y),
-    write(',th)').
-eval_form(X ^ Y) :-
-	write('Jexpt('),
-    eval_form(X),
-    write(','),
-    eval_form(Y),
-    write(',th)').
-eval_form(X mod Y) :-
-	write('Jmod('),
-    eval_form(X),
-    write(','),
-    eval_form(Y),
-    write(',th)').
-eval_form(sin(X)) :-
-	write('Jsin('),
-    eval_form(X),
-    write(',th)').
-eval_form(asin(X)) :-
-	write('Jasin('),
-    eval_form(X),
-    write(',th)').
-eval_form(cos(X)) :-
-	write('Jcos('),
-    eval_form(X),
-    write(',th)').
-eval_form(acos(X)) :-
-	write('Jacos('),
-    eval_form(X),
-    write(',th)').
-eval_form(tan(X)) :-
-	write('Jtan('),
-    eval_form(X),
-    write(',th)').
-eval_form(atan(X)) :-
-	write('Jatan('),
-    eval_form(X),
-    write(',th)').
-eval_form(exp(X)) :-
-	write('Jexp('),
-    eval_form(X),
-    write(',th)').
-eval_form(log(X)) :-
-	write('Jlog('),
-    eval_form(X),
-    write(',th)').
-eval_form(ln(X)) :-
-	write('Jln('),
-    eval_form(X),
-    write(',th)').
-eval_form(sqrt(X)) :-
-	write('Jsqrt('),
-    eval_form(X),
-    write(',th)').
-eval_form(X << Y) :-
-	write('Jleftshift('),
-    eval_form(X),
-    write(','),
-    eval_form(Y),
-    write(',th)').
-eval_form(X >> Y) :-
-	write('Jrightshift('),
-    eval_form(X),
-    write(','),
-    eval_form(Y),
-    write(',th)').
-eval_form(X /\ Y) :-
-	write('Jlogicaland('),
-    eval_form(X),
-    write(','),
-    eval_form(Y),
-    write(',th)').
-eval_form(X \/ Y) :-
-	write('Jlogicalor('),
-    eval_form(X),
-    write(','),
-    eval_form(Y),
-    write(',th)').
-eval_form(X xor Y) :-
-	write('Jxor('),
-    eval_form(X),
-    write(','),
-    eval_form(Y),
-    write(',th)').
-eval_form(\ X) :-
-	write('Jcomplement('),
-    eval_form(X),
-    write(',th)').
-eval_form(randi(X)) :-
-	write('Jrandi('),
-    eval_form(X),
-    write(',th)').
-eval_form(round(X,Y)) :-
-	  write('Jround('),
-    eval_form(X),
-    eval_form(Y),
-    write(',th)').
 
 
 
