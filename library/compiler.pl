@@ -1076,6 +1076,10 @@ eval_form(X mod Y) :-
     write(','),
     eval_form(Y),
     write(',th)').
+eval_form(sqrt(X)) :-
+	write('Jsqrt('),
+    eval_form(X),
+    write(',th)').
 eval_form(sin(X)) :-
 	write('Jsin('),
     eval_form(X),

@@ -23,5 +23,6 @@ test20(X,Y)  :- Y is atan(X).
 test21(X,Y)  :- Y is \X.
 test22(X,Y,Z)  :- Z is X/\Y.
 test23(X,Y,Z)  :- Z is X\/Y.
+teses24(X,Y,Z) :- Z is X xor Y.
 
 
