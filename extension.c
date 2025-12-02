@@ -998,7 +998,7 @@ int call(int pred, int arglist, int th)
 
 
 //----------for Raspberry PI
-#ifdef __arm__
+#ifdef __rpiwiring__
 int b_wiringpi_setup_gpio(int arglist, int rest, int th)
 {
     int n, ind;

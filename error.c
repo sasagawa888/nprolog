@@ -3,9 +3,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <setjmp.h>
-#ifdef __linux
 #include <stdio_ext.h>
-#endif
 #include "npl.h"
 
 void init_handler()

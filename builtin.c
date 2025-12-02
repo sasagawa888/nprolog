@@ -276,7 +276,7 @@ void init_builtin(void)
     defbuiltin("gr_line", b_gr_line, 5);
 
 
-#ifdef __arm__
+#ifdef __rpiwiring__
     defbuiltin("wiringpi_setup_gpio", b_wiringpi_setup_gpio, 2);
     defbuiltin("wiringpi_spi_setup_ch_speed",
 	       b_wiringpi_spi_setup_ch_speed, 1);
