@@ -1,3 +1,3 @@
 
 
-foo(X,Y,Z) :- Z is X xor Y. 
+foo(X,Y,Z) :- write(1),X->Y;Z.
