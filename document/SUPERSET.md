@@ -103,6 +103,10 @@ In N-Prolog, when foo/1 is given, the entire foo predicate is defined as dynamic
 # Not ISO-Prolog
 N-Prolog is specialized for experimenting with and playing around with small-scale code. Therefore, the following features are not included.
 
+- X -> Y 
+Since it deviates significantly from predicate logic, it is not supported.please use ifthen(X,Y).
+- X -> Y ; Z
+Since it deviates significantly from predicate logic, it is not supported.please use ifthenelse(X,Y,Z).
 - sub_atom/5  
  Reverse computation is too complex.
 - open/3  

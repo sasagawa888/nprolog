@@ -31,7 +31,6 @@ void init_builtin(void)
     definfix("\\==", b_n_notequalp, 700, XFX);
     definfix("\\=", b_n_notunify, 700, XFX);
     definfix("=..", b_n_univ, 700, XFX);
-    definfix("->", b_ifthen, 1050, XFY);
     definfix("not", b_not, 900, FY);
 
     defbuiltin("!", b_n_cut, 0);
