@@ -1701,6 +1701,7 @@ int b_consult(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("consult", n, th);
     execute_list = NIL;
+	compiler_flag = 0;
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
