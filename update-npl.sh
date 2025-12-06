@@ -16,7 +16,7 @@ if sudo systemctl list-unit-files | grep -q "$SERVICE"; then
   sudo systemctl stop "$SERVICE"
 fi
 
-git stash push -m 
+git stash push 
 git pull --rebase
 make clean
 make -j$(nproc)
