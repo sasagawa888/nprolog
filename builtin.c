@@ -2845,7 +2845,7 @@ int b_assert(int arglist, int rest, int th)
 	    checkgbc();
 	    return (prove_all(rest, sp[th], th));
 	} else
-	    exception(ARITY_ERR, ind, arglist, th);
+	    exception(NOT_CALLABLE, ind, arg1, th);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
