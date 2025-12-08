@@ -52,6 +52,21 @@ separation([A|As],F,Bs) :-
 positive(X) :- 
     X > 0 .
 
+%Axiom of Replacement
+% replacement([1,2,3],add10,X).
+replacement([],F,[]).
+replacement([A|As],F,[B|Bs]) :-
+    P =.. [F,A,B],
+    call(P),
+    replacement(As,F,Bs).
+
+%ex
+add10(X,Y) :-
+    Y is X + 10.
+
+%Axiom of Regularity
+%Prolog lists always satisfy regularity.
+
 %Axiom of Choice
 choice([A|As],0,A).
 choice([A|As],N,B) :-
