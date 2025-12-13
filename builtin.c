@@ -4074,7 +4074,7 @@ int b_halt(int arglist, int rest, int th)
     if (n == 0) {
 	if (parent_flag)
 	    exception(SYSTEM_ERR, ind,
-		      makestr("Execute dp_close before halting."), th);
+		      makestr("Execute dp_halt before halting."), th);
 
 	printf("- good bye -\n");
 	longjmp(buf, 2);
