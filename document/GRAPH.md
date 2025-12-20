@@ -25,6 +25,9 @@ Example:
 ?- generate_graph([a,b,c],[edge(a,b),edge(b,c)], G).
 G = graph([a,b,c],[edge(a,b), edge(b,c)]).
 
+Es : List of edges with weight, e.g., [edge(a,b,3), edge(b,c,4)]
+edge(_,_,weight)
+
 2. vertex(G, V)
 
 Description:

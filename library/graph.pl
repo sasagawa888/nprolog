@@ -17,7 +17,7 @@ vertex(G,V) :-
 %edge(graph(_,Es), U, V).
 edge(G,U,V) :-
     arg(2,G,Es),
-    member(edge(U,V),Es).
+    member(edge(U,V,_),Es).
 
 %adjacent(G, U, V).
 adjacent(G,U,V) :-
