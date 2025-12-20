@@ -16,17 +16,22 @@ Parameters:
 
 Vs : List of vertices, e.g., [a,b,c]
 
-Es : List of edges, e.g., [edge(a,b), edge(b,c)]
+Es : List of edges, e.g., [e(a,b), e(b,c)]
 
-G : Resulting graph term, e.g., graph([a,b,c],[edge(a,b),edge(b,c)])
+G : Resulting graph term, e.g., graph([a,b,c],[e(a,b),e(b,c)])
 
 Example:
 
-?- generate_graph([a,b,c],[edge(a,b),edge(b,c)], G).
-G = graph([a,b,c],[edge(a,b), edge(b,c)]).
+?- generate_graph([a,b,c],[e(a,b),e(b,c)], G).
+G = graph([a,b,c],[e(a,b), e(b,c)]).
 
-Es : List of edges with weight, e.g., [edge(a,b,3), edge(b,c,4)]
-edge(_,_,weight)
+- Es : List of undirected edges with weight, e.g., [ew(a,b,3), ew(b,c,4)]
+ew(_,_,weight)
+- Es : List of irected edges with weight, e.g., [edw(a,b,3), edw(b,c,4)]
+edw(_,_,weight)
+Es : List of directed edges, e.g., [ed(a,b), ed(b,c)]
+ed(_,_)
+
 
 2. vertex(G, V)
 
