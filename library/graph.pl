@@ -33,13 +33,13 @@ edge(G,U,V) :-
     member(edw(U,V,_),Es).
 
 type(G,undirected) :-
-    arg2(2,G,[e(_,_)|Es]).
+    arg(2,G,[e(_,_)|Es]).
 type(G,undirected_weight) :-
-    arg2(2,G,[ew(_,_,_)|Es]).
+    arg(2,G,[ew(_,_,_)|Es]).
 type(G,directed) :-
-    arg2(2,G,[ed(_,_)|Es]).
+    arg(2,G,[ed(_,_)|Es]).
 type(G,directed_weight) :-
-    arg2(2,G,[edw(_,_,_)|Es]).
+    arg(2,G,[edw(_,_,_)|Es]).
 
 
 %adjacent(G, U, V).
