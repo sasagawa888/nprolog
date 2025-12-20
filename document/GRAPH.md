@@ -25,11 +25,13 @@ Example:
 ?- generate_graph([a,b,c],[e(a,b),e(b,c)], G).
 G = graph([a,b,c],[e(a,b), e(b,c)]).
 
+## undirected/directed, weighted 
+
 - Es : List of undirected edges with weight, e.g., [ew(a,b,3), ew(b,c,4)]
 ew(_,_,weight)
 - Es : List of irected edges with weight, e.g., [edw(a,b,3), edw(b,c,4)]
 edw(_,_,weight)
-Es : List of directed edges, e.g., [ed(a,b), ed(b,c)]
+- Es : List of directed edges, e.g., [ed(a,b), ed(b,c)]
 ed(_,_)
 
 
@@ -46,7 +48,7 @@ V : Vertex
 
 Example:
 
-?- generate_graph([a,b,c],[edge(a,b),edge(b,c)], G),
+?- generate_graph([a,b,c],[e(a,b),e(b,c)], G),
    vertex(G, b).
 true.
 
@@ -65,7 +67,7 @@ V : End vertex
 
 Example:
 
-?- generate_graph([a,b,c],[edge(a,b),edge(b,c)], G),
+?- generate_graph([a,b,c],[e(a,b),e(b,c)], G),
    edge(G, a, b).
 true.
 
@@ -76,7 +78,7 @@ Checks if vertices U and V are adjacent (connected directly by an edge) in graph
 
 Example:
 
-?- generate_graph([a,b,c],[edge(a,b),edge(b,c)], G),
+?- generate_graph([a,b,c],[e(a,b),e(b,c)], G),
    adjacent(G, a, b).
 true.
 
@@ -90,7 +92,7 @@ Checks whether the graph G is connected (there is a path between any two vertice
 
 Example:
 
-?- generate_graph([a,b,c],[edge(a,b),edge(b,c)], G),
+?- generate_graph([a,b,c],[e(a,b),e(b,c)], G),
    connected(G).
 true.
 
@@ -101,7 +103,7 @@ Checks whether G is strongly connected (for directed graphs, a path exists from 
 
 Example:
 
-?- generate_graph([a,b,c],[edge(a,b),edge(b,c),edge(c,a)], G),
+?- generate_graph([a,b,c],[e(a,b),e(b,c),e(c,a)], G),
    strongly_connected(G).
 true.
 
@@ -112,7 +114,7 @@ Checks whether G is a complete graph (every vertex is connected to every other v
 
 Example:
 
-?- generate_graph([a,b,c],[edge(a,b),edge(a,c),edge(b,c),edge(b,a),edge(c,a),edge(c,b)], G),
+?- generate_graph([a,b,c],[e(a,b),e(a,c),e(b,c),e(b,a),e(c,a),e(c,b)], G),
    complete(G).
 true.
 
@@ -124,13 +126,13 @@ Generates a complete graph G with N vertices.
 Example:
 
 ?- generate_kn(3, G).
-G = graph([1,2,3],[edge(1,2), edge(1,3), edge(2,1), edge(2,3), edge(3,1), edge(3,2)]).
+G = graph([1,2,3],[e(1,2), e(1,3), e(2,1), e(2,3), e(3,1), e(3,2)]).
 
 
 💡 Note:
 
 graph(Vs, Es) is the standard representation used in this library.
 
-edge(U,V) denotes a directed edge from U to V.
+e(U,V) denotes a undirected edge from U to V.
 
-For undirected graphs, treat edge(U,V) and edge(V,U) as equivalent.
+For undirected graphs, treat e(U,V) and e(V,U) as equivalent.
