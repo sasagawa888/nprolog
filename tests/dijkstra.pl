@@ -26,18 +26,18 @@ test0([[a,0,none],[none,100,0]]).
 test1([[b,1,a],[c,7,a],[d,5,a],[a,0,none],[none,100,0]]).
 test2([[e,3,b],[f,5,b],[b,1,a],[c,7,a],[d,2,a],[a,0,none],[none,100,0]]).
 
-dijkstra(G,Start,Goal,Q1) :-
+dijkstra(G,Start,Goal,Q2) :-
     init(Start,Q),
     get_shortest(Q,Q,[V,_]),
     add_candidate(G,Q,Q1),
-    dijkstra1(G,V,Goal,Q1).
+    dijkstra1(G,Q1,V,Goal,Q2).
 
-dijkstra1(G,Goal,Goal,Q).
-dijkstra1(G,V,Goal,Q) :-
-    write(V),
-    get_shortest(Q,Q,[V,_]),
+dijkstra1(G,Q,Goal,Goal,Q).
+dijkstra1(G,Q,V,Goal,Q2) :-
+    get_shortest(Q,Q,[V1,_]),
     add_candidate(G,Q,Q1),
-    dijkstra1(G,V,Goal,Q1).
+    write(Q1),nl,
+    dijkstra1(G,Q1,V1,Goal,Q2).
 
 % initialize set Q
 init(Start,[[Start,0,none],[none,100,0]]).
@@ -65,13 +65,15 @@ get_shortest([Q|Qs],A,V) :-
     get_shortest(Qs,A,V).
 
 % add candidate to Q
-add_candidate(G,Q,[[P,D2,V]|Q]) :-
+add_candidate(G,Q,Q1) :-
     arg(2,G,Es),
     get_shortest(Q,Q,[V,D]),
-    member(ew(V,P,D1),Es),
-    D2 is D+D1.
-add_candidate(G,Q,Q) :-
-    arg(2,G,Es),
-    get_shortest(Q,Q,[V,D]),
-    not(member(ew(V,D,P),Es)).
+    add_candidate1(Q,Es,V,D,Q1).
+
+add_candidate1(Q,[],V,D,Q).
+add_candidate1(Q,[ew(V,P,D1)|Es],V,D,[[P,D2,V]|Qs]) :-
+    D2 is D+D1,
+    add_candidate1(Q,Es,V,D,Qs).
+add_candidate1(Q,[_|Es],V,D,Qs) :-
+    add_candidate1(Q,Es,V,D,Qs).
     
