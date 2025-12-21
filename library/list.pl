@@ -1,7 +1,7 @@
 % list library 
 :- module(list,[last/2,butlast/2,second/2,cons/3,
                 nth/3,nth0/3,iota/3,take/3,drop/3,make_list/3,reverse/2,
-                remove_at/3,insert_at/4,qsort/2,permutation/2,del/3,flatten/2]).
+                remove_at/3,insert_at/4,qsort/2,permutation/2,flatten/2,min_list/2]).
 
 last([],[]).
 last([X],[X]).
@@ -99,3 +99,11 @@ flatten([L|Ls],Z) :-
     flatten(L,Y1),
     flatten(Ls,Y2),
     append(Y1,Y2,Z).
+
+min_list([L],L).
+min_list([L|Ls],L) :-
+    min_list(Ls,X),
+    L < X.
+min_list([L|Ls],X) :-
+    min_list(Ls,X),
+    L >= X.
