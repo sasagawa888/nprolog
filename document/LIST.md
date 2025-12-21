@@ -39,3 +39,7 @@ These are the basic functions for list processing.
 - permutation/2
 
 - flatten/2
+
+- min_list/2
+
+- max_list/2
