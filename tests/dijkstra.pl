@@ -1,11 +1,12 @@
 % Daijkstra
 
 :- use_module(graph).
-:- use_module(list).
+:- use_module(math).
 
-sortest(Vs,Ds) :-
+shortest :-
     route(G),
-    dijkstra(G,a,h,A).
+    dijkstra(G,a,h),
+    listing(q).
 
 
 route(G) :-
@@ -31,37 +32,44 @@ route(G) :-
 
 
 initialize(G,S,R) :-
+    abolish(q/3),
     asserta(q(S,0,none)),
-    arg(G,1,Vs),
-    del(Vs,S,R).
+    arg(1,G,Vs),
+    difference(Vs,S,R).
 
 
-dijkstra(G,X,Y,A) :-
+dijkstra(G,X,Y) :-
     initialize(G,X,R),
-    dijkstra1(G,R,X,Y).
+    dijkstra1(G,X,Y).
 
-dijkstra1(G,R,V,V).
-dijkstra1(G,R,V,Y) :-
-    update(G,R,V,Y,R1),
-    shotestq(V1)
-    dijkstra1(G,R1,V1).
+dijkstra1(G,V,V).
+dijkstra1(G,V,Y) :-
+    selectq(V1,D,P),write(V1),
+    unselected(G,R),write(R),nl,
+    update(G,R,V1),
+    dijkstra1(G,V1,Y).
 
-update(G,R,V,Y) :-
-    update1(G,Q,R,V,Q1,R1).
-
-
-shotestq(Vmin, Dmin, Pmin) :-
+% shotest vertex in set Q.
+selectq(Vmin, Dmin, Pmin) :-
     setof(D-V-P, q(V,D,P), [Dmin-Vmin-Pmin|_]).
 
+% unselected vertex R
+unselected(G,R) :-
+    arg(1,G,Vs),
+    setof(V, q(V,_,_),Q),
+    difference(Vs,Q,R).
+
+
 % calculate distance unselected vertex
-update1(G,[],V,Q,R1).
-update1(G,[R|Rs],V) :-
+update(G,[],V,).
+update(G,[R|Rs],V) :-
     arg(2,G,Es),
-    member(e(V,R,D),Es),
-    member([D1,V,_],Q),
+    member(ew(V,R,D),Es),
+    q(V,D1,_),
     D2 is D+D1,
-    update1(G,[[D2,R,V]|Q],Rs,V).
-update1(G,Q,[R|Rs],V) :-
+    asserta(q(R,D2,V)),
+    update(G,Rs,V).
+update(G,[R|Rs],V) :-
     arg(2,G,Es),
-    not(member(e(V,R,D),Es)),
-    update1(G,Q,Rs,V).
+    not(member(ew(V,R,D),Es)),
+    update(G,Rs,V).
