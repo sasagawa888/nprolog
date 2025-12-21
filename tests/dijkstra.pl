@@ -1,7 +1,6 @@
 % Daijkstra
 
 :- use_module(graph).
-:- use_module(math).
 
 shortest(Q) :-
     route(G),
@@ -22,14 +21,11 @@ route(G) :-
                     ew(c,f,2),
                     ew(g,h,2)],G).
 
-test0([[a,0,none],[none,100,0]]).
-test1([[b,1,a],[c,7,a],[d,5,a],[a,0,none],[none,100,0]]).
-test2([[e,3,b],[f,5,b],[b,1,a],[c,7,a],[d,2,a],[a,0,none],[none,100,0]]).
-
 dijkstra(G,Start,Goal,Q2) :-
     init(Start,Q),
     get_shortest(Q,Q,[V,_]),
     add_candidate(G,Q,Q1),
+    write(Q1),nl,
     dijkstra1(G,Q1,V,Goal,Q2).
 
 dijkstra1(G,Q,Goal,Goal,Q).
@@ -40,14 +36,15 @@ dijkstra1(G,Q,V,Goal,Q2) :-
     dijkstra1(G,Q1,V1,Goal,Q2).
 
 % initialize set Q
+% max distance is 100.
 init(Start,[[Start,0,none],[none,100,0]]).
-% selected set Q [[vertex,distance,path]...]
 
-% find candidate vertex
+% data structure
+% selected set Q [[vertex,distance,path]...]
+% find candidate vertex from Q set.
 new([V,_,P],[]).
 new([V,_,P],[[_,_,V]|Qs]) :- !,fail.
 new([V,_,P],[_|Qs]) :- new([V,_,P],Qs).
-
 
 get_shortest([[V,D,_]],_,[V,D]).
 get_shortest([Q|Qs],A,[V,D]) :-
@@ -55,7 +52,6 @@ get_shortest([Q|Qs],A,[V,D]) :-
     [V,D,_] = Q,
     get_shortest(Qs,A,[V1,D1]),
     D < D1,!.
-    
 get_shortest([Q|Qs],A,[V1,D1]) :-
     new(Q,A),
     [V,D,_] = Q,
