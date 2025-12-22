@@ -21,12 +21,13 @@ route(G) :-
                     ew(c,f,2),
                     ew(g,h,2)],G).
 
-dijkstra(G,Start,Goal,Q2) :-
+dijkstra(G,Start,Goal,Path) :-
     init(Start,Q),
     get_shortest(Q,Q,[V,_]),
     add_candidate(G,Q,Q1),
     write(Q1),nl,
-    dijkstra1(G,Q1,V,Goal,Q2).
+    dijkstra1(G,Q1,V,Goal,Q2),
+    dijkstra2(Q2,Start,Goal,Path).
 
 dijkstra1(G,Q,Goal,Goal,Q).
 dijkstra1(G,Q,V,Goal,Q2) :-
@@ -34,6 +35,27 @@ dijkstra1(G,Q,V,Goal,Q2) :-
     add_candidate(G,Q,Q1),
     write(Q1),nl,
     dijkstra1(G,Q1,V1,Goal,Q2).
+
+
+dijkstra2([[Start,_,_]|_],Start,Goal,[]).
+dijkstra2([[Goal,_,Prev]|Qs],Start,Goal,[Goal,Prev|Path]) :-
+    dijkstra3(Qs,Prev,[Prev,_,P]),
+    dijkstra2(Qs,Start,P,Path).
+dijkstra2([Q|Qs],Start,Goal,Path) :-
+    dijkstra2(Qs,Start,Goal,Path).
+
+dijkstra3([],Prev,[none,100,_]).
+dijkstra3([[Prev,D,Path]|Qs],Prev,[Prev,D,Path]) :-
+    dijkstra3(Qs,Prev,[Prev,D1,_]),
+    D < D1,!.
+dijkstra3([[Prev,D,Path]|Qs],Prev,[Prev,D1,P]) :-
+    dijkstra3(Qs,Prev,[Prev,D1,P]),
+    D >= D1,!.
+dijkstra3([[Prev,D,Path]|Qs],Prev,[Prev,D,Path]).
+
+dijkstra3([_|Qs],Prev,[Prev,D1,P]) :-
+    dijkstra3(Qs,Prev,[Prev,D1,P]).
+
 
 % initialize set Q
 % max distance is 100.
