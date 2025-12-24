@@ -19,4 +19,4 @@ D4 = 2
 ...
 
 
-Each note is played for 0.4 seconds.
+Each note is played for 0.05 seconds.
