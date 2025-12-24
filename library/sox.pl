@@ -7,7 +7,7 @@ sox_play(N) :-
     midi_freq(M,F),
     string_term(S,F),
     atom_string(A,S),
-    atom_concat('play -n synth 0.4 sine ',A,C1),
+    atom_concat('play -n synth 0.05 sine ',A,C1),
     atom_concat(C1, ' >/dev/null 2>&1', C2),
     shell(C2).
 

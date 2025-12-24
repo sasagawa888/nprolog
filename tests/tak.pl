@@ -1,8 +1,11 @@
+:- use_module(sox).
+
 tak(X, Y, Z, A) :- 
     X =< Y, !,
     A = Z.
 
 tak(X, Y, Z, A) :-
+    sox_play(X),sox_play(Y),sox_play(Z),
     X1 is X - 1,
     tak(X1, Y, Z, A1),
     Y1 is Y - 1,
