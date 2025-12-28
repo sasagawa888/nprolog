@@ -128,6 +128,18 @@ Example:
 ?- generate_kn(3, G).
 G = graph([1,2,3],[e(1,2), e(1,3), e(2,1), e(2,3), e(3,1), e(3,2)]).
 
+9. reverse_graph(G,R).
+
+Description:
+Generates a reverse graph.
+
+Example:
+
+?- generate_graph([1,2,3],[ed(1,2),ed(2,3),ed(3,1),ed(3,4),ed(4,5),ed(5,6),ed(6,4)],G),reverse_graph(G,R).
+G = graph([1,2,3],[ed(1,2),ed(2,3),ed(3,1),ed(3,4),ed(4,5),ed(5,6),ed(6,4)])
+R = graph([1,2,3],[ed(2,1),ed(3,2),ed(1,3),ed(4,3),ed(5,4),ed(6,5),ed(4,6)]) .
+yes
+?- 
 
 💡 Note:
 
@@ -137,7 +149,7 @@ e(U,V) denotes a undirected edge from U to V.
 
 For undirected graphs, treat e(U,V) and e(V,U) as equivalent.
 
-9. dijkstra(G,Start,Goal,Path)
+10. dijkstra(G,Start,Goal,Path)
 
 G is undirected-wighted graph
 e.g.

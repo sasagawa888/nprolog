@@ -4,7 +4,7 @@
 %graph([1, 2, 3, 4], [e(1, 2), e(1, 3), e(1, 4), e(2, 3), e(2, 4), e(3, 4)]).
 
 :- module(graph,[graph/2,e/2,ed/2,ew/3,edw/3,generate_graph/3,vertex/2,edge/3,adjacent/3,connected/1,strongly_connected/1,
-                 complete/1,generate_kn/2,dijkstra/4]).
+                 complete/1,generate_kn/2,reverse_graph/2,dijkstra/4]).
 
 generate_graph(Vs,Es,G) :-
     G = graph(Vs,Es).
@@ -97,6 +97,16 @@ numlist(N,N,[N]).
 numlist(M,N,[M|Ns]) :-
     M1 is M+1,
     numlist(M1,N,Ns).
+
+reverse_graph(G,graph(Vs,Rs)) :-
+    arg(1,G,Vs),
+    arg(2,G,Es),
+    reverse_graph1(Es,Rs).
+
+reverse_graph1([],[]).
+reverse_graph1([ed(V,X)|Es],[ed(X,V)|Rs]) :-
+    reverse_graph1(Es,Rs).
+
 
 %------dijkstra shortest-path -----------------
 
