@@ -224,6 +224,15 @@ Example
 ?- max_list([3,1,4], X).
 X = 4.
 
+same_set/2
+same_set(List1,List2)
+
+Example
+
+?- same_set([3,1,4], [1,3,4]).
+yes.
+
+
 Notes
 
 This library is designed for clarity and learning, not performance
