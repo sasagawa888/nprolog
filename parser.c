@@ -480,7 +480,7 @@ parser(int operand, int operator, int weight, int spec, int terminal,
 
 int readc(void)
 {
-    int c;
+    char c;
 
     if (dialog_flag == 1)
 	return (read_string_term(1));

@@ -1754,7 +1754,6 @@ int b_consult(int arglist, int rest, int th)
 	    //assert
 	    b_assert(list1(clause), NIL, th);
 	}
-	open_flag = 0;
 	fclose(GET_PORT(input_stream));
 	input_stream = save;
 
@@ -1860,7 +1859,6 @@ int b_reconsult(int arglist, int rest, int th)
 	    //assert
 	    b_assert(list1(clause), NIL, th);
 	}
-	open_flag = 0;
 	fclose(GET_PORT(input_stream));
 	input_stream = save;
 	module_flag = 0;

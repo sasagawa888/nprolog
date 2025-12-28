@@ -464,6 +464,7 @@ void init_repl(void)
     for (i = 0; i <= thread_num; i++) {
 	wp[i] = wp_min[i];
     }
+	open_flag = 0;
     ctrl_c_flag = 0;
     compiled_flag = 0;
     fskip_flag = OFF;

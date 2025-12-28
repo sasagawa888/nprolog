@@ -1754,6 +1754,8 @@ int b_use_module(int arglist, int rest, int th)
 	if (fp != NULL) {
 	    fclose(fp);
 	    b_reconsult(list1(makeconst(str)), NIL, 0);
+		line = 0;
+		column = 0;
 	    return (prove_all(rest, sp[th], th));
 	}
 
