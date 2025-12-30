@@ -6,29 +6,33 @@
 
 :- dynamic(component/1).
 
+%diterministic member/2
+member1(X,[X|_]).
+
 find(C) :-
-    abolish(component/1),
-    assert(component([])),
-    generate_graph([1,2,3],[ed(1,2),ed(2,3),ed(3,1),ed(3,4),ed(4,1),
+    generate_graph([1,2,3,4,5,6,7],[ed(1,2),ed(2,3),ed(3,1),ed(3,4),ed(4,1),
                             ed(4,5),ed(5,6),ed(6,7),ed(7,5)],G),
     scc(G,C).
 
 scc(G,C) :-
+    abolish(component/1),
+    assert(component([])),
     arg(1,G,Vs),
     arg(2,G,Es),
-    member(V,Vs),
+    member1(V,Vs),
     scc1(V,Vs,Es,[]),
     fail.
 scc(_,C) :-
     compile(C).
 
 scc1(S,Vs,Es,P) :-
-    same_set(Vs,P),!.
+    same_set(Vs,P).
 
 scc1(V,Vs,Es,P) :-
     member(ed(V,X),Es),
     member(X,P),
     regist(V,X,P).
+
 
 scc1(V,Vs,Es,P) :-
     member(ed(V,X),Es),
@@ -39,7 +43,6 @@ scc1(V,Vs,Es,P) :-
 regist(V,X,P) :-
     regist1(X,P,C),
     sort([V|C],C1),
-    not(component(C1)),
     assert(component(C1)).
 
 
