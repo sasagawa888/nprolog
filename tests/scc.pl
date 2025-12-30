@@ -38,18 +38,9 @@ scc1(V,Vs,Es,P) :-
 
 regist(V,X,P) :-
     regist1(X,P,C),
-    %sort(C,C1),
-    %component(C1),
-    %retract(component(C1)),
     sort([V|C],C1),
+    not(component(C1)),
     assert(component(C1)).
-
-
-%regist(V,X,P) :-
-%    regist1(X,P,C),
-%    sort([V|C],C1),
-%    not(component(C1)),
-%    assert(component(C1)).
 
 
 regist1(X,[X|_],[X]).
