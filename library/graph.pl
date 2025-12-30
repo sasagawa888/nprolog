@@ -4,7 +4,7 @@
 %graph([1, 2, 3, 4], [e(1, 2), e(1, 3), e(1, 4), e(2, 3), e(2, 4), e(3, 4)]).
 
 :- module(graph,[graph/2,e/2,ed/2,ew/3,edw/3,generate_graph/3,vertex/2,edge/3,adjacent/3,connected/1,strongly_connected/1,
-                 complete/1,generate_kn/2,reverse_graph/2,dijkstra/4]).
+                 complete/1,generate_kn/2,reverse_graph/2,dijkstra/4,scc/2]).
 
 generate_graph(Vs,Es,G) :-
     G = graph(Vs,Es).
@@ -183,4 +183,78 @@ add_candidate1(Q,[ew(V,P,D1)|Es],V,D,[[P,D2,V]|Qs]) :-
     add_candidate1(Q,Es,V,D,Qs).
 add_candidate1(Q,[_|Es],V,D,Qs) :-
     add_candidate1(Q,Es,V,D,Qs).
-    
+
+
+% Strong-connected-component
+
+:- dynamic(component/1).
+
+%diterministic member/2
+member1(X,[X|_]).
+
+same_set(X,Y) :-
+    sort(X,X1),
+    sort(Y,Y1),
+    X1 = Y1.
+
+
+subset([],[]).
+subset([X|L],[X|S]) :-
+subset(L,S).
+subset(L, [_|S]) :-
+subset(L,S).
+
+scc(G,C) :-
+    abolish(component/1),
+    assert(component([])),
+    arg(1,G,Vs),
+    arg(2,G,Es),
+    member1(V,Vs),
+    scc1(V,Vs,Es,[]),
+    fail.
+scc(_,C) :-
+    compile(C).
+
+scc1(S,Vs,Es,P) :-
+    same_set(Vs,P).
+
+scc1(V,Vs,Es,P) :-
+    member(ed(V,X),Es),
+    member(X,P),
+    regist(V,X,P).
+
+
+scc1(V,Vs,Es,P) :-
+    member(ed(V,X),Es),
+    not(member(X,P)),
+    scc1(X,Vs,Es,[V|P]).
+
+
+regist(V,X,P) :-
+    regist1(X,P,C),
+    sort([V|C],C1),
+    assert(component(C1)).
+
+
+regist1(X,[X|_],[X]).
+regist1(X,[P|Ps],[P|Ys]) :-
+    regist1(X,Ps,Ys).
+
+
+compile(C) :-
+    setof(X,(component(X),X \= []),Y),
+    compile1(Y,C).
+
+compile1([C],[C]).
+compile1([C|Cs],X) :-
+    compile2(C,Cs), % include superset
+    compile1(Cs,X).
+compile1([C|Cs],[C|X]) :-
+    compile1(Cs,X).
+        
+compile2(X,[]) :- fail.
+compile2(X,[Y|Ys]) :-
+    subset(X,Y).
+compile2(X,[Y|Ys]) :-
+    not(subset(X,Y)),
+    compile2(X,Ys).
