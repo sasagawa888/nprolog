@@ -4,7 +4,7 @@
 %graph([1, 2, 3, 4], [e(1, 2), e(1, 3), e(1, 4), e(2, 3), e(2, 4), e(3, 4)]).
 
 :- module(graph,[graph/2,e/2,ed/2,ew/3,edw/3,generate_graph/3,vertex/2,edge/3,adjacent/3,connected/1,strongly_connected/1,
-                 complete/1,generate_kn/2,reverse_graph/2,dijkstra/4,scc/2,topsort/2]).
+                 complete/1,generate_kn/2,reverse_graph/2,dijkstra/4,scc/2,topsort/2,dag/1]).
 
 generate_graph(Vs,Es,G) :-
     G = graph(Vs,Es).
@@ -305,3 +305,9 @@ reverse([],[]).
 reverse([X|Xs],Y) :-
     reverse(Xs,Y1),
     append(Y1,[X],Y).
+
+%-------------DAG---------------------
+% Directed acyclic graph
+% When SCC has no result, G is DAG.
+dag(G) :-
+    not(scc(G,_)).
