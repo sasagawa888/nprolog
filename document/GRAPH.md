@@ -156,7 +156,15 @@ yes
 
 11. topsort(G,X)
 
+Description:
+generate topological sorted list for DAG graph G.
 
+Example:
+?- generate_graph([1,2,3,4],[ed(1,2),ed(1,3),ed(1,4),ed(3,2),ed(4,2),ed(4,3)],G),topsort(G,X).
+G = graph([1,2,3,4],[ed(1,2),ed(1,3),ed(1,4),ed(3,2),ed(4,2),ed(4,3)])
+X = [1,4,3,2] .
+yes
+?- 
 
 💡 Note:
 

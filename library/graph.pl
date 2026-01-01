@@ -287,6 +287,7 @@ assemble(L2) :-
     assemble1(L,L1),
     reverse(L1,L2).
 
+% find longest list
 assemble1([L],L).
 assemble1([L|Ls],L) :-
     assemble1(Ls,L1),
