@@ -141,6 +141,23 @@ R = graph([1,2,3],[ed(2,1),ed(3,2),ed(1,3),ed(4,3),ed(5,4),ed(6,5),ed(4,6)]) .
 yes
 ?- 
 
+10. scc(G,C)
+
+Description:
+generate strong connected component.
+
+Example:
+generate_graph([1,2,3,4,5,6,7],[ed(1,2),ed(2,3),ed(3,1),ed(3,4),ed(4,1),ed(4,5),ed(5,6),ed(6,7),ed(7,5)],G),
+    scc(G,C).
+
+C = [[5,6,7],[1,2,3,4]] .
+yes
+?- 
+
+11. topsort(G,X)
+
+
+
 💡 Note:
 
 graph(Vs, Es) is the standard representation used in this library.
