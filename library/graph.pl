@@ -4,7 +4,7 @@
 %graph([1, 2, 3, 4], [e(1, 2), e(1, 3), e(1, 4), e(2, 3), e(2, 4), e(3, 4)]).
 
 :- module(graph,[graph/2,e/2,ed/2,ew/3,edw/3,generate_graph/3,vertex/2,edge/3,adjacent/3,connected/1,strongly_connected/1,
-                 complete/1,generate_kn/2,reverse_graph/2,dijkstra/4,scc/2]).
+                 complete/1,generate_kn/2,reverse_graph/2,dijkstra/4,scc/2,topsort/2]).
 
 generate_graph(Vs,Es,G) :-
     G = graph(Vs,Es).
@@ -258,3 +258,49 @@ compile2(X,[Y|Ys]) :-
 compile2(X,[Y|Ys]) :-
     not(subset(X,Y)),
     compile2(X,Ys).
+
+
+%------------ topological sort------------
+
+
+
+topsort(G,X) :-
+    abolish(groupe/1),
+    assert(groupe([])),
+    arg(1,G,Vs),
+    arg(2,G,Es),
+    member(V,Vs),
+    topsort1(V,Vs,Es,[]),
+    fail.
+topsort(_,X) :-
+    assemble(X).
+
+topsort1(V,Vs,Es,P) :-
+    member(ed(V,X),Es),
+    topsort1(X,Vs,Es,[V|P]).
+topsort1(V,Vs,Es,P) :-
+    not(member(ed(V,X),Es)),
+    assert(groupe([V|P])).
+
+assemble(L2) :-
+    bagof(X,(groupe(X),X \=[]),L),
+    assemble1(L,L1),
+    reverse(L1,L2).
+
+assemble1([L],L).
+assemble1([L|Ls],L) :-
+    assemble1(Ls,L1),
+    length(L,X),
+    length(L1,Y),
+    X >= Y.
+assemble1([L|Ls],L1) :-
+    assemble1(Ls,L1),
+    length(L,X),
+    length(L1,Y),
+    X < Y.
+
+
+reverse([],[]).
+reverse([X|Xs],Y) :-
+    reverse(Xs,Y1),
+    append(Y1,[X],Y).
