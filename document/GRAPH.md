@@ -185,13 +185,14 @@ e(U,V) denotes a undirected edge from U to V.
 
 For undirected graphs, treat e(U,V) and e(V,U) as equivalent.
 
-10. dijkstra(G,Start,Goal,Path)
+13. dijkstra(G,Start,Goal,Path)
 
 G is undirected-wighted graph
 e.g.
 
 ```
-generate_graph([a,b,c,d,e,f,g,h],
+find(P) :-
+    generate_graph([a,b,c,d,e,f,g,h],
                    [ew(a,b,1),
                     ew(b,e,2),
                     ew(b,f,4),
@@ -202,7 +203,13 @@ generate_graph([a,b,c,d,e,f,g,h],
                     ew(d,g,5),
                     ew(c,g,3),
                     ew(c,f,2),
-                    ew(g,h,2)],G).
+                    ew(g,h,2)],G),
+    dijkstra(G,a,h,P).
+
+?- find(X).
+X = [h,g,d,a] .
+yes
+?- 
 
 ```
 ![](dijkstra.png)
