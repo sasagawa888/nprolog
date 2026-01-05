@@ -2,59 +2,89 @@
 This module provides basic mathematical and set-theoretical tools for symbolic computation, including sets, functions, topology, and permutations.
 
 math Module Reference
+
+## Usage
 use_module(math).
 
-🔢 Set Operations
+## Set Operations
 union(X,Y,Z)
 
 Description: Z is the union of sets X and Y
 Example:
 
-% example goes here
+?- union([1,2,3],[3,4,5],X).
+X = [1,2,3,4,5] .
+yes
+?- 
 
 intersection(X,Y,Z)
 
 Description: Z is the intersection of X and Y
 Example:
 
-% example goes here
+?- intersection([1,2,3,4],[2,3,4,5],X).
+X = [2,3,4] .
+yes
+?- 
 
 difference(X,Y,Z)
 
 Description: Z is the set difference X - Y
 Example:
 
-% example goes here
+?- difference([1,2,3,4,5],[2,3,4],X).
+X = [1,5] .
+yes
+?- 
 
 subset(X,Y)
 
 Description: X is a subset of Y
 Example:
 
-% example goes here
+?- subset([1,2,3],[1,2,3,4]).
+yes
+?- subset([1,2,3,4,5],[1,2,3,4]).
+no
+?- 
 
 eqset(X,Y)
 
 Description: X and Y are equal sets
 Example:
 
-% example goes here
+?- eqset([1,2,3],[1,2,3]).
+yes
+?- eqset([1,2,3],[1,2,3,4]).
+no
+?- 
 
 powerset(X,P)
 
 Description: P is the powerset of set X
 Example:
 
-% example goes here
+?- powerset([1,2,3],P).
+P = [[],[3],[2],[2,3],[1],[1,3],[1,2],[1,2,3]] .
+yes
+?- 
 
 permutation(X,Y)
 
 Description: Y is a permutation of list X
 Example:
 
-% example goes here
+?- permutation([1,2,3],X).
+X = [1,2,3] ;
+X = [1,3,2] ;
+X = [2,1,3] ;
+X = [2,3,1] ;
+X = [3,1,2] ;
+X = [3,2,1] ;
+no
+?- 
 
-🔢 Infix Notation for Sets
+## Infix Notation for Sets
 Z isl X + Y
 
 Description: Z is the union of X and Y
@@ -83,7 +113,7 @@ Example:
 
 % example goes here
 
-🧭 Map Functions
+## Map Functions
 map_val(F,X,Y)
 
 Description: Y is the image of X under map F
@@ -126,7 +156,7 @@ Example:
 
 % example goes here
 
-🧭 Infix Notation for Maps
+## Infix Notation for Maps
 Z ism val(F,X)
 
 Description: map_val(F,X,Z)
@@ -155,7 +185,7 @@ Example:
 
 % example goes here
 
-🎯 Logic Control
+## Logic Control
 forall(P,Q)
 
 Description: Succeeds if Q holds for all P
@@ -163,7 +193,7 @@ Example:
 
 % example goes here
 
-🔷 Topology
+## Topology
 topology(O,Z)
 
 Description: Checks if O is a topology on set Z
@@ -178,7 +208,7 @@ Example:
 
 % example goes here
 
-🔁 Surjections and Injections
+## Surjections and Injections
 surjection(F,S,T)
 
 Description: F maps S onto T (surjective)
@@ -193,7 +223,7 @@ Example:
 
 % example goes here
 
-🔀 Permutations
+## Permutations
 perm_prod(X,Y,Z)
 
 Description: Z is the composition of X and Y
@@ -257,7 +287,7 @@ Example:
 
 % example goes here
 
-🔀 Infix Notation for Permutations
+## Infix Notation for Permutations
 Z isq X * Y
 
 Description: perm_prod(X,Y,Z)
@@ -286,7 +316,7 @@ Example:
 
 % example goes here
 
-🏛 Groupe (Group)
+## Groupe (Group)
 groupe_prod(X,Y,Z)
 
 Description: Z is the composition of ID-X and ID-Y
@@ -315,7 +345,7 @@ Example:
 
 % example goes here
 
-🏛 Infix Notation for Groupe
+## Infix Notation for Groupe
 Z isg X * Y
 
 Description: groupe_prod(X,Y,Z)
@@ -337,7 +367,7 @@ Example:
 
 % example goes here
 
-📌 Notes
+## Notes
 
 Sets are represented as sorted lists without duplicates.
 
