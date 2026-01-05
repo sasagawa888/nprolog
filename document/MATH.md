@@ -229,14 +229,23 @@ perm_prod(X,Y,Z)
 Description: Z is the composition of X and Y
 Example:
 
-% example goes here
+?- perm_prod([2,3,1],[3,1,2],X).
+X = [1,2,3] .
+yes
+?- 
 
 perm_inv(X,Z)
 
 Description: Z is the inverse of permutation X
 Example:
 
-% example goes here
+?- perm_inv([2,3,1],X).
+X = [3,1,2] .
+yes
+?- perm_prod([2,3,1],[3,1,2],X).
+X = [1,2,3] .
+yes
+?- 
 
 perm_div(X,Y,Z)
 
@@ -250,7 +259,10 @@ perm_ident(N,X)
 Description: X is the identity permutation of size N
 Example:
 
-% example goes here
+?- perm_ident(3,X).
+X = [1,2,3] .
+yes
+?- 
 
 perm_inversion(P,N)
 
