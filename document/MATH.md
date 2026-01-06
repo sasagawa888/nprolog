@@ -269,7 +269,11 @@ perm_inversion(P,N)
 Description: N is the number of inversions in P
 Example:
 
-% example goes here
+?- perm_inversion([3,1,2],N).
+N = 2 .
+yes
+?- 
+
 
 perm_sign(P,Sign)
 
@@ -283,21 +287,36 @@ perm_expt(X,N,Z)
 Description: Z is the exponentiation X^N
 Example:
 
-% example goes here
+?- perm_expt([2,3,1],2,X).
+X = [3,1,2] .
+yes
+?- perm_expt([2,3,1],3,X).
+X = [1,2,3] .
+yes
+?- 
 
 perm_even(X,Z)
 
 Description: Z is an even permutation of X
 Example:
 
-% example goes here
+?- perm_even([1,2,3],X).
+X = [1,2,3] ;
+X = [2,3,1] ;
+X = [3,1,2] ;
+no
+?- 
 
 perm_odd(X,Z)
 
 Description: Z is an odd permutation of X
 Example:
 
-% example goes here
+?- perm_odd([1,2,3],X).
+X = [1,3,2] ;
+X = [2,1,3] ;
+X = [3,2,1] ;
+no
 
 ## Infix Notation for Permutations
 Z isq X * Y
