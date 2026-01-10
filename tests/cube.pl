@@ -12,12 +12,8 @@
 %cube state
 initial_cube(cube([0,1,2,3,4,5,6,7],[[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2]])).
 
-generate_cube(P,O,cube(P,O)).
 
-try(N,M,C1) :-
-    initial_cube(C),
-    iterate(N,M,C,C1).
-
+% order of operation M(move). N is order
 order(M,N) :-
     initial_cube(C),
     order1(0,N,M,C,C).
@@ -30,12 +26,16 @@ order1(N,N2,M,C,cube(P,O)) :-
     N1 is N+1,
     order1(N1,N2,M,C,cube(P1,O1)).
 
-iterate(0,M,C,C).
-iterate(N,M,cube(P,O),C) :-
+% iteration N times of M(move). C1 is result state of cube
+iterate(N,M,C1) :-
+    initial_cube(C),
+    iterate1(N,M,C,C1).
+iterate1(0,M,C,C).
+iterate1(N,M,cube(P,O),C) :-
     Pred =.. [M,P,O,P1,O1],
     call(Pred),
     N1 is N-1,
-    iterate(N1,M,cube(P1,O1),C).
+    iterate1(N1,M,cube(P1,O1),C).
 
 % F turn (clockwise looking at F face)
 movef([P1,P2,P3,P4,P5,P6,P7,P8],
