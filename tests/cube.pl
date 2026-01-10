@@ -3,22 +3,25 @@
 % notation
 %  Front   Back
 %  [1,2]  [5,6]
-%  [3,4]  [7,8]
+%  [4,3]  [8,7]
 %
 % Orinet [ud,lr,fb] each element is 0,1,2,
 
-cube([0,1,2,3,4,5,6,7],[[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2]]).
+%cube state
+initial_cube(cube([0,1,2,3,4,5,6,7],[[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2]])).
 
-foo(P,O) :-
-    cube(P1,O1),
-    commfr(P1,O1,P,O).
+generate_cube(P,O,cube(P,O)).
 
-fn(P,O) :-
-    cube(P1,O1),
-    movef(P1,O1,P2,O2),
-    movef(P2,O2,P3,O3),
-    movef(P3,O3,P4,O4),
-    movef(P4,O4,P,O).
+try(N,M,C1) :-
+    initial_cube(C),
+    iterate(N,M,C,C1).
+
+iterate(0,F,C,C).
+iterate(N,F,cube(P,O),C) :-
+    Move =.. [F,P,O,P1,O1],
+    call(Move),
+    N1 is N-1,
+    iterate(N1,F,cube(P1,O1),C).
 
 movef([P1,P2,P3,P4,P5,P6,P7,P8],
       [[O1ud,O1lr,O1fb],[O2ud,O2lr,O2fb],[O3ud,O3lr,O3fb],[O4ud,O4lr,O4fb],O5,O6,O7,O8],
