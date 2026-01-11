@@ -37,6 +37,25 @@ mover([P1,P2,P3,P4,P5,P6,P7,P8],
       [O1,[O6f,O6r,O6d,O6u,O6l,O6b],[O2f,O2r,O2d,O2u,O2l,O2b],O4,O5,[O7f,O7r,O7d,O7u,O7l,O7b],[O3f,O3r,O3d,O3u,O3l,O3b],O8]).
 
 
+
+% G turn all cube (clockwise looking at U face)
+moveg([P1,P2,P3,P4,P5,P6,P7,P8],
+      [[O1u,O1r,O1f,O1b,O1l,O1d],[O2u,O2r,O2f,O2b,O2l,O2d],[O3u,O3r,O3f,O3b,O3l,O3d],[O4u,O4r,O4f,O4b,O4l,O4d],
+       [O5u,O5r,O5f,O5b,O5l,O5d],[O6u,O6r,O6f,O6b,O6l,O6d],[O7u,O7r,O7f,O7b,O7l,O7d],[O8u,O8r,O8f,O8b,O8l,O8d]],
+      [P5,P1,P7,P3,P6,P2,P8,P4],
+      [[O5u,O5b,O5r,O5l,O5f,O5d],[O1u,O1b,O1r,O1l,O1f,O1d],[O7u,O7b,O7r,O7l,O7f,O7d],[O3u,O3b,O3r,O3l,O3f,O3d],
+       [O6u,O6b,O6r,O6l,O6f,O6d],[O2u,O2b,O2r,O2l,O2f,O2d],[O8u,O8b,O8r,O8l,O8f,O8d],[O4u,O4b,O4r,O4l,O4f,O4d]]).
+
+
+% H turn all cube (clockwise lokking at R face)
+moveh([P1,P2,P3,P4,P5,P6,P7,P8],
+      [[O1u,O1r,O1f,O1b,O1l,O1d],[O2u,O2r,O2f,O2b,O2l,O2d],[O3u,O3r,O3f,O3b,O3l,O3d],[O4u,O4r,O4f,O4b,O4l,O4d],
+       [O5u,O5r,O5f,O5b,O5l,O5d],[O6u,O6r,O6f,O6b,O6l,O6d],[O7u,O7r,O7f,O7b,O7l,O7d],[O8u,O8r,O8f,O8b,O8l,O8d]],
+      [P4,P6,P2,P8,P1,P7,P3,P5],
+      [[O4f,O4r,O4d,O4u,O4l,O4b],[O6f,O6r,O6d,O6u,O6l,O6b],[O2f,O2r,O2d,O2u,O2l,O2b],[O8f,O8r,O8d,O8u,O8l,O8b],
+       [O1f,O1r,O1d,O1u,O1l,O1b],[O7f,O7r,O7d,O7u,O7l,O7b],[O3f,O3r,O3d,O3u,O3l,O3b],[O5f,O5r,O5d,O5u,O5l,O5b]]).
+
+
 % order of operation M(move). N is order
 order(M,N) :-
     initial_cube(C),
@@ -124,6 +143,26 @@ commuf(P,O,P4,O4) :-
     movef(P2,O2,P1,O1),  %F-1
     moveu(P2,O2,P3,O3),  %U
     movef(P3,O3,P4,O4).  %F
+
+% commutator U R ^2　「U,R]^2
+commur2(P,O,P2,O2) :-
+    commur(P,O,P1,O1),
+    commur(P1,O1,P2,O2).
+
+% commutator U R ^3　「U,R]^3
+commur3(P,O,P3,O3) :-
+    commur(P,O,P1,O1),
+    commur(P1,O1,P2,O2),
+    commur(P2,O2,P3,O3).
+
+% commutator U R ^6　「U,R]^6
+commur6(P,O,P6,O6) :-
+    commur(P,O,P1,O1),
+    commur(P1,O1,P2,O2),
+    commur(P2,O2,P3,O3),
+    commur(P3,O3,P4,O4),
+    commur(P4,O4,P5,O5),
+    commur(P5,O5,P6,O6).
 
 
 try1(M1) :-
