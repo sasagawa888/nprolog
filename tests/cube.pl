@@ -79,7 +79,7 @@ movefru(P,O,P3,O3) :-
     mover(P1,O1,P2,O2),
     movef(P2,O2,P3,O3).
 
-% commutator F R
+% commutator F R [F,R]
 commfr(P,O,P4,O4) :-
     movef(P1,O1,P,O),    %F-1
     mover(P2,O2,P1,O1),  %R-1
@@ -87,20 +87,43 @@ commfr(P,O,P4,O4) :-
     mover(P3,O3,P4,O4).  %R
 
 
-% commutator U R
+% commutator F R [R,F]
+commrf(P,O,P4,O4) :-
+    mover(P1,O1,P,O),    %R-1
+    movef(P2,O2,P1,O1),  %F-1
+    mover(P2,O2,P3,O3),  %R
+    movef(P3,O3,P4,O4).  %F
+
+
+% commutator U R　「U,R]
 commur(P,O,P4,O4) :-
     moveu(P1,O1,P,O),    %U-1
     mover(P2,O2,P1,O1),  %R-1
     moveu(P2,O2,P3,O3),  %U
     mover(P3,O3,P4,O4).  %R
 
-% commutator F U
+% commutator R U　「R,U]
+commru(P,O,P4,O4) :-
+    mover(P1,O1,P,O),    %R-1
+    moveu(P2,O2,P1,O1),  %U-1
+    mover(P2,O2,P3,O3),  %R
+    moveu(P3,O3,P4,O4).  %U
+
+
+% commutator F U [F,U]
 commfu(P,O,P4,O4) :-
     movef(P1,O1,P,O),    %F-1
     moveu(P2,O2,P1,O1),  %U-1
     movef(P2,O2,P3,O3),  %F
     moveu(P3,O3,P4,O4).  %U
 
+
+% commutator U F [U,F]
+commuf(P,O,P4,O4) :-
+    moveu(P1,O1,P,O),    %U-1
+    movef(P2,O2,P1,O1),  %F-1
+    moveu(P2,O2,P3,O3),  %U
+    movef(P3,O3,P4,O4).  %F
 
 
 try1(M1) :-
