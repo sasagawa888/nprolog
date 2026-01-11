@@ -171,13 +171,15 @@ try1(M1) :-
     call(Pred1),
     check(P,O,P1,O1).
 
-try2(M1,M2) :-
+conjugate(M1,M2) :-
     initial_cube(cube(P,O)),
     Pred1 =.. [M1,P,O,P1,O1],
     call(Pred1),
     Pred2 =.. [M2,P1,O1,P2,O2],
     call(Pred2),
-    check(P,O,P2,O2).
+    Pred3 =.. [M1,P3,O3,P2,O2],
+    call(Pred3),
+    check(P,O,P3,O3).
 
 check([],[],[],[]).
 check([OP|OPs],[OO|OOs],[OP|RPs],[OO|ROs]) :-
