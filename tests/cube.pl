@@ -88,3 +88,34 @@ commur(P,O,P4,O4) :-
     mover(P2,O2,P1,O1),  %R-1
     moveu(P2,O2,P3,O3),  %U
     mover(P3,O3,P4,O4).  %R
+
+% commutator F U
+commfu(P,O,P4,O4) :-
+    movef(P1,O1,P,O),    %F-1
+    moveu(P2,O2,P1,O1),  %U-1
+    movef(P2,O2,P3,O3),  %F
+    moveu(P3,O3,P4,O4).  %U
+
+
+
+try1(M1) :-
+    initial_cube(cube(P,O)),
+    Pred1 =.. [M1,P,O,P1,O1],
+    call(Pred1),
+    check(P,O,P1,O1).
+
+try2(M1,M2) :-
+    initial_cube(cube(P,O)),
+    Pred1 =.. [M1,P,O,P1,O1],
+    call(Pred1),
+    Pred2 =.. [M2,P1,O1,P2,O2],
+    call(Pred2),
+    check(P,O,P2,O2).
+
+check([],[],[],[]).
+check([OP|OPs],[OO|OOs],[OP|RPs],[OO|ROs]) :-
+    check(OPs,OOs,RPs,ROs).
+check([OP|OPs],[OO|OOs],[RP|RPs],[RO|ROs]) :-
+    write(position),write(OP),write('->'),write(RP),write(' '),
+    write(orient),write(RO),nl,
+    check(OPs,OOs,RPs,ROs).
