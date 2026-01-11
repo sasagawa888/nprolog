@@ -6,6 +6,8 @@
 %  [4,3]  [8,7]
 %
 % Orinet [u,r,f,b,l,d] each element is 1,2,3,4,5,6 same as dices
+% Dice-number = Color
+% 1=white,2=blue,3=red,4=orage,5=green,6=yellow  
 % Face   F(front), U(upper), R(Right)
 % Product  FUR = F(U(R))  (from right hand to left hand)
 
