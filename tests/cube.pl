@@ -5,12 +5,34 @@
 %  [1,2]  [5,6]
 %  [4,3]  [8,7]
 %
-% Orinet [ud,lr,fb] each element is 0,1,2,
+% Orinet [u,r,f,b,l,d] each element is 1,2,3,4,5,6 same as dices
 % Face   F(front), U(upper), R(Right)
 % Product  FUR = F(U(R))  (from right hand to left hand)
 
 %cube state
-initial_cube(cube([0,1,2,3,4,5,6,7],[[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2],[0,1,2]])).
+initial_cube(cube([1,2,3,4,5,6,7,8],
+                  [[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],
+                   [1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6]])).
+
+
+% F turn (clockwise looking at F face)
+movef([P1,P2,P3,P4,P5,P6,P7,P8],
+      [[O1u,O1r,O1f,O1b,O1l,O1d],[O2u,O2r,O2f,O2b,O2l,O2d],[O3u,O3r,O3f,O3b,O3l,O3d],[O4u,O4r,O4f,O4b,O4l,O4d],O5,O6,O7,O8],
+      [P4,P1,P2,P3,P5,P6,P7,P8],
+      [[O4l,O4u,O4f,O4b,O4d,O4r],[O1l,O1u,O1f,O1b,O1d,O1r],[O2l,O2u,O2f,O2b,O2d,O2r],[O3l,O3u,O3f,O3b,O3d,O3r],O5,O6,O7,O8]).
+
+% U turn (clockwise looking at U face)
+moveu([P1,P2,P3,P4,P5,P6,P7,P8],
+      [[O1u,O1r,O1f,O1b,O1l,O1d],[O2u,O2r,O2f,O2b,O2l,O2d],O3,O4,[O5u,O5r,O5f,O5b,O5l,O5d],[O6u,O6r,O6f,O6b,O6l,O6d],O7,O8],
+      [P5,P1,P3,P4,P6,P2,P7,P8],
+      [[O5u,O5b,O5r,O5l,O5f,O5d],[O1u,O1b,O1r,O1l,O1f,O1d],O3,O4,[O6u,O6b,O6r,O6l,O6f,O6d],[O2u,O2b,O2r,O2l,O2f,O2d],O7,O8]).
+
+
+% R turn (clockwise looking at R face)
+mover([P1,P2,P3,P4,P5,P6,P7,P8],
+      [O1,[O2u,O2r,O2f,O2b,O2l,O2d],[O3u,O3r,O3f,O3b,O3l,O3d],O4,O5,[O6u,O6r,O6f,O6b,O6l,O6d],[O7u,O7r,O7f,O7b,O7l,O7d],O8],
+      [P1,P6,P2,P4,P5,P7,P3,P8],
+      [O1,[O6f,O6r,O6d,O6u,O6l,O6b],[O2f,O2r,O2d,O2u,O2l,O2b],O4,O5,[O7f,O7r,O7d,O7u,O7l,O7b],[O3f,O3r,O3d,O3u,O3l,O3b],O8]).
 
 
 % order of operation M(move). N is order
@@ -36,25 +58,6 @@ iterate1(N,M,cube(P,O),C) :-
     call(Pred),
     N1 is N-1,
     iterate1(N1,M,cube(P1,O1),C).
-
-% F turn (clockwise looking at F face)
-movef([P1,P2,P3,P4,P5,P6,P7,P8],
-      [[O1ud,O1lr,O1fb],[O2ud,O2lr,O2fb],[O3ud,O3lr,O3fb],[O4ud,O4lr,O4fb],O5,O6,O7,O8],
-      [P4,P1,P2,P3,P5,P6,P7,P8],
-      [[O4lr,O4ud,O4fb],[O1lr,O1ud,O1fb],[O2lr,O2ud,O2fb],[O3lr,O3ud,O3fb],O5,O6,O7,O8]).
-
-% U turn (clockwise looking at U face)
-moveu([P1,P2,P3,P4,P5,P6,P7,P8],
-      [[O1ud,O1lr,O1fb],[O2ud,O2lr,O2fb],O3,O4,[O5ud,O5lr,O5fb],[O6ud,O6lr,O6fb],O7,O8],
-      [P5,P1,P3,P4,P6,P2,P7,P8],
-      [[O5ud,O5fb,O5lr],[O1ud,O1fb,O1lr],O3,O4,[O6ud,O6fb,O6lr],[O2ud,O2fb,O2lr],O7,O8]).
-
-
-% R turn (clockwise looking at R face)
-mover([P1,P2,P3,P4,P5,P6,P7,P8],
-      [O1,[O2ud,O2lr,O2fb],[O3ud,O3lr,O3fb],O4,O5,[O6ud,O6lr,O6fb],[O7ud,O7lr,O7fb],O8],
-      [P1,P6,P2,P4,P5,P7,P3,P8],
-      [O1,[O6fb,O6lr,O6ud],[O2fb,O2lr,O2ud],O4,O5,[O7fb,O7lr,O7ud],[O3fb,O3lr,O3ud],O8]).
 
 % F-U-R
 movefur(P,O,P3,O3) :-
