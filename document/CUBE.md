@@ -1,0 +1,114 @@
+# Cube library
+library for 2*2 Rubik's Cube
+
+# Usage
+
+use_module(cube).
+
+# Specifiction
+
+- gen_cube/3
+gen_cube(+Positions, +Orientations, -Cube)
+
+Behavior
+Constructs a cube term cube(P,O) directly from the given position list P
+and orientation list O.
+No validation is performed; this predicate is a simple constructor.
+
+Examples
+?- gen_cube(
+     [1,2,3,4,5,6,7,8],
+     [[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],
+      [1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6]],
+     C).
+C = cube([...], [...]).
+
+
+- init_cube(C)
+Behavior
+Creates the solved (initial) state of the 2×2 Rubik’s Cube.
+Piece positions are [1,2,3,4,5,6,7,8]
+All pieces have the same default orientation [1,2,3,4,5,6]
+This predicate is typically used as the starting point for all computations.
+
+Examples
+?- init_cube(C).
+C = cube([1,2,3,4,5,6,7,8],
+         [[1,2,3,4,5,6], ...]).
+
+
+- move(+Move, +CubeBefore, -CubeAfter)
+
+Behavior
+Applies a single move to a cube state.
+Supported moves:
+Face turns
+f, fi : Front (clockwise / inverse)
+u, ui : Up (clockwise / inverse)
+r, ri : Right (clockwise / inverse)
+Whole-cube rotations
+g, gi : rotate entire cube clockwise when looking at the U face
+h, hi : rotate entire cube clockwise when looking at the R face
+Inverse moves are implemented by reversing the forward transformation.
+
+Examples
+?- init_cube(C0),
+   move(f, C0, C1).
+
+?- move(ri, C1, C2).
+
+
+- apply(+MoveExpr, +CubeBefore, -CubeAfter)
+Behavior
+Applies multiple moves to a cube state.
+Two forms of MoveExpr are supported:
+List of moves
+Moves are applied from left to right.
+[f,u,r]  ≡  R(U(F(C)))
+
+Power notation M^N
+applies move M exactly N times.
+
+Examples
+% List of moves
+?- init_cube(C0),
+   apply([f,u,r], C0, C1).
+
+% Repeated move
+?- init_cube(C0),
+   apply(f^4, C0, C1).
+
+
+- order(+MoveExpr, -N)
+
+Behavior
+Computes the order of a move or move sequence.
+N is the smallest positive integer such that applying MoveExpr N times
+returns the cube to the initial state.
+Internally, the predicate repeatedly applies the move starting from the solved
+cube until the original state is reached again.
+
+Examples
+?- order(f, N).
+N = 4.
+
+?- order([f,u,r], N).
+N = ...
+
+- try(+MoveExpr)
+
+Behavior
+A debugging and inspection utility.
+Applies MoveExpr to the initial cube
+Compares the result with the initial state
+Prints only the pieces that changed
+For each changed piece, it prints:
+old position → new position
+new orientation
+
+Examples
+?- try([f,u,r]).
+position1->2 orient[2,6,3,4,5,1]
+position4->1 orient[...]
+true.
+
