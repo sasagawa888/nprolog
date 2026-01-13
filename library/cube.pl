@@ -8,12 +8,12 @@
 % Orinet [u,r,f,b,l,d] each element is 1,2,3,4,5,6 same as dices
 % Dice-number = Color
 % 1=white,2=blue,3=red,4=orage,5=green,6=yellow  
-% Move   F(front), U(upper), R(Right)  
+% Move   F(front), U(upper), R(Right)  G(Right rotate cube) H(Upper rotate cobe)
 % Product  [F,U,R] = R(U(F))  
 % Prolog expression f,u,r,fi(F-inverse),ui(U-inverse),ri(R-inverse)
 % e.g. [f,u,r] [f,u,fi,ri]
 
-:- module(cube,[init_cube/1,gen_cube/3,move/3,order/2,apply/3,power/4,try/1]).
+:- module(cube,[init_cube/1,gen_cube/3,move/3,order/2,apply/3,try/1]).
 
 %cube state
 init_cube(cube([1,2,3,4,5,6,7,8],
@@ -43,6 +43,8 @@ move(h,cube(P,O),cube(P1,O1)) :-
 move(hi,cube(P,O),cube(P1,O1)) :-
     moveh(P1,O1,P,O).
 
+apply(M^N, S, S1) :-
+    power(N,M,S,S1).
 apply([], S, S).
 apply([M|Ms], S0, S2) :-
     move(M, S0, S1),
@@ -89,7 +91,7 @@ moveh([P1,P2,P3,P4,P5,P6,P7,P8],
 
 % order of operation M(move). N is order
 order(M,N) :-
-    initial_cube(C),
+    init_cube(C),
     order1(0,N,M,C,C).
 
 order1(N,N,M,C,C) :-
@@ -109,7 +111,7 @@ power(N,M,C,C1) :-
     power(N1,M,C2,C1).
 
 try(M) :-
-    initial_cube(cube(P,O)),
+    init_cube(cube(P,O)),
     apply(M,cube(P,O),cube(P1,O1)),
     check(P,O,P1,O1).
 
