@@ -18,6 +18,9 @@ experimentation, and executable explanations of Rubik's Cube mathematics in
 Prolog.
 
 # Specifiction
+Orinet [u,r,f,b,l,d] each element is 1,2,3,4,5,6 same as dices
+Dice-number = Color
+1=white,2=blue,3=red,4=orage,5=green,6=yellow 
 
 - gen_cube/3
 gen_cube(+Positions, +Orientations, -Cube)
