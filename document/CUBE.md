@@ -5,6 +5,18 @@ library for 2*2 Rubik's Cube
 
 use_module(cube).
 
+# Summary
+Predicate	Purpose
+init_cube/1	Create solved cube
+gen_cube/3	Construct cube from raw data
+move/3	Apply a single move
+apply/3	Apply a sequence or power of moves
+order/2	Compute order of a move or move sequence
+try/1	Inspect changes caused by a move sequence
+This structure makes the library suitable for group-theoretic exploration,
+experimentation, and executable explanations of Rubik's Cube mathematics in
+Prolog.
+
 # Specifiction
 
 - gen_cube/3
@@ -52,10 +64,16 @@ h, hi : rotate entire cube clockwise when looking at the R face
 Inverse moves are implemented by reversing the forward transformation.
 
 Examples
-?- init_cube(C0),
-   move(f, C0, C1).
+?- init_cube(C0),move(f,C0,C1).
+C0 = cube_cube([1,2,3,4,5,6,7,8],[[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6]])
+C1 = cube_cube([4,1,2,3,5,6,7,8],[[5,1,3,4,6,2],[5,1,3,4,6,2],[5,1,3,4,6,2],[5,1,3,4,6,2],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6]]) .
+yes
 
-?- move(ri, C1, C2).
+?- init_cube(C0),move(fi,C0,C1).
+C0 = cube_cube([1,2,3,4,5,6,7,8],[[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6]])
+C1 = cube_cube([2,3,4,1,5,6,7,8],[[2,6,3,4,1,5],[2,6,3,4,1,5],[2,6,3,4,1,5],[2,6,3,4,1,5],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6]]) .
+yes
+?- 
 
 
 - apply(+MoveExpr, +CubeBefore, -CubeAfter)
@@ -71,12 +89,16 @@ applies move M exactly N times.
 
 Examples
 % List of moves
-?- init_cube(C0),
-   apply([f,u,r], C0, C1).
+?- init_cube(C0),apply([f],C0,C1).
+C0 = cube_cube([1,2,3,4,5,6,7,8],[[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6]])
+C1 = cube_cube([4,1,2,3,5,6,7,8],[[5,1,3,4,6,2],[5,1,3,4,6,2],[5,1,3,4,6,2],[5,1,3,4,6,2],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6]]) .
+yes
 
 % Repeated move
-?- init_cube(C0),
-   apply(f^4, C0, C1).
+?- init_cube(C0),apply([f]^4,C0,C1).
+C0 = cube_cube([1,2,3,4,5,6,7,8],[[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6]])
+C1 = cube_cube([1,2,3,4,5,6,7,8],[[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6]]) .
+yes
 
 
 - order(+MoveExpr, -N)
@@ -89,11 +111,11 @@ Internally, the predicate repeatedly applies the move starting from the solved
 cube until the original state is reached again.
 
 Examples
-?- order(f, N).
+?- order([f], N).
 N = 4.
 
 ?- order([f,u,r], N).
-N = ...
+N = 30 .
 
 - try(+MoveExpr)
 
@@ -108,7 +130,13 @@ new orientation
 
 Examples
 ?- try([f,u,r]).
-position1->2 orient[2,6,3,4,5,1]
-position4->1 orient[...]
-true.
+position1->5 orient[1,4,2,5,3,6]
+position2->1 orient[1,4,2,5,3,6]
+position3->4 orient[1,4,2,5,3,6]
+position4->3 orient[5,1,3,4,6,2]
+position5->6 orient[1,4,2,5,3,6]
+position6->7 orient[3,2,6,1,5,4]
+position7->2 orient[3,1,2,5,6,4]
+yes
+?- 
 
