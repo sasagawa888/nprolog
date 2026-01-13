@@ -89,29 +89,39 @@ Z isl X + Y
 
 Description: Z is the union of X and Y
 Example:
+?- Z isl [1,2,3]+[2,3,4].
+Z = [1,2,3,4] .
+yes
+?- 
 
-% example goes here
-
-Z isl X - Y
-
+Z isl X - Y.
 Description: Z is the difference of X and Y
 Example:
+Z isl X - Y
+?- Z isl [1,2,3,4]-[2,3].
+Z = [1,4] .
+yes
+?- 
 
-% example goes here
 
 Z isl X * Y
 
 Description: Z is the intersection of X and Y
 Example:
+?- Z isl [1,2,3,4]*[2,3,4,5].
+Z = [2,3,4] .
+yes
+?- 
 
-% example goes here
 
 Z isl subset(X)
 
 Description: Z is a subset of X
 Example:
+?- [1,2] isl subset([1,2,3,4]).
+yes
+?- 
 
-% example goes here
 
 ## Map Functions
 map_val(F,X,Y)
@@ -199,12 +209,17 @@ topology(O,Z)
 Description: Checks if O is a topology on set Z
 Example:
 
+
 % example goes here
 
 topology_space(X,O)
 
 Description: True if O is a topology on base set X
 Example:
+?- topology_space([1,2,3],O).
+O = [[],[3],[2],[2,3],[1],[1,3],[1,2],[1,2,3]] .
+yes
+?- 
 
 % example goes here
 
