@@ -89,13 +89,13 @@ applies move M exactly N times.
 
 Examples
 % List of moves
-?- init_cube(C0),apply([f],C0,C1).
+?- init_cube(C0),apply(f,C0,C1).
 C0 = cube_cube([1,2,3,4,5,6,7,8],[[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6]])
 C1 = cube_cube([4,1,2,3,5,6,7,8],[[5,1,3,4,6,2],[5,1,3,4,6,2],[5,1,3,4,6,2],[5,1,3,4,6,2],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6]]) .
 yes
 
 % Repeated move
-?- init_cube(C0),apply([f]^4,C0,C1).
+?- init_cube(C0),apply(f^4,C0,C1).
 C0 = cube_cube([1,2,3,4,5,6,7,8],[[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6]])
 C1 = cube_cube([1,2,3,4,5,6,7,8],[[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6],[1,2,3,4,5,6]]) .
 yes
@@ -111,7 +111,7 @@ Internally, the predicate repeatedly applies the move starting from the solved
 cube until the original state is reached again.
 
 Examples
-?- order([f], N).
+?- order(f, N).
 N = 4.
 
 ?- order([f,u,r], N).

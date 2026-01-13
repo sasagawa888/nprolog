@@ -45,10 +45,16 @@ move(hi,cube(P,O),cube(P1,O1)) :-
 
 apply(M^N, S, S1) :-
     power(N,M,S,S1).
-apply([], S, S).
-apply([M|Ms], S0, S2) :-
+apply(M,S,S1) :-
+    list(M),
+    apply1(M,S,S1).
+apply(M,S,S1) :-
+    atom(M),
+    apply1([M],S,S1).    
+apply1([], S, S).
+apply1([M|Ms], S0, S2) :-
     move(M, S0, S1),
-    apply(Ms, S1, S2).
+    apply1(Ms, S1, S2).
 
 % F turn (clockwise looking at F face)
 movef([P1,P2,P3,P4,P5,P6,P7,P8],
@@ -91,8 +97,14 @@ moveh([P1,P2,P3,P4,P5,P6,P7,P8],
 
 % order of operation M(move). N is order
 order(M,N) :-
+    list(M),
     init_cube(C),
     order1(0,N,M,C,C).
+
+order(M,N) :-
+    atom(M),
+    init_cube(C),
+    order1(0,N,[M],C,C).
 
 order1(N,N,M,C,C) :-
     N > 0.
