@@ -9,8 +9,6 @@
   Copyright (c) Shigeru Iitaka
   Copyright (c) Kenichi Sasagawa
 
-  This software is released under the BSD 2-Clause License.
-  See the LICENSE file for details.
   ============================================================
 */
 :- module(math,[union/3,intersection/3,difference/3,subset/2,eqset/2,
