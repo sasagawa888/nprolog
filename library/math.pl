@@ -1,4 +1,18 @@
 % mathematics library
+/*
+  ============================================================
+  Mathematical Prolog Library
+
+  This software includes Prolog code originally written
+  by Prof. Shigeru Iitaka.
+
+  Copyright (c) Shigeru Iitaka
+  Copyright (c) Kenichi Sasagawa
+
+  This software is released under the BSD 2-Clause License.
+  See the LICENSE file for details.
+  ============================================================
+*/
 :- module(math,[union/3,intersection/3,difference/3,subset/2,eqset/2,
                 powerset/2,permutation/2,forall/2,topology/2,topology_space/2,
                 map_val/3,map_set/3,map_prod/3,surjection/3,injection/3,
