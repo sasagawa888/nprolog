@@ -19,22 +19,51 @@ g(X) :-
 foo :-
     foo.
 
+lh(X,N) :- 
+    length(X,N).
 
-% fs(X).  X is gedel number of formal symbol. 
-fs(2).
-fs(3).
-fs(5).
-fs(7).
-fs(11).
-fs(13).
-fs(17).
-fs(19).
-fs(31).
-fs(37).
-fs(41).
-fs(43).
-fs(47).
+star(X,Y,Z) :-
+    append(X,Y,Z).
+
+% fs(X).  X is formal symbol. 
+fs(X) :-
+    fv(X).
+fs(X) :-
+    bv(X).
+fs(X) :-
+    member(X,[not,or,and,imply,forall,exist,'(',')',0,'=','`','+',star]).
 
 
-num(X) :-
-    X = 2^31.
+% fv(X). X is free variable
+fv(X) :-
+    atom(X),
+    atom_chars(X,[a,C]),
+    char_code(C,A),
+    A >= 48,
+    A =< 57.
+
+% bv(X). X is binded variable.
+bv(X) :-
+    atom(X),
+    atom_chars(X,[x,C]),
+    char_code(C,A),
+    A >= 48,
+    A =< 57.
+
+% sq(X). X is sequence of formal symbol.
+sq([]).
+sq([X|Xs]) :-
+    fs(X),
+    sq(Xs).
+
+num(0).
+num(['(',X,')','`']):-
+    num(X).
+
+tm(0).
+tm(X) :-
+    fv(X).
+
+axiom(eq(X,X)).
+axiom(a0+0=a0).
+proof(F,axiom(F)) :- axiom(F).
