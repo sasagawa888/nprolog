@@ -31,7 +31,7 @@ fs(X) :-
 fs(X) :-
     bv(X).
 fs(X) :-
-    member(X,[not,or,and,imply,forall,exist,'(',')',0,'=','`','+',star]).
+    member(X,[not,or,and,imply,forall,exist,'(',')',0,'=','+']).
 
 
 % fv(X). X is free variable
@@ -57,13 +57,10 @@ sq([X|Xs]) :-
     sq(Xs).
 
 num(0).
-num(['(',X,')','`']):-
+num(s(X)):-
     num(X).
 
 tm(0).
 tm(X) :-
     fv(X).
 
-axiom(eq(X,X)).
-axiom(a0+0=a0).
-proof(F,axiom(F)) :- axiom(F).
