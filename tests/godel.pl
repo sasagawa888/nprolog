@@ -34,7 +34,7 @@ fs(X) :-
 fs(X) :-
     num(X).
 fs(X) :-
-    member(X,[not,or,and,imply,forall,exist,0,'=','+']).
+    member(X,[not,or,and,imply,forall,exist,0,'=','+','`']).
 
 
 % fv(X). X is free variable
@@ -59,18 +59,21 @@ sq([X|Xs]) :-
     fs(X),
     sq(Xs).
 
-% s(0) s(s(0)) ...
+% natural number
 num(0).
 num(s(X)):-
     num(X).
 
+
 % term(X)
-tm(0).
 tm(X) :-
     fv(X).
 tm(X) :-
     num(X).
-tm(X+Y) :-
+tm([X,+,Y]) :-
+    tm(X),
+    tm(Y).
+tm([X,*,Y]) :-
     tm(X),
     tm(Y).
 
