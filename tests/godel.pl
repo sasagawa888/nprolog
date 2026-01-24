@@ -20,24 +20,26 @@ g(X) :-
 
 
 % From godel's paper
-lh(X,N) :- 
-    length(X,N).
 
-star(X,Y,Z) :-
-    append(X,Y,Z).
 
-% fs(X).  X is formal symbol. 
-fs(X) :-
+% tm(X).  X is term. 
+tm(X) :-
     fv(X).
-fs(X) :-
+tm(X) :-
     bv(X).
-fs(X) :-
+tm(X) :-
     num(X).
-fs(X) :-
-    member(X,[not,or,and,imply,forall,exist,0,'=','+','`']).
+tm(_+_).
+tm(_=_).
+tm(neg(_)).
+tm(or(_,_)).
+tm(and(_,_)).
+tm(imply(_,_)).
+tm(forall(_,_)).
+tm(exist(_,_)).
 
 
-% fv(X). X is free variable
+% fv(X). X is free variable　e,g, a0,a1...
 fv(X) :-
     atom(X),
     atom_chars(X,[a,C]),
@@ -45,7 +47,7 @@ fv(X) :-
     A >= 48,
     A =< 57.
 
-% bv(X). X is binded variable.
+% bv(X). X is binded variable. e.g. x0,x1...
 bv(X) :-
     atom(X),
     atom_chars(X,[x,C]),
@@ -54,10 +56,15 @@ bv(X) :-
     A =< 57.
 
 % sq(X). X is sequence of formal symbol.
-sq([]).
-sq([X|Xs]) :-
-    fs(X),
-    sq(Xs).
+sq(X) :-
+    tm(X).
+sq((X,Y)) :-
+    tm(X),
+    sq(Y).
+sq((X;Y)) :-
+    tm(X),
+    sq(Y).
+
 
 % natural number
 num(0).
@@ -65,23 +72,55 @@ num(s(X)):-
     num(X).
 
 
-% term(X)
-tm(X) :-
-    fv(X).
-tm(X) :-
-    num(X).
-tm([X,+,Y]) :-
-    tm(X),
-    tm(Y).
-tm([X,*,Y]) :-
-    tm(X),
-    tm(Y).
 
-% formula(φ)
-fm(T1 = T2) :- tm(T1), tm(T2).    
-fm(not(P)) :- fm(P).
-fm(and(P,Q)) :- fm(P), fm(Q).
-fm(or(P,Q))  :- fm(P), fm(Q).
-fm(imply(P,Q)) :- fm(P), fm(Q).
-fm(forall(X,P)) :- bv(X), fm(P).
-fm(exist(X,P))  :- bv(X), fm(P).
+
+% formula(P) 
+fm(T1=T2) :-
+    tm(T1),
+    tm(T2).
+
+fm(P) :-
+    tm(P).
+
+fm(neg(P)) :-
+    fm(P).
+
+fm(and(P,Q)) :-
+    fm(P),
+    fm(Q).
+
+fm(or(P,Q)) :-
+    fm(P),
+    fm(Q).
+
+fm(imply(P,Q)) :-
+    fm(P),
+    fm(Q).
+
+fm(forall(X,P)) :-
+    bv(X),
+    fm(P).
+
+fm(exist(X,P)) :-
+    bv(X),
+    fm(P).
+
+% subst(sequence,free-var,term,Result)
+sb(X,Y,Z,Z) :-
+    fv(X),
+    X == Y.
+sb(X,Y,Z,X) :-
+    atomic(X),
+    X \=Y,!.
+sb(X,Y,Z,R) :-
+    compound(X),
+    X =.. S,
+    sb1(S,Y,Z,S1),
+    R =.. S1.
+
+sb1([],Y,Z,[]).
+sb1([Y|Ss],Y,Z,[Z|S1]) :-
+    sb1(Ss,Y,Z,S1).
+sb1([S|Ss],Y,Z,[S2|S1]) :-
+    sb(S,Y,Z,S2),
+    sb1(Ss,Y,Z,S1).
