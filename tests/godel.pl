@@ -16,9 +16,10 @@ g(X) :-
 
 % call2(g,g).
 
-foo :-
-    foo.
 
+
+
+% From godel's paper
 lh(X,N) :- 
     length(X,N).
 
@@ -31,7 +32,9 @@ fs(X) :-
 fs(X) :-
     bv(X).
 fs(X) :-
-    member(X,[not,or,and,imply,forall,exist,'(',')',0,'=','+']).
+    num(X).
+fs(X) :-
+    member(X,[not,or,and,imply,forall,exist,0,'=','+']).
 
 
 % fv(X). X is free variable
@@ -56,11 +59,26 @@ sq([X|Xs]) :-
     fs(X),
     sq(Xs).
 
+% s(0) s(s(0)) ...
 num(0).
 num(s(X)):-
     num(X).
 
+% term(X)
 tm(0).
 tm(X) :-
     fv(X).
+tm(X) :-
+    num(X).
+tm(X+Y) :-
+    tm(X),
+    tm(Y).
 
+% formula(φ)
+fm(T1 = T2) :- tm(T1), tm(T2).    
+fm(not(P)) :- fm(P).
+fm(and(P,Q)) :- fm(P), fm(Q).
+fm(or(P,Q))  :- fm(P), fm(Q).
+fm(imply(P,Q)) :- fm(P), fm(Q).
+fm(forall(X,P)) :- bv(X), fm(P).
+fm(exist(X,P))  :- bv(X), fm(P).
