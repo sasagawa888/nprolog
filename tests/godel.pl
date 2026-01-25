@@ -131,7 +131,11 @@ sb1([S|Ss],Y,Z,[S2|S1]) :-
     sb(S,Y,Z,S2),
     sb1(Ss,Y,Z,S1).
 
+% Hilbelt
 ax(imply(p,imply(q,p))).
 ax(imply(imply(p,imply(q,r)),imply(imply(p,q),imply(p,r)))).
 ax(imply(imply(neg(p),neg(q)),imply(q,p))).
 
+% PM rule
+ru(and(p,imply(p,q)),q).
+ru(p(x1),forall(x1,p(x1))).
