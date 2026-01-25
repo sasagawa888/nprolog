@@ -47,10 +47,16 @@ fv(X) :-
     A >= 48,
     A =< 57.
 
-% bv(X). X is binded variable. e.g. x0,x1...
+% bv(X). X is binded variable. e.g. x0,x1... y0,y1,...
 bv(X) :-
     atom(X),
     atom_chars(X,[x,C]),
+    char_code(C,A),
+    A >= 48,
+    A =< 57.
+bv(X) :-
+    atom(X),
+    atom_chars(X,[y,C]),
     char_code(C,A),
     A >= 48,
     A =< 57.
@@ -124,3 +130,8 @@ sb1([Y|Ss],Y,Z,[Z|S1]) :-
 sb1([S|Ss],Y,Z,[S2|S1]) :-
     sb(S,Y,Z,S2),
     sb1(Ss,Y,Z,S1).
+
+ax(imply(p,imply(q,p))).
+ax(imply(imply(p,imply(q,r)),imply(imply(p,q),imply(p,r)))).
+ax(imply(imply(neg(p),neg(q)),imply(q,p))).
+
