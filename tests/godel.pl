@@ -133,10 +133,46 @@ sb1([S|Ss],Y,Z,[S2|S1]) :-
 
 % Hilbelt
 ax(imply(P,imply(Q,P))).
-ax(imply(imply(p,imply(q,r)),imply(imply(p,q),imply(p,r)))).
-ax(imply(imply(neg(p),neg(q)),imply(q,p))).
+ax(imply(imply(P,imply(Q,R)),imply(imply(P,Q),imply(P,R)))).
+ax(imply(imply(neg(P),neg(Q)),imply(P,Q))).
 
 % PM rule
 ru(and(p,imply(p,q)),q).
 ru(p(x1),forall(x1,p(x1))).
 
+% proof
+prf(X,Y) :-
+    abolish(th/1),
+    prf1(X,Y).
+
+
+prf1(X,[]) :-
+    th(X),
+    write(rule1),
+    write(X),nl.
+
+prf1(X,[Y|Ys]) :-
+    ax(Y),
+    assert(th(Y)),
+    write(rule2),
+    write(Y),nl,
+    prf1(X,Ys).
+
+prf1(X,[Y|Ys]) :-
+    th(Z),
+    th(imply(Z,Y)),
+    assert(th(Y)),
+    write(rule3),
+    write(Y),nl,
+    prf1(X,Ys).
+
+
+test :-
+  prf(imply(p,p),
+    [ imply(p,imply(p,p))                                        % A1
+    , imply(p,imply(imply(p,p),p))                               % A1 (Q = imply(p,p))
+    , imply(imply(p,imply(imply(p,p),p)),
+            imply(imply(p,imply(p,p)),imply(p,p)))               % A2
+    , imply(imply(p,imply(p,p)),imply(p,p))                      % A1+A2
+    , imply(p,p)                                                 % goal
+    ]).
