@@ -146,11 +146,6 @@ prf(X,Y) :-
     prf1(X,Y).
 
 
-prf1(X,Y) :-
-    df(X,Z),
-    write(rule0),
-    write(Z),nl,
-    prf1(Z,Y).
 
 prf1(X,[]) :-
     th(X),
