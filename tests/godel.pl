@@ -187,5 +187,7 @@ test :-
 def(X,Y) :-
     assert(df(X,Y)).
 
+% def(g,neg(prf(code(g),X))).
+
 clr :-
     abolish(df/2).
