@@ -184,10 +184,13 @@ test :-
     , imply(p,p)                                                 % goal
     ]).
 
+bew(X) :-
+    proof(X,Y).
+
 def(X,Y) :-
     assert(df(X,Y)).
 
-% def(g,neg(prf(code(g),X))).
+% def(g,neg(bew(code(g),X))).
 
 clr :-
     abolish(df/2).
