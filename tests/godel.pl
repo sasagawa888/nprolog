@@ -146,10 +146,17 @@ prf(X,Y) :-
     prf1(X,Y).
 
 
+prf1(X,Y) :-
+    df(X,Z),
+    write(rule0),
+    write(Z),nl,
+    prf1(Z,Y).
+
 prf1(X,[]) :-
     th(X),
     write(rule1),
     write(X),nl.
+
 
 prf1(X,[Y|Ys]) :-
     ax(Y),
@@ -176,3 +183,9 @@ test :-
     , imply(imply(p,imply(p,p)),imply(p,p))                      % A1+A2
     , imply(p,p)                                                 % goal
     ]).
+
+def(X,Y) :-
+    assert(df(X,Y)).
+
+clr :-
+    abolish(df/2).
