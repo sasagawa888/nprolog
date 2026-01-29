@@ -172,7 +172,7 @@ prf1(X,[Y|Ys]) :-
 bew(X) :-
     def(X,Y),
     fp(X,Y),
-    write('fixed point detected'),nl.
+    write('self reference detected'),nl.
 
 bew(X) :-
     proof(X,Y),
