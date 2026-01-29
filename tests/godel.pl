@@ -149,14 +149,14 @@ prf(X,Y) :-
 
 prf1(X,[]) :-
     th(X),
-    write(rule1),
+    write('goal: '),
     write(X),nl.
 
 
 prf1(X,[Y|Ys]) :-
     ax(Y),
     assert(th(Y)),
-    write(rule2),
+    write('axiom: '),
     write(Y),nl,
     prf1(X,Ys).
 
@@ -164,13 +164,30 @@ prf1(X,[Y|Ys]) :-
     th(Z),
     th(imply(Z,Y)),
     assert(th(Y)),
-    write(rule3),
+    write('theolem: '),
     write(Y),nl,
     prf1(X,Ys).
 
+% if X and Y are finxed point return yes.
+fp(X,X) :- 
+    atom(X).
+fp(X,code(X)).
+fp(X,Y) :-
+    compound(Y),
+    Y =.. [P,A],
+    fp(X,A). 
 
-test :-
-  prf(imply(p,p),
+
+bew(X) :-
+    def(X,Y),
+    fp(X,Y),
+    write('fixed point detected'),nl.
+
+bew(X) :-
+    proof(X,Y),
+    prf(X,Y).
+
+proof(imply(p,p),
     [ imply(p,imply(p,p))                                        % A1
     , imply(p,imply(imply(p,p),p))                               % A1 (Q = imply(p,p))
     , imply(imply(p,imply(imply(p,p),p)),
@@ -179,13 +196,8 @@ test :-
     , imply(p,p)                                                 % goal
     ]).
 
-bew(X) :-
-    proof(X,Y).
 
-def(X,Y) :-
-    assert(df(X,Y)).
-
-% def(g,neg(bew(code(g),X))).
+def(g,neg(bew(code(g)))).
 
 clr :-
-    abolish(df/2).
+    abolish(def/2).
