@@ -168,15 +168,6 @@ prf1(X,[Y|Ys]) :-
     write(Y),nl,
     prf1(X,Ys).
 
-% if X and Y are fixed point return yes.
-fp(X,X) :- 
-    atom(X).
-fp(X,code(X)).
-fp(X,Y) :-
-    compound(Y),
-    Y =.. [P,A],
-    fp(X,A). 
-
 
 bew(X) :-
     def(X,Y),
@@ -197,6 +188,18 @@ proof(imply(p,p),
     ]).
 
 
+
+% Godel's self-reference
+% if X and Y are fixed point return yes.
+fp(X,X) :- 
+    atom(X).
+fp(X,code(X)).
+fp(X,Y) :-
+    compound(Y),
+    Y =.. [P,A],
+    fp(X,A). 
+
+% create g (I am unprovable)
 phi(neg(bew(a0))).
 
 diag(Name,G) :-
