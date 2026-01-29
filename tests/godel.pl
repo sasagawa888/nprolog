@@ -47,7 +47,7 @@ fv(X) :-
     A >= 48,
     A =< 57.
 
-% bv(X). X is binded variable. e.g. x0,x1... y0,y1,...
+% bv(X). X is bound variable. e.g. x0,x1... y0,y1,...
 bv(X) :-
     atom(X),
     atom_chars(X,[x,C]),
@@ -131,7 +131,7 @@ sb1([S|Ss],Y,Z,[S2|S1]) :-
     sb(S,Y,Z,S2),
     sb1(Ss,Y,Z,S1).
 
-% Hilbelt
+% Hilbert
 ax(imply(P,imply(Q,P))).
 ax(imply(imply(P,imply(Q,R)),imply(imply(P,Q),imply(P,R)))).
 ax(imply(imply(neg(P),neg(Q)),imply(P,Q))).
@@ -164,7 +164,7 @@ prf1(X,[Y|Ys]) :-
     th(Z),
     th(imply(Z,Y)),
     assert(th(Y)),
-    write('theolem: '),
+    write('theorem: '),
     write(Y),nl,
     prf1(X,Ys).
 
