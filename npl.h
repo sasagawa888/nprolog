@@ -998,6 +998,7 @@ int b_rename(int arglist, int rest, int th);
 int b_repeat(int arglist, int rest, int th);
 int b_reset_op(int arglist, int rest, int th);
 int b_retract(int arglist, int rest, int th);
+int b_retractall(int arglist, int rest, int th);
 int b_retrieveh(int arglist, int rest, int th);
 int b_recv_socket(int arglist, int rest, int th);
 int b_n_reconsult_predicate(int arglist, int rest, int th);

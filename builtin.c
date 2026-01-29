@@ -142,6 +142,7 @@ void init_builtin(void)
     defbuiltin("recordh", b_recordh, 4);
     defbuiltin("ref", b_ref, 1);
     defbuiltin("retract", b_retract, 1);
+	defbuiltin("retractall", b_retractall, 1);
     defbuiltin("retrieveh", b_retrieveh, 3);
     defbuiltin("removeh", b_removeh, 3);
     defbuiltin("removeallh", b_removeallh, 2);
@@ -2966,6 +2967,69 @@ int b_retract(int arglist, int rest, int th)
 	wp[th] = save1;
 	sp[th] = save2;
 	return (NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
+
+
+int b_retractall(int arglist, int rest, int th)
+{
+    int n, ind, arg1, clause, head, clauses, new_clauses, save1, save2;
+
+    save2 = sp[th];
+    clause = clauses = head = NIL;
+    n = length(arglist);
+    ind = makeind("retractall", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if (wide_variable_p(arg1))
+	    exception(INSTANTATION_ERR, ind, arg1, th);
+	if (operationp(arg1) && !predicatep(cadr(arg1)))
+	    exception(NOT_CALLABLE, ind, arg1, th);
+	if (!operationp(arg1) && !predicatep(arg1))
+	    exception(NOT_CALLABLE, ind, arg1, th);
+	if (operationp(arg1) && builtinp(cadr(arg1)))
+	    exception(BUILTIN_EXIST, ind, arg1, th);
+	if (!operationp(arg1) && builtinp(arg1))
+	    exception(BUILTIN_EXIST, ind, arg1, th);
+
+	if (singlep(arg1)) {
+	    arg1 = list1(arg1);
+	}
+	if (atom_predicate_p(arg1))
+	    clauses = GET_CAR(arg1);
+	else if (predicatep(arg1))
+	    clauses = GET_CAR(car(arg1));
+	else if (clausep(arg1) && atom_predicate_p(cadr(arg1)))
+	    clauses = GET_CAR(cadr(arg1));
+	else if (clausep(arg1))
+	    clauses = GET_CAR(car(cadr(arg1)));
+
+	new_clauses = NIL;
+	save1 = wp[th];
+	while (!nullp(clauses)) {
+	    clause = car(clauses);
+	    clauses = cdr(clauses);
+
+	    if (unify(arg1, clause, th) == NO)
+	    new_clauses = cons(clause, new_clauses);
+	}
+	if (atom_predicate_p(arg1))
+		    SET_CAR(clause,listreverse(new_clauses));
+	else if (predicatep(arg1))
+		    SET_CAR(car(arg1),listreverse(new_clauses));
+	else if (clausep(arg1) && atom_predicate_p(cadr(arg1)))
+		    SET_CAR(cadr(arg1),listreverse(new_clauses));
+	else if (clausep(arg1))
+		    SET_CAR(car(cadr(arg1)),listreverse(new_clauses));
+
+	wp[th] = save1;
+	sp[th] = save2;
+	if (prove_all(rest, sp[th], th) == YES)
+		return (YES);
+	else 
+		return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);

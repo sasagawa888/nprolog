@@ -142,7 +142,7 @@ ru(p(x1),forall(x1,p(x1))).
 
 % proof
 prf(X,Y) :-
-    abolish(th/1),
+    retractall(th(_)),
     prf1(X,Y).
 
 
@@ -168,7 +168,7 @@ prf1(X,[Y|Ys]) :-
     write(Y),nl,
     prf1(X,Ys).
 
-% if X and Y are finxed point return yes.
+% if X and Y are fixed point return yes.
 fp(X,X) :- 
     atom(X).
 fp(X,code(X)).
@@ -197,7 +197,11 @@ proof(imply(p,p),
     ]).
 
 
-def(g,neg(bew(code(g)))).
+phi(neg(bew(a0))).
 
-clr :-
-    abolish(def/2).
+diag(Name,G) :-
+    phi(Phi),
+    sb(Phi, a0, code(Name), G).
+
+def(g,G) :-
+    diag(g,G).
