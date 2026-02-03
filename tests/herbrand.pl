@@ -2,6 +2,37 @@
 
 %e.g. forall(x,exist(y,and(p(x),q(y)))).
 
+unique(X,Y) :-
+    ctr_inc(1,N),
+    number_chars(N,C),
+    atom_chars(A,C),
+    atom_concat(X,A,Y).
+
+alpha(forall(X,F), forall(X1,F1)) :-
+    unique(X, X1),
+    subst(F, X, X1, F1).
+
+alpha(exist(X,F), exist(X1,F1)) :-
+    unique(X, X1),
+    subst(F, X, X1, F1).
+
+subst(X,Y,Z,X) :-
+    atomic(X),
+    X \=Y,!.
+subst(X,Y,Z,R) :-
+    compound(X),
+    X =.. S,
+    subst1(S,Y,Z,S1),
+    R =.. S1.
+
+subst1([],Y,Z,[]).
+subst1([Y|Ss],Y,Z,[Z|S1]) :-
+    subst1(Ss,Y,Z,S1).
+subst1([S|Ss],Y,Z,[S2|S1]) :-
+    subst(S,Y,Z,S2),
+    subst1(Ss,Y,Z,S1).
+
+
 term(X) :-
     compound(X),
     X =.. [P,A],
