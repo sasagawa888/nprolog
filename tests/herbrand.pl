@@ -2,18 +2,25 @@
 
 %e.g. forall(x,exist(y,and(p(x),q(y)))).
 
-unique(X,Y) :-
+% 102 is ascii code of atom f
+:- ctr_set(2,102).
+
+uniquev(X,Y) :-
     ctr_inc(1,N),
     number_chars(N,C),
     atom_chars(A,C),
     atom_concat(X,A,Y).
 
+uniquef(X) :-
+    ctr_inc(2,N),
+    char_code(X,N).
+
 alpha(forall(X,F), forall(X1,F1)) :-
-    unique(X, X1),
+    uniquev(X, X1),
     subst(F, X, X1, F1).
 
 alpha(exist(X,F), exist(X1,F1)) :-
-    unique(X, X1),
+    uniquev(X, X1),
     subst(F, X, X1, F1).
 
 subst(X,Y,Z,X) :-
