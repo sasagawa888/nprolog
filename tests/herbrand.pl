@@ -3,7 +3,7 @@
 :- use_module(list).
 
 %e.g. 
-ex1(forall(x,exist(y,forall(x,exist(y,and(p(x,y),q(x,y))))))).
+ex1(exist(x,p(x))).
 
 ex2(forall(x,imply(p(x),
                   exist(y,
@@ -39,12 +39,11 @@ skolem(X,Y) :-
 
 skolem1(forall(V,E1),A,forall(V,Y)) :-
     skolem1(E1,[V|A],Y).
-skolem1(exist(V,E1),A,Z) :-
+skolem1(exist(V,E1),A,Y) :-
     uniquef(F),
     reverse(A,A1),
     Func =.. [F|A1],
-    subst(E1,V,Func,Y),
-    skolem1(Y,A,Z).
+    subst(E1,V,Func,Y).
 skolem1(and(E1,E2),A,and(X,Y)) :-
     skolem1(E1,A,X),
     slolem1(E2,A,Y).
@@ -82,15 +81,20 @@ term(X) :-
     compound(X),
     X =.. [P,A],
     member(P,[p,q,r]),
-    member(A,[x,y,z,a,b,c]).
+    member(A,[x,y,z,v,w,a,b,c]).
 
 
 term(X) :-
     compound(X),
     X =.. [P,A1,A2],
     member(P,[p,q,r]),
-    member(A1,[x,y,z,a,b,c]),
-    member(A2,[x,y,z,a,b,c]).
+    member(A1,[x,y,z,v,w,a,b,c]),
+    member(A2,[x,y,z,v,w,a,b,c]).
+
+
+%?- snf(exist(x,p(x)),X).
+%X = p(f) .
+%yes
 
 snf(X,Z) :-
     snf1(X,X1),
