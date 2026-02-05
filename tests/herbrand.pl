@@ -3,14 +3,21 @@
 :- use_module(list).
 
 %e.g. 
-ex(forall(x,imply(p(x),
+ex1(forall(x,exist(y,forall(x,exist(y,and(p(x,y),q(x,y))))))).
+
+ex2(forall(x,imply(p(x),
                   exist(y,
                           and( imply(q(x,y), p(a)),
                           forall(z, imply(q(y,z), p(x)))
                ))))).
 
-test(X) :-
-    ex(Y),
+test1(X) :-
+    ex1(Y),
+    write(Y),nl,
+    snf(Y,X).
+
+test2(X) :-
+    ex2(Y),
     write(Y),nl,
     snf(Y,X).
 
@@ -32,11 +39,12 @@ skolem(X,Y) :-
 
 skolem1(forall(V,E1),A,forall(V,Y)) :-
     skolem1(E1,[V|A],Y).
-skolem1(exist(V,E1),A,Y) :-
+skolem1(exist(V,E1),A,Z) :-
     uniquef(F),
     reverse(A,A1),
     Func =.. [F|A1],
-    subst(E1,V,Func,Y).
+    subst(E1,V,Func,Y),
+    skolem1(Y,A,Z).
 skolem1(and(E1,E2),A,and(X,Y)) :-
     skolem1(E1,A,X),
     slolem1(E2,A,Y).
