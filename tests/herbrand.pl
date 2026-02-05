@@ -1,5 +1,7 @@
 % ex Herbrand Thorem
 
+:- use_module(list).
+
 %e.g. 
 ex(forall(x,imply(p(x),
                   exist(y,
@@ -9,6 +11,7 @@ ex(forall(x,imply(p(x),
 
 test(X) :-
     ex(Y),
+    write(Y),nl,
     snf(Y,X).
 
 % 102 is ascii code of atom f
@@ -27,8 +30,20 @@ uniquef(X) :-
 skolem(X,Y) :-
     skolem1(X,[],Y). 
 
-skolem1(X,V,Y) :-
-    foo(X).
+skolem1(forall(V,E1),A,forall(V,Y)) :-
+    skolem1(E1,[V|A],Y).
+skolem1(exist(V,E1),A,Y) :-
+    uniquef(F),
+    reverse(A,A1),
+    Func =.. [F|A1],
+    subst(E1,V,Func,Y).
+skolem1(and(E1,E2),A,and(X,Y)) :-
+    skolem1(E1,A,X),
+    slolem1(E2,A,Y).
+skolem1(or(E1,E2),A,or(X,Y)) :-
+    skolem1(E1,A,X),
+    skolem1(E2,A,Y).
+skolem1(neg(E),A,neg(E)).
 
 alpha(forall(X,F), forall(X1,F1)) :-
     uniquev(X, X1),
@@ -70,8 +85,9 @@ term(X) :-
     member(A2,[x,y,z,a,b,c]).
 
 snf(X,Z) :-
-    snf1(X,Y),
-    alpha(Y,Z).
+    snf1(X,X1),
+    alpha(X1,X2),
+    skolem(X2,Z).
 
 snf1(X,X) :-
     term(X).
