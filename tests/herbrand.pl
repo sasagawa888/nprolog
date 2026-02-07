@@ -133,10 +133,10 @@ term(X) :-
 
 
 snf(X,Z) :-
-    snf1(X,X1),
-    alpha(X1,X2),
-    skolem(X2,X3),
-    prenex(X3,Z).
+    prenex(X,X1),
+    snf1(X1,X2),
+    alpha(X2,X3),
+    skolem(X3,Z).
 
 snf1(X,X) :-
     term(X).
@@ -195,13 +195,17 @@ prenex1(X,[],X) :-
     term(X).
 prenex1(forall(X,F),[[f,X]|V],F1) :-
     prenex1(F,V,F1).
-prenex1(exist(X,F),[[f,X]|V],F1) :-
+prenex1(exist(X,F),[[e,X]|V],F1) :-
     prenex1(F,V,F1).
 prenex1(and(E1,E2),V,and(X,Y)) :-
     prenex1(E1,V1,X),
     prenex1(E2,V2,Y),
     append(V1,V2,V).
 prenex1(or(E1,E2),V,or(X,Y)) :-
+    prenex1(E1,V1,X),
+    prenex1(E2,V2,Y),
+    append(V1,V2,V).
+prenex1(imply(E1,E2),V,imply(X,Y)) :-
     prenex1(E1,V1,X),
     prenex1(E2,V2,Y),
     append(V1,V2,V).
