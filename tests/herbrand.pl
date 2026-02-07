@@ -4,24 +4,17 @@
 
 %e.g. 
 ex1(exist(x,p(x))).
+ex2(exist(x,(forall(y,p(x,y))))).
 
-ex2(forall(x,imply(p(x),
+ex3(forall(x,imply(p(x),
                   exist(y,
                           and( imply(q(x,y), p(a)),
                           forall(z, imply(q(y,z), p(x)))
                ))))).
 
-test1(X) :-
-    ex1(Y),
-    write(Y),nl,
-    snf(Y,X).
-
-test2(X) :-
-    ex2(Y),
-    write(Y),nl,
-    snf(Y,X).
 
 % 102 is ascii code of atom f
+:- ctr_set(1,0).
 :- ctr_set(2,102).
 
 uniquev(X,Y) :-
@@ -52,54 +45,88 @@ skolem1(or(E1,E2),A,or(X,Y)) :-
     skolem1(E2,A,Y).
 skolem1(neg(E),A,neg(E)).
 
-alpha(forall(X,F), forall(X1,F1)) :-
-    uniquev(X, X1),
-    subst(F, X, X1, F1).
 
-alpha(exist(X,F), exist(X1,F1)) :-
+alpha(forall(X,F), forall(X1,F2)) :-
     uniquev(X, X1),
-    subst(F, X, X1, F1).
+    alpha(F,F1),
+    subst(F1, X, X1, F2).
 
-subst(X,Y,Z,X) :-
-    atomic(X),
-    X \=Y,!.
-subst(X,Y,Z,R) :-
+alpha(exist(X,F), exist(X1,F2)) :-
+    uniquev(X, X1),
+    alpha(F,F1),
+    subst(F1, X, X1, F2).
+
+alpha(and(A,B), and(A1,B1)) :-
+    alpha(A,A1),
+    alpha(B,B1).
+
+alpha(or(A,B), or(A1,B1)) :-
+    alpha(A,A1),
+    alpha(B,B1).
+
+alpha(imply(A,B), imply(A1,B1)) :-
+    alpha(A,A1),
+    alpha(B,B1).
+
+alpha(neg(A), neg(A1)) :-
+    alpha(A,A1).
+
+alpha(X,X) :-
+    atomic(X), !.
+
+alpha(X,Z) :-
     compound(X),
-    X =.. S,
-    subst1(S,Y,Z,S1),
-    R =.. S1.
+    X =.. [F|Args],
+    alpha_list(Args, Args1),
+    Z =.. [F|Args1].
 
-subst1([],Y,Z,[]).
-subst1([Y|Ss],Y,Z,[Z|S1]) :-
-    subst1(Ss,Y,Z,S1).
-subst1([S|Ss],Y,Z,[S2|S1]) :-
-    subst(S,Y,Z,S2),
-    subst1(Ss,Y,Z,S1).
+alpha_list([], []).
+alpha_list([A|As], [A1|As1]) :-
+    alpha(A, A1),
+    alpha_list(As, As1).
+
+
+subst(X, Y, Y1, Z) :-
+    X == Y, !,
+    Z = Y1.
+subst(X, Y, Y1, Z) :-
+    compound(X), !,
+    X =.. [F|Args],
+    subst_list(Args, Y, Y1, Args1),
+    Z =.. [F|Args1].
+subst(X, _Y, _Y1, X).
+
+subst_list([], _Y, _Y1, []).
+subst_list([A|As], Y, Y1, [B|Bs]) :-
+    subst(A, Y, Y1, B),
+    subst_list(As, Y, Y1, Bs).
+
+
 
 
 term(X) :-
     compound(X),
     X =.. [P,A],
     member(P,[p,q,r]),
-    member(A,[x,y,z,v,w,a,b,c]).
+    member(A,[x,y,z,a,b,c]).
 
 
 term(X) :-
     compound(X),
     X =.. [P,A1,A2],
     member(P,[p,q,r]),
-    member(A1,[x,y,z,v,w,a,b,c]),
-    member(A2,[x,y,z,v,w,a,b,c]).
+    member(A1,[x,y,z,a,b,c]),
+    member(A2,[x,y,z,a,b,c]).
 
 
 %?- snf(exist(x,p(x)),X).
 %X = p(f) .
 %yes
 
-snf(X,Z) :-
+snf(X,X2) :-
     snf1(X,X1),
-    alpha(X1,X2),
-    skolem(X2,Z).
+    alpha(X1,X2).
+    %skolem(X2,Z).
 
 snf1(X,X) :-
     term(X).
