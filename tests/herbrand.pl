@@ -39,7 +39,7 @@ skolem1(exist(V,E1),A,Y) :-
     subst(E1,V,Func,Y).
 skolem1(and(E1,E2),A,and(X,Y)) :-
     skolem1(E1,A,X),
-    slolem1(E2,A,Y).
+    skolem1(E2,A,Y).
 skolem1(or(E1,E2),A,or(X,Y)) :-
     skolem1(E1,A,X),
     skolem1(E2,A,Y).
@@ -107,26 +107,20 @@ subst_list([A|As], Y, Y1, [B|Bs]) :-
 term(X) :-
     compound(X),
     X =.. [P,A],
-    member(P,[p,q,r]),
-    member(A,[x,y,z,a,b,c]).
+    member(P,[p,q,r]).
 
 
 term(X) :-
     compound(X),
     X =.. [P,A1,A2],
-    member(P,[p,q,r]),
-    member(A1,[x,y,z,a,b,c]),
-    member(A2,[x,y,z,a,b,c]).
+    member(P,[p,q,r]).
 
 
-%?- snf(exist(x,p(x)),X).
-%X = p(f) .
-%yes
-
-snf(X,X2) :-
+snf(X,Z) :-
     snf1(X,X1),
-    alpha(X1,X2).
-    %skolem(X2,Z).
+    alpha(X1,X2),
+    skolem(X2,X3),
+    prenex(X3,Z).
 
 snf1(X,X) :-
     term(X).
@@ -155,3 +149,31 @@ snf1(neg(neg(E)),E).
 snf1(neg(and(E1,E2)),or(neg(E1),neg(E2))) :-
     term(E1),
     term(E2).
+
+foo(forall(x0,or(neg(p(x0)),and(or(neg(q(x0,f(x0))),p(a)),forall(z2,or(neg(q(f(x0),z2)),p(x0)))))) ).
+
+
+prenex(X,Z) :-
+    prenex1(X,V,Y),
+    prenex2(V,Y,Z).
+
+% find all bound var and body
+prenex1(X,[],X) :-
+    term(X).
+prenex1(forall(X,F),[X|V],F1) :-
+    prenex1(F,V,F1).
+prenex1(and(E1,E2),V,and(X,Y)) :-
+    prenex1(E1,V1,X),
+    prenex1(E2,V2,Y),
+    append(V1,V2,V).
+prenex1(or(E1,E2),V,or(X,Y)) :-
+    prenex1(E1,V1,X),
+    prenex1(E2,V2,Y),
+    append(V1,V2,V).
+prenex1(neg(E),V,neg(X)) :-
+    prenex1(E,V,X).
+
+% add prenex forall
+prenex2([],X,X).
+prenex2([V|Vs],X,forall(V,Y)) :-
+    prenex2(Vs,X,Y).
