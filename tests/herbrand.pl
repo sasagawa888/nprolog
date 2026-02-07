@@ -12,6 +12,7 @@ ex3(forall(x,imply(p(x),
                           forall(z, imply(q(y,z), p(x)))
                ))))).
 
+ex4(p(a)).
 
 % 102 is ascii code of atom f
 :- ctr_set(1,0).
@@ -44,6 +45,8 @@ skolem1(or(E1,E2),A,or(X,Y)) :-
     skolem1(E1,A,X),
     skolem1(E2,A,Y).
 skolem1(neg(E),A,neg(E)).
+skolem1(X,_,X) :-
+    term(X).
 
 
 alpha(forall(X,F), forall(X1,F2)) :-
@@ -131,20 +134,39 @@ snf1(forall(E1,E2),forall(E1,X)) :-
 snf1(exist(E1,E2),exist(E1,X)) :-
     snf1(E2,X).
 
+
+snf1(or(E1,and(E2,E3)),A) :-
+    snf1(E1,X),
+    snf1(E2,Y),
+    snf1(E3,Z),
+    snf1(and(or(X,Y),or(X,Z)),A).
+
+snf1(or(and(E1,E2),E3),A) :-
+    snf1(E1,X),
+    snf1(E2,Y),
+    snf1(E3,Z),
+    snf1(and(or(X,Z),or(Y,Z)),A).
+
+
 snf1(and(E1,E2),and(X,Y)) :-
     snf1(E1,X),
     snf1(E2,Y).
-
 
 snf1(or(E1,E2),or(X,Y)) :-
     snf1(E1,X),
     snf1(E2,Y).
 
-snf1(imply(E1,E2),or(neg(X),Y)) :-
+snf1(imply(E1,E2),Z) :-
     snf1(E1,X),
-    snf1(E2,Y).
+    snf1(E2,Y),
+    snf1(or(neg(X),Y),Z).
 
-snf1(neg(neg(E)),E).
+
+snf1(neg(E),neg(X)) :-
+    snf1(E,X).
+
+snf1(neg(neg(E)),X) :-
+    snf1(E,X).
 
 snf1(neg(and(E1,E2)),or(neg(E1),neg(E2))) :-
     term(E1),
