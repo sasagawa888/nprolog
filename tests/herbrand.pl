@@ -185,17 +185,17 @@ snf1(neg(and(E1,E2)),or(neg(E1),neg(E2))) :-
     term(E1),
     term(E2).
 
-foo(forall(x0,or(neg(p(x0)),and(or(neg(q(x0,f(x0))),p(a)),forall(z2,or(neg(q(f(x0),z2)),p(x0)))))) ).
-
 
 prenex(X,Z) :-
     prenex1(X,V,Y),
     prenex2(V,Y,Z).
 
-% find all bound var and body
+% find forall var and body
 prenex1(X,[],X) :-
     term(X).
-prenex1(forall(X,F),[X|V],F1) :-
+prenex1(forall(X,F),[[f,X]|V],F1) :-
+    prenex1(F,V,F1).
+prenex1(exist(X,F),[[f,X]|V],F1) :-
     prenex1(F,V,F1).
 prenex1(and(E1,E2),V,and(X,Y)) :-
     prenex1(E1,V1,X),
@@ -210,5 +210,8 @@ prenex1(neg(E),V,neg(X)) :-
 
 % add prenex forall
 prenex2([],X,X).
-prenex2([V|Vs],X,forall(V,Y)) :-
+prenex2([[f,V]|Vs],X,forall(V,Y)) :-
     prenex2(Vs,X,Y).
+prenex2([[e,V]|Vs],X,exist(V,Y)) :-
+    prenex2(Vs,X,Y).
+
