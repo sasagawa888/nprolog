@@ -161,6 +161,17 @@ snf1(or(and(E1,E2),E3),A) :-
     snf1(and(or(X,Z),or(Y,Z)),A).
 
 
+snf1(and(E1,E2),X) :-
+    snf1(E1,X),
+    snf1(E2,Y),
+    tautology(Y).
+
+snf1(and(E1,E2),Y) :-
+    snf1(E1,X),
+    snf1(E2,Y),
+    tautology(X).
+
+
 snf1(and(E1,E2),and(X,Y)) :-
     snf1(E1,X),
     snf1(E2,Y).
@@ -184,6 +195,27 @@ snf1(neg(neg(E)),X) :-
 snf1(neg(and(E1,E2)),or(neg(E1),neg(E2))) :-
     term(E1),
     term(E2).
+
+
+tautology(X) :-
+    tautology1(X,L),!,
+    tautology2(L).
+
+
+tautology1(or(X,Y),[X|Z]) :-
+    tautology1(Y,Z).
+tautology1(X,[X]) :-
+    term(X).
+tautology1(neg(X),[neg(X)]) :-
+    term(X).
+
+tautology2([X|Rest]) :-
+    member(neg(X),Rest).
+tautology2([neg(X)|Rest]) :-
+    member(X,Rest).
+tautology2([_,X|Rest]) :-
+    tautology2([X|Rest]).
+
 
 
 prenex(X,Z) :-
