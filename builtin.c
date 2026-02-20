@@ -1830,6 +1830,12 @@ int b_reconsult(int arglist, int rest, int th)
 	    }
 	    // DCG syntax e.g. a-->b.
 	    if (dcgp(clause)) {
+		atom = cadr(clause);
+		if (!memberp(atom, reconsult_list)) {
+		reconsult_list = cons(atom, reconsult_list);
+		SET_CAR(atom, NIL);
+		SET_ARITY(atom, NIL);
+	    }
 		operate(clause, th);
 		goto skip;
 	    }
