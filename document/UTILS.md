@@ -1,4 +1,4 @@
-# Token
+# Utils
 
 A small parsing toolkit for N-Prolog.
 
@@ -10,7 +10,7 @@ tokenize/2: tokenize a list of character codes into a token list.
 
 ## Usage
 ```
-?- use_module(token).
+?- use_module(utils).
 yes
 ```
 

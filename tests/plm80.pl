@@ -1,7 +1,7 @@
 %PLM80
 
 
-:- use_module(token).
+:- use_module(utils).
 :- use_module(dcg).
 
 test(A) :-

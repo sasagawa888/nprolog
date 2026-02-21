@@ -2,7 +2,7 @@
 % © 1986, 1994 The MIT Press
 % Leon Sterling and Ehud Shapiro
 
-:- use_module(token).
+:- use_module(utils).
 :- use_module(dcg).
 
 test(A) :-
@@ -61,3 +61,4 @@ comparison_op('<') --> ['<'].
 comparison_op('>=') --> ['>='].
 comparison_op('<=') --> ['<='].
         
+%---------------------------------------------
