@@ -31,6 +31,9 @@ is_space(32).  % space
 
 % --- token ---
 token(':=', [58,61|Cs], Cs) :- !.
+token('/=', [47,61|Cs], Cs) :- !.
+token('<=', [60,61|Cs], Cs) :- !.
+token('>=', [62,61|Cs], Cs) :- !.
 token(S, [C|Cs], Cs) :- one_char_sym(C, S), !.
 token(N, In, Out) :- read_digits(In, Ds, Out), Ds \= [], number_codes(N, Ds), !.
 token(A, In, Out) :- read_word(In, Cs, Out), Cs \= [], atom_codes(A, Cs), !.
@@ -45,6 +48,7 @@ one_char_sym(43,'+').
 one_char_sym(42,'*').
 one_char_sym(60,'<').
 one_char_sym(62,'>').
+one_char_sym(58,':').
 
 % digits
 read_digits([C|Cs], [C|Ds], Out) :-
