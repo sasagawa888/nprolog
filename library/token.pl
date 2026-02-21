@@ -30,18 +30,21 @@ is_space(13).  % \r
 is_space(32).  % space
 
 % --- token ---
-token(sym(S), [C|Cs], Cs) :- one_char_sym(C, S), !.
-token(num(N), In, Out) :- read_digits(In, Ds, Out), Ds \= [], number_codes(N, Ds), !.
-token(word(A), In, Out) :- read_word(In, Cs, Out), Cs \= [], atom_codes(A, Cs), !.
+token(':=', [58,61|Cs], Cs) :- !.
+token(S, [C|Cs], Cs) :- one_char_sym(C, S), !.
+token(N, In, Out) :- read_digits(In, Ds, Out), Ds \= [], number_codes(N, Ds), !.
+token(A, In, Out) :- read_word(In, Cs, Out), Cs \= [], atom_codes(A, Cs), !.
 
-% 記号（必要に応じて増やす）
+% a symbol
 one_char_sym(40,'(').
 one_char_sym(41,')').
 one_char_sym(44,',').
 one_char_sym(46,'.').
 one_char_sym(59,';').
-one_char_sym(61,'=').   % '='
-one_char_sym(43,'+').   % '+'
+one_char_sym(43,'+').  
+one_char_sym(42,'*').
+one_char_sym(60,'<').
+one_char_sym(62,'>').
 
 % digits
 read_digits([C|Cs], [C|Ds], Out) :-
