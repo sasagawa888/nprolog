@@ -81,3 +81,6 @@ no
 When I typed a semicolon and backtracked, some sentences came out.
 The meaning is strange, but it follows the grammatical rules. 
 
+## Note:
+The current DCG implementation does not support the ISO conditional form (If -> Then ; Else) inside grammar bodies.
+This feature depends on subsumption-based analysis, which is intentionally not implemented.
