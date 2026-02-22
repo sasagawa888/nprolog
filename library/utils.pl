@@ -1,3 +1,5 @@
+:- module(utils,[read_codes/2,tokenize/2]).
+
 read_codes(Stream, Codes) :-
     get_code(Stream, C),
     ( C =  end_of_file ->
@@ -49,6 +51,7 @@ one_char_sym(42,'*').
 one_char_sym(60,'<').
 one_char_sym(62,'>').
 one_char_sym(58,':').
+one_char_sym(61,'=').
 
 % digits
 read_digits([C|Cs], [C|Ds], Out) :-

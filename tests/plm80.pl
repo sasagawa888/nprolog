@@ -7,7 +7,7 @@
 test(A) :-
     open(S,'./tests/plm.pl',r),
     read_codes(S,C),
-    tokenize(C,T),
+    tokenize(C,T),write(T),nl,
     compile(T,A),
     close(S).
 
@@ -15,19 +15,35 @@ compile(T,A) :-
     parse(T,A).
 
 parse(S,A) :-
-    phrase(program(A),S).
+    phrase(program(A),S,R),write(R),nl.
 
 program(A) --> pl_module(A).
-program(A) --> statements(A).
+program(A) --> block(A).
 
+pl_module(module(X,S)) -->
+    identifier(X), [':'],
+    ['DO'], [';'],
+    statements(S),
+    ['END'], identifier(X), [';'].
 
-pl_module(module(X,S)) --> 
-    identifier(X),[:],statements(S),['END'],identifier(X),[;].
 
 statements([])  --> [].
 statements([S|Ss]) --> statement(S),statements(Ss).
+
+statement(block(S)) -->
+    block(S).
+statement(while(V,S)) -->
+    ['DO'],['WHILE'],expression(V),[';'],statements(S),['END'],[';'].
+statement(if(V,S1,S2)) -->
+    ['IF'],test(V),['THEN'],statement(S1),['ELSE'],statement(S2).    
+statement(if(V,S)) -->
+    ['IF'],test(V),['THEN'],statement(S).
 statement(assign(X,V)) -->
-    identifier(X),[':='],expression(V),[';'].
+    identifier(X),['='],expression(V),[';'].
+
+
+block(S) -->
+    ['DO'],[';'],statements(S),['END'],[';'].
 
 
 expression(X) --> pl_constant(X).
@@ -45,6 +61,17 @@ pl_constant(number(X)) --> pl_integer(X).
 
 identifier(X) --> [X],{atom(X)}.
 pl_integer(X) --> [X],{integer(X)}.
+
+
+test(compare(Op,X,Y)) -->
+    expression(X),comparison_op(Op),expression(Y).
+
+comparison_op('=') --> ['='].
+comparison_op('/=') --> ['/='].
+comparison_op('>') --> ['>'].
+comparison_op('<') --> ['<'].
+comparison_op('>=') --> ['>='].
+comparison_op('<=') --> ['<='].
 
 /*
 pl_program(A) -->
