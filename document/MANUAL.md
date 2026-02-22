@@ -64,15 +64,17 @@ Checks if `T1` succeeds or is identical to `T2` in standard order.
 
 ### □ ['File']
 Loads Prolog code from a file using consult behavior.
+You can specify multiple files:
+['file1.pl', 'file2.pl'].
 
 
 ### □ [-'File']
 Loads Prolog code using reconsult behavior.  
 Existing clauses of the same predicate are replaced.
-
 Example:
 [-'program.pl'].
-
+Multiple files are also allowed:
+[-'file1.pl', -'file2.pl'].
 
 ### □ abolish(Name/Arity)
 Removes all clauses of the specified predicate from the database.
