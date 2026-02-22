@@ -1845,7 +1845,10 @@ int b_reconsult(int arglist, int rest, int th)
 	    if (compiledp(clause)) {
 		goto skip;
 	    }
-	    //delete old definition and consult
+	    // error builtin in file
+		if (builtinp(clause))
+	    exception(BUILTIN_EXIST, ind, clause, th);
+		//delete old definition and consult
 	    if (predicatep(clause) || user_operation_p(clause)) {
 		clause1 = copy_heap(clause);
 		if (atomp(clause1))
