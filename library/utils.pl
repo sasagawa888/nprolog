@@ -13,6 +13,9 @@ read_codes(Stream, Codes) :-
 tokenize(Codes, Tokens) :-
     tokens(Tokens, Codes, []).
 
+tokens(T, In, Out) :-
+    skip_cm(In,In1),
+    tokens(T,In1,Out).
 tokens([T|Ts], In, Out) :-
     skip_ws(In, In1),
     token(T, In1, In2), !,
@@ -31,9 +34,16 @@ is_space(10).  % \n
 is_space(13).  % \r
 is_space(32).  % space
 
+% --- comment ---
+skip_cm([47,42|Cs], Rest) :-
+    skip_cm1(Cs,Rest).
+skip_cm1([42,47|Cs],Cs).
+skip_cm1([C|Cs],Rest) :-
+    skip_cm1(Cs,Rest).
+skip_cm1([], []) :- !.
+
 % --- token ---
-token(':=', [58,61|Cs], Cs) :- !.
-token('/=', [47,61|Cs], Cs) :- !.
+token('<>', [60,62|Cs], Cs) :- !.
 token('<=', [60,61|Cs], Cs) :- !.
 token('>=', [62,61|Cs], Cs) :- !.
 token(S, [C|Cs], Cs) :- one_char_sym(C, S), !.
