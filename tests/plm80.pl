@@ -7,7 +7,7 @@
 test(A) :-
     open(S,'./tests/plm.pl',r),
     read_codes(S,C),
-    tokenize(C,T),write(T),nl,
+    tokenize(C,T),
     compile(T,A),
     close(S).
 
@@ -15,7 +15,7 @@ compile(T,A) :-
     parse(T,A).
 
 parse(S,A) :-
-    phrase(program(A),S,R),write(R),nl.
+    phrase(program(A),S).
 
 program(A) --> pl_module(A).
 program(A) --> block(A).
