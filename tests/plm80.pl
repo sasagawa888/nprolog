@@ -320,9 +320,6 @@ emit(Item, [Item|Rest], Rest).
 emit_label(L, Asm0, Asm) :-
     emit(label(L), Asm0, Asm).
 
-%member(X, [X|_]).
-%member(X, [_|Xs]) :- member(X, Xs).
-
 list_length([], 0).
 list_length([_|Xs], N) :- list_length(Xs, N1), N is N1 + 1.
 

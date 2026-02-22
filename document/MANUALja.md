@@ -540,7 +540,7 @@ Xが代入された変数かどうかを調べる。
 - append(L1,L2,X)
 リストL1とL2を連結したリストをXにユニフィケーションします。
 
-- bitween(start,end,Value)
+- between(start,end,Value)
 整数startから整数endまでValueにユニフィケーションします。
 
 - char_code(E,X)

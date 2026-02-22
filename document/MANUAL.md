@@ -548,7 +548,7 @@ Enclose the atom and function in quotation marks.
 - `append(L1, L2, X)`  
   Unifies `X` with the list that results from concatenating lists `L1` and `L2`.
 
-- `bitween(start, end, Value)`  
+- `between(start, end, Value)`  
   Unifies `Value` with integers from `start` to `end`.
 
 - `char_code(E, X)`  
