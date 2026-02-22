@@ -1,67 +1,85 @@
 # N-Prolog User's manual
 
-### □ ;
-Represents the separation between goals. Disjunction (OR).
+# N-Prolog User's Manual
+
+## Built-in Operators
 
 ### □ ,
-Represents the separation between goals. Conjunction (AND).
+Represents conjunction (AND).  
+`P, Q` succeeds if both `P` and `Q` succeed.
+
+### □ ;
+Represents disjunction (OR).  
+`P ; Q` tries `P`, and on backtracking (or if `P` fails) tries `Q`.  
+Note: At the top level, `;` is also used to request the next solution.
 
 ### □ E1 < E2
-Checks if the value of `E1` is less than the value of `E2`.
+Checks if the numeric value of `E1` is less than the numeric value of `E2`.
 
 ### □ T1 = T2
 Attempts to unify `T1` and `T2`.
 
-### □ T1 \\= T2
-Fails if `T1` unifies with `T2`.
+### □ T1 \= T2
+Succeeds if `T1` does not unify with `T2`.
 
 ### □ Struct =.. List
 Known as "univ". Converts a structure to a list or a list to a structure.
 
 ### □ E1 =< E2
-Checks if the value of `E1` is less than or equal to the value of `E2`.
+Checks if `E1` is less than or equal to `E2`.
 
 ### □ E1 > E2
-Checks if the value of `E1` is greater than the value of `E2`.
+Checks if `E1` is greater than `E2`.
 
 ### □ E1 >= E2
-Checks if the value of `E1` is greater than or equal to the value of `E2`.
+Checks if `E1` is greater than or equal to `E2`.
 
 ### □ E1 =:= E2
-Checks if the value of `E1` is equal to the value of `E2`.
+Checks if the numeric values of `E1` and `E2` are equal.
 
-### □ E1 =\\= E2
-Checks if the value of `E1` is not equal to the value of `E2`.
+### □ E1 =\= E2
+Checks if the numeric values of `E1` and `E2` are not equal.
 
 ### □ T1 == T2
-Checks if `T1` and `T2` are identical (equivalent).
+Checks if `T1` and `T2` are identical (no unification performed).
 
-### □ T1 \\== T2
-Checks if `T1` and `T2` are not identical (not equivalent).
+### □ T1 \== T2
+Checks if `T1` and `T2` are not identical.
 
 ### □ T1 @< T2
-Checks if `T1` precedes `T2`.
+Checks if `T1` precedes `T2` in standard order.
 
 ### □ T1 @=< T2
-Checks if `T1` precedes `T2` or is equal to it.
+Checks if `T1` precedes or is identical to `T2` in standard order.
 
 ### □ T1 @> T2
-Checks if `T1` succeeds `T2`.
+Checks if `T1` succeeds `T2` in standard order.
 
 ### □ T1 @>= T2
-Checks if `T1` succeeds `T2` or is equal to it.
+Checks if `T1` succeeds or is identical to `T2` in standard order.
 
-### □ [Filename]
-Read from a file into a database using a consult predicate.
--When using Filename, the resoncult predicate is used.
-You can specify multiple files. [Filename1, filename2, ...] 
+---
 
-### □ abolish(name/Arity)
-Removes all clauses with the specified name arity from the data berth. 
+## File Loading
+
+### □ ['File']
+Loads Prolog code from a file using consult behavior.
+
+
+### □ [-'File']
+Loads Prolog code using reconsult behavior.  
+Existing clauses of the same predicate are replaced.
+
+Example:
+[-'program.pl'].
+
+
+### □ abolish(Name/Arity)
+Removes all clauses of the specified predicate from the database.
 
 ### □ abort
-Stop the current program. Return to the interpreter after the program ends.
-If the program is compiled, abort restarts its goal. 
+Stops the current program and returns to the interpreter.  
+If the program is compiled, `abort` restarts its goal.
 
 ### □ ansi_cuu(N)
 Move the cursor up N lines. 
@@ -120,14 +138,13 @@ The following are standard values only and may differ depending on the model.
 - 46 Background color light blue
 - 47 Background color white 
 
+### □ arg(N, Term, X)
+Unifies `X` with the Nth argument of `Term`.  
+Arguments are numbered from 1.
 
-### □ arg(N,Term,X)
-Unify X to the Nth value of the term.
-(Arguments are numbered from 1 in the increasing direction.) 
+### □ arg0(N, Term, X)
+Unifies `X` with the argument at index N (0-based).
 
-### □ arg0(N,Term,X)
-Unify X to the value of the N + 1th argument of the term.
-(Arguments are numbered from 0 in the increasing direction.) 
 
 ### □ assert(Clause)
 Add a clause to the end of the predicate. 
@@ -148,10 +165,8 @@ Convert an atom to a string or convert a string to an atom.
 Check if X is an atom data type.
 
 ### □ break
-Suspend program execution and display an interpreter prompt.
-The program can be restarted by the following types: 
-
-end_of_file
+Suspends execution and displays an interpreter prompt.  
+Type `end_of_file` to resume execution.
 
 ### □ call(P)
 Call the interpreted goal P. 
@@ -159,11 +174,10 @@ Call the interpreted goal P.
 ### □ chdir(Path)
 Change or revert to the current directory.
 
-### □ clause(Head,Body)
-Unify Head and Body to the head and body of the node, respectively.
-Head must be assigned.
+### □ clause(Head, Body)
+Unifies `Body` with the body of a clause whose head unifies with `Head`.  
+`Head` must be instantiated.
 example 
-
 
 ```
 ?- assert((foo(X) :- write(X))).
@@ -247,9 +261,9 @@ EDITOR=emacs
 ### □ edit(Filename, Option)
 Option is an atom, either `r` or `c`. If it's `r`, the file is loaded using `reconsult`. If it's `c`, the file is loaded using `consult`.
 
+### □ eq(X, Y)
+Succeeds if `X` and `Y` are the same object (same address).
 
-### □ eq(X,Y)
-Check if X and Y are the same data object and are stored at the same address. 
 
 ### □ erase(Ref)
 Removes the entry stored under the specified reference number.
@@ -260,8 +274,9 @@ Removes all entries stored under the specified key.
 ### □ errcode(Code)
 Returns the code of the most recent error message.
 
-### □ expand_term(Term,Newterm)
-DCG: Converts a term in a limited clause grammar to an equivalent Prolog term. 
+### □ expand_term(Term, NewTerm)
+DCG: Converts a DCG rule into an equivalent Prolog clause.
+
 
 ### □ fileerrors(Old, New)
 Specifies whether or not to output Linux I/O error messages, or checks the status of this setting.
@@ -291,12 +306,12 @@ When the argument is full, the cells that are no longer needed in the heap area 
 Extension: Providing the atom on as an argument enables message display upon garbage collection. Providing the atom off disables the message.
 
 ### □ get(Char)
-Read the next character from a standard input device, skipping unprinted characters,
-Unify the ASCII value with Char. 
+Reads the next printable character from standard input and unifies its ASCII value with `Char`.
 
+ 
 ### □ get0(Char)
-Read the next character from a standard input device, skipping unprinted characters,
-Unify the ASCII value with Char. get0 does not skip non-printing characters. 
+Reads the next character from standard input and unifies its ASCII value with `Char`.  
+Unlike `get/1`, it does not skip non-printing characters.
 
 ### □ get0_noecho(Char)
 Read the following characters from the standard input device and unify the ASCII value to Char.
@@ -342,8 +357,10 @@ The sorted list is returned to L2. Even if it is duplicated, it won't be united.
 ### □ leash(Mode)
 Constrain the port to the specified Mode. 
 
-### □ length(L,N)
-Change the length of the list back to N. 
+### □ length(List, N)
+Succeeds if `List` has length `N`.  
+Can also generate a list of length `N`.
+
 
 ### □ listing
 Write all current database predicates to standard output. 
@@ -352,9 +369,8 @@ Write all current database predicates to standard output.
 ### □ listing([Name/Arity,Name/Arity])
 Write all clauses to the specified predicate or list of predicates in the current database to standard output. 
 
-### □ list_text(List,AtomString)
-Convert a character list to an atom (if the atom already exists) or a string, or convert an atom or string
-Convert to a character list. 
+### □ list_text(List, AtomOrString)
+Converts between a character list and an atom or string.
 
 ### □ mkdir(Path)
 Create a new directory. 
@@ -401,8 +417,9 @@ Reads a string from the specified file.
 ### □ record_after(Ref, Term, Newref)
 Adds a term after Ref and returns the new reference number for that term.
 
-### □ recorda(Key,Term,Ref)
-Predicates a term and returns a new reference number for that term. 
+### □ recorda(Key, Term, Ref)
+Records `Term` under `Key` and returns the reference number `Ref`.
+
 
 ### □ recorded(Key, Term, Ref)
 Returns the term stored under the specified key and its reference number while backtracking.
@@ -412,6 +429,8 @@ Adds a term at the end of the predicate and returns the reference number assigne
 
 ### □ recordh(Table_name,Sort_key,Term)
 Record the term in the hash table. 
+
+
 
 ### □ ref(X)
 Check if X is a reference number. 
@@ -450,14 +469,15 @@ Save the internal database with the specified program name, Name.
 ### □ shell(Command)
 Execute the shell command and succeed.
 
-### □sort(L1.L2)
-Sort list L1 into standard order, eliminate duplication and return sorted list to L2. 
+### □ sort(L1, L2)
+Sorts list `L1` into standard order, removes duplicates, and returns the result in `L2`.
+
 
 ### □ spy(Name/Arity)
 Set a predicate as a debug spy point. 
 
 ### □ statistics(Atom/Val)
-Returns information about the usage of the Prolog system.
+Returns information about system usage.
 
 Atom -> Val
 free -> The number of free cells in the heap area
@@ -466,14 +486,14 @@ sp -> The value of the stack pointer
 gc -> The number of times the garbage collector (GC) has been triggered
 ac -> The value of th variant pointer
 
-### □ stdin(FileHandle,Goal)
-Change standard input during that goal.
+### □ stdin(FileHandle, Goal)
+Temporarily redirects standard input while executing `Goal`.
 
-### □ stdout(FileHandle.Goal)
-Change standard input during that goal.
+### □ stdout(FileHandle, Goal)
+Temporarily redirects standard output while executing `Goal`.
 
-### □ stdinout(InFile,OutFile,goal)
-During that goal, change standard input and standard output. 
+### □ stdinout(InFile, OutFile, Goal)
+Temporarily redirects standard input and output while executing `Goal`.
 
 ### □ string(X)
 Check if X is a string. 
@@ -524,7 +544,8 @@ Turn on the debugger.
 Goals are always successful. 
 
 ### □ var(X)
-Check if X is the assigned variable. 
+Succeeds if `X` is an unbound variable.
+
 
 ### □ write(Term)
 Write to standard output device. 
@@ -539,6 +560,8 @@ Enclose the atom and function in quotation marks.
 ### □ writeq(Time,Term)
 Write the term to the specified file so that the term can be read as a Prolog term
 Enclose the atom and function in quotation marks. 
+
+
 
 ## Extended Predicates
 
@@ -582,7 +605,7 @@ Enclose the atom and function in quotation marks.
   Specify whether to output the existance error message or check the current setting.
 An error message is output with yes, and no error message is output with no. 
 
-## function
+## Arithmetic Operators and Functions
 
 - pi Constant representing the value of π (pi).
 - X + Y Addition.
@@ -832,6 +855,7 @@ See Chapter 7 https://stacks.stanford.edu/file/druid:bv252vf8932/bv252vf8932.pdf
 ## Edlog editor
 Edlog is editor for N-Prolog.
 
+
 ### invoke
 `edlog`  or `edlog filename` onterminal.
 
@@ -974,7 +998,7 @@ writeq/2
 See document/SUPERSET.md
 
 
-# function
+# Arithmetic Operators and Functions
 ```
 pi  constant 3.1415...
 X + Y
