@@ -993,32 +993,6 @@ writeq/2
 # 組み込み述語（拡張）
 document/SUPERSET.mdをご参照ください。
 
-# wiringPi 
-ラズペリーPIにおいてはwiringPiのための組み込み述語が含まれます。
-
-```
-N-Prolog <==================================> C
-wiringpi_spi_setup(ch speed) <===> wiringPiSPISetup (SPI_CH, SPI_SPEED)
-wiringpi_setup_gpio  <===> wiringPiSetupGpio()
-pin_mode(n, 'output) <====> pinMode(n, OUTPUT) or 'input -> INPUT 'pwm-output -> PWM_OUTPUT
-digital_write(n, v) <===> digitalWrite(n, v)
-digital_write_byte(v) <===> digitalWriteByte(value)
-digital_read(pin) <===> digitalRead(pin)
-delay(howlong) <===> void delay(unsigned int howLong)
-delay_microseconds(howlong) <===> void delay_microseconds(unsigned int howLong)
-pull_up_dn_control(pin, pud) <===> pullUpDnControl(pin,pud)
-pwm_set_mode('pwm_mode_ms) <===> pwmSetMode(PWM_MODE_MS); or 'pwm_mode_bal -> PWM_MODE_BAL
-pwm_set_clock(n) <===> pwmSetClock(n)
-pwm_set_range(n) <===> pwmSetRange(n)
-pwm_write(pin, value) <===> pwmWrite(pin , value)
-
-timer_microseconds/1
-usage:  timer_microseconds(on).   timer on
-        timer_microseconds(off).  timer off
-        timer_microsecons(X).     unify X elapsed time. float number ,unit seconds , valid digits microsecnods
-        see tests/measure.pl
-```
-
 
 # 関数
 ```
@@ -1034,7 +1008,7 @@ X >> Y         XをYだけ右へビットシフトする。（整数のみ）
 X mod Y        XをYで割った剰余（整数のみ）
 X /\ Y         論理積
 X \/ Y         論理和
-\X  complement
+\X  complement ビットごとの補数（ビット反転）
 abs(X)         Xの値の絶対値
 sin(X)　       Xの正弦関数
 asin(X)　      Xの逆正弦関数
