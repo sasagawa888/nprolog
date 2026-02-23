@@ -2026,7 +2026,7 @@ int subsumes_conversion(int x, int th)
 
 int b_subsumes_term(int arglist, int rest, int th)
 {
-    int n, ind, arg1, arg2;
+    int n, ind, arg1, arg2, save;
 
     n = length(arglist);
     ind = makeind("subsumes_term", n, th);
@@ -2035,8 +2035,11 @@ int b_subsumes_term(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
 	arg2 = subsumes_conversion(arg2,th);
-	if(unify(arg1,arg2,th) == YES)
+	save = sp[th];
+	if(unify(arg1,arg2,th) == YES){
+		unbind(save,th);
 		return (prove_all(rest, sp[th], th));
+	}
 	else 
 		return NO;
     }
