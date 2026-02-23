@@ -495,7 +495,7 @@ void init_operator(void)
     defoperator("/\\", f_logicaland, 500, YFX, 0);
     defoperator("\\/", f_logicalor, 500, YFX, 0);
     defoperator("\\", f_complement, 200, FY, 0);
-	defoperator("xor", f_xor, 400, YFX, 0);
+    defoperator("xor", f_xor, 400, YFX, 0);
     return;
 }
 
@@ -988,11 +988,11 @@ int f_xor(int x, int y, int th)
 	exception(INSTANTATION_ERR, eval_context, y, th);
     if (!integerp(x))
 	exception(NOT_INT, eval_context, x, th);
-    if (!integerp(y)){
+    if (!integerp(y)) {
 	exception(NOT_INT, eval_context, y, th);
-	}
+    }
 
-	return(makeint(get_int(x) ^ get_int(y)));
+    return (makeint(get_int(x) ^ get_int(y)));
 }
 
 

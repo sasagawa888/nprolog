@@ -302,7 +302,7 @@ void usage()
 {
     printf("List of options:\n");
     printf("-c filename -- NPL starts after reading the file.\n");
-	printf("-d          -- string is double quote.\n");
+    printf("-d          -- string is double quote.\n");
     printf("-h          -- display help.\n");
     printf("-m N        -- NPL runs with N(30>=N>=10) mega cells.\n");
     printf("-n          -- NPL runs with network mode.\n");
@@ -368,8 +368,8 @@ int main(int argc, char *argv[])
 	    init_creceiver();
 	    break;
 	case 'd':
-		string_flag = 1;
-		break;
+	    string_flag = 1;
+	    break;
 	default:
 	    usage();
 	    exit(EXIT_FAILURE);
@@ -464,7 +464,7 @@ void init_repl(void)
     for (i = 0; i <= thread_num; i++) {
 	wp[i] = wp_min[i];
     }
-	open_flag = 0;
+    open_flag = 0;
     ctrl_c_flag = 0;
     compiled_flag = 0;
     fskip_flag = OFF;

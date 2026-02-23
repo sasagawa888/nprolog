@@ -2270,7 +2270,7 @@ void help(void)
 	  "CTRL+G  cancel command\n" "--- enter any key to exit help ---");
     CHECK(refresh);
     CHECK(getch);
-	display_header();
+    display_header();
     display_screen();
     restore_cursol();
 }

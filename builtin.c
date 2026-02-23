@@ -31,7 +31,7 @@ void init_builtin(void)
     definfix("\\==", b_n_notequalp, 700, XFX);
     definfix("\\=", b_n_notunify, 700, XFX);
     definfix("=..", b_n_univ, 700, XFX);
-	definfix("->", b_ifthen, 900, XFY);
+    definfix("->", b_ifthen, 900, XFY);
     definfix("not", b_not, 900, FY);
 
     defbuiltin("!", b_n_cut, 0);
@@ -142,7 +142,7 @@ void init_builtin(void)
     defbuiltin("recordh", b_recordh, 4);
     defbuiltin("ref", b_ref, 1);
     defbuiltin("retract", b_retract, 1);
-	defbuiltin("retractall", b_retractall, 1);
+    defbuiltin("retractall", b_retractall, 1);
     defbuiltin("retrieveh", b_retrieveh, 3);
     defbuiltin("removeh", b_removeh, 3);
     defbuiltin("removeallh", b_removeallh, 2);
@@ -1702,7 +1702,7 @@ int b_consult(int arglist, int rest, int th)
     n = length(arglist);
     ind = makeind("consult", n, th);
     execute_list = NIL;
-	compiler_flag = 0;
+    compiler_flag = 0;
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
@@ -1831,13 +1831,13 @@ int b_reconsult(int arglist, int rest, int th)
 	    // DCG syntax e.g. a-->b.
 	    if (dcgp(clause)) {
 		atom = cadr(clause);
-		if(predicatep(atom))
-			atom = car(atom);
+		if (predicatep(atom))
+		    atom = car(atom);
 		if (!memberp(atom, reconsult_list)) {
-		reconsult_list = cons(atom, reconsult_list);
-		SET_CAR(atom, NIL);
-		SET_ARITY(atom, NIL);
-	    }
+		    reconsult_list = cons(atom, reconsult_list);
+		    SET_CAR(atom, NIL);
+		    SET_ARITY(atom, NIL);
+		}
 		operate(clause, th);
 		goto skip;
 	    }
@@ -1846,9 +1846,9 @@ int b_reconsult(int arglist, int rest, int th)
 		goto skip;
 	    }
 	    // error builtin in file
-		if (builtinp(clause))
-	    exception(BUILTIN_EXIST, ind, clause, th);
-		//delete old definition and consult
+	    if (builtinp(clause))
+		exception(BUILTIN_EXIST, ind, clause, th);
+	    //delete old definition and consult
 	    if (predicatep(clause) || user_operation_p(clause)) {
 		clause1 = copy_heap(clause);
 		if (atomp(clause1))
@@ -3024,23 +3024,23 @@ int b_retractall(int arglist, int rest, int th)
 	    clauses = cdr(clauses);
 
 	    if (unify(arg1, clause, th) == NO)
-	    new_clauses = cons(clause, new_clauses);
+		new_clauses = cons(clause, new_clauses);
 	}
 	if (atom_predicate_p(arg1))
-		    SET_CAR(clause,listreverse(new_clauses));
+	    SET_CAR(clause, listreverse(new_clauses));
 	else if (predicatep(arg1))
-		    SET_CAR(car(arg1),listreverse(new_clauses));
+	    SET_CAR(car(arg1), listreverse(new_clauses));
 	else if (clausep(arg1) && atom_predicate_p(cadr(arg1)))
-		    SET_CAR(cadr(arg1),listreverse(new_clauses));
+	    SET_CAR(cadr(arg1), listreverse(new_clauses));
 	else if (clausep(arg1))
-		    SET_CAR(car(cadr(arg1)),listreverse(new_clauses));
+	    SET_CAR(car(cadr(arg1)), listreverse(new_clauses));
 
 	wp[th] = save1;
 	sp[th] = save2;
 	if (prove_all(rest, sp[th], th) == YES)
-		return (YES);
-	else 
-		return (NO);
+	    return (YES);
+	else
+	    return (NO);
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);

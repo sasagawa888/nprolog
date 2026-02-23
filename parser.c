@@ -1632,14 +1632,16 @@ int readlist(int th)
 	cdr = parser(NIL, NIL, 1201, NIL, 1, 1, th);
 	gettoken(th);		//discard Rbracket
 	if (stok.type != RBRACKET)
-	    exception(SYNTAX_ERR, makestr("illegal partial list"), NIL, th);
+	    exception(SYNTAX_ERR, makestr("illegal partial list"), NIL,
+		      th);
 	temp = cons(car, cdr);
 	SET_AUX(temp, LIST);
 	return (temp);
     } else if (stok.type == COMMA) {
 	cdr = readlist(th);
 	if (cdr == NIL)
-	    exception(SYNTAX_ERR, makestr("illegal comma in list"), NIL, th);
+	    exception(SYNTAX_ERR, makestr("illegal comma in list"), NIL,
+		      th);
 	temp = cons(car, cdr);
 	SET_AUX(temp, LIST);
 	return (temp);

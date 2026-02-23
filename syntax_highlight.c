@@ -13,7 +13,8 @@ char special[1][1] = { };
 char operator[OPERATOR_NUMBER][5] = {
     { ":-" }, { "-->" }, { "," }, { ";" }, { "?-" }, { "." },
     { "+" }, { "-" }, { "*" }, { "/" }, { "//" }, { "<<" }, { ">>" },
-    { "\\" }, { "/\\" }, { "\\/" }, { "mod" }, { "^" }, { "**" }, { "xor" },
+    { "\\" }, { "/\\" }, { "\\/" }, { "mod" }, { "^" }, { "**" },
+	{ "xor" },
 };
 
 char function[FUNCTION_NUMBER][12] = {
@@ -109,7 +110,7 @@ char extended[EXTENDED_NUMBER][30] = {
     { "gpio_event_read" },
     { "gpio_close" }, { "sleep" }, { "usleep" },
     { "format" }, { "gr_open" }, { "gr_close" }, { "gr_pset" },
-	{ "gr_circle" },
+    { "gr_circle" },
     { "gr_rect" }, { "gr_line" },
 };
 
