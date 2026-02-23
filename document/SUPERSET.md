@@ -101,6 +101,8 @@ In N-Prolog, when foo/1 is given, the entire foo predicate is defined as dynamic
 
 - retractall/1
 
+- subsumes_term/2
+
 
 # Not ISO-Prolog
 N-Prolog is specialized for experimenting with and playing around with small-scale code. Therefore, the following features are not included.
