@@ -1961,3 +1961,85 @@ int f_gr_line(int arglist, int th)
     return(T);
 }
 */
+
+int make_const_var(int x)
+{
+	char str[64];
+
+	if(variablep(x))
+		return(makeconst(GET_NAME(x)));
+	else if(alpha_variable_p(x)){
+		memset(str,0,64);
+		sprintf(str,"%d",x);
+		return(makeconst(str));
+	}
+	else if(anonymousp(x))
+		return(makeconst(GET_NAME(x)));
+	else
+		return x;
+
+}
+
+int subsumes_conversion(int x, int th)
+{
+    int temp;
+
+    if (nullp(x))
+	return (NIL);
+    else if (alpha_variable_p(x))
+	return (make_const_var(x));
+    else if (anonymousp(x))
+	return (make_const_var(x));
+    else if (variablep(x))
+	return (make_const_var(x));
+    else if (!structurep(x))
+	return (x);
+    else if (operationp(x) && nullp(caddr(x))) {	// e.g. :- foo(x)
+	temp = wlist2(car(x), subsumes_conversion(cadr(x), th), th);
+	SET_AUX(temp, GET_AUX(x));
+	return (temp);
+    } else if (operationp(x)) {
+	temp = wlist3(car(x),
+		      subsumes_conversion(cadr(x), th),
+		      subsumes_conversion(caddr(x), th), th);
+	SET_AUX(temp, GET_AUX(x));
+	return (temp);
+    } else if (listp(x)) {
+	temp =
+	    wcons(subsumes_conversion(car(x), th),
+		  subsumes_conversion(cdr(x), th), th);
+	SET_AUX(temp, GET_AUX(x));
+	return (temp);
+    } else if (predicatep(x)) {
+	temp = wcons(car(x), subsumes_conversion(cdr(x), th), th);
+	SET_AUX(temp, GET_AUX(x));
+	return (temp);
+    } else {			//buiiltin
+	temp =
+	    wcons(subsumes_conversion(car(x), th),
+		  subsumes_conversion(cdr(x), th), th);
+	SET_AUX(temp, GET_AUX(x));
+	return (temp);
+    }
+}
+
+
+int b_subsumes_term(int arglist, int rest, int th)
+{
+    int n, ind, arg1, arg2;
+
+    n = length(arglist);
+    ind = makeind("subsumes_term", n, th);
+    if (n == 2) {
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+
+	arg2 = subsumes_conversion(arg2,th);
+	if(unify(arg1,arg2,th) == YES)
+		return (prove_all(rest, sp[th], th));
+	else 
+		return NO;
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}

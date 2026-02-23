@@ -232,6 +232,7 @@ void init_builtin(void)
     defbuiltin("format", b_format, 3);
     defbuiltin("string_atom", b_string_atom, 2);
     defbuiltin("initialization", b_initialization, 1);
+	defbuiltin("subsumes_term", b_subsumes_term, 2);
     definfix("\\+", b_not, 900, FY);
 
     //-----Distributed parallel
