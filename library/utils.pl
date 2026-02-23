@@ -13,9 +13,13 @@ read_codes(Stream, Codes) :-
 tokenize(Codes, Tokens) :-
     tokens(Tokens, Codes, []).
 
-tokens(T, In, Out) :-
-    skip_cm(In,In1),
-    tokens(T,In1,Out).
+tokens([T|Ts], In, Out) :-
+    skip_ws_cm(In, In1),
+    token(T, In1, In2), !,
+    tokens(Ts, In2, Out).
+tokens([], In, Out) :-
+    skip_ws_cm(In, Out).
+
 tokens([T|Ts], In, Out) :-
     skip_ws(In, In1),
     token(T, In1, In2), !,
@@ -29,18 +33,28 @@ skip_ws([C|Cs], Rest) :-
     skip_ws(Cs, Rest).
 skip_ws(Rest, Rest).
 
+% --- whitespace + comment ---
+skip_ws_cm(In, Out) :-
+    skip_ws(In, In1),
+    skip_comment(In1, In2), !,
+    skip_ws_cm(In2, Out).
+skip_ws_cm(In, Out) :-
+    skip_ws(In, Out).
+
+
 is_space(9).   % \t
 is_space(10).  % \n
 is_space(13).  % \r
 is_space(32).  % space
 
-% --- comment ---
-skip_cm([47,42|Cs], Rest) :-
-    skip_cm1(Cs,Rest).
-skip_cm1([42,47|Cs],Cs).
-skip_cm1([C|Cs],Rest) :-
-    skip_cm1(Cs,Rest).
-skip_cm1([], []) :- !.
+% ---- comment ----
+skip_comment([47,42|Cs], Rest) :-  % /*
+    skip_comment_body(Cs, Rest).
+
+skip_comment_body([42,47|Cs], Cs) :- !. % */
+skip_comment_body([_|Cs], Rest) :-
+    skip_comment_body(Cs, Rest).
+
 
 % --- token ---
 token('<>', [60,62|Cs], Cs) :- !.

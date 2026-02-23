@@ -233,6 +233,11 @@ encode_stmt(halt, _Env, Asm0, Asm) :-
     emit(instr('HALT',[]), A1, A2),
     emit(instr('JP',['HALT_LABEL']), A2, Asm).
 
+encode_top_stmt(goto(L), Asm0, Asm) :-
+    emit(instr('JP',[L]), Asm0, Asm).
+
+encode_top_stmt(declare(_,_), Asm, Asm).
+
 % 予備：未対応stmtは無視（必要なら失敗させてもOK）
 encode_stmt(_Other, _Env, Asm, Asm).
 

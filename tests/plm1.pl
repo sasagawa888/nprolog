@@ -1,6 +1,5 @@
 /* PL/M */
 DECLARE C ADDRESS;
-
 GOTO START;
 
 /* e.g. procedure */
