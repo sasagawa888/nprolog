@@ -580,6 +580,286 @@ Xが未束縛変数かどうかを調べる。
 - existerrors(Old,New)
 述語不存在エラーメッセージの出力の可否の指定を行うか、あるいは現在のその設定をチェックする。
 
+## ISO由来の組み込み述語
+
+### □ \+(Goal)
+Goal を実行し，成功した場合は失敗し，失敗した場合は成功する（否定の失敗）。  
+Goal 内で行われた変数束縛は外側には影響しない。
+
+---
+
+### □ atom_concat(A1,A2,A3)
+アトム A1 と A2 を連結した結果を A3 にユニフィケーションする。  
+※ N-Prolog では分解方向（例: atom_concat(X,b,ab)）はサポートしていない。
+
+---
+
+### □ append(L1,L2,L3)
+リスト L1 と L2 を連結したリストを L3 にユニフィケーションする。
+
+---
+
+### □ member(E,List)
+E が List の要素であれば成功する。
+
+---
+
+### □ between(Low,High,N)
+整数 N が Low 以上 High 以下であれば成功する。  
+N が変数の場合，Low から High まで順に生成する。
+
+---
+
+### □ select(E,L1,L2)
+リスト L1 から要素 E を 1 つ取り除いた結果を L2 にユニフィケーションする。
+
+---
+
+### □ succ(N0,N1)
+N1 が N0+1 であれば成功する。
+
+---
+
+### □ maplist(Goal,List)
+List の各要素 X に対して call(Goal,X) を実行し，すべて成功すれば成功する。
+
+---
+
+### □ compound(Term)
+Term が複合項（構造体）であれば成功する。
+
+---
+
+### □ ground(Term)
+Term に変数が含まれていなければ成功する。
+
+---
+
+### □ once(Goal)
+Goal の最初の解のみを求め，それ以降のバックトラックを行わない。
+
+---
+
+### □ atom_codes(Atom,Codes)
+Atom と，その文字コードのリスト Codes を相互にユニフィケーションする。
+
+---
+
+### □ atom_chars(Atom,Chars)
+Atom と，その文字のリスト Chars を相互にユニフィケーションする。
+
+---
+
+### □ char_code(Char,Code)
+1 文字アトム Char とその文字コード Code を相互にユニフィケーションする。
+
+---
+
+### □ number_codes(Number,Codes)
+数値 Number とその表記の文字コード列 Codes を相互にユニフィケーションする。
+
+---
+
+### □ number_chars(Number,Chars)
+数値 Number とその表記の文字リスト Chars を相互にユニフィケーションする。
+
+---
+
+### □ predicate_property(Pred,Property)
+述語 Pred の性質 Property を取得または列挙する。
+
+---
+
+### □ bagof(Template,Goal,Bag)
+Goal の解から Template を集めたリストを Bag に返す。  
+自由変数ごとに結果が分かれる。解が無い場合は失敗する。
+
+---
+
+### □ setof(Template,Goal,Set)
+bagof/3 と同様だが，結果を重複除去しソートした集合として返す。  
+解が無い場合は失敗する。
+
+---
+
+### □ findall(Template,Goal,List)
+Goal のすべての解から Template を集めたリストを List に返す。  
+解が無い場合は空リストを返す。
+
+---
+
+### □ write_canonical(Term)
+Term を演算子を用いない正規形式で出力する。
+
+### □ write_canonical(Stream,Term)
+指定した Stream に正規形式で Term を出力する。
+
+---
+
+### □ atom_length(Atom,Length)
+Atom の文字数を Length にユニフィケーションする。
+
+---
+
+### □ get_code(Code)
+現在の入力から文字コードを 1 つ読み取る。
+
+### □ get_code(Stream,Code)
+指定した Stream から文字コードを 1 つ読み取る。
+
+---
+
+### □ get_char(Char)
+現在の入力から 1 文字読み取る。
+
+### □ get_char(Stream,Char)
+指定した Stream から 1 文字読み取る。
+
+---
+
+### □ get_byte(Byte)
+現在の入力から 1 バイト読み取る。
+
+### □ get_byte(Stream,Byte)
+指定した Stream から 1 バイト読み取る。
+
+---
+
+### □ put_char(Char)
+現在の出力に 1 文字書き出す。
+
+### □ put_char(Stream,Char)
+指定した Stream に 1 文字書き出す。
+
+---
+
+### □ put_code(Code)
+現在の出力に文字コード Code を書き出す。
+
+### □ put_code(Stream,Code)
+指定した Stream に文字コード Code を書き出す。
+
+---
+
+### □ put_byte(Byte)
+現在の出力に 1 バイト書き出す。
+
+### □ put_byte(Stream,Byte)
+指定した Stream に 1 バイト書き出す。
+
+---
+
+### □ peek_code(Code)
+現在の入力から文字コードを 1 つ読み取るが，入力位置は進めない。
+
+### □ peek_code(Stream,Code)
+指定した Stream から文字コードを読み取るが，入力位置は進めない。
+
+---
+
+### □ peek_char(Char)
+現在の入力から 1 文字読み取るが，入力位置は進めない。
+
+### □ peek_char(Stream,Char)
+指定した Stream から 1 文字読み取るが，入力位置は進めない。
+
+---
+
+### □ peek_byte(Byte)
+現在の入力から 1 バイト読み取るが，入力位置は進めない。
+
+### □ peek_byte(Stream,Byte)
+指定した Stream から 1 バイト読み取るが，入力位置は進めない。
+
+---
+
+### □ flush_output
+現在の出力ストリームをフラッシュする。
+
+### □ flush_output(Stream)
+指定した Stream をフラッシュする。
+
+---
+
+### □ catch(Goal,Catcher,Recovery)
+Goal 実行中に throw/1 により送出された例外が Catcher と一致した場合，Recovery を実行する。
+
+---
+
+### □ throw(Exception)
+例外 Exception を送出する。
+
+---
+
+### □ unify_with_occurs_check(T1,T2)
+循環構造を禁止したユニフィケーションを行う。
+
+---
+
+### □ current_input(Stream)
+現在の入力ストリームを Stream に返す。
+
+---
+
+### □ current_output(Stream)
+現在の出力ストリームを Stream に返す。
+
+---
+
+### □ set_input(Stream)
+現在の入力ストリームを Stream に設定する。
+
+---
+
+### □ set_output(Stream)
+現在の出力ストリームを Stream に設定する。
+
+---
+
+### □ use_module(File)
+File をロードする。
+
+---
+
+### □ module(Module)
+現在のモジュールを設定または宣言する。
+
+---
+
+### □ copy_term(T1,T2)
+T1 のコピーを T2 にユニフィケーションする。変数は共有されない。
+
+---
+
+### □ at_end_of_stream(Stream)
+Stream が終端に達していれば成功する。
+
+---
+
+### □ stream_property(Stream,Property)
+Stream の性質 Property を取得または列挙する。
+
+---
+
+### □ dynamic(PredSpec)
+PredSpec を動的述語として宣言する。  
+※ N-Prolog では foo/1 と指定した場合，foo 述語全体が dynamic となる。
+
+---
+
+### □ initialization(Goal)
+ファイルロード時に Goal を実行する。
+
+---
+
+### □ retractall(Head)
+Head に一致するすべての節を削除する。
+
+---
+
+### □ subsumes_term(General,Specific)
+General が Specific を包含する（より一般である）場合に成功する。
+
 ## 関数
 
 - pi             定数　円周率

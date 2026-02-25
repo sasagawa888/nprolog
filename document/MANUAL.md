@@ -607,6 +607,292 @@ Enclose the atom and function in quotation marks.
   Specify whether to output the existance error message or check the current setting.
 An error message is output with yes, and no error message is output with no. 
 
+## ISO-Derived Built-in Predicates
+
+### □ \+(Goal)
+Executes Goal. If Goal succeeds, this predicate fails.  
+If Goal fails, this predicate succeeds (negation as failure).  
+Variable bindings created inside Goal do not affect the outer context.
+
+---
+
+### □ atom_concat(A1,A2,A3)
+Concatenates atoms A1 and A2 and unifies the result with A3.  
+*Note:* In N-Prolog, decomposition mode (e.g. `atom_concat(X,b,ab)`) is not supported.
+
+---
+
+### □ append(L1,L2,L3)
+Unifies L3 with the list obtained by concatenating lists L1 and L2.
+
+---
+
+### □ member(E,List)
+Succeeds if E is an element of List.
+
+---
+
+### □ between(Low,High,N)
+Succeeds if integer N is between Low and High (inclusive).  
+If N is a variable, integers from Low to High are generated sequentially.
+
+---
+
+### □ select(E,L1,L2)
+Unifies L2 with the list obtained by removing one occurrence of E from L1.
+
+---
+
+### □ succ(N0,N1)
+Succeeds if N1 is N0+1.
+
+---
+
+### □ maplist(Goal,List)
+Calls Goal on each element X of List as `call(Goal,X)`.  
+Succeeds if all calls succeed.
+
+---
+
+### □ compound(Term)
+Succeeds if Term is a compound term (structure).
+
+---
+
+### □ ground(Term)
+Succeeds if Term contains no variables.
+
+---
+
+### □ once(Goal)
+Executes Goal and returns only the first solution.  
+Prevents further backtracking.
+
+---
+
+### □ atom_codes(Atom,Codes)
+Converts between Atom and its list of character codes Codes.
+
+---
+
+### □ atom_chars(Atom,Chars)
+Converts between Atom and its list of one-character atoms Chars.
+
+---
+
+### □ char_code(Char,Code)
+Converts between a one-character atom Char and its character code Code.
+
+---
+
+### □ number_codes(Number,Codes)
+Converts between Number and its character code representation Codes.
+
+---
+
+### □ number_chars(Number,Chars)
+Converts between Number and its list of character atoms Chars.
+
+---
+
+### □ predicate_property(Pred,Property)
+Retrieves or enumerates the property Property of predicate Pred.
+
+---
+
+### □ bagof(Template,Goal,Bag)
+Collects all instances of Template for which Goal succeeds into Bag.  
+Results are grouped by free variables.  
+Fails if there are no solutions.
+
+---
+
+### □ setof(Template,Goal,Set)
+Like bagof/3, but removes duplicates and returns the results sorted.  
+Fails if there are no solutions.
+
+---
+
+### □ findall(Template,Goal,List)
+Collects all instances of Template for which Goal succeeds into List.  
+Returns an empty list if there are no solutions.
+
+---
+
+### □ write_canonical(Term)
+Writes Term in canonical form (without operators).
+
+### □ write_canonical(Stream,Term)
+Writes Term in canonical form to the specified Stream.
+
+---
+
+### □ atom_length(Atom,Length)
+Unifies Length with the number of characters in Atom.
+
+---
+
+### □ get_code(Code)
+Reads the next character code from the current input stream.
+
+### □ get_code(Stream,Code)
+Reads the next character code from Stream.
+
+---
+
+### □ get_char(Char)
+Reads the next character from the current input stream.
+
+### □ get_char(Stream,Char)
+Reads the next character from Stream.
+
+---
+
+### □ get_byte(Byte)
+Reads the next byte from the current input stream.
+
+### □ get_byte(Stream,Byte)
+Reads the next byte from Stream.
+
+---
+
+### □ put_char(Char)
+Writes a character Char to the current output stream.
+
+### □ put_char(Stream,Char)
+Writes a character Char to Stream.
+
+---
+
+### □ put_code(Code)
+Writes character code Code to the current output stream.
+
+### □ put_code(Stream,Code)
+Writes character code Code to Stream.
+
+---
+
+### □ put_byte(Byte)
+Writes byte Byte to the current output stream.
+
+### □ put_byte(Stream,Byte)
+Writes byte Byte to Stream.
+
+---
+
+### □ peek_code(Code)
+Reads the next character code without consuming it from the current input stream.
+
+### □ peek_code(Stream,Code)
+Reads the next character code from Stream without consuming it.
+
+---
+
+### □ peek_char(Char)
+Reads the next character without consuming it from the current input stream.
+
+### □ peek_char(Stream,Char)
+Reads the next character from Stream without consuming it.
+
+---
+
+### □ peek_byte(Byte)
+Reads the next byte without consuming it from the current input stream.
+
+### □ peek_byte(Stream,Byte)
+Reads the next byte from Stream without consuming it.
+
+---
+
+### □ flush_output
+Flushes the current output stream.
+
+### □ flush_output(Stream)
+Flushes the specified Stream.
+
+---
+
+### □ catch(Goal,Catcher,Recovery)
+Executes Goal. If an exception thrown by throw/1 unifies with Catcher, Recovery is executed.
+
+---
+
+### □ throw(Exception)
+Throws the exception Exception.
+
+---
+
+### □ unify_with_occurs_check(T1,T2)
+Performs unification with occurs-check, preventing cyclic terms.
+
+---
+
+### □ current_input(Stream)
+Unifies Stream with the current input stream.
+
+---
+
+### □ current_output(Stream)
+Unifies Stream with the current output stream.
+
+---
+
+### □ set_input(Stream)
+Sets the current input stream to Stream.
+
+---
+
+### □ set_output(Stream)
+Sets the current output stream to Stream.
+
+---
+
+### □ use_module(File)
+Loads the specified File.
+
+---
+
+### □ module(Module)
+Declares or sets the current module.
+
+---
+
+### □ copy_term(T1,T2)
+Unifies T2 with a copy of T1.  
+Variables in T2 are fresh and not shared with T1.
+
+---
+
+### □ at_end_of_stream(Stream)
+Succeeds if Stream has reached end-of-file.
+
+---
+
+### □ stream_property(Stream,Property)
+Retrieves or enumerates Property of Stream.
+
+---
+
+### □ dynamic(PredSpec)
+Declares PredSpec as a dynamic predicate.  
+*Note:* In N-Prolog, if `foo/1` is specified, the entire predicate `foo` becomes dynamic.
+
+---
+
+### □ initialization(Goal)
+Executes Goal when the file is loaded.
+
+---
+
+### □ retractall(Head)
+Removes all clauses that match Head.
+
+---
+
+### □ subsumes_term(General,Specific)
+Succeeds if General subsumes (is more general than) Specific.
+
+
 ## Arithmetic Operators and Functions
 
 - pi Constant representing the value of π (pi).
