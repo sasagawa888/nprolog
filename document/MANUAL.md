@@ -582,7 +582,7 @@ An error message is output with yes, and no error message is output with no.
 
 ## ISO-Derived Built-in Predicates
 
-### □ '\+'(Goal)
+### □ \\+(Goal)
 Executes Goal. If Goal succeeds, this predicate fails.  
 If Goal fails, this predicate succeeds (negation as failure).  
 Variable bindings created inside Goal do not affect the outer context.
