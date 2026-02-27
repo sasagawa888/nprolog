@@ -911,8 +911,8 @@ void gettoken(int th)
 	return;
     }
     //string
-    //ARITY/PROLOG mode
-    if (c == '$' && !string_flag) {
+    //ARITY/PROLOG style
+    if (c == '$') {
 	pos = 0;
 	c = readc();
 	while (c != '$') {
@@ -933,8 +933,8 @@ void gettoken(int th)
 	stok.ahead = c;
 	return;
     }
-    //ISO-Prolog mode
-    if (c == '"' && string_flag) {
+    //ISO-Prolog style
+    if (c == '"') {
 	pos = 0;
 	c = readc();
 	while (c != '"') {
