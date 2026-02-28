@@ -193,7 +193,7 @@ encode_top_stmt(proc(Name, Params, Body, RetType), Asm0, Asm) :-
     proc_env(Name, Params, RetType, Env),
     emit_label(Name, Asm0, A1),
     emit(instr('PUSH',[ix]), A1, A2),
-    emit(instr('LD',[ix,0]), A2, A3),
+    emit(instr('LD',[ix,0x1000]), A2, A3),
     emit(instr('ADD',[ix,sp]), A3, A4),
     encode_proc_body(Body, Env, A4, A5),
     emit(instr('POP',[ix]), A5, A6),
@@ -332,14 +332,61 @@ rev(L, R) :- rev1(L, [], R).
 rev1([], A, A).
 rev1([X|Xs], A, R) :- rev1(Xs, [X|A], R).
 
-% ---------- (optional) simple printer ----------
-% テキスト化が不要なら使わなくてOK。
 print_asm([]).
-print_asm([label(L)|Xs]) :-
-    write(L), write(':'), nl,
+print_asm([X|Xs]) :-
+    print_asm_line(X),
     print_asm(Xs).
-print_asm([instr(Op,Args)|Xs]) :-
-    write('    '), write(Op),
-    ( Args = [] -> true ; write(' '), write(Args) ),
-    nl,
-    print_asm(Xs).
+
+print_asm_line(label(L)) :-
+    format(user_output,$~A:$,[L]),
+    nl.
+
+print_asm_line(instr(Op,Args0)) :-
+    normalize_args(Args0,Args),
+    format(user_output,$    ~A$,[Op]),
+    ( Args = [] ->
+        true
+    ;
+        write(' '),
+        print_operands(Args)
+    ),
+    nl.
+
+normalize_args(Args,Args) :- list(Args), !.
+normalize_args(A,[A]).
+
+print_operands([A|As]) :-
+    print_operand(A),
+    print_operands_rest(As).
+
+print_operands_rest([]).
+print_operands_rest([X|Xs]) :-
+    write(','),
+    print_operand(X),
+    print_operands_rest(Xs).
+
+print_operand(X) :-
+    ( integer(X) ->
+        format(user_output,$~D$,[X])
+    ; X = mem(Reg,Disp) ->
+        format(user_output,$(~A$,[Reg]),
+        print_disp(Disp),
+        write(')')
+    ; X = mem(Reg) ->
+        format(user_output,$(~A)$,[Reg])
+    ; X = mem_label(L) ->
+        format(user_output,$(~A)$,[L])
+    ; atom(X) ->
+        format(user_output,$~A$,[X])
+    ; write(X)
+    ).
+
+print_disp(0).
+print_disp(N) :-
+    N > 0,
+    format(user_output,$+~D$,[N]).
+print_disp(N) :-
+    N < 0,
+    N1 is -N,
+    format(user_output,$-~D$,[N1]).
+

@@ -197,6 +197,28 @@ I believe ISO-Prolog has excessively high requirements. It sets overly detailed 
 
 
 # Extended 
+### Note on `format/3`
+
+The `format/3` predicate in N-Prolog is **not ISO-compatible**.
+
+Although it shares the same name as the ISO Prolog `format/2-3`,  
+its specification is intentionally simplified and redesigned.
+
+Key differences:
+
+- The format argument must be an N-Prolog string (`$...$` or `"..."`).
+- Only the following format specifiers are supported:
+
+  - `~O`  Any atomic term
+  - `~A`  Atom
+  - `~S`  String
+  - `~D`  Integer
+  - `~F`  Float
+
+- ISO-specific specifiers (e.g. `~w`, `~q`, `~n`, etc.) are not supported.
+
+This design follows the philosophy of keeping the language simple,
+type-explicit, and suitable for educational use.
 
 ## format(Str,Format,List).
 If the first argument is a variable, the formatted string will be unified with the variable. The second argument is the format, which is a string. Values can be inserted into the string, and the values to be inserted are provided as a list in the third argument.
