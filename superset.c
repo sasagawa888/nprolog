@@ -2224,6 +2224,18 @@ int b_format(int arglist, int rest, int th)
 			output[j++] = c;
 			c = substr[k++];
 		    }
+		} else if (c == 'X') {
+		    if (!integerp(car(arg3)))
+			exception(NOT_INT, ind, arg3, th);
+		    memset(substr, 0, sizeof(substr));
+		    sprintf(substr, "%x", GET_INT(car(arg3)));
+		    arg3 = cdr(arg3);
+		    k = 0;
+		    c = substr[k++];
+		    while (c != 0) {
+			output[j++] = c;
+			c = substr[k++];
+		    }
 		} else if (c == 'F') {
 		    memset(substr, 0, sizeof(substr));
 		    sprintf(substr, "%g", GET_FLT(car(arg3)));
@@ -2234,6 +2246,8 @@ int b_format(int arglist, int rest, int th)
 			output[j++] = c;
 			c = substr[k++];
 		    }
+		} else if (c == '%'){
+			sprintf(substr,"%s","\n");
 		}
 	    } else {
 		output[j++] = c;
