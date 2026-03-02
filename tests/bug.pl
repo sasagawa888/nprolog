@@ -1,22 +1,16 @@
 
-:- use_module(dcg).
+    
+change_extension(File, NewExt, NewFile) :-
+    atom_codes(File, Codes),
+    change_extension1(Codes,BaseCodes),
+    atom_codes(BaseAtom, BaseCodes),
+    atom_concat(BaseAtom, '.', Temp),
+    atom_concat(Temp, NewExt, NewFile).
 
-% =========================================
-% 1) { Cond -> true } : 単純 if-then（Elseなし）
-% =========================================
-p1 --> [n(N)], { (N > 0 -> true) }, [pos].
+change_extension1([],[]).
+change_extension1([46|_],[]).
+change_extension1([C|Cs],[C|Bs]) :-
+        change_extension1(Cs,Bs).
 
-% =========================================
-% 2) { Cond -> Then ; Else } : if-then-else
-% =========================================
-p2 --> [n(N)], { (N > 0 -> Tag = pos ; Tag = neg) }, [tag(Tag)].
-
-% =========================================
-% 3) { Cond -> X=... ; X=... } : 変数を束縛して後続へ渡す
-% =========================================
-p3(X) --> [n(N)], { (N mod 2 =:= 0 -> X = even ; X = odd) }, [kind(X)].
-
-% =========================================
-% 4) { Cond -> true ; fail } : ガードとして使う（失敗させる）
-% =========================================
-p4 --> [n(N)], { (N > 0 -> true ; fail) }, [ok].
+    
+    

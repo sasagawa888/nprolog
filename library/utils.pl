@@ -1,4 +1,4 @@
-:- module(utils,[read_codes/2,tokenize/2]).
+:- module(utils,[read_codes/2,tokenize/2,change_extension/3]).
 
 read_codes(Stream, Codes) :-
     get_code(Stream, C),
@@ -100,3 +100,17 @@ is_word_start(C) :- is_alpha(C) ; C =:= 95.  % '_'
 is_word_char(C)  :- is_alpha(C) ; is_digit(C) ; C =:= 95.
 
 is_alpha(C) :- (C >= 65, C =< 90) ; (C >= 97, C =< 122).
+
+
+
+change_extension(File, NewExt, NewFile) :-
+    atom_codes(File, Codes),
+    change_extension1(Codes,BaseCodes),
+    atom_codes(BaseAtom, BaseCodes),
+    atom_concat(BaseAtom, '.', Temp),
+    atom_concat(Temp, NewExt, NewFile).
+
+change_extension1([],[]).
+change_extension1([46|_],[]).
+change_extension1([C|Cs],[C|Bs]) :-
+        change_extension1(Cs,Bs).
