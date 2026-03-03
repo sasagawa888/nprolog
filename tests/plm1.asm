@@ -2,7 +2,7 @@
     JP START
 SUMSQUARE:
     PUSH ix
-    LD ix,4096
+    ;LD ix,4096
     ADD ix,sp
     LD l,(ix+4)
     LD h,(ix+5)
@@ -10,7 +10,7 @@ SUMSQUARE:
     LD l,(ix+4)
     LD h,(ix+5)
     POP de
-    CALL MUL16
+    ;CALL MUL16
     PUSH hl
     LD l,(ix+6)
     LD h,(ix+7)
@@ -18,7 +18,7 @@ SUMSQUARE:
     LD l,(ix+6)
     LD h,(ix+7)
     POP de
-    CALL MUL16
+    ;CALL MUL16
     POP de
     ADD hl,de
     POP ix
@@ -29,8 +29,8 @@ START:
     LD hl,3
     PUSH hl
     CALL SUMSQUARE
-    ADD sp,4
-    LD (C),hl
-HALT_LABEL:
+    ;ADD sp,4
+    ;LD (C),hl
+HALTLABEL:
     HALT
-    JP HALT_LABEL
+    JP HALTLABEL
