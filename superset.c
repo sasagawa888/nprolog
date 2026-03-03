@@ -2246,8 +2246,8 @@ int b_format(int arglist, int rest, int th)
 			output[j++] = c;
 			c = substr[k++];
 		    }
-		} else if (c == '%'){
-			sprintf(substr,"%s","\n");
+		} else if (c == 'n'){
+			output[j++] = '\n';
 		}
 	    } else {
 		output[j++] = c;
