@@ -11,7 +11,7 @@ plm80(File) :-
     encode(Ast,Asm),
     change_ext(File,asm,Out),
     open(S,Out,w),
-    format(S,$INCLUDE ~A\n$,['plmbase.asm']),
+    %format(S,$INCLUDE ~A\n$,['plmbase.asm']),
     output_asm(user_output,Asm),
     close(S).
 
@@ -36,7 +36,7 @@ output_asm_line(S, instr(Op, Args0)) :-
     ),
     nl(S).
 
-normalize_args(Args, Args) :- is_list(Args), !.
+normalize_args(Args, Args) :- list(Args), !.
 normalize_args(A, [A]).
 
 output_operands(S, [A|As]) :-
