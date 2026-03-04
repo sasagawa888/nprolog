@@ -171,7 +171,7 @@ yes
 # Dosuments
 This document provides an overview of many documents. Please read it first.
 
-![UserManual](MANUAL.md)
+![UserManual](./document/MANUAL.md)
 This is the user manual for N-Prolog.
 
 ![Chacker](CHECKER.md)
