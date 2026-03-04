@@ -1,8 +1,4 @@
-**“This software is a technology created for peace and freedom.  
-It does not wish to serve, in any way, as a tool for oppression, suppression, human rights violations, or dictatorship.”**
-
-
-# N-Prolog
+# N-Prolog　A small Prolog implementation
 N-Prolog(NPL) is an interpreter and compiler to be superset of ARITY/PROLOG(MS-DOS)
 
 **N-Prolog is NOT ISO-Prolog.** Compatible with ARITY/PROLOG(MS-DOS) see document/NAMUAL.md　N-Prolog is not strictly ISO compliant, but it covers almost all ISO-Prolog core features required for educational use.
@@ -239,3 +235,7 @@ On Raspberry Pi, predicates for WiringPi are installed. This is their descriptio
 
 ![GPIO](./document/GPIO.md)
 On Raspberry Pi, predicates for libgpiod are installed. This is their description.
+
+**“This software is a technology created for peace and freedom.  
+It does not wish to serve, in any way, as a tool for oppression, suppression, human rights violations, or dictatorship.”**
+
