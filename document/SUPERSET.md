@@ -209,6 +209,8 @@ The variables for insertion are as follows:
 - ~F float
 - ~X hex integer
 - ~n newline
+- ~t tab
+- ~~ ~
 
 ## format(Stream,format,List).
 If the first argument is a stream or alias, the edited string will be output to that stream. The specifications of the second and third arguments remain the same.

@@ -2248,8 +2248,12 @@ int b_format(int arglist, int rest, int th)
 		    }
 		} else if (c == 'n'){
 			output[j++] = '\n';
-		}
-	    } else {
+		} else if (c == 't'){
+			output[j++] = '\t';
+		} else if (c == '~'){
+			output[j++] = '~';
+		} 
+		} else {
 		output[j++] = c;
 	    }
 	    c = format[i++];
