@@ -2252,7 +2252,9 @@ int b_format(int arglist, int rest, int th)
 			output[j++] = '\t';
 		} else if (c == '~'){
 			output[j++] = '~';
-		} 
+		} else{
+			exception(ILLEGAL_ARGS,ind,arg2,th);
+		}
 		} else {
 		output[j++] = c;
 	    }
