@@ -236,6 +236,10 @@ On Raspberry Pi, predicates for WiringPi are installed. This is their descriptio
 ![GPIO](./document/GPIO.md)
 On Raspberry Pi, predicates for libgpiod are installed. This is their description.
 
+
+![CUBE](./document/CUBE.md)
+Library for rubik's cube (2*2)
+
+
 **“This software is a technology created for peace and freedom.  
 It does not wish to serve, in any way, as a tool for oppression, suppression, human rights violations, or dictatorship.”**
-
