@@ -103,55 +103,34 @@ In N-Prolog, when foo/1 is given, the entire foo predicate is defined as dynamic
 
 - subsumes_term/2
 
+# In ISO lib
+
+-? use_module(iso).
+
+- sub_atom/5
+- numbervers/2
+- term_variables/2
+- write_term/2
+
+
 
 # Not ISO-Prolog
 N-Prolog is specialized for experimenting with and playing around with small-scale code. Therefore, the following features are not included.
 
-- sub_atom/5  
- Reverse computation is too complex.
 - open/3  
  Please use open/3 compatible with Arity/Prolog.
 - multifile/1 
  For now, we are not considering complex libraries.
 - include/1
 - ensure_loaded/1
-- write_term/2
 - current_prolog_flag/2
-
-- set_prolog_flag/2 The set_prolog_flag exists, but it is different from ISO.
-  - set_prolog_flag(string,arity). e.g. $hello world$
-  - set_prolog_flag(string,iso).   e.g. "hello world"
-  - set_prolog_flag(expression,canonical). e.g.  foo(1)
-  - set_prolog_flag(expression,sexp).      e.g.  (foo 1) 
-
+- set_prolog_flag/2 
  
 - long atom with '\\' 
  Excessively long atoms hinder code readability.
 
 - char-code with '\0x23\' 
  Use char_code/2. ?- char_code(X,0x23). X = '#' .
-
-# String
-Strings are enclosed in dollar signs, similar to ARITY/PROLOG. However, they can be changed to double quotes using set_prolog_flag.
-
-```
-N-Prolog Ver 4.01
-?- X = $hello$.
-X = $hello$ .
-yes
-?- set_prolog_flag(string,iso).
-yes
-?- X = "hello".
-X = "hello" .
-yes
-?- set_prolog_flag(string,arity).
-yes
-?- X = $hello$.
-X = $hello$ .
-yes
-?- 
-
-```
 
 
 # Module
