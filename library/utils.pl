@@ -1,4 +1,4 @@
-:- module(utils,[read_codes/2,tokenize/2,change_ext/3]).
+:- module(utils,[read_codes/2,tokenize/2,change_ext/3,format/3]).
 
 read_codes(Stream, Codes) :-
     get_code(Stream, C),
@@ -116,3 +116,5 @@ change_ext1([],[]).
 change_ext1([46|_],[]).
 change_ext1([C|Cs],[C|Bs]) :-
         change_ext1(Cs,Bs).
+
+format(X,Y,Z) :- n_format(X,Y,Z).

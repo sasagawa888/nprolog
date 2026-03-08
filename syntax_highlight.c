@@ -108,7 +108,7 @@ char extended[EXTENDED_NUMBER][30] = {
     { "gpio_read" }, { "gpio_event_request" }, { "gpio_event_wait" },
     { "gpio_event_read" },
     { "gpio_close" }, { "sleep" }, { "usleep" },
-    { "format" }, { "gr_open" }, { "gr_close" }, { "gr_pset" },
+    { "gr_open" }, { "gr_close" }, { "gr_pset" },
     { "gr_circle" },
     { "gr_rect" }, { "gr_line" },
 };
