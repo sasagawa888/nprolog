@@ -3,7 +3,12 @@ JSON library for using API of ChatGPT.
 
 # usage
 
+invoke -d option and use json library.
+
+
 ```
+npl -d
+
 use_module(json).
 
 ?- term_json(foo(1),J).

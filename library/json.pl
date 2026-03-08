@@ -2,8 +2,6 @@
 
 :- op(400,xfy,':').
 
-:- set_prolog_flag(string,iso).
-
 
 :- module(json,[term_json/2]).
 
