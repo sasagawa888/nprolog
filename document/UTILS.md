@@ -21,6 +21,8 @@ yes
 
 - format(Stream(String),Format,List)
 
+- writeln(X) write(Stream,X)
+
 
 ## format(Str,Format,List).
 If the first argument is a variable, the formatted string will be unified with the variable. The second argument is the format, which is a string. Values can be inserted into the string, and the values to be inserted are provided as a list in the third argument.
