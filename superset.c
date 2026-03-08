@@ -2095,41 +2095,6 @@ int b_cinline(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_set_prolog_flag(int arglist, int rest, int th)
-{
-    int n, arg1, arg2, ind;
-
-    n = length(arglist);
-    ind = makeind("set_prolog_flag", n, th);
-    if (n == 2) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
-
-	if (eqlp(arg1, makeconst("string"))
-	    && eqlp(arg2, makeconst("arity"))) {
-	    string_flag = 0;
-	    return (prove_all(rest, sp[th], th));
-	} else if (eqlp(arg1, makeconst("string"))
-		   && eqlp(arg2, makeconst("iso"))) {
-	    string_flag = 1;
-	    return (prove_all(rest, sp[th], th));
-	} else if (eqlp(arg1, makeconst("expression"))
-		   && eqlp(arg2, makeconst("canonical"))) {
-	    sexp_flag = 0;
-	    return (prove_all(rest, sp[th], th));
-	} else if (eqlp(arg1, makeconst("expression"))
-		   && eqlp(arg2, makeconst("sexp"))) {
-	    sexp_flag = 1;
-	    return (prove_all(rest, sp[th], th));
-	}
-
-
-	return (NO);
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-
 int format_obj(int x, int ind, int th)
 {
     char obj[STRSIZE];

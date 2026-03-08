@@ -73,7 +73,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "flush_output" }, { "put_code" }, { "put_byte" },
     { "number_codes" }, { "number_chars" }, { "catch" }, { "throw" },
     { "set_input" }, { "set_output" }, { "use_module" }, { "module" },
-    { "copy_term" }, { "set_prolog_flag" },
+    { "copy_term" }, 
     { "current_input" }, { "current_output" }, { "at_end_of_stream" },
     { "peek_code" }, { "peek_char" }, { "peek_byte" },
     { "stream_property" }, { "dynamic" }, { "subsumes_term" },

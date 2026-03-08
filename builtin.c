@@ -227,7 +227,6 @@ void init_builtin(void)
     defbuiltin("close_socket", b_close_socket, 1);
     defbuiltin("dynamic", b_dynamic, 1);
     defbuiltin("existerrors", b_existerrors, 2);
-    defbuiltin("set_prolog_flag", b_set_prolog_flag, 2);
     defbuiltin("cinline", b_cinline, 1);
     defbuiltin("format", b_format, 3);
     defbuiltin("string_atom", b_string_atom, 2);

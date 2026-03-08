@@ -1016,7 +1016,6 @@ int b_send_socket(int arglist, int rest, int th);
 int b_setof(int arglist, int rest, int th);
 int b_set_input(int arglist, int rest, int th);
 int b_set_output(int arglist, int rest, int th);
-int b_set_prolog_flag(int arglist, int rest, int th);
 int b_shell(int arglist, int rest, int th);
 int b_skip(int arglist, int rest, int th);
 int b_n_smaller(int arglist, int rest, int th);
