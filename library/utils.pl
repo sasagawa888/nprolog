@@ -1,5 +1,7 @@
+:- use_module(list).
+
 :- module(utils,[read_codes/2,tokenize/2,change_ext/3,format/3,
-                 writeln/1,writeln/2]).
+                 writeln/1,writeln/2,read_csv/2]).
 
 read_codes(Stream, Codes) :-
     get_code(Stream, C),
@@ -8,6 +10,34 @@ read_codes(Stream, Codes) :-
     ; Codes = [C|Rest],
       read_codes(Stream, Rest)
     ).
+
+
+read_csv(File,L) :-
+    read_codes(File,C),
+    read_csv1(C,[],[],[],L).
+
+%read_csv1(C,Item,Col,Row,Result)
+read_csv1([],Item,Col,Row,Result) :-
+    reverse(Item,Item1),
+    atom_codes(A,Item1),
+    reverse([A|Col],Col1),
+    reverse([Col1|Row],Result).
+read_csv1([44|Cs],Item,Col,Row,Result) :-
+    reverse(Item,Item1),
+    atom_codes(A,Item1),
+    read_csv1(Cs,[],[A|Col],Row,Result).
+read_csv1([13,10|Cs],Item,Col,Row,Result) :-
+    reverse(Item,Item1),
+    atom_codes(A,Item1),
+    reverse([A|Col],Col1),
+    read_csv1(Cs,[],[],[Col1|Row],Result).
+read_csv1([10|Cs],Item,Col,Row,Result) :-
+    reverse(Item,Item1),
+    atom_codes(A,Item1),
+    reverse([A|Col],Col1),
+    read_csv1(Cs,[],[],[Col1|Row],Result).
+read_csv1([C|Cs],Item,Col,Row,Result) :-
+    read_csv1(Cs,[C|Item],Col,Row,Result).
 
 
 % --- entry ---
