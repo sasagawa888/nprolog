@@ -10,6 +10,9 @@
 :- op(600, xfy, in).
 :- op(600, xfy, ins).
 
+label(X) :- n_label(X).
+label(X,Y) :- n_label(X,Y).
+
 X #= Y+Z :-
     integer(X),
     var(Y),

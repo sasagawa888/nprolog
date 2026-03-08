@@ -79,8 +79,7 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "stream_property" }, { "dynamic" }, { "subsumes_term" },
     { "create_client_socket" }, { "create_server_socket" },
     { "recv_socket" }, { "close_socket" }, { "initialization" },
-    { "string_atom" },
-    { "label" }, { "all_different" },
+    { "string_atom" }, 
 };
 
 //for compiled predicate
