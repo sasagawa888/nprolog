@@ -79,7 +79,9 @@ $ npl -h
 List of options:
 -c filename -- NPL starts after reading the file.
 -d          -- string is double quote.
+-f          -- NPL treats undefined errors as fail.
 -h          -- display help.
+-l          -- display Lisp like S.
 -m N        -- NPL runs with N(30>=N>=10) mega cells.
 -n          -- NPL runs with network mode.
 -r          -- NPL does not use editable REPL.
