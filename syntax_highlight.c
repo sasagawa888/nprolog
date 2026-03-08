@@ -95,7 +95,7 @@ char extended[EXTENDED_NUMBER][30] = {
     { "pin_mode" }, { "digital_write" },
     { "pwm_write" }, { "pull_up_dn_control" }, { "digital_read" },
     { "delay" }, { "delay_microseconds" },
-    { "compile_file" }, { "timer_microseconds" }, { "with" },
+    { "compile_file" }, { "timer_microseconds" }, 
     { "dp_create" }, { "dp_consult" }, { "dp_countup" },
     { "dp_transfer" }, { "dp_and" }, { "dp_or" }, { "dp_halt" },
     { "dp_reconsult" }, { "dp_setid" }, { "dp_senderr" },
