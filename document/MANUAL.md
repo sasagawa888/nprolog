@@ -576,10 +576,6 @@ Enclose the atom and function in quotation marks.
 - `measure(E)`  
   Measures and displays the execution time of the predicate `E`.
 
-- `existerrors(Old,New)`
-  Specify whether to output the existance error message or check the current setting.
-An error message is output with yes, and no error message is output with no. 
-
 ## ISO-Derived Built-in Predicates
 
 ### □ \\+(Goal)
