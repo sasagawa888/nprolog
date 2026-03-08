@@ -303,6 +303,7 @@ void usage()
     printf("List of options:\n");
     printf("-c filename -- NPL starts after reading the file.\n");
     printf("-d          -- string is double quote.\n");
+	printf("-f          -- NPL treats undefined errors as fail.\n");
     printf("-h          -- display help.\n");
 	printf("-l          -- display Lisp like S.\n");
     printf("-m N        -- NPL runs with N(30>=N>=10) mega cells.\n");
@@ -339,7 +340,7 @@ int main(int argc, char *argv[])
 	goto repl;
     }
 
-    while ((ch = getopt(argc, argv, "c:s:m:rhdvnl")) != -1) {
+    while ((ch = getopt(argc, argv, "c:s:m:rhdvnlf")) != -1) {
 	switch (ch) {
 	case 'c':
 	    b_consult(list1(makeconst(optarg)), NIL, 0);
@@ -373,6 +374,9 @@ int main(int argc, char *argv[])
 	    break;
 	case 'l':
 	    sexp_flag = 1;
+	    break;
+	case 'f':
+	    exist_flag = 1;
 	    break;
 	default:
 	    usage();
