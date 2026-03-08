@@ -892,30 +892,6 @@ int b_heapdump(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_existerrors(int arglist, int rest, int th)
-{
-    int n, ind, arg1, arg2, res;
-
-    n = length(arglist);
-    ind = makeind("existerrors", n, th);
-    if (n == 2) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
-	if (arg1 != YES && arg1 != NO && !wide_variable_p(arg1))
-	    exception(ILLEGAL_ARGS, ind, arg1, th);
-	if (arg2 != YES && arg2 != NO && !wide_variable_p(arg2))
-	    exception(ILLEGAL_ARGS, ind, arg1, th);
-
-	res = unify(arg1, exist_flag, th);
-	exist_flag = arg2;
-	if (res == YES)
-	    return (prove_all(rest, sp[th], th));
-	else
-	    return (NO);
-    }
-    return (NO);
-}
-
 int b_n_has_cut(int arglist, int rest, int th)
 {
     int n, arg1;
