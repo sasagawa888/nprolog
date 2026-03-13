@@ -17,6 +17,8 @@ yes
 ## Predicates
 - read_codes(+Stream, -Codes)
 
+- read_csv(+Stream, -List)
+
 - tokenize(+Codes, -Tokens)
 
 - format(Stream(String),Format,List)
