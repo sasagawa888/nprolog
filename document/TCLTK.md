@@ -5,6 +5,8 @@
 The Tcl/Tk library utilizes the C language embedding feature. Therefore, it needs to be compiled first. Please follow the steps below to compile it.
 
 ```
+sudo apt install tcl-dev tk-dev
+
 make prolog
 ***
 yes
