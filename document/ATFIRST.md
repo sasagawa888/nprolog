@@ -59,8 +59,6 @@ This is a description of the CLP(FD) library.
 ![Compiler](COMPILER.md)
 This is a description of the N-Prolog compiler.
 
-![Curl](CURL.md)
-This is a description of the HTTPS functionality with encryption using curl.
 
 ![DCG](DCG.md)
 This is a description of the DCG library.
