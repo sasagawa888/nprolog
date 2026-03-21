@@ -92,6 +92,9 @@ List of options:
 ## Goal
 N-Prolog aims to enjoy the experience of DEC10-Prolog from the 1980s.
 
+## Video 
+![N-Prolog in 1 minute Tutorials](https://www.youtube.com/watch?v=w51nbR98cA8&list=PLZJFIgVbFOoJoQR0JjDsMcqpR_qiQ7cIU)
+
 ## example
 ```prolog
 N-Prolog Ver 4.20
