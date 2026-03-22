@@ -576,6 +576,19 @@ gen_body((X->Y;Z),N) :-
     write(';'),nl,
     write('return(Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th));}}'),nl.
 
+
+% ifthen
+gen_body((X->Y),N) :-
+    write('{body = '),
+    gen_body1(X,N),
+    write(';'),nl,
+    write('if(Jexec_all(body,Jget_sp(th),th) == YES){'),nl,
+    write('body = '),
+    gen_body1(Y,N),
+    write(';'),nl,
+    write('return(Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th));'),nl,
+    write('} else {return(NO);}}'),nl.
+
 % disjunction
 gen_body(((X;_);Y),N) :-
     write('{dp['),write(N),write(']=Jget_sp(th);'),nl,
@@ -718,6 +731,7 @@ gen_body1(X,_) :-
 generate one operation,user,builtin or compiled predicate.
 when except of above type, invoke error.
 */
+
 gen_a_body((X;Xs)) :-
 	write('Jwlist3(Jmakeope(";"),'),
 	gen_a_body(X),
