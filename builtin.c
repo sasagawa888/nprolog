@@ -1118,8 +1118,10 @@ int b_read(int arglist, int rest, int th)
 	repl_flag = save2;
 	if (res == YES)
 	    return (prove_all(rest, sp[th], th));
-	else
+	else{
+		if(repl_flag) clear_input_buffer();
 	    return (NO);
+	}
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
