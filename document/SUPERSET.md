@@ -132,9 +132,7 @@ N-Prolog is specialized for experimenting with and playing around with small-sca
 - char-code with '\0x23\' 
  Use char_code/2. ?- char_code(X,0x23). X = '#' .
 
- - compiler
- The interpreter supports the syntax `A->B;C` and `A->B`, but the compiler does not. Please use `ifthenelse/3` or `ifthen/2` instead. This is a matter of the author's preference: such procedural extension syntax is not favored. Please express it as predicates.
-
+ 
 
 
 # Module
