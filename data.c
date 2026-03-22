@@ -2238,7 +2238,7 @@ int variable_to_call(int x)
 	return (list2(CALL, x));
     else if (atomp(x) && GET_AUX(x) == SIMP && !variablep(x) && x != FEND)
 	return (makepred(GET_NAME(x)));
-    else if (structurep(x) && (car(x) == AND || car(x) == OR))
+    else if (structurep(x) && (car(x) == AND || car(x) == OR || car(x) == IFTHEN))
 	return (list3
 		(car(x),
 		 variable_to_call(cadr(x)), variable_to_call(caddr(x))));

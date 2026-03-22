@@ -375,7 +375,7 @@ test(cut) :-
     X == 1.
 
 test(cut_failure) :-
-    (false -> X = 1 ; X = 2),
+    (fail -> X = 1 ; X = 2),
     X == 2.
 
 fib(0, 0).
@@ -589,3 +589,4 @@ test(select) :-
 main :- alltest,write('All tests are done'),nl.
 
 :- initialization(main).
+

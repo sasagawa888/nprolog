@@ -561,6 +561,20 @@ gen_body(X,_) :-
     optimize(det),
     gen_det_body(X).
 
+% ifthenelse 
+gen_body((X->Y;Z),N) :-
+    write('{body = '),
+    gen_body1(X,N),
+    write(';'),nl,
+    write('if(Jexec_all(body,Jget_sp(th),th) == YES){'),nl,
+    write('body = '),
+    gen_body1(Y,N),
+    write(';'),nl,
+    write('return(Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th));'),nl,
+    write('} else {body = '),
+    gen_body1(Z,N),
+    write(';'),nl,
+    write('return(Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th));}}'),nl.
 
 % disjunction
 gen_body(((X;_);Y),N) :-
