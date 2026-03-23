@@ -561,34 +561,6 @@ gen_body(X,_) :-
     optimize(det),
     gen_det_body(X).
 
-% ifthenelse 
-gen_body((X->Y;Z),N) :-
-    write('{body = '),
-    gen_body1(X,N),
-    write(';'),nl,
-    write('if(Jexec_all(body,Jget_sp(th),th) == YES){'),nl,
-    write('body = '),
-    gen_body1(Y,N),
-    write(';'),nl,
-    write('return(Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th));'),nl,
-    write('} else {body = '),
-    gen_body1(Z,N),
-    write(';'),nl,
-    write('return(Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th));}}'),nl.
-
-
-% ifthen
-gen_body((X->Y),N) :-
-    write('{body = '),
-    gen_body1(X,N),
-    write(';'),nl,
-    write('if(Jexec_all(body,Jget_sp(th),th) == YES){'),nl,
-    write('body = '),
-    gen_body1(Y,N),
-    write(';'),nl,
-    write('return(Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th));'),nl,
-    write('} else {return(NO);}}'),nl.
-
 % disjunction
 gen_body(((X;_);Y),N) :-
     write('{dp['),write(N),write(']=Jget_sp(th);'),nl,
@@ -691,6 +663,7 @@ gen_after_body(X,N) :-
 gen_body1([],_) :-
     write('NIL').
 
+
 gen_body1((D1;D2),N) :-
 	write('Jwlist3(Jmakeope(";"),'),
 	gen_body1(D1,N),
@@ -704,40 +677,6 @@ gen_body1(((D1;D2),Xs),N) :-
     write(','),
     gen_body1(D2,N),
     write(',th),'),
-    gen_body1(Xs,N),
-    write(',th)').
-
-%ifthenelse
-gen_body1(((X->Y;Z),Xs),N) :-
-    write('Jwlist3(Jmakeope(","),'),
-    write('({body = '),
-    gen_body1(X,N),
-    write(';'),nl,
-    write('if(Jexec_all(body,Jget_sp(th),th) == YES){'),nl,
-    write('body = '),
-    gen_body1(Y,N),
-    write(';'),nl,
-    write('return(Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th));'),nl,
-    write('} else {body = '),
-    gen_body1(Z,N),
-    write(';'),nl,
-    write('return(Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th));}})'),nl,
-    gen_body1(Xs,N),
-    write(',th)').
-
-
-%ifthen
-gen_body1(((X->Y),Xs),N) :-
-    write('Jwlist3(Jmakeope(","),'),
-    write('({body = '),
-    gen_body1(X,N),
-    write(';'),nl,
-    write('if(Jexec_all(body,Jget_sp(th),th) == YES){'),nl,
-    write('body = '),
-    gen_body1(Y,N),
-    write(';'),nl,
-    write('return(Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th));'),nl,
-    write('} else {return(NO);}})'),
     gen_body1(Xs,N),
     write(',th)').
 
