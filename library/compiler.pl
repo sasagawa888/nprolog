@@ -394,6 +394,7 @@ gen_a_pred1(P,[L|Ls]) :-
     retract(optimize(O)), % delete optimize data
     gen_a_pred1(P,Ls).
 
+
 %when normal predicate
 gen_a_pred1(P,[L|Ls]) :-
     write(user_output,$/$),write(user_output,L),write(user_output,' nondet'),
@@ -1423,6 +1424,9 @@ gen_dynamic(P) :-
 
 gen_dynamics(_,[]).
 gen_dynamics(P,[L|Ls]) :-
+    atom_concat('compiling ',P,M),
+    write(user_output,M),write(user_output,$/$),write(user_output,L),
+    write(user_output,' dynamic'),nl(user_output),
     gen_dyn(P,L),
     gen_dynamics(P,Ls).
 
@@ -1462,6 +1466,35 @@ gen_dyn2((X,Y)) :-
     write(','),
     gen_dyn2(Y),
     write(')').
+
+
+% ifthenelse
+gen_dyn2((X->Y;Z)) :-
+    n_findatom(ifthenelse,builtin,A),
+    write('Jcons('),
+    write(A),
+    write(','),
+    write('Jlist3('),
+    gen_dyn2(X),
+    write(','),
+    gen_dyn2(Y),
+    write(','),
+    gen_dyn2(Z),
+    write('))').
+
+
+% ifthen
+gen_dyn2(X->Y) :-
+    n_findatom(ifthen,builtin,A),
+    write('Jcons('),
+    write(A),
+    write(','),
+    write('Jlist2('),
+    gen_dyn2(X),
+    write(','),
+    gen_dyn2(Y),
+    write('))').
+
 
 gen_dyn2((X;Y)) :-
     write('Jlist3(Jmakeope(";")),'),

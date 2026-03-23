@@ -4,6 +4,8 @@
 %         Copyright (C) 2001-2023 Makoto Hiroi
 %
 
+:- dynamic(print_answer/1).
+%?- solver(0x1ffffff).
 % ボタンを押したときのパターン
 pattern(0, 0x0000023).  pattern(1, 0x0000047).  pattern(2, 0x000008e).  pattern(3, 0x000011c).
 pattern(4, 0x0000218).  pattern(5, 0x0000461).  pattern(6, 0x00008e2).  pattern(7, 0x00011c4).
@@ -35,15 +37,16 @@ push_button(N, M, Board, Result) :-
 push_button(N, M, Board, Result) :-
     M1 is M + 1, push_button(N, M1, Board, Result).
 
+
 % 解の表示
 print_answer(PushPattern) :-
     nl,
     between(0, 24, N),
-    %((PushPattern /\ (1 << N)) > 0 -> write('1') ; write('0')),
+    ((PushPattern /\ (1 << N)) > 0 -> write('1') ; write('0')),
     M is N mod 5,
-    %(M == 4 -> nl),
-    write(N),
+    (M == 4 -> nl),
     fail.
+
 
 % 解法
 solver(Board) :-

@@ -1,3 +1,4 @@
+:- dynamic(boo/0).
 
 boo :-
     between(0,10,N),
