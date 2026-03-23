@@ -561,6 +561,17 @@ gen_body(X,_) :-
     optimize(det),
     gen_det_body(X).
 
+% ifthenelse
+gen_body((X->Y;Z),N) :-
+    write('{body = '),
+    gen_a_body((X->Y;Z)),
+    write(';'),nl,
+    write('if((res=Jexec_all(Jaddtail_body(rest,body,th),Jget_sp(th),th)) == YES)'),nl,
+    write('return(YES);'),nl,
+    write('Jset_ac(save3,th);'),nl,
+    write('Junbind(save2,th);'),nl,
+    write('Jset_wp(save1,th);}'),nl.
+
 % disjunction
 gen_body(((X;_);Y),N) :-
     write('{dp['),write(N),write(']=Jget_sp(th);'),nl,
@@ -806,6 +817,34 @@ gen_a_body(X >= Y) :-
     eval_form(X),
     write(','),
     eval_form(Y),
+    write(',th),th)').
+
+
+% ifthenelse
+gen_a_body((X->Y;Z)) :-
+    n_findatom(ifthenelse,builtin,A),
+    write('Jwcons('),
+    write(A),
+    write(','),
+    write('Jwlist3('),
+    gen_body1(X,0),
+    write(','),
+    gen_body1(Y,0),
+    write(','),
+    gen_body1(Z,0),
+    write(',th),th)').
+
+
+% ifthen
+gen_a_body(X->Y) :-
+    n_findatom(ifthen,builtin,A),
+    write('Jwcons('),
+    write(A),
+    write(','),
+    write('Jwlist2('),
+    gen_body1(X,0),
+    write(','),
+    gen_body1(Y,0),
     write(',th),th)').
 
 % atom builtin e.g. nl fail
