@@ -1,4 +1,9 @@
 
+boo :-
+    between(0,10,N),
+    write(N),
+    fail.
+
 
 foo(X,Y,Z) :- X -> Y ; Z.
 

@@ -39,9 +39,10 @@ push_button(N, M, Board, Result) :-
 print_answer(PushPattern) :-
     nl,
     between(0, 24, N),
-    ((PushPattern /\ (1 << N)) > 0 -> write('1') ; write('0')),
+    %((PushPattern /\ (1 << N)) > 0 -> write('1') ; write('0')),
     M is N mod 5,
-    (M == 4 -> nl),
+    %(M == 4 -> nl),
+    write(N),
     fail.
 
 % 解法

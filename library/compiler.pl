@@ -1889,6 +1889,11 @@ det_builtin(member(_,X),G) :-
     n_compiler_variable(X),
     not(member(X,G)),!,fail.
 
+det_builtin(between(_,_,X),G) :-
+    n_compiler_variable(X),
+    not(member(X,G)),!,fail.
+
+
 det_builtin(X,_) :-
     n_property(X,builtin).
 
