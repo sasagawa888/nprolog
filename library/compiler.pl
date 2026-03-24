@@ -1918,7 +1918,7 @@ det_builtin(append(X,Y,_),G) :-
     n_compiler_variable(Y),
     not(member(Y,G)),!,fail.
 
-det_builtin(member(_,X),G) :-
+det_builtin(member(X,_),G) :-
     n_compiler_variable(X),
     not(member(X,G)),!,fail.
 

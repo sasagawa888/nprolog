@@ -1,11 +1,11 @@
-:- dynamic(boo/0).
+%:- dynamic(boo/0).
 
 boo :-
     between(0,10,N),
     write(N),
     fail.
 
-:- dynamic(uoo/0).
+%:- dynamic(uoo/0).
 uoo :-
     member(X,[1,2,3]),
     write(X),
