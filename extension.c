@@ -26,14 +26,15 @@ int b_n_reconsult_predicate(int arglist, int rest, int th)
     if (n == 1) {
 	save1 = sp[th];
 	arg1 = deref(car(arglist), th);
-	if (!wide_variable_p(arg1))
-	    exception(NOT_VAR, ind, arg1, th);
+	if (!wide_variable_p(arg1) && !atomp(arg1))
+	    exception(ILLEGAL_ARGS, ind, arg1, th);
 
 	lis = reverse(reconsult_list);
 	while (!nullp(lis)) {
-	    unify(arg1, car(lis), th);
-	    if (prove_all(rest, sp[th], th) == YES)
-		return (YES);
+	    if(unify(arg1, car(lis), th) == YES){
+	    	if (prove_all(rest, sp[th], th) == YES)
+			return (YES);
+		}
 
 	    lis = cdr(lis);
 	    unbind(save1, th);
