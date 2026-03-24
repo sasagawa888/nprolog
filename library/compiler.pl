@@ -1426,7 +1426,7 @@ gen_dynamics(_,[]).
 gen_dynamics(P,[L|Ls]) :-
     atom_concat('compiling ',P,M),
     write(user_output,M),write(user_output,$/$),write(user_output,L),
-    write(user_output,' dynamic'),nl(user_output),
+    write(user_output,' dyn'),nl(user_output),
     gen_dyn(P,L),
     gen_dynamics(P,Ls).
 
