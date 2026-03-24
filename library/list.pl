@@ -4,7 +4,7 @@
                 remove_at/3,insert_at/4,qsort/2,permutation/2,flatten/2,min_list/2,max_list/2,same_set/2]).
 
 last([],[]).
-last([X],[X]).
+last([X],X).
 last([X|Xs],Y) :-
     last(Xs,Y).
 
