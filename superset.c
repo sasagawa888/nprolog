@@ -2114,7 +2114,7 @@ int format_obj(int x, int ind, int th)
     return (makestr(obj));
 }
 
-int b_format(int arglist, int rest, int th)
+int b_n_format(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, ind, i, j, k, save;
     char c, format[STRSIZE], output[STRSIZE], substr[STRSIZE];

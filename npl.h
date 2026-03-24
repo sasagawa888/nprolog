@@ -890,7 +890,7 @@ int b_n_filename(int arglist, int rest, int th);
 int b_float_text(int arglist, int rest, int th);
 int b_flush(int arglist, int rest, int th);
 int b_flush_output(int arglist, int rest, int th);
-int b_format(int arglist, int rest, int th);
+int b_n_format(int arglist, int rest, int th);
 int b_functor(int arglist, int rest, int th);
 int b_gbc(int arglist, int rest, int th);
 int b_gpio_init(int arglist, int rest, int th);

@@ -227,7 +227,7 @@ void init_builtin(void)
     defbuiltin("close_socket", b_close_socket, 1);
     defbuiltin("dynamic", b_dynamic, 1);
     defbuiltin("cinline", b_cinline, 1);
-    defbuiltin("n_format", b_format, -1);
+    defbuiltin("n_format", b_n_format, -1);
     defbuiltin("string_atom", b_string_atom, 2);
     defbuiltin("initialization", b_initialization, 1);
 	defbuiltin("subsumes_term", b_subsumes_term, 2);
@@ -1827,6 +1827,8 @@ int b_reconsult(int arglist, int rest, int th)
 		&& length(clause) == 2) {
 		clause = cadr(clause);
 		prove_all(clause, sp[th], th);
+		if(!module_flag)
+			execute_list = cons(clause,execute_list);
 		goto skip;
 	    }
 	    // DCG syntax e.g. a-->b.
@@ -1877,13 +1879,7 @@ int b_reconsult(int arglist, int rest, int th)
 	module_flag = 0;
 
       exit:
-	if (compiler_flag != 1 && execute_list != NIL) {
-	    execute_list = reverse(execute_list);
-	    while (!nullp(execute_list)) {
-		prove_all(car(execute_list), sp[th], th);
-		execute_list = cdr(execute_list);
-	    }
-	}
+	
 	return (prove_all(rest, sp[th], th));
     } else if (n == 2) {
 	arg1 = car(arglist);
