@@ -5,7 +5,7 @@
 %
 % N-Prologのコンパイラのテストにつかわせていただきました。
 % print_answer/1 を動的なものとしてコンパイルすれば動作します。
-%:- use_module(utils).
+:- use_module(utils).
 %?- solver(0x1ffffff).
 % ボタンを押したときのパターン
 pattern(0, 0x0000023).  pattern(1, 0x0000047).  pattern(2, 0x000008e).  pattern(3, 0x000011c).

@@ -1834,7 +1834,7 @@ int b_reconsult(int arglist, int rest, int th)
 		atom = cadr(clause);
 		if (predicatep(atom))
 		    atom = car(atom);
-		if (!memberp(atom, reconsult_list)) {
+		if (!memberp(atom, reconsult_list) && !module_flag) {
 		    reconsult_list = cons(atom, reconsult_list);
 		    SET_CAR(atom, NIL);
 		    SET_ARITY(atom, NIL);
@@ -1864,7 +1864,7 @@ int b_reconsult(int arglist, int rest, int th)
 		else
 		    atom = car(head);
 	    }
-	    if (!memberp(atom, reconsult_list)) {
+	    if (!memberp(atom, reconsult_list) && !module_flag) {
 		reconsult_list = cons(atom, reconsult_list);
 		SET_CAR(atom, NIL);
 		SET_ARITY(atom, NIL);
