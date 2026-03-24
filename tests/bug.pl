@@ -5,6 +5,11 @@ boo :-
     write(N),
     fail.
 
+:- dynamic(uoo/0).
+uoo :-
+    member(X,[1,2,3]),
+    write(X),
+    fail.
 
 foo(X,Y,Z) :- X -> Y ; Z.
 
