@@ -1,5 +1,7 @@
 %:- dynamic(boo/0).
 
+:- use_module(list).
+
 boo :-
     between(0,10,N),
     write(N),

@@ -5,7 +5,7 @@
 %
 % N-Prologのコンパイラのテストにつかわせていただきました。
 % print_answer/1 を動的なものとしてコンパイルすれば動作します。
-:- dynamic(print_answer/1).
+%:- use_module(utils).
 %?- solver(0x1ffffff).
 % ボタンを押したときのパターン
 pattern(0, 0x0000023).  pattern(1, 0x0000047).  pattern(2, 0x000008e).  pattern(3, 0x000011c).
@@ -40,6 +40,7 @@ push_button(N, M, Board, Result) :-
 
 
 % 解の表示
+/*
 print_answer(PushPattern) :-
     nl,
     between(0, 24, N),
@@ -47,7 +48,9 @@ print_answer(PushPattern) :-
     M is N mod 5,
     (M == 4 -> nl),
     fail.
-
+*/
+print_answer(PushPattern) :-
+    format(user_output,"~B ~n",[PushPattern]).
 
 % 解法
 solver(Board) :-
@@ -55,4 +58,5 @@ solver(Board) :-
     push_button(N, 0, Board, NewBoard),
     clear_light(5, NewBoard, Result, N, PushPattern),
     Result == 0,
-    print_answer(PushPattern).
+    print_answer(PushPattern),
+    fail.
