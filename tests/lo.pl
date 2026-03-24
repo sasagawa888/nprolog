@@ -3,7 +3,8 @@
 %
 %         Copyright (C) 2001-2023 Makoto Hiroi
 %
-
+% N-Prologのコンパイラのテストにつかわせていただきました。
+% print_answer/1 を動的なものとしてコンパイルすれば動作します。
 :- dynamic(print_answer/1).
 %?- solver(0x1ffffff).
 % ボタンを押したときのパターン
