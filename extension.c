@@ -650,17 +650,10 @@ int b_n_property(int arglist, int rest, int th)
 	    else
 		return (NO);
 	} else if (predicatep(arg1)) {
-	    if (memberp(arg1, dynamic_list)) {
-		if (unify(arg2, makeconst("dynamic"), th) == YES)
-		    return (prove_all(rest, sp[th], th));
-		else
-		    return (NO);
-	    } else {
 		if (unify(arg2, makeconst("predicate"), th) == YES)
 		    return (prove_all(rest, sp[th], th));
 		else
 		    return (NO);
-	    }
 	} else if (functionp(arg1)) {
 	    if (unify(arg2, makeconst("function"), th) == YES)
 		return (prove_all(rest, sp[th], th));
