@@ -303,9 +303,9 @@ void usage()
     printf("List of options:\n");
     printf("-c filename -- NPL starts after reading the file.\n");
     printf("-d          -- string is double quote.\n");
-	printf("-f          -- NPL treats undefined errors as fail.\n");
+    printf("-f          -- NPL treats undefined errors as fail.\n");
     printf("-h          -- display help.\n");
-	printf("-l          -- display Lisp like S.\n");
+    printf("-l          -- display Lisp like S.\n");
     printf("-m N        -- NPL runs with N(30>=N>=10) mega cells.\n");
     printf("-n          -- NPL runs with network mode.\n");
     printf("-r          -- NPL does not use editable REPL.\n");

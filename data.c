@@ -2238,10 +2238,11 @@ int variable_to_call(int x)
 	return (list2(CALL, x));
     else if (atomp(x) && GET_AUX(x) == SIMP && !variablep(x) && x != FEND)
 	return (makepred(GET_NAME(x)));
-    else if (structurep(x) && (car(x) == AND || car(x) == OR || car(x) == IFTHEN))
+    else if (structurep(x)
+	     && (car(x) == AND || car(x) == OR || car(x) == IFTHEN))
 	return (list3
-		(car(x),
-		 variable_to_call(cadr(x)), variable_to_call(caddr(x))));
+		(car(x), variable_to_call(cadr(x)),
+		 variable_to_call(caddr(x))));
     else if (structurep(x) && car(x) == NECK) {
 	if (nullp(caddr(x)))	// e.g :- foo(x).
 	    return (list2(car(x), cadr(x)));

@@ -14,7 +14,7 @@ char operator[OPERATOR_NUMBER][5] = {
     { ":-" }, { "-->" }, { "," }, { ";" }, { "?-" }, { "." },
     { "+" }, { "-" }, { "*" }, { "/" }, { "//" }, { "<<" }, { ">>" },
     { "\\" }, { "/\\" }, { "\\/" }, { "mod" }, { "^" }, { "**" },
-	{ "xor" },
+    { "xor" },
 };
 
 char function[FUNCTION_NUMBER][12] = {
@@ -73,13 +73,13 @@ char builtin[BUILTIN_NUMBER][30] = {
     { "flush_output" }, { "put_code" }, { "put_byte" },
     { "number_codes" }, { "number_chars" }, { "catch" }, { "throw" },
     { "set_input" }, { "set_output" }, { "use_module" }, { "module" },
-    { "copy_term" }, 
+    { "copy_term" },
     { "current_input" }, { "current_output" }, { "at_end_of_stream" },
     { "peek_code" }, { "peek_char" }, { "peek_byte" },
     { "stream_property" }, { "dynamic" }, { "subsumes_term" },
     { "create_client_socket" }, { "create_server_socket" },
     { "recv_socket" }, { "close_socket" }, { "initialization" },
-    { "string_atom" }, 
+    { "string_atom" },
 };
 
 //for compiled predicate
@@ -95,7 +95,7 @@ char extended[EXTENDED_NUMBER][30] = {
     { "pin_mode" }, { "digital_write" },
     { "pwm_write" }, { "pull_up_dn_control" }, { "digital_read" },
     { "delay" }, { "delay_microseconds" },
-    { "compile_file" }, { "timer_microseconds" }, 
+    { "compile_file" }, { "timer_microseconds" },
     { "dp_create" }, { "dp_consult" }, { "dp_countup" },
     { "dp_transfer" }, { "dp_and" }, { "dp_or" }, { "dp_halt" },
     { "dp_reconsult" }, { "dp_setid" }, { "dp_senderr" },

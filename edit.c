@@ -138,12 +138,13 @@ void display_buffer()
 		while (buffer[col][0] != NUL && buffer[col][0] != EOL) {
 		    printf("%c", buffer[col][0]);
 		    col++;
-		    if (buffer[col - 1][0] == '$' && buffer[col - 2][0] != '\\')
+		    if (buffer[col - 1][0] == '$'
+			&& buffer[col - 2][0] != '\\')
 			break;
 		}
 		ESCRST;
 		ESCFORG;
-	 	} else if (type == 11) {	// "..."
+	    } else if (type == 11) {	// "..."
 		ESCBOLD;
 		setcolor(ed_quote_color);
 		printf("%c", buffer[col][0]);
@@ -151,7 +152,8 @@ void display_buffer()
 		while (buffer[col][0] != NUL && buffer[col][0] != EOL) {
 		    printf("%c", buffer[col][0]);
 		    col++;
-		    if (buffer[col - 1][0] == '"' && buffer[col-2][0] != '\\')
+		    if (buffer[col - 1][0] == '"'
+			&& buffer[col - 2][0] != '\\')
 			break;
 		}
 		ESCRST;
@@ -265,7 +267,7 @@ void check_token_buffer(int col)
 	rtok.type = 9;
 	rtok.length = -1;
 	return;			//double quote string token
-	} else if (buffer[col][0] == '"') {
+    } else if (buffer[col][0] == '"') {
 	rtok.type = 11;
 	rtok.length = -1;
 	return;			//string token

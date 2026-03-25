@@ -2202,7 +2202,7 @@ int b_n_format(int arglist, int rest, int th)
 			c = substr[k++];
 		    }
 		} else if (c == 'B') {
-			if (!integerp(car(arg3)))
+		    if (!integerp(car(arg3)))
 			exception(NOT_INT, ind, arg3, th);
 		    memset(substr, 0, sizeof(substr));
 		    sprintf(substr, "%b", GET_INT(car(arg3)));
@@ -2223,16 +2223,16 @@ int b_n_format(int arglist, int rest, int th)
 			output[j++] = c;
 			c = substr[k++];
 		    }
-		} else if (c == 'n'){
-			output[j++] = '\n';
-		} else if (c == 't'){
-			output[j++] = '\t';
-		} else if (c == '~'){
-			output[j++] = '~';
-		} else{
-			exception(ILLEGAL_ARGS,ind,arg2,th);
-		}
+		} else if (c == 'n') {
+		    output[j++] = '\n';
+		} else if (c == 't') {
+		    output[j++] = '\t';
+		} else if (c == '~') {
+		    output[j++] = '~';
 		} else {
+		    exception(ILLEGAL_ARGS, ind, arg2, th);
+		}
+	    } else {
 		output[j++] = c;
 	    }
 	    c = format[i++];

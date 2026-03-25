@@ -230,7 +230,7 @@ void init_builtin(void)
     defbuiltin("n_format", b_n_format, -1);
     defbuiltin("string_atom", b_string_atom, 2);
     defbuiltin("initialization", b_initialization, 1);
-	defbuiltin("subsumes_term", b_subsumes_term, 2);
+    defbuiltin("subsumes_term", b_subsumes_term, 2);
     definfix("\\+", b_not, 900, FY);
 
     //-----Distributed parallel
@@ -1118,8 +1118,9 @@ int b_read(int arglist, int rest, int th)
 	repl_flag = save2;
 	if (res == YES)
 	    return (prove_all(rest, sp[th], th));
-	else{
-		if(repl_flag) clear_input_buffer();
+	else {
+	    if (repl_flag)
+		clear_input_buffer();
 	    return (NO);
 	}
     }
@@ -1827,8 +1828,8 @@ int b_reconsult(int arglist, int rest, int th)
 		&& length(clause) == 2) {
 		clause = cadr(clause);
 		prove_all(clause, sp[th], th);
-		if(!module_flag)
-			execute_list = cons(clause,execute_list);
+		if (!module_flag)
+		    execute_list = cons(clause, execute_list);
 		goto skip;
 	    }
 	    // DCG syntax e.g. a-->b.
@@ -1879,7 +1880,7 @@ int b_reconsult(int arglist, int rest, int th)
 	module_flag = 0;
 
       exit:
-	
+
 	return (prove_all(rest, sp[th], th));
     } else if (n == 2) {
 	arg1 = car(arglist);

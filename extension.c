@@ -31,10 +31,10 @@ int b_n_reconsult_predicate(int arglist, int rest, int th)
 
 	lis = reverse(reconsult_list);
 	while (!nullp(lis)) {
-	    if(unify(arg1, car(lis), th) == YES){
-	    	if (prove_all(rest, sp[th], th) == YES)
-			return (YES);
-		}
+	    if (unify(arg1, car(lis), th) == YES) {
+		if (prove_all(rest, sp[th], th) == YES)
+		    return (YES);
+	    }
 
 	    lis = cdr(lis);
 	    unbind(save1, th);
@@ -650,20 +650,27 @@ int b_n_property(int arglist, int rest, int th)
 	    else
 		return (NO);
 	} else if (predicatep(arg1)) {
-	    if (unify(arg2, makeconst("predicate"), th) == YES)
-		return (prove_all(rest, sp[th], th));
-	    else
-		return (NO);
+	    if (memberp(arg1, reconsult_list)) {
+		if (unify(arg2, makeconst("predicate"), th) == YES)
+		    return (prove_all(rest, sp[th], th));
+		else
+		    return (NO);
+	    } else {
+		if (unify(arg2, makeconst("libpred"), th) == YES)
+		    return (prove_all(rest, sp[th], th));
+		else
+		    return (NO);
+	    }
 	} else if (functionp(arg1)) {
 	    if (unify(arg2, makeconst("function"), th) == YES)
 		return (prove_all(rest, sp[th], th));
 	    else
 		return (NO);
 	} else if (compiledp(arg1)) {
-	    if (unify(arg2, makeconst("compiled"), th) == YES)
-		return (prove_all(rest, sp[th], th));
-	    else
-		return (NO);
+		if (unify(arg2, makeconst("compiled"), th) == YES)
+		    return (prove_all(rest, sp[th], th));
+		else
+		    return (NO);
 	} else if (operationp(arg1)) {
 	    if (unify(arg2, makeconst("operation"), th) == YES)
 		return (prove_all(rest, sp[th], th));
@@ -1941,19 +1948,18 @@ int f_gr_line(int arglist, int th)
 
 int make_const_var(int x)
 {
-	char str[64];
+    char str[64];
 
-	if(variablep(x))
-		return(makeconst(GET_NAME(x)));
-	else if(alpha_variable_p(x)){
-		memset(str,0,64);
-		sprintf(str,"%d",x);
-		return(makeconst(str));
-	}
-	else if(anonymousp(x))
-		return(makeconst(GET_NAME(x)));
-	else
-		return x;
+    if (variablep(x))
+	return (makeconst(GET_NAME(x)));
+    else if (alpha_variable_p(x)) {
+	memset(str, 0, 64);
+	sprintf(str, "%d", x);
+	return (makeconst(str));
+    } else if (anonymousp(x))
+	return (makeconst(GET_NAME(x)));
+    else
+	return x;
 
 }
 
@@ -2011,14 +2017,13 @@ int b_subsumes_term(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	arg2 = subsumes_conversion(arg2,th);
+	arg2 = subsumes_conversion(arg2, th);
 	save = sp[th];
-	if(unify(arg1,arg2,th) == YES){
-		unbind(save,th);
-		return (prove_all(rest, sp[th], th));
-	}
-	else 
-		return NO;
+	if (unify(arg1, arg2, th) == YES) {
+	    unbind(save, th);
+	    return (prove_all(rest, sp[th], th));
+	} else
+	    return NO;
     }
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
