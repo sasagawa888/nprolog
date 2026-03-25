@@ -263,7 +263,7 @@ void init_builtin(void)
     defbuiltin("n_constraint_set", b_constraint_set, -1);
     defbuiltin("n_constraint_var", b_constraint_var, -1);
     defbuiltin("n_constraint_vars", b_constraint_vars, -1);
-    defbuiltin("n_label", b_label, -1);
+    defbuiltin("n_label", b_n_label, -1);
     defbuiltin("all_different", b_all_different, 1);
 
     //------dev/fb0-------------------------

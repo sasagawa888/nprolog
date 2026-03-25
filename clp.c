@@ -1220,7 +1220,7 @@ void fd_propagate()
 }
 
 
-int b_label(int arglist, int rest, int th)
+int b_n_label(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, save1, save2, save3, res, sets;
 
