@@ -925,6 +925,7 @@ int b_gr_line(int arglist, int rest, int th);
 int b_halt(int arglist, int rest, int th);
 int b_n_has_cut(int arglist, int rest, int th);
 int b_heapdump(int arglist, int rest, int th);
+int b_n_imported(int arglist, int rest, int th);
 int b_inc(int arglist, int rest, int th);
 int b_initialization(int arglist, int rest, int th);
 int b_ifthen(int arglist, int rest, int th);

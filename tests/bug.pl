@@ -2,6 +2,9 @@
 
 :- use_module(list).
 
+goo(X,Y) :- reverse(X,Y).
+
+
 boo :-
     between(0,10,N),
     write(N),
@@ -12,6 +15,7 @@ uoo :-
     member(X,[1,2,3]),
     write(X),
     fail.
+
 
 foo(X,Y,Z) :- X -> Y ; Z.
 

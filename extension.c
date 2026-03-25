@@ -650,18 +650,13 @@ int b_n_property(int arglist, int rest, int th)
 	    else
 		return (NO);
 	} else if (predicatep(arg1)) {
-		if (memberp(arg1, dynamic_list)){
+	    if (memberp(arg1, dynamic_list)) {
 		if (unify(arg2, makeconst("dynamic"), th) == YES)
 		    return (prove_all(rest, sp[th], th));
 		else
 		    return (NO);
-		} else if (memberp(arg1, reconsult_list)) {
-		if (unify(arg2, makeconst("predicate"), th) == YES)
-		    return (prove_all(rest, sp[th], th));
-		else
-		    return (NO);
 	    } else {
-		if (unify(arg2, makeconst("libpred"), th) == YES)
+		if (unify(arg2, makeconst("predicate"), th) == YES)
 		    return (prove_all(rest, sp[th], th));
 		else
 		    return (NO);
@@ -672,10 +667,10 @@ int b_n_property(int arglist, int rest, int th)
 	    else
 		return (NO);
 	} else if (compiledp(arg1)) {
-		if (unify(arg2, makeconst("compiled"), th) == YES)
-		    return (prove_all(rest, sp[th], th));
-		else
-		    return (NO);
+	    if (unify(arg2, makeconst("compiled"), th) == YES)
+		return (prove_all(rest, sp[th], th));
+	    else
+		return (NO);
 	} else if (operationp(arg1)) {
 	    if (unify(arg2, makeconst("operation"), th) == YES)
 		return (prove_all(rest, sp[th], th));
@@ -709,6 +704,24 @@ int b_n_property(int arglist, int rest, int th)
 	    else
 		return (NO);
 	} else
+	    return (NO);
+
+    }
+    return (NO);
+}
+
+
+int b_n_imported(int arglist, int rest, int th)
+{
+    int n, arg1;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+
+	if (predicatep(arg1) && !memberp(arg1, reconsult_list))
+	    return (prove_all(rest, sp[th], th));
+	else
 	    return (NO);
 
     }

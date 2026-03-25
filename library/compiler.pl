@@ -734,32 +734,27 @@ gen_a_body(X) :-
     write(P),
     write('")').
 
-/*
-% predicate in module will become as same type 
+
+% atom compiled predicate in module 
 gen_a_body(X) :-
-    not(n_reconsult_predicate(X)),
     functor(X,P,0),
-    not(n_dynamic_predicate(P)),
     n_property(P,compiled),
     write('Jmakecomp("'),
     write(P),
     write('")').
 
-% predicate in module atom predicate
+% atom predicate in module
 gen_a_body(X) :-
-    not(n_reconsult_predicate(X)),
     functor(X,P,0),
-    not(n_dynamic_predicate(P)),
     n_property(P,predicate),
+    n_imported(P),
     write('Jmakepred("'),
     write(P),
     write('")').
 
-% predicate in module compound compiled
+% compound compiled predicate in module
 gen_a_body(X) :-
-    not(n_reconsult_predicate(X)),
     X =.. [P|L],
-    not(n_dynamic_predicate(P)),
     n_property(P,compiled),
     write('Jwcons(Jmakecomp("'),
     write(P),
@@ -767,18 +762,17 @@ gen_a_body(X) :-
     gen_argument(L),
     write(',th)').
 
-% predicate in module compound predicate
+% compound predicate in module
 gen_a_body(X) :-
-    not(n_reconsult_predicate(X)),
     X =.. [P|L],
-    not(n_dynamic_predicate(P)),
     n_property(P,predicate),
+    n_imported(P),
     write('Jwcons(Jmakepred("'),
     write(P),
     write('"),'),
     gen_argument(L),
     write(',th)').
-*/
+
 
 % defined predicate will become compiled predicate
 gen_a_body(X) :-
