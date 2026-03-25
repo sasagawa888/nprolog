@@ -747,7 +747,7 @@ gen_a_body(X) :-
 gen_a_body(X) :-
     functor(X,P,0),
     n_property(P,predicate),
-    n_imported(P),
+    n_imported_predicate(P),
     write('Jmakepred("'),
     write(P),
     write('")').
@@ -766,7 +766,7 @@ gen_a_body(X) :-
 gen_a_body(X) :-
     X =.. [P|L],
     n_property(P,predicate),
-    n_imported(P),
+    n_imported_predicate(P),
     write('Jwcons(Jmakepred("'),
     write(P),
     write('"),'),

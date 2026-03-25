@@ -711,7 +711,7 @@ int b_n_property(int arglist, int rest, int th)
 }
 
 
-int b_n_imported(int arglist, int rest, int th)
+int b_n_imported_predicate(int arglist, int rest, int th)
 {
     int n, arg1;
 
