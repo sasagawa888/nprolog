@@ -49,9 +49,23 @@ print_answer(PushPattern) :-
     fail.
 */
 print_answer(PushPattern) :-
-    format(user_output,"~B ~n",[PushPattern]).
+    print_answer1(PushPattern,L),
+    print_answer2(L),!.
+
+print_answer1(0,[]).
+print_answer1(N,[B|L]) :-
+    B is N /\ 0x1f,
+    N1 is N >> 5,
+    print_answer1(N1,L) .
+
+print_answer2([]) :-
+    format(user_output,"~n",[]).
+print_answer2([L|Ls]) :-
+    format(user_output,"~B5 ~n",[L]),
+    print_answer2(Ls).
 
 % 解法
+%:- dynamic(solver/1).
 solver(Board) :-
     between(0, 31, N),
     push_button(N, 0, Board, NewBoard),

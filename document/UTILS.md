@@ -36,7 +36,7 @@ The variables for insertion are as follows:
 - ~D integer
 - ~F float
 - ~X hex integer
-- ~B binary integer
+- ~Bn binary integer with n digits
 - ~n newline
 - ~t tab
 - ~~ ~

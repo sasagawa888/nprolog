@@ -10,6 +10,7 @@
 #include <unistd.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <ctype.h>
 #include "npl.h"
 
 int b_atom_concat(int arglist, int rest, int th)
@@ -2114,6 +2115,30 @@ int format_obj(int x, int ind, int th)
     return (makestr(obj));
 }
 
+void to_binary_any(unsigned int n, char *buf, int width)
+{
+    char temp[128];
+    int i = 0;
+
+    // generate from lsb
+    do {
+        temp[i++] = (n % 2) ? '1' : '0';
+        n /= 2;
+    } while (n > 0);
+
+    // fill 0
+    while (i < width) {
+        temp[i++] = '0';
+    }
+
+    // reverse copy
+    int j = 0;
+    while (i > 0) {
+        buf[j++] = temp[--i];
+    }
+    buf[j] = '\0';
+}
+
 int b_n_format(int arglist, int rest, int th)
 {
     int n, arg1, arg2, arg3, ind, i, j, k, save;
@@ -2202,10 +2227,22 @@ int b_n_format(int arglist, int rest, int th)
 			c = substr[k++];
 		    }
 		} else if (c == 'B') {
+			//parse digits
+			int width;
+			width = 0;
+			c = format[i++];
+			while(isdigit(c)){
+				width = width * 10 + (c - '0');
+				c = format[i++];
+			}
+			if (width == 0){
+				i--;
+				width = 16;
+			}
 		    if (!integerp(car(arg3)))
 			exception(NOT_INT, ind, arg3, th);
 		    memset(substr, 0, sizeof(substr));
-		    sprintf(substr, "%b", GET_INT(car(arg3)));
+			to_binary_any((unsigned int)GET_INT(car(arg3)),substr,width);
 		    arg3 = cdr(arg3);
 		    k = 0;
 		    c = substr[k++];
