@@ -1884,7 +1884,29 @@ generated_variable((X,Y),L) :-
     append(L1,L2,L),!.
 generated_variable(M is _,[M]) :-
     n_compiler_variable(M), !.
+generated_variable(Term,V) :-
+    n_property(Term,predicate),
+    Term =.. [_|A],
+    generated_variable1(A,V).
 generated_variable(_,[]) :- !.
+
+generated_variable1([],[]).
+generated_variable1([V|Vs],[V|L]) :-
+    n_compiler_variable(V),
+    generated_variable1(Vs,L).
+generated_variable1([V|Vs],L) :-
+    list(V),
+    generated_variable1(V,L1),
+    generated_variable1(Vs,L2),
+    append(L1,L2,L).
+generated_variable1([V|Vs],L) :-
+    n_property(V,predicate),
+    generated_variable1(V,L1),
+    generated_variable1(Vs,L2),
+    append(L1,L2,L).    
+generated_variable1([_|Vs],L) :-
+    generated_variable1(Vs,L).
+
 
 independ_body(Head,Body) :-
     Head =.. [_|A],
