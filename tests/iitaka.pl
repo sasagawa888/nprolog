@@ -1,5 +1,6 @@
 % codes from Dr. iidaka's book
 
+:- use_module(math).
 
 sum1(0,0) :- !.
 sum1(J,S1) :- I is J-1,sum1(I,S),S1 is S + J.
@@ -241,10 +242,11 @@ power0(Power1,Set) :-
     Power1 isl Power - [[],Set].
 
 %p154
+/*
 topology_c(U,V,O) :-
         (Z isl U+V,sort(Z,Zs), member(Zs,O)),
         (Z1 isl U*V,sort(Z1,Z1s),member(Z1s,O)).
-
+*/
 top_condition(O0,O) :-
         for_any(memberr([U,V],O0,2),
                 topology_c(U,V,O)).
