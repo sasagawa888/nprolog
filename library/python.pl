@@ -1,4 +1,5 @@
 % library for tensorflow with python
+:- module(python,[send_python/2]).
 
 cdeclare($#include <stdio.h>$).
 cdeclare($char command[STRSIZE];
