@@ -1806,7 +1806,9 @@ tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
     H1 is H+1,!,
     tail_recursive(Cs,T,P,H1,A,N).
 tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
-    independ(Head),
+    %write(user_output,Head),nl,write(user_output,Body),nl,
+    independ_head(Head),
+    independ_body(Head,Body),
     butlast_body(Body,Body1),
     det_body(Head,Body1,[]),
     tail_body(Head,Body),
@@ -1826,35 +1828,35 @@ tail_recursive([X|Cs],D,P,H,A,N) :-
 tail_recursive([_|Cs],D,P,H,A,N) :-
     tail_recursive(Cs,D,P,H,A,N).
 
-independ(Head) :-
+independ_head(Head) :-
     Head =.. [_|A],
-    independ1(A).
+    independ_head1(A).
     
-independ1([X|Xs]) :-
+independ_head1([X|Xs]) :-
     list(X),
     flatten(Xs,F),
-    not(independ2(X,F)),!,fail.
-independ1([X|Xs]) :-
+    not(independ_head2(X,F)),!,fail.
+independ_head1([X|Xs]) :-
     list(X),
     flatten(Xs,F),
-    independ2(X,F),
-    independ1(Xs).
-independ1([_|Xs]) :-
-    independ1(Xs).
-independ1(_).        
+    independ_head2(X,F),
+    independ_head1(Xs).
+independ_head1([_|Xs]) :-
+    independ_head1(Xs).
+independ_head1(_).        
     
-independ2([],_).
-independ2([X|_],F) :-
+independ_head2([],_).
+independ_head2([X|_],F) :-
     n_compiler_variable(X),
     member(X,F),
     !,fail.
-independ2([_|Xs],F) :-
-    independ2(Xs,F).
-independ2(X,F) :-
+independ_head2([_|Xs],F) :-
+    independ_head2(Xs,F).
+independ_head2(X,F) :-
     n_compiler_variable(X),
     member(X,F),
     !,fail.
-independ2(X,_) :-
+independ_head2(X,_) :-
     atomic(X).
             
                 
@@ -1871,6 +1873,31 @@ flatten([L|Ls],Z) :-
     flatten(Ls,Y2),
     append(Y1,Y2,Z).
             
+
+generated_variable((X;Y),L) :-
+    generated_variable(X,L1),
+    generated_variable(Y,L2),
+    append(L1,L2,L),!.
+generated_variable((X,Y),L) :-
+    generated_variable(X,L1),
+    generated_variable(Y,L2),
+    append(L1,L2,L),!.
+generated_variable(M is _,[M]) :-
+    n_compiler_variable(M), !.
+generated_variable(_,[]) :- !.
+
+independ_body(Head,Body) :-
+    Head =.. [_|A],
+    flatten(A,A1),
+    generated_variable(Body,V),
+    %write(user_output,A1),write(user_output,V),
+    independ_body1(A1,V).
+independ_body1(A,[]) :- !.
+independ_body1(A,[V|Vs]) :-
+    not(member(V,A)),
+    independ_body1(A,Vs).
+independ_body1(A,[V|Vs]) :-
+    member(V,A),!,fail.
     
 % arguments = [clauses],det_count,pred_count,all_count
 halt_check([],H,P,_) :-
