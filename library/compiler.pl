@@ -1116,6 +1116,12 @@ eval_form(X) :-
 eval_form(X) :-
     list(X),
     gen_a_argument(X).
+eval_form(-X) :-
+	write('Jminus('),
+    eval_form(0),
+    write(','),
+    eval_form(X),
+    write(',th)').
 eval_form(X + Y) :-
 	write('Jplus('),
     eval_form(X),
