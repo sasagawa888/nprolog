@@ -1,5 +1,6 @@
 % Draw a C-curve (Koch C-curve)
 % draw_c_curve(X0, Y0, X1, Y1, Depth, Color)
+:- use_module(tcltk).
 
 draw_c_curve(X0, Y0, X1, Y1, 0, Color) :-
     % Base case: draw straight line
