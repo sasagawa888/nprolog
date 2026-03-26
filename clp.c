@@ -9,7 +9,7 @@
 
 #define UNBOUND -1
 
-int b_add_constraint(int arglist, int rest, int th)
+int b_n_add_constraint(int arglist, int rest, int th)
 {
     int n, ind, arg1;
 
@@ -24,7 +24,7 @@ int b_add_constraint(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_constraint_set(int arglist, int rest, int th)
+int b_n_constraint_set(int arglist, int rest, int th)
 {
     int n, ind, arg1;
 
@@ -42,7 +42,7 @@ int b_constraint_set(int arglist, int rest, int th)
 }
 
 
-int b_constraint_var(int arglist, int rest, int th)
+int b_n_constraint_var(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, var, min, max;
 
@@ -70,7 +70,7 @@ int b_constraint_var(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_constraint_vars(int arglist, int rest, int th)
+int b_n_constraint_vars(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, elt, var, min, max;
 

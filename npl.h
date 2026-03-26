@@ -1571,10 +1571,10 @@ int b_timer_microseconds(int arglist, int rest, int th);
 #endif
 
 //----CLPFD---------------
-int b_add_constraint(int arglist, int rest, int th);
-int b_constraint_set(int arglist, int rest, int th);
-int b_constraint_var(int arglist, int rest, int th);
-int b_constraint_vars(int arglist, int rest, int th);
+int b_n_add_constraint(int arglist, int rest, int th);
+int b_n_constraint_set(int arglist, int rest, int th);
+int b_n_constraint_var(int arglist, int rest, int th);
+int b_n_constraint_vars(int arglist, int rest, int th);
 int b_n_label(int arglist, int rest, int th);
 int b_all_different(int arglist, int rest, int th);
 
