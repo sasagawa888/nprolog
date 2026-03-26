@@ -1,7 +1,12 @@
 % not tail recursive optimization
 
-alpha_list([], []).
-alpha_list([A|As], [A1|As1]) :-
-    alpha(A, A1),
-    alpha_list(As, As1).
+:- use_module(utils).
 
+output_disp(_S, 0) :- !.
+output_disp(S, N) :-
+    N > 0, !,
+    format(S, $+~D$, [N]).
+output_disp(S, N) :-
+    N < 0,
+    N1 is -N,
+    format(S, $-~D$, [N1]).

@@ -1,6 +1,6 @@
 
 % PL/M compiler
-
+:- use_module(utils).
 
 plm80(File) :-
     open(S,File,r),
@@ -70,6 +70,7 @@ output_operand(S, X) :-
         write(S, X)
     ).
 
+/*
 output_disp(_S, 0) :- !.
 output_disp(S, N) :-
     N > 0, !,
@@ -78,3 +79,4 @@ output_disp(S, N) :-
     N < 0,
     N1 is -N,
     format(S, $-~D$, [N1]).
+*/
