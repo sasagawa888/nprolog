@@ -1808,8 +1808,8 @@ tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
 tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
     %write(user_output,Head),nl,write(user_output,Body),nl,
     independ_head(Head),
-    independ_body(Head,Body),
     butlast_body(Body,Body1),
+    independ_body(Head,Body1),
     det_body(Head,Body1,[]),
     tail_body(Head,Body),
     not(tail_body(Head,Body1)), % ...,qsort(),qsort(). not tco
@@ -1890,7 +1890,6 @@ independ_body(Head,Body) :-
     Head =.. [_|A],
     flatten(A,A1),
     generated_variable(Body,V),
-    %write(user_output,A1),write(user_output,V),
     independ_body1(A1,V).
 independ_body1(A,[]) :- !.
 independ_body1(A,[V|Vs]) :-

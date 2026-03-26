@@ -1,6 +1,7 @@
 % not tail recursive optimization
-print_answer1(0,[]).
-print_answer1(N,[B|L]) :-
-    B is N /\ 0x1f,
-    N1 is N >> 5,
-    print_answer1(N1,L) .
+
+alpha_list([], []).
+alpha_list([A|As], [A1|As1]) :-
+    alpha(A, A1),
+    alpha_list(As, As1).
+
