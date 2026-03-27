@@ -1,4 +1,6 @@
 % lambda tests
+:- use_module(lambda).
+
 test(identity) :- reduce([l(x,x), a], a).
 test(constant) :- reduce([l(x,y), a], y).
 test(nested1)  :- reduce([l(x, l(y, x)), a], l(y1, a)).
