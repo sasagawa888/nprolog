@@ -4,25 +4,26 @@
 
 %e.g. 
 /*
-ex1(exist(x,p(x))).
-ex2(exist(x,(forall(y,p(x,y))))).
+:- dynamic(ex/1).
+ex(1,exist(x,p(x))).
+ex(2,exist(x,(forall(y,p(x,y))))).
 
-ex3(forall(x,imply(p(x),
+ex(3,forall(x,imply(p(x),
                   exist(y,
                           and( imply(q(x,y), p(a)),
                           forall(z, imply(q(y,z), p(x)))
                ))))).
 
-ex4(p(a)).
-ex5(q(a,b)).
-ex6(neg(p(a))).
-ex7(imply(p(a), q(a,b))).
-ex8(forall(x, imply(p(x), q(x,a)))).
-ex9(exist(x, p(x))).
-ex10(forall(x, exist(y, p(x,y)))).
-ex11(exist(y, imply(q(a,y), p(a)))).
-ex12(or(p(a), and(q(a,b), r(a)))).
-ex13(forall(x,
+ex(4,p(a)).
+ex(5,q(a,b)).
+ex(6,neg(p(a))).
+ex(7,imply(p(a), q(a,b))).
+ex(8,forall(x, imply(p(x), q(x,a)))).
+ex(9,exist(x, p(x))).
+ex(10,forall(x, exist(y, p(x,y)))).
+ex(11,exist(y, imply(q(a,y), p(a)))).
+ex(12,or(p(a), and(q(a,b), r(a)))).
+ex(13,forall(x,
   imply(p(x),
     exist(y,
       and(imply(q(x,y), p(a)),
