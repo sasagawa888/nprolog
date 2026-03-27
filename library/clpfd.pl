@@ -10,7 +10,7 @@
 :- op(600, xfy, in).
 :- op(600, xfy, ins).
 
-:- module(clpfd,['..'/2,'#>'/2,'#<'/2,'#\\='/2,'#<='/2,'#>='/2,in/2,ins/2,label/1,label/2]).
+:- module(clpfd,['..'/2,'#>'/2,'#<'/2,'#\\='/2,'#<='/2,'#>='/2,'#='/2,in/2,ins/2,label/1,label/2]).
 
 label(X) :- n_label(X).
 label(X,Y) :- n_label(X,Y).

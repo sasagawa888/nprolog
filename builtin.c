@@ -322,6 +322,7 @@ void init_builtin(void)
     defbuiltin("n_clause_with_arity", b_n_clause_with_arity, 3);
     defbuiltin("n_property", b_n_property, 2);
 	defbuiltin("n_imported_predicate", b_n_imported_predicate, 1);
+	defbuiltin("n_imported_userop", b_n_imported_userop, 1);
     defbuiltin("n_bignum", b_n_bignum, 1);
     defbuiltin("n_longnum", b_n_longnum, 1);
     defbuiltin("n_findatom", b_n_findatom, 3);

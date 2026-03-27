@@ -721,6 +721,25 @@ int b_n_imported_predicate(int arglist, int rest, int th)
     return (NO);
 }
 
+
+int b_n_imported_userop(int arglist, int rest, int th)
+{
+    int n, arg1;
+
+    n = length(arglist);
+    if (n == 1) {
+	arg1 = car(arglist);
+
+	if ((user_operation_p(arg1) || user_operator_p(arg1)) && !memberp(arg1, reconsult_list))
+	    return (prove_all(rest, sp[th], th));
+	else
+	    return (NO);
+
+    }
+    return (NO);
+}
+
+
 int b_n_bignum(int arglist, int rest, int th)
 {
     int n, arg1;

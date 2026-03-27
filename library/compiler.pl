@@ -922,6 +922,7 @@ gen_a_body(X) :-
     write('")').
 gen_a_body(X) :-
     n_defined_userop(X),
+    not(n_imported_userop(X)),
     X =.. [P|L],
     write('Jwcons(Jmakecomp("'),
     write(P),
