@@ -1,10 +1,12 @@
 
 
-:- use_module(clpfd).
+:- use_module(dcg).
 
-ac(X,Y,Z) :-
-    X in 1..3,
-    Y in 1..3,
-    Z in 1..5,
-    X+Y+Z#=3,
-    label([X,Y,Z],trace). 
+
+s --> np,vp.
+np --> det,n.
+det -->[a].
+n -->[dog].
+n -->[postman].
+vp --> v,np.
+v -->[bites].

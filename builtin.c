@@ -1837,8 +1837,9 @@ int b_reconsult(int arglist, int rest, int th)
 	    // DCG syntax e.g. a-->b.
 	    if (dcgp(clause)) {
 		atom = cadr(clause);
-		if (predicatep(atom))
+		if (user_operation_p(atom))
 		    atom = car(atom);
+
 		if (!memberp(atom, reconsult_list) && !module_flag) {
 		    reconsult_list = cons(atom, reconsult_list);
 		    SET_CAR(atom, NIL);
