@@ -3,6 +3,7 @@
 :- use_module(list).
 
 %e.g. 
+/*
 ex1(exist(x,p(x))).
 ex2(exist(x,(forall(y,p(x,y))))).
 
@@ -27,6 +28,9 @@ ex13(forall(x,
       and(imply(q(x,y), p(a)),
           imply(q(y,a), p(x)))
 )))).
+*/
+% snf(forall(x,imply(p(x),exist(y,and(imply(q(x,y), p(a)),imply(q(y,a), p(x)))))),X).
+
 % 102 is ascii code of atom f
 :- ctr_set(1,0).
 :- ctr_set(2,102).

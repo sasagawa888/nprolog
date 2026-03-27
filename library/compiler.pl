@@ -1957,9 +1957,8 @@ generated_variable1([_|Vs],L) :-
 
 
 independ_body(Head,Body) :-
-    Head =.. [_|A],
-    flatten(A,A1),
-    generated_variable(Body,V),
+    extract_variable(Head,A1),
+    generated_variable(Body,V),!,
     independ_body1(A1,V).
 independ_body1(A,[]) :- !.
 independ_body1(A,[V|Vs]) :-
