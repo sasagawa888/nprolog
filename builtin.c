@@ -401,7 +401,7 @@ int exec(int goal, int bindings, int rest, int th)
 
 	    return (res);
 	}
-    } else if (predicatep(goal)) {
+    } else if (predicatep(goal) || user_operation_p(goal)) {
 	compiled_flag = 0;
 	res = prove(goal, sp[th], NIL, th);
 	compiled_flag = 1;

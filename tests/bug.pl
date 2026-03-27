@@ -7,4 +7,4 @@ ac(X,Y,Z) :-
     Y in 1..3,
     Z in 1..5,
     X+Y+Z#=3,
-    label([X,Y,Z]). 
+    label([X,Y,Z],trace). 
