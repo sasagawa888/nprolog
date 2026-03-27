@@ -1905,7 +1905,7 @@ independ_head2(X,F) :-
     !,fail.
 independ_head2(X,_) :-
     atomic(X).
-*/           
+           
                 
 flatten([],[]).
 flatten([L|Ls],[L,Ls]) :-
@@ -1919,7 +1919,7 @@ flatten([L|Ls],Z) :-
     flatten(L,Y1),
     flatten(Ls,Y2),
     append(Y1,Y2,Z).
-            
+*/           
 
 generated_variable((X;Y),L) :-
     generated_variable(X,L1),
