@@ -1874,53 +1874,6 @@ extract_variable1(L,[L]) :-
 extract_variable1(L,[]) :-
     atomic(L).
 
-/*
-independ_head(Head) :-
-    Head =.. [_|A],
-    independ_head1(A).
-    
-independ_head1([X|Xs]) :-
-    list(X),
-    flatten(Xs,F),
-    not(independ_head2(X,F)),!,fail.
-independ_head1([X|Xs]) :-
-    list(X),
-    flatten(Xs,F),
-    independ_head2(X,F),
-    independ_head1(Xs).
-independ_head1([_|Xs]) :-
-    independ_head1(Xs).
-independ_head1(_).        
-    
-independ_head2([],_).
-independ_head2([X|_],F) :-
-    n_compiler_variable(X),
-    member(X,F),
-    !,fail.
-independ_head2([_|Xs],F) :-
-    independ_head2(Xs,F).
-independ_head2(X,F) :-
-    n_compiler_variable(X),
-    member(X,F),
-    !,fail.
-independ_head2(X,_) :-
-    atomic(X).
-           
-                
-flatten([],[]).
-flatten([L|Ls],[L,Ls]) :-
-    atomic(L),
-    atomic(Ls).
-flatten([L|Ls],[L|Y]) :-
-    atomic(L),
-    flatten(Ls,Y).
-flatten([L|Ls],Z) :-
-    list(L),
-    flatten(L,Y1),
-    flatten(Ls,Y2),
-    append(Y1,Y2,Z).
-*/           
-
 generated_variable((X;Y),L) :-
     generated_variable(X,L1),
     generated_variable(Y,L2),
