@@ -1834,6 +1834,47 @@ tail_recursive([X|Cs],D,P,H,A,N) :-
 tail_recursive([_|Cs],D,P,H,A,N) :-
     tail_recursive(Cs,D,P,H,A,N).
 
+
+independ_head(Head) :-
+    extract_variable(Head,Args),
+    independ_head1(Args).
+
+independ_head1([]).
+independ_head1([_]).
+independ_head1([A|As]) :-
+    member(A,As),!,fail.
+independ_head1([_|As]) :-
+    independ_head1(As).
+
+extract_variable(Term,X) :-
+    Term =.. [_|A],
+    extract_variable1(A,X).
+
+extract_variable1([],[]).
+
+extract_variable1([L|Ls],[L|Y]) :-
+    n_compiler_variable(L), !,
+    extract_variable1(Ls,Y).
+extract_variable1([L|Ls],Y) :-
+    atomic(L), !,
+    extract_variable1(Ls,Y).
+extract_variable1([L|Ls],Z) :-
+    list(L), !,
+    extract_variable1(L,Y1),
+    extract_variable1(Ls,Y2),
+    append(Y1,Y2,Z).
+extract_variable1([L|Ls],Z) :-
+    n_property(L,predicate), !,
+    L =.. [_|Args],
+    extract_variable1(Args,Y1),
+    extract_variable1(Ls,Y2),
+    append(Y1,Y2,Z).
+extract_variable1(L,[L]) :-
+    n_compiler_variable(L), !.
+extract_variable1(L,[]) :-
+    atomic(L).
+
+/*
 independ_head(Head) :-
     Head =.. [_|A],
     independ_head1(A).
@@ -1864,7 +1905,7 @@ independ_head2(X,F) :-
     !,fail.
 independ_head2(X,_) :-
     atomic(X).
-            
+*/           
                 
 flatten([],[]).
 flatten([L|Ls],[L,Ls]) :-
@@ -1907,7 +1948,8 @@ generated_variable1([V|Vs],L) :-
     append(L1,L2,L).
 generated_variable1([V|Vs],L) :-
     n_property(V,predicate),
-    generated_variable1(V,L1),
+    V =.. [_|V1],
+    generated_variable1(V1,L1),
     generated_variable1(Vs,L2),
     append(L1,L2,L).    
 generated_variable1([_|Vs],L) :-

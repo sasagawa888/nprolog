@@ -1,4 +1,16 @@
 
+ex(concatenate([varX|varL1], varL2, [varX|varL3])).
+
+independ_head(Head) :-
+    extract_variable(Head,Args),write(Args),
+    independ_head1(Args).
+
+independ_head1([]).
+independ_head1([_]).
+independ_head1([A|As]) :-
+    member(A,As),!,fail.
+independ_head1([_|As]) :-
+    independ_head1(As).
 
 extract_variable(Term,X) :-
     Term =.. [_|A],
