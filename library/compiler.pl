@@ -1769,9 +1769,10 @@ deterministic([],D,P,H,A) :-
 deterministic([],D,P,H,A) :-
     %write(user_output,D),write(user_output,P),write(user_output,H),write(user_output,A),nl,
     P == 0,
-    D >= 1,!.
+    D == 1,!.
     %A =:= D+P+H,!.
 deterministic(_,_,P,_,_) :-
+    %write(user_output,P),
     P > 1,
     !,fail.
 deterministic([(_ :- !)|Cs],D,P,H,A) :-
