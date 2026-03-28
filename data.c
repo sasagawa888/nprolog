@@ -2445,6 +2445,7 @@ int alpha_to_variable(int x)
 
     sprintf(str, "_v%d", x - cell_size);
     res = makeatom(str, VAR);
+	SET_CAR(res,UNBIND);
     return (res);
 }
 
