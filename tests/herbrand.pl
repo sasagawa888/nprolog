@@ -4,7 +4,6 @@
 
 %e.g. 
 /*
-:- dynamic(ex/1).
 ex(1,exist(x,p(x))).
 ex(2,exist(x,(forall(y,p(x,y))))).
 
