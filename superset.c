@@ -2189,8 +2189,7 @@ int b_n_format(int arglist, int rest, int th)
 			output[j++] = c;
 			c = substr[k++];
 		    }
-		}
-		if (c == 'S') {
+		} else if (c == 'S') {
 		    if (!stringp(car(arg3)))
 			exception(NOT_STR, ind, arg3, th);
 		    memset(substr, 0, sizeof(substr));
