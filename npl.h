@@ -961,6 +961,7 @@ int b_n_notequalp(int arglist, int rest, int th);
 int b_n_notnumeq(int arglist, int rest, int th);
 int b_notrace(int arglist, int rest, int th);
 int b_n_notunify(int arglist, int rest, int th);
+int b_n_no_operation(int arglist, int rest, int th);
 int b_name(int arglist, int rest, int th);
 int b_number(int arglist, int rest, int th);
 int b_number_chars(int arglist, int rest, int th);

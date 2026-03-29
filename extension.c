@@ -996,6 +996,10 @@ int b_n_pair_list(int arglist, int rest, int th)
     return (NO);
 }
 
+int b_n_no_operation(int arglist, int rest, int th)
+{
+	return (prove_all(rest, sp[th], th));
+}
 
 int call(int pred, int arglist, int th)
 {

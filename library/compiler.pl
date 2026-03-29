@@ -710,6 +710,8 @@ gen_body1((X,Xs),N) :-
     gen_body1(Xs,N),
     write(',th)').
 
+
+
 gen_body1(X,_) :-
 	gen_a_body(X).
 
@@ -943,6 +945,9 @@ gen_a_body(X) :-
 	write('Jmakepred("'),
     write(X),
     write('")').
+% for FCG {} compile
+gen_a_body(',') :-
+    write('Jmakesys("n_no_operation")').
 gen_a_body(X) :-
     invoke_error('illegal body ',X).
 

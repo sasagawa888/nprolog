@@ -340,6 +340,7 @@ void init_builtin(void)
     defbuiltin("n_exec_greater", b_n_exec_greater, 2);
     defbuiltin("n_exec_eqsmaller", b_n_exec_eqsmaller, 2);
     defbuiltin("n_exec_eqgreater", b_n_exec_eqgreater, 2);
+	defbuiltin("n_no_operation",b_n_no_operation, 0);
 
 
     builtins = reverse(builtins);
