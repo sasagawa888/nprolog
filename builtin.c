@@ -1842,7 +1842,6 @@ int b_reconsult(int arglist, int rest, int th)
 
 		if (!memberp(atom, reconsult_list) && !module_flag) {
 		    reconsult_list = cons(atom, reconsult_list);
-			print(atom);
 		    SET_CAR(atom, NIL);
 		    SET_ARITY(atom, NIL);
 		}
