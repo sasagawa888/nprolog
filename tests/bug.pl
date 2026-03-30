@@ -212,7 +212,7 @@ run_tests :-
     test21(X21,Y21), write('test21 : '), write((X21,Y21)), nl,
     fail.
 
-/*
+
 run_tests :-
     test22(X22), write('test22 : '), write(X22), nl,
     test23(X23), write('test23 : '), write(X23), nl,
@@ -225,4 +225,3 @@ run_tests :-
     (test30(X30) -> write('test30 : '), write(X30), nl ; write('test30 : fail'), nl),
     test31(X31), write('test31 : '), write(X31), nl,
     test32(X32), write('test32 : '), write(X32), nl.
-*/
