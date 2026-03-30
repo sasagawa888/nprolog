@@ -1833,7 +1833,7 @@ int b_reconsult(int arglist, int rest, int th)
 		&& length(clause) == 2) {
 		clause = cadr(clause);
 		prove_all(clause, sp[th], th);
-		if (!module_flag)
+		if (!module_flag && car(clause) != makesys("op"))
 		    execute_list = cons(clause, execute_list);
 		goto skip;
 	    }
