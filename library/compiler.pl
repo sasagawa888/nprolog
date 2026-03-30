@@ -947,7 +947,7 @@ gen_a_body(X) :-
     write('")').
 % for FCG {} compile
 gen_a_body(',') :-
-    write('Jmakesys("n_no_operation")').
+    write('Jmakesys("n_exec_no_operation")').
 gen_a_body(X) :-
     invoke_error('illegal body ',X).
 
@@ -1522,7 +1522,7 @@ gen_dyn2((X,Y)) :-
 
 % ifthenelse
 gen_dyn2((X->Y;Z)) :-
-    n_findatom(ifthenelse,builtin,A),
+    n_findatom(n_exec_ifthenelse,builtin,A),
     write('Jcons('),
     write(A),
     write(','),
@@ -1537,7 +1537,7 @@ gen_dyn2((X->Y;Z)) :-
 
 % ifthen
 gen_dyn2(X->Y) :-
-    n_findatom(ifthen,builtin,A),
+    n_findatom(n_exec_ifthen,builtin,A),
     write('Jcons('),
     write(A),
     write(','),
