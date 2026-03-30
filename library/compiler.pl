@@ -111,6 +111,7 @@ pass1(X) :-
     abolish(pred_data/3),
     assert(pred_data(dummy,-1,-1)),
     reconsult(X,compiler),
+    reconsult(X,compiler), % twice to parse e.g. a. or zzz :- fail.
     pass1_analize.
 
 pass2(_) :-
@@ -720,6 +721,21 @@ generate one operation,user,builtin or compiled predicate.
 when except of above type, invoke error.
 */
 
+
+% ifthenelse
+gen_a_body((X->Y;Z)) :-
+    n_findatom(n_exec_ifthenelse,builtin,A),
+    write('Jwcons('),
+    write(A),
+    write(','),
+    write('Jwlist3('),
+    gen_body1(X,0),
+    write(','),
+    gen_body1(Y,0),
+    write(','),
+    gen_body1(Z,0),
+    write(',th),th)').
+
 gen_a_body((X;Xs)) :-
 	write('Jwlist3(Jmakeope(";"),'),
 	gen_a_body(X),
@@ -863,24 +879,9 @@ gen_a_body(X >= Y) :-
     write(',th),th)').
 
 
-% ifthenelse
-gen_a_body((X->Y;Z)) :-
-    n_findatom(ifthenelse,builtin,A),
-    write('Jwcons('),
-    write(A),
-    write(','),
-    write('Jwlist3('),
-    gen_body1(X,0),
-    write(','),
-    gen_body1(Y,0),
-    write(','),
-    gen_body1(Z,0),
-    write(',th),th)').
-
-
 % ifthen
 gen_a_body(X->Y) :-
-    n_findatom(ifthen,builtin,A),
+    n_findatom(n_exec_ifthen,builtin,A),
     write('Jwcons('),
     write(A),
     write(','),
