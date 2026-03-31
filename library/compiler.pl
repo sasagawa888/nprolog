@@ -1566,6 +1566,16 @@ gen_dyn2((X;Y)) :-
     write(','),
     gen_dyn2(Y),
     write(')').
+
+gen_dyn2(X) :-
+    compound(X),
+    n_property(X,compiled),
+    X =.. [P|L],
+    write('Jcons(Jmakecomp("'),
+    write(P),
+    write('"),'),
+    gen_dyn2_argument(L),
+    write(')').
     
 gen_dyn2(X) :-
     compound(X),

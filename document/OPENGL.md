@@ -1,5 +1,8 @@
 # OpenGL linbrary
+In the current implementation, OpenGL-related predicates are designed primarily for use in interpreted mode.
+Because most OpenGL operations are executed through external graphics libraries and depend on stateful APIs, compiling these predicates does not provide meaningful performance improvements.
 
+Therefore, for reliability and maintainability, OpenGL-related code is currently recommended to be executed in interpreted mode rather than compiled mode.
 
 # Preparation
 The OPenGL library utilizes the C language embedding feature. Therefore, it needs to be compiled first. Please follow the steps below to compile it.

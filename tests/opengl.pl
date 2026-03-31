@@ -11,7 +11,7 @@ main :-
     glut_display_func(show),
     glut_main_loop.
 
-
+:- dynamic(show/0).
 show :-
     gl_clear(gl_color_buffer_bit),
     gl_color3d(1.0,0.0,0.0),
