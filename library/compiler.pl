@@ -736,6 +736,17 @@ gen_a_body((X->Y;Z)) :-
     gen_body1(Z,0),
     write(',th),th)').
 
+% use_module
+gen_a_body(use_module(X)) :-
+    n_findatom(use_module,builtin,A),
+    write('Jwlist2('),
+    write(A),
+    write(','),
+    write('Jmakeconst("'),
+    write(X),
+    write('"),th)').
+
+
 gen_a_body((X;Xs)) :-
 	write('Jwlist3(Jmakeope(";"),'),
 	gen_a_body(X),
