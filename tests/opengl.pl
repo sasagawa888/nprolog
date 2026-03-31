@@ -1,3 +1,5 @@
+:- use_module(opengl).
+
 main :-
     glut_init,
     glut_init_display_mode(glut_single),

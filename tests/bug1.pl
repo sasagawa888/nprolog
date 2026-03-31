@@ -1,3 +1,0 @@
-
-:- use_module(graph).
-
