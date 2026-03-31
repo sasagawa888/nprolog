@@ -1,3 +1,34 @@
+:- module(opengl,[
+    glut_init/0,
+    glut_init_display_mode/1,
+    glut_init_window_size/2,
+    glut_init_window_position/2,
+    glut_create_window/1,
+    gl_clear_color/4,
+    glut_display_func/1,
+    glut_mouse_func/1,
+    glut_main_loop/0,
+    gl_clear/1,
+    gl_color3d/3,
+    gl_begin1/1,
+    gl_begin/1,
+    gl_error/2,
+    gl_vertex2d/2,
+    gl_vertex3d/3,
+    gl_vertex4d/4,
+    glut_solid_cube/1,
+    glut_solid_sphere/3,
+    glut_solid_torus/4,
+    glut_solid_icosahedron/0,
+    glut_solid_octahedron/0,
+    glut_solid_tetrahedron/0,
+    glut_solid_dodecahedron/0,
+    glut_solid_cone/4,
+    glut_solid_teapot/1,
+    gl_end/0,
+    gl_flush/0,
+    gl_finish/0
+]).
 
 cdeclare($#include <GL/glut.h>$).
 

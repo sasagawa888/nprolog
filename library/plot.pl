@@ -1,5 +1,5 @@
 % library for GNU-plot
-
+:- module(plot,[open_plot/0,send_plot/1,close_plot/0]).
 
 cdeclare($#include <stdio.h>
           FILE *gp;$).

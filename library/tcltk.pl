@@ -1,4 +1,38 @@
 % tcl/tk library
+:- module(tcltk,[
+    tk_interp/0,
+    tk_clear/0,
+    tk_addatom/1,
+    tk_addhex/1,
+    tk_addint/1,
+    tk_init/0,
+    tk_exit/0,
+    tk_error/2,
+    tk_canvas/2,
+    tk_label/1,
+    tk_label/2,
+    tk_button/1,
+    tk_button/2,
+    tk_radiobutton/1,
+    tk_radiobutton/2,
+    tk_checkbutton/1,
+    tk_checkbutton/2,
+    tk_listbox/1,
+    tk_listbox/2,
+    tk_scrollbar/1,
+    tk_scrollbar/2,
+    tk_command/1,
+    tk_mainloop/0,
+    tk_pack/1,
+    tk_pack/2,
+    tk_update/0,
+    tk_rgb/1,
+    tk_create/3,
+    tk_class/1,
+    tk_intlist/1,
+    tk_atomlist/1,
+    tk_option/1
+]).
 
 clibrary($-ltcl -ltk$).
 cdeclare($#ifdef __linux__

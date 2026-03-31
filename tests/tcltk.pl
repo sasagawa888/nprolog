@@ -1,7 +1,5 @@
 % test of tcl/tk
 
-:- use_module(tcltk).
-
 recur :- 
     tk_init,
     tk_canvas(c0,[width(600),height(600)]),

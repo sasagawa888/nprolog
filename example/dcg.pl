@@ -1,4 +1,3 @@
-:- use_module(dcg).
 
 s --> np,vp.
 np --> det,n.
