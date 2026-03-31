@@ -3,6 +3,9 @@ CLP(FD): Constraint Logic Programming over Finite Domains
 
 N-Prolog's CLPFD deliberately does not include heuristic optimizations. Experiencing how manually changing the order of variables or adding constraints affects the efficiency of the search space exploration is valuable and preferable for educational purposes.
 
+CLPFD predicates are currently intended primarily for interpreter use.
+Since most execution cost lies in constraint propagation and labeling, native compilation does not currently provide significant performance benefits, and some cases remain interpreter-only by design.
+
 # Usage
 
 ```
