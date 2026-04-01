@@ -1589,6 +1589,20 @@ gen_dyn2(X) :-
 
 gen_dyn2(X) :-
     atom(X),
+    n_property(X,compiled),
+    write('Jmakecomp("'),
+    write(X),
+    write('")').
+
+gen_dyn2(X) :-
+    atom(X),
+    n_property(X,predicate),
+    write('Jmakepred("'),
+    write(X),
+    write('")').
+
+gen_dyn2(X) :-
+    atom(X),
     n_dynamic_predicate(X),
     write('Jmakepred("'),
     write(X),
