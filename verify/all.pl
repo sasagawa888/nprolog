@@ -588,5 +588,5 @@ test(select) :-
      
 main :- alltest,write('All tests are done'),nl.
 
-:- main.
+:- initialization(main).
 

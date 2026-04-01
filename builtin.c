@@ -1833,7 +1833,7 @@ int b_reconsult(int arglist, int rest, int th)
 		&& length(clause) == 2) {
 		clause = cadr(clause);
 		prove_all(clause, sp[th], th);
-		if (builtinp(clause) && compoundp(clause) && car(clause) == makesys("initialization"))
+		if (compiler_flag && builtinp(clause) && compoundp(clause) && car(clause) == makesys("initialization"))
 			goto skip;
 
 		if (!module_flag && car(clause) != makesys("op"))
