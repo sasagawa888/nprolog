@@ -1516,7 +1516,8 @@ gen_dyn1([X|Xs]) :-
     write('Jadd_dynamic(dynamic_clause);'),nl,
     gen_dyn1(Xs).
 
-gen_dyn2([]).
+gen_dyn2([]) :-
+    write('NIL').
 gen_dyn2((X :- Y)) :-
     write('Jlist3(Jmakeope(":-"),'),
     gen_dyn2(X),
@@ -1697,6 +1698,9 @@ gen_dyn2_argument([X|Xs]) :-
 
 gen_dyn2_list([]) :-
     write('NIL').
+gen_dyn2_list(X) :-
+    atom(X),
+    gen_dyn2(X).
 gen_dyn2_list([L|Ls]) :-
     write('Jlistcons('),
     gen_dyn2(L),
