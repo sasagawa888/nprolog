@@ -1870,14 +1870,15 @@ int unify(int x, int y, int th)
 //typed unify. y is a pair list e.g. [L|Ls]
 int unify_pair(int x, int y, int th)
 {
+	int x1;
     if (variablep(x)) {
-	//bindsym(x, y, th);
-	if (alpha_variable_p(x))
-	    variant[x - cell_size][th] = y;
-	else if (atom_variable_p(x))
-	    SET_CAR(x, y);
-	push_stack(x, th);
+	x1 = deref(x,th);
+	if(variablep(x1)){
+	bindsym(x, y, th);
 	return (YES);
+	} else 
+		return(unify_pair(x1,y,th));
+		
     } else if (!listp(x))
 	return (NO);
     else if (listp(x) && x != NIL && unify_var(car(x), car(y), th) == YES
@@ -1893,9 +1894,14 @@ int unify_pair(int x, int y, int th)
 //typed unify. y is a small integer
 int unify_int(int x, int y, int th)
 {
+	int x1;
     if (variablep(x)) {
+	x1 = deref(x,th);
+	if (variablep(x1)){
 	bindsym(x, y, th);
 	return (YES);
+	} else 
+		return(unify_int(x1,y,th));
     } else if (!integerp(x))
 	return (NO);
     else if (eqp(x, y))
@@ -1909,9 +1915,14 @@ int unify_int(int x, int y, int th)
 //typed unify. y is a float
 int unify_flt(int x, int y, int th)
 {
+	int x1;
     if (variablep(x)) {
+	x1 = deref(x,th);
+	if (variablep(x1)){
 	bindsym(x, y, th);
 	return (YES);
+	} else 
+		return(unify_flt(x1,y,th));
     } else if (!floatp(x))
 	return (NO);
     else if (numeqp(x, y))
@@ -1926,9 +1937,15 @@ int unify_flt(int x, int y, int th)
 //typed unify. y is a long integer
 int unify_long(int x, int y, int th)
 {
+	int x1;
     if (variablep(x)) {
+	x1 = deref(x,th);
+	if(variablep(x1)){
 	bindsym(x, y, th);
 	return (YES);
+	} else 
+		return(unify_long(x1,y,th));
+
     } else if (!longnump(x))
 	return (NO);
     else if (numeqp(x, y))
@@ -1942,9 +1959,15 @@ int unify_long(int x, int y, int th)
 //typed unify. y is a long integer
 int unify_big(int x, int y, int th)
 {
+	int x1;
     if (variablep(x)) {
+	x1 = deref(x,th);
+	if (variablep(x1)){
 	bindsym(x, y, th);
 	return (YES);
+	} else 
+		return(unify_big(x1,y,th));
+
     } else if (!bignump(x))
 	return (NO);
     else if (bigx_eqp(x, y))
@@ -1958,9 +1981,14 @@ int unify_big(int x, int y, int th)
 //typed unify. y is an atom
 int unify_atom(int x, int y, int th)
 {
+	int x1;
     if (variablep(x)) {
-	bindsym(x, y, th);
-	return (YES);
+	x1 = deref(x,th);
+	if (variablep(x1)){
+		bindsym(x, y, th);
+		return (YES);
+	} else 
+		return (unify_atom(x1,y,th));
     } else if (!atomp(x))
 	return (NO);
     else if (eqlp(x, y))
@@ -1974,9 +2002,14 @@ int unify_atom(int x, int y, int th)
 //typed unify. y is a string
 int unify_str(int x, int y, int th)
 {
+	int x1;
     if (variablep(x)) {
-	bindsym(x, y, th);
-	return (YES);
+	x1 = deref(x,th);
+	if (variablep(x1)){
+		bindsym(x, y, th);
+		return (YES);
+	} else 
+		return (unify_str(x1,y,th));
     } else if (!stringp(x))
 	return (NO);
     else if (streqp(x, y))
