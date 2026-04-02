@@ -31,6 +31,7 @@ test(A) :-
 compile(T,A) :-
     parse(T,A).
 
+
 parse(S,A) :-
     phrase(program(A),S).
 
@@ -47,7 +48,6 @@ pl_module(module(X,S)) -->
 statements([])  --> [].
 statements([S|Ss]) --> statement(S),statements(Ss).
 
-
 statement(while(V,S)) -->
     ['DO'],['WHILE'],test(V),[';'],statements(S),['END'],[';'].
 statement(case(V,S)) -->
@@ -59,6 +59,7 @@ statement(if(V,S)) -->
 statement(proc(N,P,S,T)) -->
     identifier(N),[':'],['PROCEDURE'],param(P),data_type(T),[';'],
     statements(S),['END'],identifier(N),[';'].
+/*
 statement(assign(X,V)) -->
     identifier(X),['='],expression(V),[';'].
 statement(return(S)) -->
@@ -77,7 +78,7 @@ statement(halt) -->
     ['HALT'],[';'].
 statement(block(S)) -->
     block(S).
-
+*/
 block(S) -->
     ['DO'],[';'],statements(S),['END'],[';'].
 
@@ -94,15 +95,14 @@ params([S|Ss]) -->
     pl_constant(S),[','],params(Ss).
 
 
-
 expression(X) --> pl_constant(X).
 expression(X) --> pl_function(X).
 expression(E) --> add_expr(E).
 
+/*
 add_expr(E) -->
     mul_expr(T),
     add_rest(T, E).
-
 add_rest(Acc, E) -->
     add_op(Op),
     mul_expr(T),
@@ -120,7 +120,7 @@ mul_rest(Acc, E) -->
     { Acc1 = expr(Op, Acc, P) },
     mul_rest(Acc1, E).
 mul_rest(Acc, Acc) --> [].
-
+*/
 add_op('+') --> ['+'].
 add_op('-') --> ['-'].
 

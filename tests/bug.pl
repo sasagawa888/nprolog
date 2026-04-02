@@ -1,4 +1,6 @@
 
+:- use_module(dcg).
+
 
 test(A) :-
     open(S,'./tests/plm1.pl',r),
@@ -13,5 +15,6 @@ compile(T,A) :-
 parse(S,A) :-
     phrase(program(A),S).
 
-program(A) --> pl_module(A).
-program(A) --> statements(A).
+statement(proc(N,P,S,T)) -->
+    identifier(N),[':'],['PROCEDURE'],param(P),data_type(T),[';'],
+    statements(S),['END'],identifier(N),[';'].

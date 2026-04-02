@@ -1889,7 +1889,6 @@ int b_reconsult(int arglist, int rest, int th)
 	module_flag = 0;
 
       exit:
-
 	return (prove_all(rest, sp[th], th));
     } else if (n == 2) {
 	arg1 = car(arglist);
