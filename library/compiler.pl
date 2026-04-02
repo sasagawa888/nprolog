@@ -910,7 +910,7 @@ gen_a_body(X) :-
     write(A).
 gen_a_body(X) :-
     n_property(X,builtin),
-    X =.. [P|L],
+    X =.. [P|L], 
     n_findatom(P,builtin,A),
     write('Jwcons('),
     write(A),
@@ -1535,7 +1535,7 @@ gen_dyn2((X,Y)) :-
 
 % ifthenelse
 gen_dyn2((X->Y;Z)) :-
-    n_findatom(n_exec_ifthenelse,builtin,A),
+    n_findatom(ifthenelse,builtin,A),
     write('Jcons('),
     write(A),
     write(','),
@@ -1550,7 +1550,7 @@ gen_dyn2((X->Y;Z)) :-
 
 % ifthen
 gen_dyn2(X->Y) :-
-    n_findatom(n_exec_ifthen,builtin,A),
+    n_findatom(ifthen,builtin,A),
     write('Jcons('),
     write(A),
     write(','),
@@ -1814,8 +1814,8 @@ deterministic([],D,P,H,A) :-
 deterministic([],D,P,H,A) :-
     %write(user_output,D),write(user_output,P),write(user_output,H),write(user_output,A),nl,
     P == 0,
-    D == 1,!.
-    %A =:= D+P+H,!.
+    D == 1,
+    A =:= D+P+H,!.
 deterministic(_,_,P,_,_) :-
     %write(user_output,P),
     P > 1,
@@ -1996,6 +1996,7 @@ halt_check([_|Cs],D,P,A) :-
 
 % deterministic body case. Each has cut or each is builtin or each is tail-recur 
 % G is gournd_variable
+det_body(Head,(_->_;_),_) :- fail,!.
 det_body(_,(_;_),_) :- fail.
 det_body(_,!,_).
 det_body(_,(_,!),_).
