@@ -5,25 +5,25 @@
  %https://tamura70.gitlab.io/web-prolog/intro/nat.html
  
 nat(0).
-    nat(s(X)) :- nat(X).
+nat(s(X)) :- nat(X).
 
 plus(0, Y, Y).
-    plus(s(X), Y, s(Z)) :- plus(X, Y, Z).
+plus(s(X), Y, s(Z)) :- plus(X, Y, Z).
 
 times(0, _, 0).
-    times(s(X), Y, Z) :- times(X, Y, Z1), plus(Z1, Y, Z).
+times(s(X), Y, Z) :- times(X, Y, Z1), plus(Z1, Y, Z).
 
 le(X, Y) :- plus(X, _, Y).
 
 lt(X, Y) :- le(s(X), Y).
 
 quot(X, Y, 0, X) :- lt(X, Y).
-    quot(X, Y, s(Q), R) :- plus(Y, X1, X), quot(X1, Y, Q, R).
+quot(X, Y, s(Q), R) :- plus(Y, X1, X), quot(X1, Y, Q, R).
 
 prime(s(X)) :- df(X, s(X)).
 
 df(s(0), _).
-    df(s(s(M)), N) :- dnd(s(s(M)), N), df(s(M), N).
+df(s(s(M)), N) :- dnd(s(s(M)), N), df(s(M), N).
 
 dnd(M, N) :- quot(N, M, _, s(_)).
 
@@ -53,13 +53,13 @@ arc(a4, v4, v1).
 arc(a5, v3, v5).
 
 walk(U, U).
-    walk(U, V) :- arc(_, U, U1), walk(U1, V).
+walk(U, V) :- arc(_, U, U1), walk(U1, V).
 
 path(U, U, _, []).
-    path(U, V, L, [A|P]) :-
-        arc(A, U, U1),
-        not(member(U1, L)),
-        path(U1, V, [U1|L], P).
+path(U, V, L, [A|P]) :-
+    arc(A, U, U1),
+    not(member(U1, L)),
+    path(U1, V, [U1|L], P).
 
 path_find(U, V, P) :- path(U, V, [U], P).
 
