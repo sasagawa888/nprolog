@@ -294,13 +294,12 @@ test_consume(Taken, Rest) :-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 17. dynamic 述語を if-then-else の条件に使う
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% compile error
-/*
+
 check_dyn1(X, yes) :-
     (dyn1(X) -> true ; fail ).
 check_dyn1(X, no) :-
     \+ dyn1(X).
-*/
+
 test_if_dyn(R1, R2) :-
     reset_dyn,
     check_dyn1(a, R1),
