@@ -1997,7 +1997,7 @@ halt_check([_|Cs],D,P,A) :-
 % deterministic body case. Each has cut or each is builtin or each is tail-recur 
 % G is gournd_variable
 det_body(Head,(_->_;_),_) :- fail,!.
-det_body(_,(_;_),_) :- fail.
+det_body(_,(_;_),_) :- fail,!.
 det_body(_,!,_).
 det_body(_,(_,!),_).
 det_body(Head,(_,(!,Y)),G) :-
