@@ -1990,26 +1990,38 @@ int unify_str(int x, int y, int th)
 //typed unify. y is a variable
 int unify_var(int x, int y, int th)
 {
+    int x1, y1;
 
-    if (variablep(x)) {
-	//bindsym(x, y, th);
-	if (alpha_variable_p(x))
-	    variant[x - cell_size][th] = y;
-	else if (atom_variable_p(x))
-	    SET_CAR(x, y);
-	push_stack(x, th);
+    if (!variablep(x)) {
+	y1 = deref1(y, th);
+	if (y1 == y) {
+	    bindsym(y, x, th);
+	    return (YES);
+	} else
+	    return (unify(x, y1, th));
+    } else if (variablep(x)) {
+	x1 = deref1(x, th);
+	y1 = deref1(y, th);
+	if (variablep(x1) && variablep(y1)) {
+	    if (x1 == y1 || x == y1 || x1 == y || x == y) {
+		return (YES);
+	    } else if (x != y) {	//ordinaly case
+		bindsym(x1, y1, th);
+		return (YES);
+	    } else {
+		bindsym(x1, makevariant(th), th);	// ex ?- X = X
+		return (YES);
+	    }
+	} else if (!variablep(x1)) {
+	    bindsym(y1, x1, th);
+	    return (YES);
+	} else {
+	    return (unify(x1, y1, th));
+	}
+    } else if (anonymousp(x) || anonymousp(y)) {
 	return (YES);
-    } else {
-	//bindsym(y, x, th);
-	if (alpha_variable_p(y))
-	    variant[y - cell_size][th] = x;
-	else if (atom_variable_p(y))
-	    SET_CAR(y, x);
-	push_stack(y, th);
-	return (YES);
-    }
-
-    return (NO);
+    } else
+	return (NO);
 }
 
 

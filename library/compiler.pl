@@ -1008,7 +1008,7 @@ gen_head1([X|Xs],N) :-
 
 gen_head1([X|Xs],N) :-
     n_compiler_variable(X),
-    write('Junify(arg'),
+    write('Junify_var(arg'),
     write(N),
     write(','),
     gen_a_argument(X),
