@@ -6,4 +6,4 @@ check_dyn1(X, yes) :-
 check_dyn1(X, no) :-
     call(dyn1(X)).
 
-foo(X) :- a;b.
+foo(X) :- ifthenelse(true,fail,true).

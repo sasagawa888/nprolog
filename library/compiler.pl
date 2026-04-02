@@ -908,6 +908,15 @@ gen_a_body(X) :-
     functor(X,P,0),
     n_findatom(P,builtin,A),
     write(A).
+gen_a_body(ifthenelse(X,Y,Z)) :-
+    write('Jwcons(Jmakesys("n_exec_ifthenelse"),'),
+    write('Jwlist3('),
+    gen_a_argument(X),
+    write(','),
+    gen_a_argument(Y),
+    write(','),
+    gen_a_argument(Z),
+    write(',th),th)').
 gen_a_body(X) :-
     n_property(X,builtin),
     X =.. [P|L], 
@@ -2062,6 +2071,8 @@ det_builtin(between(_,_,X),G) :-
     n_compiler_variable(X),
     not(member(X,G)),!,fail.
 
+det_builtin(ifthenelse(_,_,_),G) :-
+    !,fail.
 
 det_builtin(X,_) :-
     n_property(X,builtin).
