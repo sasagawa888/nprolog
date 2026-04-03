@@ -317,12 +317,18 @@ int b_n_generate_all_variable(int arglist, int rest, int th)
 
 int b_n_generate_variable(int arglist, int rest, int th)
 {
-    int n, arg1, arg2;
+    int n, arg1, arg2,i;
 
     n = length(arglist);
     if (n == 2) {
 	arg1 = deref(car(arglist), th);
 	arg2 = cadr(arglist);
+	i = variables[th];
+	while (!nullp(i)) {
+	    SET_CAR(car(i), UNBIND);
+	    SET_CDR(car(i), UNBIND);
+	    i = cdr(i);
+	}
 	if (unify(arg2, generate_variable(arg1), th) == YES)
 	    return (prove_all(rest, sp[th], th));
 	else

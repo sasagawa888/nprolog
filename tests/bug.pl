@@ -15,6 +15,8 @@ compile(T,A) :-
 parse(S,A) :-
     phrase(program(A),S).
 
+/*
 statement(proc(N,P,S,T)) -->
     identifier(N),[':'],['PROCEDURE'],param(P),data_type(T),[';'],
     statements(S),['END'],identifier(N),[';'].
+*/
