@@ -331,6 +331,25 @@ int b_n_generate_variable(int arglist, int rest, int th)
     return (NO);
 }
 
+// clear_variable is used to clear variable bindings introduced by DCG.
+void clear_variable(int x)
+{
+	if (nullp(x))
+		return;
+	else if (variablep(x)){
+		set_car(x,UNBIND);
+		set_cdr(x,UNBIND);
+		return;
+	} else if (!compoundp(x))
+		return;
+	else {
+		clear_variable(car(x));
+		clear_variable(cdr(x));
+		return;
+	}
+}
+
+
 int generate_all_variable(int x)
 {
     int y, res;
@@ -592,6 +611,7 @@ int b_n_clause_with_arity(int arglist, int rest, int th)
 	    clauses = cdr(clauses);
 	}
 	res = listreverse(res);
+	clear_variable(res);
 	unify(res, arg3, th);
 	return (prove_all(rest, sp[th], th));
     }

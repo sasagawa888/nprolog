@@ -59,7 +59,7 @@ statement(if(V,S)) -->
 statement(proc(N,P,S,T)) -->
     identifier(N),[':'],['PROCEDURE'],param(P),data_type(T),[';'],
     statements(S),['END'],identifier(N),[';'].
-/*
+
 statement(assign(X,V)) -->
     identifier(X),['='],expression(V),[';'].
 statement(return(S)) -->
@@ -78,7 +78,7 @@ statement(halt) -->
     ['HALT'],[';'].
 statement(block(S)) -->
     block(S).
-*/
+
 block(S) -->
     ['DO'],[';'],statements(S),['END'],[';'].
 
@@ -99,7 +99,7 @@ expression(X) --> pl_constant(X).
 expression(X) --> pl_function(X).
 expression(E) --> add_expr(E).
 
-/*
+
 add_expr(E) -->
     mul_expr(T),
     add_rest(T, E).
@@ -120,7 +120,7 @@ mul_rest(Acc, E) -->
     { Acc1 = expr(Op, Acc, P) },
     mul_rest(Acc1, E).
 mul_rest(Acc, Acc) --> [].
-*/
+
 add_op('+') --> ['+'].
 add_op('-') --> ['-'].
 
