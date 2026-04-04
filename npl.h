@@ -51,7 +51,7 @@ address
 #define RIGHTPAREN  18
 #define CALL        20
 #define QUEST	    22
-#define ANOYVAR     24
+#define ANONYVAR    24
 #define NECK        26
 #define ATMARK      28
 #define COLON       30
@@ -513,7 +513,7 @@ int IS_ALPHA(int addr);
 //atom type
 #define SIMP    1 //simple atom(constant)
 #define VAR     2 //variable
-#define ANOY    3 //anoimouse
+#define ANONY   3 //anonymouse
 #define USER    4 //user defined operator
 #define OPE     5 //operator
 #define PRED    6 //user defined predicate

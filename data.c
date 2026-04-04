@@ -1103,7 +1103,7 @@ int atom_variable_p(int addr)
 
 int anonymousp(int addr)
 {
-    if (IS_INCELL(addr) && singlep(addr) && GET_AUX(addr) == ANOY)
+    if (IS_INCELL(addr) && singlep(addr) && GET_AUX(addr) == ANONY)
 	return (1);
     else
 	return (0);

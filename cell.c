@@ -42,7 +42,7 @@ void init_cell(void)
     makeatom("<rightparen>", SIMP);	//address = 18 ')'
     makeatom("call", SYS);	//address = 20
     makeatom("?-", OPE);	//address = 22
-    makeatom("_", ANOY);	//address = 24
+    makeatom("_", ANONY);	//address = 24
     makeatom(":-", OPE);	//address = 26
     makeatom("@", SIMP);	//address = 28
     makeatom(":", SIMP);	//address = 30
@@ -568,7 +568,7 @@ int makeanony(char *name)
 {
     int y;
 
-    y = makeatom(name, ANOY);
+    y = makeatom(name, ANONY);
     SET_CAR(y, UNBIND);		//value
     SET_CDR(y, UNBIND);		//alpha variable
     SET_VAR(y, NIL);

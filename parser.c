@@ -1486,7 +1486,7 @@ int readitem1(int th)
 	SET_VAR(temp, NIL);
 	return (temp);
     case ANOYMOUS:
-	return (makeatom(stok.buf, ANOY));
+	return (makeatom(stok.buf, ANONY));
     case VARIANT:
 	temp = atoi(stok.buf);
 	temp = temp + cell_size;
