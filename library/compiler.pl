@@ -1366,6 +1366,12 @@ gen_a_argument(X) :-
     write(',th)').
 gen_a_argument(X) :-
     n_property(X,predicate),
+    functor(X,Y,0),
+    write('Jmakepred("'),
+    write(Y),
+    write('")').
+gen_a_argument(X) :-
+    n_property(X,predicate),
     X =.. [Y|Z],
     write('Jwcons(Jmakepred("'),
     write(Y),
