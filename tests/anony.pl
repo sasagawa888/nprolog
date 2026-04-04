@@ -4,14 +4,14 @@
 
 % ① 基本：無名変数は独立
 test_anon1 :-
-    ( _ = a, _ = b -> write('NG'), nl
-    ; write('OK'), nl ).
+    ( _ = a, _ = b -> write('OK'), nl
+    ; write('NG'), nl ).
 
 % ② 同一節内での独立性
 test_anon2 :-
     ( (_ = X, _ = X) ->
-        write('NG'), nl
-    ;   write('OK'), nl ).
+        write('OK'), nl
+    ;   write('NG'), nl ).
 
 % ③ 構造内
 test_anon3 :-
@@ -22,8 +22,8 @@ test_anon3 :-
 % ④ 同一化してはいけないケース（重要）
 test_anon4 :-
     ( f(_, _) = f(X, X) ->
-        write('NG'), nl
-    ; write('OK'), nl ).
+        write('OK'), nl
+    ; write('NG'), nl ).
 
 % ⑤ DCG 基本
 /*
@@ -55,8 +55,8 @@ test_anon5(Result) :-
 % ⑧ 強力チェック（同一化バグ検出）
 test_anon6 :-
     ( (_ = X, _ = Y, X == Y) ->
-        write('NG'), nl
-    ; write('OK'), nl ).
+        write('OK'), nl
+    ; write('NG'), nl ).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 一括実行
