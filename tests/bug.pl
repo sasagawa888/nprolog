@@ -6,3 +6,5 @@ reset_dyn :-
 set_dyn :-
     assertz(dyn1(a)),
     assertz(dyn1(b)).
+
+foo(_) :- write('ok').

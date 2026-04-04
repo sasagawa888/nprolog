@@ -1003,6 +1003,11 @@ gen_head1([[]|Xs],N) :-
 
 gen_head1([X|Xs],N) :-
     n_compiler_anonymous(X),
+    write('Junify_var(arg'),
+    write(N),
+    write(','),
+    gen_a_argument(X),
+    write(',th) == YES && '),
     N1 is N + 1,
     gen_head1(Xs,N1).  
 
@@ -1661,6 +1666,11 @@ gen_dyn2(X) :-
     write('"),'),
     gen_dyn2_argument(L),
     write(')').
+gen_dyn2(X) :-
+    n_compiler_anonymous(X),
+    write('Jmakeanony("'),
+    write(X),
+    write('")').
 gen_dyn2(X) :-
     n_compiler_variable(X),
     write('Jmakevar("'),
