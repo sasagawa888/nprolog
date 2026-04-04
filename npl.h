@@ -193,7 +193,7 @@ enum { LIST3_IDX, ERRORCOMP_IDX, WLISTCONS_IDX,UNIFY_IDX, UNIFY_PAIR_IDX,
        NUM_FN3S,
 };
 
-enum { MAKECONST_IDX, MAKEPRED_IDX, MAKEVAR_IDX, MAKESTRFLT_IDX, MAKECOMP_IDX,
+enum { MAKECONST_IDX, MAKEPRED_IDX, MAKEVAR_IDX, MAKEANONY_IDX, MAKESTRFLT_IDX, MAKECOMP_IDX,
        MAKESYS_IDX, MAKEOPE_IDX, MAKEUSER_IDX, MAKESTRLONG_IDX, MAKEBIGX_IDX,
        MAKESTR_IDX, MAKEFUNC_IDX, 
        NUM_FN4S
@@ -1296,6 +1296,7 @@ int makesocket(int sockfd, int type, const char *name, int listenfd);
 int makeuser(char *name);
 int makevariant(int th);
 int makevar(char *name);
+int makeanony(char *name);
 int memory_variant(int x);
 int memq(int x, int y);
 int memberp(int x, int y);

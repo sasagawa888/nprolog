@@ -164,6 +164,7 @@ void dynamic_link(int x)
     init_f4(MAKECONST_IDX, (tpred) makeconst);
     init_f4(MAKEPRED_IDX, (tpred) makepred);
     init_f4(MAKEVAR_IDX, (tpred) makevar);
+    init_f4(MAKEANONY_IDX, (tpred) makeanony);
     init_f4(MAKESTRFLT_IDX, (tpred) makestrflt);
     init_f4(MAKECOMP_IDX, (tpred) makecomp);
     init_f4(MAKESYS_IDX, (tpred) makesys);

@@ -564,6 +564,18 @@ int makevar(char *name)
     return (y);
 }
 
+int makeanony(char *name)
+{
+    int y;
+
+    y = makeatom(name, ANOY);
+    SET_CAR(y, UNBIND);		//value
+    SET_CDR(y, UNBIND);		//alpha variable
+    SET_VAR(y, NIL);
+    return (y);
+}
+
+
 int makestrflt(char *str)
 {
     return (makeflt(atof(str)));

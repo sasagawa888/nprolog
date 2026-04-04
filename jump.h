@@ -178,6 +178,8 @@ static inline int Jmakevariant(int x) {
     return f1[MAKEVARIANT_IDX](x);
 }
 
+
+
 static inline int Jadd_dynamic(int x) {
     return f1[ADD_DYNAMIC_IDX](x);
 }
@@ -493,6 +495,11 @@ static inline int Jmakepred(char* x) {
 static inline int Jmakevar(char* x) {
     return f4[MAKEVAR_IDX](x);
 }
+
+static inline int Jmakeanoy(char* x) {
+    return f4[MAKEANOY_IDX](x);
+}
+
 
 static inline int Jmakestrflt(char* x) {
     return f4[MAKESTRFLT_IDX](x);
