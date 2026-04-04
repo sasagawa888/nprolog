@@ -1309,6 +1309,11 @@ there are all type of prolog object
 gen_a_argument([]) :-
 	write('NIL').
 gen_a_argument(X) :-
+    n_compiler_anonymous(X),
+    write('Jmakeanony("'),
+    write(X),
+    write('")').
+gen_a_argument(X) :-
 	n_compiler_variable(X),
     n_atom_convert(X,X1),
     write(X1).
