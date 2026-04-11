@@ -1796,6 +1796,8 @@ int unify(int x, int y, int th)
 
     if (nullp(x) && nullp(y))
 	return (YES);
+	else if (anonymousp(x) || anonymousp(y)) 
+	return (YES);
     else if (variablep(x) && !variablep(y)) {
 	x1 = deref1(x, th);
 	if (x1 == x) {
@@ -1832,8 +1834,6 @@ int unify(int x, int y, int th)
 	} else {
 	    return (unify(x1, y1, th));
 	}
-    } else if (anonymousp(x) || anonymousp(y)) {
-	return (YES);
     } else if (constantp(x) && constantp(y)) {
 	if (eqlp(x, y))
 	    return (YES);

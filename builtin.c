@@ -2384,8 +2384,10 @@ int b_n_equalp(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 
-	if (anonymousp(arg1) && anonymousp(arg2))
-	    return (NO);
+	if (anonymousp(arg1) || anonymousp(arg2))
+	    return (YES);
+	else if (variablep(arg1) || variablep(arg2))
+		return (YES);
 	else if (equalp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
 	else

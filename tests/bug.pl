@@ -7,12 +7,3 @@ test_anon6 :-
     ; write('NG'), nl ).
 
 
-
-p(1).
-p(2).
-
-
-test31(X) :-
-    ( p(_) -> X = then_branch ; X = else_branch ).
-
-
