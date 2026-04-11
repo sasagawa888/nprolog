@@ -8,6 +8,11 @@ test_anon6 :-
 
 
 
-test9(X) :-
-    ( true -> fail ; X = else_branch ).
+p(1).
+p(2).
+
+
+test31(X) :-
+    ( p(_) -> X = then_branch ; X = else_branch ).
+
 
