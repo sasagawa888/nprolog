@@ -1871,7 +1871,9 @@ int unify(int x, int y, int th)
 int unify_pair(int x, int y, int th)
 {
 	int x1;
-    if (variablep(x)) {
+	if (anonymousp(x)) {
+		return(YES);
+	} else if (variablep(x)) {
 	x1 = deref(x,th);
 	if(variablep(x1)){
 	bindsym(x, y, th);
@@ -1895,7 +1897,9 @@ int unify_pair(int x, int y, int th)
 int unify_int(int x, int y, int th)
 {
 	int x1;
-    if (variablep(x)) {
+	if (anonymousp(x)) {
+		return(YES);
+	} else if (variablep(x)) {
 	x1 = deref(x,th);
 	if (variablep(x1)){
 	bindsym(x, y, th);
@@ -1916,7 +1920,9 @@ int unify_int(int x, int y, int th)
 int unify_flt(int x, int y, int th)
 {
 	int x1;
-    if (variablep(x)) {
+	if (anonymousp(x)) {
+		return(YES);
+	} else if (variablep(x)) {
 	x1 = deref(x,th);
 	if (variablep(x1)){
 	bindsym(x, y, th);
@@ -1938,7 +1944,9 @@ int unify_flt(int x, int y, int th)
 int unify_long(int x, int y, int th)
 {
 	int x1;
-    if (variablep(x)) {
+	if (anonymousp(x)) {
+		return(YES);
+	} else if (variablep(x)) {
 	x1 = deref(x,th);
 	if(variablep(x1)){
 	bindsym(x, y, th);
@@ -1960,7 +1968,9 @@ int unify_long(int x, int y, int th)
 int unify_big(int x, int y, int th)
 {
 	int x1;
-    if (variablep(x)) {
+	if (anonymousp(x)) {
+		return(YES);
+	} else if (variablep(x)) {
 	x1 = deref(x,th);
 	if (variablep(x1)){
 	bindsym(x, y, th);
@@ -1982,7 +1992,9 @@ int unify_big(int x, int y, int th)
 int unify_atom(int x, int y, int th)
 {
 	int x1;
-    if (variablep(x)) {
+	if (anonymousp(x)) {
+		return(YES);
+	} else if (variablep(x)) {
 	x1 = deref(x,th);
 	if (variablep(x1)){
 		bindsym(x, y, th);
@@ -2003,7 +2015,9 @@ int unify_atom(int x, int y, int th)
 int unify_str(int x, int y, int th)
 {
 	int x1;
-    if (variablep(x)) {
+	if (anonymousp(x)) {
+		return(YES);
+	} else if (variablep(x)) {
 	x1 = deref(x,th);
 	if (variablep(x1)){
 		bindsym(x, y, th);
@@ -2025,7 +2039,9 @@ int unify_var(int x, int y, int th)
 {
     int x1, y1;
 
-    if (!variablep(x)) {
+	if (anonymousp(x)) {
+		return(YES);
+	} else if (!variablep(x)) {
 	y1 = deref1(y, th);
 	if (y1 == y) {
 	    bindsym(y, x, th);
