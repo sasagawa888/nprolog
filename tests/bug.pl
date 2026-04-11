@@ -1,9 +1,6 @@
 
+:- use_module(dcg).
 
-% ⑧ 強力チェック（同一化バグ検出）
-test_anon6 :-
-    ( (_ = X, _ = Y, X == Y) ->
-        write('OK'), nl
-    ; write('NG'), nl ).
-
-
+test_anon_dcg -->
+    [_],
+    [_].

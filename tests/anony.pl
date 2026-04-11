@@ -26,7 +26,8 @@ test_anon4 :-
     ; write('NG'), nl ).
 
 % ⑤ DCG 基本
-/*
+:- use_module(dcg).
+
 test_anon_dcg -->
     [_],
     [_].
@@ -45,7 +46,7 @@ test_anon_dcg3 -->
     [_].
 
 % ?- phrase(test_anon_dcg3, [a,b]). % true
-*/
+
 % ⑦ findall
 test_anon5(Result) :-
     findall(_, member(_, [a,b,c]), Result).
