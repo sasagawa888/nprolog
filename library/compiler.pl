@@ -1498,9 +1498,7 @@ gen_a_argument([]) :-
 	write('NIL').
 gen_a_argument(X) :-
     n_compiler_anonymous(X),
-    write('Jmakeanony("'),
-    write(X),
-    write('")').
+    write(X).
 gen_a_argument(X) :-
 	n_compiler_variable(X),
     n_atom_convert(X,X1),
