@@ -2079,6 +2079,7 @@ int b_is(int arglist, int rest, int th)
 	if (wide_variable_p(arg2))
 	    exception(INSTANTATION_ERR, ind, arg2, th);
 
+
 	eval_context = ind;
 	arg2 = eval(arg2, th);
 	res = unify(arg1, arg2, th);

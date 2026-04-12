@@ -832,14 +832,14 @@ gen_a_body(X) :-
     write(',th)').
 % is/2 
 gen_a_body(X is Y) :-
-    n_findatom(n_exec_is,builtin,A),
+    n_findatom(is,builtin,A),
     write('Jwcons('),
     write(A),
     write(','),
     write('Jwlist2('),
-    eval_form(X),
+    gen_form(X),
     write(','),
-    eval_form(Y),
+    gen_form(Y),
     write(',th),th)').
 % </2 
 gen_a_body(X < Y) :-
@@ -1269,7 +1269,7 @@ eval_form(X /\ Y) :-
     eval_form(Y),
     write(',th)').
 eval_form(X \/ Y) :-
-	  write('Jlogicalor('),
+	write('Jlogicalor('),
     eval_form(X),
     write(','),
     eval_form(Y),
@@ -1285,7 +1285,195 @@ eval_form(randi(X)) :-
 eval_form(round(X,Y)) :-
 	  write('Jround('),
     eval_form(X),
+    write(','),
     eval_form(Y),
+    write(',th)').
+
+
+/*
+generate evauation code
+e.g.  X is 1+2.  X == 3*4.
+*/
+gen_form([]) :-
+	write('NIL').
+gen_form([X]) :-
+	write('Jmakeconst("'),
+    write(X),
+    write('")').
+gen_form(pi) :-
+	write('Jmakestrflt("3.14159265358979")').
+gen_form(random) :-
+	write('Jrandom(th)').    
+gen_form(X) :-
+	n_bignum(X),
+    write('Jmakebig("'),
+    write(X),
+    write('")').
+gen_form(X) :-
+	n_longnum(X),
+    write('Jmakestrlong("'),
+    write(X),
+    write('")').
+gen_form(X) :-
+	integer(X),
+    write('Jmakeint('),
+    write(X),
+    write(')').
+gen_form(X) :-
+	float(X),
+    write('Jmakestrflt("'),
+    write(X),
+    write('")').
+gen_form(X) :-
+	atom(X),
+    n_compiler_variable(X),
+    n_atom_convert(X,X1),
+    write(X1).
+gen_form(X) :-
+	atom(X),
+    write('Jmakeconst("'),
+    write(X),
+    write('")').
+gen_form(X) :-
+    list(X),
+    gen_a_argument(X).
+gen_form(-X) :-
+	write('Jwlist2(Jmakeope("-"),'),
+    gen_form(X),
+    write('),th)').
+gen_form(X + Y) :-
+	write('Jwlist3(Jmakeope("+"),'),
+    gen_form(X),
+    write(','),
+    gen_form(Y),
+    write(',th)').
+gen_form(X - Y) :-
+	write('Jwlist3(Jmakeope("-"),'),
+    gen_form(X),
+    write(','),
+    gen_form(Y),
+    write(',th)').
+gen_form(X * Y) :-
+	write('Jwlist3(Jmakeope("*"),'),
+    gen_form(X),
+    write(','),
+    gen_form(Y),
+    write(',th)').
+gen_form(X / Y) :-
+	write('Jwlist3(Jmakeope("/")'),
+    gen_form(X),
+    write(','),
+    gen_form(Y),
+    write(',th)').
+gen_form(X//Y) :-
+	write('Jwlist3(Jmakeope("//")'),
+    gen_form(X),
+    write(','),
+    gen_form(Y),
+    write(',th)').
+gen_form(X ^ Y) :-
+	write('Jwlist3(Jmakeope("^"),'),
+    gen_form(X),
+    write(','),
+    gen_form(Y),
+    write(',th)').
+gen_form(X mod Y) :-
+	write('Jwlist3(Jmakeope("mod"),'),
+    gen_form(X),
+    write(','),
+    gen_form(Y),
+    write(',th)').
+gen_form(sqrt(X)) :-
+	write('Jwlist2(Jmakefun("sqrt),'),
+    gen_form(X),
+    write(',th)').
+gen_form(sin(X)) :-
+	write('Jwlist2(Jmakefun("sin"),'),
+    gen_form(X),
+    write(',th)').
+gen_form(asin(X)) :-
+	write('Jwlist2(Jmakefun("asin"),'),
+    gen_form(X),
+    write(',th)').
+gen_form(cos(X)) :-
+	write('Jwlist2(Jmakefun("cos),'),
+    gen_form(X),
+    write(',th)').
+gen_form(acos(X)) :-
+	write('Jwlist2(Jmakefun("acos"),'),
+    gen_form(X),
+    write(',th)').
+gen_form(tan(X)) :-
+	write('Jwlist2(Jmakefun("tan"),'),
+    gen_form(X),
+    write(',th)').
+gen_form(atan(X)) :-
+	write('Jwlist2(Jmakefun("atan"),'),
+    gen_form(X),
+    write(',th)').
+gen_form(exp(X)) :-
+	write('Jwlist2(Jmakefun("exp"),'),
+    gen_form(X),
+    write(',th)').
+gen_form(log(X)) :-
+	write('Jwlist2(Jmakefun("log"),',),
+    gen_form(X),
+    write(',th)').
+gen_form(ln(X)) :-
+	write('Jwlist2(Jmakefun("ln"),'),
+    gen_form(X),
+    write(',th)').
+gen_form(integer(X)) :-
+	write('Jwlist2(Jmakesys("integer"),'),
+    gen_form(X),
+    write(',th)').
+gen_form(abs(X)) :-
+	write('Jwlist2(Jmakefun("abs"),'),
+    gen_form(X),
+    write(',th)').
+gen_form(X << Y) :-
+	write('Jwlist3(Jmakeope("<<"),'),
+    gen_form(X),
+    write(','),
+    gen_form(Y),
+    write(',th)').
+gen_form(X >> Y) :-
+	write('Jwlist3(Jmakeope(">>"),'),
+    gen_form(X),
+    write(','),
+    gen_form(Y),
+    write(',th)').
+gen_form(X xor Y) :-
+	write('Jwlist3(Jmakeope("xor"),'),
+    gen_form(X),
+    write(','),
+    gen_form(Y),
+    write(',th)').
+gen_form(X /\ Y) :-
+	write('Jwlist3(Jmakeope("/\"),'),
+    gen_form(X),
+    write(','),
+    gen_form(Y),
+    write(',th)').
+gen_form(X \/ Y) :-
+	write('Jwlist3(Jmakeope("\\/"),'),
+    gen_form(X),
+    write(','),
+    gen_form(Y),
+    write(',th)').
+gen_form(\ X) :-
+	write('Jwlist2(Jmakeope("\"),'),
+    gen_form(X),
+    write(',th)').
+gen_form(randi(X)) :-
+	write('Jwlist2(Jmakefun("randi"),'),
+    gen_form(X),
+    write(',th)').
+gen_form(round(X,Y)) :-
+	write('Jwlist3(Jmakefun("round"),'),
+    gen_form(X),
+    write(','),
+    gen_form(Y),
     write(',th)').
 
 

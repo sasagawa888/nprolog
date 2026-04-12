@@ -1,9 +1,7 @@
 
-:- use_module(dcg).
-
-test_anon_dcg -->
-    [_],
-    [_].
+foo(X,Y) :-
+    append(A,B,[1,2,3]),
+    Y is X * X.
 
 % recompute_test(2,A,Z).
 recompute_test(N, X, Y) :-
