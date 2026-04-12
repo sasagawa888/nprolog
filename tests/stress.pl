@@ -2,6 +2,8 @@
 % compiler_stress.pl
 % N-Prolog compiler stress test
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+:- use_module(dcg).
+
 /*
 ?- test_formula(F).
 ?- test_if(A,B,C,D).
@@ -181,7 +183,6 @@ collect_sorted_paths_from(X, L) :-
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 8. DCG + {} のテスト
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-:- use_module(dcg).
 
 sentence(s(NP,VP)) --> noun_phrase(NP, N), verb_phrase(VP, N).
 
