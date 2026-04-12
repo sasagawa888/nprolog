@@ -843,50 +843,50 @@ gen_a_body(X is Y) :-
     write(',th),th)').
 % </2 
 gen_a_body(X < Y) :-
-    n_findatom(n_exec_smaller,builtin,A),
+    n_findatom(<,builtin,A),
     write('Jwcons('),
     write(A),
     write(','),
     write('Jwlist2('),
-    eval_form(X),
+    gen_form(X),
     write(','),
-    eval_form(Y),
+    gen_form(Y),
     write(',th),th)').
 
 % >/2 
 gen_a_body(X > Y) :-
-    n_findatom(n_exec_greater,builtin,A),
+    n_findatom(>,builtin,A),
     write('Jwcons('),
     write(A),
     write(','),
     write('Jwlist2('),
-    eval_form(X),
+    gen_form(X),
     write(','),
-    eval_form(Y),
+    gen_form(Y),
     write(',th),th)').
 
 % =</2 
 gen_a_body(X =< Y) :-
-    n_findatom(n_exec_eqsmaller,builtin,A),
+    n_findatom(=<,builtin,A),
     write('Jwcons('),
     write(A),
     write(','),
     write('Jwlist2('),
-    eval_form(X),
+    gen_form(X),
     write(','),
-    eval_form(Y),
+    gen_form(Y),
     write(',th),th)').
 
 % >=/2 
 gen_a_body(X >= Y) :-
-    n_findatom(n_exec_eqgreater,builtin,A),
+    n_findatom(>=,builtin,A),
     write('Jwcons('),
     write(A),
     write(','),
     write('Jwlist2('),
-    eval_form(X),
+    gen_form(X),
     write(','),
-    eval_form(Y),
+    gen_form(Y),
     write(',th),th)').
 
 
