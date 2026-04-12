@@ -889,6 +889,18 @@ gen_a_body(X >= Y) :-
     gen_form(Y),
     write(',th),th)').
 
+% ==/2 
+gen_a_body(X == Y) :-
+    n_findatom(==,builtin,A),
+    write('Jwcons('),
+    write(A),
+    write(','),
+    write('Jwlist2('),
+    gen_form(X),
+    write(','),
+    gen_form(Y),
+    write(',th),th)').
+
 
 % ifthen
 gen_a_body(X->Y) :-
