@@ -1813,7 +1813,7 @@ void printlist(int addr)
 {
     if (nullp(addr)) {
 	printc(']');
-    } else if ((!(structurep(cdr(addr)))) && (!(nullp(cdr(addr))))) {
+    } else if ((!(nullp(cdr(addr))))) {
 	if (operationp(car(addr)) &&
 	    !argumentsp(car(addr)) && heavy999p(car(car(addr)))) {
 	    printc('(');
