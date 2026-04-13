@@ -1,6 +1,6 @@
 /*
 toy production system
-| ?-reaction([c,h2,o2,o2,h2,],Y).
+| ?-reaction([c,h2,o2,o2,h2],Y).
 [ch4,o2,o2]
 [co2,h2o,h2o]
 Y = [co2,h2o,h2o]
