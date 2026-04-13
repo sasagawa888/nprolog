@@ -1,5 +1,3 @@
-# N-Prolog User's manual
-
 # N-Prolog User's Manual
 
 ## Built-in Operators
