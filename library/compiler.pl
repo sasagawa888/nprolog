@@ -1410,7 +1410,7 @@ gen_form(X * Y) :-
     gen_form(Y),
     write(',th)').
 gen_form(X / Y) :-
-	write('Jwlist3(Jmakeope("/")'),
+	write('Jwlist3(Jmakeope("/"),'),
     gen_form(X),
     write(','),
     gen_form(Y),
