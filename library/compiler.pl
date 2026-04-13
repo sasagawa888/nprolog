@@ -721,6 +721,21 @@ generate one operation,user,builtin or compiled predicate.
 when except of above type, invoke error.
 */
 
+% case
+case_arg((X;Y),[X|Z]) :-
+    case_arg(Y,Z).
+case_arg(X,X).
+
+gen_a_body((X->Y;Z)) :-
+    n_findatom(case,builtin,A),
+    write('Jwcons('),
+    write(A),
+    write(','),
+    write('Jwlist1('),
+    case_arg((X->Y;Z),L),
+    gen_argument_list(L),
+    write(',th),th)').
+
 
 % ifthenelse
 gen_a_body((X->Y;Z)) :-

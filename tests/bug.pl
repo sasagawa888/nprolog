@@ -1,5 +1,4 @@
 
-
 classify_num(N, X) :-
     ( N < 0 ->
         X = negative
