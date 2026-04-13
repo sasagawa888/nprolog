@@ -3946,8 +3946,9 @@ int b_ifthenelse(int arglist, int rest, int th)
 
 int case_list_p(int x)
 {
+
 	int elt;
-	if (predicatep(x))
+	if (predicatep(x) || builtinp(x))
 		return(1);
 	else if(nullp(x))
 		return(0);
