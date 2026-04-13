@@ -3974,13 +3974,13 @@ int b_case(int arglist, int rest, int th)
 	if (!(listp(arg1) && case_list_p(arg1)))
 	    exception(ILLEGAL_ARGS, ind, arg1, th);
 
-	while(!predicatep(arg1)){
+	while(!(predicatep(arg1) || builtinp(arg1))){
 		ifthen = car(arg1);
-		if (prove_all(cadr(ifthen), sp[th], th) == YES) {
-	    return (prove_all(addtail_body(rest, caddr(ifthen), th), sp[th], th));
+		if (prove_all(cadr(ifthen), sp[th], th) == YES) 
+	    	return (prove_all(addtail_body(rest, caddr(ifthen), th), sp[th], th));
 		arg1 = cdr(arg1);
 		unbind(save1, th);
-	}}
+	}
 	
 	return (prove_all(addtail_body(rest, arg1, th), sp[th], th));
 
