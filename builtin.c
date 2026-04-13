@@ -360,7 +360,7 @@ int exec_all(int goals, int bindings, int th)
     if (IS_NIL(goals))
 	return (YES);
     // ,(;(D1;D2),Xs) 
-    else if (structurep(goals) && car(cadr(goals)) == OR) {
+    else if (structurep(goals) && structurep(cadr(goals)) && car(cadr(goals)) == OR) {
 	if (exec_all(cadr(cadr(goals)), bindings, th) == YES)
 	    return (exec_all(caddr(goals), bindings, th));
 	else if (exec_all(caddr(cadr(goals)), bindings, th) == YES)
