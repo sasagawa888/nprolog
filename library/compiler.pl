@@ -1390,7 +1390,7 @@ gen_form(X) :-
 gen_form(-X) :-
 	write('Jwlist2(Jmakeope("-"),'),
     gen_form(X),
-    write('),th)').
+    write(',th)').
 gen_form(X + Y) :-
 	write('Jwlist3(Jmakeope("+"),'),
     gen_form(X),
