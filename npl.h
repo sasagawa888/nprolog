@@ -807,6 +807,7 @@ int b_between(int arglist, int rest, int th);
 int b_n_bignum(int arglist, int rest, int th);
 int b_break(int arglist, int rest, int th);
 int b_call(int arglist, int rest, int th);
+int b_case(int arglist, int rest, int th);
 int b_catch(int arglist, int rest, int th);
 int b_chdir(int arglist , int rest, int th);
 int b_char_code(int arglist, int rest, int th);

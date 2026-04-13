@@ -103,6 +103,7 @@ void init_builtin(void)
     defbuiltin("heapd", b_heapdump, 2);
     defbuiltin("ifthen", b_ifthen, 2);
     defbuiltin("ifthenelse", b_ifthenelse, 3);
+	defbuiltin("case", b_case, 1);
     defbuiltin("inc", b_inc, 2);
     defbuiltin("instance", b_instance, 2);
     defbuiltin("integer", b_integer, 1);
@@ -3943,6 +3944,49 @@ int b_ifthenelse(int arglist, int rest, int th)
     return (NO);
 }
 
+int case_list_p(int x)
+{
+	int elt;
+	if (predicatep(x))
+		return(1);
+	else if(nullp(x))
+		return(0);
+	else {
+		elt = car(x);
+		if (!(predicatep(elt) && car(elt) == IFTHEN))
+			return (case_list_p(cdr(x)));
+		else 
+			return 0;
+	}
+}
+
+int b_case(int arglist, int rest, int th)
+{
+    int n, ind, arg1, save1, ifthen;
+
+    n = length(arglist);
+    ind = makeind("case", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+	save1 = sp[th];
+
+	if (!(listp(arg1) && case_list_p(arg1)))
+	    exception(ILLEGAL_ARGS, ind, arg1, th);
+
+	while(!predicatep(arg1)){
+		ifthen = car(arg1);
+		if (prove_all(cadr(ifthen), sp[th], th) == YES) {
+	    return (prove_all(addtail_body(rest, caddr(ifthen), th), sp[th], th));
+		arg1 = cdr(arg1);
+		unbind(save1, th);
+	}}
+	
+	return (prove_all(addtail_body(rest, arg1, th), sp[th], th));
+
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
 
 
 double getETime()
