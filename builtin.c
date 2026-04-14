@@ -359,14 +359,17 @@ int exec_all(int goals, int bindings, int th)
 
     if (IS_NIL(goals))
 	return (YES);
-    // ,(;(D1;D2),Xs) 
-    else if (structurep(goals) && structurep(cadr(goals)) && car(cadr(goals)) == OR) {
+    // ((D1;D2),Xs) 
+    else if (structurep(goals) && car(goals) == AND && structurep(cadr(goals)) && car(cadr(goals)) == OR) {
 	if (exec_all(cadr(cadr(goals)), bindings, th) == YES)
-	    return (exec_all(caddr(goals), bindings, th));
-	else if (exec_all(caddr(cadr(goals)), bindings, th) == YES)
-	    return (exec_all(caddr(goals), bindings, th));
-	else
-	    return (NO);
+	    if (exec_all(caddr(goals), sp[th], th) == YES)
+			return(YES);
+	unbind(bindings,th);
+	if (exec_all(caddr(cadr(goals)), bindings, th) == YES)
+	    if (exec_all(caddr(goals), sp[th], th) == YES)
+			return(YES);
+	unbind(bindings,th);
+	return (NO);
     }
     // ((D1,D2),Xs) 
     else if (structurep(goals) && car(goals) == AND
@@ -375,7 +378,7 @@ int exec_all(int goals, int bindings, int th)
 	    return (exec_all(caddr(goals), bindings, th));
 	else
 	    return (NO);
-    } else if (car(goals) != AND)
+    } else if ((structurep(goals) && car(goals) != AND) || atomp(goals))
 	return (exec(goals, bindings, NIL, th));
     else {
 	return (exec(cadr(goals), bindings, caddr(goals), th));
