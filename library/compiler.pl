@@ -2149,6 +2149,7 @@ tail_recursive([X|Cs],D,P,H,A,N) :-
     tail_recursive(Cs,D,P,H1,A,N).
 tail_recursive([X|Cs],D,P,H,A,N) :-
     n_property(X,predicate),
+    independ_head(X),
     P1 is P+1,!,
     tail_recursive(Cs,D,P1,H,A,N).
 tail_recursive([_|Cs],D,P,H,A,N) :-
