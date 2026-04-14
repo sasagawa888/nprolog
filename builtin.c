@@ -3951,7 +3951,7 @@ int case_list_p(int x)
 {
 
 	int elt;
-	if (predicatep(x) || builtinp(x) || compiledp(x))
+	if (predicatep(x) || builtinp(x) || compiledp(x) || conjunctionp(x))
 		return(1);
 	else if(nullp(x))
 		return(0);
@@ -3977,7 +3977,7 @@ int b_case(int arglist, int rest, int th)
 	if (!(listp(arg1) && case_list_p(arg1)))
 	    exception(ILLEGAL_ARGS, ind, arg1, th);
 
-	while(!(predicatep(arg1) || builtinp(arg1) || compiledp(arg1))){
+	while(!(predicatep(arg1) || builtinp(arg1) || compiledp(arg1) || conjunctionp(arg1))){
 		ifthen = car(arg1);
 		if (prove_all(cadr(ifthen), sp[th], th) == YES) 
 	    	return (prove_all(addtail_body(rest, caddr(ifthen), th), sp[th], th));
