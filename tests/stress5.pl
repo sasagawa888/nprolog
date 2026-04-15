@@ -17,16 +17,16 @@ run_all :-
     test5,
     test6,
     test7,
-    %test8,
+    test8,
     test9,
     test10,
     test11,
-    %test12,
+    test12,
     test13,
     test14,
     test15,
     test16,
-    %test17,
+    test17,
     test18,
     test19,
     test20.
@@ -194,9 +194,16 @@ test11 :-
 %% \+ の成功ケース
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+/*
 test12 :-
     \+ (X = a),
     show(test12, ok).
+*/
+
+test12 :-
+     (\+ (X = a) -> R = yes ; R = no),
+     show(test12, R).
+
 
 % expected:
 % test12 : fail

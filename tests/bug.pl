@@ -1,10 +1,13 @@
 
 
-p10(N, X) :-
-    ( N > 0 ->
-        Y is N * 2,
-        X is Y*3
-    ;
-        Y is N * 3,
-        X is Y*2
-    ).
+
+show(Test, X) :-
+    write(Test), write(' : '), write(X), nl.
+
+test8 :-
+    ((fail ; fail ; X = ok)),
+    show(test8, X).
+
+% expected:
+% test8 : ok
+
