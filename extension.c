@@ -334,19 +334,19 @@ int b_n_generate_variable(int arglist, int rest, int th)
 // clear_variable is used to clear variable bindings introduced by DCG.
 void clear_variable(int x)
 {
-	if (nullp(x))
-		return;
-	else if (variablep(x)){
-		set_car(x,UNBIND);
-		set_cdr(x,UNBIND);
-		return;
-	} else if (!compoundp(x))
-		return;
-	else {
-		clear_variable(car(x));
-		clear_variable(cdr(x));
-		return;
-	}
+    if (nullp(x))
+	return;
+    else if (variablep(x)) {
+	set_car(x, UNBIND);
+	set_cdr(x, UNBIND);
+	return;
+    } else if (!compoundp(x))
+	return;
+    else {
+	clear_variable(car(x));
+	clear_variable(cdr(x));
+	return;
+    }
 }
 
 
@@ -670,10 +670,10 @@ int b_n_property(int arglist, int rest, int th)
 	    else
 		return (NO);
 	} else if (predicatep(arg1)) {
-		if (unify(arg2, makeconst("predicate"), th) == YES)
-		    return (prove_all(rest, sp[th], th));
-		else
-		    return (NO);
+	    if (unify(arg2, makeconst("predicate"), th) == YES)
+		return (prove_all(rest, sp[th], th));
+	    else
+		return (NO);
 	} else if (functionp(arg1)) {
 	    if (unify(arg2, makeconst("function"), th) == YES)
 		return (prove_all(rest, sp[th], th));
@@ -750,7 +750,8 @@ int b_n_imported_userop(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 
-	if ((user_operation_p(arg1) || user_operator_p(arg1)) && !memberp(arg1, reconsult_list))
+	if ((user_operation_p(arg1) || user_operator_p(arg1))
+	    && !memberp(arg1, reconsult_list))
 	    return (prove_all(rest, sp[th], th));
 	else
 	    return (NO);
@@ -1065,8 +1066,8 @@ int b_n_exec_ifthenelse(int arglist, int rest, int th)
 	if (variablep(arg3))
 	    exception(INSTANTATION_ERR, ind, arg3, th);
 
-	if(exec_all(arg1,sp[th],th) == YES){
-		return (exec_all(addtail_body(rest, arg2, th), sp[th], th));
+	if (exec_all(arg1, sp[th], th) == YES) {
+	    return (exec_all(addtail_body(rest, arg2, th), sp[th], th));
 	} else {
 	    unbind(save1, th);
 	    return (exec_all(addtail_body(rest, arg3, th), sp[th], th));
@@ -1080,7 +1081,7 @@ int b_n_exec_ifthenelse(int arglist, int rest, int th)
 
 int b_n_exec_no_operation(int arglist, int rest, int th)
 {
-	return (prove_all(rest, sp[th], th));
+    return (prove_all(rest, sp[th], th));
 }
 
 int call(int pred, int arglist, int th)

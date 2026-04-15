@@ -103,7 +103,7 @@ void init_builtin(void)
     defbuiltin("heapd", b_heapdump, 2);
     defbuiltin("ifthen", b_ifthen, 2);
     defbuiltin("ifthenelse", b_ifthenelse, 3);
-	defbuiltin("case", b_case, 1);
+    defbuiltin("case", b_case, 1);
     defbuiltin("inc", b_inc, 2);
     defbuiltin("instance", b_instance, 2);
     defbuiltin("integer", b_integer, 1);
@@ -322,8 +322,8 @@ void init_builtin(void)
     defbuiltin("n_generate_variable", b_n_generate_variable, 2);
     defbuiltin("n_clause_with_arity", b_n_clause_with_arity, 3);
     defbuiltin("n_property", b_n_property, 2);
-	defbuiltin("n_imported_predicate", b_n_imported_predicate, 1);
-	defbuiltin("n_imported_userop", b_n_imported_userop, 1);
+    defbuiltin("n_imported_predicate", b_n_imported_predicate, 1);
+    defbuiltin("n_imported_userop", b_n_imported_userop, 1);
     defbuiltin("n_bignum", b_n_bignum, 1);
     defbuiltin("n_longnum", b_n_longnum, 1);
     defbuiltin("n_findatom", b_n_findatom, 3);
@@ -341,9 +341,9 @@ void init_builtin(void)
     defbuiltin("n_exec_greater", b_n_exec_greater, 2);
     defbuiltin("n_exec_eqsmaller", b_n_exec_eqsmaller, 2);
     defbuiltin("n_exec_eqgreater", b_n_exec_eqgreater, 2);
-	defbuiltin("n_exec_no_operation",b_n_exec_no_operation, 0);
-	defbuiltin("n_exec_ifthen",b_n_exec_ifthen, 2);
-	defbuiltin("n_exec_ifthenelse",b_n_exec_ifthenelse, 3);
+    defbuiltin("n_exec_no_operation", b_n_exec_no_operation, 0);
+    defbuiltin("n_exec_ifthen", b_n_exec_ifthen, 2);
+    defbuiltin("n_exec_ifthenelse", b_n_exec_ifthenelse, 3);
 
 
     builtins = reverse(builtins);
@@ -360,27 +360,28 @@ int exec_all(int goals, int bindings, int th)
     if (IS_NIL(goals))
 	return (YES);
     // ((D1;D2),Xs) 
-    else if (structurep(goals) && car(goals) == AND && structurep(cadr(goals)) && car(cadr(goals)) == OR) {
+    else if (structurep(goals) && car(goals) == AND
+	     && structurep(cadr(goals)) && car(cadr(goals)) == OR) {
 	if (exec_all(cadr(cadr(goals)), bindings, th) == YES)
 	    if (exec_all(caddr(goals), sp[th], th) == YES)
-			return(YES);
-	unbind(bindings,th);
+		return (YES);
+	unbind(bindings, th);
 	if (exec_all(caddr(cadr(goals)), bindings, th) == YES)
 	    if (exec_all(caddr(goals), sp[th], th) == YES)
-			return(YES);
-	unbind(bindings,th);
+		return (YES);
+	unbind(bindings, th);
 	return (NO);
     }
-	// (D1,D2)
-	else if(structurep(goals) && car(goals) == OR){
-		if (exec_all(cadr(goals), bindings, th) == YES)
-			return(YES);
-	unbind(bindings,th);
+    // (D1,D2)
+    else if (structurep(goals) && car(goals) == OR) {
+	if (exec_all(cadr(goals), bindings, th) == YES)
+	    return (YES);
+	unbind(bindings, th);
 	if (exec_all(caddr(goals), bindings, th) == YES)
-			return(YES);
-	unbind(bindings,th);
+	    return (YES);
+	unbind(bindings, th);
 	return (NO);
-	}
+    }
     // ((D1,D2),Xs) 
     else if (structurep(goals) && car(goals) == AND
 	     && car(cadr(goals)) == AND) {
@@ -388,12 +389,12 @@ int exec_all(int goals, int bindings, int th)
 	    return (exec_all(caddr(goals), bindings, th));
 	else
 	    return (NO);
-    } 
-	// predicate P 
-	else if ((structurep(goals) && car(goals) != AND) || atomp(goals))
+    }
+    // predicate P 
+    else if ((structurep(goals) && car(goals) != AND) || atomp(goals))
 	return (exec(goals, bindings, NIL, th));
     // (P1,P2,...)
-	else {
+    else {
 	return (exec(cadr(goals), bindings, caddr(goals), th));
     }
 
@@ -1850,8 +1851,9 @@ int b_reconsult(int arglist, int rest, int th)
 		&& length(clause) == 2) {
 		clause = cadr(clause);
 		prove_all(clause, sp[th], th);
-		if (compiler_flag && builtinp(clause) && compoundp(clause) && car(clause) == makesys("initialization"))
-			goto skip;
+		if (compiler_flag && builtinp(clause) && compoundp(clause)
+		    && car(clause) == makesys("initialization"))
+		    goto skip;
 
 		if (!module_flag && car(clause) != makesys("op"))
 		    execute_list = cons(clause, execute_list);
@@ -2405,7 +2407,7 @@ int b_n_equalp(int arglist, int rest, int th)
 	if (anonymousp(arg1) || anonymousp(arg2))
 	    return (YES);
 	else if (variablep(arg1) || variablep(arg2))
-		return (YES);
+	    return (YES);
 	else if (equalp(arg1, arg2))
 	    return (prove_all(rest, sp[th], th));
 	else
@@ -3953,7 +3955,7 @@ int b_ifthenelse(int arglist, int rest, int th)
 	    return (prove_all(addtail_body(rest, arg2, th), sp[th], th));
 	} else {
 	    unbind(save1, th);
-		return (prove_all(addtail_body(rest, arg3, th), sp[th], th));
+	    return (prove_all(addtail_body(rest, arg3, th), sp[th], th));
 	}
     }
     exception(ARITY_ERR, ind, arglist, th);
@@ -3963,18 +3965,18 @@ int b_ifthenelse(int arglist, int rest, int th)
 int case_list_p(int x)
 {
 
-	int elt;
-	if (predicatep(x) || builtinp(x) || compiledp(x) || conjunctionp(x))
-		return(1);
-	else if(nullp(x))
-		return(0);
-	else {
-		elt = car(x);
-		if (!(predicatep(elt) && car(elt) == IFTHEN))
-			return (case_list_p(cdr(x)));
-		else 
-			return 0;
-	}
+    int elt;
+    if (predicatep(x) || builtinp(x) || compiledp(x) || conjunctionp(x))
+	return (1);
+    else if (nullp(x))
+	return (0);
+    else {
+	elt = car(x);
+	if (!(predicatep(elt) && car(elt) == IFTHEN))
+	    return (case_list_p(cdr(x)));
+	else
+	    return 0;
+    }
 }
 
 int b_case(int arglist, int rest, int th)
@@ -3990,14 +3992,18 @@ int b_case(int arglist, int rest, int th)
 	if (!(listp(arg1) && case_list_p(arg1)))
 	    exception(ILLEGAL_ARGS, ind, arg1, th);
 
-	while(!(predicatep(arg1) || builtinp(arg1) || compiledp(arg1) || conjunctionp(arg1))){
-		ifthen = car(arg1);
-		if (prove_all(cadr(ifthen), sp[th], th) == YES) 
-	    	return (prove_all(addtail_body(rest, caddr(ifthen), th), sp[th], th));
-		arg1 = cdr(arg1);
-		unbind(save1, th);
+	while (!
+	       (predicatep(arg1) || builtinp(arg1) || compiledp(arg1)
+		|| conjunctionp(arg1))) {
+	    ifthen = car(arg1);
+	    if (prove_all(cadr(ifthen), sp[th], th) == YES)
+		return (prove_all
+			(addtail_body(rest, caddr(ifthen), th), sp[th],
+			 th));
+	    arg1 = cdr(arg1);
+	    unbind(save1, th);
 	}
-	
+
 	return (prove_all(addtail_body(rest, arg1, th), sp[th], th));
 
     }

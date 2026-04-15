@@ -2122,19 +2122,19 @@ void to_binary_any(unsigned int n, char *buf, int width)
 
     // generate from lsb
     do {
-        temp[i++] = (n % 2) ? '1' : '0';
-        n /= 2;
+	temp[i++] = (n % 2) ? '1' : '0';
+	n /= 2;
     } while (n > 0);
 
     // fill 0
     while (i < width) {
-        temp[i++] = '0';
+	temp[i++] = '0';
     }
 
     // reverse copy
     int j = 0;
     while (i > 0) {
-        buf[j++] = temp[--i];
+	buf[j++] = temp[--i];
     }
     buf[j] = '\0';
 }
@@ -2226,22 +2226,23 @@ int b_n_format(int arglist, int rest, int th)
 			c = substr[k++];
 		    }
 		} else if (c == 'B') {
-			//parse digits
-			int width;
-			width = 0;
+		    //parse digits
+		    int width;
+		    width = 0;
+		    c = format[i++];
+		    while (isdigit(c)) {
+			width = width * 10 + (c - '0');
 			c = format[i++];
-			while(isdigit(c)){
-				width = width * 10 + (c - '0');
-				c = format[i++];
-			}
-			if (width == 0){
-				i--;
-				width = 16;
-			}
+		    }
+		    if (width == 0) {
+			i--;
+			width = 16;
+		    }
 		    if (!integerp(car(arg3)))
 			exception(NOT_INT, ind, arg3, th);
 		    memset(substr, 0, sizeof(substr));
-			to_binary_any((unsigned int)GET_INT(car(arg3)),substr,width);
+		    to_binary_any((unsigned int) GET_INT(car(arg3)),
+				  substr, width);
 		    arg3 = cdr(arg3);
 		    k = 0;
 		    c = substr[k++];
