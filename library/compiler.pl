@@ -2270,7 +2270,7 @@ halt_check([_|Cs],D,P,A) :-
 
 % deterministic body case. Each has cut or each is builtin or each is tail-recur 
 % G is gournd_variable
-det_body(Head,(_->_;_),_) :- fail,!.
+det_body(Head,(_->_;_),_).
 det_body(_,(_;_),_) :- fail,!.
 det_body(_,!,_).
 det_body(_,(_,!),_).
@@ -2463,6 +2463,12 @@ gen_a_det_body(X >= Y) :-
     write(','),
     eval_form(Y),
     write(') && Jinc_proof(th))').
+
+gen_a_det_body((X->Y;Z)) :-
+    case_arg((X->Y;Z),L),
+    write('if (Jcall(Jmakesys("case"),Jwlist1('),
+    gen_a_argument(L),
+    write(',th),th) == YES)').
 
 gen_a_det_body(X) :-
     X =.. [P|A],
