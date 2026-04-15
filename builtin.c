@@ -371,6 +371,16 @@ int exec_all(int goals, int bindings, int th)
 	unbind(bindings,th);
 	return (NO);
     }
+	// (D1,D2)
+	else if(structurep(goals) && car(goals) == OR){
+		if (exec_all(cadr(goals), bindings, th) == YES)
+			return(YES);
+	unbind(bindings,th);
+	if (exec_all(caddr(goals), bindings, th) == YES)
+			return(YES);
+	unbind(bindings,th);
+	return (NO);
+	}
     // ((D1,D2),Xs) 
     else if (structurep(goals) && car(goals) == AND
 	     && car(cadr(goals)) == AND) {
@@ -378,9 +388,12 @@ int exec_all(int goals, int bindings, int th)
 	    return (exec_all(caddr(goals), bindings, th));
 	else
 	    return (NO);
-    } else if ((structurep(goals) && car(goals) != AND) || atomp(goals))
+    } 
+	// predicate P 
+	else if ((structurep(goals) && car(goals) != AND) || atomp(goals))
 	return (exec(goals, bindings, NIL, th));
-    else {
+    // (P1,P2,...)
+	else {
 	return (exec(cadr(goals), bindings, caddr(goals), th));
     }
 
