@@ -1,13 +1,8 @@
 
 
+:- use_module(utils).
 
-show(Test, X) :-
-    write(Test), write(' : '), write(X), nl.
-
-test8 :-
-    ((fail ; fail ; X = ok)),
-    show(test8, X).
-
-% expected:
-% test8 : ok
+test18 :-
+    ( \+ fail -> X=yes ; X=no ),
+    writeln(test18), writeln(X).
 
