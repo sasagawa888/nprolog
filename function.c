@@ -489,6 +489,7 @@ void init_operator(void)
     defoperator("**", f_expt, 200, XFY, 0);
     defoperator("/", f_divide, 400, YFX, 0);
     defoperator("//", f_div, 400, YFX, 0);
+	defoperator("div", f_div, 400, YFX, 0);
     defoperator("mod", f_mod, 400, YFX, 0);
     defoperator("<<", f_leftshift, 400, YFX, 0);
     defoperator(">>", f_rightshift, 400, YFX, 0);

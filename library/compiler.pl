@@ -1241,6 +1241,12 @@ eval_form(X//Y) :-
     write(','),
     eval_form(Y),
     write(',th)').
+eval_form(X div Y) :-
+	write('Jdiv('),
+    eval_form(X),
+    write(','),
+    eval_form(Y),
+    write(',th)').
 eval_form(X ^ Y) :-
 	write('Jexpt('),
     eval_form(X),
@@ -1424,6 +1430,12 @@ gen_form(X / Y) :-
     write(',th)').
 gen_form(X//Y) :-
 	write('Jwlist3(Jmakeope("//")'),
+    gen_form(X),
+    write(','),
+    gen_form(Y),
+    write(',th)').
+gen_form(X div Y) :-
+	write('Jwlist3(Jmakeope("div")'),
     gen_form(X),
     write(','),
     gen_form(Y),
