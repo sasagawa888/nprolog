@@ -3,7 +3,7 @@
 %
 %         Copyright (C) 2001-2023 Makoto Hiroi
 %
-
+% ?- solver(0x1ffffff).
 % ボタンを押したときのパターン
 pattern(0, 0x0000023).  pattern(1, 0x0000047).  pattern(2, 0x000008e).  pattern(3, 0x000011c).
 pattern(4, 0x0000218).  pattern(5, 0x0000461).  pattern(6, 0x00008e2).  pattern(7, 0x00011c4).

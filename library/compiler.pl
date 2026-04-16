@@ -676,6 +676,11 @@ gen_after_body(X,N) :-
 gen_body1([],_) :-
     write('NIL').
 
+gen_body1((((X->Y),Y1);Z),N) :-
+	gen_a_body((((X->Y),Y1);Z)).
+
+gen_body1((X->Y;Z),N) :-
+	gen_a_body((X->Y;Z)).
 
 gen_body1((D1;D2),N) :-
 	write('Jwlist3(Jmakeope(";"),'),
@@ -683,6 +688,21 @@ gen_body1((D1;D2),N) :-
     write(','),
     gen_body1(D2,N),
     write(',th)').
+
+gen_body1(((((X->Y),Y1);Z),Xs),N) :-
+    write('Jwlist3(Jmakeope(","),'),
+	gen_a_body((((X->Y),Y1);Z)),
+    write(','),
+    gen_body1(Xs,N),
+    write(',th)').
+
+gen_body1(((X->Y;Z),Xs),N) :-
+    write('Jwlist3(Jmakeope(","),'),
+	gen_a_body((X->Y;Z)),
+    write(','),
+    gen_body1(Xs,N),
+    write(',th)').
+
 gen_body1(((D1;D2),Xs),N) :-
     write('Jwlist3(Jmakeope(","),'),
 	write('Jwlist3(Jmakeope(";"),'),
@@ -732,6 +752,15 @@ case_arg((X;Y),[X|Z]) :-
     case_arg(Y,Z).
 case_arg(X,X).
 
+gen_a_body(((X->Y),Y1);Z) :-
+    n_findatom(case,builtin,A),
+    write('Jwcons('),
+    write(A),
+    write(','),
+    write('Jwlist1('),
+    case_arg((((X->Y),Y1);Z),L),
+    gen_argument_list(L),
+    write(',th),th)').
 
 gen_a_body((X->Y;Z)) :-
     n_findatom(case,builtin,A),
