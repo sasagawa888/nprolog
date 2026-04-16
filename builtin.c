@@ -342,7 +342,7 @@ void init_builtin(void)
     //defbuiltin("n_exec_eqsmaller", b_n_exec_eqsmaller, 2);
     //defbuiltin("n_exec_eqgreater", b_n_exec_eqgreater, 2);
     defbuiltin("n_exec_no_operation", b_n_exec_no_operation, 0);
-    defbuiltin("n_exec_ifthen", b_n_exec_ifthen, 2);
+    //defbuiltin("n_exec_ifthen", b_n_exec_ifthen, 2);
 
 
     builtins = reverse(builtins);
@@ -2111,7 +2111,7 @@ int b_is(int arglist, int rest, int th)
     return (NO);
 }
 
-
+/*
 int b_n_exec_is(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, res;
@@ -2135,7 +2135,7 @@ int b_n_exec_is(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
-
+*/
 
 
 int b_n_greater(int arglist, int rest, int th)
@@ -2166,7 +2166,7 @@ int b_n_greater(int arglist, int rest, int th)
     return (NO);
 }
 
-
+/*
 int b_n_exec_greater(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
@@ -2190,7 +2190,7 @@ int b_n_exec_greater(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
-
+*/
 
 int b_n_smaller(int arglist, int rest, int th)
 {
@@ -2220,7 +2220,7 @@ int b_n_smaller(int arglist, int rest, int th)
     return (NO);
 }
 
-
+/*
 int b_n_exec_smaller(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
@@ -2246,7 +2246,7 @@ int b_n_exec_smaller(int arglist, int rest, int th)
     return (NO);
 }
 
-
+*/
 int b_n_eqsmaller(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
@@ -2274,7 +2274,7 @@ int b_n_eqsmaller(int arglist, int rest, int th)
     return (NO);
 }
 
-
+/*
 int b_n_exec_eqsmaller(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
@@ -2297,7 +2297,7 @@ int b_n_exec_eqsmaller(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
-
+*/
 
 int b_n_eqgreater(int arglist, int rest, int th)
 {
@@ -2327,7 +2327,7 @@ int b_n_eqgreater(int arglist, int rest, int th)
     return (NO);
 }
 
-
+/*
 int b_n_exec_eqgreater(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
@@ -2351,7 +2351,7 @@ int b_n_exec_eqgreater(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
-
+*/
 
 int b_n_numeq(int arglist, int rest, int th)
 {
