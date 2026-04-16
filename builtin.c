@@ -32,7 +32,7 @@ void init_builtin(void)
     definfix("\\=", b_n_notunify, 700, XFX);
     definfix("=..", b_n_univ, 700, XFX);
     definfix("->", b_ifthen, 900, XFY);
-    definfix("not", b_not, 900, FY);
+    definfix("not", b_not, 850, FY);
 
     defbuiltin("!", b_n_cut, 0);
     defbuiltin("%ask", b_n_ask, -1);
@@ -232,7 +232,7 @@ void init_builtin(void)
     defbuiltin("string_atom", b_string_atom, 2);
     defbuiltin("initialization", b_initialization, 1);
     defbuiltin("subsumes_term", b_subsumes_term, 2);
-    definfix("\\+", b_not, 900, FY);
+    definfix("\\+", b_not, 850, FY);
 
     //-----Distributed parallel
     defbuiltin("dp_create", b_dp_create, 1);
