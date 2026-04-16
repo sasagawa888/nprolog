@@ -962,6 +962,7 @@ gen_a_body(X \= Y) :-
     gen_form(Y),
     write(',th),th)').
 
+/*
 % ifthen
 gen_a_body(X->Y) :-
     n_findatom(n_exec_ifthen,builtin,A),
@@ -973,7 +974,7 @@ gen_a_body(X->Y) :-
     write(','),
     gen_body1(Y,0),
     write(',th),th)').
-
+*/
 % atom builtin e.g. nl fail
 gen_a_body(X) :-
     n_property(X,builtin),

@@ -336,11 +336,11 @@ void init_builtin(void)
     defbuiltin("n_before_cut", b_n_before_cut, 2);
     defbuiltin("n_after_cut", b_n_after_cut, 2);
     defbuiltin("n_pair_list", b_n_pair_list, 1);
-    defbuiltin("n_exec_is", b_n_exec_is, 2);
-    defbuiltin("n_exec_smaller", b_n_exec_smaller, 2);
-    defbuiltin("n_exec_greater", b_n_exec_greater, 2);
-    defbuiltin("n_exec_eqsmaller", b_n_exec_eqsmaller, 2);
-    defbuiltin("n_exec_eqgreater", b_n_exec_eqgreater, 2);
+    //defbuiltin("n_exec_is", b_n_exec_is, 2);
+    //defbuiltin("n_exec_smaller", b_n_exec_smaller, 2);
+    //defbuiltin("n_exec_greater", b_n_exec_greater, 2);
+    //defbuiltin("n_exec_eqsmaller", b_n_exec_eqsmaller, 2);
+    //defbuiltin("n_exec_eqgreater", b_n_exec_eqgreater, 2);
     defbuiltin("n_exec_no_operation", b_n_exec_no_operation, 0);
     defbuiltin("n_exec_ifthen", b_n_exec_ifthen, 2);
 
