@@ -1047,37 +1047,6 @@ int b_n_exec_ifthen(int arglist, int rest, int th)
     return (NO);
 }
 
-int b_n_exec_ifthenelse(int arglist, int rest, int th)
-{
-    int n, ind, arg1, arg2, arg3, save1;
-
-    n = length(arglist);
-    ind = makeind("n_exec_ifthenelse", n, th);
-    if (n == 3) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
-	arg3 = caddr(arglist);
-	save1 = sp[th];
-
-	if (variablep(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
-	if (variablep(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
-	if (variablep(arg3))
-	    exception(INSTANTATION_ERR, ind, arg3, th);
-
-	if (exec_all(arg1, sp[th], th) == YES) {
-	    return (exec_all(addtail_body(rest, arg2, th), sp[th], th));
-	} else {
-	    unbind(save1, th);
-	    return (exec_all(addtail_body(rest, arg3, th), sp[th], th));
-	}
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-
-
 
 int b_n_exec_no_operation(int arglist, int rest, int th)
 {

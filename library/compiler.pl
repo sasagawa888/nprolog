@@ -773,20 +773,6 @@ gen_a_body((X->Y;Z)) :-
     write(',th),th)').
 
 
-% ifthenelse
-gen_a_body((X->Y;Z)) :-
-    n_findatom(n_exec_ifthenelse,builtin,A),
-    write('Jwcons('),
-    write(A),
-    write(','),
-    write('Jwlist3('),
-    gen_body1(X,0),
-    write(','),
-    gen_body1(Y,0),
-    write(','),
-    gen_body1(Z,0),
-    write(',th),th)').
-
 % use_module
 gen_a_body(use_module(X)) :-
     n_findatom(use_module,builtin,A),

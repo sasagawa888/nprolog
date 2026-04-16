@@ -87,7 +87,7 @@ char builtin[BUILTIN_NUMBER][30] = {
 char compiled[COMPILED_NUMBER][30] = {
     { "n_exec_is" }, { "n_exec_greater" }, { "n_exec_smaller" },
     { "n_exec_eqgreater" }, { "n_exec_eqsmaller" },
-    { "n_exec_ifthen" }, { "n_exec_ifthenelse" },
+    { "n_exec_ifthen" },
 };
 
 //extened predicate
