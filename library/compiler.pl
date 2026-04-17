@@ -2386,7 +2386,7 @@ det_builtin(between(_,_,X),G) :-
     n_compiler_variable(X),
     not(member(X,G)),!,fail.
 
-det_builtin(ifthenelse(_,_,_),G) :-
+det_builtin(repeat,G) :-
     !,fail.
 
 det_builtin(X,_) :-
