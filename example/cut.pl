@@ -20,7 +20,7 @@ fact(X,Y) :-
     Y is X*Y1.
 
 yes_or_no(X) :- 
-    repeat, write('yes or no >'), read(X), (X == yes ; X == no), !.
+    repeat, write('yes or no >'), read(X), (X == yes ; X == no),!.
 
 take_integer([X | Xs], Ys) :-
     take_integer(X, Ys1), take_integer(Xs, Ys2), append(Ys1, Ys2, Ys), !.
