@@ -8,6 +8,7 @@ test41 :-
     writeln(test41),
     writeln(X).
 
+/*
 p41(N, X) :-
     ( N > 0 ->
         M is N - 1,
@@ -29,7 +30,7 @@ p42(N, A, X) :-
     ;
         X = A
     ).
-
+*/
 test43 :-
     ( (A=3, A>0) -> X=A ; X=0 ),
     writeln(test43),

@@ -1,13 +1,9 @@
 
-test16 :-
-    between(0,5,N),
-    (N < 3 ->
-        ((N < 1 -> X = a ; X = b),
-        Y = left)
+p42(N, A, X) :-
+    ( N > 0 ->
+        B is A + N,
+        M is N - 1,
+        p42(M, B, X)
     ;
-        ((N < 5 -> X = c ; X = d),
-        Y = right)
-    ),
-    write(test16), write(' : '), write(X), write(','), write(Y), nl,
-    fail.
-test16.
+        X = A
+    ).
