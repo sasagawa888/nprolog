@@ -76,7 +76,7 @@ run :-
 
 run_test(Name) :-
     ( call(Name) ->
-        write(Name), write(' : ok'), nl
+        (write(Name), write(' : ok'), nl)
     ;
-        write(Name), write(' : ng'), nl
+        (write(Name), write(' : ng'), nl)
     ).
