@@ -742,15 +742,33 @@ when except of above type, invoke error.
 */
 
 % case
+% transform if-then-else / if-then 
+% to argument of case/1
+case_arg((Cond -> Then ; Else), [Cond -> Then1 | Else1]) :-
+    case_body(Then, Then1),
+    case_body(Else, Else1).
 
-case_arg((X;Y),[X1->X5|Z]) :-
-    X = (X1 -> (X2 -> X3 ; X4)),
-    case_arg((X2->X3;X4),L),
-    X5 =.. [case,L],
-    case_arg(Y,Z).
-case_arg((X;Y),[X|Z]) :-
-    case_arg(Y,Z).
-case_arg(X,X).
+case_arg((Cond -> Then), [Cond -> Then1 | true]) :-
+    case_body(Then, Then1).
+
+% parse body recursively
+case_body((P,Q), (P1,Q1)) :-
+    case_body(P, P1),
+    case_body(Q, Q1).
+
+% nested if-then-else transform case/1 
+case_body((Cond -> Then ; Else), Case) :-
+    case_arg((Cond -> Then ; Else), L),
+    Case =.. [case, L].
+
+% nested if-then transform to case/1.
+case_body((Cond -> Then), Case) :-
+    case_arg((Cond -> Then), L),
+    Case =.. [case, L].
+
+case_body(X, X).
+
+
 
 gen_a_body(((X->Y),Y1);Z) :-
     n_findatom(case,builtin,A),
