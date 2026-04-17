@@ -29,6 +29,7 @@ show2(T, X) :-
 show3(T, X, Y) :-
     write(T), write(' : '), write(X), write(','), write(Y), nl.
 
+
 % 連言の真ん中に単純な if-then-else
 test1 :-
     between(0, 9, N),
@@ -40,10 +41,11 @@ test1.
 % then 側が連言
 test2 :-
     between(0, 5, N),
-    (N < 3 -> A is N + 10, X = A ; X = ng),
+    (N < 3 -> (A is N + 10, X = A) ; X = ng),
     show2(test2, X),
     fail.
 test2.
+
 
 % else 側が連言
 test3 :-
@@ -83,10 +85,11 @@ test6.
 % then 側に 2 個のゴール
 test7 :-
     between(1, 4, N),
-    (N =< 2 -> A is N * 10, B is A + 1 ; B is -1),
+    (N =< 2 -> (A is N * 10, B is A + 1) ; B is -1),
     show2(test7, B),
     fail.
 test7.
+
 
 % else 側に 2 個のゴール
 test8 :-
@@ -173,11 +176,11 @@ test15.
 test16 :-
     between(0,5,N),
     (N < 3 ->
-        (N < 1 -> X = a ; X = b),
-        Y = left
+        ((N < 1 -> X = a ; X = b),
+        Y = left)
     ;
-        (N < 5 -> X = c ; X = d),
-        Y = right
+        ((N < 5 -> X = c ; X = d),
+        Y = right)
     ),
     write(test16), write(' : '), write(X), write(','), write(Y), nl,
     fail.
@@ -204,3 +207,4 @@ test18 :-
     write(test18), write(' : '), write(X), nl,
     fail.
 test18.
+
