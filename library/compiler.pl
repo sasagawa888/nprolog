@@ -1463,13 +1463,13 @@ gen_form(X / Y) :-
     gen_form(Y),
     write(',th)').
 gen_form(X//Y) :-
-	write('Jwlist3(Jmakeope("//")'),
+	write('Jwlist3(Jmakeope("//"),'),
     gen_form(X),
     write(','),
     gen_form(Y),
     write(',th)').
 gen_form(X div Y) :-
-	write('Jwlist3(Jmakeope("div")'),
+	write('Jwlist3(Jmakeope("div"),'),
     gen_form(X),
     write(','),
     gen_form(Y),
@@ -2156,7 +2156,7 @@ deterministic([_|Cs],D,P,H,A) :-
 % arguments = [clauses],tail_count,pred_count, halt_base_count,all_count, arity
 tail_recursive([],T,P,H,A,_) :-
     %write(user_output,T),write(user_output,P),write(user_output,H),write(user_output,A),nl,
-    T == 1,
+    T >= 1,
     P == 1,
     A =:= T+P+H,!.
 tail_recursive([],T,P,H,A,_) :-
