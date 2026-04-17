@@ -1,5 +1,5 @@
 % ----------------------------------------
-% stress13.pl
+% stress12.pl
 % conjunction-embedded if-then-else tests
 % ----------------------------------------
 
