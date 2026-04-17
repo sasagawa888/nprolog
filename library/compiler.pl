@@ -1487,7 +1487,7 @@ gen_form(X mod Y) :-
     gen_form(Y),
     write(',th)').
 gen_form(sqrt(X)) :-
-	write('Jwlist2(Jmakefun("sqrt),'),
+	write('Jwlist2(Jmakefun("sqrt"),'),
     gen_form(X),
     write(',th)').
 gen_form(sin(X)) :-
