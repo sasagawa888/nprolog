@@ -308,17 +308,17 @@ push_args_l2r([A|As], Env, Asm0, Asm) :-
 % Params: (IX+off) ; Globals: (Label)
 load_var16(Var, Env, Asm0, Asm) :-
     ( param_offset(Env, Var, Off) ->
-        emit(instr('LD',[l, mem(ix,Off)]), Asm0, A1),
+        (emit(instr('LD',[l, mem(ix,Off)]), Asm0, A1),
         Off1 is Off + 1,
-        emit(instr('LD',[h, mem(ix,Off1)]), A1, Asm)
+        emit(instr('LD',[h, mem(ix,Off1)]), A1, Asm))
     ;   emit(instr('LD',[hl, mem_label(Var)]), Asm0, Asm)
     ).
 
 store_var16(Var, Env, Asm0, Asm) :-
     ( param_offset(Env, Var, Off) ->
-        emit(instr('LD',[mem(ix,Off), l]), Asm0, A1),
+        (emit(instr('LD',[mem(ix,Off), l]), Asm0, A1),
         Off1 is Off + 1,
-        emit(instr('LD',[mem(ix,Off1), h]), A1, Asm)
+        emit(instr('LD',[mem(ix,Off1), h]), A1, Asm))
     ;   emit(instr('LD',[mem_label(Var), hl]), Asm0, Asm)
     ).
 
