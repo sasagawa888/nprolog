@@ -336,13 +336,7 @@ void init_builtin(void)
     defbuiltin("n_before_cut", b_n_before_cut, 2);
     defbuiltin("n_after_cut", b_n_after_cut, 2);
     defbuiltin("n_pair_list", b_n_pair_list, 1);
-    //defbuiltin("n_exec_is", b_n_exec_is, 2);
-    //defbuiltin("n_exec_smaller", b_n_exec_smaller, 2);
-    //defbuiltin("n_exec_greater", b_n_exec_greater, 2);
-    //defbuiltin("n_exec_eqsmaller", b_n_exec_eqsmaller, 2);
-    //defbuiltin("n_exec_eqgreater", b_n_exec_eqgreater, 2);
     defbuiltin("n_exec_no_operation", b_n_exec_no_operation, 0);
-    //defbuiltin("n_exec_ifthen", b_n_exec_ifthen, 2);
 
 
     builtins = reverse(builtins);
@@ -2111,32 +2105,6 @@ int b_is(int arglist, int rest, int th)
     return (NO);
 }
 
-/*
-int b_n_exec_is(int arglist, int rest, int th)
-{
-    int n, ind, arg1, arg2, res;
-
-    n = length(arglist);
-    ind = makeind("is", n, th);
-    if (n == 2) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
-
-	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
-
-	res = unify(arg1, arg2, th);
-
-	if (res == YES)
-	    return (prove_all(rest, sp[th], th));
-	else
-	    return (NO);
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-*/
-
 
 int b_n_greater(int arglist, int rest, int th)
 {
@@ -2166,32 +2134,6 @@ int b_n_greater(int arglist, int rest, int th)
     return (NO);
 }
 
-/*
-int b_n_exec_greater(int arglist, int rest, int th)
-{
-    int n, ind, arg1, arg2;
-
-    n = length(arglist);
-    ind = makeind(">", n, th);
-    if (n == 2) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
-
-	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
-	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
-
-	if (greaterp(arg1, arg2))
-	    return (prove_all(rest, sp[th], th));
-	else
-	    return (NO);
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-*/
-
 int b_n_smaller(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
@@ -2220,33 +2162,6 @@ int b_n_smaller(int arglist, int rest, int th)
     return (NO);
 }
 
-/*
-int b_n_exec_smaller(int arglist, int rest, int th)
-{
-    int n, ind, arg1, arg2;
-
-    n = length(arglist);
-    ind = makeind("<", n, th);
-    if (n == 2) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
-
-	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
-	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
-
-
-	if (smallerp(arg1, arg2))
-	    return (prove_all(rest, sp[th], th));
-	else
-	    return (NO);
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-
-*/
 int b_n_eqsmaller(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2;
@@ -2273,31 +2188,6 @@ int b_n_eqsmaller(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
-
-/*
-int b_n_exec_eqsmaller(int arglist, int rest, int th)
-{
-    int n, ind, arg1, arg2;
-
-    n = length(arglist);
-    ind = makeind("=<", n, th);
-    if (n == 2) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
-	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
-	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
-
-	if (eqsmallerp(arg1, arg2))
-	    return (prove_all(rest, sp[th], th));
-	else
-	    return (NO);
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-*/
 
 int b_n_eqgreater(int arglist, int rest, int th)
 {
@@ -2326,32 +2216,6 @@ int b_n_eqgreater(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
-
-/*
-int b_n_exec_eqgreater(int arglist, int rest, int th)
-{
-    int n, ind, arg1, arg2;
-
-    n = length(arglist);
-    ind = makeind(">=", n, th);
-    if (n == 2) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
-
-	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
-	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
-
-	if (eqgreaterp(arg1, arg2))
-	    return (prove_all(rest, sp[th], th));
-	else
-	    return (NO);
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-*/
 
 int b_n_numeq(int arglist, int rest, int th)
 {
