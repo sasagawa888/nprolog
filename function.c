@@ -723,7 +723,7 @@ int f_mod(int x, int y, int th)
     if ((positivep(x) && positivep(y)) || (negativep(x) && negativep(y)))
 	res = s_remainder(x, y, th);
     else if ((positivep(x) && negativep(y)))
-	res = plus(y, s_remainder(x, y, th), th);
+	res = s_remainder(x, y, th);
     else if (negativep(x) && positivep(y))
 	res = mult(makeint(-1), plus(y, s_remainder(x, y, th), th), th);
     else
