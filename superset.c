@@ -175,13 +175,14 @@ int b_maplist(int arglist, int rest, int th)
 	    exception(NOT_LIST, ind, arg2, th);
 	if (listp(arg2) && length(arg2) == -1)
 	    exception(NOT_LIST, ind, arg2, th);
-	if (!variablep(arg3))
+	if (!variablep(arg3) && !listp(arg3))
 		exception(NOT_VAR, ind, arg3, th);
 
 	varR = makevariant(th);
 	while(!nullp(arg2)){
 		pred = wlist3(arg1,car(arg2),varR,th);
-		prove_all(pred,sp[th],th);
+		if(prove_all(pred,sp[th],th) == NO)
+			return(NO);
 		result = wlistcons(deref(varR,th),result,th);
 		unbind(save1,th);
 		arg2 = cdr(arg2);
