@@ -2390,6 +2390,9 @@ det_builtin(between(_,_,X),G) :-
 det_builtin(repeat,G) :-
     !,fail.
 
+det_builtin(select(_,_,_),G) :-
+    !,fail.
+
 det_builtin(X,_) :-
     n_property(X,builtin).
 
