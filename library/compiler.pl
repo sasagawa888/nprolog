@@ -2173,6 +2173,7 @@ tail_recursive([(_ :- !)|Cs],T,P,H,A,N) :-
     H1 is H+1,!,
     tail_recursive(Cs,T,P,H1,A,N).
 tail_recursive([(Head :- Body)|Cs],T,P,H,A,N) :-
+    independ_head(Head),
     not(tail_body(Head,Body)),
     det_body(Head,Body,[]),
     H1 is H+1,!,
