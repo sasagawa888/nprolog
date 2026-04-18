@@ -106,7 +106,7 @@ int b_succ(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg1) && wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arglist, th);
+	    exception(INSTANTIATION_ERR, ind, arglist, th);
 	if (!wide_integer_p(arg1) && !wide_variable_p(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (!wide_integer_p(arg2) && !wide_variable_p(arg2))
@@ -208,11 +208,11 @@ int b_once(int arglist, int rest, int th)
 	arg1 = car(arglist);
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!callablep(arg1))
 	    exception(NOT_CALLABLE, ind, arg1, th);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (atom_constant_p(arg1))
 	    arg1 = makeatom(GET_NAME(arg1), PRED);
 
@@ -376,9 +376,9 @@ int b_between(int arglist, int rest, int th)
 	arg2 = cadr(arglist);	//high
 	arg3 = caddr(arglist);	//variable
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!wide_variable_p(arg1) && !integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
@@ -687,7 +687,7 @@ int b_get_code(int arglist, int rest, int th)
 
       get_code:
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    exception(NOT_INT, ind, arg2, th);
 	if (!streamp(arg1) && !aliasp(arg1))
@@ -767,7 +767,7 @@ int b_get_char(int arglist, int rest, int th)
 
       get_char:
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !atomp(arg2))
 	    exception(NOT_INT, ind, arg2, th);
 	if (!streamp(arg1) && !aliasp(arg1))
@@ -844,7 +844,7 @@ int b_get_byte(int arglist, int rest, int th)
 
       get_byte:
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    exception(NOT_INT, ind, arg2, th);
 	if (!streamp(arg1) && !aliasp(arg1))
@@ -884,9 +884,9 @@ int b_put_char(int arglist, int rest, int th)
 
       put:
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!wide_variable_p(arg1) && !characterp(arg2))
 	    exception(NOT_CHAR, ind, arg2, th);
 	if (!streamp(arg1) && !aliasp(arg1))
@@ -916,9 +916,9 @@ int b_put_code(int arglist, int rest, int th)
 
       put:
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!wide_variable_p(arg1) && !integerp(arg2))
 	    exception(NOT_INT, ind, arg2, th);
 	if (!streamp(arg1) && !aliasp(arg1))
@@ -947,9 +947,9 @@ int b_put_byte(int arglist, int rest, int th)
 
       put:
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!wide_variable_p(arg1) && !integerp(arg2))
 	    exception(NOT_INT, ind, arg2, th);
 	if (!streamp(arg1) && !aliasp(arg1))
@@ -980,7 +980,7 @@ int b_peek_code(int arglist, int rest, int th)
 
       peek_code:
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    exception(NOT_INT, ind, arg2, th);
 	if (!streamp(arg1) && !aliasp(arg1))
@@ -1074,7 +1074,7 @@ int b_peek_char(int arglist, int rest, int th)
 
       peek_char:
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    exception(NOT_INT, ind, arg2, th);
 	if (!streamp(arg1) && !aliasp(arg1))
@@ -1162,7 +1162,7 @@ int b_peek_byte(int arglist, int rest, int th)
 
       peek_byte:
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    exception(NOT_INT, ind, arg2, th);
 	if (!streamp(arg1) && !aliasp(arg1))
@@ -1197,7 +1197,7 @@ int b_flush_output(int arglist, int rest, int th)
     } else if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
 	if (aliasp(arg1))
@@ -1221,7 +1221,7 @@ int b_atom_codes(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (wide_variable_p(arg1) && listp(arg2) && length(arg2) == -1)
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!wide_variable_p(arg1) && !atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 	if (wide_variable_p(arg1) && !listp(arg2))
@@ -1317,7 +1317,7 @@ int b_atom_chars(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (wide_variable_p(arg1) && listp(arg2) && length(arg2) == -1)
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!wide_variable_p(arg1) && !atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 	if (wide_variable_p(arg1) && !listp(arg2))

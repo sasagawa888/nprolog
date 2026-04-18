@@ -463,7 +463,7 @@ int b_length(int arglist, int rest, int th)
 	if (!wide_variable_p(arg2) && !integerp(arg2))
 	    exception(NOT_INT, ind, arg2, th);
 	if (variablep(arg1) && variablep(arg2) && eqp(arg1, arg2))
-	    exception(INSTANTATION_ERR, ind, arglist, th);
+	    exception(INSTANTIATION_ERR, ind, arglist, th);
 
 	save1 = wp[th];
 	if (listp(arg1) && properp) {
@@ -544,11 +544,11 @@ int b_op(int arglist, int rest, int th)
 	arg3 = caddr(arglist);	//operator
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (listp(arg3) && length(arg3) == -1)
-	    exception(INSTANTATION_ERR, ind, arg3, th);
+	    exception(INSTANTIATION_ERR, ind, arg3, th);
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (!atomp(arg2))
@@ -604,7 +604,7 @@ int b_op(int arglist, int rest, int th)
 	} else {
 	    while (!nullp(arg3)) {
 		if (wide_variable_p(car(arg3)))
-		    exception(INSTANTATION_ERR, ind, car(arg3), th);
+		    exception(INSTANTIATION_ERR, ind, car(arg3), th);
 		else if (!atomp(car(arg3)) && !operatorp(car(arg3)))
 		    exception(NOT_ATOM, ind, car(arg3), th);
 		else if (operatorp(car(arg3)))
@@ -773,7 +773,7 @@ int b_write(int arglist, int rest, int th)
 
       write:
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
 
@@ -810,7 +810,7 @@ int b_display(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
       display:
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
 
@@ -848,7 +848,7 @@ int b_writeq(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
       writeq:
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
 
@@ -1117,7 +1117,7 @@ int b_read(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
       read:
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
 
@@ -1159,7 +1159,7 @@ int b_read_line(int arglist, int rest, int th)
 	    arg1 = standard_input;
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !stringp(arg2))
@@ -1214,7 +1214,7 @@ int b_read_string(int arglist, int rest, int th)
 	arg3 = caddr(arglist);	// string
       read_string:
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
 	if (!integerp(arg2))
@@ -1272,7 +1272,7 @@ int b_skip(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
       skip:
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
 
@@ -1398,7 +1398,7 @@ int b_create(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!atomp(arg2))
 	    exception(NOT_ATOM, ind, arg2, th);
 
@@ -1434,7 +1434,7 @@ int b_open(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!atomp(arg2))
 	    exception(NOT_ATOM, ind, arg2, th);
 
@@ -1558,7 +1558,7 @@ int b_see(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
@@ -1628,7 +1628,7 @@ int b_tell(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg1 = makeatom(prolog_file_name(GET_NAME(arg1)), SIMP);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
@@ -1697,7 +1697,7 @@ int b_flush(int arglist, int rest, int th)
     } else if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!streamp(arg1) && !aliasp(arg1))
 	    exception(NOT_STREAM, ind, arg1, th);
 	if (aliasp(arg1))
@@ -1724,7 +1724,7 @@ int b_consult(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
@@ -1805,7 +1805,7 @@ int b_reconsult(int arglist, int rest, int th)
 	arg1 = car(arglist);
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
@@ -2008,7 +2008,7 @@ int b_directory(int arglist, int rest, int th)
 	arg6 = cadddddr(arglist);
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !atomp(arg2))
@@ -2089,7 +2089,7 @@ int b_is(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 
 
 	eval_context = ind;
@@ -2117,9 +2117,9 @@ int b_n_greater(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 
 	eval_context = ind;
 	arg1 = eval(arg1, th);
@@ -2145,9 +2145,9 @@ int b_n_smaller(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 
 	eval_context = ind;
 	arg1 = eval(arg1, th);
@@ -2172,9 +2172,9 @@ int b_n_eqsmaller(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 
 	eval_context = ind;
 	arg1 = eval(arg1, th);
@@ -2200,9 +2200,9 @@ int b_n_eqgreater(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 
 	eval_context = ind;
 	arg1 = eval(arg1, th);
@@ -2646,13 +2646,13 @@ int b_call(int arglist, int rest, int th)
 	arg1 = car(arglist);
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 
 	if (!callablep(arg1))
 	    exception(NOT_CALLABLE, ind, arg1, th);
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 
 	if (atom_constant_p(arg1))
 	    arg1 = makeatom(GET_NAME(arg1), PRED);
@@ -2672,7 +2672,7 @@ int b_not(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!callablep(arg1))
 	    exception(NOT_CALLABLE, ind, arg1, th);
 
@@ -2711,7 +2711,7 @@ int b_assert(int arglist, int rest, int th)
 	arg1 = car(arglist);
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (singlep(arg1)) {
 	    if (GET_AUX(arg1) == SIMP || GET_AUX(arg1) == NIL)
 		SET_AUX(arg1, PRED);
@@ -2761,7 +2761,7 @@ int b_asserta(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (singlep(arg1)) {
 	    if (GET_AUX(arg1) == SIMP || GET_AUX(arg1) == NIL)
 		SET_AUX(arg1, PRED);
@@ -2814,7 +2814,7 @@ int b_retract(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (operationp(arg1) && !predicatep(cadr(arg1)))
 	    exception(NOT_CALLABLE, ind, arg1, th);
 	if (!operationp(arg1) && !predicatep(arg1))
@@ -2886,7 +2886,7 @@ int b_retractall(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (operationp(arg1) && !predicatep(cadr(arg1)))
 	    exception(NOT_CALLABLE, ind, arg1, th);
 	if (!operationp(arg1) && !predicatep(arg1))
@@ -2949,10 +2949,10 @@ int b_abolish(int arglist, int rest, int th)
 	arg1 = car(arglist);
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (structurep(arg1) &&
 	    (wide_variable_p(cadr(arg1)) || wide_variable_p(caddr(arg1))))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!indicatorp(arg1))
 	    exception(NOT_INDICATOR, ind, arg1, th);
 	if (builtinp(cadr(arg1)))
@@ -3008,7 +3008,7 @@ int b_clause(int arglist, int rest, int th)
 	arg2 = cadr(arglist);	//body
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!atom_predicate_p(arg1) && !predicatep(arg1))
 	    exception(NOT_CALLABLE, ind, arg1, th);
 	if (builtinp(arg1) || compiledp(arg1))
@@ -3131,7 +3131,7 @@ int b_name(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (wide_variable_p(arg1) && listp(arg2) && length(arg2) == -1)
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!wide_variable_p(arg1) && !atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 	if (wide_variable_p(arg1) && !listp(arg2))
@@ -3227,7 +3227,7 @@ int b_list_text(int arglist, int rest, int th)
 	arg1 = car(arglist);	//list
 	arg2 = cadr(arglist);	//atomstring
 	if (listp(arg1) && length(arg1) == -1 && wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!wide_variable_p(arg1) && !listp(arg1))
 	    exception(NOT_LIST, ind, arg1, th);
 	if (wide_variable_p(arg1) && !atomp(arg2) && !stringp(arg2))
@@ -3375,7 +3375,7 @@ int b_char_code(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg1) && wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, list2(arg1, arg2), th);
+	    exception(INSTANTIATION_ERR, ind, list2(arg1, arg2), th);
 	if (!wide_variable_p(arg1) && !characterp(arg1))
 	    exception(NOT_CHAR, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !integerp(arg2))
@@ -3502,7 +3502,7 @@ int b_string_length(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!stringp(arg1))
 	    exception(NOT_STR, ind, arg1, th);
 	if (integerp(arg2) && GET_INT(arg2) < 0)
@@ -3600,7 +3600,7 @@ int b_substring(int arglist, int rest, int th)
 	arg4 = cadddr(arglist);	//outstring
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!stringp(arg1))
 	    exception(NOT_STR, ind, arg1, th);
 	if (!wide_variable_p(arg4) && !stringp(arg4))
@@ -3777,9 +3777,9 @@ int b_ifthen(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 	save1 = sp[th];
 	if (variablep(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (variablep(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 
 	if (prove_all(arg1, sp[th], th) == YES) {
 	    return (prove_all(addtail_body(rest, arg2, th), sp[th], th));
@@ -3808,11 +3808,11 @@ int b_ifthenelse(int arglist, int rest, int th)
 	save1 = sp[th];
 
 	if (variablep(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (variablep(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (variablep(arg3))
-	    exception(INSTANTATION_ERR, ind, arg3, th);
+	    exception(INSTANTIATION_ERR, ind, arg3, th);
 
 	if (prove_all(arg1, sp[th], th) == YES) {
 	    return (prove_all(addtail_body(rest, arg2, th), sp[th], th));
@@ -4318,9 +4318,9 @@ int b_functor(int arglist, int rest, int th)
 	arg3 = caddr(arglist);
 
 	if (wide_variable_p(arg1) && wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, list2(arg1, arg2), th);
+	    exception(INSTANTIATION_ERR, ind, list2(arg1, arg2), th);
 	if (wide_variable_p(arg1) && wide_variable_p(arg3))
-	    exception(INSTANTATION_ERR, ind, list2(arg1, arg3), th);
+	    exception(INSTANTIATION_ERR, ind, list2(arg1, arg3), th);
 	if (wide_variable_p(arg1) && !atomicp(arg2)) {
 	    exception(NOT_ATOMIC, ind, arg2, th);
 	}
@@ -4407,9 +4407,9 @@ int b_arg(int arglist, int rest, int th)
 	arg3 = caddr(arglist);
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (!compoundp(arg2))
@@ -4444,9 +4444,9 @@ int b_arg0(int arglist, int rest, int th)
 	arg3 = caddr(arglist);
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (!compoundp(arg2))
@@ -4569,7 +4569,7 @@ int b_n_univ(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
 	if (variablep(arg1) && variablep(arg2))
-	    exception(INSTANTATION_ERR, ind, list2(arg1, arg2), th);
+	    exception(INSTANTIATION_ERR, ind, list2(arg1, arg2), th);
 	if (listp(arg2) && compoundp(car(arg2)))
 	    exception(NOT_ATOMIC, ind, arg2, th);
 	if (variablep(arg1) && nullp(arg2))
@@ -4782,7 +4782,7 @@ int b_predicate_property(int arglist, int rest, int th)
 	arg2 = cadr(arglist);	//prop
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 
 	if (atomp(arg1) && GET_AUX(arg1) == SYS) {
 	    if (unify(arg2, makeconst("built_in"), th) == YES)
@@ -4931,7 +4931,7 @@ int b_mkdir(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
@@ -4952,7 +4952,7 @@ int b_rmdir(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
@@ -4973,7 +4973,7 @@ int b_chdir(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
@@ -4995,7 +4995,7 @@ int b_delete(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 
@@ -5017,11 +5017,11 @@ int b_rename(int arglist, int rest, int th)
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!atomp(arg2))
 	    exception(NOT_ATOM, ind, arg2, th);
 
@@ -5315,7 +5315,7 @@ int b_inc(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg1) && wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, list2(arg1, arg2), th);
+	    exception(INSTANTIATION_ERR, ind, list2(arg1, arg2), th);
 	if (!wide_variable_p(arg1) && !wide_integer_p(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !wide_integer_p(arg2))
@@ -5362,7 +5362,7 @@ int b_dec(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg1) && wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, list2(arg1, arg2), th);
+	    exception(INSTANTIATION_ERR, ind, list2(arg1, arg2), th);
 	if (!wide_variable_p(arg1) && !wide_integer_p(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (!wide_variable_p(arg2) && !wide_integer_p(arg2))
@@ -5409,13 +5409,13 @@ int b_ansi_cup(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!wide_variable_p(arg1) && !wide_integer_p(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (wide_integer_p(arg1) && negativep(arg1))
 	    exception(LESS_THAN_ZERO, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!wide_variable_p(arg2) && !wide_integer_p(arg2))
 	    exception(NOT_INT, ind, arg2, th);
 	if (wide_integer_p(arg2) && negativep(arg2))
@@ -5590,7 +5590,7 @@ int b_ansi_cuu(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (negativep(arg1))
@@ -5615,7 +5615,7 @@ int b_ansi_cud(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (negativep(arg1))
@@ -5640,7 +5640,7 @@ int b_ansi_cuf(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (negativep(arg1))
@@ -5665,7 +5665,7 @@ int b_ansi_cub(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (negativep(arg1))
@@ -5690,7 +5690,7 @@ int b_ansi_sgr(int arglist, int rest, int th)
     if (n == 1) {
 	arg1 = car(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (negativep(arg1))
@@ -5844,11 +5844,11 @@ int b_recordh(int arglist, int rest, int th)
 	arg2 = cadr(arglist);	//sort_key
 	arg3 = caddr(arglist);	//term instance address
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!wide_variable_p(arg1) && !atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!wide_variable_p(arg2) && !atomp(arg2))
 	    exception(NOT_ATOM, ind, arg2, th);
 
@@ -5885,11 +5885,11 @@ int b_retrieveh(int arglist, int rest, int th)
 	arg2 = cadr(arglist);	//sort key
 	arg3 = caddr(arglist);	//term instance address
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!wide_variable_p(arg1) && !atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!wide_variable_p(arg2) && !atomp(arg2))
 	    exception(NOT_ATOM, ind, arg2, th);
 
@@ -5959,13 +5959,13 @@ int b_recordz(int arglist, int rest, int th)
 	arg3 = caddr(arglist);	//ref 
 
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 	if (builtinp(arg1))
 	    exception(BUILTIN_EXIST, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!wide_variable_p(arg3))
 	    exception(NOT_VAR, ind, arg3, th);
 
@@ -6013,7 +6013,7 @@ int b_record_after(int arglist, int rest, int th)
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!wide_variable_p(arg3))
 	    exception(NOT_VAR, ind, arg3, th);
 
@@ -6047,13 +6047,13 @@ int b_recorda(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 	if (builtinp(arg1))
 	    exception(BUILTIN_EXIST, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!wide_variable_p(arg3))
 	    exception(NOT_VAR, ind, arg3, th);
 
@@ -6217,7 +6217,7 @@ int b_replace(int arglist, int rest, int th)
 	if (!integerp(arg1))
 	    exception(NOT_INT, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 
 	chain = get_int(arg1);
 	arg2 = copy_heap(arg2);
@@ -6288,11 +6288,11 @@ int b_removeh(int arglist, int rest, int th)
 	arg2 = cadr(arglist);
 	arg3 = caddr(arglist);
 	if (wide_variable_p(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
+	    exception(INSTANTIATION_ERR, ind, arg1, th);
 	if (!wide_variable_p(arg1) && !atomp(arg1))
 	    exception(NOT_ATOM, ind, arg1, th);
 	if (wide_variable_p(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
+	    exception(INSTANTIATION_ERR, ind, arg2, th);
 	if (!wide_variable_p(arg2) && !atomp(arg2))
 	    exception(NOT_ATOM, ind, arg2, th);
 

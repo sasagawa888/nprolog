@@ -1017,37 +1017,6 @@ int b_n_pair_list(int arglist, int rest, int th)
     return (NO);
 }
 
-
-int b_n_exec_ifthen(int arglist, int rest, int th)
-{
-    int n, ind, arg1, arg2, save1;
-
-    n = length(arglist);
-    ind = makeind("n_exec_ifthen", n, th);
-    if (n == 2) {
-	arg1 = car(arglist);
-	arg2 = cadr(arglist);
-	save1 = sp[th];
-	if (variablep(arg1))
-	    exception(INSTANTATION_ERR, ind, arg1, th);
-	if (variablep(arg2))
-	    exception(INSTANTATION_ERR, ind, arg2, th);
-
-	if (exec_all(arg1, sp[th], th) == YES) {
-	    return (exec_all(addtail_body(rest, arg2, th), sp[th], th));
-	} else {
-	    unbind(save1, th);
-	    return (NO);
-	}
-
-	unbind(save1, th);
-	return (NO);
-    }
-    exception(ARITY_ERR, ind, arglist, th);
-    return (NO);
-}
-
-
 int b_n_exec_no_operation(int arglist, int rest, int th)
 {
     return (prove_all(rest, sp[th], th));

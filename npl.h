@@ -274,8 +274,8 @@ extern char extended[EXTENDED_NUMBER][30];
 extern double timer;
 
 //error_handler
-extern int instantation_tag;
-extern int uninstantation_tag;
+extern int instantiation_tag;
+extern int uninstantiation_tag;
 extern int type_tag;
 extern int domain_tag;
 extern int exsistence_tag;
@@ -713,7 +713,7 @@ enum Error {
     LESS_THAN_ZERO,
     FLOAT_OVERF,
     SYSTEM_ERR,
-    INSTANTATION_ERR,
+    INSTANTIATION_ERR,
     EXISTENCE_ERR,
     NON_EMPTY_LIST,
     EVALUATION_ERR,

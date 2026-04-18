@@ -9,10 +9,10 @@
 void init_handler()
 {
 
-    instantation_tag = list3(makepred("error"),
+    instantiation_tag = list3(makepred("error"),
 			     makepred("instantiation_error"),
 			     makevar("%Context"));
-    uninstantation_tag =
+    uninstantiation_tag =
 	list2(makepred("uninstantiation_error"), makevar("%Term"));
     type_tag =
 	list3(makepred("error"),
@@ -273,11 +273,11 @@ void exception(int errnum, int ind, int arg, int th)
 	print(arg);
 	break;
 
-    case INSTANTATION_ERR:
+    case INSTANTIATION_ERR:
 	bindsym(makevar("%Context"), ind, th);
-	throw(instantation_tag, th);
+	throw(instantiation_tag, th);
 	ESCFRED;
-	printf("Instantation error ");
+	printf("Instantiation error ");
 	print(ind);
 	printf(" ");
 	print(arg);

@@ -71,8 +71,8 @@ int cursor_style_store = -1;	//for ansi_sgr
 double timer;			// for timer_microseconds/1
 
 //error_handler
-int instantation_tag;
-int uninstantation_tag;
+int instantiation_tag;
+int uninstantiation_tag;
 int type_tag;
 int domain_tag;
 int exsistence_tag;
@@ -538,7 +538,7 @@ void query(int x, int th)
 	x = makepred(GET_NAME(x));
 
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, makestr("?-"), x, th);
+	exception(INSTANTIATION_ERR, makestr("?-"), x, th);
 
     if (!callablep(x))
 	exception(NOT_CALLABLE, makestr("?-"), x, th);
@@ -585,7 +585,7 @@ void query_break(int x, int th)
 	x = makepred(GET_NAME(x));
 
     if (wide_variable_p(x))
-	exception(INSTANTATION_ERR, makestr("?="), x, th);
+	exception(INSTANTIATION_ERR, makestr("?="), x, th);
 
     if (!callablep(x)) {
 	exception(NOT_CALLABLE, makestr("?="), x, th);
