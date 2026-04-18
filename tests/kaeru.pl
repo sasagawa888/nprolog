@@ -4,7 +4,7 @@
 %
 %            Copyright (C) 2005-2023 Makoto Hiroi
 %
-:- use_module(utils).
+:- use_module(utils). % for format/3
 % 新しい局面の生成
 new_state([b, s | Rest], [s, b | Rest]).
 new_state([s, w | Rest], [w, s | Rest]).

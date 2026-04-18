@@ -10,7 +10,7 @@
 % E_left  : 左岸にいる先住民の数
 % M_right : 左岸にいる宣教師の数
 % E_right : 左岸にいる先住民の数
-:- use_module(utils).
+:- use_module(utils).　% for format/3
 % ボートに乗る組み合わせ : boat(M, E)
 boat(1, 0).
 boat(0, 1).
