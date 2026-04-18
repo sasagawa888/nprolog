@@ -1,4 +1,6 @@
 
 
-my_between(L, H, L) :- L =< H.
-my_between(L, H, V) :- L < H, L1 is L + 1, my_between(L1, H, V).
+my_length([], A, A) :- !.
+my_length([_ | Xs], A, N) :- A1 is A + 1, my_length(Xs, A1, N).
+
+my_length(Xs, N) :- my_length(Xs, 0, N).
