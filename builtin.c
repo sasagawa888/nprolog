@@ -187,7 +187,7 @@ void init_builtin(void)
     defbuiltin("between", b_between, 3);
     defbuiltin("select", b_select, 3);
     defbuiltin("succ", b_succ, 2);
-    defbuiltin("maplist", b_maplist, 2);
+    defbuiltin("maplist", b_maplist, list2(2,3));
     defbuiltin("compound", b_compound, 1);
     defbuiltin("ground", b_ground, 1);
     defbuiltin("once", b_once, 1);

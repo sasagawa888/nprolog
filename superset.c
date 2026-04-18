@@ -140,12 +140,13 @@ int b_succ(int arglist, int rest, int th)
 
 int b_maplist(int arglist, int rest, int th)
 {
-    int arg1, arg2, varE, varEs, varP, n, ind, pred, arg, body, save1,
-	save2;
-    save2 = sp[th];
-    pred = NIL;
+    int arg1, arg2, arg3, n, ind, save1, pred, varR, result;
+    
     n = length(arglist);
     ind = makeind("maplist", n, th);
+	pred = NIL;
+	result = NIL;
+	save1 = sp[th];
     if (n == 2) {
 	arg1 = car(arglist);
 	arg2 = cadr(arglist);
@@ -155,43 +156,43 @@ int b_maplist(int arglist, int rest, int th)
 	    exception(NOT_LIST, ind, arg2, th);
 	if (listp(arg2) && length(arg2) == -1)
 	    exception(NOT_LIST, ind, arg2, th);
-
-	varP = makevariant(th);
-	save1 = wp[th];
-	if (unify_var(varP, arg1, th) == YES && unify_nil(arg2, th) == YES)
-	    if (prove_all(rest, sp[th], th) == YES)
-		return (YES);
-	unbind(save2, th);
-	wp[th] = save1;
-	varP = makevariant(th);
-	varE = makevariant(th);
-	varEs = makevariant(th);
-	save1 = wp[th];
-	if (unify_var(varP, arg1, th) == YES
-	    && unify(wlistcons(varE, varEs, th), arg2, th) == YES)
-	    pred = deref(varP, th);
-	arg = deref(varE, th);
-	if (structurep(pred))
-	    pred = wappend(pred, wlist1(arg, th), th);
-	else
-	    pred = wlist2(pred, arg, th);
-	pred = list_to_structure(pred);
-	if (!callablep(pred))
-	    exception(NOT_CALLABLE, ind, pred, th);
-	if (prove_all(pred, sp[th], th) == NO) {
-	    unbind(save2, th);
-	    wp[th] = save1;
-	    return (NO);
+	
+	while(!nullp(arg2)){
+		pred = wlist2(arg1,car(arg2),th);
+		prove_all(pred,sp[th],th);
+		unbind(save1,th);
+		arg2 = cdr(arg2);
 	}
-	body =
-	    wcons(makesys("maplist"),
-		  wcons(varP, wcons(varEs, NIL, th), th), th);
-	if (prove_all(addtail_body(rest, body, th), sp[th], th) == YES)
-	    return (YES);
-	unbind(save2, th);
-	wp[th] = save1;
-	return (NO);
-    }
+	return(prove_all(rest,sp[th],th));
+
+	} else if (n == 3){
+	arg1 = car(arglist);
+	arg2 = cadr(arglist);
+	arg3 = caddr(arglist);
+	if (!callablep(arg1))
+	    exception(NOT_CALLABLE, ind, arg1, th);
+	if (!listp(arg2) && !nullp(arg2))
+	    exception(NOT_LIST, ind, arg2, th);
+	if (listp(arg2) && length(arg2) == -1)
+	    exception(NOT_LIST, ind, arg2, th);
+	if (!variablep(arg3))
+		exception(NOT_VAR, ind, arg3, th);
+
+	varR = makevariant(th);
+	while(!nullp(arg2)){
+		pred = wlist3(arg1,car(arg2),varR,th);
+		prove_all(pred,sp[th],th);
+		result = wlistcons(deref(varR,th),result,th);
+		unbind(save1,th);
+		arg2 = cdr(arg2);
+	}
+	result = listreverse(result);
+	if(unify(arg3,result,th) == YES)
+		return(prove_all(rest,sp[th],th));
+	
+	return(NO);
+	}
+
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
