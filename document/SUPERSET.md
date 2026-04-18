@@ -172,3 +172,13 @@ yes
 ?- 
 ```
 
+Also div is same meaning as //, like ISO.
+
+```
+N-Prolog Ver 5.15 [30M cells]
+?- X is 7 div 2.
+X = 3 .
+yes
+?- 
+```
+
