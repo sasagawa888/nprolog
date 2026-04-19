@@ -28,7 +28,7 @@ test4 :- length(L, 0), L = [].
 test5 :- length(L, 3), L = [_,_,_].
 
 % ---- partial binding ----
-
+% Partial list cases for length/2 are not fully supported.
 test6 :- length([a,b|T], 5), length(T, 3).
 test7 :- length([_|T], N), N =:= 1, T = [].
 

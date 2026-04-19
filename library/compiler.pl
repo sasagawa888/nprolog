@@ -2392,6 +2392,12 @@ det_builtin(repeat,G) :-
 det_builtin(select(_,_,_),G) :-
     !,fail.
 
+det_builtin(length(X,Y),G) :-
+    n_compiler_variable(X),
+    n_compiler_variable(Y),
+    not(member(X,G)),
+    not(member(Y,G)),!,fail.
+
 det_builtin(X,_) :-
     n_property(X,builtin).
 
