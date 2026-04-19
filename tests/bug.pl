@@ -3,6 +3,6 @@
 
 run(Test) :-
     write(Test), write(' : '),
-    ( call(Test) -> write(ok)
-    ; write(fail)
+    ( call(Test) -> writeln(ok)
+    ; writeln(fail)
     ).

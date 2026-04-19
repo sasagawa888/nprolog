@@ -6,14 +6,14 @@
 
 run(Test) :-
     write(Test), write(' : '),
-    ( call(Test) -> write(ok)
-    ; write(fail)
+    ( call(Test) -> writeln(ok)
+    ; writeln(fail)
     ).
 
 run_fail(Test) :-
     write(Test), write(' : '),
-    ( call(Test) -> write('unexpected success')
-    ; write(ok)
+    ( call(Test) -> writeln('unexpected success')
+    ; writeln(ok)
     ).
 
 % ---- basic ----

@@ -1625,6 +1625,13 @@ gen_a_argument(X) :-
 gen_a_argument(X) :-
     n_defined_predicate(X),
     functor(X,Y,0),
+    n_imported_predicate(Y),
+    write('Jmakepred("'),
+    write(Y),
+    write('")').
+gen_a_argument(X) :-
+    n_defined_predicate(X),
+    functor(X,Y,0),
     write('Jmakecomp("'),
     write(Y),
     write('")').
@@ -1632,6 +1639,15 @@ gen_a_argument(X) :-
     n_defined_predicate(X),
     X =.. [Y|Z],
     n_dynamic_predicate(Y),
+    write('Jwcons(Jmakepred("'),
+    write(Y),
+    write('"),'),
+    gen_argument(Z),
+    write(',th)').
+gen_a_argument(X) :-
+    n_defined_predicate(X),
+    X =.. [Y|Z],
+    n_imported_predicate(Y),
     write('Jwcons(Jmakepred("'),
     write(Y),
     write('"),'),
