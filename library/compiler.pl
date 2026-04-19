@@ -2320,7 +2320,8 @@ halt_check([_|Cs],D,P,A) :-
 % G is gournd_variable
 det_body(Head,(((_->_),_);_),_). % a->b,c;d->e,f
 det_body(Head,(_->_;_),_).       % a->b;c
-det_body(_,(_;_),_) :- fail,!.
+det_body(_,(_;_),_) :- !,fail.
+det_body(_,((_;_),_),_) :- !,fail.
 det_body(_,!,_).
 det_body(_,(_,!),_).
 det_body(Head,(_,(!,Y)),G) :-
