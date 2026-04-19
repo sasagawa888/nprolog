@@ -689,13 +689,6 @@ gen_body1((D1;D2),N) :-
     gen_body1(D2,N),
     write(',th)').
 
-gen_body1(((((X->Y),Y1);Z),Xs),N) :-
-    write('Jwlist3(Jmakeope(","),'),
-	gen_a_body((((X->Y),Y1);Z)),
-    write(','),
-    gen_body1(Xs,N),
-    write(',th)').
-
 gen_body1(((X->Y;Z),Xs),N) :-
     write('Jwlist3(Jmakeope(","),'),
 	gen_a_body((X->Y;Z)),
@@ -768,17 +761,6 @@ case_body((Cond -> Then), Case) :-
 
 case_body(X, X).
 
-
-
-gen_a_body(((X->Y),Y1);Z) :-
-    n_findatom(case,builtin,A),
-    write('Jwcons('),
-    write(A),
-    write(','),
-    write('Jwlist1('),
-    case_arg((((X->Y),Y1);Z),L),
-    gen_argument_list(L),
-    write(',th),th)').
 
 gen_a_body((X->Y;Z)) :-
     n_findatom(case,builtin,A),
@@ -2318,7 +2300,6 @@ halt_check([_|Cs],D,P,A) :-
 
 % deterministic body case. Each has cut or each is builtin or each is tail-recur 
 % G is gournd_variable
-det_body(Head,(((_->_),_);_),_). % a->b,c;d->e,f
 det_body(Head,(_->_;_),_).       % a->b;c
 det_body(_,(_;_),_) :- !,fail.
 det_body(_,((_;_),_),_) :- !,fail.
