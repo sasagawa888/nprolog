@@ -1,4 +1,3 @@
-:- use_module(list).
 
 :- module(utils,[read_codes/2,tokenize/2,change_ext/3,format/3,
                  writeln/1,writeln/2,read_csv/2]).
@@ -11,6 +10,11 @@ read_codes(Stream, Codes) :-
       read_codes(Stream, Rest)
     ).
 
+
+reverse([],[]).
+reverse([X|Xs],Y) :-
+    reverse(Xs,Y1),
+    append(Y1,[X],Y).
 
 read_csv(File,L) :-
     read_codes(File,C),

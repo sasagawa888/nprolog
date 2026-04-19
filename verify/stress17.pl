@@ -56,14 +56,14 @@ test14 :- length(foo, 3).    % implementation dependent
 % ---- large ----
 % make_list is used in list libraly
 
-make_list1(0, []).
-make_list1(N, [_|T]) :-
+make_list(0, []).
+make_list(N, [_|T]) :-
     N > 0,
     N1 is N - 1,
-    make_list1(N1, T).
+    make_list(N1, T).
 
 test15 :-
-    make_list1(10000, L),
+    make_list(10000, L),
     length(L, N),
     N =:= 10000.
 
