@@ -16,7 +16,8 @@ yes
 ?- 
 
 ```
-
+# Note
+If you are using libraries, and you define a predicate with the same name as one contained in those libraries, a compilation error will occur. In such cases, please rename the predicate.
 
 # Option
 
