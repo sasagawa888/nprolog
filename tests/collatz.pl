@@ -3,7 +3,7 @@
 collatz(1).
 collatz(N) :-
     N > 1, N mod 2 =:= 0,
-    N1 is N//2,
+    N1 is N div 2,
     write(N1), write(' '),
     collatz(N1).   
 collatz(N) :-
