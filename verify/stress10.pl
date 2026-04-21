@@ -72,7 +72,7 @@ test37 :-
     writeln(X).
 
 % then側に選言を含む算術
-/*
+
 test38 :-
     N = 1,
     ( N > 0 ->
@@ -83,7 +83,7 @@ test38 :-
     ),
     writeln(test38),
     writeln(X).
-*/
+
 
 % else側に選言を含む算術
 test39 :-
@@ -97,7 +97,7 @@ test39 :-
     writeln(test39),
     writeln(X).
 
-/*
+
 % cut + 算術
 test40 :-
     N = 1,
@@ -109,4 +109,3 @@ test40 :-
     ),
     writeln(test40),
     writeln(X).
-*/
