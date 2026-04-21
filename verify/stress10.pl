@@ -23,7 +23,7 @@ test32 :-
     ),
     writeln(test32),
     writeln(X).
-/*
+
 % then側で is/2
 test33 :-
     N = 3,
@@ -35,7 +35,7 @@ test33 :-
     ),
     writeln(test33),
     writeln(X).
-*/
+
 
 
 % else側で is/2
