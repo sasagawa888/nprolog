@@ -309,34 +309,34 @@ void init_builtin(void)
 
 
     //-----JUMP project---------
-    defbuiltin("n_reconsult_predicate", b_n_reconsult_predicate, 1);
-    defbuiltin("n_reconsult_abolish", b_n_reconsult_abolish, 0);
-    defbuiltin("n_dynamic_predicate", b_n_dynamic_predicate, 1);
-    defbuiltin("n_filename", b_n_filename, 2);
-    defbuiltin("n_atom_convert", b_n_atom_convert, 2);
-    defbuiltin("n_arity_count", b_n_arity_count, 2);
-    defbuiltin("n_compiler_anonymous", b_n_compiler_anonymous, 1);
-    defbuiltin("n_compiler_variable", b_n_compiler_variable, 1);
-    defbuiltin("n_variable_convert", b_n_variable_convert, 2);
-    defbuiltin("n_generate_all_variable", b_n_generate_all_variable, 2);
-    defbuiltin("n_generate_variable", b_n_generate_variable, 2);
-    defbuiltin("n_clause_with_arity", b_n_clause_with_arity, 3);
-    defbuiltin("n_property", b_n_property, 2);
-    defbuiltin("n_imported_predicate", b_n_imported_predicate, 1);
-    defbuiltin("n_imported_userop", b_n_imported_userop, 1);
-    defbuiltin("n_bignum", b_n_bignum, 1);
-    defbuiltin("n_longnum", b_n_longnum, 1);
-    defbuiltin("n_findatom", b_n_findatom, 3);
-    defbuiltin("n_defined_predicate", b_n_defined_predicate, 1);
-    defbuiltin("n_defined_userop", b_n_defined_userop, 1);
-    defbuiltin("n_get_execute", b_n_get_execute, 1);
-    defbuiltin("n_get_dynamic", b_n_get_dynamic, 1);
-    defbuiltin("n_error", b_n_error, 2);
-    defbuiltin("n_has_cut", b_n_has_cut, 1);
-    defbuiltin("n_before_cut", b_n_before_cut, 2);
-    defbuiltin("n_after_cut", b_n_after_cut, 2);
-    defbuiltin("n_pair_list", b_n_pair_list, 1);
-    defbuiltin("n_exec_no_operation", b_n_exec_no_operation, 0);
+    defbuiltin("n_reconsult_predicate", b_n_reconsult_predicate, -1);
+    defbuiltin("n_reconsult_abolish", b_n_reconsult_abolish, -1);
+    defbuiltin("n_dynamic_predicate", b_n_dynamic_predicate, -1);
+    defbuiltin("n_filename", b_n_filename, -1);
+    defbuiltin("n_atom_convert", b_n_atom_convert, -1);
+    defbuiltin("n_arity_count", b_n_arity_count, -1);
+    defbuiltin("n_compiler_anonymous", b_n_compiler_anonymous, -1);
+    defbuiltin("n_compiler_variable", b_n_compiler_variable, -1);
+    defbuiltin("n_variable_convert", b_n_variable_convert, -1);
+    defbuiltin("n_generate_all_variable", b_n_generate_all_variable, -1);
+    defbuiltin("n_generate_variable", b_n_generate_variable, -1);
+    defbuiltin("n_clause_with_arity", b_n_clause_with_arity, -1);
+    defbuiltin("n_property", b_n_property, -1);
+    defbuiltin("n_imported_predicate", b_n_imported_predicate, -1);
+    defbuiltin("n_imported_userop", b_n_imported_userop, -1);
+    defbuiltin("n_bignum", b_n_bignum, -1);
+    defbuiltin("n_longnum", b_n_longnum, -1);
+    defbuiltin("n_findatom", b_n_findatom, -1);
+    defbuiltin("n_defined_predicate", b_n_defined_predicate, -1);
+    defbuiltin("n_defined_userop", b_n_defined_userop, -1);
+    defbuiltin("n_get_execute", b_n_get_execute, -1);
+    defbuiltin("n_get_dynamic", b_n_get_dynamic, -1);
+    defbuiltin("n_error", b_n_error, -1);
+    defbuiltin("n_has_cut", b_n_has_cut, -1);
+    defbuiltin("n_before_cut", b_n_before_cut, -1);
+    defbuiltin("n_after_cut", b_n_after_cut, -1);
+    defbuiltin("n_pair_list", b_n_pair_list, -1);
+    defbuiltin("n_exec_no_operation", b_n_exec_no_operation, -1);
 
 
     builtins = reverse(builtins);

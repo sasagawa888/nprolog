@@ -1974,33 +1974,6 @@ int b_gr_line(int arglist, int rest, int th)
 }
 
 
-
-
-/*
-int f_gr_line(int arglist, int th)
-{
-    int arg1,arg2,arg3,arg4,arg5;
-    arg1 = car(arglist);
-    arg2 = cadr(arglist);
-    arg3 = caddr(arglist);
-    arg4 = car(cdddr(arglist));
-    arg5 = car(cdr(cdddr(arglist)));
-    if(!integerp(arg1))
-    error(NOT_INT,"GR-LINE",arg1,th);
-    if(!integerp(arg2))
-    error(NOT_INT,"GR-LINE",arg2,th);
-    if(!integerp(arg3))
-    error(NOT_INT,"GR-LINE",arg3,th);
-    if(!integerp(arg4))
-    error(NOT_INT,"GR-LINE",arg4,th);
-    if(!symbolp(arg5))
-    error(NOT_SYM,"GR-LINE",arg5,th);
-
-    fb_draw_line(GET_INT(arg1),GET_INT(arg2),GET_INT(arg3),GET_INT(arg4),color_to_number(arg5));
-    return(T);
-}
-*/
-
 int make_const_var(int x)
 {
     char str[64];
