@@ -1046,6 +1046,7 @@ int b_n_unify(int arglist, int rest, int th);
 int b_n_univ(int arglist, int rest, int th);
 int b_use_module(int arglist, int rest, int th);
 int b_var(int arglist, int rest, int th);
+int b_version(int arglist, int rest, int th);
 int b_n_variable_convert(int arglist, int rest, int th);
 int b_unify_with_occurs_check(int arglist, int rest, int th);
 int b_write(int arglist, int rest, int th);

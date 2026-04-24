@@ -2345,3 +2345,21 @@ int b_initialization(int arglist, int rest, int th)
     exception(ARITY_ERR, ind, arglist, th);
     return (NO);
 }
+
+
+int b_version(int arglist, int rest, int th)
+{
+    int n, arg1, ind;
+
+    n = length(arglist);
+    ind = makeind("version", n, th);
+    if (n == 1) {
+	arg1 = car(arglist);
+	if(unify(arg1,makeflt(VERSION),th) == YES)
+		return (prove_all(rest, sp[th], th));
+	else 
+		return(NO);
+    }
+    exception(ARITY_ERR, ind, arglist, th);
+    return (NO);
+}
