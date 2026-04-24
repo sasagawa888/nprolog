@@ -103,6 +103,8 @@ In N-Prolog, when foo/1 is given, the entire foo predicate is defined as dynamic
 
 - subsumes_term/2
 
+- version/1  (not ISO)  to check version of child machine
+
 # In ISO lib
 
 -? use_module(iso).
