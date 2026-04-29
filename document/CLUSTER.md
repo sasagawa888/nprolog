@@ -64,10 +64,7 @@ Key points:
 When upgrading the child machine, please follow the procedure below.
 
 ```
-sudo systemctl1 stop npl.service
-cd nprolog
-git pull
-sudo make install
+bash update-pl.sh
 ```
 
 and reboot PIs
