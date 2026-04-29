@@ -64,10 +64,17 @@ Key points:
 When upgrading the child machine, please follow the procedure below.
 
 ```
+git checkout .
 bash update-pl.sh
 ```
-
 and reboot PIs
+
+test
+```
+$ npl
+?- dp-prove(N,version(X)).
+```
+N = 0,1,2,...
 
 
 ## systemctl
