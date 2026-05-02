@@ -175,7 +175,7 @@ This document provides an overview of many documents. Please read it first.
 ![UserManual](./document/MANUAL.md)
 This is the user manual for N-Prolog.
 
-![Chacker](./document/CHECKER.md)
+![Checker](./document/CHECKER.md)
 This is a description of the Prolog code checker library using static analysis.
 
 ![CLPFD](./document/CLPFD.md)
