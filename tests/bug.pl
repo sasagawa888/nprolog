@@ -1,4 +1,5 @@
+:- use_module(utils).
 
-foo(X,Y) :-
-    length(X,Y),
-    write(X),write(Y).
+test15 :-
+    ( fail -> (X=1, Y=0) ; (Y=2 ; Y=3) ),
+    writeln(test15), writeln(Y).
