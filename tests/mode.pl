@@ -46,3 +46,47 @@ Result is list [+,+,-,-]
 </2 >/2 =:=/2 /==/2 -> left and rigth must be +
 right is left   -> right is -, left is +.
 */
+
+
+partition(X,Y,L1,L2) :-
+cinline($ //for qsort
+          int exec1(int x, int y, int l1, int l2){
+              if(x == NIL)
+                  return(Jlist2(l1,l2));
+              else if(Jsmallerp(Jcar(x),y))
+                  return(exec1(Jcdr(x),y,Jlistcons(Jcar(x),l1),l2));
+              else return(exec1(Jcdr(x),y,l1,Jlistcons(Jcar(x),l2)));
+          }
+          int x = Jderef(varX,th);
+          int y = Jderef(varY,th);
+          int res = exec1(x,y,NIL,NIL);
+          Junify(varL1,Jcar(res),th);
+          Junify(varL2,Jcar(Jcdr(res)),th);
+          return(Jexec_all(rest,Jget_sp(th),th)); $).
+
+
+% Quicksort
+qsort([X|L], R, R0) :-
+    partition(L, X, L1, L2),
+    qsort(L2, R1, R0),
+    qsort(L1, R, [X|R1]).
+qsort([], R, R) :- !.
+
+/*
+qsort(X,Y) :-
+cinline($ //qsort
+          int exec1(int x, int y){
+              if(x == NIL)
+                  return(y);
+              else{
+                  int l1,l2;
+                  Jcall(Jmakecomp("partition"),Jlist3(x,l1,l2));
+                  return(exec1(l1,y);
+          }
+          int x = Jderef(varX,th);
+          int y = Jderef(varY,th);
+          int res = exec1(x,y,NIL,NIL);
+          Junify(varL1,Jcar(res),th);
+          Junify(varL2,Jcar(Jcdr(res)),th);
+          return(Jexec_all(rest,Jget_sp(th),th)); $).
+*/

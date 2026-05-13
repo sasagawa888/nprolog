@@ -20,6 +20,26 @@ qsort([X|L], R, R0) :-
     qsort(L1, R, [X|R1]).
 qsort([], R, R) :- !.
 
+/*
+partition(X,Y,L1,L2) :-
+cinline($ //for qsort
+          int exec1(int x, int y, int l1, int l2){
+              if(x == NIL)
+                  return(Jlist2(l1,l2));
+              else if(Jsmallerp(Jcar(x),y))
+                  return(exec1(Jcdr(x),y,Jlistcons(Jcar(x),l1),l2));
+              else return(exec1(Jcdr(x),y,l1,Jlistcons(Jcar(x),l2)));
+          }
+          int x = Jderef(varX,th);
+          int y = Jderef(varY,th);
+          int res = exec1(x,y,NIL,NIL);
+          Junify(varL1,Jcar(res),th);
+          Junify(varL2,Jcar(Jcdr(res)),th);
+          return(Jexec_all(rest,Jget_sp(th),th)); $).
+*/
+
+
+
 % Partition list for quicksort
 partition([X|L], Y, [X|L1], L2) :-
     X < Y, !, partition(L, Y, L1, L2).
