@@ -41,10 +41,35 @@ Result is list [+,+,-,-]
 + means input (instantated)
 - means output (not instantated)
 
-
+Env = [c(varY,+),c(varX,+),c(2,varY),c(1,varX)]
 
 </2 >/2 =:=/2 /==/2 -> left and rigth must be +
 right is left   -> right is -, left is +.
+
+
+Prolog -> C 
+input [X|L] -> x = car(a1);l=cdr(a1);
+output [X|L] -> Jwcons(x,y,th);
+
+multiple value retunr(JwlistN(A,B,...));
+
+main:
+int exec1(a1,a2){
+}
+int exec2(a3,a4){
+}
+if(Jvarp(arg1) && Jvarp(arg2)){
+    res = exec1(deref(arg3,th),deref(arg4,th));
+    Junify(arg1,Jnth(res,1));
+    Junify(arg2,Jnth8res,2);
+} else{
+    res = exec2(deref(arg1,th),deref(arg2,th));
+    Junify(arg3,Jnth(res,1));
+    Junify(arg4,Jnth8res,2);
+}
+return(Jexec_all(...));
+    
+
 */
 
 /*
