@@ -47,21 +47,21 @@ Result is list [+,+,-,-]
 right is left   -> right is -, left is +.
 */
 
-/*
-qsort([], []).
-qsort([X|Xs], Ys) :-
-    partition(Xs, X, Ls, Gs),
-    qsort(Ls, SLs),
-    qsort(Gs, SGs),
+
+qsort1([], []).
+qsort1([X|Xs], Ys) :-
+    partition1(Xs, X, Ls, Gs),
+    qsort1(Ls, SLs),
+    qsort1(Gs, SGs),
     append(SLs, [X|SGs], Ys).
 
-partition([], _, [], []).
-partition([X|Xs], P, [X|Ls], Rs) :-
+partition1([], _, [], []).
+partition1([X|Xs], P, [X|Ls], Rs) :-
     X < P, !,
-    partition(Xs, P, Ls, Rs).
-partition([X|Xs], P, Ls, [X|Rs]) :-
-    partition(Xs, P, Ls, Rs).
-*/
+    partition1(Xs, P, Ls, Rs).
+partition1([X|Xs], P, Ls, [X|Rs]) :-
+    partition1(Xs, P, Ls, Rs).
+
 
 partition(X,Y,L1,L2) :-
 cinline($ //for qsort
@@ -69,8 +69,10 @@ cinline($ //for qsort
               Jinc_proof(th);
               if(x == NIL)
                   return(Jwlist2(l1,l2,th));
-              else if(Jsmallerp(Jcar(x),y))
+              else if(Jsmallerp(Jcar(x),y)){
+                  Jinc_proof(th);
                   return(exec1(Jcdr(x),y,Jwlistcons(Jcar(x),l1,th),l2));
+              }
               else return(exec1(Jcdr(x),y,l1,Jwlistcons(Jcar(x),l2,th)));
           }
           int x = Jderef(varX,th);
@@ -95,6 +97,7 @@ cinline($ //qsort
                   r1 =Jcar(exec1(Jderef(l1,th)));
                   r2 =Jcar(exec1(Jderef(l2,th)));
                   Jcall(Jmakesys("append"),Jwlist3(r1,Jwlistcons(x,r2,th),r,th),th);
+                  Jinc_proof(th);
                   return(Jwlist1(Jderef(r,th),th));
               }
               else if(a1 == NIL){
@@ -136,6 +139,12 @@ run(qsort, N) :-
     list50(X),
     repeat_for(N), 
     qsort(X, _), 
+    fail.
+
+run(qsort1, N) :-
+    list50(X),
+    repeat_for(N), 
+    qsort1(X, _), 
     fail.
 
 run(reverse, N) :-

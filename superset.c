@@ -316,6 +316,17 @@ int b_member(int arglist, int rest, int th)
 	append([X|Ls],Ys,[X|Zs]):-
         	append(Ls,Ys,Zs).
 */
+
+int wappend1(int x, int y, int th);
+int wappend1(int x, int y, int th){
+	if(nullp(x))
+		return(y);
+	else {
+		proof[th]++;
+		return(wcons(car(x),wappend1(cdr(x),y,th),th));
+	}
+}
+
 int b_append(int arglist, int rest, int th)
 {
     int n, ind, arg1, arg2, arg3, x, ls, ys, zs, save1, save2, body;
@@ -335,6 +346,12 @@ int b_append(int arglist, int rest, int th)
 	    exception(NOT_LIST, ind, arg2, th);
 	if (!listp(arg3) && !nullp(arg3) && !wide_variable_p(arg3))
 	    exception(NOT_LIST, ind, arg3, th);
+
+	if (listp(arg1) && listp(arg2) && !wide_variable_p(arg3)){
+		unify(arg3,wappend1(arg1,arg2,th),th);
+		if (prove_all(rest, sp[th], th) == YES)
+		return (YES);
+	}
 
 	save1 = wp[th];
 	if (unify_nil(arg1, th) == YES && unify(arg2, arg3, th) == YES) {

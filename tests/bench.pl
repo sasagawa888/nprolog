@@ -29,6 +29,22 @@ partition([X|L], Y, L1, [X|L2]) :-
     !,partition(L, Y, L1, L2).
 partition([], _ , [], []) :- !.
 
+% normal qsort
+qsort1([], []).
+qsort1([X|Xs], Ys) :-
+    partition1(Xs, X, Ls, Gs),
+    qsort1(Ls, SLs),
+    qsort1(Gs, SGs),
+    append(SLs, [X|SGs], Ys).
+
+partition1([], _, [], []).
+partition1([X|Xs], P, [X|Ls], Rs) :-
+    X < P, !,
+    partition1(Xs, P, Ls, Rs).
+partition1([X|Xs], P, Ls, [X|Rs]) :-
+    partition1(Xs, P, Ls, Rs).
+
+
 % List of 50 elements for another test
 list50([27, 74, 17, 33, 94, 18, 46, 83, 65, 2, 32, 53, 28, 85, 99, 47, 28, 82, 6, 11,
         55, 29, 39, 81, 90, 37, 10, 0, 66, 51, 7, 21, 85, 27, 31, 63, 75, 4, 95, 99, 11, 28, 61,
@@ -47,6 +63,12 @@ run(qsort, N) :-
     list50(X),
     repeat_for(N), 
     qsort(X, _ ,[]), 
+    fail.
+
+run(qsort1, N) :-
+    list50(X),
+    repeat_for(N), 
+    qsort1(X, _), 
     fail.
 
 run(reverse, N) :-
