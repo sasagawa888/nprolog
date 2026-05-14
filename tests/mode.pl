@@ -47,7 +47,7 @@ Result is list [+,+,-,-]
 right is left   -> right is -, left is +.
 */
 
-
+/*
 qsort([], []).
 qsort([X|Xs], Ys) :-
     partition(Xs, X, Ls, Gs),
@@ -61,16 +61,17 @@ partition([X|Xs], P, [X|Ls], Rs) :-
     partition(Xs, P, Ls, Rs).
 partition([X|Xs], P, Ls, [X|Rs]) :-
     partition(Xs, P, Ls, Rs).
+*/
 
-/*
 partition(X,Y,L1,L2) :-
 cinline($ //for qsort
           int exec1(int x, int y, int l1, int l2){
+              Jinc_proof(th);
               if(x == NIL)
-                  return(Jlist2(l1,l2));
+                  return(Jwlist2(l1,l2,th));
               else if(Jsmallerp(Jcar(x),y))
-                  return(exec1(Jcdr(x),y,Jlistcons(Jcar(x),l1),l2));
-              else return(exec1(Jcdr(x),y,l1,Jlistcons(Jcar(x),l2)));
+                  return(exec1(Jcdr(x),y,Jwlistcons(Jcar(x),l1,th),l2));
+              else return(exec1(Jcdr(x),y,l1,Jwlistcons(Jcar(x),l2,th)));
           }
           int x = Jderef(varX,th);
           int y = Jderef(varY,th);
@@ -84,17 +85,16 @@ qsort(X,Y) :-
 cinline($ //qsort
           int exec1(int a1){
             int x,l,l1,l2,r1,r2,r;
+            Jinc_proof(th);
             l1 = Jmakevariant(th);
             l2 =  Jmakevariant(th);
             r = Jmakevariant(th);
               if(a1 != NIL){
                   x=Jcar(a1);l=Jcdr(a1);
-                  Jcall(Jmakecomp("partition"),Jcons(a1,Jwlist3(x,l1,l2,th)),th);
-                  //Jprint(Jderef(l1,th));
-                  //Jprint(Jderef(l2,th));
+                  Jcall(Jmakecomp("partition"),Jwcons(a1,Jwlist3(x,l1,l2,th),th),th);
                   r1 =Jcar(exec1(Jderef(l1,th)));
                   r2 =Jcar(exec1(Jderef(l2,th)));
-                  Jcall(Jmakesys("append"),Jwlist3(r1,Jlistcons(x,r2),r,th),th);
+                  Jcall(Jmakesys("append"),Jwlist3(r1,Jwlistcons(x,r2,th),r,th),th);
                   return(Jwlist1(Jderef(r,th),th));
               }
               else if(a1 == NIL){
@@ -104,7 +104,7 @@ cinline($ //qsort
           int res = Jcar(exec1(x));
           Junify(varY,res,th);
           return(Jexec_all(rest,Jget_sp(th),th)); $).
-*/
+
 
 % Reverse a list
 nreverse([X|L0], L) :- nreverse(L0, L1), concatenate(L1, [X], L).
