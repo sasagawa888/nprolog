@@ -61,9 +61,9 @@ partition1([X|Xs], P, [X|Ls], Rs) :-
     partition1(Xs, P, Ls, Rs).
 partition1([X|Xs], P, Ls, [X|Rs]) :-
     partition1(Xs, P, Ls, Rs).
+*/
 
-
-partition(X,Y,L1,L2) :-
+partition1(X,Y,L1,L2) :-
 cinline($ //for qsort
           int exec1(int x, int y, int l1, int l2){
               Jinc_proof(th);
@@ -83,7 +83,7 @@ cinline($ //for qsort
           return(Jexec_all(rest,Jget_sp(th),th)); $).
 
 
-qsort(X,Y) :-
+qsort1(X,Y) :-
 cinline($ //qsort
           int exec1(int a1){
             int x,l,l1,l2,r1,r2,r;
@@ -93,7 +93,7 @@ cinline($ //qsort
             r = Jmakevariant(th);
               if(a1 != NIL){
                   x=Jcar(a1);l=Jcdr(a1);
-                  Jcall(Jmakecomp("partition"),Jwcons(a1,Jwlist3(x,l1,l2,th),th),th);
+                  Jcall(Jmakecomp("partition1"),Jwcons(a1,Jwlist3(x,l1,l2,th),th),th);
                   r1 =Jcar(exec1(Jderef(l1,th)));
                   r2 =Jcar(exec1(Jderef(l2,th)));
                   Jcall(Jmakesys("append"),Jwlist3(r1,Jwlistcons(x,r2,th),r,th),th);
@@ -108,7 +108,7 @@ cinline($ //qsort
           Junify(varY,res,th);
           return(Jexec_all(rest,Jget_sp(th),th)); $).
 
-*/
+
 qsort(X,Y,Z) :-
 cinline($ //qsort
           int exec1(int a1, int r0){
@@ -187,6 +187,13 @@ run(qsort, N) :-
     list50(X),
     repeat_for(N), 
     qsort(X, _, []), 
+    fail.
+
+
+run(qsort1, N) :-
+    list50(X),
+    repeat_for(N), 
+    qsort1(X, _), 
     fail.
 
 

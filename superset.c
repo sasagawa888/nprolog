@@ -339,13 +339,21 @@ int b_member(int arglist, int rest, int th)
 
 int wappend1(int x, int y, int th);
 int wappend1(int x, int y, int th){
-	if(nullp(x))
-		return(y);
+	int x1;
+	x1 = x;
+	if(nullp(cdr(x1))){
+		SET_CDR(x1,y);
+		return(x);
+	}
 	else {
 		proof[th]++;
-		return(wcons(car(x),wappend1(cdr(x),y,th),th));
+		x1 = cdr(x1);
 	}
+
+	//dummy
+	return(NIL);
 }
+
 
 int b_append(int arglist, int rest, int th)
 {
