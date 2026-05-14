@@ -13,31 +13,13 @@ concatenate([], L, L) :- !.
 list30([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 14, 15, 16, 17, 18, 19, 20, 
         21, 22, 25, 24, 25, 26, 27, 28, 29, 30]).
 
+
 % Quicksort
 qsort([X|L], R, R0) :-
     partition(L, X, L1, L2),
     qsort(L2, R1, R0),
     qsort(L1, R, [X|R1]).
 qsort([], R, R) :- !.
-
-/*
-partition(X,Y,L1,L2) :-
-cinline($ //for qsort
-          int exec1(int x, int y, int l1, int l2){
-              if(x == NIL)
-                  return(Jlist2(l1,l2));
-              else if(Jsmallerp(Jcar(x),y))
-                  return(exec1(Jcdr(x),y,Jlistcons(Jcar(x),l1),l2));
-              else return(exec1(Jcdr(x),y,l1,Jlistcons(Jcar(x),l2)));
-          }
-          int x = Jderef(varX,th);
-          int y = Jderef(varY,th);
-          int res = exec1(x,y,NIL,NIL);
-          Junify(varL1,Jcar(res),th);
-          Junify(varL2,Jcar(Jcdr(res)),th);
-          return(Jexec_all(rest,Jget_sp(th),th)); $).
-*/
-
 
 
 % Partition list for quicksort
@@ -64,7 +46,7 @@ run(none, N) :- repeat_for(N), fail.
 run(qsort, N) :-
     list50(X),
     repeat_for(N), 
-    qsort(X, _, []), 
+    qsort(X, _ ,[]), 
     fail.
 
 run(reverse, N) :-
