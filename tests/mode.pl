@@ -41,7 +41,9 @@ Result is list [+,+,-,-]
 + means input (instantated)
 - means output (not instantated)
 
-Env = [c(varY,+),c(varX,+),c(2,varY),c(1,varX)]
+Env = [e(1,2),c(varY,+),c(varX,+),c(2,varY),c(1,varX)]
+c/2　connect
+e/2 exclusive
 
 </2 >/2 =:=/2 /==/2 -> left and rigth must be +
 right is left   -> right is -, left is +.
@@ -58,7 +60,7 @@ int exec1(a1,a2){
 }
 int exec2(a3,a4){
 }
-if(Jvarp(arg1) && Jvarp(arg2)){
+if(Jvariablep(arg1) && Jvariablep(arg2)){
     res = exec1(deref(arg3,th),deref(arg4,th));
     Junify(arg1,Jnth(res,1));
     Junify(arg2,Jnth8res,2);

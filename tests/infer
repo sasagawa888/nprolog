@@ -1,0 +1,15 @@
+% mode-inferencer
+
+test(P) :-
+    n_arity_count(P,L),
+    test1(P,L).
+
+test1(P,[]).
+test1(P,[N|Ls]) :-
+    n_clause_with_arity(P,N,X),
+    infer(X,[],R).
+
+infer([],R).
+infer([T|Ts],[R|Rs]) :-
+    infer1(T,[],R),
+    infer(Ts,Rs). 
