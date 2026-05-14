@@ -189,7 +189,7 @@ int makeatom1(char *pname, int property)
     if (str == NULL)
 	exception(SYSTEM_ERR, makestr("makeatom"), NIL, 0);
     heap[addr].name = str;
-    strcpy(heap[addr].name, pname);
+    memcpy(heap[addr].name, pname, strlen(pname) + 1);
     SET_CAR(addr, NIL);
     SET_CDR(addr, NIL);
     SET_AUX(addr, property);
@@ -276,7 +276,7 @@ int makestr(char *name)
     if (str == NULL)
 	exception(SYSTEM_ERR, makestr("makestr"), NIL, 0);
     heap[res].name = str;
-    strcpy(heap[res].name, name);
+    memcpy(heap[res].name, name, strlen(name) + 1);
     SET_CAR(res, NIL);
     SET_CDR(res, NIL);
     SET_AUX(res, NIL);
@@ -408,7 +408,7 @@ int makesocket(int sockfd, int type, const char *name, int listenfd)
     if (str == NULL)
 	exception(SYSTEM_ERR, makestr("makesocket"), NIL, 0);
     heap[addr].name = str;
-    strcpy(heap[addr].name, name);	/* ip address */
+    memcpy(heap[addr].name, name, strlen(name) + 1);	/* ip address */
     SET_AUX(addr, NPL_OPEN);	/* NPL_OPEN/NPL_CLOSE initial value is NPL_OPEN */
     return (addr);
 }
