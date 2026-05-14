@@ -47,7 +47,7 @@ Result is list [+,+,-,-]
 right is left   -> right is -, left is +.
 */
 
-
+/*
 qsort1([], []).
 qsort1([X|Xs], Ys) :-
     partition1(Xs, X, Ls, Gs),
@@ -108,6 +108,52 @@ cinline($ //qsort
           Junify(varY,res,th);
           return(Jexec_all(rest,Jget_sp(th),th)); $).
 
+*/
+qsort(X,Y,Z) :-
+cinline($ //qsort
+          int exec1(int a1, int r0){
+            int x,l,l1,l2,r1,r2,r;
+            Jinc_proof(th);
+            l1 = Jmakevariant(th);
+            l2 =  Jmakevariant(th);
+            r = Jmakevariant(th);
+              if(a1 != NIL){
+                  x=Jcar(a1);l=Jcdr(a1);
+                  Jcall(Jmakecomp("partition"),Jwcons(a1,Jwlist3(x,l1,l2,th),th),th);
+                  r1 =Jcar(exec1(Jderef(l2,th),r0));
+                  r2 =Jcar(exec1(Jderef(l1,th),Jwlistcons(x,r1,th)));
+                  return(Jwlist1(r2,th));
+              }
+              else if(a1 == NIL){
+                  return(Jwlist1(r0,th));
+          }}
+          int x = Jderef(varX,th);
+          int z = Jderef(varZ,th);
+          int res = Jcar(exec1(x,z));
+          Junify(varY,res,th);
+          return(Jexec_all(rest,Jget_sp(th),th)); $).
+
+
+partition(X,Y,L1,L2) :-
+cinline($ //for qsort
+          int exec1(int x, int y, int l1, int l2){
+              Jinc_proof(th);
+              if(x == NIL)
+                  return(Jwlist2(l1,l2,th));
+              else if(Jsmallerp(Jcar(x),y)){
+                  Jinc_proof(th);
+                  return(exec1(Jcdr(x),y,Jwlistcons(Jcar(x),l1,th),l2));
+              }
+              else return(exec1(Jcdr(x),y,l1,Jwlistcons(Jcar(x),l2,th)));
+          }
+          int x = Jderef(varX,th);
+          int y = Jderef(varY,th);
+          int res = exec1(Jcdr(x),y,NIL,NIL);
+          Junify(varL1,Jcar(res),th);
+          Junify(varL2,Jcar(Jcdr(res)),th);
+          return(Jexec_all(rest,Jget_sp(th),th)); $).
+
+
 
 % Reverse a list
 nreverse([X|L0], L) :- nreverse(L0, L1), concatenate(L1, [X], L).
@@ -135,17 +181,14 @@ repeat_for(N) :-
 
 % Run various tests
 run(none, N) :- repeat_for(N), fail.
+
+
 run(qsort, N) :-
     list50(X),
     repeat_for(N), 
-    qsort(X, _), 
+    qsort(X, _, []), 
     fail.
 
-run(qsort1, N) :-
-    list50(X),
-    repeat_for(N), 
-    qsort1(X, _), 
-    fail.
 
 run(reverse, N) :-
     list30(X),
