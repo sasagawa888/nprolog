@@ -339,19 +339,13 @@ int b_member(int arglist, int rest, int th)
 
 int wappend1(int x, int y, int th);
 int wappend1(int x, int y, int th){
-	int x1;
-	x1 = x;
-	if(nullp(cdr(x1))){
-		SET_CDR(x1,y);
-		return(x);
-	}
-	else {
+	if(nullp(x))
+		return(y);
+	else{
 		proof[th]++;
-		x1 = cdr(x1);
-	}
+		return(wlistcons(car(x),wappend1(cdr(x),y,th),th));
+	} 
 
-	//dummy
-	return(NIL);
 }
 
 
@@ -375,7 +369,7 @@ int b_append(int arglist, int rest, int th)
 	if (!listp(arg3) && !nullp(arg3) && !wide_variable_p(arg3))
 	    exception(NOT_LIST, ind, arg3, th);
 
-	if (listp(arg1) && listp(arg2) && !wide_variable_p(arg3)){
+	if (listp(arg1) && listp(arg2) && wide_variable_p(arg3)){
 		unify(arg3,wappend1(arg1,arg2,th),th);
 		if (prove_all(rest, sp[th], th) == YES)
 		return (YES);
