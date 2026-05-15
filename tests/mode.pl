@@ -10,6 +10,17 @@ partition([X|L], Y, L1, [X|L2]) :-
     !,partition(L, Y, L1, L2).
 partition([], _ , [], []) :- !.
 
+c(1,[X|L])
+c(2.Y)
+c(3,[X|L1])
+c(4.L2)
+e(1,3)
+s(X,+)
+s(Y,+)
+e(1,4)
+
+
+
 [X|L]と[X|L1]は同じ構造であり同じ変数Xを共有している。したがっていずれか一方が入力で他方が出力である。
 [X|L]と[X|L2]は同じ構造であり同じ変数Xを共有している。したがっていずれか一方が入力で他方が出力である。
 YはX<Yで使われている。したがって確定していなければいけないから第2引数は入力である。
@@ -30,6 +41,17 @@ qsort([], R, R) :- !.
 第1節の本体部でL1,L2が現れておりこれは自由変数である。したがってpartitionの第3、第4引数は出力である。
 その場合にはすでに解析したようにLは入力である。したがって第1引数は入力である。
 
+c(1,[X|L])
+c(2,R)
+c(3,R0)
+s(X,+)
+s(L1,-)
+s(L2,-)
+s(L,+)
+s(R1,+)
+s([X|R1],+)
+e(2,3)
+
 mode(qsort,[+,-,+]).
 
 
@@ -42,8 +64,9 @@ Result is list [+,+,-,-]
 - means output (not instantated)
 
 Env = [e(1,2),c(varY,+),c(varX,+),c(2,varY),c(1,varX)]
-c/2　connect
-e/2 exclusive
+c/2　connect c(1,[X|L])
+e/2 exclusive e(2,3)
+s/3 state (1,R,+)
 
 </2 >/2 =:=/2 /==/2 -> left and rigth must be +
 right is left   -> right is -, left is +.

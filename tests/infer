@@ -1,5 +1,7 @@
 % mode-inferencer
 
+% mode(predicate,arity,modelist). e,g, mode(qsort,3,[+,-,+]).
+
 test(P) :-
     n_arity_count(P,L),
     test1(P,L).
