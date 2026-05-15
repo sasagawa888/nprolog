@@ -124,6 +124,7 @@ test(arithmetic) :-
     verify(1=<1),
     verify(1=<1*1).
 
+
 test(sort) :-
     sort([2,3,1],X),
     verify(X == [1,2,3]),
@@ -348,7 +349,7 @@ partition(Pivot, [H|T], Left, [H|Right]) :-
     H > Pivot,
     partition(Pivot, T, Left, Right).
 
-test(sort) :- 
+test(qsort) :- 
     quick_sort([3,1,4,1,5,9,2,6,5], Sorted), Sorted = [1,1,2,3,4,5,5,6,9].
 
 

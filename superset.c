@@ -369,10 +369,12 @@ int b_append(int arglist, int rest, int th)
 	if (!listp(arg3) && !nullp(arg3) && !wide_variable_p(arg3))
 	    exception(NOT_LIST, ind, arg3, th);
 
-	if (listp(arg1) && listp(arg2) && wide_variable_p(arg3)){
+	if (!wide_variable_p(arg1) && !wide_variable_p(arg2) && wide_variable_p(arg3)){
 		unify(arg3,wappend1(arg1,arg2,th),th);
 		if (prove_all(rest, sp[th], th) == YES)
 		return (YES);
+		else 
+		return (NO);
 	}
 
 	save1 = wp[th];
