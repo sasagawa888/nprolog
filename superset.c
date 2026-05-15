@@ -262,17 +262,6 @@ int b_ground(int arglist, int rest, int th)
 }
 
 
-int memberp1(int x, int y, int th)
-{
-    while (!nullp(y)) {
-	if (equalp(x, car(y)))
-	    return (1);
-	y = cdr(y);
-	proof[th]++;
-    }
-    return (0);
-}
-
 
 int b_member(int arglist, int rest, int th)
 {
@@ -289,14 +278,8 @@ int b_member(int arglist, int rest, int th)
 
 	if (nullp(arg2))
 	    return (NO);
-
-	if (!wide_variable_p(arg1) && listp(arg2)){
-		if (memberp1(arg1,arg2,th)){
-			if ((res = prove(NIL, sp[th], rest, th)) == YES)
-		         return (YES);
-		}
-	}
-
+	
+	
 	save1 = wp[th];
 	x = makevariant(th);
 	l = makevariant(th);
