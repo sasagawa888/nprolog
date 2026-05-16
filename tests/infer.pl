@@ -1,5 +1,5 @@
 % mode-inferencer
-
+:- use_module(list).
 % test case
 foo(X,Y) :- true,Z is Y,X > Z.
 
@@ -83,3 +83,31 @@ same_struct1([X|Xs],[Y|Ys],N) :-
     same_struct1(Xs,Ys,N).
 
 
+term_variables(Term, Vars) :-
+    term_variables(Term, [], Rev),
+    reverse(Rev, Vars).
+
+term_variables(X, Vars, Vars) :-
+    atomic(X),
+    \+ n_compiler_variable(X), !.
+
+term_variables(X, Vars, Vars) :-
+    member_eq(X, Vars), !.
+
+term_variables(X, Vars, [X|Vars]) :-
+    n_compiler_variable(X), !.
+
+term_variables(Term, Vars0, Vars) :-
+    Term =.. [_|Args],
+    term_variables_list(Args, Vars0, Vars).
+
+term_variables_list([], Vars, Vars).
+
+term_variables_list([X|Xs], Vars0, Vars) :-
+    term_variables(X, Vars0, Vars1),
+    term_variables_list(Xs, Vars1, Vars).
+
+member_eq(X,[Y|_]) :-
+    X == Y, !.
+member_eq(X,[_|Ys]) :-
+    member_eq(X,Ys).
