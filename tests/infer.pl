@@ -1,7 +1,7 @@
 % mode-inferencer
 
 % test case
-foo(X,Y) :- Z is Y,true,X is Z,X > Z.
+foo(X,Y) :- true,Z is Y,X > Z.
 
 
 test(P) :-
