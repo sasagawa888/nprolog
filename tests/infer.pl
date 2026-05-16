@@ -1,7 +1,7 @@
 % mode-inferencer
 
 % test case
-foo(X,Y) :- true.
+foo(X,Y) :- Z is Y,true,X is Z,X > Z.
 
 
 test(P) :-
@@ -14,25 +14,28 @@ test1(P,[N|Ls]) :-
     n_clause_with_arity(P,N,C),
     n_variable_convert(C,C1),
     write('clause = '), write(C1), nl,
-    infer_clause(C1,State,Env,Mode),
+    infer_clause(C1,State,Env),
+    write('State = '),write(State),nl,
     write('Env = '),write(Env),nl,
     test1(P,Ls).
 
-infer_clause([],[],[],Mode).
-infer_clause([C|Cs],State, Env ,Mode) :-
-    infer_a_clause(C,S1,E1,Mode),
-    infer_clause(Cs,State,E2,Mode),
+infer_clause([],[],[]).
+infer_clause([C|Cs],State, Env) :-
+    infer_a_clause(C,S1,E1),
+    infer_clause(Cs,S2,E2),
+    append(S1,S2,State),
     append(E1,E2,Env).
 
 
-infer_a_clause((Head :- Body), State, Env1 ,Mode) :- 
+infer_a_clause((Head :- Body), State1, Env1) :- 
     head_args(Head,Args),
     head_env(Args,Env0),
-    infer_body(Body,Env0,Env1).
+    infer_body(Body,[],Env0,State1,Env1).
 
-infer_a_clause(Head,State, Env, Mode) :-
+infer_a_clause(Head, State1, Env1) :-
     head_args(Head,Args),
-    head_env(Args,Env0).
+    head_env(Args,Env0),
+    infer_head(Head,[],Env0,State1,Env1).
 
 
 head_args(H,Args) :-
@@ -47,16 +50,18 @@ head_env([_|Xs],Es) :-
     head_env(Xs,Es).
 
 
-infer_body(true,Env,Env).
-infer_body((A,B),Env0,Env2) :-
-    infer_a_body(A,Env0,Env1),
-    infer_body(B,Env1,Env2).
-infer_body(A,Env0,Env1) :-
-    infer_goal(A,Env0,Env1).
+infer_body(end,State,Env,State,Env).
+infer_body((A,B),State,Env,States,Envs) :-
+    infer_a_body(A,State,Env,State1,Env1),
+    infer_body(B,State1,Env1,States,Envs).
+infer_body(A,State,Env,State1,Env1) :- 
+    infer_a_body(A,State,Env,State1,Env1),
+    infer_body(end,State1,Env1,State1,Env1).
 
 
-infer_a_body(X,Env0,Env0).
-
+infer_a_body((X is Y),State,Env,[s(X,out),s(Y,in)|State],Env).
+infer_a_body((X > Y),State,Env,[s(X,in),s(Y,in)|State],Env).
+infer_a_body(true,State,Env,State,Env).
 
 same_struct(X,Y) :-
     same_struct1(X,Y,0).
