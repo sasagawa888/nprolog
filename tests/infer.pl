@@ -2,7 +2,13 @@
 :- use_module(list).
 % test case
 foo(X,Y) :- true,Z is Y,X > Z.
-
+% Partition list for quicksort
+partition([X|L], Y, [X|L1], L2) :-
+    X < Y, !, partition(L, Y, L1, L2).
+partition([X|L], Y, L1, [X|L2]) :-
+    !,partition(L, Y, L1, L2).
+partition([], _ , [], []) :- !.
+%-----------------------------
 
 test(P) :-
     n_arity_count(P,L),
@@ -61,7 +67,8 @@ infer_body(A,State,Env,State1,Env1) :-
 
 infer_a_body((X is Y),State,Env,[s(X,out),s(Y,in)|State],Env).
 infer_a_body((X > Y),State,Env,[s(X,in),s(Y,in)|State],Env).
-infer_a_body(true,State,Env,State,Env).
+infer_a_body((X < Y),State,Env,[s(X,in),s(Y,in)|State],Env).
+infer_a_body(A,State,Env,State,Env).
 
 same_struct(X,Y) :-
     same_struct1(X,Y,0).
