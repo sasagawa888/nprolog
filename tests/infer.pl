@@ -26,11 +26,9 @@ test1(P,[N|Ls]) :-
     test1(P,Ls).
 
 infer_clause([],[],[]).
-infer_clause([C|Cs],State, Env) :-
+infer_clause([C|Cs],[S1,S2],[E1,E2]) :-
     infer_a_clause(C,S1,E1),
-    infer_clause(Cs,S2,E2),
-    append(S1,S2,State),
-    append(E1,E2,Env).
+    infer_clause(Cs,S2,E2).
 
 
 infer_a_clause((Head :- Body), State1, Env1) :- 
