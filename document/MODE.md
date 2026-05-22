@@ -7,7 +7,7 @@ The `mode` library is planned to eventually be integrated into and absorbed by t
 ```prolog
 N-Prolog Ver 5.19 [30M cells]
 
-?- use_module(modeinf).
+?- use_module(mode).
 yes
 
 ?- infer('./tests/bug').
