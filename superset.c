@@ -337,6 +337,8 @@ int properp(int x){
 		return(1);
 	else if(atomicp(x))
 		return(0);
+	else if(wide_variable_p(x))
+		return(0);
 	else 
 		return(properp(cdr(x)));
 
