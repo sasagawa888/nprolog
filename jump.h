@@ -188,6 +188,13 @@ static inline int Jbigx_to_parmanent(int x) {
     return f1[BIGX_TO_PARMANENT_IDX](x);
 }
 
+
+static inline int Jinc_back_choice(int x) {
+    return f1[INC_BACK_CHOICE_IDX](x);
+}
+
+
+
 static inline int Jcons(int x, int y) {
     return f2[CONS_IDX](x, y);
 }
