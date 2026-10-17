@@ -24,7 +24,7 @@ export NPROLOG
 SHAREDIR ?= $(PREFIX)/share/nprolog
 export SHAREDIR
 
-NPL   := mpl
+NPL   := npl
 EDLOG := edlog
 
 
